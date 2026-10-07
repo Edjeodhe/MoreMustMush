@@ -102,8 +102,9 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
-# UI Toolkit auto generated files
-/UIElementsSchema/
-
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# ===== External assets (never commit) =====
+/[Aa]ssets/ExternalAssets/
+/[Aa]ssets/ExternalAssets.meta
