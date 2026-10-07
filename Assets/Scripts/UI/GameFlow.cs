@@ -19,6 +19,8 @@ namespace MoreMush
         public SettleScreen settle;
         public TaxScreen tax;
         public GameObject titleBackdrop;        // world-space town + grandpa behind title/settle/tax
+        public FarmScreen farmScreen;
+        public FarmView farm;                   // world-space farm (field | ranch | kitchen)
 
         [Header("Modal")]
         public ModalHost modal;
@@ -30,6 +32,8 @@ namespace MoreMush
         public ShopPanel shop;
         public WorkshopPanel workshop;
         public SkinPanel skins;
+        public DecoPanel deco;
+        public PetCardPanel petCard;
         public GameObject resetPanel;
         public DebugPanel debug;
         public Toast toast;
@@ -61,6 +65,7 @@ namespace MoreMush
         // ===== screens =====
         public void SetScreen(string s)
         {
+            if (Screen == "farm" && s != "farm") farm.Flush();   // 밭일·요리 대기열은 떠날 때 바로 끝낸다
             Screen = s;
             UIUtil.Show(title, s == "title");
             UIUtil.Show(tree, s == "tree");
@@ -69,6 +74,8 @@ namespace MoreMush
             UIUtil.Show(settle, s == "settle");
             UIUtil.Show(tax, s == "tax");
             UIUtil.Show(titleBackdrop, s == "title" || s == "settle" || s == "tax");
+            UIUtil.Show(farmScreen, s == "farm");
+            UIUtil.Show(farm, s == "farm");
             if (tree != null) tree.SetActiveWorld(s == "tree");
         }
 
@@ -79,6 +86,52 @@ namespace MoreMush
             SetScreen("tree");
             CloseModal();
             tree.Refresh();
+        }
+
+        public void EnterFarm(string view)
+        {
+            CloseModal();
+            SetScreen("farm");
+            farm.Enter(view);
+            farmScreen.Render();
+        }
+
+        void OpenPetCard(string id)
+        {
+            petCard.id = id;
+            OpenModal(petCard, () => { if (Screen == "farm") farmScreen.Render(); });
+            petCard.Render();
+        }
+
+        void FarmEvolve(string id)
+        {
+            var k = SPC[id];
+            string before = EvoName(k);
+            if (!Game.FarmEvolve(id)) { Snd.Err(); ShowToast($"호감도 {FARM.hearts}칸을 모두 채우면 진화할 수 있어요"); return; }
+            Snd.Record();
+            farm.Evolved(id);
+            ShowToast($"{U.Iga(before)} {EvoName(k)}(으)로 진화했어요! 부탁 보상 ×{U.FmtN(FARM.evoGem[EvoOf(id)])}");
+            CloseModal(); farmScreen.Render();
+        }
+
+        void FieldAll(string mode)
+        {
+            int n = farm.FieldAll(mode);
+            if (n == 0)
+            {
+                Snd.Err();
+                if (farm.workers.Count == 0) ShowToast("특수 버섯(꼬마)을 잡으면 밭일을 도와줘요");
+                else if (mode == "plant" && FieldKeys().Any(t => !farm.busy.ContainsKey(t.key) && PlotAt(t.key)?.s == "till"))
+                {
+                    var nd = CropNeed(G.farm.crop);
+                    ShowToast(G.spore < nd["spore"] ? "버섯 포자가 부족해요 (버섯 상점 → 포자 상점)" : $"{CATS[G.farm.crop].name} 버섯이 부족해요");
+                }
+                else ShowToast(mode == "till" ? "갈 땅이 없어요" : mode == "plant" ? "먼저 밭을 갈아 주세요" : "다 자란 작물이 없어요");
+                return;
+            }
+            Snd.Ui();
+            ShowToast($"꼬마들이 {n}칸을 {(mode == "till" ? "갈러" : mode == "plant" ? $"{CROPS[G.farm.crop].n} 심으러" : "수확하러")} 가요!");
+            farmScreen.Render();
         }
 
         public void ShowToast(string msg) { if (toast != null) toast.Show(msg); }
@@ -106,6 +159,7 @@ namespace MoreMush
                 shop.ResetQty();
                 if (from == "tax" && Screen == "tax") tax.ShowBill();
                 else if (Screen == "tree") tree.Refresh();
+                else if (Screen == "farm") farmScreen.Render();
             });
             shop.Render();
         }
@@ -266,14 +320,52 @@ namespace MoreMush
                 case "hvtoggle":
                     if (!HvToggle(arg)) { Snd.Err(); ShowToast("수확기는 최소 1개는 켜져 있어야 해요"); break; }
                     Snd.Ui(); workshop.Render(); break;
-                case "skinshop": Snd.Ui(); OpenModal(skins, () => tree.Refresh()); skins.Render(); break;
+                case "skinshop": Snd.Ui(); OpenModal(skins, () => { if (Screen == "farm") farmScreen.Render(); else if (Screen == "tree") tree.Refresh(); }); skins.Render(); break;
                 case "skintab": Snd.Ui(); skins.tab = arg; skins.Render(); break;
                 case "buyskin":
                     if (!BuySkin(arg)) { Snd.Err(); ShowToast("균사석이 부족해요"); break; }
                     Snd.Record(); ShowToast($"{SKIN[arg].n} 스킨을 샀어요!"); skins.Render(); break;
-                case "wearskin": WearSkin(arg); Snd.Ui(); skins.Render(); break;
-                case "farm":
-                    Snd.Err(); ShowToast("곧 열려요 (이식 중)"); break;
+                case "wearskin":
+                {
+                    var p = arg.Split('|');
+                    WearSkin(p[0]); Snd.Ui();
+                    if (p.Length > 1) petCard.Render(); else skins.Render();
+                    break;
+                }
+                // ===== 버섯 농장 =====
+                case "farm": Snd.Ui(); EnterFarm(null); break;
+                case "totree2": Snd.Ui(); EnterTree(); break;
+                case "farmgo": farm.Go(arg); farmScreen.Render(); break;
+                case "farmall":
+                {
+                    var r = farm.CareAll();
+                    if (r.n == 0) { Snd.Err(); ShowToast("지금 부탁하는 꼬마가 없어요"); break; }
+                    Snd.Record(); ShowToast($"꼬마 {r.n}마리를 돌봤어요! 균사석 +{U.Fmt(r.gem)}{(r.bonus > 0 ? $" (호감도 보너스 +{r.bonus})" : "")}"); farmScreen.Render();
+                    break;
+                }
+                case "farmcard": Snd.Ui(); OpenPetCard(arg); break;
+                case "evolve": FarmEvolve(arg); break;
+                case "decoshop": Snd.Ui(); OpenModal(deco, () => farmScreen.Render()); deco.Render(); break;
+                case "buydeco":
+                    if (!BuyDeco(arg)) { Snd.Err(); ShowToast("균사석이 부족해요"); break; }
+                    Snd.Record(); ShowToast($"{DECO[arg].n}을(를) 목장에 놓았어요!"); deco.Render(); break;
+                case "placedeco": PlaceDeco(arg); Snd.Ui(); deco.Render(); break;
+                case "fieldcrop": Snd.Ui(); G.farm.crop = arg; SaveGame(); farmScreen.Render(); break;
+                case "fieldall": FieldAll(arg); break;
+                case "fieldexpand":
+                    if (!Game.FieldExpand()) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
+                    Snd.Record(); ShowToast($"밭을 {G.farm.size}×{G.farm.size}로 넓혔어요!"); farmScreen.Render(); break;
+                case "toolup":
+                    if (!ToolUp()) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
+                    Snd.Record(); ShowToast($"[{TOOLS[G.farm.tool].grade}] {TOOLS[G.farm.tool].n}을 손에 넣었어요! 수확 때 포자가 더 나와요"); farmScreen.Render(); break;
+                case "cook": farm.CookOrder(arg, false); farmScreen.Render(); break;
+                case "cookall":
+                {
+                    var made = farm.CookAll();
+                    if (made.Count == 0) { Snd.Err(); ShowToast(farm.cooks.Count > 0 ? "지금 만들 수 있는 요리가 없어요" : "특수 버섯(꼬마)을 잡으면 요리를 해 줘요"); break; }
+                    Snd.Ui(); ShowToast($"{string.Concat(made.Select(rc => UIUtil.Ic(rc.icon)))} {made.Count}개 주문! 꼬마 요리사들이 만들어요"); farmScreen.Render();
+                    break;
+                }
                 default:
                     if (act.StartsWith("dbg-") && debug != null) debug.Do(act, arg);
                     break;

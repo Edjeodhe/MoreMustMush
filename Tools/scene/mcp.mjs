@@ -32,6 +32,27 @@ export async function call(tool, args) {
   try { return JSON.parse(text); } catch { return { success: !r.isError, message: text }; }
 }
 
+// Delete every object at these scene paths, including inactive ones (manage_gameobject's path lookup skips
+// objects under an inactive parent, so a rebuild would otherwise stack a second copy).
+export async function destroyPaths(paths) {
+  const list = paths.map((p) => JSON.stringify(p)).join(", ");
+  const code = `int n = 0; var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+foreach (var path in new string[] { ${list} }) {
+  var parts = path.Split(new[] { '/' }, 2);
+  foreach (var root in scene.GetRootGameObjects()) {
+    if (root.name != parts[0]) continue;
+    var hits = new System.Collections.Generic.List<GameObject>();
+    if (parts.Length == 1) hits.Add(root);
+    else foreach (var t in root.GetComponentsInChildren<Transform>(true)) if (AnimationUtility.CalculateTransformPath(t, root.transform) == parts[1]) hits.Add(t.gameObject);
+    foreach (var g in hits) if (g != null) { Undo.DestroyObjectImmediate(g); n++; }
+  }
+}
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
+return n;`;
+  const r = await call("execute_code", { action: "execute", code });
+  console.log(`deleted ${r?.data?.result ?? "?"} object(s)`, r?.success === false ? JSON.stringify(r).slice(0, 300) : "");
+}
+
 // ===== value helpers =====
 export function col(hex, a) {
   hex = hex.replace("#", "");

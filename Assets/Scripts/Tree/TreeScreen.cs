@@ -16,6 +16,7 @@ namespace MoreMush
         public Image taxBox; public TMP_Text taxTitle, taxSub;
         public TMP_Text codexButtonText, workshopButtonText;
         public GameObject workshopButton;
+        public GameObject farmBadge; public TMP_Text farmBadgeText;   // 꼬마 부탁 + 다 자란 작물
         public RectTransform sparkLayer;
         public Spark sparkTemplate;     // hidden template slot under sparkLayer, cloned per spark
 
@@ -41,6 +42,15 @@ namespace MoreMush
             taxPulse = due && G.gold < bill;
             codexButtonText.text = $"{UIUtil.Ic("book")} 도감 ({CodexCount()}/{SP_TOTAL})";
             workshopButtonText.text = "공방";
+            RefreshFarmBadge();
+        }
+
+        int farmN = -1; float farmT;
+        void RefreshFarmBadge()
+        {
+            farmN = FarmReadyCount();
+            UIUtil.Show(farmBadge, farmN > 0);
+            farmBadgeText.text = farmN.ToString();
         }
 
         bool taxPulse;
@@ -51,6 +61,7 @@ namespace MoreMush
                 var o = taxBox.GetComponent<Outline>();
                 if (o != null) o.effectColor = new Color(232 / 255f, 69 / 255f, 44 / 255f, 0.45f * (0.5f + 0.5f * Mathf.Sin(Time.time * Mathf.PI * 2 / 1.2f)));
             }
+            if (G != null && (farmT -= Time.deltaTime) <= 0) { farmT = 0.5f; if (FarmReadyCount() != farmN) RefreshFarmBadge(); }
         }
 
         // 강화 성공 불꽃 (prototype burstDom)

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace MoreMush
@@ -25,7 +24,7 @@ namespace MoreMush
         public List<string> dishes = new List<string>();
         public Dictionary<string, int> dishLeft = new Dictionary<string, int>();
         public List<Quest> quests = new List<Quest>();   // 마을 의뢰 (버섯 상점)
-        public JObject farm = new JObject();      // 버섯 농장 (3단계)
+        public Farm farm = new Farm();             // 버섯 농장 (목장·밭)
         public TaxState tax = new TaxState();
         public Records rec = new Records();
         public int rounds;
@@ -34,6 +33,19 @@ namespace MoreMush
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
         [Serializable] public class Decor { public Dictionary<string, bool> own = new Dictionary<string, bool>(), on = new Dictionary<string, bool>(); }
+        // next 다음 부탁 시각(ms, 실제 시간) · kind 부탁 종류 · love 호감도(부탁 수) · evo 진화 단계 · plots 밭 칸("행,열")
+        [Serializable]
+        public class Farm
+        {
+            public Dictionary<string, double> next = new Dictionary<string, double>();
+            public Dictionary<string, string> kind = new Dictionary<string, string>();
+            public Dictionary<string, int> love = new Dictionary<string, int>(), evo = new Dictionary<string, int>();
+            public int size = 4, tool;
+            public string crop = "ed";
+            public Dictionary<string, Plot> plots = new Dictionary<string, Plot>();
+        }
+        // s: "till" 간 땅 · "grow" 자라는 중 (t0 심은 시각, at 다 자라는 시각, ms)
+        [Serializable] public class Plot { public string s, crop; public double t0, at; }
         [Serializable] public class Quest { public string id, npc; public double cnt; public int line; }
         [Serializable] public class CodexEntry { public double n; public int first; public bool gold, giant; }
         [Serializable] public class TaxState { public int cycle = 1, roundsIn, paid, unpaid; public double income, debt; }
@@ -85,7 +97,13 @@ namespace MoreMush
                 g.skins ??= new SaveData.Skins();
                 g.decor ??= new SaveData.Decor();
                 g.quests ??= new List<SaveData.Quest>();
-                g.farm ??= new JObject();
+                g.farm ??= new SaveData.Farm();
+                g.farm.next ??= new Dictionary<string, double>(); g.farm.kind ??= new Dictionary<string, string>();
+                g.farm.love ??= new Dictionary<string, int>(); g.farm.evo ??= new Dictionary<string, int>();
+                g.farm.plots ??= new Dictionary<string, SaveData.Plot>();
+                if (!Defs.CROPS.ContainsKey(g.farm.crop ?? "")) g.farm.crop = "ed";
+                g.farm.size = Math.Max(4, Math.Min(Defs.FIELD.max, g.farm.size));
+                g.farm.tool = Math.Max(0, Math.Min(Defs.TOOLS.Length - 1, g.farm.tool));
                 return g;
             }
             catch (Exception e)
