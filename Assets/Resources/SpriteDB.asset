@@ -13,10 +13,40 @@ MonoBehaviour:
   m_Name: SpriteDB
   m_EditorClassIdentifier: Assembly-CSharp::MoreMush.SpriteDB
   entries:
+  - key: Backgrounds/bg_field
+    sprite: {fileID: 21300000, guid: 7503fe7ec8df8b341a261ff46f8248eb, type: 3}
   - key: Backgrounds/bg_forest
     sprite: {fileID: 21300000, guid: 7e98c98524e899e458cdb08041a53b5d, type: 3}
+  - key: Backgrounds/bg_kitchen
+    sprite: {fileID: 21300000, guid: ddf6777c963c7a1448369116eb577e7f, type: 3}
+  - key: Backgrounds/bg_ranch
+    sprite: {fileID: 21300000, guid: 5aac7e73b20379d4bab14b0bedb7c9ac, type: 3}
   - key: Backgrounds/bg_title
     sprite: {fileID: 21300000, guid: b41355204c6763843893cd705ca5662b, type: 3}
+  - key: Characters/Critters/Acc/bandana
+    sprite: {fileID: 21300000, guid: c204437ca10c3f14499277a7414384f4, type: 3}
+  - key: Characters/Critters/Acc/bow
+    sprite: {fileID: 21300000, guid: e83a8fc64bb43b84187d373670668008, type: 3}
+  - key: Characters/Critters/Acc/chef
+    sprite: {fileID: 21300000, guid: 364bd0366c45911468476a0460ef3577, type: 3}
+  - key: Characters/Critters/Acc/cloud
+    sprite: {fileID: 21300000, guid: 823719a92fc08f64c816e7c2e2117692, type: 3}
+  - key: Characters/Critters/Acc/crown
+    sprite: {fileID: 21300000, guid: 7e43d805770260e45b5992972f925127, type: 3}
+  - key: Characters/Critters/Acc/flower
+    sprite: {fileID: 21300000, guid: 8c72b6c86c0b8014abf274f0ad61ba33, type: 3}
+  - key: Characters/Critters/Acc/halo
+    sprite: {fileID: 21300000, guid: 34940da342d0f2147bd9cdfaff49f71a, type: 3}
+  - key: Characters/Critters/Acc/headphones
+    sprite: {fileID: 21300000, guid: 183ae9ad715872c4fad4fc0a78a6c9f3, type: 3}
+  - key: Characters/Critters/Acc/scarf
+    sprite: {fileID: 21300000, guid: 960ca9d505ee8f94f8d73df0643e0472, type: 3}
+  - key: Characters/Critters/Acc/straw
+    sprite: {fileID: 21300000, guid: 699f9ea2be3c276499a6a18e9c5e8db3, type: 3}
+  - key: Characters/Critters/Acc/sunglasses
+    sprite: {fileID: 21300000, guid: f535db6bdc23cc94fa331d57c31d135d, type: 3}
+  - key: Characters/Critters/Acc/tophat
+    sprite: {fileID: 21300000, guid: a79f5402bc1712e499273a54cde49a72, type: 3}
   - key: Characters/Critters/blush
     sprite: {fileID: 21300000, guid: 5c45121e56a9f7740b8456d69b152956, type: 3}
   - key: Characters/Critters/body
@@ -69,6 +99,26 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 8c2843cd05b2eec41bce4b9c8b9e8a88, type: 3}
   - key: Characters/Critters/rock_ref
     sprite: {fileID: 21300000, guid: e6b71d04b61c42442bb1966c55aa9a90, type: 3}
+  - key: Characters/Critters/skin_chest
+    sprite: {fileID: 21300000, guid: e77301c16a418b540999153955e95689, type: 3}
+  - key: Characters/Critters/skin_coin
+    sprite: {fileID: 21300000, guid: 0bc40ad155d88974bbd2930d0f77114e, type: 3}
+  - key: Characters/Critters/skin_dew
+    sprite: {fileID: 21300000, guid: de9354846ff1ba7469a3059678897909, type: 3}
+  - key: Characters/Critters/skin_fire
+    sprite: {fileID: 21300000, guid: 15d9091820363104e906fa421db7392b, type: 3}
+  - key: Characters/Critters/skin_leaf
+    sprite: {fileID: 21300000, guid: 7005f6ff45bc9d24ead58f5ca8ba8d04, type: 3}
+  - key: Characters/Critters/skin_moon
+    sprite: {fileID: 21300000, guid: 89f9d7a9cc1c46b4ca27e468c4994f62, type: 3}
+  - key: Characters/Critters/skin_rock
+    sprite: {fileID: 21300000, guid: 8d7ae8617b3805b4cb25b030ef567143, type: 3}
+  - key: Characters/Critters/skin_spark
+    sprite: {fileID: 21300000, guid: cc30b3cfc94c1cd4188027f2cd3f41e3, type: 3}
+  - key: Characters/Critters/skin_star
+    sprite: {fileID: 21300000, guid: 0bdbd5186e7335b47929c0d1a6431253, type: 3}
+  - key: Characters/Critters/skin_wind
+    sprite: {fileID: 21300000, guid: 75fa4cb27a01923428e2d2c15c67511f, type: 3}
   - key: Characters/Critters/spark_ref
     sprite: {fileID: 21300000, guid: e81f85628d7c8f846a879ff880a8cc81, type: 3}
   - key: Characters/Critters/star_ref
@@ -103,16 +153,40 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 25ae82f9e5c3901438f46b0ea7cf5acd, type: 3}
   - key: Characters/Grandpa/lower_arm_front
     sprite: {fileID: 21300000, guid: 871e4b60e7dbfb646b86c75239c6c3ff, type: 3}
+  - key: Characters/Grandpa/pelvis
+    sprite: {fileID: 21300000, guid: 9c5c9bbe1c5b0814cbae71b375653ac8, type: 3}
   - key: Characters/Grandpa/scythe
     sprite: {fileID: 21300000, guid: 04b76cb14ba6fc24d860297b228fc1a3, type: 3}
   - key: Characters/Grandpa/torso
     sprite: {fileID: 21300000, guid: e2ad097ea819d324381e9d208e091db2, type: 3}
+  - key: Characters/Grandpa/torso_v2
+    sprite: {fileID: 21300000, guid: 822d8f7e33d47c3439511ea281e3aae5, type: 3}
   - key: Characters/Grandpa/upper_arm_back
     sprite: {fileID: 21300000, guid: 408cc167d7bd89f43b50c59a0fa9a82a, type: 3}
   - key: Characters/Grandpa/upper_arm_front
     sprite: {fileID: 21300000, guid: 21c7cb1694f75d1469d354f24f534a45, type: 3}
+  - key: Characters/NPC/baker
+    sprite: {fileID: 21300000, guid: 2f5d52f07491b234d8720a47e5d7ebac, type: 3}
+  - key: Characters/NPC/dr
+    sprite: {fileID: 21300000, guid: f125f7de967889746931693366f8a1c0, type: 3}
+  - key: Characters/NPC/herb
+    sprite: {fileID: 21300000, guid: 92cda875ae76e0947b82a631f6f0e246, type: 3}
+  - key: Characters/NPC/inn
+    sprite: {fileID: 21300000, guid: 014f64dcc5ef0484d8a1fb7c70422880, type: 3}
+  - key: Characters/NPC/kid
+    sprite: {fileID: 21300000, guid: 4d166f8e56e75034393a57580ded1e1c, type: 3}
+  - key: Characters/NPC/merch
+    sprite: {fileID: 21300000, guid: 39a1466376f43d442a2edf66436b7a8b, type: 3}
+  - key: Characters/NPC/ranger
+    sprite: {fileID: 21300000, guid: 1b15af6f23e9300409d7e40584c5e72b, type: 3}
+  - key: Characters/NPC/smith
+    sprite: {fileID: 21300000, guid: 0f7aa1321f80db1438473cdbc4720eaf, type: 3}
   - key: FX/circle
     sprite: {fileID: 21300000, guid: 7409728771d7a4c40b736410c47f8377, type: 3}
+  - key: FX/fever_edge
+    sprite: {fileID: 21300000, guid: 58ed43b828ae1ec4da25d2eaecc05310, type: 3}
+  - key: FX/flame_tongue
+    sprite: {fileID: 21300000, guid: ae3185a29c8a4ac4784a29ac835881bb, type: 3}
   - key: FX/ring
     sprite: {fileID: 21300000, guid: ec84ff17f28950541b56c034d948a224, type: 3}
   - key: FX/ring_thin
@@ -121,6 +195,100 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e635c1f892c34cb4dac66a7269dddbdc, type: 3}
   - key: FX/square
     sprite: {fileID: 21300000, guid: 1a04737655ccbdd49bcbb95786643a9f, type: 3}
+  - key: FX/tree_soil
+    sprite: {fileID: 21300000, guid: 07d5a5d2e637e024bb25a1e0f9e2f7e1, type: 3}
+  - key: Farm/Field/crop_ed
+    sprite: {fileID: 21300000, guid: f3860f1098325df4c915745e61538d44, type: 3}
+  - key: Farm/Field/crop_md
+    sprite: {fileID: 21300000, guid: e8b9da30b7e4b4445a8f79e2a2f14711, type: 3}
+  - key: Farm/Field/crop_ps
+    sprite: {fileID: 21300000, guid: e1e12b6e446e1fc49a5e604ec265bf30, type: 3}
+  - key: Farm/Field/tile_grass
+    sprite: {fileID: 21300000, guid: 74491762bbd199d40aacfc2bd7d22ce2, type: 3}
+  - key: Farm/Field/tile_grow
+    sprite: {fileID: 21300000, guid: 1403c848f7074f44a83a13cf7cfb3a07, type: 3}
+  - key: Farm/Field/tile_soil
+    sprite: {fileID: 21300000, guid: 8d891e1bc22fd7b408488549686c4ed3, type: 3}
+  - key: Farm/Field/tile_sprout
+    sprite: {fileID: 21300000, guid: 6dac4768116367f4ca872378ea589963, type: 3}
+  - key: Farm/Field/tool_0
+    sprite: {fileID: 21300000, guid: 4fff3b47481568e4a9cd0c8f70d045be, type: 3}
+  - key: Farm/Field/tool_1
+    sprite: {fileID: 21300000, guid: e8ecc85520dcd9a4aa6fe11171729920, type: 3}
+  - key: Farm/Field/tool_2
+    sprite: {fileID: 21300000, guid: 7be4907602b22384f9ed1c6bc546cc28, type: 3}
+  - key: Farm/Field/tool_3
+    sprite: {fileID: 21300000, guid: 49a539064c1a06643ae18bdcb0b7c67e, type: 3}
+  - key: Farm/Field/tool_4
+    sprite: {fileID: 21300000, guid: 19ac037fe1945ea47b7026605dea8cc2, type: 3}
+  - key: Farm/Icons/dish_cure
+    sprite: {fileID: 21300000, guid: 79afa7be35b66b0479be7fccef0e3230, type: 3}
+  - key: Farm/Icons/dish_fog
+    sprite: {fileID: 21300000, guid: 73ff5c4a2c751a448a89d4c91d3d8bbb, type: 3}
+  - key: Farm/Icons/dish_hotpot
+    sprite: {fileID: 21300000, guid: 3f9943e81be23224787c544fdd0d0612, type: 3}
+  - key: Farm/Icons/dish_jap
+    sprite: {fileID: 21300000, guid: 003343a5a2f1a2d48b1f0b2ed9737783, type: 3}
+  - key: Farm/Icons/dish_reishi
+    sprite: {fileID: 21300000, guid: a40174b7c3ff66044821dd5a24888792, type: 3}
+  - key: Farm/Icons/dish_songi
+    sprite: {fileID: 21300000, guid: dbc90da4210fc4d40928137019cea895, type: 3}
+  - key: Farm/Icons/dish_soup
+    sprite: {fileID: 21300000, guid: 0bc2ee351ca051847b38054615706583, type: 3}
+  - key: Farm/Icons/dish_tea
+    sprite: {fileID: 21300000, guid: 31f15f3b0ccb1d747aa561c19c42085c, type: 3}
+  - key: Farm/Icons/dish_truffle
+    sprite: {fileID: 21300000, guid: 70cfd22800e09f7498a9cf7ff0e16690, type: 3}
+  - key: Farm/Icons/dish_venom
+    sprite: {fileID: 21300000, guid: 4ace641087a9e94409a443cc25844156, type: 3}
+  - key: Farm/Icons/fx_heart
+    sprite: {fileID: 21300000, guid: fa49dc51e5d8d2744933f34f93b601bb, type: 3}
+  - key: Farm/Icons/fx_note
+    sprite: {fileID: 21300000, guid: c4b0ec389538ad344ab9c057cca47a8b, type: 3}
+  - key: Farm/Icons/fx_surprise
+    sprite: {fileID: 21300000, guid: 938fb69821e7c2d4887ba6dab0e5a7ee, type: 3}
+  - key: Farm/Icons/fx_zzz
+    sprite: {fileID: 21300000, guid: b636432be27ccc341b2f761715bd2035, type: 3}
+  - key: Farm/Icons/req_gift
+    sprite: {fileID: 21300000, guid: cf61d0fd99659b24a85d805ac5a40921, type: 3}
+  - key: Farm/Icons/req_pet
+    sprite: {fileID: 21300000, guid: d795fbbde7993d74fbd8baed9ee119e7, type: 3}
+  - key: Farm/Icons/req_snack
+    sprite: {fileID: 21300000, guid: 77f3c7a3b48632742899b1c47a3aaaed, type: 3}
+  - key: Farm/Icons/req_song
+    sprite: {fileID: 21300000, guid: 0454fc94a45e06047ad606eb45d8b707, type: 3}
+  - key: Farm/Icons/req_water
+    sprite: {fileID: 21300000, guid: 29d39060e9f081f4e8c29baa2009bcfb, type: 3}
+  - key: Farm/Icons/tool_knife
+    sprite: {fileID: 21300000, guid: 8aae36112f95e8e4a8f7c4c9166f0d5b, type: 3}
+  - key: Farm/Icons/tool_ladle
+    sprite: {fileID: 21300000, guid: b4b6759b560e65540a9a24666ab198e6, type: 3}
+  - key: Farm/Icons/tool_plate
+    sprite: {fileID: 21300000, guid: 48a31d24d36fcb3418820e4312ceae08, type: 3}
+  - key: Farm/Props/counter
+    sprite: {fileID: 21300000, guid: 917feb9c86f3e9b48921f1d8bcfa6891, type: 3}
+  - key: Farm/Props/dc_bed
+    sprite: {fileID: 21300000, guid: c1f535b007917834b91fa469a366763c, type: 3}
+  - key: Farm/Props/dc_fire
+    sprite: {fileID: 21300000, guid: 6ab46bfd98473384f97d41b87d8a9ae6, type: 3}
+  - key: Farm/Props/dc_house
+    sprite: {fileID: 21300000, guid: cfd8fa60a6a9ccf428d5790935139984, type: 3}
+  - key: Farm/Props/dc_lamp
+    sprite: {fileID: 21300000, guid: 94cefef1ab8915c439491af5749eb090, type: 3}
+  - key: Farm/Props/dc_statue
+    sprite: {fileID: 21300000, guid: 3118f8290a8cab14cb6021fe7e88997d, type: 3}
+  - key: Farm/Props/dc_swing
+    sprite: {fileID: 21300000, guid: d646ceb097e801e4eb6e658a1a4ee347, type: 3}
+  - key: Farm/Props/dc_table
+    sprite: {fileID: 21300000, guid: 61b71e08acb08ec47a0617f32cd951f0, type: 3}
+  - key: Farm/Props/dc_well
+    sprite: {fileID: 21300000, guid: 3383c00097572bc4494a380b7b826ed3, type: 3}
+  - key: Farm/Props/dining
+    sprite: {fileID: 21300000, guid: 75c8a2183eb18494c974c16980d508c2, type: 3}
+  - key: Farm/Props/scarecrow
+    sprite: {fileID: 21300000, guid: e1048ad16a09bcc4fa93254c1b34f1d5, type: 3}
+  - key: Farm/Props/stove
+    sprite: {fileID: 21300000, guid: c218c53bad2266b4e985577c63cfa40f, type: 3}
   - key: Harvesters/bell
     sprite: {fileID: 21300000, guid: f5ec55c9af7e9d1478e896310e555ae9, type: 3}
   - key: Harvesters/cloud_spore
@@ -129,6 +297,20 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 4899d6b4edafb644ab7faa5079e048d2, type: 3}
   - key: Harvesters/gold
     sprite: {fileID: 21300000, guid: 68465f1a67fa9534d8558441ee943916, type: 3}
+  - key: Harvesters/hs_bell
+    sprite: {fileID: 21300000, guid: 8bbe195321f8d3d4c930ec463a9a47ef, type: 3}
+  - key: Harvesters/hs_coin
+    sprite: {fileID: 21300000, guid: 1824cd0f802dde5409e45aab62d51645, type: 3}
+  - key: Harvesters/hs_gold
+    sprite: {fileID: 21300000, guid: 62dcb96bf2d2f61448fdcd4075daf29c, type: 3}
+  - key: Harvesters/hs_mill
+    sprite: {fileID: 21300000, guid: 8643fb000af0e6e44807b929487a9b58, type: 3}
+  - key: Harvesters/hs_sam
+    sprite: {fileID: 21300000, guid: ae6e556b6335f4343b73d07c1881570c, type: 3}
+  - key: Harvesters/hs_saw
+    sprite: {fileID: 21300000, guid: 3ab0dff9915b863409664246caa69063, type: 3}
+  - key: Harvesters/hs_spore
+    sprite: {fileID: 21300000, guid: 8d9d3a690e4d6d44892e90bcd1219430, type: 3}
   - key: Harvesters/mill
     sprite: {fileID: 21300000, guid: 8779dc8012920f44e9c8c95a7e35dbfb, type: 3}
   - key: Harvesters/puff_dust

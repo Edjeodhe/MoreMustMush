@@ -1,0 +1,18 @@
+Sprite sheet: a 3x4 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Tiles and tools for a mushroom farm field. The four tile items are FLAT, straight top-down (orthographic, seen from directly above) SQUARE soil plots with no side faces and no perspective, all exactly the same size, each filling its whole cell edge to edge so they tile seamlessly in a square grid. Crops and tools are single objects. Wide sheet: 3 rows of 4.
+
+Assets in reading order (left to right, top to bottom):
+1. a square plot of untouched grassy ground
+2. a square plot of freshly tilled dark brown soil with neat furrows
+3. a square plot of tilled soil with a tiny mushroom sprout poking out
+4. a square plot of tilled soil with small young mushrooms growing
+5. a ripe cluster of orange edible mushrooms ready to harvest, glowing a little
+6. a ripe cluster of green medicinal mushrooms ready to harvest, glowing a little
+7. a ripe cluster of purple poison mushrooms ready to harvest, glowing a little
+8. an old worn wooden hoe
+9. an iron hoe
+10. a shiny silver hoe
+11. a hoe with a glowing teal mycelium-crystal blade
+12. a legendary golden pitchfork

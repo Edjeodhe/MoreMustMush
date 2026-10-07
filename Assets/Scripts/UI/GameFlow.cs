@@ -27,6 +27,9 @@ namespace MoreMush
         public GameObject pausePanel;
         public RecordsPanel records;
         public BulkPanel bulk;
+        public ShopPanel shop;
+        public WorkshopPanel workshop;
+        public SkinPanel skins;
         public GameObject resetPanel;
         public DebugPanel debug;
         public Toast toast;
@@ -93,6 +96,29 @@ namespace MoreMush
             OpenModal(pausePanel, () => { if (RoundSim.R != null) RoundSim.R.paused = false; });
         }
 
+        // ===== shop =====
+        public void OpenShop()
+        {
+            string from = Screen;
+            shop.ResetQty();
+            OpenModal(shop, () =>
+            {
+                shop.ResetQty();
+                if (from == "tax" && Screen == "tax") tax.ShowBill();
+                else if (Screen == "tree") tree.Refresh();
+            });
+            shop.Render();
+        }
+
+        void Sell(System.Collections.Generic.IEnumerable<(string id, double cnt)> ids)
+        {
+            var r = SellMush(ids);
+            if (r.n == 0) { Snd.Err(); return; }
+            foreach (var (id, _) in ids) shop.qty.Remove(id);
+            Snd.Buy(); ShowToast($"버섯 {U.Fmt(r.n)}개 판매 +{U.Fmt(r.gold)}골드{(r.debt > 0 ? $" (체납 {U.Fmt(r.debt)} 차감)" : "")}");
+            shop.Render();
+        }
+
         // ===== round =====
         public void OpenPreRound()
         {
@@ -141,7 +167,7 @@ namespace MoreMush
         void NextTaxCycle()
         {
             G.tax.cycle++; G.tax.roundsIn = 0; G.tax.income = 0;
-            G.quests = new Newtonsoft.Json.Linq.JArray();   // 마을 의뢰는 사이클마다 새로 (2단계)
+            G.quests.Clear();   // 마을 의뢰는 세금 사이클마다 새로
             SaveGame();
         }
 
@@ -201,8 +227,53 @@ namespace MoreMush
                 case "taxpay": TaxPay(); break;
                 case "taxskip": TaxSkip(); break;
                 case "aftertax": Snd.Ui(); AfterTax(); break;
-                case "shop": case "farm": case "skinshop": case "workshop": case "sporeshop":
-                    Snd.Err(); ShowToast("2·3단계에서 열리는 기능이에요"); break;
+                case "shop": Snd.Ui(); OpenShop(); break;
+                case "sporeshop": Snd.Ui(); shop.mode = "spore"; OpenShop(); break;
+                case "shopmode": Snd.Ui(); shop.mode = arg; shop.Render(); break;
+                case "shoptab": Snd.Ui(); shop.tab = arg; shop.Render(); break;
+                case "shopq": { var p = arg.Split('|'); shop.StepQty(p[0], double.Parse(p[1])); break; }
+                case "shopset": { var p = arg.Split('|'); shop.SetQtyFrac(p[0], double.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture)); break; }
+                case "shopsell": Sell(new[] { (arg, shop.Qty(arg)) }); break;
+                case "shopsellall": Sell(ShopList(shop.tab).Select(sp => (sp.id, InvCount(sp.id)))); break;
+                case "quest":
+                {
+                    var r = DoQuest(int.Parse(arg));
+                    if (r == null) { Snd.Err(); break; }
+                    Snd.Record(); ShowToast($"의뢰 완료! +{U.Fmt(r.Value.gold)}골드{(r.Value.debt > 0 ? $" (체납 {U.Fmt(r.Value.debt)} 차감)" : "")}"); shop.Render();
+                    break;
+                }
+                case "questall":
+                {
+                    var r = QuestAll();
+                    if (r.n == 0) { Snd.Err(); ShowToast("지금 전달할 수 있는 의뢰가 없어요"); break; }
+                    Snd.Record(); ShowToast($"의뢰 {r.n}개 완료! +{U.Fmt(r.gold)}골드{(r.debt > 0 ? $" (체납 {U.Fmt(r.debt)} 차감)" : "")}"); shop.Render();
+                    break;
+                }
+                case "buyspore":
+                {
+                    double n = arg == "max" ? SporeMax() : double.Parse(arg);
+                    if (!BuySpore(n)) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
+                    Snd.Buy(); ShowToast($"{UIUtil.Ic("spore")} 버섯 포자 {U.Fmt(n)}개 구입 (−{U.Fmt(n * SporePrice())}골드)"); shop.Render();
+                    break;
+                }
+                case "workshop": Snd.Ui(); OpenModal(workshop, () => tree.Refresh()); workshop.Render(); break;
+                case "hvunlock":
+                    if (!HvUnlock(arg)) { Snd.Err(); break; }
+                    Snd.Buy(); ShowToast($"{HV[arg].n} 해금! 활성화되어 무작위로 나와요"); workshop.Render(); break;
+                case "hvlevel":
+                    if (!HvLevel(arg)) { Snd.Err(); break; }
+                    Snd.Buy(); ShowToast($"{HV[arg].n} {U.Stars(HvStar(arg))}{(HvStar(arg) >= 5 ? " 최대! 날이 늘었어요" : "")}"); workshop.Render(); break;
+                case "hvtoggle":
+                    if (!HvToggle(arg)) { Snd.Err(); ShowToast("수확기는 최소 1개는 켜져 있어야 해요"); break; }
+                    Snd.Ui(); workshop.Render(); break;
+                case "skinshop": Snd.Ui(); OpenModal(skins, () => tree.Refresh()); skins.Render(); break;
+                case "skintab": Snd.Ui(); skins.tab = arg; skins.Render(); break;
+                case "buyskin":
+                    if (!BuySkin(arg)) { Snd.Err(); ShowToast("균사석이 부족해요"); break; }
+                    Snd.Record(); ShowToast($"{SKIN[arg].n} 스킨을 샀어요!"); skins.Render(); break;
+                case "wearskin": WearSkin(arg); Snd.Ui(); skins.Render(); break;
+                case "farm":
+                    Snd.Err(); ShowToast("곧 열려요 (이식 중)"); break;
                 default:
                     if (act.StartsWith("dbg-") && debug != null) debug.Do(act, arg);
                     break;

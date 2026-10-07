@@ -40,8 +40,7 @@ namespace MoreMush
             taxBox.color = due ? (G.gold >= bill ? U.Hex("#e4f6d4") : U.Hex("#ffe0c8")) : U.Hex("#f6ead2");
             taxPulse = due && G.gold < bill;
             codexButtonText.text = $"{UIUtil.Ic("book")} 도감 ({CodexCount()}/{SP_TOTAL})";
-            bool ws = WorkshopOpen();
-            workshopButtonText.text = $"공방{(ws ? "" : " (도감 10종)")}";
+            workshopButtonText.text = "공방";
         }
 
         bool taxPulse;

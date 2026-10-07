@@ -27,7 +27,7 @@ namespace MoreMush
     }
 
     // Game rules on the save data (prototype "조회 · 해금 · 비용 · 세금 · 판매 · 능력치" sections).
-    public static class Game
+    public static partial class Game
     {
         public static SaveData G;
         public static class DBG { public static bool open, infinite, allSeeds; public static int speed = 1; }
@@ -41,7 +41,6 @@ namespace MoreMush
         public static int CodexCount() => SPECIES.Count(s => Harvested(s.id));
         public static int GoldenCount() => SPECIES.Count(s => G.codex.TryGetValue(s.id, out var e) && e.gold);
         public static bool SetDone(string id) => SETS.First(x => x.id == id).ids.All(Harvested);
-        public static bool WorkshopOpen() => CodexCount() >= 10;
         public static bool HasSpecial(string id) => G.specials.TryGetValue(id, out var b) && b;
 
         public static double GoldenSetBonus()

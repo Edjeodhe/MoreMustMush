@@ -18,7 +18,8 @@ namespace MoreMush
             bool busy = !b.perm && R.balls.Count > 12;
             transform.localPosition = Art.P(b.x, b.y);
 
-            body.sprite = SpriteDB.Get("Harvesters/" + b.hv);
+            var skin = Game.HvSkinOn(b.hv);
+            body.sprite = SpriteDB.Get("Harvesters/" + (skin != null ? skin.id : b.hv));
             Art.FitPx(body, b.r * 2.3f);
             body.transform.localRotation = Quaternion.Euler(0, 0, -b.ang * Mathf.Rad2Deg);
             body.color = new Color(1, 1, 1, b.perm ? 1 : Mathf.Min(0.85f, b.life));
@@ -45,12 +46,18 @@ namespace MoreMush
                 blade.color = b.bladeFx > 0 ? new Color(1, 1, 1, 0.55f) : new Color(230 / 255f, 230 / 255f, 1, 0.2f);
             }
 
+            // 버프 빛이 우선, 없으면 수확기 스킨의 은은한 빛
             bool buff = b.accel > 0 || b.clear > 0 || b.sharpen > 0;
-            aura.enabled = buff;
+            aura.enabled = buff || skin != null;
             if (buff)
             {
                 aura.color = b.clear > 0 ? new Color(190 / 255f, 245 / 255f, 1, 0.18f) : b.sharpen > 0 ? new Color(1, 1, 1, 0.18f) : new Color(110 / 255f, 210 / 255f, 1, 0.18f);
                 aura.transform.localScale = Vector3.one * (b.r * 3.2f / Art.PPU);
+            }
+            else if (skin != null)
+            {
+                var ac = U.Hex(skin.aura); ac.a = 0.3f * (b.perm ? 1 : Mathf.Min(0.85f, b.life)); aura.color = ac;
+                aura.transform.localScale = Vector3.one * (b.r * 3.4f / Art.PPU);
             }
 
             fire.enabled = st.fire && !busy;

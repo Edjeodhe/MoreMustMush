@@ -1,0 +1,14 @@
+Sprite sheet: a 2x4 grid holding 8 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Bust portraits (head and shoulders only, front three-quarter view, friendly smile, modest everyday clothing) of eight villagers of a cozy mushroom village, for a quest board. Same art style as the mushroom-hunter grandpa reference. Each portrait is a clean cut-out on a fully transparent background: no glow, no vignette, no backdrop. Wide sheet: 2 rows of 4 portraits.
+
+Assets in reading order (left to right, top to bottom):
+1. Milsun, an old granny baker: grey hair in a bun, round glasses, pink dress with a white apron
+2. Gamcho, an old herbalist grandpa: bald head, long white beard, round glasses, green robe
+3. Musoe, a burly blacksmith uncle: short dark hair, stubble, red headband, brown leather apron
+4. Dotori, a little boy mushroom hunter: brown hair, orange cap, freckles, sky-blue shirt
+5. Dallae, a cheerful middle-aged innkeeper woman: long brown hair tied with a purple scarf, modest high-collared purple dress with an apron
+6. Dr. Pojarin, a scientist: messy silver hair, round glasses, white lab coat
+7. Geumbok, a plaza merchant: short black hair, curled mustache, dark top hat, red vest
+8. Solip, a forest ranger woman: long brown hair, olive ranger hat and green uniform

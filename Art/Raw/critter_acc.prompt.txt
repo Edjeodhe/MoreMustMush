@@ -1,0 +1,18 @@
+Sprite sheet: a 3x4 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Accessories and hats sized to fit the mushroom critters in the attached reference, each drawn alone in front view, to be layered on a critter's cap or face.
+
+Assets in reading order (left to right, top to bottom):
+1. a red pirate bandana with white dots, tied at the side
+2. big neon headphones
+3. a cozy white knitted scarf
+4. a small black top hat with a gold band
+5. a glowing golden halo ring
+6. a pink cherry-blossom flower hairpin
+7. black cool sunglasses
+8. a small fluffy white cloud
+9. a small jeweled golden crown
+10. a big pink ribbon bow
+11. a white chef toque
+12. a straw farmer hat with a red band

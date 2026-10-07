@@ -24,7 +24,7 @@ namespace MoreMush
         public string theme = "forest";
         public List<string> dishes = new List<string>();
         public Dictionary<string, int> dishLeft = new Dictionary<string, int>();
-        public JArray quests = new JArray();      // 마을 의뢰 (2단계)
+        public List<Quest> quests = new List<Quest>();   // 마을 의뢰 (버섯 상점)
         public JObject farm = new JObject();      // 버섯 농장 (3단계)
         public TaxState tax = new TaxState();
         public Records rec = new Records();
@@ -34,6 +34,7 @@ namespace MoreMush
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
         [Serializable] public class Decor { public Dictionary<string, bool> own = new Dictionary<string, bool>(), on = new Dictionary<string, bool>(); }
+        [Serializable] public class Quest { public string id, npc; public double cnt; public int line; }
         [Serializable] public class CodexEntry { public double n; public int first; public bool gold, giant; }
         [Serializable] public class TaxState { public int cycle = 1, roundsIn, paid, unpaid; public double income, debt; }
 
@@ -83,7 +84,7 @@ namespace MoreMush
                 g.dishLeft ??= new Dictionary<string, int>();
                 g.skins ??= new SaveData.Skins();
                 g.decor ??= new SaveData.Decor();
-                g.quests ??= new JArray();
+                g.quests ??= new List<SaveData.Quest>();
                 g.farm ??= new JObject();
                 return g;
             }
