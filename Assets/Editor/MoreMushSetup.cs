@@ -48,6 +48,9 @@ namespace MoreMush.EditorTools
                 if (imp == null) { Debug.LogWarning("missing " + path); continue; }
                 imp.GetSourceTextureWidthAndHeight(out int w, out int h);
                 imp.spriteBorder = kv.Value(w, h);
+                // sliced SpriteRenderers (world-space frames, bubbles) need a full-rect mesh to 9-slice correctly
+                var st = new TextureImporterSettings(); imp.ReadTextureSettings(st);
+                st.spriteMeshType = SpriteMeshType.FullRect; imp.SetTextureSettings(st);
                 imp.SaveAndReimport();
             }
         }
@@ -119,7 +122,7 @@ namespace MoreMush.EditorTools
         public static void BuildIconSpriteAsset()
         {
             const int cell = 128;
-            var paths = AssetDatabase.FindAssets("t:Texture2D", new[] { GenRoot + "/Icons" }).Select(AssetDatabase.GUIDToAssetPath).OrderBy(p => p).ToList();
+            var paths = AssetDatabase.FindAssets("t:Texture2D", new[] { GenRoot + "/Icons", GenRoot + "/Farm/Icons", GenRoot + "/Farm/Field", GenRoot + "/Farm/Tree" }).Select(AssetDatabase.GUIDToAssetPath).OrderBy(p => p).ToList();
             int cols = 8, rows = Mathf.CeilToInt(paths.Count / (float)cols);
             var atlas = new Texture2D(cols * cell, rows * cell, TextureFormat.RGBA32, false);
             atlas.SetPixels32(new Color32[atlas.width * atlas.height]);

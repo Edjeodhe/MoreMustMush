@@ -10,7 +10,9 @@ namespace MoreMush
         public Transform root;                  // squash/scale pivot (feet line)
         public Transform body, cap, eyes, mouth, blush, footL, footR;
         public SpriteRenderer capSprite, eyesSprite, mouthSprite;
+        public SpriteRenderer acc, hat;         // skin accessory and job hat (chef · straw), children of the cap
         public string kind = "fire";
+        public string skin, hatId;              // worn skin id and hat id (null = none)
         public float baseRadius = 50;           // prototype critter radius the authored pose was built for
         public bool idle = true;
         public float blinkEvery = 3.2f;
@@ -26,9 +28,6 @@ namespace MoreMush
         void Awake()
         {
             renderers = GetComponentsInChildren<SpriteRenderer>(true);
-            if (eyesSprite == null) eyesSprite = eyes.GetComponent<SpriteRenderer>();
-            if (mouthSprite == null) mouthSprite = mouth.GetComponent<SpriteRenderer>();
-            if (capSprite == null) capSprite = cap.GetComponentInChildren<SpriteRenderer>();
             capRest = cap.localPosition; bodyRest = body.localPosition;
             footLRest = footL.localPosition; footRRest = footR.localPosition;
             blinkT = Random.Range(0.5f, blinkEvery);
@@ -37,10 +36,36 @@ namespace MoreMush
         public void SetKind(string id)
         {
             kind = id;
-            if (shownKind == id) return;
-            shownKind = id;
-            var s = SpriteDB.Get("Characters/Critters/cap_" + id);
+            string key = id + "|" + skin + "|" + hatId;
+            if (shownKind == key) return;
+            shownKind = key;
+            Defs.SKIN.TryGetValue(skin ?? "", out var sk);
+            var s = SpriteDB.Get("Characters/Critters/" + (sk != null ? "skin_" : "cap_") + id);
             if (s != null) capSprite.sprite = s;
+            Place(acc, sk?.acc);
+            Place(hat, hatId);
+        }
+
+        // Skin + hat for this critter (farm, skin shop, field). Null to take them off.
+        public void SetLook(string id, string skinId, string hatName)
+        {
+            skin = skinId; hatId = hatName;
+            SetKind(id);
+        }
+
+        // Puts an accessory sprite where Defs.ACC_PLACE says (rig units from the critter center), relative to the cap.
+        void Place(SpriteRenderer sr, string name)
+        {
+            if (sr == null) return;
+            sr.gameObject.SetActive(name != null);
+            if (name == null) return;
+            var sp = SpriteDB.Get("Characters/Critters/Acc/" + name);
+            sr.sprite = sp;
+            if (sp == null || !Defs.ACC_PLACE.TryGetValue(name, out var p)) return;
+            float s = p.w / sp.bounds.size.x;
+            sr.transform.localPosition = new Vector3(p.x, p.y - capRest.y, 0);
+            sr.transform.localScale = new Vector3(s, s, 1);
+            sr.sortingOrder = capSprite.sortingOrder + (p.back ? -1 : 1);
         }
 
         // sx, sy: squash factors (1 = rest); r: prototype radius to display at
@@ -52,7 +77,7 @@ namespace MoreMush
 
         void Update()
         {
-            if (shownKind != kind) SetKind(kind);
+            if (shownKind != kind + "|" + skin + "|" + hatId) SetKind(kind);
             if (shownSilhouette != silhouette)
             {
                 shownSilhouette = silhouette;

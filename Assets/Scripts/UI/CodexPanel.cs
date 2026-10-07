@@ -71,7 +71,7 @@ namespace MoreMush
                 detailName.text = $"{(own ? k.n : "???")} <size=50%><mark=#b07bff>  특수 버섯  </mark></size>";
                 detailDesc.text = own ? "숲을 깡총깡총 뛰어다니던 캐릭터 버섯. 지금은 버섯 농장에서 뛰어놀고 있어요." : $"라운드 중 가끔({Mathf.RoundToInt(SPECIAL_P * 100)}%) 나타나요. {SPECIAL_LIFE}초 안에 잡지 못하면 숲으로 도망쳐요.";
                 detailStars.gameObject.SetActive(false); detailAb.gameObject.SetActive(false); detailWarn.gameObject.SetActive(false);
-                detailTrait.text = own ? "보유 중 · " + k.perk : "잡으면 영구 능력을 얻어요";
+                detailTrait.text = own ? $"보유 중 · 보유 효과: {FxText(k.id)}" : "잡으면 버섯 농장에 들어와 일을 도와요";
                 detailRec.text = "이미 잡은 특수 버섯을 또 잡으면 이번 사이클 세금의 30%만큼 보너스 골드";
                 return;
             }

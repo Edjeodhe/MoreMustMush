@@ -1,0 +1,18 @@
+Sprite sheet: a 3x4 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Props for a cozy mushroom farm seen from a slight top-down 3/4 view, each standing on its own base, drawn at the same scale as each other.
+
+Assets in reading order (left to right, top to bottom):
+1. a big mushroom-cap table with two small mushroom stools
+2. a brazier shaped like a mushroom cap with a cozy fire burning in it
+3. a pair of glowing mushroom lanterns on short posts
+4. a wooden flower bed planter full of colorful flowers
+5. a small swing hanging between two mushroom-shaped trees
+6. a small fountain whose top is a mushroom cap spouting water
+7. a little red mushroom cottage with a round window and a door
+8. a statue carved from glowing teal mycelium crystal on a stone base
+9. a cute kitchen stove hearth with a bubbling pot on top
+10. a wooden kitchen prep counter with a cutting board
+11. a round wooden dining table with a checkered cloth
+12. a friendly scarecrow wearing a mushroom-cap hat

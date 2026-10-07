@@ -1,0 +1,29 @@
+Sprite sheet: a 5x5 grid holding 22 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Small bold game icons for a cozy mushroom farm and kitchen, each a single object centered in its cell, readable at 32 px.
+
+Assets in reading order (left to right, top to bottom):
+1. a blue water droplet
+2. a gently patting open hand
+3. two musical notes
+4. a round cookie
+5. a wrapped gift box with a red ribbon
+6. a pink heart
+7. sleepy letters Z z made of fluffy cloud shapes
+8. a yellow exclamation burst
+9. a single music note
+10. a small kitchen knife
+11. a wooden ladle
+12. an empty white plate
+13. a bowl of creamy mushroom soup
+14. a bowl of rice topped with sliced matsutake
+15. a cup of green herbal tea
+16. a small potion bottle of reddish-brown reishi tonic
+17. a clay bowl of green herbal detox broth with leaves
+18. purple poison-mushroom skewers
+19. a pot of purple misty stew
+20. a hot pot with three colors of mushrooms
+21. a plate of glass noodles with wood-ear mushrooms
+22. a plate of risotto with shaved black truffle
+Leave the remaining 3 cell(s) empty.

@@ -1,0 +1,1 @@
+Wide landscape 16:9 game background, slight top-down 3/4 view: a mushroom farm field area. Left two-thirds: a large plain flat dirt-and-grass clearing where a square crop plot will be drawn (keep it empty and even). Right third: a small wooden tool shed and a stack of hay. Wooden fence along the top, sunny day, warm colors. No crops, no characters, no text, no UI.

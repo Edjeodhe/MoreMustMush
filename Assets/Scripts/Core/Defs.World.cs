@@ -54,31 +54,9 @@ namespace MoreMush
 
         // 버섯 체력·보상(점수·수확 개수) 배율: 지역마다 ×10, 스테이지마다 ×1.01.
         // 공격력·타격 점수 단계 노드(+1/+10/+100/+1000)와 단위를 맞춰, 새 지역에 갈 때마다 숫자가 한 자리씩 뛴다.
-        public const double ZONE_STEP = 10, STAGE_GROWTH = 1.01;        public static int ThemeIndex(string id) => Math.Max(0, THEMES.FindIndex(t => t.id == id));
+        public const double ZONE_STEP = 10, STAGE_GROWTH = 1.01;
+        public static int ThemeIndex(string id) => Math.Max(0, THEMES.FindIndex(t => t.id == id));
         public static double ZoneMul(string themeId, int stage) => Math.Pow(ZONE_STEP, ThemeIndex(themeId)) * Math.Pow(STAGE_GROWTH, stage - 1);
-
-        // ===== 버섯 요리 (2단계에서 만들 수 있게 됨; 능력치 계산은 지금부터 반영) =====
-        public class Recipe
-        {
-            public string id, cat, n, icon;
-            public Dictionary<string, int> need;
-            public Func<double, string> eff;
-            public Action<RoundStats, double> apply;
-        }
-        public static readonly List<Recipe> RECIPES = new List<Recipe>
-        {
-            new Recipe { id = "soup", cat = "ed", n = "버섯 수프", icon = "dish_soup", need = new Dictionary<string, int> { ["ed"] = 30, ["spore"] = 2 }, eff = k => $"수확량 ×{U.FmtN(1 + 0.5 * k)}", apply = (st, k) => st.harvestMul *= 1 + 0.5 * k },
-            new Recipe { id = "songi", cat = "ed", n = "송이 덮밥", icon = "dish_songi", need = new Dictionary<string, int> { ["ed"] = 50, ["spore"] = 5 }, eff = k => $"황금 변종 확률 ×{U.FmtN(1 + 2 * k)}", apply = (st, k) => st.golden *= 1 + 2 * k },
-            new Recipe { id = "tea", cat = "md", n = "약초 차", icon = "dish_tea", need = new Dictionary<string, int> { ["md"] = 30, ["spore"] = 2 }, eff = k => $"제한시간 +{U.FmtN(5 * k, 1)}초", apply = (st, k) => st.duration += 5 * k },
-            new Recipe { id = "reishi", cat = "md", n = "영지 보약", icon = "dish_reishi", need = new Dictionary<string, int> { ["md"] = 50, ["spore"] = 5 }, eff = k => $"모든 스킬 발동률 ×{U.FmtN(1 + 0.5 * k)}", apply = (st, k) => { foreach (var s in st.sk.Values) s.p *= 1 + 0.5 * k; } },
-            new Recipe { id = "cure", cat = "md", n = "해독 약초탕", icon = "dish_cure", need = new Dictionary<string, int> { ["md"] = 40, ["spore"] = 3 }, eff = k => "포자 디버프(느림·약화)에 걸리지 않음", apply = (st, k) => st.debuffDur = 0 },
-            new Recipe { id = "venom", cat = "ps", n = "독버섯 꼬치", icon = "dish_venom", need = new Dictionary<string, int> { ["ps"] = 40, ["spore"] = 3 }, eff = k => $"공격력 ×{U.FmtN(1 + 0.4 * k)} · 치명타 +{U.JsRound(5 * k)}%p", apply = (st, k) => { st.atk *= 1 + 0.4 * k; st.crit += 0.05 * k; } },
-            new Recipe { id = "fog", cat = "ps", n = "독안개 스튜", icon = "dish_fog", need = new Dictionary<string, int> { ["ps"] = 50, ["spore"] = 4 }, eff = k => $"필드 버섯 체력 −{U.JsRound(100 * (1 - 1 / (1 + 0.4 * k)))}%", apply = (st, k) => st.shroomHp /= 1 + 0.4 * k },
-            new Recipe { id = "hotpot", cat = "mix", n = "삼색 버섯전골", icon = "dish_hotpot", need = new Dictionary<string, int> { ["ed"] = 20, ["md"] = 20, ["ps"] = 20, ["spore"] = 4, ["gem"] = 2 }, eff = k => $"점수 ×{U.FmtN(1 + k)}", apply = (st, k) => st.scoreMul *= 1 + k },
-            new Recipe { id = "jap", cat = "mix", n = "목이 잡채", icon = "dish_jap", need = new Dictionary<string, int> { ["ed"] = 25, ["md"] = 15, ["spore"] = 3, ["gem"] = 3 }, eff = k => "영구 핀볼 +1", apply = (st, k) => st.permBalls += 1 },
-            new Recipe { id = "truffle", cat = "mix", n = "송로 리조또", icon = "dish_truffle", need = new Dictionary<string, int> { ["ed"] = 30, ["ps"] = 30, ["spore"] = 6, ["gem"] = 5 }, eff = k => $"에픽 이상 출현 ×{U.FmtN(1 + k)} · 거대 버섯 확정", apply = (st, k) => { st.rareMul *= 1 + k; st.giantP = 1; } },
-        };
-        public static readonly Dictionary<string, Recipe> RECIPE = new Dictionary<string, Recipe>();
 
         // ===== 숲 장치 =====
         public static readonly string[] DEVICE_TYPES = { "stump", "moss", "mole", "stream", "acorn" };
@@ -133,7 +111,6 @@ namespace MoreMush
         {
             foreach (var w in WEATHERS) { WEATHER[w.id] = w; if (w.fav != null) foreach (var n in w.fav) w.favIds.Add(SP_BY_NAME[n].id); }
             foreach (var t in THEMES) { THEME[t.id] = t; foreach (var n in t.fav) t.favIds.Add(SP_BY_NAME[n].id); }
-            foreach (var r in RECIPES) RECIPE[r.id] = r;
             foreach (var s in SETS) s.ids = s.cat != null ? SPECIES.Where(x => x.c == s.cat).Select(x => x.id).ToList() : s.m.Select(n => SP_BY_NAME[n].id).ToList();
             GOLDEN_STEPS = new[] { new[] { 5 }, new[] { 15 }, new[] { SP_TOTAL } };
         }

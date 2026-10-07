@@ -1,0 +1,14 @@
+Sprite sheet: a 2x4 grid holding 7 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Skin versions of the pinball harvester tokens in the attached reference: exactly the same shapes and size, only recolored. Clean cut-outs on a fully transparent background: NO glow, NO aura, NO colored background. Wide sheet: 2 rows of 4.
+
+Assets in reading order (left to right, top to bottom):
+1. cherry-blossom scythe: pink blade, pale wood handle
+2. obsidian shuriken: near-black blades with violet edges and a purple hub
+3. ice saw: pale icy blue disc with white edges
+4. galaxy spore: deep indigo cap with yellow star dots
+5. golden bell: shining gold bell with a dark gold cap
+6. jade coin: jade green coin with a darker green ring
+7. dragon scythe: red blade with a gold edge and a dark handle
+Leave the remaining 1 cell(s) empty.

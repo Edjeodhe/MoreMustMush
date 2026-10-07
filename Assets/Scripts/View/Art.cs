@@ -29,6 +29,14 @@ namespace MoreMush
             t.localScale = new Vector3(w / PPU / b.x, h / PPU / b.y, 1);
         }
 
+        // Sliced SpriteRenderer sized in prototype pixels. The object may be scaled down so the 9-slice border
+        // (drawn big in the generated UI kit) looks thinner; the size is set in that scaled space.
+        public static void SlicedPx(SpriteRenderer sr, float w, float h)
+        {
+            float k = sr.transform.localScale.x;
+            sr.size = new Vector2(w, h) / PPU / (k == 0 ? 1 : k);
+        }
+
         static readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
         public static void SetFx(Renderer r, float gold = 0, float dark = 0, float flash = 0)
         {

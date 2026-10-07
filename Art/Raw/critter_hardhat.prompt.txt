@@ -1,0 +1,7 @@
+Sprite sheet: a 1x1 grid holding 1 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A hat sized to fit the mushroom critters in the attached reference, drawn alone in front view, to be layered on a critter's cap.
+
+Assets in reading order (left to right, top to bottom):
+1. a small yellow construction hard hat with a front brim
