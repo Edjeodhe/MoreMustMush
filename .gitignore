@@ -108,3 +108,6 @@ InitTestScene*.unity*
 # ===== External assets (never commit) =====
 /[Aa]ssets/ExternalAssets/
 /[Aa]ssets/ExternalAssets.meta
+
+# Claude Code MCP config (per-machine)
+.mcp.json
