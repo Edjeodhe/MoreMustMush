@@ -1,0 +1,11 @@
+Sprite sheet: a 1x5 grid holding 5 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Five growth stages of the SAME cozy fantasy farm tree on which mushrooms grow, matching the attached ranch background's style, front view, each standing on a small round grass base. From left (smallest) to right (largest) the tree clearly grows bigger and lusher. Warm brown mossy bark, rounded green leafy canopy with soft clumps. Do NOT draw mushrooms on the branches (they are added separately); a few tiny decorative shelf fungi low on the trunk are fine.
+
+Assets in reading order (left to right, top to bottom):
+1. stage 1: a small sapling with a thin trunk and a few leaf clumps
+2. stage 2: a young tree with a slim trunk and a small round canopy
+3. stage 3: a medium tree with a sturdier trunk and a fuller canopy
+4. stage 4: a large tree with a thick trunk, visible roots and a big lush canopy
+5. stage 5: a grand ancient tree with a very thick mossy trunk, big roots and a huge layered lush canopy sprinkled with tiny glowing spores

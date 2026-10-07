@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Mushroom farm world under World/Farm: one ranch screen with the field inside, 64 plot slots, the placement ghost,
+// Mushroom farm world under World/Farm: one ranch screen with the mushroom tree inside (13 mushroom slots), the
+// buildable-area grid and placement ghost (24 footprint tiles),
 // and hidden template slots for critters / buildings / particles / floating text. Built through MCP for Unity.
 // Only creates World/Farm (deleting a previous one). Create positions / scales are local to the parent.
 import { Builder, call, destroyPaths, ART, MAT, FONT, TMAT, col } from "./mcp.mjs";
@@ -13,55 +14,40 @@ const SR = (sprite, order, color = "#ffffff", o = {}) => ({ ...(sprite ? { sprit
 const TMP = (text, size, color, order, o = {}) => ({ text, fontSize: size / 10, alignment: o.align ?? "Center", color: col(color), textWrappingMode: "NoWrap", richText: true,
   font: o.font ?? FONT.jua, ...(o.mat ? { fontSharedMaterial: o.mat } : {}), sortingOrder: order });
 // sprite pixel widths (PPU 100) → scale for a target width in stage pixels
-const PX = { scarecrow: 279, tile: 324, crop: 332, gem: 216, star: 227, surprise: 227, req: 202, tool: 321, hammer: 407 };
+const PX = { gem: 216, star: 227, surprise: 227, req: 202, tool: 321, hammer: 407, tree: 369, fruit: 563 };
 const fit = (key, w) => { const s = w / PX[key]; return [s, s, 1]; };
 const BG = 19.2 / 16.72;   // backgrounds are 1672 px wide
-const FIELD = { cx: 600, cy: 600 };
+const TREE = { x: 570, y: 790 };
+const GRID = { x0: 120, y0: 260, cell: 40, cols: 42, rows: 16 };
 
 await destroyPaths([F]);
 
 b.go(F, { FarmView: {} });
 b.go(`${F}/Background`, { SpriteRenderer: SR(ART("Backgrounds/bg_ranch"), 0) }, { pos: P(960, 540, 1), scale: [BG, BG, 1] });
 b.raw("manage_gameobject", { action: "create", name: "Grandpa", parent: F, prefab_path: "Assets/Prefabs/Characters/GrandpaRig.prefab", position: P(150, 960), scale: [0.55, 0.55, 1] });
-b.go(`${F}/Scarecrow`, {}, { pos: P(330, 905) });
-b.go(`${F}/Scarecrow/Sprite`, { SpriteRenderer: SR(ART("Farm/Props/scarecrow"), 1899) }, { pos: P(0, -95), scale: fit("scarecrow", 160) });
-// field frames
-b.go(`${F}/FieldNext`);
-for (let i = 0; i < 4; i++) b.go(`${F}/FieldNext/NextEdges${i}`, { SpriteRenderer: SR(ART("FX/square"), 89, "#ffffff", { a: 0.7 }) }, { scale: i < 2 ? [4.7, 0.03, 1] : [0.03, 4.7, 1] });
-b.go(`${F}/FieldFrame`, { SpriteRenderer: SR(ART("UI/panel_wood"), 90, "#ffffff", { sliced: true }) }, { pos: P(FIELD.cx, FIELD.cy), scale: [1 / 7, 1 / 7, 1] });
-await b.send("farm: scene");
-
-b.go(`${F}/Tiles`);
-for (let r = 0; r < 8; r++) {
-  for (let c = 0; c < 8; c++) {
-    const i = r * 8 + c, T = `${F}/Tiles/Tiles${i}`;
-    const cx = FIELD.cx + (c - 4) * 55 + 27.5, cy = FIELD.cy + (r - 4) * 55 + 27.5, k = 55 / 112;
-    b.go(T, { FieldTile: {} }, { pos: P(cx, cy), scale: [k, k, 1] });
-    // children are authored for a 112 px plot (the slot is scaled to the plot size)
-    b.go(`${T}/Ground`, { SpriteRenderer: SR(ART("Farm/Field/tile_grass"), 100) }, { scale: fit("tile", 108) });
-    b.go(`${T}/Glow`, { SpriteRenderer: SR(ART("FX/soft"), 101, "#a0ffd2", { a: 0.7 }) }, { scale: [1.3, 1.3, 1] });
-    b.go(`${T}/Crop`, { SpriteRenderer: SR(ART("Farm/Field/crop_ed"), 103) }, { pos: P(0, -4), scale: fit("crop", 86) });
-    b.go(`${T}/BarBack`, { SpriteRenderer: SR(ART("FX/square"), 104, "#000000", { a: 0.35 }) }, { pos: P(0, 46), scale: [0.92, 0.06, 1] });
-    b.go(`${T}/BarFill`, { SpriteRenderer: SR(ART("FX/square"), 105, "#f28c28") }, { pos: P(0, 46), scale: [0.5, 0.06, 1] });
-    b.go(`${T}/Gem`, { SpriteRenderer: SR(ART("Icons/gem"), 106) }, { pos: P(41, -41), scale: fit("gem", 26) });
-    b.go(`${T}/Busy`, { SpriteRenderer: SR(ART("FX/square"), 107, "#ffe36e", { a: 0.22 }) }, { scale: [1.04, 1.04, 1] });
-    b.go(`${T}/BusyIcon`, { SpriteRenderer: SR(ART("Farm/Field/tool_0"), 108) }, { pos: P(-36, -36), scale: fit("tool", 30) });
-    b.go(`${T}/Hover`, { SpriteRenderer: SR(ART("FX/square"), 109, "#fff6b0", { a: 0.28 }) }, { scale: [1.04, 1.04, 1] });
-  }
-  await b.send(`farm: tiles row ${r}`);
+// the mushroom tree (sits at the trunk base): stage picture, 13 mushroom slots with ripe glows, level sign
+const T = `${F}/Tree`;
+b.go(T, { FarmTreeView: {} }, { pos: P(TREE.x, TREE.y) });
+b.go(`${T}/Shadow`, { SpriteRenderer: SR(ART("FX/soft"), 1840, "#1e3c14", { a: 0.3 }) }, { scale: [3.6, 0.6, 1] });
+b.go(`${T}/TreeSprite`, { SpriteRenderer: SR(ART("Farm/Tree/tree_2"), 1850) }, { pos: [0, 2.1, 0], scale: fit("tree", 330) });
+for (let i = 0; i < 13; i++) {
+  b.go(`${T}/Glows${i}`, { SpriteRenderer: SR(ART("FX/soft"), 1851, "#fff2a0", { add: true, a: 0.55 }) }, { pos: [0, 2 + i * 0.1, 0], scale: [0.6, 0.6, 1] });
+  b.go(`${T}/Fruits${i}`, { SpriteRenderer: SR(ART("Farm/Tree/fruit_ed"), 1852) }, { pos: [0, 2 + i * 0.1, 0], scale: fit("fruit", 44) });
 }
-b.go(`${F}/TileHint`, {}, { pos: P(FIELD.cx, 300) });
-b.go(`${F}/TileHint/TileHintBack`, { SpriteRenderer: SR(ART("UI/panel_paper"), 5200, "#28190f", { a: 0.85, sliced: true }) }, { scale: [1 / 6, 1 / 6, 1] });
-b.go(`${F}/TileHint/TileHintText`, { TextMeshPro: TMP("갈기", 22, "#fff6e0", 5201) });
+b.go(`${T}/Sign`, {}, { pos: P(120, -20) });
+b.go(`${T}/Sign/SignBack`, { SpriteRenderer: SR(ART("UI/panel_wood"), 1860, "#c89060", { sliced: true }) }, { scale: [1 / 7, 1 / 7, 1] });
+b.go(`${T}/Sign/SignText`, { TextMeshPro: TMP("Lv.1", 22, "#fff6e0", 1861, { mat: TMAT.dark }) });
+await b.send("farm: scene + tree");
 
-// layers (clones go here) and the placement ghost
+// layers (clones go here), buildable-area grid and the placement ghost (24 footprint tiles = largest building 6×4)
 b.go(`${F}/BuildLayer`);
 b.go(`${F}/CritterLayer`);
+b.go(`${F}/BuildGrid`, { SpriteRenderer: SR(ART("FX/build_grid"), 80, "#c8ffb0", { a: 0.8 }) }, { pos: P(GRID.x0 + GRID.cols * GRID.cell / 2, GRID.y0 + GRID.rows * GRID.cell / 2), scale: [GRID.cols * GRID.cell / 100, GRID.cols * GRID.cell / 100, 1] });   // FX sprites import 1 unit wide
 b.go(`${F}/Ghost`, {}, { pos: P(1180, 560) });
-b.go(`${F}/Ghost/GhostFoot`, { SpriteRenderer: SR(ART("FX/square"), 3990, "#73ff80", { a: 0.38 }) }, { pos: [0, 0.6, 0], scale: [2.4, 1.2, 1] });
-b.go(`${F}/Ghost/GhostSprite`, { SpriteRenderer: SR(ART("Farm/Props/dc_table"), 4000, "#ffffff", { a: 0.7 }) }, { scale: [0.65, 0.65, 1] });
+b.go(`${F}/Ghost/GhostSprite`, { SpriteRenderer: SR(ART("Farm/Props/dc_table"), 4000, "#ffffff", { a: 0.75 }) }, { scale: [0.65, 0.65, 1] });
+for (let i = 0; i < 24; i++) b.go(`${F}/Ghost/GhostTiles${i}`, { SpriteRenderer: SR(ART("FX/square"), 3990, "#59ff73", { a: 0.5 }) }, { pos: [(i % 6) * 0.4, (i / 6 | 0) * 0.4, 0], scale: [0.36, 0.36, 1] });
 b.go(`${F}/Fx`);
-await b.send("farm: hint, layers, ghost");
+await b.send("farm: layers, grid, ghost");
 
 // ===== template slots (hidden, cloned by FarmView) =====
 const TP = `${F}/Templates`;
@@ -108,12 +94,11 @@ await b.send("farm: templates");
 
 // sliced sizes (in the scaled-down space), then hide templates and the ghost
 const sliced = [
-  [`${F}/TileHint/TileHintBack`, 120, 32, 6], [`${BT}/Site/TimerBack`, 140, 36, 6],
+  [`${T}/Sign/SignBack`, 84, 36, 7], [`${BT}/Site/TimerBack`, 140, 36, 6],
   [`${C}/Label/LabelBack`, 160, 30, 6], [`${C}/Say/SayBack`, 200, 50, 6], [`${C}/Req/ReqBack`, 72, 62, 6],
-  [`${F}/FieldFrame`, 468, 468, 7],
 ].map(([path, w, h, k]) => ({ tool: "manage_components", params: { action: "set_property", target: path, search_method: "by_path", component_type: "SpriteRenderer", property: "size", value: [w / 100 * k, h / 100 * k] } }));
 const r = await call("batch_execute", { commands: sliced, fail_fast: false });
 console.log("[farm: sliced sizes]", (r?.data?.results ?? []).map((x) => (x.result?.success ? "ok" : x.result?.error ?? "?")).join(" "));
-for (const t of [TP, `${F}/Fx/PartTemplate`, `${F}/Fx/FloatTemplate`, `${F}/Ghost`, F])
+for (const t of [TP, `${F}/Fx/PartTemplate`, `${F}/Fx/FloatTemplate`, `${F}/Ghost`, `${F}/BuildGrid`, F])
   await call("manage_gameobject", { action: "modify", target: t, search_method: "by_path", set_active: false });
 console.log("farm world built");

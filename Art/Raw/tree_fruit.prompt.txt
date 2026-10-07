@@ -1,0 +1,9 @@
+Sprite sheet: a 1x3 grid holding 3 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Mushroom clusters that grow on a tree branch, each a single object centered in its cell, readable at 40 px. Each cluster sprouts from a small piece of bark (no soil, no ground).
+
+Assets in reading order (left to right, top to bottom):
+1. a cluster of plump orange edible mushrooms
+2. a cluster of green medicinal mushrooms
+3. a cluster of purple poison mushrooms with tiny spots

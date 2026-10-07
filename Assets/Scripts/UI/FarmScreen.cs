@@ -7,8 +7,9 @@ using static MoreMush.Game;
 
 namespace MoreMush
 {
-    // Farm HUD: title and worker count, currencies, critter chips, field panel (opens with "밭 관리"),
-    // and the placement bar (confirm / cancel) that follows the building ghost. Everything is placed in the hierarchy.
+    // Farm HUD: title and worker count, currencies, critter chips, the mushroom tree panel (opens with "버섯 나무"
+    // or by clicking the trunk), and the placement hint bar while a building is being placed.
+    // Everything is placed in the hierarchy.
     public class FarmScreen : MonoBehaviour
     {
         [ScenePath("World/Farm")] public FarmView farm;
@@ -16,7 +17,7 @@ namespace MoreMush
         [Header("Top")]
         public TMP_Text title, status;
         public TMP_Text goldText, gemText, diaText, sporeText;
-        public TMP_Text fieldToggleText;
+        public TMP_Text treeToggleText;
         public GameObject centerMsg; public TMP_Text centerTitle, centerSub;
 
         [Header("Bottom")]
@@ -24,23 +25,20 @@ namespace MoreMush
         public FarmChip[] chipList = new FarmChip[10];
         public Button careAll; public TMP_Text careAllText;
 
-        [Header("Field panel")]
-        public GameObject fieldPanel;
-        public TMP_Text fieldHead;
-        public CropCard[] crops = new CropCard[3];          // ed, md, ps
-        public TMP_Text stock;
-        public Button[] fieldButtons = new Button[3];       // till, plant, harvest
-        public TMP_Text[] fieldButtonTexts = new TMP_Text[3];
-        public TMP_Text sizeText, expandSub;
-        public Button expand; public TMP_Text expandText; public GameObject expandMax;
+        [Header("Tree panel")]
+        public GameObject treePanel;
+        public Image treeIcon;
+        public TMP_Text treeHead, treeStats, treeNext;
+        public Button treeUp; public TMP_Text treeUpText; public GameObject treeMax;
+        public Button pickAll; public TMP_Text pickAllText;
+        public Button growFast; public TMP_Text growFastText;
 
         [Header("Placement")]
-        public RectTransform placeBar;
+        public GameObject placeBar;
         public TMP_Text placeTitle, placeSub;
-        public Button placeOk;
 
-        public bool fieldOpen;
-        float tickT; int lastN = -1; string lastSig;
+        public bool treeOpen;
+        float tickT; int lastN = -1; int lastBusy = -1;
 
         void OnEnable() { tickT = 0; }
 
@@ -52,11 +50,9 @@ namespace MoreMush
             tickT = 0.5f;
             if (GameFlow.I.ModalOpen) return;
             if (farm.crits.Count != FarmOwned().Count) { FarmEnsure(); farm.Sync(false); farm.dirty = true; }
-            if (farm.dirty || FarmReadyCount() != lastN || FieldSig() != lastSig) Render();
-            else { foreach (var c in chipList) c.RefreshTime(); RenderStatus(); }
+            if (farm.dirty || FarmReadyCount() != lastN || farm.Picking != lastBusy) Render();
+            else { foreach (var c in chipList) c.RefreshTime(); RenderStatus(); if (treeOpen) RenderTree(); }
         }
-
-        string FieldSig() => string.Concat(FieldKeys().Select(t => { var p = PlotAt(t.key); return farm.busy.ContainsKey(t.key) ? '9' : p == null ? '0' : p.s == "till" ? '1' : TileRipe(p) ? '3' : '2'; }));
 
         void RenderStatus()
         {
@@ -73,61 +69,54 @@ namespace MoreMush
             gemText.text = $"{UIUtil.Ic("gem")}{U.Fmt(G.gem)}";
             diaText.text = $"{UIUtil.Ic("dia")}{U.Fmt(G.dia)}";
             sporeText.text = $"{UIUtil.Ic("spore")}{U.Fmt(G.spore)}";
-            int fn = FieldRipeCount();
-            fieldToggleText.text = $"{UIUtil.Ic("crop_ed")} 밭 관리{(fn > 0 ? $" <color=#e8453c>({fn})</color>" : "")}";
+            int rn = TreeRipeCount();
+            treeToggleText.text = $"{UIUtil.Ic("fruit_ed")} 버섯 나무 Lv.{TreeLv()}{(rn > 0 ? $" <color=#e8453c>({rn})</color>" : "")}";
 
             bool none = farm.crits.Count == 0;
             UIUtil.Show(centerMsg, none);
-            if (none) { centerTitle.text = "아직 농장에 아무도 없어요"; centerSub.text = "수확 중에 나타나는 특수 버섯(꼬마)을 잡으면 이곳에 들어와 밭일과 건설을 도와요!"; }
+            if (none) { centerTitle.text = "아직 농장에 아무도 없어요"; centerSub.text = "수확 중에 나타나는 특수 버섯(꼬마)을 잡으면 이곳에 들어와 버섯 따기와 건설을 도와요!"; }
 
             bool placing = farm.Placing;
             UIUtil.Show(bottom, !placing);
             UIUtil.Show(placeBar, placing);
-            UIUtil.Show(fieldPanel, fieldOpen && !placing);
+            UIUtil.Show(treePanel, treeOpen && !placing);
 
             int n = FarmPetCount();
             for (int i = 0; i < chipList.Length; i++) chipList[i].Set(SPECIALS[i]);
             careAll.interactable = n > 0;
             careAllText.text = $"모두 돌보기{(n > 0 ? $" ({n})" : "")}";
-            if (fieldOpen) RenderField();
+            if (treeOpen) RenderTree();
             if (placing) DrawPlaceBar();
 
-            lastN = FarmReadyCount(); lastSig = FieldSig(); farm.dirty = false;
+            lastN = FarmReadyCount(); lastBusy = farm.Picking; farm.dirty = false;
         }
 
-        void RenderField()
+        void RenderTree()
         {
-            var f = G.farm;
-            var keys = FieldKeys().Where(t => !farm.busy.ContainsKey(t.key)).ToList();
-            int raw = keys.Count(t => PlotAt(t.key) == null), till = keys.Count(t => PlotAt(t.key)?.s == "till"), ripe = keys.Count(t => TileRipe(PlotAt(t.key)));
-            int working = farm.Working;
-            fieldHead.text = $"심을 작물 <size=55%><color=#8a6a4a>칸을 누르면 꼬마가 가서 갈기 → 심기 → 수확{(working > 0 ? $" · <b>작업 {working}칸 진행 중</b>" : "")}</color></size>";
-            string[] cs = { "ed", "md", "ps" };
-            for (int i = 0; i < 3; i++) crops[i].Set(cs[i]);
-            stock.text = $"창고  {UIUtil.Ic("ed")}{U.Fmt(InvTotal("ed"))}   {UIUtil.Ic("md")}{U.Fmt(InvTotal("md"))}   {UIUtil.Ic("ps")}{U.Fmt(InvTotal("ps"))}";
-            int[] cnt = { raw, till, ripe };
-            string[] names = { "모두 갈기", "모두 심기", "모두 수확" };
-            for (int i = 0; i < 3; i++) { fieldButtons[i].interactable = cnt[i] > 0; fieldButtonTexts[i].text = $"{names[i]} ({cnt[i]})"; }
-            sizeText.text = $"{f.size}×{f.size}";
-            expandSub.text = $"최대 {FIELD.max}×{FIELD.max} · 지금 {f.size * f.size}칸";
-            double ec = ExpandCost();
-            UIUtil.Show(expand, ec > 0); UIUtil.Show(expandMax, ec <= 0);
-            if (ec > 0) { expand.interactable = G.gold >= ec; expandText.text = $"{f.size + 1}×{f.size + 1}로\n<size=72%>{U.Fmt(ec)}G</size>"; }
+            int lv = TreeLv(), st = TREE.Stage(lv);
+            treeIcon.sprite = SpriteDB.Get("Farm/Tree/tree_" + st);
+            treeHead.text = $"버섯 나무 <color=#2a9a74>Lv.{lv}</color> <size=60%><color=#8a6a4a>{st + 1}단계 / 최대 Lv.{TREE.maxLv}</color></size>";
+            double grow = System.Math.Pow(TREE.speedPerLv, lv - 1);
+            treeStats.text = $"버섯 자리 <b>{TREE.Slots(lv)}</b>개 · 성장 시간 ×{U.FmtN(grow)} · 수확량 ×{U.FmtN(TreeYieldMul())}\n"
+                + $"<size=85%><color=#6a5040>{string.Join("  ", FRUITS.Select(kv => $"{UIUtil.Ic("fruit_" + kv.Key)}{kv.Value.n} {TimeText(FruitSeconds(kv.Key))} → {UIUtil.Ic("gem")}{kv.Value.gem}"))}</color></size>";
+            double cost = TreeUpCost();
+            UIUtil.Show(treeUp, cost > 0); UIUtil.Show(treeMax, cost <= 0);
+            treeNext.text = cost > 0 ? $"다음 레벨: 버섯 자리 +1 · 성장 시간 ×{U.FmtN(TREE.speedPerLv)} · 수확량 +{U.Pct(TREE.yieldPerLv)}{(TREE.Stage(lv + 1) > st ? " · <color=#2a9a74>나무가 자라요!</color>" : "")}" : "가장 큰 나무예요";
+            if (cost > 0) { treeUp.interactable = G.gold >= cost; treeUpText.text = $"레벨 업  <size=80%>{UIUtil.Ic("gold")}{U.Fmt(cost)}</size>"; }
+            int ripe = G.farm.tree.slots.Where((f, i) => FruitRipe(f) && !farm.busy.Contains(i)).Count();
+            pickAll.interactable = ripe > 0;
+            pickAllText.text = $"모두 따기 ({ripe})" + (farm.Picking > 0 ? $" <size=70%>· 따는 중 {farm.Picking}</size>" : "");
+            int ac = TreeAccelCost();
+            growFast.interactable = ac > 0;
+            growFastText.text = ac > 0 ? $"빨리 자라게  <size=80%>{UIUtil.Ic("gem")}{ac}</size>" : "모두 다 자랐어요";
         }
 
-        // 확인·취소 막대: 건물 잔상 바로 위에 붙는다 (화면 밖으로 나가지 않게)
         void DrawPlaceBar()
         {
-            var B = BUILDING[farm.PlaceId]; var r = farm.PlaceRect;
-            bool ok = farm.PlaceOk;
+            var B = BUILDING[farm.PlaceId];
             placeTitle.text = $"{B.n} <size=70%>({B.w}×{B.h}칸 · {UIUtil.Ic("dia")}{B.price} · {TimeText(BuildSeconds(B, null))})</size>";
-            placeSub.text = ok ? "누르거나 끌어서 옮기고, 확인을 누르면 꼬마가 지으러 가요" : "<color=#d23a2a>여기에는 지을 수 없어요 (울타리 밖 · 밭 · 다른 건물)</color>";
-            placeOk.interactable = ok;
-            var size = placeBar.sizeDelta;
-            float x = Mathf.Clamp(r.center.x, size.x / 2 + 16, W - size.x / 2 - 16);
-            float y = r.yMin - 130 - size.y / 2;
-            if (y < size.y / 2 + 100) y = r.yMax + 40 + size.y / 2;
-            placeBar.anchoredPosition = new Vector2(x, -y);
+            placeSub.text = farm.PlaceOk ? "<color=#3a8a2a>초록 칸</color>에서 왼쪽 클릭하면 바로 지어요 · 오른쪽 클릭·Esc 취소"
+                : "<color=#d23a2a>빨간 칸</color>이 있으면 지을 수 없어요 (울타리 밖 · 나무 둘레 · 다른 건물)";
         }
     }
 }

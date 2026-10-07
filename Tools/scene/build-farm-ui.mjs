@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Farm HUD (Canvas/FarmScreen), build shop (Canvas/Modal/BuildPanel), idle harvest reward (Canvas/Modal/AutoPanel),
+// Farm HUD (Canvas/FarmScreen, tree panel, placement hint), build shop (Canvas/Modal/BuildPanel), idle harvest reward
+// (Canvas/Modal/AutoPanel), speed-up (Canvas/Modal/AccelPanel),
 // critter card (Canvas/Modal/PetCardPanel) and the tree screen's farm badge / idle-reward button / diamond counter,
 // built through MCP for Unity. Fixed counts → every chip, crop card and building card is placed here.
 // Deletes and recreates only those objects (and removes the old decoration shop and pre-round dish rows).
@@ -39,7 +40,7 @@ const BUILDS = ["dc_table", "dc_lamp", "dc_bed", "dc_fire", "dc_swing", "dc_well
 const FS = "Canvas/FarmScreen";
 const TB = "Canvas/TreeScreen";
 
-await destroyPaths([FS, "Canvas/Modal/DecoPanel", "Canvas/Modal/BuildPanel", "Canvas/Modal/AutoPanel", "Canvas/Modal/PetCardPanel",
+await destroyPaths([FS, "Canvas/Modal/DecoPanel", "Canvas/Modal/BuildPanel", "Canvas/Modal/AutoPanel", "Canvas/Modal/AccelPanel", "Canvas/Modal/PetCardPanel",
   `${TB}/Buttons/Right/Farm/FarmBadge`, `${TB}/Buttons/Left/AutoHarvest`, `${TB}/Topbar/Dia`,
   "Canvas/Modal/PreRoundPanel/DishesHead", "Canvas/Modal/PreRoundPanel/Dishes"]);
 
@@ -51,7 +52,7 @@ k.image(`${FS}/StatusBox`, PAPER, { type: "Sliced", color: col("#3b2414", 0.78),
 k.text(`${FS}/StatusBox/Status`, "", 18, "#fff6e0", { rect: STRETCH(14, 0, 10, 2), align: "MidlineLeft" });
 button(`${FS}/Skin`, `${ic("star")} 스킨`, "skinshop", { rect: R(24, 132, 120, 46), size: 18 });
 button(`${FS}/Build`, `${ic("build")} 건축`, "buildshop", { rect: R(152, 132, 130, 46), size: 18 });
-button(`${FS}/FieldToggle`, `${ic("crop_ed")} 밭 관리`, "fieldpanel", { rect: R(290, 132, 190, 46), size: 18, textName: "FieldToggleText" });
+button(`${FS}/TreeToggle`, `${ic("fruit_ed")} 버섯 나무`, "treepanel", { rect: R(290, 132, 230, 46), size: 18, textName: "TreeToggleText" });
 [["Gold", "gold"], ["Gem", "gem"], ["Dia", "dia"], ["Spore", "spore"]].forEach(([n, icon], i) => {
   box(`${FS}/${n}Box`, { bg: "#f6ead2", border: WOOD_D, ow: 3, rect: R(1192 + i * 178, 18, 170, 52) });
   k.text(`${FS}/${n}Box/${n}Text`, `${ic(icon)}0`, 24, INK, { rect: STRETCH(10, 0, 10, 2) });
@@ -81,44 +82,27 @@ for (let i = 0; i < 10; i++) {
 button(`${FS}/Bottom/CareAll`, "모두 돌보기", "farmall", { style: "go", rect: R(1646, 996, 250, 68), size: 24, textName: "CareAllText" });
 await b.send("farm hud: bottom");
 
-// field panel (opens with "밭 관리")
-const FP = `${FS}/FieldPanel`;
-k.image(FP, PAPER, { type: "Sliced", color: col("#f6ead2", 0.96), outline: WOOD_D, ow: 5, rect: R(1246, 84, 650, 460),
-  extra: { VerticalLayoutGroup: vlay({ gap: 12, pad: { left: 18, right: 18, top: 16, bottom: 16 }, align: "UpperLeft" }), ContentSizeFitter: { horizontalFit: "Unconstrained", verticalFit: "PreferredSize" } } });
-k.text(`${FP}/FieldHead`, "심을 작물", 24, INK, { align: "MidlineLeft", wrap: true, le: { h: 34 } });
-go(`${FP}/CropRow`, { RectTransform: {}, HorizontalLayoutGroup: hlay({ gap: 8, cw: false, ch: false, align: "MiddleLeft" }), LayoutElement: le({ h: 96 }) });
-["ed", "md", "ps"].forEach((c, i) => {
-  const Cc = `${FP}/CropRow/Crops${i}`;
-  go(Cc, { RectTransform: R(0, 0, 199, 96), Button: {}, UIAction: { act: "fieldcrop", arg: c }, UIButtonFx: {}, CropCard: {} });
-  box(`${Cc}/Frame`, { border: "#d9c6a2", ow: 3, ray: true });
-  k.image(`${Cc}/Icon`, ART("Icons/" + c), { rect: R(8, 24, 44, 44), aspect: true });
-  k.text(`${Cc}/Title`, c, 19, INK, { rect: R(58, 6, 136, 26), align: "MidlineLeft" });
-  k.text(`${Cc}/Need`, "", 15, INK, { rect: R(58, 34, 136, 24), align: "MidlineLeft" });
-  k.text(`${Cc}/Time`, "", 12, "#6a5040", { rect: R(58, 62, 136, 24), align: "MidlineLeft", font: FONT.noto });
-  k.text(`${Cc}/Lack`, "재료 부족", 11, "#d23a2a", { rect: TR(-6, 4, 70, 16), align: "Right", font: FONT.noto });
-});
-go(`${FP}/StockRow`, { RectTransform: {}, LayoutElement: le({ h: 40 }) });
-k.text(`${FP}/StockRow/Stock`, "창고", 18, INK, { rect: R(0, 0, 440, 40), align: "MidlineLeft" });
-button(`${FP}/StockRow/SporeShop`, `${ic("spore")} 포자 상점`, "sporeshop", { rect: TR(0, 0, 160, 40), size: 16 });
-go(`${FP}/BtnRow`, { RectTransform: {}, HorizontalLayoutGroup: hlay({ gap: 8, cw: false, ch: false, align: "MiddleLeft" }), LayoutElement: le({ h: 52 }) });
-[["till", "모두 갈기"], ["plant", "모두 심기"], ["harvest", "모두 수확"]].forEach(([m, label], i) =>
-  button(`${FP}/BtnRow/FieldButtons${i}`, label, "fieldall", { arg: m, rect: R(0, 0, 199, 50), size: 18, style: i === 2 ? "go" : "wood", textName: `FieldButtonTexts${i}` }));
-box(`${FP}/SizeRow`, { le: { h: 88 }, rect: {} });
-k.image(`${FP}/SizeRow/SizeBox`, PAPER, { type: "Sliced", color: col("#6e4426"), outline: WOOD_D, ow: 3, rect: R(12, 12, 64, 64) });
-k.text(`${FP}/SizeRow/SizeBox/SizeText`, "4×4", 22, "#fff6e0", { rect: STRETCH() });
-k.text(`${FP}/SizeRow/ExpandTitle`, "밭 넓히기", 22, INK, { rect: R(88, 12, 300, 30), align: "MidlineLeft" });
-k.text(`${FP}/SizeRow/ExpandSub`, "", 13, "#6a5040", { rect: R(88, 48, 300, 24), align: "MidlineLeft", font: FONT.noto });
-button(`${FP}/SizeRow/Expand`, "", "fieldexpand", { style: "go", rect: TR(-12, 12, 210, 64), size: 16, textName: "ExpandText" });
-k.text(`${FP}/SizeRow/ExpandMax`, "최대 ★", 18, "#b8860b", { rect: TR(-16, 12, 200, 64), align: "MidlineRight" });
-await b.send("farm hud: field panel");
+// mushroom tree panel (opens with "버섯 나무" or by clicking the trunk)
+const TPn = `${FS}/TreePanel`;
+k.image(TPn, PAPER, { type: "Sliced", color: col("#f6ead2", 0.96), outline: WOOD_D, ow: 5, rect: R(1246, 84, 650, 420) });
+k.image(`${TPn}/TreeIcon`, ART("Farm/Tree/tree_2"), { rect: R(18, 18, 120, 130), aspect: true });
+k.text(`${TPn}/TreeHead`, "버섯 나무 Lv.1", 28, INK, { rect: R(150, 16, 480, 40), align: "MidlineLeft" });
+k.text(`${TPn}/TreeStats`, "", 17, INK, { rect: R(150, 60, 480, 90), align: "TopLeft", wrap: true, lineSpacing: 10 });
+box(`${TPn}/UpRow`, { rect: R(18, 160, 614, 110) });
+k.body(`${TPn}/UpRow/TreeNext`, "", 14, "#4a3424", { rect: R(14, 8, 586, 40), align: "MidlineLeft" });
+button(`${TPn}/UpRow/TreeUp`, "레벨 업", "treeup", { style: "go", rect: R(14, 50, 300, 52), size: 20, textName: "TreeUpText" });
+k.text(`${TPn}/UpRow/TreeMax`, "최고 레벨 ★", 20, "#b8860b", { rect: R(14, 50, 300, 52), align: "MidlineLeft" });
+button(`${TPn}/PickAll`, "모두 따기", "pickall", { style: "go", rect: R(18, 290, 300, 60), size: 21, textName: "PickAllText" });
+button(`${TPn}/GrowFast`, "빨리 자라게", "treeaccel", { rect: R(332, 290, 300, 60), size: 20, textName: "GrowFastText" });
+k.body(`${TPn}/Hint`, "버섯을 누르면 꼬마가 따러 가요. 딴 자리에는 새 버섯이 바로 자라요.", 13, "#8a6a4a", { rect: R(18, 362, 614, 40), align: "MidlineLeft" });
+await b.send("farm hud: tree panel");
 
-// placement bar: follows the building ghost
+// placement hint bar (top center while placing; left click on green tiles builds)
 const PB = `${FS}/PlaceBar`;
-k.image(PB, PAPER, { type: "Sliced", color: col("#fffaf0", 0.97), outline: WOOD_D, ow: 4, rect: R(960, 300, 620, 124, { pivot: [0.5, 0.5] }) });
+k.image(PB, PAPER, { type: "Sliced", color: col("#fffaf0", 0.97), outline: WOOD_D, ow: 4, rect: R(960, 228, 760, 96, { pivot: [0.5, 0.5] }) });
 k.text(`${PB}/PlaceTitle`, "건물", 24, INK, { rect: R(20, 10, 580, 32), align: "MidlineLeft" });
-k.text(`${PB}/PlaceSub`, "", 14, "#6a5040", { rect: R(20, 44, 580, 22), align: "MidlineLeft", font: FONT.noto });
-button(`${PB}/PlaceOk`, "확인", "placeok", { style: "go", rect: R(330, 70, 130, 46), size: 22 });
-button(`${PB}/PlaceCancel`, "취소", "placecancel", { rect: R(468, 70, 130, 46), size: 22 });
+k.text(`${PB}/PlaceSub`, "", 15, "#6a5040", { rect: R(20, 50, 580, 30), align: "MidlineLeft", font: FONT.noto });
+button(`${PB}/PlaceCancel`, "취소", "placecancel", { rect: R(612, 22, 130, 52), size: 22 });
 await b.send("farm hud: place bar");
 
 // ===== build shop =====
@@ -168,6 +152,19 @@ go(`${AP}/ClaimRow`, { RectTransform: {}, HorizontalLayoutGroup: hlay({ cw: fals
 button(`${AP}/ClaimRow/Claim`, "보상 받기", "claimauto", { style: "go", rect: R(0, 0, 360, 72), size: 28, textName: "ClaimText" });
 k.close(AP);
 await b.send("auto reward");
+
+// ===== speed-up (균사석 가속) =====
+const AC = "Canvas/Modal/AccelPanel";
+k.panel(AC, 760, { h: 460, gap: 10, pad: { left: 40, right: 40, top: 30, bottom: 28 }, comps: { AccelPanel: {} } });
+k.h2(`${AC}/Title`, "가속");
+go(`${AC}/IconRow`, { RectTransform: {}, LayoutElement: le({ h: 140 }) });
+k.image(`${AC}/IconRow/Icon`, ART("Farm/Tree/tree_2"), { rect: R(270, 0, 140, 140), aspect: true });
+k.body(`${AC}/Desc`, "", 16, "#6a5040", { align: "Center", le: { h: 50 } });
+k.text(`${AC}/TimeText`, "", 24, INK, { le: { h: 34 } });
+go(`${AC}/BtnRow`, { RectTransform: {}, HorizontalLayoutGroup: hlay({ cw: false, ch: false, align: "MiddleCenter" }), LayoutElement: le({ h: 72 }) });
+button(`${AC}/BtnRow/Accel`, "가속", "accelok", { style: "go", rect: R(0, 0, 380, 68), size: 26, textName: "CostText" });
+k.close(AC);
+await b.send("accel");
 
 // ===== critter card =====
 const PC = "Canvas/Modal/PetCardPanel";
@@ -225,7 +222,7 @@ const late = Object.entries(renames).map(([a, z]) => `[${JSON.stringify(a.replac
 const res = await call("execute_code", { action: "execute", code: `var c = GameObject.Find("Canvas").transform; int n = 0;
 var renames = new System.Collections.Generic.Dictionary<string, string> { ${late} };
 foreach (var kv in renames) { var t = c.Find(kv.Key); if (t != null) { t.name = kv.Value; n++; } }
-foreach (var p in new[] { "Modal/BuildPanel", "Modal/AutoPanel", "Modal/PetCardPanel" }) c.Find(p).gameObject.SetActive(false);
+foreach (var p in new[] { "Modal/BuildPanel", "Modal/AutoPanel", "Modal/AccelPanel", "Modal/PetCardPanel" }) c.Find(p).gameObject.SetActive(false);
 c.Find("FarmScreen").gameObject.SetActive(false);
 c.Find("FarmScreen").SetSiblingIndex(c.Find("Modal").GetSiblingIndex());   // HUD stays under the modal layer
 UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());

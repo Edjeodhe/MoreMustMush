@@ -7,7 +7,8 @@ using static MoreMush.Defs;
 namespace MoreMush
 {
     // Mushroom farm rules: critter requests (hearts · evolution · diamonds), critter star grades and owned effects,
-    // buildings (fixed footprints on a grid, built by a free critter over real time), field plots, idle harvest reward.
+    // buildings (fixed footprints on a tile grid, built by a free critter over real time), the mushroom tree, idle harvest
+    // reward, and 균사석 speed-ups.
     // Times are real-time epoch milliseconds like Date.now(). Screen state (critters walking, job queue) is FarmView.
     public static partial class Game
     {
@@ -17,16 +18,17 @@ namespace MoreMush
         // ===== 꼬마 =====
         public static List<Special> FarmOwned() => SPECIALS.Where(k => HasSpecial(k.id)).ToList();
 
-        // 잡은 꼬마는 부탁 시각이 없으면 만들어 준다 (자동 입주)
+        // 잡은 꼬마는 부탁 시각이 없으면 만들어 준다 (자동 입주). 나무 버섯 자리도 채운다
         public static void FarmEnsure()
         {
             foreach (var k in FarmOwned())
                 if (!G.farm.next.ContainsKey(k.id)) { G.farm.next[k.id] = Now() + FARM.first * 1000; G.farm.kind[k.id] = "water"; }
+            TreeEnsure();
         }
 
         public static bool FarmReady(string id) => G.farm.next.TryGetValue(id, out var t) && Now() >= t;
         public static int FarmPetCount() => G?.farm == null ? 0 : FarmOwned().Count(k => FarmReady(k.id));
-        public static int FarmReadyCount() => FarmPetCount() + FieldRipeCount();   // 균사 트리 버튼 알림: 꼬마 부탁 + 다 자란 작물
+        public static int FarmReadyCount() => FarmPetCount() + TreeRipeCount();   // 균사 트리 버튼 알림: 꼬마 부탁 + 다 자란 나무 버섯
 
         // 호감도·진화
         public static int EvoOf(string id) => Math.Min(FARM.evoMax, G.farm.evo.TryGetValue(id, out var e) ? e : 0);
@@ -130,16 +132,23 @@ namespace MoreMush
 
         static bool InFence(float x, float y) { float dx = (x - GRID.ecx) / GRID.erx, dy = (y - GRID.ecy) / GRID.ery; return dx * dx + dy * dy <= 1; }
 
-        // 그 자리에 놓을 수 있나: 울타리 안 · 밭(최대 크기) 밖 · 다른 건물과 안 겹침 (skipUid는 옮기는 중인 자기 자신)
+        // 격자 한 칸을 쓸 수 있나: 칸 가운데가 울타리 안 · 나무 둘레 밖 · 다른 건물이 없음 (skipUid = 옮기는 중인 자기 자신)
+        public static bool TileOk(int gx, int gy, int skipUid = 0)
+        {
+            if (gx < 0 || gy < 0 || gx >= GRID.cols || gy >= GRID.rows) return false;
+            float cx = GRID.x0 + (gx + 0.5f) * GRID.cell, cy = GRID.y0 + (gy + 0.5f) * GRID.cell;
+            if (!InFence(cx, cy)) return false;
+            if (cx > TREE.zoneX0 && cx < TREE.zoneX1 && cy > TREE.zoneY0 && cy < TREE.zoneY1) return false;
+            foreach (var o in G.farm.blds)
+                if (o.uid != skipUid && gx >= o.gx && gx < o.gx + BUILDING[o.id].w && gy >= o.gy && gy < o.gy + BUILDING[o.id].h) return false;
+            return true;
+        }
+
+        // 그 자리에 놓을 수 있나: 건물이 덮는 칸이 모두 쓸 수 있어야 한다
         public static bool CanPlace(Building b, int gx, int gy, int skipUid = 0)
         {
             if (gx < 0 || gy < 0 || gx + b.w > GRID.cols || gy + b.h > GRID.rows) return false;
-            var r = BuildRect(b, gx, gy);
-            if (!InFence(r.xMin, r.yMin) || !InFence(r.xMax, r.yMin) || !InFence(r.xMin, r.yMax) || !InFence(r.xMax, r.yMax)) return false;
-            var field = new Rect(FIELD.cx - FIELD.zone, FIELD.cy - FIELD.zone, FIELD.zone * 2, FIELD.zone * 2);
-            if (r.Overlaps(field)) return false;
-            foreach (var o in G.farm.blds)
-                if (o.uid != skipUid && r.Overlaps(BuildRect(BUILDING[o.id], o.gx, o.gy))) return false;
+            for (int y = gy; y < gy + b.h; y++) for (int x = gx; x < gx + b.w; x++) if (!TileOk(x, y, skipUid)) return false;
             return true;
         }
 
@@ -196,39 +205,86 @@ namespace MoreMush
 
         public static string BuildLeftText(SaveData.Bld b) => Mmss(Math.Max(0, (long)Math.Ceiling((b.at - Now()) / 1000)));
 
-        // ===== 버섯 밭 =====
-        public static Dictionary<string, double> CropNeed(string c) => new Dictionary<string, double>
-        { ["spore"] = CROPS[c].spore, [c] = Math.Ceiling(CROPS[c].need * Math.Pow(1.1, StageNow() - 1)) };
-        public static double CropTime(string c) => CROPS[c].time * NF.gm_farm(Lv("gm_farm")) * (1 - BStat("grow")) * Math.Max(0.2, 1 - Fx("grow"));
-        public static bool CanPlant(string c) { var n = CropNeed(c); return G.spore >= n["spore"] && InvTotal(c) >= n[c]; }
-        public static int FieldOff(int n) => (FIELD.max - n) / 2;
-        public static bool FieldOpen(int r, int c) { int n = G.farm.size, o = FieldOff(n); return r >= o && r < o + n && c >= o && c < o + n; }
-        public static bool TileRipe(SaveData.Plot p) => p != null && p.s == "grow" && Now() >= p.at;
-        public static SaveData.Plot PlotAt(string key) => G.farm.plots.TryGetValue(key, out var p) ? p : null;
-        public static IEnumerable<(int r, int c, string key)> FieldKeys()
+        // ===== 버섯 나무 =====
+        public static int TreeLv() => G?.farm?.tree == null ? 1 : G.farm.tree.lv;
+        public static double FruitSeconds(string kind) => FRUITS[kind].time * Math.Pow(TREE.speedPerLv, TreeLv() - 1) * NF.gm_farm(Lv("gm_farm"))
+            * (1 - BStat("grow")) * Math.Max(0.2, 1 - Fx("grow"));
+        public static SaveData.Fruit NewFruit()
         {
-            int o = FieldOff(G.farm.size);
-            for (int r = o; r < o + G.farm.size; r++) for (int c = o; c < o + G.farm.size; c++) yield return (r, c, r + "," + c);
+            string kind = U.PickWeighted(FRUITS.Keys.ToList(), k => FRUITS[k].w);
+            double now = Now();
+            return new SaveData.Fruit { kind = kind, t0 = now, at = now + FruitSeconds(kind) * 1000 };
         }
-        public static int FieldRipeCount() => G?.farm?.plots == null ? 0 : G.farm.plots.Values.Count(TileRipe);
-
-        // 수확: 균사석 (보유 효과·건물·노드 반영, 소수점은 확률로) + 포자 (기본 0~1, 보너스)
-        public static (int gem, int spore) HarvestYield(string crop, string critter)
+        // 나무 레벨에 맞게 버섯 자리를 채운다 (새 자리는 바로 자라기 시작)
+        public static void TreeEnsure()
         {
-            double mul = 1 + BStat("fieldGem") + Fx("fieldGem") + (NF.gm_gourmet(Lv("gm_gourmet")) - 1)
-                         + (critter != null && CRITTER_FX[critter].key == "fieldGemSelf" ? FxOf(critter) : 0);
-            double g = CROPS[crop].gem * mul;
+            var sl = G.farm.tree.slots; int n = TREE.Slots(TreeLv());
+            while (sl.Count < n) sl.Add(NewFruit());
+            if (sl.Count > n) sl.RemoveRange(n, sl.Count - n);
+        }
+        public static bool FruitRipe(SaveData.Fruit f) => f != null && Now() >= f.at;
+        public static int TreeRipeCount() => G?.farm?.tree?.slots == null ? 0 : G.farm.tree.slots.Count(FruitRipe);
+        public static double TreeYieldMul() => 1 + TREE.yieldPerLv * (TreeLv() - 1);
+
+        // 버섯 따기: 균사석 (나무 레벨·보유 효과·건물·노드, 소수점은 확률로) + 포자 (0~1 + 보너스)
+        public static (int gem, int spore) PickYield(string kind, string critter)
+        {
+            double mul = TreeYieldMul() * (1 + BStat("fieldGem") + Fx("fieldGem") + (NF.gm_gourmet(Lv("gm_gourmet")) - 1)
+                         + (critter != null && CRITTER_FX[critter].key == "fieldGemSelf" ? FxOf(critter) : 0));
+            double g = FRUITS[kind].gem * mul;
             int gem = (int)Math.Floor(g) + (U.Chance((float)(g - Math.Floor(g))) ? 1 : 0);
             int sp = U.RandI(0, 1) + (U.Chance((float)NF.gm_spore(Lv("gm_spore"))) ? 2 : 0) + (U.Chance(BStat("spore") + Fx("spore")) ? 1 : 0);
             return (gem, sp);
         }
 
-        public static double ExpandCost() => FIELD.expand.TryGetValue(G.farm.size, out var c) ? c : 0;
-        public static bool FieldExpand()
+        // 딴 자리에는 새 버섯이 바로 자라기 시작한다
+        public static (int gem, int spore)? PickFruit(int slot, string critter)
         {
-            double c = ExpandCost();
+            var sl = G.farm.tree.slots;
+            if (slot < 0 || slot >= sl.Count || !FruitRipe(sl[slot])) return null;
+            var y = PickYield(sl[slot].kind, critter);
+            G.gem += y.gem; G.spore += y.spore;
+            sl[slot] = NewFruit();
+            return y;
+        }
+
+        public static double TreeUpCost() => TreeLv() >= TREE.maxLv ? 0 : TREE.Cost(TreeLv());
+        public static bool TreeUp()
+        {
+            double c = TreeUpCost();
             if (c <= 0 || G.gold < c) return false;
-            G.gold -= c; G.farm.size++; SaveGame();
+            G.gold -= c; G.farm.tree.lv++;
+            TreeEnsure(); SaveGame();
+            return true;
+        }
+
+        // ===== 균사석 가속 =====
+        // 나무: 아직 자라는 버섯을 모두 지금 다 자라게 (남은 시간 합 TREE.accelSec초마다 균사석 1개)
+        public static int TreeAccelCost()
+        {
+            double now = Now(), left = 0;
+            foreach (var f in G.farm.tree.slots) left += Math.Max(0, f.at - now) / 1000;
+            return left <= 0 ? 0 : Math.Max(1, (int)Math.Ceiling(left / TREE.accelSec));
+        }
+        public static bool TreeAccel()
+        {
+            int c = TreeAccelCost();
+            if (c <= 0 || G.gem < c) return false;
+            G.gem -= c; double now = Now();
+            foreach (var f in G.farm.tree.slots) if (f.at > now) f.at = now;
+            SaveGame();
+            return true;
+        }
+        // 건물: 지금 바로 완성 (남은 시간 BUILD_ACCEL_SEC초마다 균사석 1개)
+        public static int BuildAccelCost(SaveData.Bld b) { double left = Math.Max(0, (b.at - Now()) / 1000); return b.done || left <= 0 ? 0 : Math.Max(1, (int)Math.Ceiling(left / BUILD_ACCEL_SEC)); }
+        public static bool BuildAccel(int uid)
+        {
+            var b = G.farm.blds.FirstOrDefault(x => x.uid == uid);
+            if (b == null) return false;
+            int c = BuildAccelCost(b);
+            if (c <= 0 || G.gem < c) return false;
+            G.gem -= c; b.at = Now();
+            SaveGame();
             return true;
         }
 

@@ -34,6 +34,7 @@ namespace MoreMush
         public SkinPanel skins;
         public BuildPanel build;
         public AutoPanel auto;
+        public AccelPanel accel;
         public PetCardPanel petCard;
         public GameObject resetPanel;
         public DebugPanel debug;
@@ -115,24 +116,12 @@ namespace MoreMush
             CloseModal(); farmScreen.Render();
         }
 
-        void FieldAll(string mode)
+        public void OpenAccel(string kind, int uid)
         {
-            int n = farm.FieldAll(mode);
-            if (n == 0)
-            {
-                Snd.Err();
-                if (farm.Workers == 0) ShowToast(farm.crits.Count == 0 ? "특수 버섯(꼬마)을 잡으면 밭일을 도와줘요" : "꼬마들이 모두 건물을 짓고 있어요");
-                else if (mode == "plant" && FieldKeys().Any(t => !farm.busy.ContainsKey(t.key) && PlotAt(t.key)?.s == "till"))
-                {
-                    var nd = CropNeed(G.farm.crop);
-                    ShowToast(G.spore < nd["spore"] ? "버섯 포자가 부족해요 (버섯 상점 → 포자 상점)" : $"{CATS[G.farm.crop].name} 버섯이 부족해요");
-                }
-                else ShowToast(mode == "till" ? "갈 땅이 없어요" : mode == "plant" ? "먼저 밭을 갈아 주세요" : "다 자란 작물이 없어요");
-                return;
-            }
+            accel.kind = kind; accel.uid = uid;
             Snd.Ui();
-            ShowToast($"꼬마들이 {n}칸을 {(mode == "till" ? "갈러" : mode == "plant" ? $"{CROPS[G.farm.crop].n} 심으러" : "수확하러")} 가요!");
-            farmScreen.Render();
+            OpenModal(accel, () => { if (Screen == "farm") farmScreen.Render(); });
+            accel.Render();
         }
 
         public void ShowToast(string msg) { if (toast != null) toast.Show(msg); }
@@ -341,12 +330,28 @@ namespace MoreMush
                 case "starup":
                     if (!StarUp(arg)) { Snd.Err(); ShowToast("골드나 균사석이 부족해요"); break; }
                     Snd.Record(); farm.StarredUp(arg); ShowToast($"{EvoName(SPC[arg])} ★{CStarOf(arg)}! {FxText(arg)}"); petCard.Render(); break;
-                case "fieldpanel": Snd.Ui(); farmScreen.fieldOpen = !farmScreen.fieldOpen; farmScreen.Render(); break;
-                case "fieldcrop": Snd.Ui(); G.farm.crop = arg; SaveGame(); farmScreen.Render(); break;
-                case "fieldall": FieldAll(arg); break;
-                case "fieldexpand":
-                    if (!Game.FieldExpand()) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
-                    Snd.Record(); ShowToast($"밭을 {G.farm.size}×{G.farm.size}로 넓혔어요!"); farmScreen.Render(); break;
+                // ===== 버섯 나무 =====
+                case "treepanel": Snd.Ui(); farmScreen.treeOpen = arg == "open" || !farmScreen.treeOpen; farmScreen.Render(); break;
+                case "treeup":
+                    if (!TreeUp()) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
+                    Snd.Record(); farm.TreeLeveled();
+                    ShowToast($"버섯 나무 Lv.{TreeLv()}! 버섯 자리 {TREE.Slots(TreeLv())}개 · 수확량 ×{U.FmtN(TreeYieldMul())}"); farmScreen.Render(); break;
+                case "pickall":
+                {
+                    int n = farm.PickAll();
+                    if (n == 0) { Snd.Err(); ShowToast(farm.Workers == 0 && farm.crits.Count > 0 ? "꼬마들이 모두 건물을 짓고 있어요" : farm.crits.Count == 0 ? "특수 버섯(꼬마)을 잡으면 버섯을 따 줘요" : "다 자란 버섯이 없어요"); break; }
+                    Snd.Ui(); ShowToast($"꼬마들이 버섯 {n}개를 따러 가요!"); farmScreen.Render();
+                    break;
+                }
+                case "treeaccel": OpenAccel("tree", 0); break;
+                case "accelok":
+                {
+                    bool ok = accel.kind == "build" ? BuildAccel(accel.uid) : TreeAccel();
+                    if (!ok) { Snd.Err(); ShowToast("균사석이 부족해요"); break; }
+                    Snd.Record(); ShowToast(accel.kind == "build" ? "건설 완료!" : "버섯이 모두 다 자랐어요!");
+                    CloseModal(); farmScreen.Render();
+                    break;
+                }
                 // ===== 건축 =====
                 case "buildshop":
                     Snd.Ui();
@@ -368,7 +373,7 @@ namespace MoreMush
                 case "placeok":
                 {
                     var b = farm.ConfirmPlace();
-                    if (b == null) { Snd.Err(); ShowToast("여기에는 지을 수 없어요"); break; }
+                    if (b == null) { Snd.Err(); ShowToast(farm.Placing && !farm.PlaceOk ? "여기에는 설치할 수 없어요" : "지을 수 없어요"); break; }
                     Snd.Record();
                     ShowToast($"{U.Iga(EvoName(SPC[b.critter]))} {BUILDING[b.id].n}을(를) 짓기 시작했어요! ({BuildLeftText(b)})");
                     farmScreen.Render();

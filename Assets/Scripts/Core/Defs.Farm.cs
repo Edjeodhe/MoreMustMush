@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MoreMush
 {
-    // Mushroom farm (one screen: ranch with the field inside), buildings, critter grades, idle harvest reward and skins.
+    // Mushroom farm (one screen: ranch with the mushroom tree inside), buildings, critter grades, idle harvest reward and skins.
     // Screen coordinates are the 1920×1080 stage pixels. Every number here is a design value meant to be tuned.
     public static partial class Defs
     {
@@ -61,71 +61,83 @@ namespace MoreMush
             public const int max = 5;
             public static readonly double[] gold = { 10000, 100000, 1000000, 10000000, 100000000 };   // n성 → n+1성
             public static readonly int[] gem = { 5, 10, 20, 40, 80 };
-            public const float build = 0.08f, work = 0.08f;       // 별마다 이 꼬마의 건설 속도 · 밭일 속도
+            public const float build = 0.08f, work = 0.08f;       // 별마다 이 꼬마의 건설 속도 · 버섯 따기 속도
         }
 
         // 꼬마 보유 효과: 잡으면 생기고, 별 등급마다 커진다 (값 = v0 + vs × 별)
-        // key: fieldGemSelf 이 꼬마가 수확한 밭 균사석 · build 모든 건설 속도 · grow 밭 성장 시간 · autoGold 자동 수확 골드
-        //      dia 부탁 다이아 확률 · spore 밭 포자 +1 확률 · autoGem 자동 수확 균사석 · work 모든 꼬마 밭일 속도
-        //      buildSelf 이 꼬마의 건설 시간 · fieldGem 밭 균사석
+        // key: fieldGemSelf 이 꼬마가 딴 나무 버섯 균사석 · build 모든 건설 속도 · grow 나무 버섯 성장 시간 · autoGold 자동 수확 골드
+        //      dia 부탁 다이아 확률 · spore 버섯 딸 때 포자 +1 확률 · autoGem 자동 수확 균사석 · work 모든 꼬마 버섯 따기 속도
+        //      buildSelf 이 꼬마의 건설 시간 · fieldGem 나무 버섯 균사석
         public class CritterFx { public string key, fmt; public float v0, vs; }
         public static readonly Dictionary<string, CritterFx> CRITTER_FX = new Dictionary<string, CritterFx>
         {
-            ["fire"] = new CritterFx { key = "fieldGemSelf", v0 = 0.20f, vs = 0.10f, fmt = "불씨 꼬마가 밭을 수확하면 균사석 +{0}" },
+            ["fire"] = new CritterFx { key = "fieldGemSelf", v0 = 0.20f, vs = 0.10f, fmt = "불씨 꼬마가 버섯을 따면 균사석 +{0}" },
             ["spark"] = new CritterFx { key = "build", v0 = 0.10f, vs = 0.05f, fmt = "모든 건물 건설 속도 +{0}" },
-            ["dew"] = new CritterFx { key = "grow", v0 = 0.05f, vs = 0.02f, fmt = "밭 작물 성장 시간 −{0}" },
+            ["dew"] = new CritterFx { key = "grow", v0 = 0.05f, vs = 0.02f, fmt = "나무 버섯 성장 시간 −{0}" },
             ["coin"] = new CritterFx { key = "autoGold", v0 = 0.10f, vs = 0.05f, fmt = "자동 수확 골드 +{0}" },
             ["star"] = new CritterFx { key = "dia", v0 = 0.05f, vs = 0.02f, fmt = "부탁을 들어줄 때 다이아몬드 확률 +{0}p" },
-            ["leaf"] = new CritterFx { key = "spore", v0 = 0.20f, vs = 0.10f, fmt = "밭 수확 때 포자 +1 확률 +{0}p" },
+            ["leaf"] = new CritterFx { key = "spore", v0 = 0.20f, vs = 0.10f, fmt = "버섯 딸 때 포자 +1 확률 +{0}p" },
             ["moon"] = new CritterFx { key = "autoGem", v0 = 0.10f, vs = 0.05f, fmt = "자동 수확 균사석 +{0}" },
-            ["wind"] = new CritterFx { key = "work", v0 = 0.10f, vs = 0.05f, fmt = "모든 꼬마 밭일 속도 +{0}" },
+            ["wind"] = new CritterFx { key = "work", v0 = 0.10f, vs = 0.05f, fmt = "모든 꼬마 버섯 따기 속도 +{0}" },
             ["rock"] = new CritterFx { key = "buildSelf", v0 = 0.20f, vs = 0.10f, fmt = "조약돌 꼬마가 지으면 건설 시간 −{0}" },
-            ["chest"] = new CritterFx { key = "fieldGem", v0 = 0.05f, vs = 0.03f, fmt = "밭 수확 균사석 +{0}" },
+            ["chest"] = new CritterFx { key = "fieldGem", v0 = 0.05f, vs = 0.03f, fmt = "나무 버섯 균사석 +{0}" },
         };
 
         // ===== 건축 (다이아몬드로 짓는 건물. 규격(칸)과 최대 개수는 정해져 있다) =====
-        // 배치 격자: 칸 40px, (x0, y0)부터 cols × rows. 건물 발밑이 울타리 타원 안이고, 밭·다른 건물과 겹치지 않아야 한다
+        // 배치 격자: 칸 40px, (x0, y0)부터 cols × rows. 칸 가운데가 울타리 타원 안이고, 나무 둘레·다른 건물과 겹치지 않아야 놓을 수 있다
         public static class GRID
         {
             public const float cell = 40, x0 = 120, y0 = 260;
             public const int cols = 42, rows = 16;
-            public const float ecx = 960, ecy = 575, erx = 840, ery = 320;   // 울타리 안 타원
+            public const float ecx = 960, ecy = 565, erx = 840, ery = 285;   // 울타리 안 타원 (Tools/art/make_build_grid.py도 같이)
         }
-        // stat: grow 밭 성장 시간 − · spore 밭 포자 +1 확률 + · wait 꼬마 부탁 간격 − · build 건설 시간 −
-        //       dia 부탁 다이아 확률 + · fieldGem 밭 균사석 + · auto 자동 수확 보상 + · harvest 라운드 버섯 수확량 +
+        // stat: grow 나무 버섯 성장 시간 − · spore 버섯 딸 때 포자 +1 확률 + · wait 꼬마 부탁 간격 − · build 건설 시간 −
+        //       dia 부탁 다이아 확률 + · fieldGem 나무 버섯 균사석 + · auto 자동 수확 보상 + · harvest 라운드 버섯 수확량 +
         public class Building { public string id, n, d, stat, statFmt; public float val, px; public int price, max, w, h; public float time; }
         public static readonly Building[] BUILDINGS =
         {
-            new Building { id = "dc_table", n = "버섯 탁자", d = "커다란 버섯 탁자와 버섯 의자.", price = 20, time = 600, max = 2, w = 6, h = 3, px = 240, stat = "grow", val = 0.02f, statFmt = "밭 작물 성장 시간 −{0}" },
-            new Building { id = "dc_lamp", n = "포자 등불", d = "은은한 버섯 등불 한 쌍.", price = 15, time = 300, max = 3, w = 6, h = 2, px = 230, stat = "spore", val = 0.03f, statFmt = "밭 수확 때 포자 +1 확률 +{0}p" },
+            new Building { id = "dc_table", n = "버섯 탁자", d = "커다란 버섯 탁자와 버섯 의자.", price = 20, time = 600, max = 2, w = 6, h = 3, px = 240, stat = "grow", val = 0.02f, statFmt = "나무 버섯 성장 시간 −{0}" },
+            new Building { id = "dc_lamp", n = "포자 등불", d = "은은한 버섯 등불 한 쌍.", price = 15, time = 300, max = 3, w = 6, h = 2, px = 230, stat = "spore", val = 0.03f, statFmt = "버섯 딸 때 포자 +1 확률 +{0}p" },
             new Building { id = "dc_bed", n = "꽃 화단", d = "알록달록 꽃이 핀 나무 화단.", price = 15, time = 300, max = 3, w = 5, h = 2, px = 190, stat = "wait", val = 0.02f, statFmt = "꼬마 부탁 간격 −{0}" },
             new Building { id = "dc_fire", n = "버섯 화로", d = "버섯 갓 모양 화로에 포근한 불이 타올라요.", price = 25, time = 900, max = 1, w = 4, h = 3, px = 140, stat = "build", val = 0.03f, statFmt = "건물 건설 시간 −{0}" },
             new Building { id = "dc_swing", n = "꼬마 그네", d = "버섯 나무 두 그루에 매단 그네.", price = 30, time = 1200, max = 1, w = 6, h = 3, px = 240, stat = "dia", val = 0.02f, statFmt = "부탁을 들어줄 때 다이아몬드 확률 +{0}p" },
-            new Building { id = "dc_well", n = "버섯 분수", d = "버섯 갓에서 물이 퐁퐁 솟는 작은 분수.", price = 40, time = 1800, max = 2, w = 5, h = 3, px = 180, stat = "fieldGem", val = 0.02f, statFmt = "밭 수확 균사석 +{0}" },
+            new Building { id = "dc_well", n = "버섯 분수", d = "버섯 갓에서 물이 퐁퐁 솟는 작은 분수.", price = 40, time = 1800, max = 2, w = 5, h = 3, px = 180, stat = "fieldGem", val = 0.02f, statFmt = "나무 버섯 균사석 +{0}" },
             new Building { id = "dc_house", n = "버섯 오두막", d = "창문이 달린 빨간 버섯 집.", price = 50, time = 3600, max = 2, w = 6, h = 4, px = 230, stat = "auto", val = 0.03f, statFmt = "자동 수확 보상 +{0}" },
             new Building { id = "dc_statue", n = "균사석 조각상", d = "균사석을 깎아 만든 조각상.", price = 80, time = 7200, max = 1, w = 3, h = 3, px = 120, stat = "harvest", val = 0.02f, statFmt = "라운드 버섯 수확량 +{0}" },
         };
         public static readonly Dictionary<string, Building> BUILDING = BUILDINGS.ToDictionary(b => b.id);
         public const int BUILD_SLOTS = 15;   // 지을 수 있는 건물 총수 (최대 개수 합)
 
-        // ===== 버섯 밭 (목장 안 왼쪽) =====
-        // 8×8 칸 중 가운데 size×size가 열려 있다 (처음 4×4, 골드로 8×8까지). 칸 키 "행,열"은 8×8 기준
-        public static class FIELD
+        // ===== 버섯 나무 (밭 대신 한 그루. 가지에 버섯이 저절로 열리고, 꼬마가 따 온다) =====
+        public static class TREE
         {
-            public const int max = 8;
-            public const float cx = 600, cy = 600, span = 440;    // 밭 가운데 · 칸 크기 = span / 한 변 칸 수 (최대 112px)
-            public static readonly Dictionary<int, double> expand = new Dictionary<int, double> { [4] = 3000, [5] = 30000, [6] = 300000, [7] = 3000000 };
-            public const float work = 0.6f;                        // 한 칸 일하는 시간 (초) ÷ 속도
-            public const float zone = span / 2 + 34;               // 건물을 놓을 수 없는 밭 둘레 (가운데에서 반너비)
+            public const int maxLv = 10;
+            public const float x = 570, y = 790;                  // 나무 밑동 (화면 좌표)
+            public static int Slots(int lv) => 3 + lv;            // 버섯이 열리는 자리 수
+            public static double Cost(int lv) => 3000 * System.Math.Pow(3, lv - 1);   // lv → lv+1 골드
+            public const float speedPerLv = 0.9f;                 // 성장 시간 × 0.9^(lv-1)
+            public const float yieldPerLv = 0.15f;                // 수확량 × (1 + 0.15 × (lv-1))
+            public static int Stage(int lv) => System.Math.Min(4, (lv - 1) / 2);   // 나무 그림 단계 (tree_0 ~ tree_4)
+            public static readonly float[] width = { 170, 240, 330, 430, 520 };   // 단계별 나무 너비 (px)
+            // 단계별 버섯이 열리는 타원 (나무 그림 너비 대비: 가운데 x, 밑동에서 위로 y, 반지름 rx·ry) — Farm/Tree/tree_N 그림에서 잰 값
+            public static readonly float[][] canopy =
+            {
+                new[] { 0f, 0.80f, 0.30f, 0.20f }, new[] { 0f, 1.00f, 0.34f, 0.26f }, new[] { 0f, 0.80f, 0.38f, 0.26f },
+                new[] { 0f, 0.66f, 0.40f, 0.24f }, new[] { 0f, 0.72f, 0.40f, 0.26f },
+            };
+            public const float pick = 0.6f;                       // 버섯 하나 따는 시간 (초) ÷ 속도
+            public const float accelSec = 600;                    // 균사석 1개로 줄이는 성장 시간 (초)
+            public const float zoneX0 = 300, zoneX1 = 840, zoneY0 = 260, zoneY1 = 840;   // 건물을 놓을 수 없는 나무 둘레 (Tools/art/make_build_grid.py도 같이)
         }
-        // 작물: spore 포자 수 · need 분류 버섯 수(스테이지마다 ×1.1) · time 자라는 시간(초) · gem 수확 균사석
-        public class Crop { public string n; public int spore, need, gem; public float time; }
-        public static readonly Dictionary<string, Crop> CROPS = new Dictionary<string, Crop>
+        // 나무에 열리는 버섯: w 열릴 확률 가중치 · time 자라는 시간(초) · gem 딸 때 균사석
+        public class Fruit { public string n; public int gem; public float w, time; }
+        public static readonly Dictionary<string, Fruit> FRUITS = new Dictionary<string, Fruit>
         {
-            ["ed"] = new Crop { n = "식용 버섯", spore = 1, need = 20, time = 300, gem = 2 },
-            ["md"] = new Crop { n = "약용 버섯", spore = 1, need = 20, time = 900, gem = 5 },
-            ["ps"] = new Crop { n = "독버섯", spore = 2, need = 20, time = 2400, gem = 12 },
+            ["ed"] = new Fruit { n = "식용 버섯", w = 60, time = 180, gem = 2 },
+            ["md"] = new Fruit { n = "약용 버섯", w = 30, time = 420, gem = 5 },
+            ["ps"] = new Fruit { n = "독버섯", w = 10, time = 900, gem = 12 },
         };
+        public const float BUILD_ACCEL_SEC = 300;                 // 균사석 1개로 줄이는 건설 시간 (초)
 
         // ===== 자동 수확 보상 (마지막으로 받은 뒤 쌓인다, 최대 8시간) =====
         public static class AUTO

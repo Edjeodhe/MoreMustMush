@@ -31,22 +31,22 @@ namespace MoreMush
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
         // next 다음 부탁 시각(ms, 실제 시간) · kind 부탁 종류 · love 호감도(부탁 수) · evo 진화 단계 · star 별 등급
-        // plots 밭 칸("행,열") · blds 지은(짓는) 건물
+        // tree 버섯 나무 · blds 지은(짓는) 건물
         [Serializable]
         public class Farm
         {
             public Dictionary<string, double> next = new Dictionary<string, double>();
             public Dictionary<string, string> kind = new Dictionary<string, string>();
             public Dictionary<string, int> love = new Dictionary<string, int>(), evo = new Dictionary<string, int>(), star = new Dictionary<string, int>();
-            public int size = 4, nextUid = 1;
-            public string crop = "ed";
-            public Dictionary<string, Plot> plots = new Dictionary<string, Plot>();
+            public int nextUid = 1;
+            public Tree tree = new Tree();
             public List<Bld> blds = new List<Bld>();
         }
+        // 버섯 나무: lv 레벨 · slots 버섯 자리마다 지금 열리는 버섯 (kind, t0 열리기 시작한 시각, at 다 자라는 시각, ms)
+        [Serializable] public class Tree { public int lv = 1; public List<Fruit> slots = new List<Fruit>(); }
+        [Serializable] public class Fruit { public string kind; public double t0, at; }
         // 건물 하나: 격자 칸(gx, gy)이 왼쪽 위 · critter 짓는 꼬마 · at 다 지어지는 시각(ms) · done 완성
         [Serializable] public class Bld { public int uid, gx, gy; public string id, critter; public double t0, at; public bool done; }
-        // s: "till" 간 땅 · "grow" 자라는 중 (t0 심은 시각, at 다 자라는 시각, ms)
-        [Serializable] public class Plot { public string s, crop; public double t0, at; }
         [Serializable] public class Quest { public string id, npc; public double cnt; public int line; }
         [Serializable] public class CodexEntry { public double n; public int first; public bool gold, giant; }
         [Serializable] public class TaxState { public int cycle = 1, roundsIn, paid, unpaid; public double income, debt; }
@@ -98,11 +98,11 @@ namespace MoreMush
                 g.farm ??= new SaveData.Farm();
                 g.farm.next ??= new Dictionary<string, double>(); g.farm.kind ??= new Dictionary<string, string>();
                 g.farm.love ??= new Dictionary<string, int>(); g.farm.evo ??= new Dictionary<string, int>();
-                g.farm.plots ??= new Dictionary<string, SaveData.Plot>();
                 g.farm.star ??= new Dictionary<string, int>();
                 g.farm.blds = g.farm.blds?.FindAll(b => b != null && Defs.BUILDING.ContainsKey(b.id ?? "")) ?? new List<SaveData.Bld>();
-                if (!Defs.CROPS.ContainsKey(g.farm.crop ?? "")) g.farm.crop = "ed";
-                g.farm.size = Math.Max(4, Math.Min(Defs.FIELD.max, g.farm.size));
+                g.farm.tree ??= new SaveData.Tree();
+                g.farm.tree.lv = Math.Max(1, Math.Min(Defs.TREE.maxLv, g.farm.tree.lv));
+                g.farm.tree.slots = g.farm.tree.slots?.FindAll(f => f != null && Defs.FRUITS.ContainsKey(f.kind ?? "")) ?? new List<SaveData.Fruit>();
 
                 return g;
             }

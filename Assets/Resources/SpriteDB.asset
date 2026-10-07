@@ -183,6 +183,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 1b15af6f23e9300409d7e40584c5e72b, type: 3}
   - key: Characters/NPC/smith
     sprite: {fileID: 21300000, guid: 0f7aa1321f80db1438473cdbc4720eaf, type: 3}
+  - key: FX/build_grid
+    sprite: {fileID: 21300000, guid: 1674479cdab87b34baf93101d32d9f10, type: 3}
   - key: FX/circle
     sprite: {fileID: 21300000, guid: 7409728771d7a4c40b736410c47f8377, type: 3}
   - key: FX/fever_edge
@@ -293,6 +295,22 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e1048ad16a09bcc4fa93254c1b34f1d5, type: 3}
   - key: Farm/Props/stove
     sprite: {fileID: 21300000, guid: c218c53bad2266b4e985577c63cfa40f, type: 3}
+  - key: Farm/Tree/fruit_ed
+    sprite: {fileID: 21300000, guid: 396c7b97d24ddcd4b9e731df2c1d22be, type: 3}
+  - key: Farm/Tree/fruit_md
+    sprite: {fileID: 21300000, guid: 66e1e34e878193b46818b2a270f6a3f8, type: 3}
+  - key: Farm/Tree/fruit_ps
+    sprite: {fileID: 21300000, guid: 41ea456794c370b499188530a65db4bd, type: 3}
+  - key: Farm/Tree/tree_0
+    sprite: {fileID: 21300000, guid: 4f09b12fd43f8814aa9938f405146a90, type: 3}
+  - key: Farm/Tree/tree_1
+    sprite: {fileID: 21300000, guid: 78f22d624183e17458c28139abb4443c, type: 3}
+  - key: Farm/Tree/tree_2
+    sprite: {fileID: 21300000, guid: 125866ffed6baaa4c8079922c499d904, type: 3}
+  - key: Farm/Tree/tree_3
+    sprite: {fileID: 21300000, guid: 76dab3270a03c374ca80514d9458e17e, type: 3}
+  - key: Farm/Tree/tree_4
+    sprite: {fileID: 21300000, guid: af2bec2ec5ca9fb49ac00182049277ba, type: 3}
   - key: Harvesters/bell
     sprite: {fileID: 21300000, guid: f5ec55c9af7e9d1478e896310e555ae9, type: 3}
   - key: Harvesters/cloud_spore

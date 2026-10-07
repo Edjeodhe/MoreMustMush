@@ -39,7 +39,7 @@ namespace MoreMush
 
             // 별 등급
             gradeStars.text = $"<color=#e8a900>{new string('★', st)}</color><color=#d9c6a2>{new string('★', CSTAR.max - st)}</color>";
-            gradeInfo.text = $"건설 속도 +{U.Pct(CSTAR.build * st)} · 밭일 속도 +{U.Pct(CSTAR.work * st)} <color=#8a6a4a>(별마다 +{U.Pct(CSTAR.build)})</color>";
+            gradeInfo.text = $"건설 속도 +{U.Pct(CSTAR.build * st)} · 버섯 따기 속도 +{U.Pct(CSTAR.work * st)} <color=#8a6a4a>(별마다 +{U.Pct(CSTAR.build)})</color>";
             var cost = StarCost(id);
             UIUtil.Show(starUp, cost != null); UIUtil.Show(starMax, cost == null);
             if (cost != null)
@@ -60,7 +60,7 @@ namespace MoreMush
             list.text =
                 $"· 부탁 보상: 균사석 ×{U.FmtN(FARM.evoGem[e])} {(e < FARM.evoMax ? $"(진화하면 ×{U.FmtN(FARM.evoGem[e + 1])})" : "")} · {UIUtil.Ic("dia")} 가끔, 호감도 칸을 채우면 +{FARM.diaHeart}\n" +
                 $"· 호감도 보너스: 부탁 때 <b>{U.JsRound(FARM.bonusP * h * 100)}%</b> 확률로 균사석 +1~{2 + e}\n" +
-                $"· 부탁 간격 ×{U.FmtN(FARM.evoWait[e])} · 진화 밭일 속도 ×{U.FmtN(FARM.evoSpd[e])}";
+                $"· 부탁 간격 ×{U.FmtN(FARM.evoWait[e])} · 진화 일 속도 ×{U.FmtN(FARM.evoSpd[e])}";
 
             bool max = e >= FARM.evoMax;
             UIUtil.Show(evolve, !max); UIUtil.Show(evoMax, max);

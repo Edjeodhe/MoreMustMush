@@ -122,7 +122,7 @@ namespace MoreMush.EditorTools
         public static void BuildIconSpriteAsset()
         {
             const int cell = 128;
-            var paths = AssetDatabase.FindAssets("t:Texture2D", new[] { GenRoot + "/Icons", GenRoot + "/Farm/Icons", GenRoot + "/Farm/Field" }).Select(AssetDatabase.GUIDToAssetPath).OrderBy(p => p).ToList();
+            var paths = AssetDatabase.FindAssets("t:Texture2D", new[] { GenRoot + "/Icons", GenRoot + "/Farm/Icons", GenRoot + "/Farm/Field", GenRoot + "/Farm/Tree" }).Select(AssetDatabase.GUIDToAssetPath).OrderBy(p => p).ToList();
             int cols = 8, rows = Mathf.CeilToInt(paths.Count / (float)cols);
             var atlas = new Texture2D(cols * cell, rows * cell, TextureFormat.RGBA32, false);
             atlas.SetPixels32(new Color32[atlas.width * atlas.height]);

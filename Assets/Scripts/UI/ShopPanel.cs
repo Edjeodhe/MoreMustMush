@@ -140,7 +140,7 @@ namespace MoreMush
 
         void RenderSpore()
         {
-            sub.text = "버섯 포자를 골드로 사요. 포자는 <color=#3a8a2a>버섯 농장 밭 재배</color>에 써요.";
+            sub.text = "버섯 포자를 골드로 사요.";
             double pr = SporePrice(), mx = SporeMax();
             sporePrice.text = $"1개 {UIUtil.Ic("gold")}{U.Fmt(pr)}골드";
             sporeOwn.text = $"보유 {U.Fmt(G.spore)}개";
@@ -154,8 +154,7 @@ namespace MoreMush
                 sporeButtonTexts[i].text = $"{labels[i]}\n<size=70%>{small}</size>";
             }
             sporeUses.text =
-                $"<b>버섯 밭 재배</b>  농장 밭에 포자 + 식용·약용·독 버섯을 심으면, 다 자랐을 때 <b>균사석</b>을 줘요. (식용 {CROPS["ed"].spore} · 약용 {CROPS["md"].spore} · 독 {CROPS["ps"].spore}개)\n" +
-                "<b>밭 수확</b>  작물을 수확할 때 포자가 0~1개 함께 나와요. 포자 등불·새싹 꼬마가 있으면 더 나와요.";
+                "<b>버섯 나무</b>  꼬마가 나무에서 버섯을 딸 때 포자가 0~1개 함께 나와요. 포자 등불·새싹 꼬마가 있으면 더 나와요.";
         }
     }
 }

@@ -427,6 +427,27 @@ export const SHEETS = [
     subject: "A single large reward illustration for an idle-harvest reward popup.",
     items: [["auto_reward", "a big open wooden treasure chest overflowing with gold coins, glowing orange mushrooms, teal mycelium crystals and sparkling pink-violet diamonds, with coins spilling onto the ground"]],
   },
+  // ===== 버섯 나무 (밭 대신. 레벨이 오르면 나무가 커진다) =====
+  {
+    id: "mush_tree", rows: 1, cols: 5, out: "Farm/Tree", refs: ["Art/Raw/bg_ranch.png"],
+    subject: "Five growth stages of the SAME cozy fantasy farm tree on which mushrooms grow, matching the attached ranch background's style, front view, each standing on a small round grass base. From left (smallest) to right (largest) the tree clearly grows bigger and lusher. Warm brown mossy bark, rounded green leafy canopy with soft clumps. Do NOT draw mushrooms on the branches (they are added separately); a few tiny decorative shelf fungi low on the trunk are fine.",
+    items: [
+      ["tree_0", "stage 1: a small sapling with a thin trunk and a few leaf clumps"],
+      ["tree_1", "stage 2: a young tree with a slim trunk and a small round canopy"],
+      ["tree_2", "stage 3: a medium tree with a sturdier trunk and a fuller canopy"],
+      ["tree_3", "stage 4: a large tree with a thick trunk, visible roots and a big lush canopy"],
+      ["tree_4", "stage 5: a grand ancient tree with a very thick mossy trunk, big roots and a huge layered lush canopy sprinkled with tiny glowing spores"],
+    ],
+  },
+  {
+    id: "tree_fruit", rows: 1, cols: 3, out: "Farm/Tree",
+    subject: "Mushroom clusters that grow on a tree branch, each a single object centered in its cell, readable at 40 px. Each cluster sprouts from a small piece of bark (no soil, no ground).",
+    items: [
+      ["fruit_ed", "a cluster of plump orange edible mushrooms"],
+      ["fruit_md", "a cluster of green medicinal mushrooms"],
+      ["fruit_ps", "a cluster of purple poison mushrooms with tiny spots"],
+    ],
+  },
   {
     id: "bg_kitchen", kind: "image", out: "Backgrounds/bg_kitchen.png",
     prompt: "Wide landscape 16:9 game background, slight top-down 3/4 view: the inside of a cozy little mushroom-village kitchen restaurant. Warm wooden walls with shelves of jars and hanging herbs at the top, a window, and a wooden plank floor filling the lower two-thirds, kept plain so furniture and characters can be placed on it. No furniture on the floor, no characters, no text, no UI.",
