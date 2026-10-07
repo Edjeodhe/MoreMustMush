@@ -24,7 +24,7 @@ namespace MoreMush
                 {
                     a.enabled = true; a.sprite = SpriteDB.Get("Props/stump");
                     a.transform.localPosition = Art.P(d.x, d.y);
-                    Art.FitPx(a, 92 * (d.hitT > 0 ? 1.12f : 1));
+                    Art.FitPx(a, 92 * Defs.DEV_SCALE * (d.hitT > 0 ? 1.12f : 1));
                     Art.SetFx(a, 0, 0, d.hitT > 0 ? 0.35f : 0);
                     break;
                 }
@@ -44,7 +44,7 @@ namespace MoreMush
                     a.enabled = b.enabled = true;
                     a.sprite = b.sprite = SpriteDB.Get("Props/mole");
                     a.transform.localPosition = Art.P(d.a.x, d.a.y); b.transform.localPosition = Art.P(d.b.x, d.b.y);
-                    Art.FitPx(a, 84); Art.FitPx(b, 84);
+                    Art.FitPx(a, 84 * Defs.DEV_SCALE); Art.FitPx(b, 84 * Defs.DEV_SCALE);
                     link.enabled = true; link.positionCount = 2;
                     link.SetPosition(0, Art.P(d.a.x, d.a.y)); link.SetPosition(1, Art.P(d.b.x, d.b.y));
                     break;
@@ -57,10 +57,10 @@ namespace MoreMush
                         rs[i].enabled = true;
                         rs[i].sprite = SpriteDB.Get(d.lit[i] > 0 ? "Props/acorn_on" : "Props/acorn_off");
                         rs[i].transform.localPosition = Art.P(d.pts[i].x, d.pts[i].y);
-                        Art.FitPx(rs[i], 40);
+                        Art.FitPx(rs[i], 40 * Defs.DEV_SCALE);
                         glows[i].enabled = d.lit[i] > 0;
                         glows[i].transform.localPosition = rs[i].transform.localPosition;
-                        glows[i].transform.localScale = Vector3.one * (68 / Art.PPU);
+                        glows[i].transform.localScale = Vector3.one * (68 * Defs.DEV_SCALE / Art.PPU);
                     }
                     break;
                 }

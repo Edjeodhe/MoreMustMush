@@ -25,40 +25,69 @@ namespace MoreMush
             SKILL_IDS.Add(id);
         }
 
-        public static double SkillRate(int S) => 0.10 * Math.Pow(1.7, S);
-        public static double KidRate(int L) => L > 0 ? 0.10 * Math.Pow(1.5, L - 1) : 0;
-        public static double MultiRate(int L) => L > 0 ? 0.05 * Math.Pow(1.4, L - 1) : 0;
+        // 성장 설계
+        // - 레벨 효과는 레벨당 고정값을 더하는 식이다. 최대 레벨은 2~4로 짧다.
+        // - 공격력·타격 점수·수확량은 단계 노드 I(+1) → II(+10) → III(+100) → IV(+1000)로 단위가 커진다.
+        //   다음 단계는 앞 단계를 최대 레벨까지 올려야 열린다(가격이 아니라 구조로 막는다).
+        // - 버섯 체력·보상도 지역마다 ×10씩 커지므로(ZoneMul) 단계가 오를 때마다 숫자 단위가 한 자리씩 뛴다.
+        // - 곱셈은 균사석 노드(후반)에서만 들어온다.
+        public static double SkillRate(int S) => 0.10 + 0.10 * S;
+        public static double SkillPow(int P) => 1 + 0.75 * P;   // 스킬 위력 배율 (피해·시간·속도)
+        public static double KidRate(int L) => 0.12 * L;
+        public static double MultiRate(int L) => 0.10 * L;
 
         // ===== 균사 노드 효과 공식 (NF) =====
         public static class NF
         {
-            public static double ed_score(int L) => Math.Pow(1.5, L);
-            public static double ed_price(int L) => Math.Pow(1.35, L);
-            public static double ed_regen(int L) => 4 * Math.Pow(0.75, L);
-            public static double ed_rare(int L) => Math.Pow(1.5, L);
-            public static double ed_gold(int L) => 0.01 * Math.Pow(1.6, L);
-            public static double ed_bonus(int L) => Math.Pow(1.4, L);
-            public static double ed_tax(int L) => 1 - 0.06 * L;
-            public static double ed_trade(int L) => 1 + 0.2 * L;
-            public static double ed_giant(int L) => 0.08 + 0.06 * L;
-            public static double ed_special(int L) => 0.07 * L;
-            public static double md_bar(int L) => Math.Pow(1.22, L);
-            public static double md_combo(int L) => 0.1 * Math.Pow(1.36, L);
-            public static double md_chef(int L) => 1 + 0.15 * L;
-            public static double md_buffdur(int L) => 1 + 0.2 * L;
-            public static double md_templife(int L) => 1 + 0.2 * L;
-            public static double md_stump(int L) => 1 + 0.4 * L;
-            public static double ps_atk(int L) => Math.Pow(1.37, L);
-            public static double ps_size(int L) => Math.Pow(1.14, L);
-            public static double ps_spd(int L) => Math.Pow(1.1, L);
-            public static double ps_dur(int L) => Math.Pow(1.14, L);
-            public static double ps_crit(int L) => L > 0 ? 0.03 * Math.Pow(1.48, L - 1) : 0;
-            public static double ps_heavy(int L) => 1 + 0.25 * L;
-            public static double ps_resist(int L) => Math.Pow(0.85, L);
-            public static double ps_rush(int L) => 1 + 0.5 * L;
-            public static double bl_range(int L) => 20 * Math.Pow(1.34, L);
-            public static double bl_spd(int L) => 0.6 * Math.Pow(0.86, L);
-            public static double gm_harvest(int L) => 1 + 0.2 * L;
+            // 단계 노드: 고정값 더하기 (I +1 · II +10 · III +100 · IV +1000)
+            public static double ps_atk(int L) => 1 * L;
+            public static double ps_atk2(int L) => 10 * L;
+            public static double ps_atk3(int L) => 100 * L;
+            public static double ps_atk4(int L) => 1000 * L;
+            public static double ed_score(int L) => 1 * L;      // 타격 점수 +
+            public static double ed_score2(int L) => 10 * L;
+            public static double ed_score3(int L) => 100 * L;
+            public static double ed_bonus(int L) => 1 * L;      // 버섯 하나당 수확 개수 +
+            public static double ed_bonus2(int L) => 10 * L;
+            public static double ed_bonus3(int L) => 100 * L;
+            public static double ed_price(int L) => 1 + 0.3 * L;
+            public static double ed_price2(int L) => 0.5 * L;   // 판매가 +50%씩 (I에 더함)
+            public static int ed_cols2(int L) => 4 * L;         // 군락지 수 +4씩
+            public static double md_combo2(int L) => 0.1 * L;   // 콤보 계수 +0.1씩
+            public static double ps_dur2(int L) => 3 * L;       // 라운드 시간 +3초씩
+            public static double ps_crit2(int L) => 3 + 1 * L;  // 치명타 배율 ×3 → ×5
+            public static double ed_regen(int L) => 4 - 0.8 * L;
+            public static double ed_rare(int L) => 1 + 0.5 * L;
+            public static double ed_gold(int L) => 0.01 + 0.02 * L;
+            public static double ed_tax(int L) => 1 - 0.1 * L;
+            public static double ed_trade(int L) => 1 + 0.3 * L;
+            public static double ed_giant(int L) => 0.08 + 0.1 * L;
+            public static double ed_special(int L) => 0.1 * L;
+            public static double ed_special_life(int L) => SPECIAL_LIFE + 2 * L;
+            public static int ed_size(int L) => 5 + 2 * L;   // 군락지당 최대 버섯 수
+            public static int ed_dev(int L) => 2 + 2 * L;    // 라운드 시작 숲 장치 수
+            public static double md_bar(int L) => 1 + 0.25 * L;
+            public static double md_combo(int L) => 0.1 + 0.05 * L;
+            public static double md_chef(int L) => 1 + 0.3 * L;
+            public static double md_buffdur(int L) => 1 + 0.4 * L;
+            public static double md_templife(int L) => 1 + 0.4 * L;
+            public static double md_stump(int L) => 1 + 0.8 * L;
+            public static double ps_size(int L) => 1 + 0.15 * L;
+            public static double ps_spd(int L) => 1 + 0.12 * L;
+            public static double ps_dur(int L) => 2 * L;   // 라운드 시간 +초
+            public static double ps_crit(int L) => 0.05 * L;
+            public static double ps_heavy(int L) => 1 + 0.5 * L;
+            public static double ps_resist(int L) => 1 - 0.15 * L;
+            public static double ps_rush(int L) => 1 + 0.75 * L;
+            public static double bl_range(int L) => 20 + 25 * L;
+            public static double bl_spd(int L) => 0.6 - 0.12 * L;
+            public static double bl_pow(int L) => 0.4 * SkillPow(L);
+            // 스킬 범위: 기본값에 위력 레벨당 고정값을 더한다
+            public static double burst_r(int P) => 80 + 25 * P;
+            public static double tornado_h(int P) => 50 + 22 * P;
+            public static double shock_r(int P) => 100 + 30 * P;
+            // ↓ 균사석 노드 (후반): 다른 보너스를 다 더한 값에 곱한다
+            public static double gm_harvest(int L) => Math.Pow(1.25, L);
             public static double gm_spore(int L) => 0.25 * L;
             public static double gm_toxin(int L) => Math.Pow(0.75, L);
             public static double gm_herb(int L) => L;
@@ -72,17 +101,22 @@ namespace MoreMush
         {
             public string id, br, parent, n, skill, icon, col, d;
             public bool core, sub, gem;
+            public bool needMax;   // 부모 노드를 최대 레벨까지 올려야 열린다 (단계 노드 I → II → III)
+            public int tier = 1;   // 성장 단계: 1 초반 · 2 중반 · 3 후반
+            public int zone;       // 이 지역(THEMES 순서)이 열려야 살 수 있다. 기본은 단계 - 1 (초반 숲 · 중반 달빛 밤 · 후반 들판)
             public int max;
-            public double costGold, costGem, g;
+            public double costGold, costGem, g;   // costGold·g: 가격표가 없을 때의 기본가와 사는 순서 기준
+            public double[] costs;                // 레벨별 골드 가격 (Defs.Prices.cs)
             public Func<int, string> eff;
         }
 
         public static readonly List<Node> NODES = new List<Node>();
         public static readonly Dictionary<string, Node> NODE = new Dictionary<string, Node>();
+        public static readonly string[] TIER_NAMES = { "", "초반", "중반", "후반" };
 
-        static Node N(string id, string br, string parent, string n, int max, double gold, double g, Func<int, string> eff, double gem = 0, bool core = false, bool sub = false, string skill = null, string icon = null, string col = null)
+        static Node N(string id, string br, string parent, string n, int max, double gold, double g, Func<int, string> eff, double gem = 0, bool core = false, bool sub = false, string skill = null, string icon = null, string col = null, int tier = 1, bool needMax = false, int zone = -1)
         {
-            var node = new Node { id = id, br = br, parent = parent, n = n, max = max, costGold = gold, costGem = gem, g = g, eff = eff, core = core, sub = sub, skill = skill, icon = icon, col = col, gem = gem > 0 };
+            var node = new Node { id = id, br = br, parent = parent, n = n, max = max, costGold = gold, costGem = gem, g = g, eff = eff, core = core, sub = sub, skill = skill, icon = icon, col = col, gem = gem > 0, tier = tier, needMax = needMax, zone = zone >= 0 ? zone : tier - 1 };
             NODES.Add(node);
             return node;
         }
@@ -99,13 +133,27 @@ namespace MoreMush
             ["core_ed"] = "💰 돈·수확 쪽 강화 가지예요. 점수, 판매가, 세금 감면, 마을 의뢰 보상, 군락지 수·재생, 수확량, 황금 변종, 거대·특수 버섯 등장을 올릴 수 있어요.",
             ["core_md"] = "🎯 바·스킬·시간·필드 쪽 강화 가지예요. 필드 넓히기, 바 넓이, 콤보, 꼬마 수확기, 스킬 15종(가속·포자 폭발·충격파…), 버프 지속, 요리 효과를 올릴 수 있어요.",
             ["core_ps"] = "⚔️ 전투 쪽 강화 가지예요. 공격력, 수확기 크기·속도, 제한시간, 치명타, 핀볼 수, 회전 칼날, 단단한 버섯 피해, 포자 저항을 올릴 수 있어요.",
-            ["ed_score"] = "버섯을 칠 때마다 얻는 점수를 늘려요. 점수는 라운드가 끝나면 골드로 바뀌어요.",
+            ["ed_score"] = "버섯을 칠 때마다 얻는 점수에 고정값을 더해요. 점수는 라운드가 끝나면 골드로 바뀌어요. 끝까지 올리면 타격 점수 II가 열려요.",
+            ["ed_score2"] = "타격 점수를 10 단위로 더해요. 끝까지 올리면 타격 점수 III이 열려요.",
+            ["ed_score3"] = "타격 점수를 100 단위로 더해요.",
+            ["ed_bonus2"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 10 단위로 더해요. 끝까지 올리면 수확량 III이 열려요.",
+            ["ed_bonus3"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 100 단위로 더해요.",
+            ["ed_cols2"] = "군락지 수를 끝까지 올린 뒤 군락지를 더 늘려요.",
+            ["ed_price2"] = "판매 가격을 끝까지 올린 뒤 판매가를 더 올려요.",
+            ["md_combo2"] = "콤보 계수를 끝까지 올린 뒤 콤보당 배율을 더 키워요.",
+            ["ps_atk2"] = "공격력을 10 단위로 더해요. 지역이 바뀌면 버섯 체력이 10배가 되니, 다음 지역에 가기 전에 올려 두세요. 끝까지 올리면 공격력 III이 열려요.",
+            ["ps_atk3"] = "공격력을 100 단위로 더해요. 끝까지 올리면 공격력 IV가 열려요.",
+            ["ps_atk4"] = "공격력을 1000 단위로 더해요.",
+            ["ps_ball2"] = "영구 핀볼을 하나 더 늘려요.",
+            ["ps_ball3"] = "영구 핀볼을 두 개까지 더 늘려요.",
+            ["ps_dur2"] = "지속시간을 끝까지 올린 뒤 라운드 시간을 더 늘려요.",
+            ["ps_crit2"] = "치명타가 났을 때 피해와 점수 배율을 키워요.",
             ["ed_price"] = "버섯 상점에서 버섯을 팔 때 받는 골드를 늘려요.",
             ["ed_cols"] = "필드에 동시에 있을 수 있는 버섯 군락지의 최대 개수를 늘려요.",
             ["ed_regen"] = "군락지를 다 수확해서 사라진 뒤, 새 군락지가 다시 돋아날 때까지 걸리는 시간이에요. 숫자가 작을수록 빨리 돋아나요.",
             ["ed_rare"] = "새로 돋는 군락지가 에픽·유니크·레전드리 버섯일 확률을 높여요.",
             ["ed_gold"] = "버섯이 황금 변종으로 나올 확률이에요. 황금 버섯은 점수 ×10, 수확량 ×5이고 도감에 황금으로 기록돼요.",
-            ["ed_bonus"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 늘려요.",
+            ["ed_bonus"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 늘려요. 끝까지 올리면 수확량 II가 열려요.",
             ["ed_multi"] = "버섯을 수확할 때 일정 확률로 수확량이 3배가 돼요.",
             ["ed_size"] = "군락지 하나에서 가운데 무더기 둘레에 나는 개별 버섯 수의 최대치를 늘려요.",
             ["ed_tax"] = "세금 고지서 금액을 줄여요.",
@@ -120,16 +168,16 @@ namespace MoreMush
             ["ps_rush"] = "라운드를 시작하고 3초 동안 공격력이 올라가요. 처음 쏜 핀볼로 크게 터뜨리기 좋아요.",
             ["ps_heavy"] = "군락 가운데 버섯 무더기와 거대 버섯처럼 단단한 버섯에 주는 피해를 늘려요.",
             ["ed_dev"] = "라운드 시작 때 필드에 놓이는 숲 장치(그루터기 범퍼·이끼 길·두더지 굴·개울·도토리 스위치) 수를 늘려요.",
-            ["md_map"] = "버섯 밭(필드)을 넓혀요. 처음엔 필드가 좁아 화면이 확대되어 수확기·버섯이 크게 보이고, 넓힐수록 군락지와 숲 장치가 더 많이 들어가요(수입 증가). 5레벨이면 원래 크기예요.",
+            ["md_map"] = "버섯 밭(필드)을 넓혀요. 처음엔 필드가 좁아 화면이 확대되어 수확기·버섯이 크게 보이고, 넓힐수록 군락지와 숲 장치가 더 많이 들어가요(수입 증가). 4레벨이면 원래 크기예요.",
             ["md_bar"] = "화면 아래 슬라이드 바(통나무)의 길이예요. 길수록 핀볼을 받아치기 쉬워요.",
             ["md_combo"] = "핀볼이 바에 맞을 때마다 콤보가 쌓이고, 콤보마다 점수 배율이 올라요. 그 배율이 오르는 폭을 키워요. 바닥 벽에 닿으면 콤보가 끊겨요.",
             ["md_kid"] = "영구 핀볼이 바에 맞을 때 확률로 작은 임시 핀볼이 하나 튀어나와요.",
-            ["ps_atk"] = "수확기가 버섯에 부딪힐 때 주는 피해예요. 대부분의 스킬 피해도 공격력에 비례해요.",
+            ["ps_atk"] = "수확기가 버섯에 부딪힐 때 주는 피해에 고정값을 더해요. 대부분의 스킬 피해도 공격력에 비례해요. 끝까지 올리면 공격력 II가 열려요.",
             ["ps_size"] = "수확기(핀볼)의 크기예요. 클수록 버섯에 잘 맞아요.",
             ["ps_spd"] = "수확기가 날아가는 속도예요.",
-            ["ps_dur"] = "한 라운드의 기본 제한시간이에요.",
-            ["ps_crit"] = "버섯을 칠 때 치명타가 날 확률이에요. 치명타는 피해와 점수가 ×3이에요.",
-            ["ps_ball"] = "라운드를 시작할 때 함께 발사하는 영구 핀볼 수예요. 바 버프는 영구 핀볼만 받아요.",
+            ["ps_dur"] = "한 라운드의 제한시간을 늘려요. 라운드는 15초에서 시작해 스테이지마다 0.5초씩(최대 +10초) 길어지고, 여기에 더해져요.",
+            ["ps_crit"] = "버섯을 칠 때 치명타가 날 확률이에요. 치명타는 피해와 점수가 ×3이에요(치명타 피해 노드로 더 커져요).",
+            ["ps_ball"] = "라운드를 시작할 때 함께 발사하는 영구 핀볼을 하나 늘려요. 바 버프는 영구 핀볼만 받아요. 공격력 II·III 아래에서 더 늘릴 수 있어요.",
             ["bl"] = "수확기 둘레에 회전 칼날이 생겨서, 범위 안의 버섯에 주기적으로 피해를 줘요.",
             ["bl_pow"] = "회전 칼날이 한 번 벨 때 주는 피해예요.",
             ["bl_range"] = "회전 칼날이 닿는 범위(수확기 둘레 반지름)예요.",
@@ -176,91 +224,124 @@ namespace MoreMush
         static void InitSkillsAndNodes()
         {
             string F(double v, int d = 2) => U.FmtN(v, d);
-            AddSkill("accel", "가속", "bar", 60, "#6fd3ff", P => $"3초간 속도 ×{F(1 + 0.15 * Math.Pow(2, P))}");
-            AddSkill("sharpen", "날 갈기", "bar", 200, "#dfe6ee", P => $"다음 3타 피해 ×{2 * Math.Pow(2, P)}");
-            AddSkill("split", "분열", "bar", 740, "#ffe36e", P => $"임시 핀볼 {1 + P}개 (6초)");
-            AddSkill("sip", "시간 한 모금", "bar", 420, "#9ee6ff", P => $"+{F(0.3 * Math.Pow(2, P), 1)}초 (라운드당 +10초까지)");
-            AddSkill("clear", "맑은 포자막", "bar", 360, "#bff6ff", P => $"{F(1.5 * Math.Pow(2, P), 1)}초 디버프 무시·해제");
-            AddSkill("burst", "포자 폭발", "hit", 100, "#ffb347", P => $"반경 {U.JsRound(80 * Math.Pow(1.2, P))}, 피해 공격력×{2 * Math.Pow(2, P)}");
-            AddSkill("tspore", "시간 포자", "hit", 140, "#8fe3ff", P => $"+{F(0.3 * Math.Pow(2, P), 1)}초 (라운드당 +15초까지)");
-            AddSkill("clone", "분신 수확기", "harvest", 580, "#c9d6ff", P => $"작은 임시 핀볼 {1 + P}개, 4초");
-            AddSkill("magnet", "버섯 자석", "hit", 360, "#ff6b8b", P => $"1초간 가까운 버섯 쪽으로 초당 {20 * Math.Pow(2, P)}°");
-            AddSkill("bolt", "연쇄 번개", "hit", 1300, "#fff36b", P => $"주변 {2 + P}개, 피해 공격력×{Math.Pow(2, P)}");
-            AddSkill("tornado", "회오리", "wall", 1500, "#b8f0e0", P => $"띠 높이 {U.JsRound(50 * Math.Pow(1.3, P))}, 피해 공격력×{2 * Math.Pow(2, P)}");
-            AddSkill("shock", "충격파", "harvest", 880, "#ffd0a0", P => $"반경 {U.JsRound(100 * Math.Pow(1.2, P))}, 피해 공격력×{Math.Pow(2, P)}, 연쇄 최대 8단계");
-            AddSkill("device", "숲 장치 등장", "harvest", 280, "#9be07a", P => "근처에 무작위 숲 장치 (라운드당 최대 +10개)", noPow: true);
-            AddSkill("pierce", "관통", "pierce", 110, "#ffd6d6", P => $"단단한 버섯(무더기·거대)을 튕기지 않고 뚫고 지나가며 피해 공격력×{Math.Pow(2, P)}");
-            AddSkill("fest", "풍년", "fest", 5400, "#ffd84a", P => $"라운드 마지막 5초 모든 점수·수확량 ×{2 * Math.Pow(2, P)}", noRate: true);
+            // 스킬: (해금 가격, 단계). 발동률·위력 노드는 해금 가격의 2배에서 시작해 레벨당 ×3
+            AddSkill("accel", "가속", "bar", 150, "#6fd3ff", P => $"3초간 속도 ×{F(1 + 0.15 * SkillPow(P))}");
+            AddSkill("sharpen", "날 갈기", "bar", 5000, "#dfe6ee", P => $"다음 3타 피해 ×{F(2 * SkillPow(P), 1)}");
+            AddSkill("split", "분열", "bar", 2000000, "#ffe36e", P => $"임시 핀볼 {1 + P}개 (6초)");
+            AddSkill("sip", "시간 한 모금", "bar", 20000, "#9ee6ff", P => $"+{F(0.3 * SkillPow(P), 2)}초 (라운드당 +10초까지)");
+            AddSkill("clear", "맑은 포자막", "bar", 15000, "#bff6ff", P => $"{F(1.5 * SkillPow(P), 2)}초 디버프 무시·해제");
+            AddSkill("burst", "포자 폭발", "hit", 400, "#ffb347", P => $"반경 {U.JsRound(NF.burst_r(P))}, 피해 공격력×{F(2 * SkillPow(P), 1)}");
+            AddSkill("tspore", "시간 포자", "hit", 500, "#8fe3ff", P => $"+{F(0.3 * SkillPow(P), 2)}초 (라운드당 +15초까지)");
+            AddSkill("clone", "분신 수확기", "harvest", 5000000, "#c9d6ff", P => $"작은 임시 핀볼 {1 + P}개, 4초");
+            AddSkill("magnet", "버섯 자석", "hit", 15000, "#ff6b8b", P => $"1초간 가까운 버섯 쪽으로 초당 {U.JsRound(20 * SkillPow(P))}°");
+            AddSkill("bolt", "연쇄 번개", "hit", 20000000, "#fff36b", P => $"주변 {2 + P}개, 피해 공격력×{F(SkillPow(P), 1)}");
+            AddSkill("tornado", "회오리", "wall", 30000000, "#b8f0e0", P => $"띠 높이 {U.JsRound(NF.tornado_h(P))}, 피해 공격력×{F(2 * SkillPow(P), 1)}");
+            AddSkill("shock", "충격파", "harvest", 10000000, "#ffd0a0", P => $"반경 {U.JsRound(NF.shock_r(P))}, 피해 공격력×{F(SkillPow(P), 1)}, 연쇄 최대 8단계");
+            AddSkill("device", "숲 장치 등장", "harvest", 25000, "#9be07a", P => "근처에 무작위 숲 장치 (라운드당 최대 +10개)", noPow: true);
+            AddSkill("pierce", "관통", "pierce", 300, "#ffd6d6", P => $"단단한 버섯(무더기·거대)을 튕기지 않고 뚫고 지나가며 피해 공격력×{F(SkillPow(P), 1)}");
+            AddSkill("fest", "풍년", "fest", 100000000, "#ffd84a", P => $"라운드 마지막 5초 모든 점수·수확량 ×{F(2 * SkillPow(P), 1)}", noRate: true);
+            var SKILL_TIER = new Dictionary<string, int>
+            {
+                ["accel"] = 1, ["burst"] = 1, ["tspore"] = 1, ["pierce"] = 1,
+                ["sharpen"] = 2, ["magnet"] = 2, ["sip"] = 2, ["clear"] = 2, ["device"] = 2,
+                ["split"] = 3, ["clone"] = 3, ["shock"] = 3, ["bolt"] = 3, ["tornado"] = 3, ["fest"] = 3,
+            };
+            // 기본(단계 - 1)보다 늦게 여는 스킬: 바다(3). 폐허(4)는 기본 트리 이후(무한 모드) 지역으로 남긴다
+            var SKILL_ZONE = new Dictionary<string, int> { ["bolt"] = 3, ["tornado"] = 3, ["fest"] = 3 };
 
             // 핵심 코어 (1레벨 고정)
             N("core_ed", "ed", null, "식용 균사", 1, 10, 1, L => L > 0 ? "열림 · 버섯 판매가 +10%" : "사면 식용 가지가 열리고 버섯 판매가 +10%", core: true);
             N("core_md", "md", null, "약용 균사", 1, 10, 1, L => L > 0 ? "열림 · 바 길이 +10%" : "사면 약용 가지가 열리고 바 길이 +10%", core: true);
             N("core_ps", "ps", null, "독 균사", 1, 10, 1, L => L > 0 ? "열림 · 공격력 +10%" : "사면 독 가지가 열리고 공격력 +10%", core: true);
-            // 식용
-            N("ed_score", "ed", "core_ed", "점수 획득량", 5, 16, 1.6, L => $"타격 점수 ×{F(NF.ed_score(L))}");
-            N("ed_price", "ed", "ed_score", "판매 가격", 5, 40, 1.6, L => $"버섯 판매가 ×{F(NF.ed_price(L))}");
-            N("ed_tax", "ed", "ed_price", "세금 감면", 5, 120, 1.6, L => $"세금 ×{F(NF.ed_tax(L))}");
-            N("ed_trade", "ed", "ed_price", "단골 거래", 5, 200, 1.6, L => $"마을 의뢰 보상 ×{F(NF.ed_trade(L))}");
-            N("ed_cols", "ed", "ed_score", "군락지 수", 5, 32, 1.6, L => $"최대 {ColCount(L)}개");
-            N("ed_regen", "ed", "ed_score", "군락 재생 속도", 5, 56, 1.6, L => $"사라진 군락지가 {F(NF.ed_regen(L))}초 뒤 다시 돋아남");
-            N("ed_rare", "ed", "ed_cols", "변종 출현율", 5, 150, 1.6, L => $"에픽 이상 가중치 ×{F(NF.ed_rare(L))}");
-            N("ed_gold", "ed", "ed_rare", "황금 변종", 5, 500, 1.6, L => $"버섯마다 {U.Pct(NF.ed_gold(L))}");
-            N("ed_giant", "ed", "ed_rare", "거대 버섯", 4, 400, 1.6, L => $"라운드마다 {U.Pct(NF.ed_giant(L))} 확률로 거대 버섯");
-            N("ed_special", "ed", "ed_gold", "꼬마 손님", 4, 600, 1.6, L => $"특수 버섯 등장 {U.Pct(SPECIAL_P + NF.ed_special(L))} · 잡을 시간 {SPECIAL_LIFE + L}초");
-            N("ed_bonus", "ed", "ed_regen", "수확 보너스", 5, 200, 1.6, L => $"수확 버섯 ×{F(NF.ed_bonus(L))}");
-            N("ed_multi", "ed", "ed_bonus", "배수 획득", 5, 300, 1.6, L => L > 0 ? $"수확할 때 {U.Pct(MultiRate(L))} 확률로 버섯 ×3" : "없음");
-            N("ed_size", "ed", "ed_regen", "군락지 버섯 수", 5, 350, 1.6, L => $"군락지당 3~{5 + L}개");
-            N("ed_dev", "ed", "ed_regen", "숲 장치 수", 5, 250, 1.6, L => $"라운드마다 {2 + L}개");
-            // 약용
-            N("md_map", "md", "core_md", "필드 넓히기", 5, 30, 1.9, L => $"필드 {U.JsRound(W / MAP_ZOOM[L])}×{U.JsRound(H / MAP_ZOOM[L])} · 화면 확대 ×{F(MAP_ZOOM[L])}");
-            N("md_bar", "md", "core_md", "바 넓이", 5, 16, 1.6, L => $"{U.JsRound(150 * NF.md_bar(L))}px");
-            N("md_combo", "md", "md_bar", "콤보 계수", 5, 34, 1.6, L => $"콤보당 +{F(NF.md_combo(L), 3)}배");
-            N("md_chef", "md", "md_combo", "버섯 요리사", 5, 150, 1.6, L => $"요리 효과 ×{F(NF.md_chef(L))}");
-            N("md_stump", "md", "md_combo", "숲 장치 강화", 5, 180, 1.6, L => $"숲 장치 효과 ×{F(NF.md_stump(L))}");
-            N("md_kid", "md", "md_bar", "꼬마 수확기", 5, 110, 1.6, L => L > 0 ? $"영구 핀볼이 바에 맞을 때 {U.Pct(KidRate(L))} 확률로 작은 임시 핀볼 1개 (8초)" : "없음", icon: "s_kid", col: "#9fd8ff");
-            N("md_templife", "md", "md_kid", "임시 핀볼 수명", 5, 300, 1.6, L => $"임시 핀볼 지속시간 ×{F(NF.md_templife(L))}");
+            // 퍼센트 효과는 "기본 대비 +%"로 보여 준다 (다른 보너스와도 더해진다)
+            string Plus(double mul) => $"+{U.JsRound((mul - 1) * 100)}%";
+            string Num(double v) => U.Fmt(v);
+            // ── 식용 (돈·수확) ──
+            // 초반
+            N("ed_score", "ed", "core_ed", "타격 점수 I", 3, 15, 2.2, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score(L))}");
+            N("ed_cols", "ed", "ed_score", "군락지 수", 3, 30, 2.2, L => $"최대 {ColCount(L)}개");
+            N("ed_regen", "ed", "ed_score", "군락 재생 속도", 3, 50, 2.2, L => $"사라진 군락지가 {F(NF.ed_regen(L))}초 뒤 다시 돋아남");
+            N("ed_price", "ed", "ed_score", "판매 가격", 3, 60, 2.2, L => $"버섯 판매가 {Plus(NF.ed_price(L))}");
+            N("ed_bonus", "ed", "ed_regen", "수확량 I", 3, 40, 2.2, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus(L))}개");
+            // 중반
+            N("ed_score2", "ed", "ed_score", "타격 점수 II", 3, 2000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score2(L))}", tier: 2, needMax: true);
+            N("ed_bonus2", "ed", "ed_bonus", "수확량 II", 3, 3000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus2(L))}개", tier: 2, needMax: true);
+            N("ed_cols2", "ed", "ed_cols", "군락지 수 II", 2, 10000, 3, L => $"군락지 +{NF.ed_cols2(L)}개", tier: 2, needMax: true);
+            N("ed_price2", "ed", "ed_price", "판매 가격 II", 2, 15000, 3, L => $"버섯 판매가 +{U.JsRound(NF.ed_price2(L) * 100)}%", tier: 2, needMax: true);
+            N("ed_rare", "ed", "ed_cols", "변종 출현율", 3, 5000, 2.2, L => $"에픽 이상 가중치 {Plus(NF.ed_rare(L))}", tier: 2);
+            N("ed_size", "ed", "ed_regen", "군락지 버섯 수", 3, 4000, 2.2, L => $"군락지당 3~{NF.ed_size(L)}개", tier: 2);
+            N("ed_dev", "ed", "ed_regen", "숲 장치 수", 2, 3000, 2.2, L => $"라운드마다 {NF.ed_dev(L)}개", tier: 2);
+            N("ed_tax", "ed", "ed_price", "세금 감면", 2, 8000, 2.2, L => $"세금 -{U.JsRound((1 - NF.ed_tax(L)) * 100)}%", tier: 2);
+            // 후반
+            N("ed_score3", "ed", "ed_score2", "타격 점수 III", 3, 1000000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score3(L))}", tier: 3, needMax: true);
+            N("ed_bonus3", "ed", "ed_bonus2", "수확량 III", 3, 1500000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus3(L))}개", tier: 3, needMax: true);
+            N("ed_trade", "ed", "ed_price", "단골 거래", 2, 3000000, 2.2, L => $"마을 의뢰 보상 {Plus(NF.ed_trade(L))}", tier: 3);
+            N("ed_gold", "ed", "ed_rare", "황금 변종", 2, 3000000, 2.2, L => $"버섯마다 {U.Pct(NF.ed_gold(L))}", tier: 3);
+            N("ed_giant", "ed", "ed_rare", "거대 버섯", 2, 2000000, 2.2, L => $"라운드마다 {U.Pct(NF.ed_giant(L))} 확률로 거대 버섯", tier: 3);
+            N("ed_special", "ed", "ed_gold", "꼬마 손님", 2, 10000000, 2.2, L => $"특수 버섯 등장 {U.Pct(SPECIAL_P + NF.ed_special(L))} · 잡을 시간 {NF.ed_special_life(L)}초", tier: 3);
+            N("ed_multi", "ed", "ed_bonus", "배수 획득", 2, 5000000, 2.2, L => L > 0 ? $"수확할 때 {U.Pct(MultiRate(L))} 확률로 버섯 ×3" : "없음", tier: 3);
+            // ── 약용 (바·스킬·필드) ──
+            N("md_map", "md", "core_md", "필드 넓히기", 4, 40, 2.2, L => $"필드 {U.JsRound(W / MAP_ZOOM[L])}×{U.JsRound(H / MAP_ZOOM[L])} · 화면 확대 ×{F(MAP_ZOOM[L])}");
+            N("md_bar", "md", "core_md", "바 넓이", 3, 15, 2.2, L => $"{U.JsRound(150 * NF.md_bar(L))}px");
+            N("md_combo", "md", "md_bar", "콤보 계수", 3, 60, 2.2, L => $"콤보당 +{F(NF.md_combo(L), 3)}배");
+            N("md_kid", "md", "md_bar", "꼬마 수확기", 3, 300, 2.2, L => L > 0 ? $"영구 핀볼이 바에 맞을 때 {U.Pct(KidRate(L))} 확률로 작은 임시 핀볼 1개 (8초)" : "없음", icon: "s_kid", col: "#9fd8ff");
+            N("md_combo2", "md", "md_combo", "콤보 계수 II", 2, 8000, 3, L => $"콤보당 +{F(NF.md_combo2(L), 2)}배 더", tier: 2, needMax: true);
+            N("md_templife", "md", "md_kid", "임시 핀볼 수명", 2, 20000, 2.2, L => $"임시 핀볼 지속시간 {Plus(NF.md_templife(L))}", tier: 2);
+            N("md_chef", "md", "md_combo", "버섯 요리사", 2, 2000000, 2.2, L => $"요리 효과 {Plus(NF.md_chef(L))}", tier: 3);
+            N("md_stump", "md", "md_combo", "숲 장치 강화", 2, 2000000, 2.2, L => $"숲 장치 효과 {Plus(NF.md_stump(L))}", tier: 3);
             foreach (var id in SKILL_IDS)
             {
-                var s = SKILLS[id];
+                var s = SKILLS[id]; int tr = SKILL_TIER[id]; int zn = SKILL_ZONE.TryGetValue(id, out var z) ? z : tr - 1;
                 N(id, "md", SKILL_TREE[id], s.n, 1, s.costGold, 1,
-                    L => L > 0 ? $"사용 중 · {(s.noRate ? "" : "발동률 10% · ")}{s.eff(0)}" : $"해금하면 {(s.noRate ? "" : "발동률 10%로 ")}사용 시작", skill: id, icon: s.icon, col: s.col);
-                if (!s.noRate) N(id + "_rate", "md", id, s.n + " 발동률", 3, s.costGold * 2, 2.5, L => $"발동률 {U.Pct(SkillRate(L))}", sub: true);
-                if (!s.noPow) N(id + "_pow", "md", id, s.n + " 위력", 3, s.costGold * 2, 2.5, L => s.eff(L), sub: true);
+                    L => L > 0 ? $"사용 중 · {(s.noRate ? "" : "발동률 10% · ")}{s.eff(0)}" : $"해금하면 {(s.noRate ? "" : "발동률 10%로 ")}사용 시작", skill: id, icon: s.icon, col: s.col, tier: tr, zone: zn);
+                if (!s.noRate) N(id + "_rate", "md", id, s.n + " 발동률", 2, s.costGold * 2, 3, L => $"발동률 {U.Pct(SkillRate(L))}", sub: true, tier: tr, zone: zn);
+                if (!s.noPow) N(id + "_pow", "md", id, s.n + " 위력", 2, s.costGold * 2, 3, L => s.eff(L), sub: true, tier: tr, zone: zn);
             }
-            N("md_buffdur", "md", "accel", "버프 지속", 5, 250, 1.6, L => $"가속·맑은 포자막 지속 ×{F(NF.md_buffdur(L))}, 날 갈기 {Math.Ceiling(3 * NF.md_buffdur(L))}타");
-            // 독
-            N("ps_atk", "ps", "core_ps", "공격력", 5, 16, 1.6, L => $"×{F(NF.ps_atk(L))}");
-            N("ps_size", "ps", "ps_atk", "수확기 크기", 5, 34, 1.6, L => $"반지름 {F(TUNE.ball0 * NF.ps_size(L), 1)}");
-            N("ps_spd", "ps", "ps_atk", "공속", 5, 42, 1.6, L => $"이동 속도 ×{F(NF.ps_spd(L))}");
-            N("ps_resist", "ps", "ps_spd", "포자 저항", 5, 200, 1.6, L => $"느림·약화 디버프 지속 ×{F(NF.ps_resist(L))}");
-            N("ps_dur", "ps", "ps_atk", "지속시간", 5, 70, 1.6, L => $"{F(BASE_TIME * NF.ps_dur(L), 1)}초");
-            N("ps_rush", "ps", "ps_dur", "선제 공격", 3, 250, 2, L => $"라운드 시작 후 3초 동안 공격력 ×{F(NF.ps_rush(L))}");
-            N("ps_crit", "ps", "ps_size", "치명타", 5, 170, 1.6, L => L > 0 ? $"{U.Pct(NF.ps_crit(L))} (피해·점수 ×3)" : "0%");
-            N("ps_heavy", "ps", "ps_crit", "무더기 파쇄", 5, 300, 1.6, L => $"군락 무더기·거대 버섯 피해 ×{F(NF.ps_heavy(L))}");
-            N("ps_ball", "ps", "ps_atk", "핀볼 +1", 2, 260, 3, L => $"영구 핀볼 {1 + L}개");
-            N("bl", "ps", "ps_size", "회전 칼날", 1, 420, 1, L => L > 0 ? "사용 중 · 범위 안 버섯에 주기적 피해" : "해금하면 칼날 사용 시작", icon: "s_blade", col: "#e6e6f0");
-            N("bl_pow", "ps", "bl", "칼날 위력", 3, 840, 2.5, L => $"피해 공격력×{F(0.4 * Math.Pow(2, L))}", sub: true);
-            N("bl_range", "ps", "bl", "칼날 범위", 5, 560, 1.6, L => $"수확기 반지름 + {U.JsRound(NF.bl_range(L))}px", sub: true);
-            N("bl_spd", "ps", "bl", "칼날 속도", 5, 620, 1.6, L => $"공격 간격 {F(NF.bl_spd(L))}초", sub: true);
-            // 균사석 노드
-            N("gm_harvest", "ed", "ed_bonus", "균사 공명", 3, 3000, 2, L => $"모든 버섯 획득량 +{U.JsRound((NF.gm_harvest(L) - 1) * 100)}%", gem: 10);
-            N("gm_spore", "ed", "ed_multi", "포자 감응", 3, 2000, 2, L => $"밭 수확 때 {U.Pct(NF.gm_spore(L))} 확률로 버섯 포자 +2", gem: 8);
-            N("gm_gourmet", "ed", "ed_trade", "미식가의 혀", 3, 2500, 2, L => $"식용 버섯 요리 효과 ×{F(NF.gm_gourmet(L))}", gem: 10);
-            N("gm_herb", "md", "md_chef", "약효 증폭", 3, 2500, 2, L => $"약용 버섯 요리 효과가 {1 + NF.gm_herb(L)}라운드 동안 지속", gem: 10);
-            N("gm_farm", "md", "md_stump", "대지의 축복", 3, 1500, 2, L => $"농작물 성장 시간 ×{F(NF.gm_farm(L))}", gem: 6);
+            N("md_buffdur", "md", "accel", "버프 지속", 2, 30000, 2.2, L => $"가속·맑은 포자막 지속 {Plus(NF.md_buffdur(L))}, 날 갈기 {Math.Ceiling(3 * NF.md_buffdur(L))}타", tier: 2);
+            // ── 독 (전투) ──
+            // 초반
+            N("ps_atk", "ps", "core_ps", "공격력 I", 4, 15, 2.2, L => $"공격력 +{Num(NF.ps_atk(L))}");
+            N("ps_size", "ps", "ps_atk", "수확기 크기", 3, 40, 2.2, L => $"반지름 {F(TUNE.ball0 * BALL_SCALE * NF.ps_size(L), 1)}");
+            N("ps_spd", "ps", "ps_atk", "공속", 3, 50, 2.2, L => $"이동 속도 {Plus(NF.ps_spd(L))}");
+            N("ps_dur", "ps", "ps_atk", "지속시간", 3, 80, 2.2, L => $"라운드 시간 +{NF.ps_dur(L)}초");
+            N("ps_ball", "ps", "ps_atk", "핀볼 +1", 1, 500, 1, L => $"영구 핀볼 +{L}개");
+            // 중반
+            N("ps_atk2", "ps", "ps_atk", "공격력 II", 4, 2000, 2.5, L => $"공격력 +{Num(NF.ps_atk2(L))}", tier: 2, needMax: true);
+            N("ps_ball2", "ps", "ps_atk2", "핀볼 +1 (II)", 1, 50000, 1, L => $"영구 핀볼 +{L}개", tier: 2);
+            N("ps_dur2", "ps", "ps_dur", "지속시간 II", 2, 15000, 3, L => $"라운드 시간 +{NF.ps_dur2(L)}초 더", tier: 2, needMax: true);
+            N("ps_crit", "ps", "ps_size", "치명타", 3, 6000, 2.2, L => L > 0 ? $"{U.Pct(NF.ps_crit(L))} (피해·점수 ×3)" : "0%", tier: 2);
+            N("ps_resist", "ps", "ps_spd", "포자 저항", 2, 10000, 2.2, L => $"느림·약화 디버프 지속 -{U.JsRound((1 - NF.ps_resist(L)) * 100)}%", tier: 2);
+            N("ps_rush", "ps", "ps_dur", "선제 공격", 2, 25000, 2.2, L => $"라운드 시작 후 3초 동안 공격력 ×{F(NF.ps_rush(L))}", tier: 2);
+            N("bl", "ps", "ps_size", "회전 칼날", 1, 60000, 1, L => L > 0 ? "사용 중 · 범위 안 버섯에 주기적 피해" : "해금하면 칼날 사용 시작", icon: "s_blade", col: "#e6e6f0", tier: 2);
+            // 후반
+            N("ps_atk3", "ps", "ps_atk2", "공격력 III", 4, 1000000, 2.5, L => $"공격력 +{Num(NF.ps_atk3(L))}", tier: 3, needMax: true);
+            N("ps_atk4", "ps", "ps_atk3", "공격력 IV", 3, 100000000, 3, L => $"공격력 +{Num(NF.ps_atk4(L))}", tier: 3, needMax: true, zone: 3);
+            N("ps_ball3", "ps", "ps_atk3", "핀볼 +2 (III)", 2, 50000000, 5, L => $"영구 핀볼 +{L}개", tier: 3, zone: 3);
+            N("ps_crit2", "ps", "ps_crit", "치명타 피해", 2, 20000000, 3, L => $"치명타 피해·점수 ×{NF.ps_crit2(L)}", tier: 3, needMax: true, zone: 3);
+            N("ps_heavy", "ps", "ps_crit", "무더기 파쇄", 2, 4000000, 2.2, L => $"군락 무더기·거대 버섯 피해 ×{F(NF.ps_heavy(L))}", tier: 3);
+            N("bl_pow", "ps", "bl", "칼날 위력", 2, 3000000, 3, L => $"피해 공격력×{F(NF.bl_pow(L))}", sub: true, tier: 3);
+            N("bl_range", "ps", "bl", "칼날 범위", 2, 2000000, 3, L => $"수확기 반지름 + {U.JsRound(NF.bl_range(L))}px", sub: true, tier: 3);
+            N("bl_spd", "ps", "bl", "칼날 속도", 2, 2500000, 3, L => $"공격 간격 {F(NF.bl_spd(L))}초", sub: true, tier: 3);
+            // 균사석 노드 (후반): 여기서부터 곱셈 효과가 들어온다
+            N("gm_harvest", "ed", "ed_bonus", "균사 공명", 3, 3000, 2, L => $"모든 버섯 획득량 ×{F(NF.gm_harvest(L))}", gem: 10, tier: 3);
+            N("gm_spore", "ed", "ed_multi", "포자 감응", 3, 2000, 2, L => $"밭 수확 때 {U.Pct(NF.gm_spore(L))} 확률로 버섯 포자 +2", gem: 8, tier: 3);
+            N("gm_gourmet", "ed", "ed_trade", "미식가의 혀", 3, 2500, 2, L => $"식용 버섯 요리 효과 ×{F(NF.gm_gourmet(L))}", gem: 10, tier: 3);
+            N("gm_herb", "md", "md_chef", "약효 증폭", 3, 2500, 2, L => $"약용 버섯 요리 효과가 {1 + NF.gm_herb(L)}라운드 동안 지속", gem: 10, tier: 3);
+            N("gm_farm", "md", "md_stump", "대지의 축복", 3, 1500, 2, L => $"농작물 성장 시간 ×{F(NF.gm_farm(L))}", gem: 6, tier: 3);
             N("gm_meteor", "md", "md_combo", "균사석 낙하", 3, 5000, 2, L =>
             {
                 if (L == 0) return "없음";
                 var m = NF.gm_meteor(L);
                 return $"{F(m.interval)}초마다 균사석이 떨어져 반경 {m.r} 피해 공격력×{m.dmg}";
-            }, gem: 25, col: "#8ff0c8");
-            N("gm_toxin", "ps", "ps_resist", "독성 내성", 3, 2000, 2, L => $"포자 디버프 지속 ×{F(NF.gm_toxin(L))} · 독버섯 포자 구름 ×{F(NF.gm_toxin(L))}", gem: 8);
+            }, gem: 25, col: "#8ff0c8", tier: 3);
+            N("gm_toxin", "ps", "ps_resist", "독성 내성", 3, 2000, 2, L => $"포자 디버프 지속 ×{F(NF.gm_toxin(L))} · 독버섯 포자 구름 ×{F(NF.gm_toxin(L))}", gem: 8, tier: 3);
 
             foreach (var n in NODES)
             {
                 if (n.id.EndsWith("_rate")) n.d = $"{U.Iga(SKILLS[n.parent].n)} 발동할 확률을 높여요.";
                 else if (n.id.EndsWith("_pow") && SKILLS.ContainsKey(n.parent)) n.d = $"{SKILLS[n.parent].n}의 효과(피해·범위·개수·시간)를 키워요.";
                 else n.d = NODE_DESC[n.id];
+                if (PRICE_TABLE.TryGetValue(n.id, out var pc) && pc.Length == n.max) n.costs = pc;
                 NODE[n.id] = n;
             }
 

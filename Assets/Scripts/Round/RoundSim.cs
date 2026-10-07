@@ -285,19 +285,20 @@ namespace MoreMush
             }
             switch (type)
             {
-                case "stump": { var p = Pos(50); return new Device { type = type, x = p.x, y = p.y, r = 40 }; }
+                case "stump": { var p = Pos(50 * DEV_SCALE); return new Device { type = type, x = p.x, y = p.y, r = 40 * DEV_SCALE }; }
                 case "moss":
                 {
-                    var p = Pos(140); bool hz = U.Chance(0.5f); float w = hz ? 260 : 50, hh = hz ? 50 : 260;
+                    var p = Pos(140 * DEV_SCALE); bool hz = U.Chance(0.5f); float w = (hz ? 260 : 50) * DEV_SCALE, hh = (hz ? 50 : 260) * DEV_SCALE;
                     return new Device { type = type, x0 = p.x - w / 2, y0 = p.y - hh / 2, x1 = p.x + w / 2, y1 = p.y + hh / 2, hz = hz };
                 }
                 case "mole":
                 {
-                    var a = Pos(40);
+                    float mr = 40 * DEV_SCALE;
+                    var a = Pos(mr);
                     for (int k = 0; k < 30; k++)
                     {
-                        var b = new Vector2(U.Rand(FX0 + 40, FX1 - 40), U.Rand(FY0 + 40, NO_SPAWN_Y - 40));
-                        if (U.D2(a.x, a.y, b.x, b.y) >= 600 * 600) return new Device { type = type, a = a, b = b, r = 30 };
+                        var b = new Vector2(U.Rand(FX0 + mr, FX1 - mr), U.Rand(FY0 + mr, NO_SPAWN_Y - mr));
+                        if (U.D2(a.x, a.y, b.x, b.y) >= 600 * 600) return new Device { type = type, a = a, b = b, r = 30 * DEV_SCALE };
                     }
                     return null;
                 }
@@ -305,17 +306,17 @@ namespace MoreMush
                     if (U.Chance(0.5f))
                     {
                         float y = near.HasValue ? U.Clamp(near.Value.y + U.Rand(-160, 160), FY0 + 70, NO_SPAWN_Y - 70) : U.Rand(FY0 + 70, NO_SPAWN_Y - 70);
-                        return new Device { type = type, x0 = FX0, x1 = FX1, y0 = y - 35, y1 = y + 35, fx = U.Chance(0.5f) ? 1 : -1, fy = 0 };
+                        return new Device { type = type, x0 = FX0, x1 = FX1, y0 = y - 35 * DEV_SCALE, y1 = y + 35 * DEV_SCALE, fx = U.Chance(0.5f) ? 1 : -1, fy = 0 };
                     }
                     else
                     {
                         float x = near.HasValue ? U.Clamp(near.Value.x + U.Rand(-160, 160), FX0 + 70, FX1 - 70) : U.Rand(FX0 + 70, FX1 - 70);
-                        return new Device { type = type, x0 = x - 35, x1 = x + 35, y0 = FY0, y1 = NO_SPAWN_Y, fx = 0, fy = U.Chance(0.5f) ? 1 : -1 };
+                        return new Device { type = type, x0 = x - 35 * DEV_SCALE, x1 = x + 35 * DEV_SCALE, y0 = FY0, y1 = NO_SPAWN_Y, fx = 0, fy = U.Chance(0.5f) ? 1 : -1 };
                     }
                 case "acorn":
                 {
-                    var p = Pos(110); bool hz = U.Chance(0.6f);
-                    var pts = new[] { -1, 0, 1 }.Select(k => new Vector2(p.x + (hz ? k * 70 : 0), p.y + (hz ? 0 : k * 70))).ToArray();
+                    var p = Pos(110 * DEV_SCALE); bool hz = U.Chance(0.6f); float gap = 70 * DEV_SCALE;
+                    var pts = new[] { -1, 0, 1 }.Select(k => new Vector2(p.x + (hz ? k * gap : 0), p.y + (hz ? 0 : k * gap))).ToArray();
                     return new Device { type = type, pts = pts, lit = new int[3], hz = hz };
                 }
             }

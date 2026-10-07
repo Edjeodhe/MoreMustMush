@@ -162,7 +162,7 @@ namespace MoreMush
         {
             var n = nv.Node;
             string st = NodeState(n);
-            if (st == "locked") { Snd.Err(); GameFlow.I.ShowToast("선행 노드를 먼저 사야 열려요"); return; }
+            if (st == "locked") { Snd.Err(); GameFlow.I.ShowToast(ParentOk(n) ? $"{ZoneOf(n).n} 지역(스테이지 {ZoneOf(n).from})부터 열려요" : n.needMax ? "앞 단계를 최대 레벨까지 올려야 열려요" : "선행 노드를 먼저 사야 열려요"); return; }
             if (st == "max") return;
             int before = Lv(n.id);
             int k = max ? BuyMax(n) : BuyNode(n) ? 1 : 0;

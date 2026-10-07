@@ -55,6 +55,22 @@ namespace MoreMush
             toTreeText.text = due ? "세금 고지서 확인 ▶" : "균사 트리로 ▶";
             SpawnBasket(s);
             LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
+            FitToScreen();
+        }
+
+        // 카드 높이가 내용에 따라 늘어나므로, 화면을 넘으면 비율을 유지한 채 축소한다.
+        void FitToScreen()
+        {
+            var host = (RectTransform)transform;
+            if (host.childCount == 0) return;
+            var card = (RectTransform)host.GetChild(0);
+            card.localScale = Vector3.one;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(card);
+            const float margin = 24f;
+            float availH = host.rect.height - margin, availW = host.rect.width - margin;
+            if (availH <= 0 || availW <= 0) return;
+            float k = Mathf.Min(1f, availH / card.rect.height, availW / card.rect.width);
+            card.localScale = new Vector3(k, k, 1f);
         }
 
         void Card(RectTransform parent, Sprite s, int fx, string name, string tag, string style)
