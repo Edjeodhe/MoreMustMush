@@ -11,7 +11,7 @@ namespace MoreMush
         public SpriteRenderer ground, glow, crop, barBack, barFill, gem, busy, busyIcon, hover;
         const float FULL = 112, BAR = 92;
 
-        public void Draw(float cx, float cy, float T, SaveData.Plot p, double t0, float now, string bz, bool hov, int tool)
+        public void Draw(float cx, float cy, float T, SaveData.Plot p, double t0, float now, string bz, bool hov)
         {
             transform.localPosition = Art.P(cx, cy);
             float s = T / FULL;
@@ -50,7 +50,7 @@ namespace MoreMush
             busy.enabled = busyIcon.enabled = bz != null;
             if (bz != null)
             {
-                var bs = SpriteDB.Get(bz == "till" ? "Farm/Field/tool_" + tool : bz == "plant" ? "Icons/spore" : "UI/basket");
+                var bs = SpriteDB.Get(bz == "till" ? "Farm/Field/tool_0" : bz == "plant" ? "Icons/spore" : "UI/basket");
                 if (busyIcon.sprite != bs) { busyIcon.sprite = bs; Art.FitPx(busyIcon, 30); }
             }
             hover.enabled = hov;

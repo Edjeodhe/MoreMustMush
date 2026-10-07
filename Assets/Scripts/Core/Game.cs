@@ -23,7 +23,6 @@ namespace MoreMush
         public double bladeR, bladeInt, bladeDmg, kidP, buffMul, tempLife, devMul, heavyMul, rushMul;
         public Dictionary<string, SkillInfo> sk = new Dictionary<string, SkillInfo>();
         public double burstR, festMul, shroomHp = 1;
-        public List<string> dishes;
     }
 
     // Game rules on the save data (prototype "조회 · 해금 · 비용 · 세금 · 판매 · 능력치" sections).
@@ -160,7 +159,7 @@ namespace MoreMush
         public static Species NextTaxUnlock() => SPECIES.Where(s => s.tax > 0 && s.tax > G.tax.paid).OrderBy(s => s.tax).FirstOrDefault();
 
         // ===== 창고·판매 =====
-        public static double PriceMul() => NF.ed_price(Lv("ed_price")) * (Lv("core_ed") > 0 ? 1.1 : 1) * (HasSpecial("coin") ? 1.15 : 1) * (1 + StarAbilities()["price"]) * (1 + GoldenSetBonus());
+        public static double PriceMul() => NF.ed_price(Lv("ed_price")) * (Lv("core_ed") > 0 ? 1.1 : 1) * (1 + StarAbilities()["price"]) * (1 + GoldenSetBonus());
         public static double UnitPrice(Species sp, double pm) => TIERS[sp.t].drop * SELL_PRICE * pm;
         public static double InvCount(string id) => Math.Floor(G.inv.TryGetValue(id, out var v) ? v : 0);
         public static double InvTotal(string cat = null) { double n = 0; foreach (var sp in SPECIES) if (cat == null || sp.c == cat) n += InvCount(sp.id); return n; }
@@ -193,30 +192,28 @@ namespace MoreMush
             st.hvs = ActiveHvs();
             st.hvStar = st.hvs.ToDictionary(id => id, id => G.hv.TryGetValue(id, out var s) ? s : 1);
             st.atk = (NF.ps_atk(Lv("ps_atk")) + (SetDone("poison") ? 3 : 0)) * (Core("core_ps") ? 1.1 : 1) * (1 + ab["atk"]);
-            double spd = NF.ps_spd(Lv("ps_spd")) * (1 + ab["spd"]) * (wId == "storm" ? 0.8 : 1) * (HasSpecial("wind") ? 1.1 : 1);
+            double spd = NF.ps_spd(Lv("ps_spd")) * (1 + ab["spd"]) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
             st.launch = TUNE.launch * spd;
             st.minSpd = TUNE.min * spd;
             st.ballR = TUNE.ball0 * NF.ps_size(Lv("ps_size")) * (1 + ab["size"]);
-            st.barLen = (150 * NF.md_bar(Lv("md_bar")) + (SetDone("shelf") ? 40 : 0)) * (Core("core_md") ? 1.1 : 1) * (1 + ab["bar"]) * (wId == "cold" ? 0.75 : 1) * (HasSpecial("rock") ? 1.12 : 1);
-            st.duration = BASE_TIME * NF.ps_dur(Lv("ps_dur")) + (HasSpecial("dew") ? 2 : 0) + ab["dur"] - (wId == "cold" ? 3 : 0);
+            st.barLen = (150 * NF.md_bar(Lv("md_bar")) + (SetDone("shelf") ? 40 : 0)) * (Core("core_md") ? 1.1 : 1) * (1 + ab["bar"]) * (wId == "cold" ? 0.75 : 1);
+            st.duration = BASE_TIME * NF.ps_dur(Lv("ps_dur")) + ab["dur"] - (wId == "cold" ? 3 : 0);
             st.crit = NF.ps_crit(Lv("ps_crit")) + (SetDone("coral") ? 0.05 : 0) + ab["crit"];
             st.comboK = NF.md_combo(Lv("md_combo")) * (1 + ab["combo"]);
             st.scoreMul = NF.ed_score(Lv("ed_score")) * (SetDone("cook") ? 1.5 : 1) * (1 + ab["score"]);
-            st.maxCol = Math.Max(3, (int)Math.Ceiling(ColCount(Lv("ed_cols")) * (wId == "rain" ? 1.2 : 1) * (wId == "drought" ? 0.7 : 1) * (1 + ab["cols"]) * (HasSpecial("leaf") ? 1.15 : 1)));
+            st.maxCol = Math.Max(3, (int)Math.Ceiling(ColCount(Lv("ed_cols")) * (wId == "rain" ? 1.2 : 1) * (wId == "drought" ? 0.7 : 1) * (1 + ab["cols"])));
             st.regen = NF.ed_regen(Lv("ed_regen")) / (wId == "rain" ? 2 : 1) * (wId == "storm" ? 2 : 1) / (1 + ab["regen"]);
-            st.rareMul = NF.ed_rare(Lv("ed_rare")) * (HasSpecial("star") ? 1.25 : 1) * (1 + ab["rare"]);
+            st.rareMul = NF.ed_rare(Lv("ed_rare")) * (1 + ab["rare"]);
             st.stageMul = 1 + 0.03 * (st.stage - 1);
-            st.harvestMul = NF.ed_bonus(Lv("ed_bonus")) * (1 + ab["harvest"]) * (HasSpecial("chest") ? 1.15 : 1) * NF.gm_harvest(Lv("gm_harvest"));
+            st.harvestMul = NF.ed_bonus(Lv("ed_bonus")) * (1 + ab["harvest"]) * NF.gm_harvest(Lv("gm_harvest")) * (1 + BStat("harvest"));
             st.multiP = MultiRate(Lv("ed_multi"));
             st.priceMul = PriceMul();
-            st.fire = HasSpecial("fire");
-            st.sparkP = HasSpecial("spark") ? 0.06 : 0;
             st.colMax = 5 + Lv("ed_size");
             st.zoom = MAP_ZOOM[Lv("md_map")];
             double area = Math.Pow(1 / (st.zoom * st.zoom), 0.7);
             st.maxCol = Math.Max(4, (int)U.JsRound(st.maxCol * area));
-            st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0)) * (wId == "moon" ? 3 : 1) * (HasSpecial("moon") ? 1.5 : 1) + ab["golden"];
+            st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0)) * (wId == "moon" ? 3 : 1) + ab["golden"];
             st.devices = Math.Max(1, (int)U.JsRound((2 + Lv("ed_dev")) * area));
             st.permBalls = 1 + Lv("ps_ball");
             st.comboWin = COMBO_WINDOW;
@@ -247,10 +244,7 @@ namespace MoreMush
             foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= 1 + ab["skill"]; st.sk[id] = si; }
             st.burstR = 80 * Math.Pow(1.2, st.sk["burst"].P) + (SetDone("fart") ? 30 : 0);
             st.festMul = 2 * st.sk["fest"].pm;
-            st.dishes = G.dishes.Where(id => RECIPE.ContainsKey(id)).ToList();
             st.shroomHp = 1;
-            double k = NF.md_chef(Lv("md_chef"));
-            foreach (var id in st.dishes) RECIPE[id].apply(st, k * (RECIPE[id].cat == "ed" ? NF.gm_gourmet(Lv("gm_gourmet")) : 1));
             return st;
         }
     }

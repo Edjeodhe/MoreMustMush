@@ -37,7 +37,7 @@ namespace MoreMush
                 case "dbg-tax": if (G != null) { G.tax.roundsIn = TAX.every - 1; SaveGame(); flow.tree.Refresh(); flow.ShowToast("다음 정산 때 세금이 청구돼요"); } break;
                 case "dbg-stage": if (G != null) { G.rounds += 10; G.theme = LatestTheme().id; CheckUnlocks(); SaveGame(); flow.tree.Refresh(); flow.ShowToast($"스테이지 {StageNow()} · {LatestTheme().n}"); } break;
                 case "dbg-specials": if (G != null) { foreach (var k in SPECIALS) G.specials[k.id] = true; SaveGame(); flow.ShowToast("특수 버섯 10종을 모두 잡았어요"); } break;
-                case "dbg-gem": if (G != null) { G.gem += 100; G.spore += 100; SaveGame(); flow.tree.Refresh(); flow.ShowToast("균사석 +100 · 포자 +100"); } break;
+                case "dbg-gem": if (G != null) { G.gem += 100; G.spore += 100; G.dia += 100; SaveGame(); flow.tree.Refresh(); flow.ShowToast("균사석 +100 · 포자 +100 · 다이아몬드 +100"); } break;
                 case "dbg-preset": ApplyPreset(arg); flow.ShowToast($"밸런스: {TUNE.n} (다음 라운드부터)"); break;
             }
         }

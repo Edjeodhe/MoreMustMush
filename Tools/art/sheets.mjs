@@ -406,6 +406,27 @@ export const SHEETS = [
     id: "bg_field", kind: "image", out: "Backgrounds/bg_field.png",
     prompt: "Wide landscape 16:9 game background, slight top-down 3/4 view: a mushroom farm field area. Left two-thirds: a large plain flat dirt-and-grass clearing where a square crop plot will be drawn (keep it empty and even). Right third: a small wooden tool shed and a stack of hay. Wooden fence along the top, sunny day, warm colors. No crops, no characters, no text, no UI.",
   },
+  // ===== 농장 개편 (다이아몬드 · 건축 · 자동 수확) =====
+  {
+    id: "farm_build_icons", rows: 1, cols: 4, out: "Icons",
+    subject: "Small bold game icons for a cozy mushroom farm, each a single object centered in its cell, readable at 32 px.",
+    items: [
+      ["dia", "a sparkling cut diamond gem in pink-violet and cyan facets (premium cosmetic currency, clearly different from a green crystal)"],
+      ["hammer", "a small wooden-handled builder's hammer"],
+      ["auto_harvest", "a woven basket overflowing with mushrooms and gold coins"],
+      ["build", "a little wooden house frame under construction with a hammer leaning on it"],
+    ],
+  },
+  {
+    id: "critter_hardhat", rows: 1, cols: 1, out: "Characters/Critters/Acc", refs: ["Art/Raw/critters_full.png"],
+    subject: "A hat sized to fit the mushroom critters in the attached reference, drawn alone in front view, to be layered on a critter's cap.",
+    items: [["hardhat", "a small yellow construction hard hat with a front brim"]],
+  },
+  {
+    id: "auto_reward", rows: 1, cols: 1, out: "Farm/Props",
+    subject: "A single large reward illustration for an idle-harvest reward popup.",
+    items: [["auto_reward", "a big open wooden treasure chest overflowing with gold coins, glowing orange mushrooms, teal mycelium crystals and sparkling pink-violet diamonds, with coins spilling onto the ground"]],
+  },
   {
     id: "bg_kitchen", kind: "image", out: "Backgrounds/bg_kitchen.png",
     prompt: "Wide landscape 16:9 game background, slight top-down 3/4 view: the inside of a cozy little mushroom-village kitchen restaurant. Warm wooden walls with shelves of jars and hanging herbs at the top, a window, and a wooden plank floor filling the lower two-thirds, kept plain so furniture and characters can be placed on it. No furniture on the floor, no characters, no text, no UI.",

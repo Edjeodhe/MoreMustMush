@@ -10,9 +10,9 @@ namespace MoreMush
     public class SaveData
     {
         public int v = 2;
-        public double gold, gem, spore;
+        public double gold, gem, spore, dia;       // dia 다이아몬드: 스킨·건물에 쓰는 코스메틱 재화
+        public double autoT;                       // 자동 수확 보상을 마지막으로 받은 시각 (ms, 0 = 아직 시작 안 함)
         public Skins skins = new Skins();
-        public Decor decor = new Decor();
         public Dictionary<string, int> nodes = new Dictionary<string, int>();
         public Dictionary<string, bool> seeds = new Dictionary<string, bool>();
         public Dictionary<string, CodexEntry> codex = new Dictionary<string, CodexEntry>();
@@ -21,8 +21,6 @@ namespace MoreMush
         public Dictionary<string, int> hv = new Dictionary<string, int> { ["sam"] = 1 };
         public Dictionary<string, bool> hvOn = new Dictionary<string, bool> { ["sam"] = true };
         public string theme = "forest";
-        public List<string> dishes = new List<string>();
-        public Dictionary<string, int> dishLeft = new Dictionary<string, int>();
         public List<Quest> quests = new List<Quest>();   // 마을 의뢰 (버섯 상점)
         public Farm farm = new Farm();             // 버섯 농장 (목장·밭)
         public TaxState tax = new TaxState();
@@ -32,18 +30,21 @@ namespace MoreMush
         public bool ending;
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
-        [Serializable] public class Decor { public Dictionary<string, bool> own = new Dictionary<string, bool>(), on = new Dictionary<string, bool>(); }
-        // next 다음 부탁 시각(ms, 실제 시간) · kind 부탁 종류 · love 호감도(부탁 수) · evo 진화 단계 · plots 밭 칸("행,열")
+        // next 다음 부탁 시각(ms, 실제 시간) · kind 부탁 종류 · love 호감도(부탁 수) · evo 진화 단계 · star 별 등급
+        // plots 밭 칸("행,열") · blds 지은(짓는) 건물
         [Serializable]
         public class Farm
         {
             public Dictionary<string, double> next = new Dictionary<string, double>();
             public Dictionary<string, string> kind = new Dictionary<string, string>();
-            public Dictionary<string, int> love = new Dictionary<string, int>(), evo = new Dictionary<string, int>();
-            public int size = 4, tool;
+            public Dictionary<string, int> love = new Dictionary<string, int>(), evo = new Dictionary<string, int>(), star = new Dictionary<string, int>();
+            public int size = 4, nextUid = 1;
             public string crop = "ed";
             public Dictionary<string, Plot> plots = new Dictionary<string, Plot>();
+            public List<Bld> blds = new List<Bld>();
         }
+        // 건물 하나: 격자 칸(gx, gy)이 왼쪽 위 · critter 짓는 꼬마 · at 다 지어지는 시각(ms) · done 완성
+        [Serializable] public class Bld { public int uid, gx, gy; public string id, critter; public double t0, at; public bool done; }
         // s: "till" 간 땅 · "grow" 자라는 중 (t0 심은 시각, at 다 자라는 시각, ms)
         [Serializable] public class Plot { public string s, crop; public double t0, at; }
         [Serializable] public class Quest { public string id, npc; public double cnt; public int line; }
@@ -92,18 +93,17 @@ namespace MoreMush
                 foreach (var n in Defs.NODES) if (g.nodes.TryGetValue(n.id, out var L) && L > n.max) g.nodes[n.id] = n.max;
                 foreach (var id in new List<string>(g.hv.Keys)) g.hv[id] = Math.Min(5, g.hv[id]);
                 if (!Defs.THEME.ContainsKey(g.theme ?? "")) g.theme = "forest";
-                g.dishes = g.dishes?.FindAll(id => Defs.RECIPE.ContainsKey(id)) ?? new List<string>();
-                g.dishLeft ??= new Dictionary<string, int>();
                 g.skins ??= new SaveData.Skins();
-                g.decor ??= new SaveData.Decor();
                 g.quests ??= new List<SaveData.Quest>();
                 g.farm ??= new SaveData.Farm();
                 g.farm.next ??= new Dictionary<string, double>(); g.farm.kind ??= new Dictionary<string, string>();
                 g.farm.love ??= new Dictionary<string, int>(); g.farm.evo ??= new Dictionary<string, int>();
                 g.farm.plots ??= new Dictionary<string, SaveData.Plot>();
+                g.farm.star ??= new Dictionary<string, int>();
+                g.farm.blds = g.farm.blds?.FindAll(b => b != null && Defs.BUILDING.ContainsKey(b.id ?? "")) ?? new List<SaveData.Bld>();
                 if (!Defs.CROPS.ContainsKey(g.farm.crop ?? "")) g.farm.crop = "ed";
                 g.farm.size = Math.Max(4, Math.Min(Defs.FIELD.max, g.farm.size));
-                g.farm.tool = Math.Max(0, Math.Min(Defs.TOOLS.Length - 1, g.farm.tool));
+
                 return g;
             }
             catch (Exception e)

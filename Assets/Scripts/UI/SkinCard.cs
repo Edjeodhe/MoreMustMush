@@ -32,12 +32,12 @@ namespace MoreMush
                 var a = U.Hex(sk.aura); a.a = 0.45f; hvAura.color = a;
             }
             title.text = sk.n;
-            who.text = ch ? (has ? SPC[sk.of].n : "아직 못 잡은 꼬마") : (has ? HV[sk.of].n : "아직 없는 수확기");
+            who.text = ch ? (has ? EvoName(SPC[sk.of]) : "아직 못 잡은 꼬마") : (has ? HV[sk.of].n : "아직 없는 수확기");
 
             if (!own)
             {
-                action.act = "buyskin"; button.interactable = G.gem >= sk.price;
-                buttonText.text = $"{UIUtil.Ic("gem")}{sk.price} 구입";
+                action.act = "buyskin"; button.interactable = G.dia >= sk.price;
+                buttonText.text = $"{UIUtil.Ic("dia")}{sk.price} 구입";
                 buttonImage.color = Color.white;
             }
             else if (!has)

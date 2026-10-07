@@ -9,210 +9,223 @@ using static MoreMush.Game;
 
 namespace MoreMush
 {
-    // Mushroom farm world (prototype FARM_RT + drawFarm): three scenes side by side (field | ranch | kitchen)
-    // that slide past the camera. The caught critters live in all three: wandering ranch pets with requests,
-    // field workers that walk to queued plots, kitchen cooks that carry orders through counter → stove → table.
-    // Every fixed object (backgrounds, decorations, 64 plot slots, dish slots) is placed in the hierarchy;
-    // critters, particles and floating texts are clones of hidden template slots.
+    // Mushroom farm world: one ranch with the field inside. Caught critters wander and ask for things, walk to queued
+    // field plots, and build buildings (a builder is busy until the building is done, real time). Buildings sit on a grid
+    // with fixed footprints; placing one shows a ghost that snaps to the grid until it is confirmed.
+    // Fixed objects (background, 64 plot slots, ghost) are placed in the hierarchy; critters, buildings, particles and
+    // floating texts are clones of hidden template slots.
     public class FarmView : MonoBehaviour
     {
         public static FarmView I;
-        static readonly Dictionary<string, int> SCENE_X = new Dictionary<string, int> { ["field"] = -1, ["pets"] = 0, ["kitchen"] = 1 };
 
-        [Header("Scenes")]
-        public Transform content;                 // zoom pivot for the pan
-        public Transform field, pets, kitchen;    // scene roots, one screen apart
-        public SpriteRenderer panShade;           // darkens the edges while panning
-
-        [Header("Ranch")]
-        public GrandpaRig petsGrandpa;
-        public GameObject[] decor = new GameObject[8];   // DECOR order
-
-        [Header("Field")]
-        public GrandpaRig fieldGrandpa;
-        public FieldTile[] tiles = new FieldTile[64];     // 8×8, index r * 8 + c
+        [Header("Scene")]
+        public GrandpaRig grandpa;
         public SpriteRenderer fieldFrame;                 // sliced wood frame around the open plots
-        public SpriteRenderer[] nextEdges = new SpriteRenderer[4];   // outline of the next size (top, bottom, left, right)
+        public SpriteRenderer[] nextEdges = new SpriteRenderer[4];   // outline of the next field size
+        public FieldTile[] tiles = new FieldTile[64];     // 8×8, index r * 8 + c
         public GameObject tileHint; public TMP_Text tileHintText; public SpriteRenderer tileHintBack;
 
-        [Header("Kitchen")]
-        public SpriteRenderer[] dishes = new SpriteRenderer[10];
-        public SpriteRenderer[] steam = new SpriteRenderer[6];
-        public SpriteRenderer stoveGlow;
+        [Header("Buildings")]
+        public Transform buildLayer;
+        public BuildingView buildingTemplate;             // hidden slot, one clone per building
+        public GameObject ghost;                          // placement preview
+        public SpriteRenderer ghostSprite, ghostFoot;
 
         [Header("Templates (hidden slots)")]
+        public Transform critterLayer;
         public FarmCritter critterTemplate;
         public SpriteRenderer partTemplate;
         public FarmFloat floatTemplate;
-        public Transform fx;                      // particles and floating texts (screen coordinates, drawn when not panning)
+        public Transform fx;
 
         // ===== screen state (not saved) =====
         public class Critter
         {
             public string id; public Special kind;
-            public float x, y, tx, ty, t, hop, animT, sayT, slot;
-            public int face = 1, step;
-            public string state = "idle", anim, say, tool;
-            public Job job; public string order;
+            public float x, y, tx, ty, t, hop, animT, sayT;
+            public int face = 1;
+            public string state = "idle", anim, say, tool;   // state: idle · walk · work (field) · build
+            public Job job;
         }
         public class Job { public int r, c; public string key, mode, crop; }
         class Part { public string k; public float x, y, vx, vy, t, life; }
         class Float { public float x, y, t; public string text; public bool gem; public Color col; }
-        class Cam { public float from, to, t, dur; }
 
-        public string View { get; private set; } = "pets";
-        public bool Moving => cam != null;
-        public readonly List<Critter> petList = new List<Critter>(), workers = new List<Critter>(), cooks = new List<Critter>();
+        public readonly List<Critter> crits = new List<Critter>();
         public readonly List<Job> jobs = new List<Job>();
         public readonly Dictionary<string, string> busy = new Dictionary<string, string>();
-        public readonly List<string> orders = new List<string>();
-        public readonly HashSet<string> cooking = new HashSet<string>();
         readonly List<Part> parts = new List<Part>();
         readonly List<Float> floats = new List<Float>();
-        Cam cam;
         Critter hover; (int r, int c, string key)? hoverTile;
-        public bool dirty;                        // HUD needs a redraw (FarmScreen polls it)
+        public bool dirty;                                // HUD needs a redraw (FarmScreen polls it)
 
-        Pool<FarmCritter> petPool, workerPool, cookPool;
+        // placement (건물 배치)
+        public string PlaceId { get; private set; }
+        public int placeX, placeY;
+        public bool Placing => PlaceId != null;
+        public bool PlaceOk => Placing && CanPlace(BUILDING[PlaceId], placeX, placeY);
+
+        Pool<FarmCritter> critPool;
+        Pool<BuildingView> buildPool;
         Pool<SpriteRenderer> partPool;
         Pool<FarmFloat> floatPool;
 
         void Awake()
         {
             I = this;
-            petPool = new Pool<FarmCritter>(critterTemplate, pets);
-            workerPool = new Pool<FarmCritter>(critterTemplate, field);
-            cookPool = new Pool<FarmCritter>(critterTemplate, kitchen);
+            critPool = new Pool<FarmCritter>(critterTemplate, critterLayer);
+            buildPool = new Pool<BuildingView>(buildingTemplate, buildLayer);
             partPool = new Pool<SpriteRenderer>(partTemplate, fx);
             floatPool = new Pool<FarmFloat>(floatTemplate, fx);
         }
 
-        // ===== enter · leave · move =====
-        public void Enter(string view)
+        // ===== enter · leave =====
+        public void Enter()
         {
             FarmEnsure(); SaveGame();
-            if (view != null) View = view;
-            cam = null;
+            CancelPlace();
             Sync(true);
             dirty = true;
         }
 
-        // Leaving the farm: queued field work and orders finish at once (as the critters would have done)
+        // Leaving the farm: queued field work finishes at once (as the critters would have done). Buildings keep their real-time timers.
         public void Flush()
         {
             if (G?.farm == null) return;
-            foreach (var w in workers) if (w.job != null) { FinishJob(w.job, true); w.job = null; w.state = "idle"; }
-            foreach (var j in jobs) FinishJob(j, true);
+            CancelPlace();
+            foreach (var w in crits) if (w.job != null) { FinishJob(w.job, w.id, true); w.job = null; w.state = "idle"; }
+            foreach (var j in jobs) FinishJob(j, null, true);
             jobs.Clear();
-            foreach (var c in cooks) if (c.order != null) { FinishOrder(c.order, true); c.order = null; c.state = "idle"; }
-            foreach (var o in orders) FinishOrder(o, true);
-            orders.Clear();
             SaveGame();
         }
 
         static Critter NewCritter(Special k, float x, float y) => new Critter
         { id = k.id, kind = k, x = x, y = y, tx = x, ty = y, t = U.Rand(0.2f, 2), face = U.Chance(0.5f) ? 1 : -1, hop = U.Rand(0, 6) };
 
-        // Caught critters become characters in all three scenes. A newcomer walks in from the ranch gate.
+        // Caught critters move in; a newcomer walks in from the ranch gate. Builders start at their site.
         public void Sync(bool initial)
         {
             foreach (var k in FarmOwned())
             {
-                if (!petList.Any(p => p.id == k.id)) petList.Add(NewCritter(k, initial ? U.Rand(FARM.x0, FARM.x1) : 960, initial ? U.Rand(FARM.y0, FARM.y1) : FARM.y1));
-                if (!workers.Any(p => p.id == k.id)) { var s = FieldIdleSpot(); workers.Add(NewCritter(k, s.x, s.y)); }
-                if (!cooks.Any(p => p.id == k.id)) { var s = KitIdleSpot(); cooks.Add(NewCritter(k, s.x, s.y)); }
+                if (crits.Any(p => p.id == k.id)) continue;
+                var site = BuilderSpot(k.id);
+                var p0 = site ?? (initial ? WanderSpot() : new Vector2(960, FARM.y1));
+                crits.Add(NewCritter(k, p0.x, p0.y));
             }
-            petList.RemoveAll(p => !HasSpecial(p.id)); workers.RemoveAll(p => !HasSpecial(p.id)); cooks.RemoveAll(p => !HasSpecial(p.id));
+            crits.RemoveAll(p => !HasSpecial(p.id));
         }
 
-        public void Go(string v)
+        static Vector2 WanderSpot() => new Vector2(U.Rand(FARM.x0, FARM.x1), U.Rand(FARM.y0, FARM.y1));
+
+        // 짓고 있는 건물 앞 (그 꼬마가 서는 곳)
+        static Vector2? BuilderSpot(string critter)
         {
-            if (cam != null || v == View || !SCENE_X.ContainsKey(v)) return;
-            int d = Mathf.Abs(SCENE_X[v] - SCENE_X[View]);
-            cam = new Cam { from = SCENE_X[View], to = SCENE_X[v], t = 0, dur = FARM.pan * (d > 1 ? 1.35f : 1) };
-            View = v; hover = null; hoverTile = null; parts.Clear(); floats.Clear();
-            dirty = true;
-            Snd.Tone(220, 0.35f, Snd.Wave.Sine, 0.35f, 2.4f, "whoosh", 0.06f);
+            var b = G.farm.blds.FirstOrDefault(x => !x.done && x.critter == critter);
+            if (b == null) return null;
+            var r = BuildRect(BUILDING[b.id], b.gx, b.gy);
+            return new Vector2(r.center.x + (b.uid % 2 == 0 ? -1 : 1) * r.width * 0.32f, r.yMax + 14);
         }
 
-        // ===== ranch =====
+        static float BuildCenterX(string critter)
+        {
+            var b = G.farm.blds.FirstOrDefault(x => !x.done && x.critter == critter);
+            return b == null ? 0 : BuildRect(BUILDING[b.id], b.gx, b.gy).center.x;
+        }
+
+        // ===== critters =====
         public void Say(Critter p, string line, string anim)
         {
             p.say = line; p.sayT = 2.8f;
-            if (anim != null) { p.anim = anim; p.animT = 0; if (p.job == null && p.order == null) { p.state = "idle"; p.t = Mathf.Max(p.t, FARM_ANIMS[anim] + 0.3f); } }
+            if (anim != null) { p.anim = anim; p.animT = 0; if (p.job == null && p.state != "build") { p.state = "idle"; p.t = Mathf.Max(p.t, FARM_ANIMS[anim] + 0.3f); } }
         }
 
-        void ClickPet(Critter p)
+        void ClickCritter(Critter p)
         {
+            bool free = p.job == null && p.state != "build";
             if (FarmReady(p.id))
             {
                 var r = FarmServe(p.id).Value; SaveGame(); Snd.Buy();
-                Say(p, r.full ? "호감도 가득! 진화할 수 있어!" : U.Pick(FARM_LINES["thanks"]), "heart");
+                Say(p, r.full ? "호감도 가득! 진화할 수 있어!" : U.Pick(FARM_LINES["thanks"]), free ? "heart" : null);
                 AddFloat(p.x, p.y - 200, $"+{r.gem}", true, U.Hex("#a8f5d4"));
                 if (r.bonus > 0) AddFloat(p.x + 60, p.y - 240, $"보너스 +{r.bonus}", true, U.Hex("#ffe36e"), -0.15f);
+                if (r.dia > 0) AddFloat(p.x - 70, p.y - 240, $"{UIUtil.Ic("dia")}+{r.dia}", false, U.Hex("#f2b8ff"), -0.1f);
                 GemBurst(p.x, p.y - 40, 12);
                 if (r.heart) AddFloat(p.x, p.y - 280, $"호감도 {HeartStr(p.id)}", false, U.Hex("#ff7aa8"), -0.3f);
                 dirty = true;
+                return;
             }
-            else
-            {
-                Snd.Ui();
-                string anim = U.Pick(FARM_ANIMS.Keys.ToList());
-                Say(p, anim == "sleep" ? "쿨쿨... 음냐..." : U.Pick(FARM_LINES[p.id].Concat(FARM_LINES["all"]).ToList()), anim);
-            }
+            Snd.Ui();
+            if (p.state == "build") { Say(p, U.Pick(FARM_LINES["build"]), null); return; }
+            if (p.job != null) { Say(p, U.Pick(FARM_LINES["field"]), null); return; }
+            string anim = U.Pick(FARM_ANIMS.Keys.ToList());
+            Say(p, anim == "sleep" ? "쿨쿨... 음냐..." : U.Pick(FARM_LINES[p.id].Concat(FARM_LINES["all"]).ToList()), anim);
         }
 
-        // 모두 돌보기 → (돌본 꼬마 수, 균사석, 보너스)
-        public (int n, int gem, int bonus) CareAll()
+        // 모두 돌보기 → (돌본 꼬마 수, 균사석, 보너스, 다이아몬드)
+        public (int n, int gem, int bonus, int dia) CareAll()
         {
-            int n = 0, gem = 0, bonus = 0;
-            foreach (var p in petList)
+            int n = 0, gem = 0, bonus = 0, dia = 0;
+            foreach (var p in crits)
             {
                 var rr = FarmServe(p.id); if (rr == null) continue;
                 var r = rr.Value;
-                n++; gem += r.gem; bonus += r.bonus;
-                Say(p, r.full ? "호감도 가득! 진화할 수 있어!" : U.Pick(FARM_LINES["thanks"]), "jump");
+                n++; gem += r.gem; bonus += r.bonus; dia += r.dia;
+                Say(p, r.full ? "호감도 가득! 진화할 수 있어!" : U.Pick(FARM_LINES["thanks"]), p.job == null && p.state != "build" ? "jump" : null);
                 AddFloat(p.x, p.y - 200, $"+{r.gem + r.bonus}", true, U.Hex("#a8f5d4"));
                 GemBurst(p.x, p.y - 40, 5);
             }
             if (n > 0) { SaveGame(); dirty = true; }
-            return (n, gem, bonus);
+            return (n, gem, bonus, dia);
         }
 
         public void Evolved(string id)
         {
-            var p = petList.FirstOrDefault(q => q.id == id);
+            var p = crits.FirstOrDefault(q => q.id == id);
             if (p == null) return;
             Say(p, "반짝반짝… 몸이 커졌어!", "spin");
             AddFloat(p.x, p.y - 200, "진화!", false, U.Hex("#ffe36e"));
-            for (int i = 0; i < 30; i++) { float a = U.Rand(0, U.TAU), v = U.Rand(80, 300); parts.Add(new Part { k = "star", x = p.x, y = p.y - 50, vx = Mathf.Cos(a) * v, vy = Mathf.Sin(a) * v, life = U.Rand(0.6f, 1.1f) }); }
+            Stars(p.x, p.y - 50);
         }
+
+        public void StarredUp(string id)
+        {
+            var p = crits.FirstOrDefault(q => q.id == id);
+            if (p == null) return;
+            Say(p, "힘이 솟아나! 더 열심히 할게!", p.job == null && p.state != "build" ? "jump" : null);
+            AddFloat(p.x, p.y - 200, $"★{CStarOf(id)}", false, U.Hex("#ffe36e"));
+            Stars(p.x, p.y - 50);
+        }
+
+        void Stars(float x, float y) { for (int i = 0; i < 30; i++) { float a = U.Rand(0, U.TAU), v = U.Rand(80, 300); parts.Add(new Part { k = "star", x = x, y = y, vx = Mathf.Cos(a) * v, vy = Mathf.Sin(a) * v, life = U.Rand(0.6f, 1.1f) }); } }
 
         static float Radius(string id) => 44 * (1 + 0.15f * EvoOf(id));
 
-        // 누를 수 있는 꼬마 (목장: 부탁 말풍선 포함)
-        static Critter CritterAt(List<Critter> list, float x, float y, bool bubble)
+        // 누를 수 있는 꼬마 (부탁 말풍선 포함)
+        Critter CritterAt(float x, float y)
         {
             Critter best = null; float bd = 1e9f;
-            foreach (var p in list)
+            foreach (var p in crits)
             {
                 float R = Radius(p.id), d = U.D2(x, y, p.x, p.y - R * 0.9f);
-                bool bub = bubble && FarmReady(p.id) && p.sayT <= 0 && x > p.x - 40 && x < p.x + 40 && y > p.y - 170 && y < p.y - 90;
+                bool bub = FarmReady(p.id) && p.sayT <= 0 && x > p.x - 40 && x < p.x + 40 && y > p.y - 170 && y < p.y - 90;
                 if ((d < R * 1.25f * R * 1.25f || bub) && d < bd) { best = p; bd = d; }
             }
             return best;
         }
 
-        // 꼬마가 쉬러 갈 곳: 놓아 둔 꾸미기 근처를 좋아한다
-        static Vector2 PetWanderTarget(Critter p)
+        // 쉬러 갈 곳: 다 지은 건물 근처를 좋아한다
+        static Vector2 WanderTarget(Critter p)
         {
-            var on = DECOR.Where(d => DecoOn(d.id)).ToList();
-            if (on.Count > 0 && U.Chance(0.3f)) { var d = U.Pick(on); return new Vector2(U.Clamp(d.x + U.Rand(-90, 90), FARM.x0, FARM.x1), U.Clamp(d.y + U.Rand(20, 70), FARM.y0, FARM.y1)); }
-            float a = U.Rand(0, U.TAU), r = U.Rand(120, 380);
-            return new Vector2(U.Clamp(p.x + Mathf.Cos(a) * r, FARM.x0, FARM.x1), U.Clamp(p.y + Mathf.Sin(a) * r * 0.6f, FARM.y0, FARM.y1));
+            var built = G.farm.blds.Where(b => b.done).ToList();
+            if (built.Count > 0 && U.Chance(0.3f))
+            {
+                var b = U.Pick(built); var r = BuildRect(BUILDING[b.id], b.gx, b.gy);
+                return new Vector2(U.Clamp(r.center.x + U.Rand(-r.width / 2, r.width / 2), FARM.x0, FARM.x1), U.Clamp(r.yMax + U.Rand(10, 50), FARM.y0, FARM.y1));
+            }
+            float a = U.Rand(0, U.TAU), rr = U.Rand(120, 380);
+            return new Vector2(U.Clamp(p.x + Mathf.Cos(a) * rr, FARM.x0, FARM.x1), U.Clamp(p.y + Mathf.Sin(a) * rr * 0.6f, FARM.y0, FARM.y1));
         }
 
-        // 목표까지 걷기. 도착하면 true
         static bool WalkTo(Critter p, float x, float y, float spd, float dt)
         {
             float dx = x - p.x, dy = y - p.y, d = Mathf.Sqrt(dx * dx + dy * dy);
@@ -223,7 +236,7 @@ namespace MoreMush
             return false;
         }
 
-        bool TickCritter(Critter p, float dt)
+        bool TickAnim(Critter p, float dt)
         {
             if (p.sayT > 0) p.sayT = Mathf.Max(0, p.sayT - dt);
             if (p.anim == null) return false;
@@ -234,27 +247,64 @@ namespace MoreMush
             return true;   // 동작 중에는 걷지 않는다
         }
 
-        void UpdatePets(float dt)
+        void UpdateCritters(float dt)
         {
-            foreach (var p in petList)
+            foreach (var p in crits)
             {
                 p.t -= dt;
-                if (TickCritter(p, dt) && View == "pets") continue;
-                if (p.state == "walk")
+                bool anim = TickAnim(p, dt);
+
+                // 건설: 현장으로 가서 다 지을 때까지 망치질 (그동안 밭일은 못 한다)
+                var site = BuilderSpot(p.id);
+                if (site != null)
                 {
-                    if (WalkTo(p, p.tx, p.ty, 70, dt) || p.t <= 0) { p.state = "idle"; p.t = U.Rand(1, 3.5f); }
+                    if (p.job != null) { jobs.Add(p.job); p.job = null; }
+                    if (p.state != "build")
+                    {
+                        p.state = "walk"; p.tool = null;
+                        if (WalkTo(p, site.Value.x, site.Value.y, 240, dt)) { p.state = "build"; p.tool = "hammer"; p.face = site.Value.x < BuildCenterX(p.id) ? 1 : -1; }
+                    }
+                    continue;
                 }
+                if (p.state == "build") { p.state = "idle"; p.tool = null; p.t = U.Rand(0.5f, 1.5f); }
+
+                // 밭일
+                if (p.job != null)
+                {
+                    float ws = WorkSpeed(p.id);
+                    if (p.state == "walk") { if (WalkTo(p, p.tx, p.ty, 380 * ws, dt)) { p.state = "work"; p.t = FIELD.work / ws; } }
+                    else if (p.state == "work" && p.t <= 0)
+                    {
+                        var j = p.job; p.job = null; p.tool = null; p.state = "idle"; p.t = U.Rand(0.2f, 0.6f);
+                        FinishJob(j, p.id, false);
+                        if (j.mode == "harvest") Snd.Buy(); else Snd.Tone(j.mode == "till" ? 180 : 520, 0.06f, Snd.Wave.Triangle, 0.4f, 1.2f, "farm", 0.04f);
+                    }
+                    continue;
+                }
+                if (anim) continue;
+                if (jobs.Count > 0)
+                {
+                    int bi = 0; float bd = 1e12f;
+                    for (int i = 0; i < jobs.Count; i++) { var tt = TileXY(jobs[i].r, jobs[i].c); float d = U.D2(p.x, p.y, tt.x, tt.y); if (d < bd) { bd = d; bi = i; } }
+                    var jb = jobs[bi]; jobs.RemoveAt(bi);
+                    var t = TileXY(jb.r, jb.c); float T = TileSize();
+                    p.job = jb; p.tx = t.x + T / 2; p.ty = t.y + T * 0.78f; p.state = "walk"; p.anim = null;
+                    p.tool = jb.mode == "till" ? "till" : jb.mode == "plant" ? "seed" : "basket";
+                    continue;
+                }
+
+                // 산책
+                if (p.state == "walk") { if (WalkTo(p, p.tx, p.ty, 70, dt) || p.t <= 0) { p.state = "idle"; p.t = U.Rand(1, 3.5f); } }
                 else if (p.t <= 0)
                 {
-                    var t = PetWanderTarget(p); p.tx = t.x; p.ty = t.y; p.state = "walk"; p.t = 8;
-                    if (View == "pets" && Random.value < 0.08f && !petList.Any(q => q.sayT > 0)) { p.say = U.Pick(FARM_LINES[p.id]); p.sayT = 2.4f; }
+                    var tg = WanderTarget(p); p.tx = tg.x; p.ty = tg.y; p.state = "walk"; p.t = 8;
+                    if (Random.value < 0.06f && !crits.Any(q => q.sayT > 0)) { p.say = U.Pick(FARM_LINES[p.id]); p.sayT = 2.4f; }
                 }
             }
         }
 
         // ===== field =====
         public static float TileSize() => Mathf.Min(112, FIELD.span / G.farm.size);
-        // top-left of plot (r, c) in stage pixels
         public static Vector2 TileXY(int r, int c)
         {
             int n = G.farm.size, o = FieldOff(n); float T = TileSize();
@@ -268,19 +318,18 @@ namespace MoreMush
             return FieldOpen(r, c) ? (r, c, r + "," + c) : ((int, int, string)?)null;
         }
 
-        // 쉴 때 서 있는 자리: 밭 둘레
-        static Vector2 FieldIdleSpot()
-        {
-            float half = FIELD.span / 2 + 40, a = U.Rand(0, U.TAU);
-            return new Vector2(U.Clamp(FIELD.cx + Mathf.Cos(a) * (half + U.Rand(10, 60)), 300, 1160), U.Clamp(FIELD.cy + Mathf.Sin(a) * (half * 0.8f + U.Rand(0, 40)), 220, 1000));
-        }
+        public int Workers => crits.Count(p => BuilderSpot(p.id) == null);
 
         // 칸에 할 일 맡기기. mode 없으면 칸 상태에 맞게. 심을 때 재료는 맡기는 순간 쓴다. 맡겼으면 true
         public bool FieldQueue(int r, int c, string mode, bool quiet)
         {
             string key = r + "," + c; var p = PlotAt(key);
             if (busy.ContainsKey(key)) return false;
-            if (workers.Count == 0) { if (!quiet) { Snd.Err(); GameFlow.I.ShowToast("특수 버섯(꼬마)을 잡으면 밭일을 도와줘요"); } return false; }
+            if (Workers == 0)
+            {
+                if (!quiet) { Snd.Err(); GameFlow.I.ShowToast(crits.Count == 0 ? "특수 버섯(꼬마)을 잡으면 밭일을 도와줘요" : "꼬마들이 모두 건물을 짓고 있어요"); }
+                return false;
+            }
             string m = mode ?? (p == null ? "till" : p.s == "till" ? "plant" : TileRipe(p) ? "harvest" : null);
             if (m == null) return false;
             if (m == "till" && p != null) return false;
@@ -303,8 +352,20 @@ namespace MoreMush
             return true;
         }
 
-        // 일이 끝났을 때 (quiet = 농장을 떠나며 한꺼번에 끝낼 때)
-        void FinishJob(Job j, bool quiet)
+        // 분류 재료는 판매가가 싼 버섯부터 쓴다
+        static void ConsumeCat(string cat, double n)
+        {
+            var list = SPECIES.Where(sp => sp.c == cat && InvCount(sp.id) > 0).OrderBy(sp => sp.t).ThenByDescending(sp => InvCount(sp.id)).ToList();
+            foreach (var sp in list)
+            {
+                if (n <= 0) break;
+                double k = System.Math.Min(n, InvCount(sp.id));
+                G.inv[sp.id] -= k; n -= k;
+            }
+        }
+
+        // 일이 끝났을 때 (worker = 일한 꼬마, quiet = 농장을 떠나며 한꺼번에 끝낼 때)
+        void FinishJob(Job j, string worker, bool quiet)
         {
             var P = G.farm.plots; var p = PlotAt(j.key);
             busy.Remove(j.key);
@@ -322,8 +383,7 @@ namespace MoreMush
             }
             else if (j.mode == "harvest" && TileRipe(p))
             {
-                var tool = TOOLS[G.farm.tool]; int gem = CROPS[p.crop].gem;
-                int sp = U.RandI(tool.dropMin, tool.dropMax) + (U.Chance((float)NF.gm_spore(Lv("gm_spore"))) ? 2 : 0);
+                var (gem, sp) = HarvestYield(p.crop, worker);
                 G.gem += gem; G.spore += sp;
                 P.Remove(j.key);   // 수확하면 다시 안 간 땅
                 if (!quiet) { AddFloat(mx, my - 50, $"+{gem}{(sp > 0 ? $"  포자 +{sp}" : "")}", true, U.Hex("#a8f5d4")); GemBurst(mx, my - 20, 6); }
@@ -332,45 +392,7 @@ namespace MoreMush
             if (!quiet) { SaveGame(); dirty = true; }
         }
 
-        void UpdateField(float dt)
-        {
-            const float spd = 380;
-            foreach (var w in workers)
-            {
-                w.t -= dt;
-                if (TickCritter(w, dt) && w.job == null) continue;
-                float ev = FARM.evoSpd[EvoOf(w.id)];
-                if (w.job != null)
-                {
-                    if (w.state == "walk") { if (WalkTo(w, w.tx, w.ty, spd * ev, dt)) { w.state = "work"; w.t = FIELD.work / ev; } }
-                    else if (w.state == "work" && w.t <= 0)
-                    {
-                        var j = w.job; w.job = null; w.tool = null; w.state = "idle"; w.t = U.Rand(0.2f, 0.6f);
-                        FinishJob(j, false);
-                        if (j.mode == "harvest") Snd.Buy(); else Snd.Tone(j.mode == "till" ? 180 : 520, 0.06f, Snd.Wave.Triangle, 0.4f, 1.2f, "farm", 0.04f);
-                    }
-                    continue;
-                }
-                if (jobs.Count > 0)
-                {
-                    int bi = 0; float bd = 1e12f;
-                    for (int i = 0; i < jobs.Count; i++) { var tt = TileXY(jobs[i].r, jobs[i].c); float d = U.D2(w.x, w.y, tt.x, tt.y); if (d < bd) { bd = d; bi = i; } }
-                    var jb = jobs[bi]; jobs.RemoveAt(bi);
-                    var t = TileXY(jb.r, jb.c); float T = TileSize();
-                    w.job = jb; w.tx = t.x + T / 2; w.ty = t.y + T * 0.78f; w.state = "walk"; w.anim = null;
-                    w.tool = jb.mode == "till" ? "hoe" : jb.mode == "plant" ? "seed" : "basket";
-                    continue;
-                }
-                if (w.state == "walk") { if (WalkTo(w, w.tx, w.ty, 90, dt) || w.t <= 0) { w.state = "idle"; w.t = U.Rand(1.5f, 4); } }
-                else if (w.t <= 0)
-                {
-                    var s = FieldIdleSpot(); w.tx = s.x; w.ty = s.y; w.state = "walk"; w.t = 8;
-                    if (View == "field" && U.Chance(0.06f)) { w.say = U.Pick(FARM_LINES["field"]); w.sayT = 2.4f; }
-                }
-            }
-        }
-
-        // 일괄: 모두 갈기 · 모두 심기 · 모두 수확 (꼬마들이 나눠서 한다) → 맡긴 칸 수
+        // 일괄: 모두 갈기 · 모두 심기 · 모두 수확 → 맡긴 칸 수
         public int FieldAll(string mode)
         {
             int n = 0;
@@ -379,7 +401,7 @@ namespace MoreMush
             return n;
         }
 
-        public int Working => jobs.Count + workers.Count(w => w.job != null);
+        public int Working => jobs.Count + crits.Count(w => w.job != null);
 
         void FieldClick(float x, float y)
         {
@@ -394,75 +416,55 @@ namespace MoreMush
             if (FieldQueue(r, c, null, false)) { Snd.Ui(); dirty = true; }
         }
 
-        // ===== kitchen =====
-        static Vector2 KitIdleSpot() => new Vector2(U.Rand(300, 1150), U.Rand(880, 1020));
-
-        public bool CanCook(Recipe rc) => !DishOn(rc.id) && !cooking.Contains(rc.id) && HasIngredients(rc);
-
-        public bool CookOrder(string id, bool quiet)
+        // ===== buildings =====
+        public bool BeginPlace(string id)
         {
-            var rc = RECIPE[id];
-            if (cooks.Count == 0) { if (!quiet) { Snd.Err(); GameFlow.I.ShowToast("특수 버섯(꼬마)을 잡으면 요리를 해 줘요"); } return false; }
-            if (!CanCook(rc)) { if (!quiet) Snd.Err(); return false; }
-            PayIngredients(RecipeNeed(rc));
-            orders.Add(id); cooking.Add(id);
-            SaveGame();
-            if (!quiet) { Snd.Ui(); GameFlow.I.ShowToast($"{UIUtil.Ic(rc.icon)} {rc.n} 주문! 꼬마 요리사가 만들어요"); dirty = true; }
+            var spot = FirstSpot(BUILDING[id]);
+            if (spot == null) return false;
+            PlaceId = id; placeX = spot.Value.x; placeY = spot.Value.y;
+            dirty = true;
             return true;
         }
 
-        public List<Recipe> CookAll()
+        public void CancelPlace() { if (PlaceId == null) return; PlaceId = null; dirty = true; }
+
+        // 확인: 그 자리에 건설 시작 → 맡은 꼬마가 들어 있는 건물 (실패하면 null)
+        public SaveData.Bld ConfirmPlace()
         {
-            var made = RECIPES.Where(rc => CookOrder(rc.id, true)).ToList();
-            if (made.Count > 0) dirty = true;
-            return made;
+            if (!PlaceOk) return null;
+            var idle = crits.Where(p => p.job == null && BuilderSpot(p.id) == null).Select(p => p.id).ToList();
+            var bld = BuildStart(PlaceId, placeX, placeY, idle);
+            if (bld == null) return null;
+            PlaceId = null; dirty = true;
+            var c = crits.FirstOrDefault(p => p.id == bld.critter);
+            if (c != null) { c.anim = null; Say(c, "내가 지을게! 뚝딱뚝딱!", null); }
+            return bld;
         }
 
-        void FinishOrder(string rid, bool quiet)
+        // 누른 위치를 건물 가운데로 삼아 격자에 맞춘다
+        void MoveGhost(float x, float y)
         {
-            var rc = RECIPE[rid];
-            cooking.Remove(rid);
-            ServeDish(rid);
-            if (!quiet)
+            var b = BUILDING[PlaceId];
+            int gx = Mathf.RoundToInt((x - GRID.x0) / GRID.cell - b.w / 2f), gy = Mathf.RoundToInt((y - GRID.y0) / GRID.cell - b.h / 2f);
+            gx = Mathf.Clamp(gx, 0, GRID.cols - b.w); gy = Mathf.Clamp(gy, 0, GRID.rows - b.h);
+            if (gx != placeX || gy != placeY) { placeX = gx; placeY = gy; dirty = true; }
+        }
+
+        // 배치 중인 건물의 화면 영역 (HUD가 확인·취소 버튼을 옆에 붙인다)
+        public Rect PlaceRect => Placing ? BuildRect(BUILDING[PlaceId], placeX, placeY) : default;
+
+        void TickBuilds()
+        {
+            foreach (var b in BuildTick())
             {
-                SaveGame(); Snd.Record(); GameFlow.I.ShowToast($"{UIUtil.Ic(rc.icon)} {rc.n} 완성! 다음 라운드에 먹어요");
-                AddFloat(KIT.table.x, KIT.table.y - 150, $"{UIUtil.Ic(rc.icon)} 완성!", false, U.Hex("#ffe36e"));
+                var B = BUILDING[b.id]; var r = BuildRect(B, b.gx, b.gy);
+                AddFloat(r.center.x, r.yMin - 30, $"{B.n} 완성!", false, U.Hex("#ffe36e"));
+                Stars(r.center.x, r.center.y);
+                Snd.Record();
+                GameFlow.I.ShowToast($"{B.n} 완성! {string.Format(B.statFmt, U.Pct(B.val))}");
+                var c = crits.FirstOrDefault(p => p.id == b.critter);
+                if (c != null) { c.state = "idle"; c.tool = null; Say(c, "다 지었다! 어때?", "jump"); }
                 dirty = true;
-            }
-        }
-
-        static Vector2 KitAt(string where) => where == "counter" ? KIT.counter : where == "stove" ? KIT.stove : KIT.table;
-
-        void UpdateKitchen(float dt)
-        {
-            foreach (var c in cooks)
-            {
-                c.t -= dt;
-                if (TickCritter(c, dt) && c.order == null) continue;
-                float ev = FARM.evoSpd[EvoOf(c.id)];
-                if (c.order != null)
-                {
-                    var (where, dur, tool) = KIT.steps[c.step]; var at = KitAt(where);
-                    if (c.state == "walk") { if (WalkTo(c, at.x + c.slot, at.y, 340 * ev, dt)) { c.state = "work"; c.t = dur / ev; c.tool = tool; } }
-                    else if (c.state == "work" && c.t <= 0)
-                    {
-                        if (c.step < KIT.steps.Length - 1) { c.step++; c.state = "walk"; }
-                        else { var o = c.order; c.order = null; c.tool = null; c.state = "idle"; c.t = U.Rand(0.5f, 1.5f); FinishOrder(o, false); }
-                    }
-                    continue;
-                }
-                if (orders.Count > 0)
-                {
-                    c.order = orders[0]; orders.RemoveAt(0); c.step = 0; c.state = "walk"; c.anim = null; c.slot = U.Rand(-50, 50); c.tool = null;
-                    if (View == "kitchen") { c.say = $"{RECIPE[c.order].n} 만들게!"; c.sayT = 1.8f; }
-                    continue;
-                }
-                if (c.state == "walk") { if (WalkTo(c, c.tx, c.ty, 80, dt) || c.t <= 0) { c.state = "idle"; c.t = U.Rand(1.5f, 4); } }
-                else if (c.t <= 0)
-                {
-                    var s = KitIdleSpot(); c.tx = s.x; c.ty = s.y; c.state = "walk"; c.t = 8;
-                    if (View == "kitchen" && U.Chance(0.06f)) { c.say = U.Pick(FARM_LINES["kitchen"]); c.sayT = 2.4f; }
-                }
             }
         }
 
@@ -471,61 +473,37 @@ namespace MoreMush
         void AddFloat(float x, float y, string text, bool gem, Color col, float t = 0) => floats.Add(new Float { x = x, y = y, text = text, gem = gem, col = col, t = t });
 
         // ===== frame =====
+        float buildTickT;
         void Update()
         {
             if (G?.farm == null) return;
             float dt = Mathf.Min(Time.deltaTime, 0.05f), now = Time.time;
+            if ((buildTickT -= dt) <= 0) { buildTickT = 0.5f; TickBuilds(); }
             HandleInput();
-            UpdatePets(dt); UpdateField(dt); UpdateKitchen(dt);
+            UpdateCritters(dt);
             foreach (var q in parts) { q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; if (q.k == "gem" || q.k == "dirt") q.vy += 700 * dt; }
             parts.RemoveAll(q => q.t >= q.life);
             if (parts.Count > 200) parts.RemoveRange(0, parts.Count - 200);
             foreach (var f in floats) { f.t += dt; f.y -= 40 * dt; }
             floats.RemoveAll(f => f.t >= 1.4f);
 
-            // camera: slides between scenes, pulling back a little halfway
-            float x = SCENE_X[View], z = 1, shade = 0;
-            if (cam != null)
+            grandpa.sparkle = FarmReadyCount() > 0 && Mathf.Sin(now * 2) > 0;
+            DrawField(now);
+            DrawBuildings();
+            for (int i = 0; i < crits.Count; i++)
             {
-                cam.t = Mathf.Min(1, cam.t + dt / cam.dur);
-                float u = cam.t < 0.5f ? 4 * cam.t * cam.t * cam.t : 1 - Mathf.Pow(-2 * cam.t + 2, 3) / 2;
-                x = U.Lerp(cam.from, cam.to, u); z = 1 - 0.12f * Mathf.Sin(Mathf.PI * cam.t);
-                shade = 0.45f * Mathf.Sin(Mathf.PI * cam.t);
-                if (cam.t >= 1) { cam = null; dirty = true; }
+                var p = crits[i];
+                string hat = BuilderSpot(p.id) != null ? "hardhat" : p.job != null ? "straw" : null;
+                critPool.Get(i).Draw(p, now, hat, hover == p, FarmReady(p.id) ? FarmKindOf(p.id) : null);
             }
-            var c0 = Art.P(960, 540);
-            content.localScale = new Vector3(z, z, 1);
-            content.localPosition = new Vector3(c0.x * (1 - z) - x * W / Art.PPU * z, c0.y * (1 - z), 0);
-            field.gameObject.SetActive(Mathf.Abs(-1 - x) < 1);
-            pets.gameObject.SetActive(Mathf.Abs(0 - x) < 1);
-            kitchen.gameObject.SetActive(Mathf.Abs(1 - x) < 1);
-            var sc = panShade.color; sc.a = shade; panShade.color = sc;
-            panShade.enabled = shade > 0.001f;
-
-            if (field.gameObject.activeSelf) DrawField(now);
-            if (pets.gameObject.activeSelf) DrawPets(now);
-            if (kitchen.gameObject.activeSelf) DrawKitchen(now);
+            critPool.Trim(crits.Count);
             DrawFx();
-        }
-
-        void DrawPets(float now)
-        {
-            petsGrandpa.sparkle = FarmPetCount() > 0 && Mathf.Sin(now * 2) > 0;
-            for (int i = 0; i < DECOR.Length; i++) UIUtil.Show(decor[i], DecoOn(DECOR[i].id));
-            for (int i = 0; i < petList.Count; i++)
-            {
-                var p = petList[i];
-                petPool.Get(i).Draw(p, now, null, hover == p, FarmReady(p.id) ? FarmKindOf(p.id) : null);
-            }
-            petPool.Trim(petList.Count);
         }
 
         void DrawField(float now)
         {
-            fieldGrandpa.sparkle = FieldRipeCount() > 0 && Mathf.Sin(now * 2) > 0;
-            int n = G.farm.size, o = FieldOff(n); float T = TileSize();
+            int n = G.farm.size; float T = TileSize();
             double t0 = Now();
-            var a = TileXY(o, o);
             fieldFrame.transform.localPosition = Art.P(FIELD.cx, FIELD.cy);
             Art.SlicedPx(fieldFrame, n * T + 28, n * T + 28);
             bool more = n < FIELD.max;
@@ -551,86 +529,72 @@ namespace MoreMush
                     var p = TileXY(r, c);
                     busy.TryGetValue(key, out var bz);
                     bool hov = hoverTile.HasValue && hoverTile.Value.key == key;
-                    tile.Draw(p.x + T / 2, p.y + T / 2, T, PlotAt(key), t0, now, bz, hov, G.farm.tool);
+                    tile.Draw(p.x + T / 2, p.y + T / 2, T, PlotAt(key), t0, now, bz, hov);
                 }
-            for (int i = 0; i < workers.Count; i++) workerPool.Get(i).Draw(workers[i], now, "straw", hover == workers[i], null);
-            workerPool.Trim(workers.Count);
 
             // 마우스를 올린 칸 안내
-            UIUtil.Show(tileHint, hoverTile.HasValue && cam == null);
-            if (hoverTile.HasValue && cam == null)
+            UIUtil.Show(tileHint, hoverTile.HasValue);
+            if (hoverTile.HasValue)
             {
                 var (r, c, key) = hoverTile.Value; var q = PlotAt(key); var p = TileXY(r, c);
                 string label = busy.ContainsKey(key) ? "꼬마가 일하러 가는 중…"
-                    : q == null ? $"{UIUtil.Ic("tool_" + G.farm.tool)} 갈기 ({TOOLS[G.farm.tool].n})"
+                    : q == null ? "갈기"
                     : q.s == "till" ? $"{UIUtil.Ic(G.farm.crop)} {CROPS[G.farm.crop].n} 심기"
                     : TileRipe(q) ? $"{UIUtil.Ic("crop_" + q.crop)} 수확 (균사석 +{CROPS[q.crop].gem})"
                     : $"{CROPS[q.crop].n} · {Mmss((long)System.Math.Ceiling((q.at - t0) / 1000))} 남음";
                 UIUtil.SetText(tileHintText, label);
                 tileHintText.ForceMeshUpdate();
-                float w = tileHintText.preferredWidth * Art.PPU + 24;
                 tileHint.transform.localPosition = Art.P(p.x + T / 2, p.y - 18);
-                Art.SlicedPx(tileHintBack, w, 32);
+                Art.SlicedPx(tileHintBack, tileHintText.preferredWidth * Art.PPU + 24, 32);
             }
         }
 
-        void DrawKitchen(float now)
+        void DrawBuildings()
         {
-            bool cook = cooks.Any(c => c.order != null && c.step == 1 && c.state == "work");
-            var gc = stoveGlow.color; gc.a = (cook ? 0.55f : 0.3f) + 0.1f * Mathf.Sin(now * 9); stoveGlow.color = gc;
-            for (int i = 0; i < steam.Length; i++)
-            {
-                bool on = i < (cook ? 6 : 3);
-                steam[i].enabled = on;
-                if (!on) continue;
-                float t = (now * 0.5f + i / 6f) % 1;
-                steam[i].transform.localPosition = Art.P(380 + i * 16 + Mathf.Sin(now * 2 + i) * 10, KIT.stove.y - 330 - t * 140);
-                float s = (14 + t * 18) * 2 / Art.PPU;
-                steam[i].transform.localScale = new Vector3(s, s, 1);
-                steam[i].color = new Color(1, 1, 1, 0.5f * (1 - t));
-            }
-            var ds = G.dishes.Where(id => RECIPE.ContainsKey(id)).ToList();
-            for (int i = 0; i < dishes.Length; i++)
-            {
-                bool on = i < ds.Count;
-                dishes[i].enabled = on;
-                if (on) dishes[i].sprite = SpriteDB.Get("Farm/Icons/" + RECIPE[ds[i]].icon);
-            }
-            for (int i = 0; i < cooks.Count; i++) cookPool.Get(i).Draw(cooks[i], now, "chef", hover == cooks[i], null);
-            cookPool.Trim(cooks.Count);
+            var list = G.farm.blds;
+            for (int i = 0; i < list.Count; i++) buildPool.Get(i).Draw(list[i]);
+            buildPool.Trim(list.Count);
+
+            UIUtil.Show(ghost, Placing);
+            if (!Placing) return;
+            var b = BUILDING[PlaceId]; var r = BuildRect(b, placeX, placeY);
+            bool ok = PlaceOk;
+            ghost.transform.localPosition = Art.P(r.center.x, r.yMax);
+            ghostFoot.transform.localPosition = new Vector3(0, r.height / 2 / Art.PPU, 0);
+            ghostFoot.transform.localScale = new Vector3(r.width / Art.PPU, r.height / Art.PPU, 1);
+            ghostFoot.color = ok ? new Color(0.45f, 1, 0.5f, 0.38f) : new Color(1, 0.35f, 0.3f, 0.42f);
+            BuildingView.Fit(ghostSprite, SpriteDB.Get("Farm/Props/" + b.id), b.px);
+            ghostSprite.color = ok ? new Color(1, 1, 1, 0.7f) : new Color(1, 0.6f, 0.6f, 0.6f);
         }
 
         void DrawFx()
         {
-            bool show = cam == null;
             int n = 0;
-            if (show)
-                foreach (var q in parts)
+            foreach (var q in parts)
+            {
+                var sr = partPool.Get(n++);
+                sr.transform.localPosition = Art.P(q.x, q.y);
+                var c = Color.white; c.a = Mathf.Clamp01(1 - q.t / q.life);
+                string sp; float px;
+                switch (q.k)
                 {
-                    var sr = partPool.Get(n++);
-                    sr.transform.localPosition = Art.P(q.x, q.y);
-                    var c = Color.white; c.a = Mathf.Clamp01(1 - q.t / q.life);
-                    string sp; float px;
-                    switch (q.k)
-                    {
-                        case "gem": sp = "Icons/gem"; px = 24; break;
-                        case "dirt": sp = "FX/circle"; px = 10; c = new Color(0.48f, 0.31f, 0.18f, c.a); break;
-                        case "spore": sp = "Icons/spore"; px = 18; break;
-                        case "star": sp = "Icons/star"; px = 22; break;
-                        case "heart": sp = "Farm/Icons/fx_heart"; px = 26; break;
-                        default: sp = "Farm/Icons/fx_zzz"; px = 30; break;
-                    }
-                    sr.sprite = SpriteDB.Get(sp); sr.color = c;
-                    Art.FitPx(sr, px);
+                    case "gem": sp = "Icons/gem"; px = 24; break;
+                    case "dirt": sp = "FX/circle"; px = 10; c = new Color(0.48f, 0.31f, 0.18f, c.a); break;
+                    case "spore": sp = "Icons/spore"; px = 18; break;
+                    case "star": sp = "Icons/star"; px = 22; break;
+                    case "heart": sp = "Farm/Icons/fx_heart"; px = 26; break;
+                    default: sp = "Farm/Icons/fx_zzz"; px = 30; break;
                 }
+                sr.sprite = SpriteDB.Get(sp); sr.color = c;
+                Art.FitPx(sr, px);
+            }
             partPool.Trim(n);
             n = 0;
-            if (show)
-                foreach (var f in floats)
-                {
-                    if (f.t < 0) continue;
-                    floatPool.Get(n++).Draw(f.x, f.y, f.text, f.gem, f.col, Mathf.Clamp01(1.4f - f.t));
-                }
+            foreach (var f in floats)
+            {
+                if (f.t < 0) continue;
+                floatPool.Get(n++).Draw(f.x, f.y, f.text, f.gem, f.col, Mathf.Clamp01(1.4f - f.t));
+            }
             floatPool.Trim(n);
         }
 
@@ -645,36 +609,29 @@ namespace MoreMush
         {
             var p = Pointer.current;
             hover = null; hoverTile = null;
-            if (p == null || cam != null || GameFlow.I.ModalOpen) return;
+            if (p == null || GameFlow.I.ModalOpen) return;
             bool isMouse = p is Mouse;
             bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(isMouse ? -1 : 0);
-            if (overUI) return;
             var s = ToStage(p.position.ReadValue());
-            if (isMouse) Hover(s.x, s.y);
-            if (p.press.wasPressedThisFrame) Click(s.x, s.y);
-        }
-
-        void Hover(float x, float y)
-        {
-            if (View == "field") { hover = CritterAt(workers, x, y, false); if (hover == null) hoverTile = FieldTileAt(x, y); return; }
-            hover = CritterAt(View == "kitchen" ? cooks : petList, x, y, View == "pets");
-        }
-
-        void Click(float x, float y)
-        {
-            if (View == "field")
+            if (Placing)
             {
-                var w = CritterAt(workers, x, y, false);
-                if (w != null && w.job == null) { Snd.Ui(); Say(w, U.Pick(FARM_LINES["field"].Concat(FARM_LINES[w.id]).ToList()), U.Pick(new[] { "jump", "dance", "heart" })); return; }
-                FieldClick(x, y); return;
-            }
-            if (View == "kitchen")
-            {
-                var c = CritterAt(cooks, x, y, false);
-                if (c != null) { Snd.Ui(); Say(c, c.order != null ? $"{RECIPE[c.order].n} 만드는 중이야!" : U.Pick(FARM_LINES["kitchen"].Concat(FARM_LINES[c.id]).ToList()), c.order != null ? null : U.Pick(new[] { "jump", "dance", "spin" })); }
+                // 배치 중: 누르거나 끌면 건물 잔상이 따라온다 (확인·취소는 HUD 버튼)
+                if (!overUI && p.press.isPressed) MoveGhost(s.x, s.y);
                 return;
             }
-            var pt = CritterAt(petList, x, y, true); if (pt != null) ClickPet(pt);
+            if (overUI) return;
+            if (isMouse) { hover = CritterAt(s.x, s.y); if (hover == null) hoverTile = FieldTileAt(s.x, s.y); }
+            if (!p.press.wasPressedThisFrame) return;
+            var c = CritterAt(s.x, s.y);
+            if (c != null) { ClickCritter(c); return; }
+            if (FieldTileAt(s.x, s.y) != null) { FieldClick(s.x, s.y); return; }
+            var b = G.farm.blds.LastOrDefault(x => BuildRect(BUILDING[x.id], x.gx, x.gy).Contains(new Vector2(s.x, s.y)));
+            if (b != null)
+            {
+                var r = BuildRect(BUILDING[b.id], b.gx, b.gy);
+                AddFloat(r.center.x, r.yMin - 20, b.done ? string.Format(BUILDING[b.id].statFmt, U.Pct(BUILDING[b.id].val)) : $"{UIUtil.Ic("hammer")} {BuildLeftText(b)} 남음", false, U.Hex("#fff6e0"));
+                Snd.Ui();
+            }
         }
     }
 }

@@ -210,20 +210,20 @@ namespace MoreMush
 
         public static readonly int[] STAR_N = { 10, 50, 200, 800, 3000 };
 
-        // ===== 특수 버섯 =====
+        // ===== 특수 버섯 (꼬마): 라운드에서 잡으면 버섯 농장에 들어온다. 능력은 농장(아웃게임)에만 있다 · Defs.CRITTER_FX =====
         public class Special { public string id, n, c1, c2, perk; }
         public static readonly Special[] SPECIALS =
         {
-            new Special { id = "fire", n = "불씨 꼬마", c1 = "#ff7a2a", c2 = "#ffd34a", perk = "화염 이펙트: 수확기가 불꽃을 두르고 버섯 피해 +30%" },
-            new Special { id = "spark", n = "찌릿 꼬마", c1 = "#ffe03a", c2 = "#fff7b0", perk = "찌릿 번개: 버섯을 칠 때 6% 확률로 연쇄 번개" },
-            new Special { id = "dew", n = "이슬 꼬마", c1 = "#5fc8ff", c2 = "#d8f4ff", perk = "이슬 시계: 라운드 제한시간 +2초" },
-            new Special { id = "coin", n = "동전 꼬마", c1 = "#f5c518", c2 = "#fff2a8", perk = "동전 주머니: 버섯 판매가 +15%" },
-            new Special { id = "star", n = "별똥 꼬마", c1 = "#b07bff", c2 = "#f2e2ff", perk = "별똥 행운: 에픽 이상 등장 가중치 +25%" },
-            new Special { id = "leaf", n = "새싹 꼬마", c1 = "#5fc85a", c2 = "#d8f8c0", perk = "새싹 기운: 군락지 수 +15%" },
-            new Special { id = "moon", n = "달빛 꼬마", c1 = "#3a4a8a", c2 = "#f6f0b0", perk = "달빛 축복: 황금 버섯 확률 ×1.5" },
-            new Special { id = "wind", n = "바람 꼬마", c1 = "#5fd8c0", c2 = "#e8fff8", perk = "순풍: 핀볼 속도 +10%" },
-            new Special { id = "rock", n = "조약돌 꼬마", c1 = "#8a8a86", c2 = "#c8c6bc", perk = "든든한 바: 슬라이드 바 길이 +12%" },
-            new Special { id = "chest", n = "꿀밤 꼬마", c1 = "#a0602a", c2 = "#f0c890", perk = "꿀밤 주머니: 버섯 수확량 +15%" },
+            new Special { id = "fire", n = "불씨 꼬마", c1 = "#ff7a2a", c2 = "#ffd34a", perk = "보유 효과: 불씨 꼬마가 밭을 수확하면 균사석 +20%" },
+            new Special { id = "spark", n = "찌릿 꼬마", c1 = "#ffe03a", c2 = "#fff7b0", perk = "보유 효과: 모든 건물 건설 속도 +10%" },
+            new Special { id = "dew", n = "이슬 꼬마", c1 = "#5fc8ff", c2 = "#d8f4ff", perk = "보유 효과: 밭 작물 성장 시간 −5%" },
+            new Special { id = "coin", n = "동전 꼬마", c1 = "#f5c518", c2 = "#fff2a8", perk = "보유 효과: 자동 수확 골드 +10%" },
+            new Special { id = "star", n = "별똥 꼬마", c1 = "#b07bff", c2 = "#f2e2ff", perk = "보유 효과: 부탁을 들어줄 때 다이아몬드 확률 +5%p" },
+            new Special { id = "leaf", n = "새싹 꼬마", c1 = "#5fc85a", c2 = "#d8f8c0", perk = "보유 효과: 밭 수확 때 포자 +1 확률 +20%p" },
+            new Special { id = "moon", n = "달빛 꼬마", c1 = "#3a4a8a", c2 = "#f6f0b0", perk = "보유 효과: 자동 수확 균사석 +10%" },
+            new Special { id = "wind", n = "바람 꼬마", c1 = "#5fd8c0", c2 = "#e8fff8", perk = "보유 효과: 모든 꼬마 밭일 속도 +10%" },
+            new Special { id = "rock", n = "조약돌 꼬마", c1 = "#8a8a86", c2 = "#c8c6bc", perk = "보유 효과: 조약돌 꼬마가 지으면 건설 시간 −20%" },
+            new Special { id = "chest", n = "꿀밤 꼬마", c1 = "#a0602a", c2 = "#f0c890", perk = "보유 효과: 밭 수확 균사석 +5%" },
         };
         public static readonly Dictionary<string, Special> SPC = SPECIALS.ToDictionary(s => s.id);
         public const float SPECIAL_P = 0.3f, SPECIAL_LIFE = 10;

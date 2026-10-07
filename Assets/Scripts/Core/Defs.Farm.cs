@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace MoreMush
 {
-    // Mushroom farm (ranch · field · kitchen), decorations and skins (prototype "버섯 농장", "농장 꾸미기",
-    // "버섯 밭", "꼬마 식당", "스킨" sections). Screen coordinates are the prototype's 1920×1080 stage pixels.
+    // Mushroom farm (one screen: ranch with the field inside), buildings, critter grades, idle harvest reward and skins.
+    // Screen coordinates are the 1920×1080 stage pixels. Every number here is a design value meant to be tuned.
     public static partial class Defs
     {
-        // ===== 버섯 농장 =====
+        // ===== 버섯 농장: 꼬마 부탁·호감도·진화 =====
         public static class FARM
         {
             public static readonly float[] wait = { 240, 600 };   // 다음 부탁까지 (초, 무작위) × 진화 배율
@@ -19,8 +19,9 @@ namespace MoreMush
             public static readonly float[] evoGem = { 1, 1.5f, 2 };
             public static readonly float[] evoWait = { 1, 0.85f, 0.7f };
             public static readonly float[] evoSpd = { 1, 1.2f, 1.4f };
-            public const float x0 = 250, y0 = 300, x1 = 1670, y1 = 900;   // 목장 울타리 안
-            public const float pan = 0.9f;                         // 장면 넘어가는 시간 (초)
+            public const float x0 = 260, y0 = 300, x1 = 1660, y1 = 860;   // 꼬마가 돌아다니는 울타리 안
+            public const float diaP = 0.25f;                       // 부탁 들어줄 때 다이아몬드 1개 확률
+            public const int diaHeart = 2;                         // 호감도 한 칸을 새로 채우면 다이아몬드
         }
 
         public class FarmKind { public string id, icon, n; public float w; public int gem; }
@@ -49,45 +50,74 @@ namespace MoreMush
             ["all"] = new[] { "할아버지, 오늘도 수확 잘했어요?", "여기 농장 진짜 좋아!", "심심해~ 놀아 줘!", "포자 날린다~", "배고파... 버섯 수프 없나?", "헤헤, 간지러워!", "같이 산책할래?" },
             ["thanks"] = new[] { "고마워! 이거 받아!", "헤헤, 최고야!", "역시 할아버지야!", "기분 좋아~ 선물이야!" },
             ["field"] = new[] { "영차영차! 밭일은 맡겨 줘!", "흙냄새 좋다~", "포자 쏙쏙 심어 줄게!", "다 자라면 균사석이 나와!", "허수아비 아저씨 안녕!" },
-            ["kitchen"] = new[] { "보글보글~ 맛있겠다!", "간 맞추는 중이야!", "조심해, 뜨거워!", "오늘의 메뉴는 뭘까?", "셰프 모자 잘 어울려?" },
+            ["build"] = new[] { "뚝딱뚝딱! 금방 지을게!", "망치질은 자신 있어!", "조금만 기다려 줘~", "튼튼하게 짓는 중이야!" },
         };
         public static readonly Dictionary<string, float> FARM_ANIMS = new Dictionary<string, float>
         { ["jump"] = 0.9f, ["spin"] = 0.8f, ["dance"] = 1.6f, ["heart"] = 1.4f, ["sleep"] = 2.6f, ["surprise"] = 0.9f };
 
-        // ===== 농장 꾸미기 (균사석으로 사서 목장에 놓는 장식. 꼬마들이 근처에서 놀기를 좋아한다) =====
-        public class Deco { public string id, n, d; public int price; public float x, y; }
-        public static readonly Deco[] DECOR =
+        // ===== 꼬마 별 등급 (골드 + 균사석으로 강화, 아웃게임 능력치만) =====
+        public static class CSTAR
         {
-            new Deco { id = "dc_table", n = "버섯 탁자", d = "커다란 버섯 탁자와 버섯 의자. 꼬마들이 둘러앉아 쉬어요.", price = 20, x = 620, y = 440 },
-            new Deco { id = "dc_fire", n = "버섯 화로", d = "버섯 갓 모양 화로에 포근한 불이 타올라요.", price = 25, x = 1290, y = 450 },
-            new Deco { id = "dc_lamp", n = "포자 등불", d = "흙길 입구를 밝히는 은은한 버섯 등불 한 쌍.", price = 15, x = 960, y = 400 },
-            new Deco { id = "dc_bed", n = "꽃 화단", d = "알록달록 꽃이 핀 나무 화단.", price = 15, x = 400, y = 430 },
-            new Deco { id = "dc_swing", n = "꼬마 그네", d = "버섯 나무 두 그루에 매단 그네. 바람에 흔들흔들.", price = 30, x = 470, y = 790 },
-            new Deco { id = "dc_well", n = "버섯 분수", d = "버섯 갓에서 물이 퐁퐁 솟는 작은 분수.", price = 40, x = 1450, y = 790 },
-            new Deco { id = "dc_house", n = "버섯 오두막", d = "창문이 달린 빨간 버섯 집. 밤에는 불이 켜져요.", price = 50, x = 1530, y = 420 },
-            new Deco { id = "dc_statue", n = "균사석 조각상", d = "균사석을 깎아 만든 조각상. 마당 한가운데서 빛나요.", price = 80, x = 960, y = 600 },
-        };
-        public static readonly Dictionary<string, Deco> DECO = DECOR.ToDictionary(d => d.id);
+            public const int max = 5;
+            public static readonly double[] gold = { 10000, 100000, 1000000, 10000000, 100000000 };   // n성 → n+1성
+            public static readonly int[] gem = { 5, 10, 20, 40, 80 };
+            public const float build = 0.08f, work = 0.08f;       // 별마다 이 꼬마의 건설 속도 · 밭일 속도
+        }
 
-        // ===== 버섯 밭 =====
+        // 꼬마 보유 효과: 잡으면 생기고, 별 등급마다 커진다 (값 = v0 + vs × 별)
+        // key: fieldGemSelf 이 꼬마가 수확한 밭 균사석 · build 모든 건설 속도 · grow 밭 성장 시간 · autoGold 자동 수확 골드
+        //      dia 부탁 다이아 확률 · spore 밭 포자 +1 확률 · autoGem 자동 수확 균사석 · work 모든 꼬마 밭일 속도
+        //      buildSelf 이 꼬마의 건설 시간 · fieldGem 밭 균사석
+        public class CritterFx { public string key, fmt; public float v0, vs; }
+        public static readonly Dictionary<string, CritterFx> CRITTER_FX = new Dictionary<string, CritterFx>
+        {
+            ["fire"] = new CritterFx { key = "fieldGemSelf", v0 = 0.20f, vs = 0.10f, fmt = "불씨 꼬마가 밭을 수확하면 균사석 +{0}" },
+            ["spark"] = new CritterFx { key = "build", v0 = 0.10f, vs = 0.05f, fmt = "모든 건물 건설 속도 +{0}" },
+            ["dew"] = new CritterFx { key = "grow", v0 = 0.05f, vs = 0.02f, fmt = "밭 작물 성장 시간 −{0}" },
+            ["coin"] = new CritterFx { key = "autoGold", v0 = 0.10f, vs = 0.05f, fmt = "자동 수확 골드 +{0}" },
+            ["star"] = new CritterFx { key = "dia", v0 = 0.05f, vs = 0.02f, fmt = "부탁을 들어줄 때 다이아몬드 확률 +{0}p" },
+            ["leaf"] = new CritterFx { key = "spore", v0 = 0.20f, vs = 0.10f, fmt = "밭 수확 때 포자 +1 확률 +{0}p" },
+            ["moon"] = new CritterFx { key = "autoGem", v0 = 0.10f, vs = 0.05f, fmt = "자동 수확 균사석 +{0}" },
+            ["wind"] = new CritterFx { key = "work", v0 = 0.10f, vs = 0.05f, fmt = "모든 꼬마 밭일 속도 +{0}" },
+            ["rock"] = new CritterFx { key = "buildSelf", v0 = 0.20f, vs = 0.10f, fmt = "조약돌 꼬마가 지으면 건설 시간 −{0}" },
+            ["chest"] = new CritterFx { key = "fieldGem", v0 = 0.05f, vs = 0.03f, fmt = "밭 수확 균사석 +{0}" },
+        };
+
+        // ===== 건축 (다이아몬드로 짓는 건물. 규격(칸)과 최대 개수는 정해져 있다) =====
+        // 배치 격자: 칸 40px, (x0, y0)부터 cols × rows. 건물 발밑이 울타리 타원 안이고, 밭·다른 건물과 겹치지 않아야 한다
+        public static class GRID
+        {
+            public const float cell = 40, x0 = 120, y0 = 260;
+            public const int cols = 42, rows = 16;
+            public const float ecx = 960, ecy = 575, erx = 840, ery = 320;   // 울타리 안 타원
+        }
+        // stat: grow 밭 성장 시간 − · spore 밭 포자 +1 확률 + · wait 꼬마 부탁 간격 − · build 건설 시간 −
+        //       dia 부탁 다이아 확률 + · fieldGem 밭 균사석 + · auto 자동 수확 보상 + · harvest 라운드 버섯 수확량 +
+        public class Building { public string id, n, d, stat, statFmt; public float val, px; public int price, max, w, h; public float time; }
+        public static readonly Building[] BUILDINGS =
+        {
+            new Building { id = "dc_table", n = "버섯 탁자", d = "커다란 버섯 탁자와 버섯 의자.", price = 20, time = 600, max = 2, w = 6, h = 3, px = 240, stat = "grow", val = 0.02f, statFmt = "밭 작물 성장 시간 −{0}" },
+            new Building { id = "dc_lamp", n = "포자 등불", d = "은은한 버섯 등불 한 쌍.", price = 15, time = 300, max = 3, w = 6, h = 2, px = 230, stat = "spore", val = 0.03f, statFmt = "밭 수확 때 포자 +1 확률 +{0}p" },
+            new Building { id = "dc_bed", n = "꽃 화단", d = "알록달록 꽃이 핀 나무 화단.", price = 15, time = 300, max = 3, w = 5, h = 2, px = 190, stat = "wait", val = 0.02f, statFmt = "꼬마 부탁 간격 −{0}" },
+            new Building { id = "dc_fire", n = "버섯 화로", d = "버섯 갓 모양 화로에 포근한 불이 타올라요.", price = 25, time = 900, max = 1, w = 4, h = 3, px = 140, stat = "build", val = 0.03f, statFmt = "건물 건설 시간 −{0}" },
+            new Building { id = "dc_swing", n = "꼬마 그네", d = "버섯 나무 두 그루에 매단 그네.", price = 30, time = 1200, max = 1, w = 6, h = 3, px = 240, stat = "dia", val = 0.02f, statFmt = "부탁을 들어줄 때 다이아몬드 확률 +{0}p" },
+            new Building { id = "dc_well", n = "버섯 분수", d = "버섯 갓에서 물이 퐁퐁 솟는 작은 분수.", price = 40, time = 1800, max = 2, w = 5, h = 3, px = 180, stat = "fieldGem", val = 0.02f, statFmt = "밭 수확 균사석 +{0}" },
+            new Building { id = "dc_house", n = "버섯 오두막", d = "창문이 달린 빨간 버섯 집.", price = 50, time = 3600, max = 2, w = 6, h = 4, px = 230, stat = "auto", val = 0.03f, statFmt = "자동 수확 보상 +{0}" },
+            new Building { id = "dc_statue", n = "균사석 조각상", d = "균사석을 깎아 만든 조각상.", price = 80, time = 7200, max = 1, w = 3, h = 3, px = 120, stat = "harvest", val = 0.02f, statFmt = "라운드 버섯 수확량 +{0}" },
+        };
+        public static readonly Dictionary<string, Building> BUILDING = BUILDINGS.ToDictionary(b => b.id);
+        public const int BUILD_SLOTS = 15;   // 지을 수 있는 건물 총수 (최대 개수 합)
+
+        // ===== 버섯 밭 (목장 안 왼쪽) =====
         // 8×8 칸 중 가운데 size×size가 열려 있다 (처음 4×4, 골드로 8×8까지). 칸 키 "행,열"은 8×8 기준
         public static class FIELD
         {
             public const int max = 8;
-            public const float cx = 690, cy = 586, span = 640;    // 밭 가운데 · 칸 크기 = span / 한 변 칸 수 (최대 112px)
+            public const float cx = 600, cy = 600, span = 440;    // 밭 가운데 · 칸 크기 = span / 한 변 칸 수 (최대 112px)
             public static readonly Dictionary<int, double> expand = new Dictionary<int, double> { [4] = 3000, [5] = 30000, [6] = 300000, [7] = 3000000 };
-            public const float work = 0.6f;                        // 한 칸 일하는 시간 (초) ÷ 진화 속도
+            public const float work = 0.6f;                        // 한 칸 일하는 시간 (초) ÷ 속도
+            public const float zone = span / 2 + 34;               // 건물을 놓을 수 없는 밭 둘레 (가운데에서 반너비)
         }
-        // 농기구: 등급이 높을수록 수확 때 버섯 포자가 더 많이 나온다
-        public class Tool { public string n, grade, bonus; public double cost; public int dropMin, dropMax; public string col; }
-        public static readonly Tool[] TOOLS =
-        {
-            new Tool { n = "낡은 호미", grade = "일반", cost = 0, dropMin = 0, dropMax = 1, bonus = "기본", col = "#9a8a70" },
-            new Tool { n = "철제 호미", grade = "고급", cost = 2000, dropMin = 1, dropMax = 2, bonus = "+1", col = "#5fb8ff" },
-            new Tool { n = "은빛 괭이", grade = "희귀", cost = 20000, dropMin = 1, dropMax = 3, bonus = "+1~2", col = "#c77dff" },
-            new Tool { n = "균사 괭이", grade = "영웅", cost = 200000, dropMin = 2, dropMax = 4, bonus = "+2~3", col = "#2a9a74" },
-            new Tool { n = "대지의 쇠스랑", grade = "전설", cost = 2000000, dropMin = 3, dropMax = 6, bonus = "+3~5", col = "#e8a900" },
-        };
         // 작물: spore 포자 수 · need 분류 버섯 수(스테이지마다 ×1.1) · time 자라는 시간(초) · gem 수확 균사석
         public class Crop { public string n; public int spore, need, gem; public float time; }
         public static readonly Dictionary<string, Crop> CROPS = new Dictionary<string, Crop>
@@ -97,15 +127,16 @@ namespace MoreMush
             ["ps"] = new Crop { n = "독버섯", spore = 2, need = 20, time = 2400, gem = 12 },
         };
 
-        // ===== 꼬마 식당 =====
-        public static class KIT
+        // ===== 자동 수확 보상 (마지막으로 받은 뒤 쌓인다, 최대 8시간) =====
+        public static class AUTO
         {
-            public static readonly UnityEngine.Vector2 counter = new UnityEngine.Vector2(770, 830), stove = new UnityEngine.Vector2(420, 830), table = new UnityEngine.Vector2(980, 960);
-            // [어디서, 몇 초, 손에 든 것]
-            public static readonly (string at, float t, string hold)[] steps = { ("counter", 1.0f, "tool_knife"), ("stove", 1.6f, "tool_ladle"), ("table", 0.5f, "tool_plate") };
+            public const float maxHours = 8;
+            public const double goldTaxK = 0.25, goldMin = 200;   // 골드/시간 = max(goldMin, 이번 사이클 최소 세금 × goldTaxK)
+            public const double gemH = 1, diaH = 0.4;             // 균사석·다이아몬드/시간
+            public const float minClaim = 60;                      // 받을 수 있는 최소 시간 (초)
         }
 
-        // ===== 스킨 (균사석으로 산다) =====
+        // ===== 스킨 (다이아몬드로 산다) =====
         // 꼬마 스킨: 꼬마마다 1개. 갓을 스킨 갓(Critters/skin_<of>)으로 바꾸고 액세서리(Critters/Acc/<acc>)를 단다.
         public class Skin { public string id, of, n, acc, aura; public int price; public bool top, ch; }
         public static readonly Skin[] CHAR_SKINS =
@@ -142,6 +173,7 @@ namespace MoreMush
             ["tophat"] = new AccPlace(0.02f, 0.52f, 0.36f), ["halo"] = new AccPlace(0, 0.62f, 0.46f, true), ["flower"] = new AccPlace(0.22f, 0.3f, 0.24f),
             ["sunglasses"] = new AccPlace(0, -0.115f, 0.42f), ["cloud"] = new AccPlace(0, 0.54f, 0.46f), ["crown"] = new AccPlace(0, 0.52f, 0.32f),
             ["bow"] = new AccPlace(-0.22f, 0.32f, 0.27f), ["chef"] = new AccPlace(0, 0.54f, 0.4f), ["straw"] = new AccPlace(0, 0.4f, 0.72f),
+            ["hardhat"] = new AccPlace(0, 0.46f, 0.5f),
         };
     }
 }

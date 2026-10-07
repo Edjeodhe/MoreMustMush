@@ -84,10 +84,10 @@ namespace MoreMush
             if (work)
             {
                 float sw = Mathf.Sin(now * 14 + p.x) * 0.6f;
-                tool.sprite = SpriteDB.Get(p.tool == "hoe" ? "Farm/Field/tool_" + G.farm.tool : p.tool == "seed" ? "Icons/spore" : p.tool == "basket" ? "UI/basket" : "Farm/Icons/" + p.tool);
+                tool.sprite = SpriteDB.Get(p.tool == "till" ? "Farm/Field/tool_0" : p.tool == "hammer" ? "Icons/hammer" : p.tool == "seed" ? "Icons/spore" : "UI/basket");
                 tool.transform.localPosition = new Vector3(p.face * R0 * 0.75f / P, -(-R0 * 0.55f + oy) / P, 0);
                 tool.transform.localRotation = Quaternion.Euler(0, 0, -sw * p.face * Mathf.Rad2Deg);
-                Art.FitPx(tool, R0 * (p.tool == "hoe" ? 1.3f : 0.75f));
+                Art.FitPx(tool, R0 * (p.tool == "till" ? 1.3f : p.tool == "hammer" ? 0.95f : 0.75f));
                 var ts = tool.transform.localScale; ts.x = Mathf.Abs(ts.x) * p.face; tool.transform.localScale = ts;
                 tool.sortingOrder = order + 2;
             }

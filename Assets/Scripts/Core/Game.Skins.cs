@@ -2,7 +2,7 @@ using static MoreMush.Defs;
 
 namespace MoreMush
 {
-    // Skin shop rules (prototype "스킨 상점"): bought with gems (균사석), worn or taken off any time.
+    // Skin shop rules (prototype "스킨 상점"): bought with diamonds (다이아몬드, cosmetic currency), worn or taken off any time.
     public static partial class Game
     {
         public static bool SkinOwn(string id) => G?.skins != null && G.skins.own.TryGetValue(id, out var b) && b;
@@ -14,8 +14,8 @@ namespace MoreMush
         public static bool BuySkin(string id)
         {
             var sk = SKIN[id];
-            if (SkinOwn(id) || G.gem < sk.price) return false;
-            G.gem -= sk.price; G.skins.own[id] = true;
+            if (SkinOwn(id) || G.dia < sk.price) return false;
+            G.dia -= sk.price; G.skins.own[id] = true;
             if (HasOwner(sk)) (sk.ch ? G.skins.ch : G.skins.hv)[sk.of] = id;   // 가진 꼬마·수확기면 바로 입힌다
             SaveGame();
             return true;

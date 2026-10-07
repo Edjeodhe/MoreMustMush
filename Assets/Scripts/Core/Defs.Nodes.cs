@@ -44,7 +44,7 @@ namespace MoreMush
             public static double ed_special(int L) => 0.07 * L;
             public static double md_bar(int L) => Math.Pow(1.22, L);
             public static double md_combo(int L) => 0.1 * Math.Pow(1.36, L);
-            public static double md_chef(int L) => 1 + 0.15 * L;
+            public static double md_chef(int L) => Math.Pow(0.92, L);        // 건설 시간 배율
             public static double md_buffdur(int L) => 1 + 0.2 * L;
             public static double md_templife(int L) => 1 + 0.2 * L;
             public static double md_stump(int L) => 1 + 0.4 * L;
@@ -61,8 +61,8 @@ namespace MoreMush
             public static double gm_harvest(int L) => 1 + 0.2 * L;
             public static double gm_spore(int L) => 0.25 * L;
             public static double gm_toxin(int L) => Math.Pow(0.75, L);
-            public static double gm_herb(int L) => L;
-            public static double gm_gourmet(int L) => 1 + 0.25 * L;
+            public static double gm_herb(int L) => 1 + 0.2 * L;              // 자동 수확 보상 배율
+            public static double gm_gourmet(int L) => 1 + 0.1 * L;           // 밭 수확 균사석 배율
             public static double gm_farm(int L) => Math.Pow(0.8, L);
             public struct Meteor { public double interval, dmg, r; }
             public static Meteor gm_meteor(int L) => new Meteor { interval = 3.5 * Math.Pow(0.8, Math.Max(0, L - 1)), dmg = 3 * Math.Pow(2, Math.Max(0, L - 1)), r = 110 + 20 * L };
@@ -112,7 +112,7 @@ namespace MoreMush
             ["ed_trade"] = "버섯 상점의 마을 의뢰를 완료했을 때 받는 골드를 늘려요.",
             ["ed_giant"] = "라운드 중에 거대 버섯이 나타날 확률이에요. 거대 버섯은 점수 ×3, 수확량 ×30이에요.",
             ["ed_special"] = "캐릭터 모양 특수 버섯이 나타날 확률과, 도망가기 전까지 잡을 수 있는 시간을 늘려요.",
-            ["md_chef"] = "버섯 상점에서 만드는 요리의 효과를 키워요.",
+            ["md_chef"] = "버섯 농장에서 꼬마가 건물을 짓는 시간을 줄여요.",
             ["md_stump"] = "숲 장치 효과를 키워요: 그루터기 점수, 도토리 점수 ×2 지속시간, 이끼 길 가속.",
             ["md_templife"] = "분열·분신·꼬마 수확기로 생기는 임시 핀볼이 더 오래 남아요.",
             ["md_buffdur"] = "바 버프 중 가속·맑은 포자막의 지속시간과 날 갈기의 강화 타수를 늘려요.",
@@ -151,8 +151,8 @@ namespace MoreMush
             ["fest"] = "라운드 마지막 5초 동안 점수와 수확량이 몇 배가 돼요.",
             ["gm_harvest"] = "균사석으로 여는 특수 노드. 라운드에서 수확하는 모든 버섯 개수를 늘려요.",
             ["gm_spore"] = "균사석으로 여는 특수 노드. 버섯 밭에서 작물을 수확할 때 버섯 포자를 더 얻을 확률이 생겨요.",
-            ["gm_gourmet"] = "균사석으로 여는 특수 노드. 식용 버섯 요리(회복·버프 요리)의 효과 수치를 키워요.",
-            ["gm_herb"] = "균사석으로 여는 특수 노드. 약용 버섯 요리(치유·상태이상 해제 요리)가 여러 라운드 동안 이어져요.",
+            ["gm_gourmet"] = "균사석으로 여는 특수 노드. 버섯 밭에서 작물을 수확할 때 균사석을 더 얻어요.",
+            ["gm_herb"] = "균사석으로 여는 특수 노드. 자동 수확 보상이 늘어나요.",
             ["gm_farm"] = "균사석으로 여는 특수 노드. 버섯 밭 작물이 더 빨리 자라요.",
             ["gm_meteor"] = "균사석 특수 스킬. 라운드 중 일정 시간마다 하늘에서 균사석이 떨어져, 떨어진 자리 둘레의 버섯에 큰 피해를 줘요. 발동률 없이 늘 일어나요.",
             ["gm_toxin"] = "균사석으로 여는 특수 노드. 독버섯이 뿜는 포자 구름이 줄고, 느림·약화 디버프가 짧아져요.",
@@ -215,7 +215,7 @@ namespace MoreMush
             N("md_map", "md", "core_md", "필드 넓히기", 5, 30, 1.9, L => $"필드 {U.JsRound(W / MAP_ZOOM[L])}×{U.JsRound(H / MAP_ZOOM[L])} · 화면 확대 ×{F(MAP_ZOOM[L])}");
             N("md_bar", "md", "core_md", "바 넓이", 5, 16, 1.6, L => $"{U.JsRound(150 * NF.md_bar(L))}px");
             N("md_combo", "md", "md_bar", "콤보 계수", 5, 34, 1.6, L => $"콤보당 +{F(NF.md_combo(L), 3)}배");
-            N("md_chef", "md", "md_combo", "버섯 요리사", 5, 150, 1.6, L => $"요리 효과 ×{F(NF.md_chef(L))}");
+            N("md_chef", "md", "md_combo", "꼬마 건축가", 5, 150, 1.6, L => $"건설 시간 ×{F(NF.md_chef(L))}");
             N("md_stump", "md", "md_combo", "숲 장치 강화", 5, 180, 1.6, L => $"숲 장치 효과 ×{F(NF.md_stump(L))}");
             N("md_kid", "md", "md_bar", "꼬마 수확기", 5, 110, 1.6, L => L > 0 ? $"영구 핀볼이 바에 맞을 때 {U.Pct(KidRate(L))} 확률로 작은 임시 핀볼 1개 (8초)" : "없음", icon: "s_kid", col: "#9fd8ff");
             N("md_templife", "md", "md_kid", "임시 핀볼 수명", 5, 300, 1.6, L => $"임시 핀볼 지속시간 ×{F(NF.md_templife(L))}");
@@ -245,8 +245,8 @@ namespace MoreMush
             // 균사석 노드
             N("gm_harvest", "ed", "ed_bonus", "균사 공명", 3, 3000, 2, L => $"모든 버섯 획득량 +{U.JsRound((NF.gm_harvest(L) - 1) * 100)}%", gem: 10);
             N("gm_spore", "ed", "ed_multi", "포자 감응", 3, 2000, 2, L => $"밭 수확 때 {U.Pct(NF.gm_spore(L))} 확률로 버섯 포자 +2", gem: 8);
-            N("gm_gourmet", "ed", "ed_trade", "미식가의 혀", 3, 2500, 2, L => $"식용 버섯 요리 효과 ×{F(NF.gm_gourmet(L))}", gem: 10);
-            N("gm_herb", "md", "md_chef", "약효 증폭", 3, 2500, 2, L => $"약용 버섯 요리 효과가 {1 + NF.gm_herb(L)}라운드 동안 지속", gem: 10);
+            N("gm_gourmet", "ed", "ed_trade", "풍요의 손길", 3, 2500, 2, L => $"밭 수확 균사석 ×{F(NF.gm_gourmet(L))}", gem: 10);
+            N("gm_herb", "md", "md_chef", "자동 수확 확장", 3, 2500, 2, L => $"자동 수확 보상 ×{F(NF.gm_herb(L))}", gem: 10);
             N("gm_farm", "md", "md_stump", "대지의 축복", 3, 1500, 2, L => $"농작물 성장 시간 ×{F(NF.gm_farm(L))}", gem: 6);
             N("gm_meteor", "md", "md_combo", "균사석 낙하", 3, 5000, 2, L =>
             {

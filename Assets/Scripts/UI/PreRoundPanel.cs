@@ -7,10 +7,10 @@ using static MoreMush.Game;
 
 namespace MoreMush
 {
-    // "수확 준비" modal (prototype renderPreRound): region picks, active harvesters, prepared dishes.
+    // "수확 준비" modal (prototype renderPreRound): region picks, active harvesters.
     public class PreRoundPanel : MonoBehaviour
     {
-        public TMP_Text stage, harvesters, dishes, dishesHead;
+        public TMP_Text stage, harvesters;
         public Image[] themeCards = new Image[5];
         public Image[] themeIcons = new Image[5];
         public TMP_Text[] themeNames = new TMP_Text[5], themeDescs = new TMP_Text[5], themeCounts = new TMP_Text[5];
@@ -34,9 +34,6 @@ namespace MoreMush
                 themeCounts[i].text = ok ? $"전용 버섯 {ex.Count(sp => Harvested(sp.id))}/{ex.Count}" : UIUtil.Ic("lock");
             }
             harvesters.text = string.Join("   ", ActiveHvs().Select(id => $"{HV[id].n} <color=#e8a900>{U.Stars(G.hv.TryGetValue(id, out var s) ? s : 1)}</color>"));
-            var ds = G.dishes.Where(id => RECIPE.ContainsKey(id)).ToList();
-            UIUtil.Show(dishes, ds.Count > 0); UIUtil.Show(dishesHead, ds.Count > 0);
-            dishes.text = string.Join("   ", ds.Select(id => RECIPE[id].n + (G.dishLeft.TryGetValue(id, out var l) && l > 1 ? $" <size=70%>({l}라운드)</size>" : "")));
         }
     }
 }

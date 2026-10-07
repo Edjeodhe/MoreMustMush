@@ -37,6 +37,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 8c72b6c86c0b8014abf274f0ad61ba33, type: 3}
   - key: Characters/Critters/Acc/halo
     sprite: {fileID: 21300000, guid: 34940da342d0f2147bd9cdfaff49f71a, type: 3}
+  - key: Characters/Critters/Acc/hardhat
+    sprite: {fileID: 21300000, guid: a7344b53d4a161e4794ee758dca51718, type: 3}
   - key: Characters/Critters/Acc/headphones
     sprite: {fileID: 21300000, guid: 183ae9ad715872c4fad4fc0a78a6c9f3, type: 3}
   - key: Characters/Critters/Acc/scarf
@@ -265,6 +267,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: b4b6759b560e65540a9a24666ab198e6, type: 3}
   - key: Farm/Icons/tool_plate
     sprite: {fileID: 21300000, guid: 48a31d24d36fcb3418820e4312ceae08, type: 3}
+  - key: Farm/Props/auto_reward
+    sprite: {fileID: 21300000, guid: 42ed3ec8896e716478d6532d5aafb584, type: 3}
   - key: Farm/Props/counter
     sprite: {fileID: 21300000, guid: 917feb9c86f3e9b48921f1d8bcfa6891, type: 3}
   - key: Farm/Props/dc_bed
@@ -321,8 +325,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 2fa20e94d87bb1545b601aa4b1955721, type: 3}
   - key: Harvesters/spore
     sprite: {fileID: 21300000, guid: be7d597ed85fa8443887461514f82560, type: 3}
+  - key: Icons/auto_harvest
+    sprite: {fileID: 21300000, guid: 93a8fdeb723db83479dddb78fd80afd8, type: 3}
   - key: Icons/book
     sprite: {fileID: 21300000, guid: ab2794149520faf4ba551ca973d4bd44, type: 3}
+  - key: Icons/build
+    sprite: {fileID: 21300000, guid: 44159d2bd4a7be64a99591ef86e59b8f, type: 3}
   - key: Icons/clock
     sprite: {fileID: 21300000, guid: c1a1dd24ea5e4264db64cbf27ae60586, type: 3}
   - key: Icons/core_ed
@@ -331,12 +339,16 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 97f38d830b01a674c840009197bbf8e1, type: 3}
   - key: Icons/core_ps
     sprite: {fileID: 21300000, guid: 01a16a6d046853047ac6ccca03022d7a, type: 3}
+  - key: Icons/dia
+    sprite: {fileID: 21300000, guid: 0533e9fd343d3c84dbac904293da3bf8, type: 3}
   - key: Icons/ed
     sprite: {fileID: 21300000, guid: e7a5f3c0ca6b97a4aad20d6a669dfd81, type: 3}
   - key: Icons/gem
     sprite: {fileID: 21300000, guid: 205aea8eaf9c08549a83f8dc24d6b447, type: 3}
   - key: Icons/gold
     sprite: {fileID: 21300000, guid: bdb8555d18882444e8ea7b02b9e13d40, type: 3}
+  - key: Icons/hammer
+    sprite: {fileID: 21300000, guid: 90d6b9683eaf14f479f3a1a98127d3d0, type: 3}
   - key: Icons/lock
     sprite: {fileID: 21300000, guid: f94fc9adad12eff4b9314cc9687bd677, type: 3}
   - key: Icons/md

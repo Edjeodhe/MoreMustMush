@@ -116,7 +116,7 @@ namespace MoreMush
             {
                 G.specials[k.id] = true; specialGot = k.id; SaveGame();
                 AddLabel($"{k.n} 포획! 영구 능력 획득", sm.x, sm.y - 70, "#fff7c2", 38);
-                AddLabel(k.perk.Split(':')[0] + " (다음 라운드부터) · 버섯 농장에 들어와요!", sm.x, sm.y - 20, k.c2, 24);
+                AddLabel(k.n + " · 버섯 농장에 들어와요!", sm.x, sm.y - 20, k.c2, 24);
             }
             else
             {
