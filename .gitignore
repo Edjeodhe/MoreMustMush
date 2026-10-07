@@ -111,3 +111,7 @@ InitTestScene*.unity*
 
 # Claude Code MCP config (per-machine)
 .mcp.json
+
+# Local verification screenshots (MCP captures)
+/[Aa]ssets/[Ss]creenshots/
+/[Aa]ssets/[Ss]creenshots.meta

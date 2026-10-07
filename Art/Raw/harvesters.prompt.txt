@@ -1,0 +1,15 @@
+Sprite sheet: a 3x3 grid holding 9 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Pinball 'harvester' tokens for a mushroom-harvesting pinball game, seen from above. Each reads as a compact, roughly round spinning token (it rotates while it flies), chunky and readable at 40 px. Plus two small effect sprites.
+
+Assets in reading order (left to right, top to bottom):
+1. scythe harvester: a short wooden handle with a curved steel scythe blade, coiled into a round spinning shape
+2. shuriken harvester: four wide gunmetal blades around a round hub with a red gem in the middle
+3. circular saw harvester: a round steel disc ring with many small spinning teeth around it
+4. spore harvester: a round red-orange mushroom cap seen from above with cream spore dots
+5. bell harvester: a big acorn-shaped brass bell with an acorn-cap top
+6. coin harvester: a large old Korean brass coin (yeopjeon) with a square hole in the middle
+7. golden scythe harvester: the scythe harvester made of shining gold with sparkles (reward item)
+8. a soft puffy purple-grey spore cloud
+9. a small soft white dust puff

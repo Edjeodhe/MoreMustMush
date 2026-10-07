@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Square game skill and UI icons, each a single bold object centered in its cell, consistent size.
+
+Assets in reading order (left to right, top to bottom):
+1. acceleration: a speeding round token with wind speed lines
+2. sharpen: a whetstone sharpening a shining blade with a spark
+3. split: one glowing orb splitting into two with sparkles
+4. sip of time: an hourglass with a little sip cup
+5. clear spore shield: a translucent cyan bubble
+6. spore burst: an orange explosion of spores
+7. time spore: a spore with a small clock face
+8. clone harvester: two overlapping spinning blades, one ghostly
+9. mushroom magnet: a red horseshoe magnet
+10. chain lightning: a zigzag yellow lightning bolt
+11. tornado: a mint-green whirlwind
+12. shockwave: concentric orange rings bursting outward
+13. forest device: a small tree stump with a sprout
+14. pierce: a short dagger piercing through
+15. bountiful harvest: a golden wheat sheaf
+16. spinning blade: a four-point steel blade star
+17. kid harvester: a tiny blue spinning token
+18. money bag full of gold
+19. a target with an arrow in the bullseye
+20. two crossed swords
+21. a closed brass padlock
+22. an open mushroom encyclopedia book
+23. a round wooden pause button
+24. a golden star
+25. a gold medal with a ribbon

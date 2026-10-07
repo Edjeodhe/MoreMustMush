@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+25 different real edible mushroom species, one single mushroom (or its natural small group) per cell, drawn as encyclopedia icons that show the species' true shape clearly.
+
+Assets in reading order (left to right, top to bottom):
+1. 양송이 (Agaricus bisporus): white button mushroom: smooth round white cap, short thick white stem
+2. 느타리 (Pleurotus ostreatus): grey oyster mushroom: overlapping fan-shaped grey caps, white gills underneath, short side stem
+3. 표고 (Lentinula edodes): shiitake: dark brown dome cap cracked into a white turtle-shell pattern, cream stem
+4. 팽이버섯 (Flammulina velutipes (cultivated enoki)): bundle of long thin cream stems with tiny round caps
+5. 목이버섯 (Auricularia auricula-judae): dark brown translucent jelly shaped like a human ear
+6. 새송이버섯 (Pleurotus eryngii): king oyster: very thick white stem, small flat light-brown cap
+7. 먹물버섯 (Coprinus comatus): shaggy ink cap: tall white cylindrical cap with shaggy scales, black ink dripping at the rim
+8. 말불버섯 (Lycoperdon perlatum): white round puffball covered in tiny warts, a small puff of spores
+9. 꾀꼬리버섯 (Cantharellus cibarius): golden-orange chanterelle trumpet with wavy rim and ridged false gills
+10. 덕다리버섯 (Laetiporus sulphureus): chicken of the woods: stacked bright orange shelves with yellow edges
+11. 큰갓버섯 (Macrolepiota procera): parasol: tall thin stem with a ring, wide beige cap with brown scales and a brown center bump
+12. 민자주방망이버섯 (Lepista nuda): wood blewit: lilac-violet cap and gills, stout violet stem
+13. 기와버섯 (Russula virescens): green-teal cap cracked into tile-like patches, white stem
+14. 만가닥버섯 (Hypsizygus marmoreus): dense bunch of small marbled light-brown caps on white stems from one base
+15. 곰보버섯 (Morchella esculenta): morel: honeycomb-pitted conical tan cap, hollow white stem
+16. 달걀버섯 (Amanita hemibapha (Caesar's mushroom)): smooth orange-red cap rising out of a white egg-like sac, yellow stem
+17. 소혀버섯 (Fistulina hepatica): beefsteak fungus: moist red tongue-shaped shelf
+18. 능이버섯 (Sarcodon aspratus): dark brown funnel with rough upturned scales on top
+19. 송이버섯 (Tricholoma matsutake): matsutake: thick white stem, brown fibrous cap, a faint golden glow (legendary)
+20. 송로버섯 (Tuber melanosporum): black warty round truffle lump with a few golden sparkles (legendary)
+21. 싸리버섯 (Ramaria flava): pale yellow coral fungus branching like a broom
+22. 달빛표고 (fantasy variant of Lentinula edodes): shiitake with an indigo-blue cap whose cracks glow silver-white
+23. 주름버섯 (Agaricus campestris): field mushroom: white cap tilted to show pink gills, short stem
+24. 바다송이 (fantasy variant of Tricholoma matsutake): thick-stemmed matsutake with a sea-blue cap dusted with salt crystals and a tiny barnacle
+25. 벽돌먹물버섯 (fantasy variant of Coprinus comatus): shaggy ink cap with a brick-red scaled cap and black inky rim

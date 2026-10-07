@@ -1,0 +1,16 @@
+Sprite sheet: a 2x5 grid holding 10 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Ten cute chibi mushroom-critter characters of one family, front view, standing: each has a round cream face/body with big round eyes, a small smile and rosy cheeks, little brown feet, and a big mushroom cap on top. Same body shape for all; only the cap colors and the decoration differ.
+
+Assets in reading order (left to right, top to bottom):
+1. orange-red cap (#ff7a2a) with yellow (#ffd34a) spots, a little flame on top
+2. yellow cap (#ffe03a) with pale yellow spots, a small lightning bolt on top
+3. sky-blue cap (#5fc8ff) with pale blue spots, a water droplet on top
+4. gold cap (#f5c518) with cream spots, a shiny coin on top
+5. violet cap (#b07bff) with pale lilac spots, a little star on top
+6. green cap (#5fc85a) with pale green spots, two sprout leaves on top
+7. deep navy cap (#3a4a8a) with pale yellow spots, a crescent moon on top
+8. mint cap (#5fd8c0) with white spots, two white wind swirls on top
+9. grey cap (#8a8a86) with light grey spots, a smooth pebble on top
+10. chestnut-brown cap (#a0602a) with beige spots, a small acorn on top

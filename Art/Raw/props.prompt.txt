@@ -1,0 +1,22 @@
+Sprite sheet: a 4x4 grid holding 16 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Top-down game field props and particles for a forest pinball field, seen from directly above.
+
+Assets in reading order (left to right, top to bottom):
+1. a round tree stump bumper seen from above, cut face with growth rings, bark rim
+2. a mole hole: a dark round hole in a ring of dug-up dirt, seen from above
+3. an acorn switch: a brown acorn lying on the ground, seen from above
+4. the same acorn switch glowing golden-yellow, lit up
+5. a wide rounded-rectangle patch of soft bright moss with tiny glowing specks (flat, top-down, even border all around)
+6. a wide rounded-rectangle patch of clear blue stream water with small white ripples (flat, top-down, even border all around)
+7. a small round mound of soil and moss, seen from slightly above (base for a mushroom heap)
+8. a dark oval ground shadow with cracks (where something giant will burst out)
+9. a small clover sprig
+10. a tiny cluster of white and yellow wild flowers
+11. three small rounded pebbles
+12. a single orange autumn leaf
+13. a single small white snowflake
+14. a four-point white sparkle
+15. a four-point golden sparkle
+16. dark crack lines decal on a transparent background

@@ -4,7 +4,7 @@
 //
 // Usage:
 //   node Tools/codex-image.mjs --prompt "<what to draw>" --out Assets/Art/Generated/<name>.png
-//        [--transparent] [--ref <image>]... [--style <file>] [--timeout <sec>]
+//        [--transparent] [--ref <image>]... [--style <file>] [--search] [--timeout <sec>]
 //
 // Prints one JSON line on success: {"out": "...", "source": "...", "rgba": true}
 
@@ -32,6 +32,7 @@ function parseArgs(argv) {
     else if (a === "--style") opts.style = next();
     else if (a === "--timeout") opts.timeout = Number(next());
     else if (a === "--transparent") opts.transparent = true;
+    else if (a === "--search") opts.search = true;
     else fail(`unknown argument: ${a}`);
   }
   if (!opts.prompt || !opts.out) fail("--prompt and --out are required");
@@ -70,6 +71,7 @@ function buildPrompt(opts) {
     lines.push("", "Output requirements: transparent background (PNG with alpha channel), a single isolated subject, centered with some padding, no ground shadow, no text, no frame.");
   }
   if (opts.refs.length) lines.push("", "Use the attached image(s) as visual reference for style and consistency.");
+  if (opts.search) lines.push("", "You may web-search real references first (e.g. photos of the named species) so shapes and colors are accurate, then draw in the art style above.");
   lines.push("", "When the image is generated, reply with just: done");
   return lines.join("\n");
 }
@@ -101,6 +103,8 @@ async function main() {
   const startedAt = Date.now();
 
   const args = ["exec", "--skip-git-repo-check", "--json", "-s", "read-only", "-C", repoRoot];
+  // Live web search lets Codex look up real references (e.g. actual mushroom species) before drawing.
+  if (opts.search) args.push("-c", 'web_search="live"');
   for (const r of opts.refs) args.push("-i", path.resolve(r));
   args.push("-");
 
@@ -131,9 +135,10 @@ async function main() {
   const code = await new Promise((resolve) => child.on("close", resolve));
   clearTimeout(timer);
 
-  // Prefer this run's thread folder; fall back to anything written since we started.
-  const candidates = (threadId ? listImages(path.join(imagesRoot, threadId)) : [])
-    .concat(listImages(imagesRoot).filter((p) => fs.statSync(p).mtimeMs >= startedAt - 1000))
+  // Only this run's thread folder counts: other Codex runs (parallel sheets) write to the same root.
+  // Without a thread id, fall back to anything written since we started.
+  const own = threadId ? listImages(path.join(imagesRoot, threadId)) : [];
+  const candidates = (own.length || threadId ? own : listImages(imagesRoot).filter((p) => fs.statSync(p).mtimeMs >= startedAt - 1000))
     .sort((a, b) => fs.statSync(b).mtimeMs - fs.statSync(a).mtimeMs);
 
   if (!candidates.length) {

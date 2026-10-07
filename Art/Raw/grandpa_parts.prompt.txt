@@ -1,0 +1,22 @@
+Sprite sheet: a 4x4 grid holding 16 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Cut-out animation parts of the SAME mushroom-hunter grandpa as the attached reference, all drawn at the same scale, each part separate with a little extra overlap at the joints so they can be rigged. Neutral pose, front three-quarter view.
+
+Assets in reading order (left to right, top to bottom):
+1. the leather hunting hat with the feather
+2. the head without the hat: face with the eye scar, ears, braided grey beard, no eyes drawn (blank eye area)
+3. a pair of kind open eyes
+4. a pair of sparkling excited eyes with star highlights
+5. a pair of closed eyes (blink)
+6. the torso in the long olive coat with fur collar, spore vial bandolier and belt with mushroom trophies and dagger, no arms, no legs
+7. the lower hem of the coat (tail flap)
+8. the upper arm (shoulder to elbow) of the arm that holds the scythe
+9. the forearm and hand (elbow to fist) of the arm that holds the scythe
+10. the upper arm (shoulder to elbow) of the free arm
+11. the forearm and open hand (elbow to hand) of the free arm
+12. the left leg with boot
+13. the right leg with boot
+14. the big scythe alone
+15. a bushy grey eyebrow
+16. a bushy grey eyebrow, mirrored

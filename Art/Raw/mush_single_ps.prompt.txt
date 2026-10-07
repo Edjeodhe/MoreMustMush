@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+25 different real poisonous mushroom species, one single mushroom (or its natural small group) per cell, drawn as encyclopedia icons that show the species' true shape clearly.
+
+Assets in reading order (left to right, top to bottom):
+1. 무당버섯 (Russula emetica): bright red smooth cap, white gills and stem
+2. 노란다발 (Hypholoma fasciculare): cluster of small sulfur-yellow caps
+3. 노란각시버섯 (Leucocoprinus birnbaumii): lemon-yellow powdery bell cap on a slender yellow stem
+4. 맑은애주름버섯 (Mycena pura): small delicate lilac-purple cap on a thin stem
+5. 이끼꽃버섯 (Gliophorus psittacinus): parrot waxcap: slimy glossy dark-green small caps
+6. 비단빛깔때기버섯 (Clitocybe dealbata): pure silky white funnel shape
+7. 땀버섯 (Inocybe fastigiata): brown conical fibrous cap with a split edge
+8. 갈황색미치광이버섯 (Gymnopilus junonius): cluster of orange-gold caps
+9. 광대버섯 (Amanita muscaria): fly agaric: red cap with white warts, white stem with a skirt ring
+10. 뱀껍질광대버섯 (Amanita spissacea): grey-brown cap with snakeskin scale pattern, snake-patterned stem
+11. 붉은싸리버섯 (Ramaria formosa): salmon pink-orange coral fungus
+12. 알광대버섯 (Amanita phalloides): death cap: olive-green cap, white skirt ring, white egg sac at the base
+13. 마귀곰보버섯 (Gyromitra esculenta): false morel: brain-like wrinkled reddish-brown cap
+14. 독깔때기버섯 (Paralepistopsis acromelalga): tan-orange funnel cap
+15. 화경버섯 (Omphalotus japonicus): orange-brown fan with gills glowing green
+16. 개나리광대버섯 (Amanita subjunquillea): forsythia-yellow cap, white ring and egg sac
+17. 마귀광대버섯 (Amanita pantherina): panther cap: brown cap scattered with white warts
+18. 독우산광대버섯 (Amanita virosa): destroying angel: all-white umbrella with ring and egg sac, faint eerie glow
+19. 붉은사슴뿔버섯 (Trichoderma cornu-damae): poison fire coral: red finger-like horns (legendary)
+20. 갈색고리갓버섯 (Lepiota brunneoincarnata): small cap with brown scales and a ring, faint glow (legendary)
+21. 흰가시광대버섯 (Amanita echinocephala): white cap covered in spiky warts, ring
+22. 달빛애주름버섯 (fantasy variant of Mycena chlorophos): small mycena glowing soft green
+23. 말똥버섯 (Panaeolus semiovatus): grey-brown bell cap on a thin stem growing from a small dung pat
+24. 해파리버섯 (fantasy variant of a jelly fungus): translucent purple jellyfish-like cap with dangling tendrils
+25. 콘크리트광대버섯 (fantasy variant of Amanita): grey concrete-textured cracked amanita cap with a ring, bursting from a concrete chunk (legendary)

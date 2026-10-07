@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+25 mushroom colonies of different species: each cell is a big chunky heap of MANY mushrooms of that one species packed tightly on a small mound of soil and moss, like a boss-sized clump. Massiveness and visual appeal matter more than detail.
+
+Assets in reading order (left to right, top to bottom):
+1. 구름버섯 (Trametes versicolor): turkey tail: thin overlapping fans with concentric grey, blue and tan bands
+2. 치마버섯 (Schizophyllum commune): small fuzzy white fan with split grey gills
+3. 간버섯 (Pycnoporus cinnabarinus): bright cinnabar-orange bracket shelf
+4. 흰목이 (Tremella fuciformis): snow fungus: white translucent jelly with ruffled petal lobes
+5. 잎새버섯 (Grifola frondosa): maitake: rosette of overlapping grey-brown leaf-like caps
+6. 한입버섯 (Cryptoporus volvatus): round chestnut-like orange-tan ball with a small pore hole
+7. 복령 (Wolfiporia cocos): brown bark-covered lump, one cut face showing white flesh
+8. 저령 (Polyporus umbellatus): many small round light-brown caps on branching stems like a bouquet
+9. 꽃송이버섯 (Sparassis crispa): cauliflower fungus: cream ruffled mass of curly lobes
+10. 노루궁뎅이 (Hericium erinaceus): lion's mane: white shaggy mass of hanging icicle spines
+11. 말굽버섯 (Fomes fomentarius): grey hoof-shaped hard bracket with concentric growth rings
+12. 잔나비걸상버섯 (Ganoderma applanatum): large flat brown semicircle shelf with a white rim
+13. 목도리방귀버섯 (Geastrum triplex): collared earthstar: brown star rays with a collar holding a round spore ball, a little spore puff
+14. 소나무잔나비버섯 (Fomitopsis pinicola): dark brown bracket with a red-orange and yellow banded edge
+15. 영지버섯 (Ganoderma lucidum): reishi: glossy lacquered red-brown kidney-shaped cap with a yellow rim and side stem
+16. 상황버섯 (Phellinus linteus): hard brown shelf with a bright yellow rim
+17. 차가버섯 (Inonotus obliquus): chaga: black cracked charcoal-like lump with rusty orange showing inside
+18. 말똥진흙버섯 (Phellinus igniarius): dark grey-brown hoof bracket with a finely cracked surface and brown rim
+19. 동충하초 (Cordyceps militaris): bright orange club-shaped fruiting bodies sprouting from a small pupa, soft glow (legendary)
+20. 눈꽃동충하초 (Isaria japonica): white powdery snowflake-like branches sprouting from a silkworm pupa, soft glow (legendary)
+21. 자작나무버섯 (Fomitopsis betulina): birch polypore: smooth white rounded shelf with a rolled edge on a strip of birch bark
+22. 달빛동충하초 (fantasy variant of Cordyceps militaris): pale blue glowing club-shaped fruiting bodies
+23. 선녀낙엽버섯 (Marasmius oreades): fairy ring mushroom: a small ring of tan caps with center bumps on thin stems
+24. 산호버섯 (fantasy variant of Ramaria coral fungus): pink coral-shaped branches with sea water droplets
+25. 녹슨영지 (fantasy variant of Ganoderma lucidum): reishi with a rusty iron-brown metallic cap and a bolt stuck in it

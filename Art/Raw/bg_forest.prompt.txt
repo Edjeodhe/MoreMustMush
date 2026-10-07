@@ -1,0 +1,1 @@
+Wide landscape 16:9 game background: top-down view of a forest-floor pinball field. Soft mossy green grass with a few clovers and gentle light patches. All four edges are framed by a thin border of rounded grey rocks and roots (about 4% of the width). The middle is calm and fairly plain so small game objects read clearly. No mushrooms, no characters, no text, no UI.

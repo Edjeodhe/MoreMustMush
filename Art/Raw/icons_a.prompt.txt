@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Square game UI icons, each a single bold object centered in its cell, consistent size.
+
+Assets in reading order (left to right, top to bottom):
+1. a shiny gold coin
+2. an edible mushroom icon: cream stem with a round ORANGE cap
+3. a medicinal mushroom icon: cream stem with a round GREEN cap
+4. a poisonous mushroom icon: cream stem with a round PURPLE cap with white dots
+5. a tax bill: a paper scroll with lines and a red stamp
+6. mycelite: a bumpy purple stone with glowing teal mycelium threads and a tiny mushroom sprout on top
+7. a small tied burlap sack with tiny spores floating up out of it
+8. a round brass stopwatch
+9. sunny weather: a smiling round sun
+10. light rain: a soft cloud with a few rain drops
+11. full moon night: a big glowing full moon
+12. autumn leaves: two falling orange maple leaves
+13. thunderstorm: a dark cloud with a yellow lightning bolt
+14. rainbow arching over a small cloud
+15. thick fog: layered grey mist bands
+16. spore wind: purple swirling wind with spores
+17. heavy rain storm: a big wave with heavy rain
+18. cold snap: an icy blue snowflake
+19. drought: cracked dry earth under a hot sun
+20. forest region: two round pine trees
+21. moonlit night region: a crescent moon over dark trees
+22. field region: golden wheat stalks
+23. sea region: a curling blue wave over sand
+24. mushroom ruins region: a ruined house with a giant mushroom growing through it
+25. a golden trophy cup

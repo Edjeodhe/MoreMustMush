@@ -1,6 +1,8 @@
-MoreMush — cozy 2D mushroom-farming game, landscape 1920x1080.
-- Look: cute cartoon, soft cel shading, rounded chunky shapes, thick dark-brown outline (#3b2414).
-- Palette: warm wood browns (#7a4f2e, #3b2414), cream (#f6ead2, #e8d6b4), accent orange (#f28c28),
-  green (#3fae4a), purple (#9b4fd1), gold (#f5c518), sky blue (#5fb8ff).
-- Lighting: soft top-left light, gentle highlights, no harsh realism, no photographic textures.
-- Readability: clear silhouette that reads at 64px icon size.
+MORE MUST MUSH visual guide (기획서 비주얼 기획서 / 컨셉기획서 4장):
+- 2D game art, cel shading, simple and flat. Reference feel: Cookie Run: Kingdom item and character art.
+- Line art: thick, slightly textured brush outline in a darker shade of the part's own color (not pure black).
+- Shading: chunky blocks of light and shadow, simplified texture detail, soft top-left light.
+- Color: clear, vivid, casual colors; at most two main colors per part. Overall world tone is soft warm browns.
+- Shapes: natural motifs, rounded and soft, chunky and friendly. Nothing sharp-edged or realistic-gritty.
+- Readability: strong silhouette that still reads at 64 px.
+- No text, no labels, no frames, no drop shadow on the ground unless asked.

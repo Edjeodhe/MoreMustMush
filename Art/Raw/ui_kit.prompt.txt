@@ -1,0 +1,15 @@
+Sprite sheet: a 3x3 grid holding 9 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A UI kit of EMPTY interface frames and buttons (no icons, no symbols, no text inside them) for a cozy wooden game interface, drawn flat and front-facing. Panels and buttons must have even, uniform borders on all sides so they can be 9-sliced.
+
+Assets in reading order (left to right, top to bottom):
+1. a square wooden frame panel: thick rounded dark-brown wood border (#7a4f2e) around a cream paper center (#f6ead2)
+2. a plain square cream paper card (#fffaf0) with a thin tan rounded border
+3. a rounded rectangle button of light cream-to-tan wood with a dark brown outline
+4. a rounded rectangle button of glossy honey-yellow with a dark brown outline
+5. a rounded rectangle button of coral-red with a dark brown outline
+6. a round wooden badge with a cream center
+7. a long thin horizontal wooden log platform with a small green leaf at each end (very wide and short)
+8. a wooden signpost arrow board pointing right
+9. a woven wooden harvest basket seen from the front, open top
