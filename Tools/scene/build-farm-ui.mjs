@@ -221,3 +221,10 @@ const fixes = created.map(([path, ap]) => ({ tool: "manage_components", params: 
   properties: { localScale: /FootR$/.test(path) ? [-1, 1, 1] : [1, 1, 1], anchoredPosition3D: ap ? [ap[0], ap[1], 0] : [0, 0, 0] } } }));
 for (let i = 0; i < fixes.length; i += 25) await call("batch_execute", { commands: fixes.slice(i, i + 25), fail_fast: false });
 console.log(`fixed ${fixes.length} transforms`);
+
+// modal panels start hidden (ModalHost shows one at a time; an active sibling would show behind every modal)
+await call("execute_code", { action: "execute", code: `var m = GameObject.Find("Canvas").transform.Find("Modal");
+foreach (var n in new[] { "DecoPanel", "PetCardPanel" }) m.Find(n).gameObject.SetActive(false);
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+return "hidden";` });
+console.log("modal panels hidden");
