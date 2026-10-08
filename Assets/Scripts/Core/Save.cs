@@ -24,7 +24,6 @@ namespace MoreMush
         public string theme = "forest";
         public List<Quest> quests = new List<Quest>();   // 마을 의뢰 (버섯 상점)
         public Farm farm = new Farm();             // 버섯 농장 (목장·밭)
-        public TaxState tax = new TaxState();
         public Records rec = new Records();
         public int rounds;
         public double play;
@@ -50,7 +49,6 @@ namespace MoreMush
         [Serializable] public class Bld { public int uid, gx, gy; public string id, critter; public double t0, at; public bool done; }
         [Serializable] public class Quest { public string id, npc; public double cnt; public int line; }
         [Serializable] public class CodexEntry { public double n; public int first; public bool gold, giant; }
-        [Serializable] public class TaxState { public int cycle = 1, roundsIn, paid, unpaid; public double income, debt; }
 
         [Serializable]
         public class Records

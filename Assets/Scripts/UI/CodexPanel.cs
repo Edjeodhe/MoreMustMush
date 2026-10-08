@@ -72,13 +72,14 @@ namespace MoreMush
                 detailDesc.text = own ? "숲을 깡총깡총 뛰어다니던 캐릭터 버섯. 지금은 버섯 농장에서 뛰어놀고 있어요." : $"라운드 중 가끔({Mathf.RoundToInt(SPECIAL_P * 100)}%) 나타나요. {SPECIAL_LIFE}초 안에 잡지 못하면 숲으로 도망쳐요.";
                 detailStars.gameObject.SetActive(false); detailAb.gameObject.SetActive(false); detailWarn.gameObject.SetActive(false);
                 detailTrait.text = own ? $"보유 중 · 보유 효과: {FxText(k.id)}" : "잡으면 버섯 농장에 들어와 일을 도와요";
-                detailRec.text = "이미 잡은 특수 버섯을 또 잡으면 이번 사이클 세금의 30%만큼 보너스 골드";
+                detailRec.text = "이미 잡은 특수 버섯을 또 잡으면 보너스 골드 (스테이지가 오를수록 커져요)";
                 return;
             }
             var sp = SP[selected]; G.codex.TryGetValue(sp.id, out var e);
             bool h = Harvested(sp.id), un = IsUnlockedSp(sp);
             string trait = sp.jelly ? TRAIT_TEXT["jelly"] : sp.spore != null ? TRAIT_TEXT[sp.spore] : sp.wander ? TRAIT_TEXT["wander"] + " · 항상 떠돌이" : "";
             string tierPill = $"<size=50%><mark={TIERS[sp.t].color}55>  {TIERS[sp.t].name}  </mark></size>";
+            if (sp.boss > 0) tierPill += $" <size=50%><mark=#c0392b>  {UIUtil.Ic(BOSS_ICON)} 스테이지 {sp.boss} 보스  </mark></size>";
             if (h || un)
             {
                 int s = h ? StarOf(sp.id) : 0; double n = e?.n ?? 0;

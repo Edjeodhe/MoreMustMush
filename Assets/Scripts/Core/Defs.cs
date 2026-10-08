@@ -73,7 +73,7 @@ namespace MoreMush
             public string c, n, sh, c1, c2, pat, d;
             public int t, idx;
             public string id, trait, ab, afterId, after, theme, spore;
-            public int cnt, tax;
+            public int cnt, boss;   // boss: 이 버섯이 보스로 나오는 스테이지 (보스 전투는 아직 없어 그 스테이지에 닿으면 해금)
             public bool init, jelly, wander, glow, thick, tall, small, big, leaf, ring, horn;
         }
 
@@ -94,18 +94,18 @@ namespace MoreMush
             new[] { "ed", "새송이버섯", "0", "cap", "#c9a77e", "#f4ecdc", "", "thick after:팽이버섯 cnt:15", "굵고 하얀 대가 통통한 버섯. 큰느타리라고도 한다." },
             new[] { "ed", "먹물버섯", "0", "cylinder", "#f4f2ec", "#2b2a33", "scales", "after:목이버섯 cnt:20", "다 자라면 갓이 스스로 녹아 먹물 같은 액체가 된다." },
             new[] { "ed", "말불버섯", "0", "ball", "#f3efe3", "#d6cdb6", "warts", "spore:slow after:새송이버섯 cnt:20", "다 익으면 살짝만 눌러도 연기처럼 포자를 뿜는다." },
-            new[] { "ed", "꾀꼬리버섯", "1", "trumpet", "#f6a44e", "#f9c98a", "", "tax:1", "살구 향이 나는 나팔 모양 버섯. 서양에서는 샹트렐이라 부른다." },
+            new[] { "ed", "꾀꼬리버섯", "1", "trumpet", "#f6a44e", "#f9c98a", "", "boss:4", "살구 향이 나는 나팔 모양 버섯. 서양에서는 샹트렐이라 부른다." },
             new[] { "ed", "덕다리버섯", "1", "shelf", "#f28a22", "#f7d44a", "", "after:표고 cnt:30", "나무에 선반처럼 층층이 붙고, 닭고기 같은 식감이라고 한다." },
             new[] { "ed", "큰갓버섯", "1", "cap", "#a3785a", "#efe3cf", "scales", "tall after:먹물버섯 cnt:25", "키가 30cm 넘게 자라는 커다란 우산 버섯." },
             new[] { "ed", "민자주방망이버섯", "1", "cap", "#a88bd2", "#cdbbea", "", "after:꾀꼬리버섯 cnt:15", "갓과 주름이 모두 연보랏빛인 늦가을 버섯." },
             new[] { "ed", "기와버섯", "1", "cap", "#4fa596", "#dfe9e2", "crack", "after:덕다리버섯 cnt:15", "청록빛 갓 표면이 기와처럼 잘게 갈라진다." },
             new[] { "ed", "만가닥버섯", "1", "cluster", "#cdb49a", "#efe5d6", "", "after:말불버섯 cnt:25", "한 뿌리에서 만 가닥으로 갈라진 듯 빽빽하게 모여 자란다." },
             new[] { "ed", "곰보버섯", "2", "cone", "#b88a55", "#efe2c8", "honey", "after:큰갓버섯 cnt:20", "갓이 벌집처럼 움푹움푹 파인 봄 버섯. 반드시 익혀 먹는다." },
-            new[] { "ed", "달걀버섯", "2", "egg", "#e8452c", "#f8f3ea", "", "tax:4", "하얀 알 같은 주머니를 깨고 주홍빛 갓이 올라온다." },
+            new[] { "ed", "달걀버섯", "2", "egg", "#e8452c", "#f8f3ea", "", "boss:13", "하얀 알 같은 주머니를 깨고 주홍빛 갓이 올라온다." },
             new[] { "ed", "소혀버섯", "2", "shelf", "#b3222d", "#e0555a", "", "after:기와버섯 cnt:20", "소 혀처럼 붉고 촉촉하며, 자르면 붉은 즙이 난다." },
             new[] { "ed", "능이버섯", "2", "trumpet", "#6b4a35", "#a07a5a", "scales", "after:곰보버섯 cnt:12", "1능이 2표고 3송이라 할 만큼 향이 진한 가을 버섯." },
             new[] { "ed", "송이버섯", "3", "cap", "#8c6b4b", "#f3e8d6", "", "thick glow after:능이버섯 cnt:10", "살아 있는 소나무 뿌리와 함께 자라 인공 재배가 어렵다." },
-            new[] { "ed", "송로버섯", "3", "lump", "#3a2a22", "#6a5040", "", "glow tax:8", "땅속에서 자라 돼지나 개가 냄새로 찾아낸다. 트러플이라 부른다." },
+            new[] { "ed", "송로버섯", "3", "lump", "#3a2a22", "#6a5040", "", "glow boss:25", "땅속에서 자라 돼지나 개가 냄새로 찾아낸다. 트러플이라 부른다." },
             new[] { "ed", "싸리버섯", "1", "coral", "#f3d9a4", "#fff1cf", "", "theme:forest", "빗자루처럼 갈라진 연노랑 가지. 데쳐 먹는 가을 숲 버섯." },
             new[] { "ed", "달빛표고", "2", "cap", "#5a6fa8", "#dfe6ff", "crack", "theme:night glow", "(판타지) 달빛을 받으면 갓의 갈라진 틈이 은빛으로 빛난다." },
             new[] { "ed", "주름버섯", "1", "button", "#f4efe6", "#d8a7a0", "", "theme:field", "풀밭에 흔한 양송이의 친척. 주름이 분홍빛이다." },
@@ -121,17 +121,17 @@ namespace MoreMush
             new[] { "md", "복령", "0", "lump", "#7a5236", "#efe6d2", "", "after:잎새버섯 cnt:20", "소나무 뿌리에 붙어 땅속에서 자라는 덩어리. 속살은 하얗다." },
             new[] { "md", "저령", "0", "cluster", "#9c8064", "#e8dcc6", "", "after:한입버섯 cnt:20", "작은 갓이 수십 개씩 가지 끝에 달려 꽃다발처럼 보인다." },
             new[] { "md", "꽃송이버섯", "1", "flower", "#f3e3bd", "#dcc38a", "", "after:잎새버섯 cnt:30", "꽃양배추처럼 주름진 크림색 덩어리로 자란다." },
-            new[] { "md", "노루궁뎅이", "1", "furry", "#f8f4ea", "#d9ccb4", "", "tax:2", "하얀 털 같은 침이 고드름처럼 늘어진다." },
+            new[] { "md", "노루궁뎅이", "1", "furry", "#f8f4ea", "#d9ccb4", "", "boss:7", "하얀 털 같은 침이 고드름처럼 늘어진다." },
             new[] { "md", "말굽버섯", "1", "shelf", "#9c9c96", "#66665f", "rings", "after:복령 cnt:25", "말발굽 모양으로 해마다 나이테 같은 층이 는다." },
             new[] { "md", "잔나비걸상버섯", "1", "shelf", "#8b6b4a", "#ece0c6", "", "big after:말굽버섯 cnt:15", "원숭이가 걸터앉을 만큼 크고 넓은 반원 선반." },
             new[] { "md", "목도리방귀버섯", "1", "star", "#b89c78", "#8a6d4f", "", "spore:slow after:저령 cnt:25", "별 모양 목도리 위 공에서 방귀처럼 포자가 퐁 나온다." },
             new[] { "md", "소나무잔나비버섯", "1", "shelf", "#5a3324", "#f0b23a", "rings", "after:꽃송이버섯 cnt:15", "소나무에 붙는 선반 버섯. 가장자리가 노랗고 빨갛게 띠를 두른다." },
-            new[] { "md", "영지버섯", "2", "kidney", "#a41f2b", "#eaa53a", "", "tax:5", "옻칠한 듯 붉은 광택이 나는 콩팥 모양 버섯." },
+            new[] { "md", "영지버섯", "2", "kidney", "#a41f2b", "#eaa53a", "", "boss:16", "옻칠한 듯 붉은 광택이 나는 콩팥 모양 버섯." },
             new[] { "md", "상황버섯", "2", "shelf", "#6f4a2a", "#f3c42e", "", "after:잔나비걸상버섯 cnt:20", "갈색 선반에 샛노란 테두리가 둘러져 있다." },
             new[] { "md", "차가버섯", "2", "lump", "#221c19", "#8b5a3a", "", "after:소나무잔나비버섯 cnt:20", "자작나무에 붙은 검은 숯덩이처럼 보인다." },
             new[] { "md", "말똥진흙버섯", "2", "shelf", "#3e3a36", "#9a7a52", "crack", "after:상황버섯 cnt:12", "버드나무 등에 붙는 단단한 말굽형 버섯. 표면이 잘게 갈라진다." },
             new[] { "md", "동충하초", "3", "club", "#f27a1a", "#ffb05a", "", "wander glow after:차가버섯 cnt:10", "곤충 몸에서 주황 곤봉처럼 솟아난다." },
-            new[] { "md", "눈꽃동충하초", "3", "club", "#f5f0d8", "#fff9c8", "", "wander glow tax:10", "누에 번데기에서 눈꽃처럼 하얀 가루 가지가 피어난다." },
+            new[] { "md", "눈꽃동충하초", "3", "club", "#f5f0d8", "#fff9c8", "", "wander glow boss:31", "누에 번데기에서 눈꽃처럼 하얀 가루 가지가 피어난다." },
             new[] { "md", "자작나무버섯", "1", "shelf", "#efe7d6", "#b7a78f", "", "theme:forest", "자작나무에만 붙는 하얀 선반 버섯." },
             new[] { "md", "달빛동충하초", "2", "club", "#9fd0ff", "#e6f4ff", "", "theme:night wander glow", "(판타지) 밤에만 땅 위로 올라와 떠도는 푸른 곤봉." },
             new[] { "md", "선녀낙엽버섯", "1", "cap", "#e8c99a", "#f6e6c8", "", "theme:field small", "잔디밭에 둥근 고리 모양으로 줄지어 난다. 요정의 고리라고도 한다." },
@@ -146,18 +146,18 @@ namespace MoreMush
             new[] { "ps", "비단빛깔때기버섯", "0", "trumpet", "#fbfbfb", "#e5e5ef", "", "after:맑은애주름버섯 cnt:15", "순백색 비단 같은 깔때기 모양." },
             new[] { "ps", "땀버섯", "0", "bell", "#b08a5a", "#e2cfa8", "scales", "after:이끼꽃버섯 cnt:20", "먹으면 땀이 비 오듯 난다는 갈색 고깔 버섯." },
             new[] { "ps", "갈황색미치광이버섯", "0", "cluster", "#e08a2a", "#f6c46a", "", "after:비단빛깔때기버섯 cnt:20", "주황빛 다발 버섯. 먹으면 환각에 빠진다고 한다." },
-            new[] { "ps", "광대버섯", "1", "cap", "#d9271c", "#ffffff", "dots", "spore:weak tax:3", "빨간 갓에 하얀 사마귀 점. 동화 속 그 버섯." },
+            new[] { "ps", "광대버섯", "1", "cap", "#d9271c", "#ffffff", "dots", "spore:weak boss:10", "빨간 갓에 하얀 사마귀 점. 동화 속 그 버섯." },
             new[] { "ps", "뱀껍질광대버섯", "1", "cap", "#8a7a65", "#dccfb9", "scales", "spore:weak after:땀버섯 cnt:25", "갓에 뱀 비늘 같은 무늬가 있다." },
             new[] { "ps", "붉은싸리버섯", "1", "coral", "#f47d6b", "#f8b58c", "", "after:갈황색미치광이버섯 cnt:25", "분홍·주황 산호처럼 가지를 친다." },
             new[] { "ps", "알광대버섯", "1", "cap", "#8e9c4c", "#f3f3ea", "", "spore:both ring after:뱀껍질광대버섯 cnt:15", "올리브색 갓과 흰 턱받이. 치명적인 맹독 버섯." },
             new[] { "ps", "마귀곰보버섯", "1", "brain", "#8a3b2a", "#dcbc9c", "", "after:붉은싸리버섯 cnt:15", "뇌처럼 주름진 적갈색 갓. 곰보버섯과 헷갈리기 쉽다." },
             new[] { "ps", "독깔때기버섯", "1", "trumpet", "#d9a06a", "#f0d2a8", "", "after:광대버섯 cnt:15", "깔때기 모양 갈색 버섯. 먹으면 손발이 불에 덴 듯 아프다." },
-            new[] { "ps", "화경버섯", "2", "fan", "#e8923a", "#8dff9e", "gills", "glow tax:6", "낮엔 주황빛, 밤엔 주름이 초록빛으로 은은하게 빛난다." },
+            new[] { "ps", "화경버섯", "2", "fan", "#e8923a", "#8dff9e", "gills", "glow boss:19", "낮엔 주황빛, 밤엔 주름이 초록빛으로 은은하게 빛난다." },
             new[] { "ps", "개나리광대버섯", "2", "cap", "#f2d22a", "#fbf3c9", "", "ring after:알광대버섯 cnt:20", "개나리처럼 노란 갓을 가진 광대버섯." },
             new[] { "ps", "마귀광대버섯", "2", "cap", "#7a5a3a", "#ffffff", "dots", "spore:weak after:마귀곰보버섯 cnt:20", "갈색 갓에 흰 사마귀가 흩뿌려진 광대버섯." },
             new[] { "ps", "독우산광대버섯", "2", "cap", "#fbfbf6", "#e9ecef", "", "spore:both ring glow after:개나리광대버섯 cnt:12", "온통 새하얀 우산. 죽음의 천사라 불린다." },
             new[] { "ps", "붉은사슴뿔버섯", "3", "coral", "#e2241a", "#ff7b3a", "", "horn after:마귀광대버섯 cnt:10", "불꽃 같은 붉은 손가락 모양. 만지기만 해도 위험하다." },
-            new[] { "ps", "갈색고리갓버섯", "3", "cap", "#c9b49a", "#7a4a2a", "scales", "ring glow tax:12", "작고 얌전해 보이지만 독우산광대버섯과 같은 맹독을 품었다." },
+            new[] { "ps", "갈색고리갓버섯", "3", "cap", "#c9b49a", "#7a4a2a", "scales", "ring glow boss:37", "작고 얌전해 보이지만 독우산광대버섯과 같은 맹독을 품었다." },
             new[] { "ps", "흰가시광대버섯", "2", "cap", "#f6f4ee", "#e8e2d6", "warts", "theme:forest ring", "하얀 갓에 가시 같은 사마귀가 돋은 독버섯." },
             new[] { "ps", "달빛애주름버섯", "1", "cap", "#7ad6a0", "#d8ffe6", "", "theme:night small glow", "(판타지) 밤이면 초록빛을 내는 작은 애주름버섯." },
             new[] { "ps", "말똥버섯", "1", "bell", "#9a8a74", "#3a3430", "", "theme:field", "소똥·말똥 위에 자라는 회갈색 종 모양 버섯." },
@@ -233,14 +233,12 @@ namespace MoreMush
         public static readonly Dictionary<string, Special> SPC = SPECIALS.ToDictionary(s => s.id);
         public const float SPECIAL_P = 0.3f, SPECIAL_LIFE = 10;
 
-        // ===== 세금 =====
-        public static class TAX
-        {
-            public const int every = 3;
-            public const float @base = 100, growth = 1.5f, share = 0.35f, rate0 = 0.2f, rateStep = 0.1f, rateMax = 0.5f;
-        }
-        public static double TaxAmount(int cycle) => Math.Ceiling(TAX.@base * Math.Pow(TAX.growth, cycle - 1) / 10) * 10;
-        public static double TaxRate(int unpaid) => U.JsRound(Math.Min(TAX.rateMax, TAX.rate0 + TAX.rateStep * unpaid) * 100) / 100;
+        // ===== 보스 =====
+        public const string BOSS_ICON = "trophy";   // 임시 아이콘. 보스 전용 리소스가 생기면 바꾼다
+
+        // ===== 진행도 골드 =====
+        // 포자 값·자동 수확 골드·특수 버섯 보너스의 기준. 100골드에서 3스테이지마다 ×1.5
+        public static double StageGold(int stage) => Math.Ceiling(100 * Math.Pow(1.5, (stage - 1) / 3) / 10) * 10;
 
         public static readonly Dictionary<string, string> TRAIT_TEXT = new Dictionary<string, string>
         {
@@ -272,7 +270,7 @@ namespace MoreMush
                         case "init": s.init = true; break;
                         case "after": s.after = v; break;
                         case "cnt": s.cnt = int.Parse(v); break;
-                        case "tax": s.tax = int.Parse(v); break;
+                        case "boss": s.boss = int.Parse(v); break;
                         case "theme": s.theme = v; break;
                         case "spore": s.spore = v; break;
                         case "jelly": s.jelly = true; break;

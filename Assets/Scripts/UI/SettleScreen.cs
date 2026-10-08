@@ -14,8 +14,8 @@ namespace MoreMush
         public RectTransform basket;
         public Image basketShroomPrefab;
         public TMP_Text[] gainTexts = new TMP_Text[3];
-        public TMP_Text saleValue, scoreLabel, scoreValue, bonusLabel, bonusValue, debtValue, goldValue, meta, themeText, recsText, toTreeText;
-        public GameObject bonusRow, debtRow, themeBox, unlockBox, newsBox, recsBox;
+        public TMP_Text saleValue, scoreLabel, scoreValue, bonusLabel, bonusValue, goldValue, meta, themeText, recsText, toTreeText;
+        public GameObject bonusRow, themeBox, unlockBox, newsBox, recsBox;
         public RectTransform unlockCards, newsCards;
         [AssetPath("Assets/Prefabs/UI/NewCard.prefab")] public NewCard cardPrefab;
         public RectTransform card;
@@ -39,10 +39,7 @@ namespace MoreMush
             bonusRow.SetActive(s.bonusGold > 0);
             bonusLabel.text = $"보너스 골드 <size=70%><color=#8a6a4a>(엽전 수확기 {U.Fmt(s.coinGold)} · 특수 버섯 {U.Fmt(s.bonusGold - s.coinGold)})</color></size>";
             bonusValue.text = "+" + U.Fmt(s.bonusGold);
-            debtRow.SetActive(s.debtTaken > 0);
-            debtValue.text = "−" + U.Fmt(s.debtTaken);
-            bool due = G.tax.roundsIn >= TAX.every;
-            meta.text = $"창고 {U.Fmt(InvTotal())}개 (≈{U.Fmt(InvValue())}골드) · {(due ? $"{UIUtil.Ic("tax")} 세금 고지서가 도착했어요!" : $"세금 청구까지 {TaxRoundsLeft()}라운드")}";
+            meta.text = $"창고 {U.Fmt(InvTotal())}개 (≈{U.Fmt(InvValue())}골드)";
             themeBox.SetActive(s.newTheme != null);
             if (s.newTheme != null) { var th = THEME[s.newTheme]; themeText.text = $"{UIUtil.Ic(th.icon)} 새 지역 열림: <color=#2a6ab8>{th.n}</color>\n<size=55%><color=#4a6a8a>{th.d} · 다음 라운드부터 이 지역으로 가요</color></size>"; }
 
@@ -58,7 +55,7 @@ namespace MoreMush
             if (s.goldHv) recs.Insert(0, $"{UIUtil.Ic("medal")} 황금 수확기 해금!");
             recsBox.SetActive(recs.Count > 0);
             recsText.text = string.Join("\n", recs);
-            toTreeText.text = due ? "세금 고지서 확인 ▶" : "균사 트리로 ▶";
+            toTreeText.text = "균사 트리로 ▶";
             SpawnBasket(s);
             FitCards();
             FitToScreen();

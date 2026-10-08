@@ -11,21 +11,13 @@ namespace MoreMush
     public class BulkPanel : MonoBehaviour
     {
         public string br = "all";
-        public bool keep = true;
-        public TMP_Text keepLabel, plan;
-        public Toggle keepToggle;
+        public TMP_Text plan;
         public Transform tabs;          // branch tab buttons (UIAction arg = branch)
         public Button goButton;
-
-        void Awake()
-        {
-            keepToggle.onValueChanged.AddListener(v => { keep = v; Render(); });
-        }
 
         string[] Branches => br == "all" ? CAT_KEYS : new[] { br };
 
         public void SetBranch(string b) { br = b; Render(); }
-        public void ToggleKeep() { keep = !keep; Render(); }
 
         public void Render()
         {
@@ -37,9 +29,7 @@ namespace MoreMush
                 tab.GetComponent<Image>().color = on ? U.Hex(col) : Color.white;
                 tab.GetComponentInChildren<TMP_Text>().color = on ? Color.white : U.Hex("#3b2414");
             }
-            keepToggle.SetIsOnWithoutNotify(keep);
-            keepLabel.text = $"다음 세금 예상액({U.Fmt(TaxBill())}골드)만큼 남기기";
-            var p = BulkBuy(Branches, keep ? TaxBill() : 0, true);
+            var p = BulkBuy(Branches, 0, true);
             plan.text = $"보유 {U.Fmt(G.gold)}골드 → 강화 <color=#2a6ab8>{p.levels}</color>단계 · 비용 <color=#2a6ab8>{U.Fmt(p.spent)}</color>골드 · 남는 골드 {U.Fmt(G.gold - p.spent)}";
             goButton.interactable = p.levels > 0;
         }
@@ -47,7 +37,7 @@ namespace MoreMush
         public void Go()
         {
             var before = G.nodes.Where(kv => kv.Value > 0).Select(kv => kv.Key).ToHashSet();
-            var res = BulkBuy(Branches, keep ? TaxBill() : 0, false);
+            var res = BulkBuy(Branches, 0, false);
             if (res.levels == 0) { Snd.Err(); return; }
             GameFlow.I.tree.world.MarkGrown(G.nodes.Where(kv => kv.Value > 0 && !before.Contains(kv.Key)).Select(kv => kv.Key));
             Snd.Buy(); GameFlow.I.CloseModal(); GameFlow.I.tree.Refresh();

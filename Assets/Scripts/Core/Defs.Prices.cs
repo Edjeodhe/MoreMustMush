@@ -5,7 +5,7 @@ namespace MoreMush
     public static partial class Defs
     {
         // 노드 레벨별 골드 가격표. Assets/Editor/BalanceSim.cs의 가격 맞추기(TunePrices)로 생성한다.
-        // 기준: 평균 이하 플레이어(BalanceSim.SKILL), 세금 제외, 기본 트리 약 2시간, 지역 잠금 없이 골드로만. 비어 있는 노드는 기본가 × 증가율^레벨을 쓴다.
+        // 기준: 평균 이하 플레이어(BalanceSim.SKILL), 기본 트리 약 2시간, 지역 잠금 없이 골드로만. 비어 있는 노드는 기본가 × 증가율^레벨을 쓴다.
         public static readonly Dictionary<string, double[]> PRICE_TABLE = new Dictionary<string, double[]>
         {
             // 초반
@@ -50,7 +50,6 @@ namespace MoreMush
             ["ed_rare"] = new double[] { 320000, 1200000, 4400000 },
             ["ed_size"] = new double[] { 180000, 610000, 2300000 },
             ["ed_dev"] = new double[] { 150000, 410000 },
-            ["ed_tax"] = new double[] { 460000, 1700000 },
             ["md_combo2"] = new double[] { 1100000, 4100000 },
             ["md_templife"] = new double[] { 6000000, 23000000 },
             ["sharpen"] = new double[] { 190000 },

@@ -308,7 +308,7 @@ namespace MoreMush
         public static (double gold, double gem, double dia) AutoRates()
         {
             double m = AutoMul();
-            double gold = Math.Max(AUTO.goldMin, TaxAmount(G.tax.cycle) * AUTO.goldTaxK) * (1 + Fx("autoGold")) * m;
+            double gold = Math.Max(AUTO.goldMin, StageGold(StageNow()) * AUTO.goldStageK) * (1 + Fx("autoGold")) * m;
             return (gold, AUTO.gemH * (1 + Fx("autoGem")) * m, AUTO.diaH * m);
         }
         public static (double gold, int gem, int dia) AutoReward()
@@ -318,14 +318,13 @@ namespace MoreMush
         }
         public static bool AutoReady() => AutoHours() * 3600 >= AUTO.minClaim;
 
-        public static (double gold, int gem, int dia, double debt)? ClaimAuto()
+        public static (double gold, int gem, int dia)? ClaimAuto()
         {
             if (!AutoReady()) return null;
             var r = AutoReward();
-            double debt = GainGold(r.gold);
-            G.gem += r.gem; G.dia += r.dia; G.autoT = Now();
+            G.gold += r.gold; G.gem += r.gem; G.dia += r.dia; G.autoT = Now();
             SaveGame();
-            return (r.gold, r.gem, r.dia, debt);
+            return (r.gold, r.gem, r.dia);
         }
     }
 }

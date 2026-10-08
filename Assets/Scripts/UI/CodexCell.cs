@@ -44,13 +44,14 @@ namespace MoreMush
             bool h = Harvested(sp.id), un = IsUnlockedSp(sp);
             G.codex.TryGetValue(sp.id, out var e);
             UIUtil.SetImage(icon, SpriteDB.Single(sp.id), h ? 0 : un ? 2 : 1);
-            label.text = h || un ? sp.n : sp.tax > 0 ? UIUtil.Ic("tax") : sp.theme != null ? UIUtil.Ic(THEME[sp.theme].icon) : "???";
+            label.text = h || un ? sp.n : sp.boss > 0 ? UIUtil.Ic(BOSS_ICON) : sp.theme != null ? UIUtil.Ic(THEME[sp.theme].icon) : "???";
             frame.color = h ? Color.white : un ? U.Hex("#fbf6ea") : U.Hex("#d8cdb8");
             if (outline != null) outline.effectColor = h && sp.t > 0 ? U.Hex(new[] { "", "#7fc4ff", "#c77dff", "#ffb627" }[sp.t]) : U.Hex("#d9c6a2");
             UIUtil.Show(stars, h);
             if (h) { int s = StarOf(sp.id); stars.text = s > 0 ? $"<color=#e8a900>{new string('★', s)}</color><color=#d8ccb4>{new string('★', 5 - s)}</color>" : ""; }
-            UIUtil.Show(themeMark, sp.theme != null);
+            UIUtil.Show(themeMark, sp.theme != null || sp.boss > 0);
             if (sp.theme != null) themeMark.text = UIUtil.Ic(THEME[sp.theme].icon);
+            else if (sp.boss > 0) themeMark.text = UIUtil.Ic(BOSS_ICON);
             UIUtil.Show(goldStar, e != null && e.gold);
             UIUtil.Show(giantMark, e != null && e.giant);
         }

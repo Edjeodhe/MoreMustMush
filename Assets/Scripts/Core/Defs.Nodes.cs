@@ -70,7 +70,6 @@ namespace MoreMush
             public static double ed_regen(int L) => 4 - 0.8 * L;
             public static double ed_rare(int L) => 1 + 0.5 * L;
             public static double ed_gold(int L) => 0.01 + 0.02 * L;
-            public static double ed_tax(int L) => 1 - 0.1 * L;
             public static double ed_trade(int L) => 1 + 0.3 * L;
             public static double ed_giant(int L) => 0.08 + 0.1 * L;
             public static double ed_special(int L) => 0.1 * L;
@@ -140,7 +139,7 @@ namespace MoreMush
 
         static readonly Dictionary<string, string> NODE_DESC = new Dictionary<string, string>
         {
-            ["core_ed"] = "💰 돈·수확 쪽 강화 가지예요. 점수, 판매가, 세금 감면, 마을 의뢰 보상, 군락지 수·재생, 수확량, 황금 변종, 거대·특수 버섯 등장을 올릴 수 있어요.",
+            ["core_ed"] = "💰 돈·수확 쪽 강화 가지예요. 점수, 판매가, 마을 의뢰 보상, 군락지 수·재생, 수확량, 황금 변종, 거대·특수 버섯 등장을 올릴 수 있어요.",
             ["core_md"] = "🎯 바·스킬·시간·필드 쪽 강화 가지예요. 필드 넓히기, 바 넓이, 콤보, 꼬마 수확기, 스킬 15종(가속·포자 폭발·충격파…), 버프 지속, 요리 효과를 올릴 수 있어요.",
             ["core_ps"] = "⚔️ 전투 쪽 강화 가지예요. 공격력, 수확기 크기·속도, 제한시간, 치명타, 핀볼 수, 회전 칼날, 단단한 버섯 피해, 포자 저항을 올릴 수 있어요.",
             ["ed_score"] = "버섯을 칠 때마다 얻는 점수에 고정값을 더해요. 점수는 라운드가 끝나면 골드로 바뀌어요. 끝까지 올리면 타격 점수 I+가 열려요.",
@@ -174,7 +173,6 @@ namespace MoreMush
             ["ed_bonus1p"] = "수확 개수를 1 단위로 한 번 더 더해요. 끝까지 올리면 수확량 II가 열려요.",
             ["ed_multi"] = "버섯을 수확할 때 일정 확률로 수확량이 3배가 돼요.",
             ["ed_size"] = "군락지 하나에서 가운데 무더기 둘레에 나는 개별 버섯 수의 최대치를 늘려요.",
-            ["ed_tax"] = "세금 고지서 금액을 줄여요.",
             ["ed_trade"] = "버섯 상점의 마을 의뢰를 완료했을 때 받는 골드를 늘려요.",
             ["ed_giant"] = "라운드 중에 거대 버섯이 나타날 확률이에요. 거대 버섯은 점수 ×3, 수확량 ×30이에요.",
             ["ed_special"] = "캐릭터 모양 특수 버섯이 나타날 확률과, 도망가기 전까지 잡을 수 있는 시간을 늘려요.",
@@ -291,7 +289,6 @@ namespace MoreMush
             N("ed_rare", "ed", "ed_cols", "변종 출현율", 3, 5000, 2.2, L => $"에픽 이상 가중치 {Plus(NF.ed_rare(L))}", tier: 2);
             N("ed_size", "ed", "ed_regen", "군락지 버섯 수", 3, 4000, 2.2, L => $"군락지당 3~{NF.ed_size(L)}개", tier: 2);
             N("ed_dev", "ed", "ed_regen", "숲 장치 수", 2, 3000, 2.2, L => $"라운드마다 {NF.ed_dev(L)}개", tier: 2);
-            N("ed_tax", "ed", "ed_price", "세금 감면", 2, 8000, 2.2, L => $"세금 -{U.JsRound((1 - NF.ed_tax(L)) * 100)}%", tier: 2);
             // 후반
             N("ed_score3", "ed", "ed_score2p", "타격 점수 III", 3, 1000000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score3(L))}", tier: 3, needMax: true);
             N("ed_bonus3", "ed", "ed_bonus2p", "수확량 III", 3, 1500000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus3(L))}개", tier: 3, needMax: true);

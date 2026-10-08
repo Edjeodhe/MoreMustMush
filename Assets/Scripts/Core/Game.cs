@@ -26,7 +26,7 @@ namespace MoreMush
         public double zoneMul = 1, scoreFlat, critMul = 3;
     }
 
-    // Game rules on the save data (prototype "조회 · 해금 · 비용 · 세금 · 판매 · 능력치" sections).
+    // Game rules on the save data (prototype "조회 · 해금 · 비용 · 판매 · 능력치" sections).
     public static partial class Game
     {
         public static SaveData G;
@@ -72,7 +72,7 @@ namespace MoreMush
         public static bool UnlockReady(Species sp)
         {
             if (sp.init) return true;
-            if (sp.tax > 0) return G.tax.paid >= sp.tax;
+            if (sp.boss > 0) return StageNow() >= sp.boss;
             if (sp.theme != null) return ThemeOpen(THEME[sp.theme]);
             if (sp.afterId != null) return G.codex.TryGetValue(sp.afterId, out var e) && e.n >= sp.cnt;
             return false;
@@ -81,7 +81,7 @@ namespace MoreMush
         public static string UnlockText(Species sp)
         {
             if (sp.init) return "처음부터 등장";
-            if (sp.tax > 0) return $"세금 {sp.tax}회 납부 시 해금 (현재 {G.tax.paid}회)";
+            if (sp.boss > 0) return $"스테이지 {sp.boss} 보스 · 스테이지 {sp.boss} 도달 시 해금 (현재 {StageNow()})";
             if (sp.theme != null) { var t = THEME[sp.theme]; return $"{t.n} 지역 전용 (스테이지 {t.from}부터, 그 지역에서만 등장)"; }
             double have = G.codex.TryGetValue(sp.afterId, out var e) ? e.n : 0;
             var pre = SP[sp.afterId];
@@ -156,15 +156,6 @@ namespace MoreMush
             return (levels, spent);
         }
 
-        // ===== 세금 =====
-        public static double TaxBill()
-        {
-            double b = Math.Max(TaxAmount(G.tax.cycle), TAX.share * G.tax.income);
-            return Math.Ceiling(b * (SetDone("tax") ? 0.8 : 1) * NF.ed_tax(Lv("ed_tax")) / 10) * 10;
-        }
-        public static int TaxRoundsLeft() => TAX.every - G.tax.roundsIn;
-        public static Species NextTaxUnlock() => SPECIES.Where(s => s.tax > 0 && s.tax > G.tax.paid).OrderBy(s => s.tax).FirstOrDefault();
-
         // ===== 창고·판매 =====
         // 같은 능력치에 붙는 보너스(노드·코어·꼬마·별·세트)는 곱하지 않고 더한다
         public static double PriceMul() => NF.ed_price(Lv("ed_price")) + NF.ed_price2(Lv("ed_price2")) + (Lv("core_ed") > 0 ? 0.1 : 0) + StarAbilities()["price"] + GoldenSetBonus();
@@ -172,9 +163,6 @@ namespace MoreMush
         public static double InvCount(string id) => Math.Floor(G.inv.TryGetValue(id, out var v) ? v : 0);
         public static double InvTotal(string cat = null) { double n = 0; foreach (var sp in SPECIES) if (cat == null || sp.c == cat) n += InvCount(sp.id); return n; }
         public static double InvValue(string cat = null) { double pm = PriceMul(), v = 0; foreach (var sp in SPECIES) if (cat == null || sp.c == cat) v += InvCount(sp.id) * UnitPrice(sp, pm); return v; }
-
-        // 골드가 들어올 때는 체납금부터 갚는다. 갚은 금액을 돌려준다.
-        public static double GainGold(double x) { double take = Math.Min(G.tax.debt, x); G.tax.debt -= take; G.gold += x - take; return take; }
 
         // ===== 수확기·날씨 =====
         public static List<string> ActiveHvs()

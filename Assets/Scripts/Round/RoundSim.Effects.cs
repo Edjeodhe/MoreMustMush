@@ -120,7 +120,7 @@ namespace MoreMush
             }
             else
             {
-                double bonus = Math.Ceiling(TaxBill() * 0.3);
+                double bonus = Math.Ceiling(StageGold(StageNow()) * 0.3);
                 bonusGold += bonus;
                 AddLabel($"{k.n} 포획! 보너스 +{U.Fmt(bonus)}골드", sm.x, sm.y - 70, "#ffe36e", 34);
             }
@@ -392,7 +392,7 @@ namespace MoreMush
         // ===== 정산 =====
         public class Summary
         {
-            public double score, scoreGold, bonusGold, value, debtTaken, net, goldMul, coinGold;
+            public double score, scoreGold, bonusGold, value, net, goldMul, coinGold;
             public Dictionary<string, double> gains;
             public List<string> newSpecies, newGolden, unlocks;
             public List<(string id, int s)> newStars;
@@ -402,19 +402,18 @@ namespace MoreMush
             public int harvests;
         }
 
-        // 점수 → 골드, 수확한 버섯 → 창고, 체납 차감 (prototype finishRound)
+        // 점수 → 골드, 수확한 버섯 → 창고 (prototype finishRound)
         public Summary Finish()
         {
             double scoreGold = Math.Floor(score * st.goldMul);
             double bonus = Math.Floor(bonusGold);
             double val = Math.Floor(value);
-            double debtTaken = GainGold(scoreGold + bonus);
-            var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = val, debtTaken = debtTaken, net = scoreGold + bonus - debtTaken, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold) };
+            G.gold += scoreGold + bonus;
+            var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = val, net = scoreGold + bonus, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold) };
             foreach (var kv in bag) G.inv[kv.Key] = (G.inv.TryGetValue(kv.Key, out var v) ? v : 0) + kv.Value;
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
-            G.tax.income += scoreGold + bonus + val;
-            G.tax.roundsIn++;
             G.rounds++;
+            if (G.rounds % QUEST_EVERY == 0) G.quests.Clear();   // 마을 의뢰는 몇 라운드마다 새로
             if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hv["gold"] = 1; G.hvOn["gold"] = true; s.goldHv = true; }
             var newTheme = THEMES.FirstOrDefault(th => th.from > 1 && th.from == StageNow());
             if (newTheme != null) G.theme = newTheme.id;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MoreMush
 {
-    // Behind title / settlement / tax (prototype drawTitleBg): the overrun town (the grandpa rig stands in it)
+    // Behind title / settlement (prototype drawTitleBg): the overrun town (the grandpa rig stands in it)
     // and a scythe harvester bouncing around the screen.
     public class TitleBackdrop : MonoBehaviour
     {

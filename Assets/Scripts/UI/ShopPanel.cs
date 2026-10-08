@@ -18,8 +18,8 @@ namespace MoreMush
         public Image[] modeTabs = new Image[3];          // sell, quest, spore
         public TMP_Text[] modeTabTexts = new TMP_Text[3];
         public GameObject questDot; public TMP_Text questDotText;
-        public TMP_Text sub, goldText, sporeText, debtText;
-        public GameObject sporeChip, debtChip;
+        public TMP_Text sub, goldText, sporeText;
+        public GameObject sporeChip;
         public Button questAllButton; public TMP_Text questAllText;
 
         [Header("Sell")]
@@ -77,8 +77,6 @@ namespace MoreMush
             goldText.text = $"{UIUtil.Ic("gold")}{U.Fmt(G.gold)}";
             sporeText.text = $"{UIUtil.Ic("spore")}{U.Fmt(G.spore)}";
             UIUtil.Show(sporeChip, mode != "sell");
-            UIUtil.Show(debtChip, mode == "sell" && G.tax.debt > 0);
-            debtText.text = $"체납 {U.Fmt(G.tax.debt)}";
             UIUtil.Show(questAllButton, mode == "quest");
             questAllButton.interactable = ready > 0;
             questAllText.text = $"일괄 완료{(ready > 0 ? $" ({ready})" : "")}";
@@ -126,7 +124,7 @@ namespace MoreMush
 
         void RenderQuests()
         {
-            sub.text = $"마을 사람들이 원하는 버섯을 모아 전달하면 <color=#3a8a2a>판매가보다 훨씬 많은</color> 골드를 줘요. 의뢰는 3개씩이고, 세금 사이클이 바뀌면 새 의뢰로 바뀌어요. ('단골 거래' 노드로 보상 증가)";
+            sub.text = $"마을 사람들이 원하는 버섯을 모아 전달하면 <color=#3a8a2a>판매가보다 훨씬 많은</color> 골드를 줘요. 의뢰는 3개씩이고, {QUEST_EVERY}라운드마다 새 의뢰로 바뀌어요. ('단골 거래' 노드로 보상 증가)";
             RefreshQuests();
             while (quests.Count < G.quests.Count) { var q = Instantiate(questTemplate, questContent); q.gameObject.SetActive(true); quests.Add(q); }
             for (int i = 0; i < quests.Count; i++)

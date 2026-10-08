@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace MoreMush
 {
-    // Small card "icon + name + tag" used in settlement/tax news (prototype .newcard). Prefab: Prefabs/UI/NewCard
+    // Small card "icon + name + tag" used in settlement news (prototype .newcard). Prefab: Prefabs/UI/NewCard
     public class NewCard : MonoBehaviour
     {
         public Image frame, icon;

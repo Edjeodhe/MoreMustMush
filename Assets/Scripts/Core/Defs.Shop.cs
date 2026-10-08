@@ -8,6 +8,7 @@ namespace MoreMush
         // ===== 마을 의뢰 =====
         public static readonly double[] QUEST_N = { 30, 12, 5, 2 };   // 등급별 기본 요구 개수 (스테이지마다 ×1.1)
         public const double QUEST_MUL = 3;
+        public const int QUEST_EVERY = 3;   // 마을 의뢰가 새로 바뀌는 라운드 간격
 
         // 의뢰 주민 8명. 초상화는 Characters/NPC/<id>. lines의 {m} = 버섯 이름, {n} = 개수
         public class Npc { public string id, n, job, bg; public string[] lines; }

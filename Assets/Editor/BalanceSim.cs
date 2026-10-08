@@ -80,24 +80,6 @@ namespace MoreMush.EditorTools
             return res;
         }
 
-        static void PayOrSkipTax(StringBuilder sb)
-        {
-            if (G.tax.roundsIn < TAX.every) return;
-            double bill = TaxBill(), inc = G.tax.income;
-            if (G.gold >= bill)
-            {
-                G.gold -= bill; G.tax.paid++; CheckUnlocks();
-                sb?.AppendLine($"   세금 {G.tax.cycle}회차: 소득 {inc:G3} · 고지 {bill:G3} ({bill / Math.Max(1, inc):P0}) 납부");
-            }
-            else
-            {
-                double rate = TaxRate(G.tax.unpaid), pen = Math.Ceiling(inc * rate), take = Math.Min(G.gold, pen);
-                G.gold -= take; G.tax.debt += pen - take; G.tax.unpaid++;
-                sb?.AppendLine($"   세금 {G.tax.cycle}회차: 고지 {bill:G3} 못 냄 → 벌금 {pen:G3}");
-            }
-            G.tax.cycle++; G.tax.roundsIn = 0; G.tax.income = 0;
-        }
-
         public static int GoldLevels(int tier = 0) => NODES.Where(n => n.costGem <= 0 && (tier == 0 || n.tier == tier)).Sum(n => Lv(n.id));
         public static int GoldLevelsMax(int tier = 0) => NODES.Where(n => n.costGem <= 0 && (tier == 0 || n.tier == tier)).Sum(n => n.max);
 
@@ -131,14 +113,14 @@ namespace MoreMush.EditorTools
 
         static string StatePath(int seed = 1) => Path.GetFullPath(Path.Combine(Application.dataPath, $"../Temp/balance_state_s{seed}.json"));
 
-        // 새 게임(resume = false) 또는 이전 진행 상태에서 n판. 매 판 뒤 세금 처리 후 일괄 강화(가장 싼 것부터)로 전부 산다.
-        // 한 판에 라운드 외에 드는 시간(조준·정산·트리·세금 화면) 추정치. 플레이 시간 환산에만 쓴다
+        // 새 게임(resume = false) 또는 이전 진행 상태에서 n판. 매 판 뒤 일괄 강화(가장 싼 것부터)로 전부 산다.
+        // 한 판에 라운드 외에 드는 시간(조준·정산·트리 화면) 추정치. 플레이 시간 환산에만 쓴다
         // 보수적 기준: 평균 이하 플레이어. 바 조작 오차 ±60%, 한 판 화면 전환 30초
         public const double OVERHEAD_SEC = 30;
         public const float SKILL = 0.6f;
 
         // every: 몇 판마다 한 줄씩 남길지. 트리를 다 산 판은 항상 남긴다
-        public static string Progression(int rounds, bool resume = false, int seed = 1, float skill = SKILL, double maxWallSec = 20, int every = 1, bool withTax = false, int stopStage = 0)
+        public static string Progression(int rounds, bool resume = false, int seed = 1, float skill = SKILL, double maxWallSec = 20, int every = 1, int stopStage = 0)
         {
             LoadPriceTable();
             return Sandbox(() =>
@@ -153,15 +135,6 @@ namespace MoreMush.EditorTools
                     if (sw.Elapsed.TotalSeconds > maxWallSec || (stopStage > 0 && StageNow() > stopStage)) break;
                     var rnd = new System.Random(seed * 1000 + G.rounds); UnityEngine.Random.InitState(seed * 1000 + G.rounds);
                     var r = PlayRound(rnd, skill, !GAME_ZONE);
-                    // 세금은 제거 예정이라 기본은 빼고 계산한다 (withTax = true면 납부·추정분 비축)
-                    double reserve = 0;
-                    if (withTax)
-                    {
-                        PayOrSkipTax(null);
-                        double projected = G.tax.roundsIn > 0 ? G.tax.income * TAX.every / G.tax.roundsIn : 0;
-                        reserve = Math.Max(TaxAmount(G.tax.cycle), TAX.share * projected) * G.tax.roundsIn / TAX.every;
-                    }
-                    else { G.tax.roundsIn = 0; G.tax.income = 0; }
                     // 판매·의뢰: 매 판 끝에 의뢰를 전부 하고 창고 버섯을 전부 판다(사용자 결정 2026-10-08 "의뢰+전부 판매 가정, 널널하게").
                     // 판 수입(ph.inc)에 들어가서 가격 맞추기도 이 수입을 기준으로 한다. 끄려면 SELL = false(명령줄 -nosell)
                     double sold = 0;
@@ -172,7 +145,7 @@ namespace MoreMush.EditorTools
                         sold += SellMush(G.inv.Select(kv => (kv.Key, kv.Value)).ToList()).gold;
                     }
                     int before = GoldLevels();
-                    BulkBuy(new[] { "ed", "md", "ps" }, reserve, false);
+                    BulkBuy(new[] { "ed", "md", "ps" }, 0, false);
                     G.play += r.duration + OVERHEAD_SEC;   // 추정 플레이 시간(초)
                     int bought = GoldLevels() - before;
                     ph.rounds++; if (bought > 0) ph.buyRounds++;
@@ -189,7 +162,7 @@ namespace MoreMush.EditorTools
                     File.WriteAllText(StatePath(seed), JsonConvert.SerializeObject(G));
                     File.WriteAllText(PhasePath(seed), JsonConvert.SerializeObject(ph));
                 }
-                Log(sb, $"({(withTax ? $"세금 납부 {G.tax.paid}회 · 미납 {G.tax.unpaid}회 · " : "세금 제외 · ")}무언가 산 판 {ph.buyRounds}/{ph.rounds} · 이번 호출 {sw.Elapsed.TotalSeconds:F1}s)");
+                Log(sb, $"(무언가 산 판 {ph.buyRounds}/{ph.rounds} · 이번 호출 {sw.Elapsed.TotalSeconds:F1}s)");
                 return sb.ToString();
             });
         }
@@ -448,7 +421,7 @@ namespace MoreMush.EditorTools
             sb.AppendLine("    public static partial class Defs");
             sb.AppendLine("    {");
             sb.AppendLine("        // 노드 레벨별 골드 가격표. Assets/Editor/BalanceSim.cs의 가격 맞추기(TunePrices)로 생성한다.");
-            sb.AppendLine("        // 기준: 평균 이하 플레이어(BalanceSim.SKILL), 세금 제외, 기본 트리 약 2시간, 지역 잠금 없이 골드로만. 비어 있는 노드는 기본가 × 증가율^레벨을 쓴다.");
+            sb.AppendLine("        // 기준: 평균 이하 플레이어(BalanceSim.SKILL), 기본 트리 약 2시간, 지역 잠금 없이 골드로만. 비어 있는 노드는 기본가 × 증가율^레벨을 쓴다.");
             sb.AppendLine("        public static readonly Dictionary<string, double[]> PRICE_TABLE = new Dictionary<string, double[]>");
             sb.AppendLine("        {");
             for (int t = 1; t <= 3; t++)

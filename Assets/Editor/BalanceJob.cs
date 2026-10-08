@@ -67,7 +67,7 @@ namespace MoreMush.EditorTools
             for (int sd = 1; sd <= seeds; sd++)
                 for (int st = 1; st <= p.b; st++)
                 {
-                    BalanceSim.Progression(1, st > 1, sd, BalanceSim.SKILL, 1e9, 1, false, p.b);
+                    BalanceSim.Progression(1, st > 1, sd, BalanceSim.SKILL, 1e9, 1, p.b);
                     yield return null;
                 }
         }

@@ -16,8 +16,8 @@ namespace MoreMush
             .Where(sp => InvCount(sp.id) >= 1 && (tab == "all" || sp.c == tab))
             .OrderBy(sp => Array.IndexOf(CAT_KEYS, sp.c)).ThenByDescending(sp => sp.t).ThenBy(sp => sp.idx).ToList();
 
-        // 팔고 받은 (개수, 골드, 체납 차감)
-        public static (double n, double gold, double debt) SellMush(IEnumerable<(string id, double cnt)> ids)
+        // 팔고 받은 (개수, 골드)
+        public static (double n, double gold) SellMush(IEnumerable<(string id, double cnt)> ids)
         {
             double pm = PriceMul(), gold = 0, n = 0;
             foreach (var (id, cnt) in ids)
@@ -27,15 +27,15 @@ namespace MoreMush
                 G.inv[id] -= k; if (G.inv[id] < 1e-9) G.inv.Remove(id);
                 gold += k * UnitPrice(SP[id], pm); n += k;
             }
-            if (n == 0) return (0, 0, 0);
+            if (n == 0) return (0, 0);
             gold = Math.Floor(gold);
-            double debt = GainGold(gold);
+            G.gold += gold;
             SaveGame();
-            return (n, gold, debt);
+            return (n, gold);
         }
 
         // ===== 마을 의뢰 =====
-        // 주민이 특정 버섯을 원한다. 판매가의 QUEST_MUL배 골드를 준다. 3개씩, 세금 사이클이 바뀌면 새 의뢰.
+        // 주민이 특정 버섯을 원한다. 판매가의 QUEST_MUL배 골드를 준다. 3개씩, QUEST_EVERY 라운드마다 새 의뢰.
         public static Npc QuestNpc(Quest q) => NPC.TryGetValue(q.npc ?? "", out var n) ? n : NPCS[0];
 
         static Quest MakeQuest()
@@ -61,38 +61,38 @@ namespace MoreMush
         public static bool QuestReady(Quest q) => InvCount(q.id) >= q.cnt;
         public static int QuestReadyCount() => G?.quests == null ? 0 : G.quests.Count(QuestReady);
 
-        // 받은 (골드, 체납 차감). 못 하면 null
-        public static (double gold, double debt)? DoQuest(int i)
+        // 받은 골드. 못 하면 null
+        public static double? DoQuest(int i)
         {
             if (i < 0 || i >= G.quests.Count || !QuestReady(G.quests[i])) return null;
             var q = G.quests[i];
             double g = QuestReward(q);
             G.inv[q.id] -= q.cnt;
-            double debt = GainGold(g);
+            G.gold += g;
             G.quests.RemoveAt(i); RefreshQuests();
             SaveGame();
-            return (g, debt);
+            return g;
         }
 
         // 일괄 완료: 지금 전달할 수 있는 의뢰를 전부 (새로 들어온 의뢰도 바로 가능하면 계속)
-        public static (int n, double gold, double debt) QuestAll()
+        public static (int n, double gold) QuestAll()
         {
-            int n = 0; double gold = 0, debt = 0;
+            int n = 0; double gold = 0;
             for (int guard = 0; guard < 50; guard++)
             {
                 int i = G.quests.FindIndex(QuestReady);
                 if (i < 0) break;
                 var q = G.quests[i]; double g = QuestReward(q);
-                G.inv[q.id] -= q.cnt; debt += GainGold(g); gold += g; n++;
+                G.inv[q.id] -= q.cnt; G.gold += g; gold += g; n++;
                 G.quests.RemoveAt(i); RefreshQuests();
             }
             if (n > 0) SaveGame();
-            return (n, gold, debt);
+            return (n, gold);
         }
 
         // ===== 포자 상점 =====
-        // 버섯 포자를 골드로 산다. 값은 세금 사이클에 맞춰 오른다 (진행도에 비례)
-        public static double SporePrice() => Math.Max(20, Math.Ceiling(TaxAmount(G.tax.cycle) * 0.15 / 5) * 5);
+        // 버섯 포자를 골드로 산다. 값은 스테이지에 맞춰 오른다 (진행도에 비례)
+        public static double SporePrice() => Math.Max(20, Math.Ceiling(StageGold(StageNow()) * 0.15 / 5) * 5);
         public static double SporeMax() => Math.Floor(G.gold / SporePrice());
 
         public static bool BuySpore(double n)
