@@ -16,10 +16,12 @@ namespace MoreMush
         public static int SPEED = 1;
         public static bool IsTouch => Touchscreen.current != null && Mouse.current == null;
         Vector2 mouse = new Vector2(960, 540);
+        RoundSim finishedR;   // 이미 정산을 넘긴 라운드. 정산 중 예외가 나도 다음 프레임에 또 정산(골드·판 수 중복)하지 않게
 
         public void Begin(string weatherId, string themeId)
         {
-            RoundSim.Start(weatherId, themeId);
+            var round = RoundSim.Start(weatherId, themeId);
+            hud.BindFlyerTargets(round);
             view.Clear();
             gameObject.SetActive(true);
         }
@@ -45,6 +47,7 @@ namespace MoreMush
             float target = U.Clamp(mouse.x / RoundSim.ZOOM, RoundSim.FX0 + R.barLen / 2, RoundSim.FX1 - R.barLen / 2);
             bool modal = GameFlow.I != null && GameFlow.I.ModalOpen;
             if (!R.paused) R.barX = U.Lerp(R.barX, target, 1 - Mathf.Exp(-18 * dt));
+            bool live = !R.paused && !modal && R.hitstop <= 0;   // 이번 프레임에 시뮬레이션이 진행되는지
             if (!R.paused && !modal)
             {
                 if (R.hitstop > 0) R.hitstop -= dt;
@@ -56,10 +59,10 @@ namespace MoreMush
             }
             if (RoundSim.R == null) return;
             float now = Time.time;
-            view.Draw(R);
+            view.Draw(R, live);
             hud.Draw(R, now, SPEED, IsTouch);
             combo.Draw(R, now);
-            if (R.phase == "end" && R.endT <= 0) GameFlow.I.FinishRound();
+            if (R.phase == "end" && R.endT <= 0 && finishedR != R) { finishedR = R; GameFlow.I.FinishRound(); }
         }
 
         void HandleInput(RoundSim R)
@@ -77,14 +80,13 @@ namespace MoreMush
                 if (kb.escapeKey.wasPressedThisFrame) { if (GameFlow.I.ModalOpen) GameFlow.I.CloseModal(); else GameFlow.I.OpenPause(); }
             }
             if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame) NextSpeed();
-            if (R.paused || GameFlow.I.ModalOpen) return;
+            // 조준 중에 일시정지·창이 열리면 조준을 버린다 (창을 닫는 클릭이 엉뚱한 방향 발사가 되지 않게)
+            if (R.paused || GameFlow.I.ModalOpen) { R.aimStart = R.aimCur = null; return; }
 
             var field = new Vector2(sp.x / RoundSim.ZOOM, sp.y / RoundSim.ZOOM);
             if (p.press.wasPressedThisFrame)
             {
-                bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(isMouse ? -1 : 0);
-                // 오른쪽 위 배속 칸
-                if (sp.x >= 1730 && sp.x <= 1904 && sp.y >= 14 && sp.y <= 84) { NextSpeed(); Snd.Ui(); return; }
+                bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();   // -1 = 지금 포인터 (터치 id는 0이 아님)
                 if (!overUI && R.phase == "aim" && U.D2(field.x, field.y, RoundSim.LAUNCH.x, RoundSim.LAUNCH.y) < 160 * 160)
                     R.aimStart = R.aimCur = field;
             }

@@ -51,7 +51,7 @@ namespace MoreMush
             if (GameFlow.I.ModalOpen) return;
             if (farm.crits.Count != FarmOwned().Count) { FarmEnsure(); farm.Sync(false); farm.dirty = true; }
             if (farm.dirty || FarmReadyCount() != lastN || farm.Picking != lastBusy) Render();
-            else { foreach (var c in chipList) c.RefreshTime(); RenderStatus(); if (treeOpen) RenderTree(); }
+            else { foreach (var c in chipList) if (c.gameObject.activeSelf) c.RefreshTime(); RenderStatus(); if (treeOpen) RenderTree(); }
         }
 
         void RenderStatus()
@@ -82,7 +82,11 @@ namespace MoreMush
             UIUtil.Show(treePanel, treeOpen && !placing);
 
             int n = FarmPetCount();
-            for (int i = 0; i < chipList.Length; i++) chipList[i].Set(SPECIALS[i]);
+            for (int i = 0; i < chipList.Length; i++)
+            {
+                bool on = i < SPECIALS.Length; UIUtil.Show(chipList[i], on);
+                if (on) chipList[i].Set(SPECIALS[i]);
+            }
             careAll.interactable = n > 0;
             careAllText.text = $"모두 돌보기{(n > 0 ? $" ({n})" : "")}";
             if (treeOpen) RenderTree();
@@ -111,8 +115,15 @@ namespace MoreMush
             growFastText.text = ac > 0 ? $"빨리 자라게  <size=80%>{UIUtil.Ic("gem")}{ac}</size>" : "모두 다 자랐어요";
         }
 
+        // 배치 바: 배치 중에는 매 프레임 불리므로, 건물·옮기기 여부·놓을 수 있는지가 바뀔 때(또는 1초마다)만 글자를 다시 만든다
+        string placeShownId; bool placeShownMove, placeShownOk; float placeRefreshT;
+
         void DrawPlaceBar()
         {
+            bool ok = farm.PlaceOk;
+            placeRefreshT -= Time.unscaledDeltaTime;
+            if (farm.PlaceId == placeShownId && farm.Moving == placeShownMove && ok == placeShownOk && placeRefreshT > 0) return;
+            placeShownId = farm.PlaceId; placeShownMove = farm.Moving; placeShownOk = ok; placeRefreshT = 1;
             var B = BUILDING[farm.PlaceId];
             if (farm.Moving)
             {

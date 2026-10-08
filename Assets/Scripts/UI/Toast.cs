@@ -10,10 +10,12 @@ namespace MoreMush
         public TMP_Text text;
         public RectTransform rect;
         float hideAt = -1;
+        Vector2 origin;
 
         void Awake()
         {
             group.alpha = 0;
+            origin = rect.anchoredPosition;
         }
 
         public void Show(string msg)
@@ -26,8 +28,9 @@ namespace MoreMush
         void Update()
         {
             bool on = Time.unscaledTime < hideAt;
+            if (!on && group.alpha == 0) return;
             group.alpha = Mathf.MoveTowards(group.alpha, on ? 1 : 0, Time.unscaledDeltaTime / 0.25f);
-            rect.anchoredPosition = new Vector2(0, -110 + (1 - group.alpha) * 20);
+            rect.anchoredPosition = origin + new Vector2(0, (1 - group.alpha) * 20);
         }
     }
 }

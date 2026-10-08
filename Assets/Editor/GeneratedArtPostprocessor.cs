@@ -24,6 +24,10 @@ public class GeneratedArtPostprocessor : AssetPostprocessor
         importer.spriteImportMode = SpriteImportMode.Single;
         importer.alphaIsTransparency = true;
         importer.mipmapEnabled = false;
-        importer.maxTextureSize = 2048;
+        importer.maxTextureSize = MoreMush.EditorTools.ProjectOptimization.TextureLimit(assetPath);
+        importer.textureCompression = TextureImporterCompression.CompressedHQ;
+        var settings = new TextureImporterSettings(); importer.ReadTextureSettings(settings);
+        settings.spriteGenerateFallbackPhysicsShape = false;
+        importer.SetTextureSettings(settings);
     }
 }

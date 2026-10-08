@@ -27,6 +27,14 @@ namespace MoreMush
 
         public static float Radius(Node n) => n.core ? 26 : n.sub ? 16 : 24;
 
+        // 지난 프레임에 그린 상태. 이것이 같고 자라는 애니메이션도 없으면 선·레벨 칸·속 그림·이름표를 다시 만들지 않는다
+        // (노드 108개가 매 프레임 LineRenderer 점 수천 개와 이름표 문자열을 새로 만들고 있었다)
+        bool? shownHidden;
+        string shownS, shownSt; int shownL = -1; bool shownHover, shownLabel;
+        static readonly Vector3[] linkBuf = new Vector3[21], arcBuf = new Vector3[11];   // SetPositions가 복사하므로 노드끼리 같이 써도 된다
+
+        static void Show(Component c, bool on) => UIUtil.Show(c, on);
+
         void Awake()
         {
             var r = U.Seeded(nodeId.GetHashCode() & 0xffff);
@@ -41,7 +49,8 @@ namespace MoreMush
             var n = Node;
             string s = NodeState(n);
             bool hidden = s == "hidden";
-            foreach (Transform c in transform) c.gameObject.SetActive(!hidden);
+            // 숨김이 바뀔 때만 자식을 모두 켜고 끈다 (예전엔 매 프레임 켰다가 아래에서 다시 꺼서 TMP가 등록·해제를 반복했다)
+            if (shownHidden != hidden) { shownHidden = hidden; foreach (Transform c in transform) c.gameObject.SetActive(!hidden); shownS = null; }
             if (hidden) return;
             int L = Lv(n.id);
             var cost = L < n.max ? NodeCost(n, L) : default;
@@ -52,11 +61,15 @@ namespace MoreMush
             float r = Radius(n);
             var me = TreePos;
             float sc = hover ? 1.15f : 1;
+            bool locked = st == "locked";
+            bool labelOn = !locked && (!n.sub || hover || camZ > 0.8f || n.core);
+            bool dirty = growAnim >= 0 || s != shownS || st != shownSt || L != shownL || hover != shownHover || labelOn != shownLabel;
+            shownS = s; shownSt = st; shownL = L; shownHover = hover; shownLabel = labelOn;
 
             // 연결 균사 (부모 → 나)
             bool owned = L > 0;
-            link.gameObject.SetActive(!n.core);
-            if (!n.core)
+            Show(link, !n.core);
+            if (!n.core && dirty)
             {
                 Vector2 p = parentPos;
                 float mx = (p.x + me.x) / 2 - (me.y - p.y) * bend, my = (p.y + me.y) / 2 + (me.x - p.x) * bend;
@@ -69,8 +82,9 @@ namespace MoreMush
                     float t = i / (float)N * k;
                     float x = (1 - t) * (1 - t) * p.x + 2 * (1 - t) * t * mx + t * t * me.x, y = (1 - t) * (1 - t) * p.y + 2 * (1 - t) * t * my + t * t * me.y;
                     if (owned && k < 1) { x += Mathf.Sin(t * 20 + now * 10) * 3; y += Mathf.Cos(t * 20 + now * 10) * 3; }
-                    link.SetPosition(i, Art.P(x - me.x, y - me.y));
+                    linkBuf[i] = Art.P(x - me.x, y - me.y);
                 }
+                link.SetPositions(linkBuf);
                 int depth = Mathf.Max(1, Mathf.RoundToInt(me.magnitude / 150));
                 link.widthMultiplier = Mathf.Max(2, 9 - depth * 1.2f) / Art.PPU;
                 var lc = owned ? U.Hex("#f2e6c8") : s == "avail" ? new Color(240 / 255f, 225 / 255f, 195 / 255f, 0.55f) : new Color(240 / 255f, 225 / 255f, 195 / 255f, 0.22f);
@@ -79,12 +93,11 @@ namespace MoreMush
             }
 
             glow.transform.localScale = pulse.transform.localScale = body.transform.localScale = border.transform.localScale = Vector3.one * sc;
-            bool locked = st == "locked";
-            qmark.gameObject.SetActive(locked);
-            badge.gameObject.SetActive(!locked);
-            inner.gameObject.SetActive(!locked);
-            label.gameObject.SetActive(!locked && (!n.sub || hover || camZ > 0.8f || n.core));
-            line2.gameObject.SetActive(label.gameObject.activeSelf);
+            Show(qmark, locked);
+            Show(badge, !locked);
+            Show(inner, !locked);
+            Show(label, labelOn);
+            Show(line2, labelOn);
 
             body.transform.localScale = Vector3.one * (r * 2 / Art.PPU) * sc;
             border.transform.localScale = Vector3.one * ((r * 2 + 4) / Art.PPU) * sc;
@@ -94,7 +107,7 @@ namespace MoreMush
                 border.color = new Color(220 / 255f, 210 / 255f, 190 / 255f, 0.5f);
                 glow.enabled = pulse.enabled = false;
                 qmark.fontSize = r * 0.9f / 10f;
-                foreach (var a in levelArcs) if (a != null) a.gameObject.SetActive(false);
+                foreach (var a in levelArcs) if (a != null) Show(a, false);
                 return;
             }
             // 바깥 빛: 강화 가능 = 파랗게 숨쉬는 빛 · 최대 = 은은한 금빛 · 균사석 = 청록
@@ -110,6 +123,7 @@ namespace MoreMush
             if (pulse.enabled) { pulse.color = new Color(col.r, col.g, col.b, 0.35f + 0.35f * Mathf.Sin(now * 4 + me.x * 0.01f)); pulse.transform.localScale = Vector3.one * ((r + 11) * 2 / Art.PPU) * sc; }
             body.color = n.gem ? U.Hex("#1e2a2a") : st == "max" ? U.Hex("#3a2a18") : U.Hex("#2e2016");
             border.color = col;
+            if (!dirty) return;   // 아래(레벨 칸·속 그림·배지·이름표)는 상태가 바뀔 때만
 
             // 레벨 칸
             for (int i = 0; i < levelArcs.Length; i++)
@@ -117,18 +131,19 @@ namespace MoreMush
                 var a = levelArcs[i];
                 if (a == null) continue;
                 bool show = n.max > 1 && i < n.max;
-                a.gameObject.SetActive(show);
+                Show(a, show);
                 if (!show) continue;
                 float gap = 0.12f, seg = U.TAU / n.max, a0 = -Mathf.PI / 2 + i * seg + gap / 2, a1 = a0 + seg - gap;
                 const int K = 10;
                 a.positionCount = K + 1;
-                for (int j = 0; j <= K; j++) { float ang = Mathf.Lerp(a0, a1, j / (float)K); a.SetPosition(j, Art.P(Mathf.Cos(ang) * (r + 6) * sc, Mathf.Sin(ang) * (r + 6) * sc)); }
+                for (int j = 0; j <= K; j++) { float ang = Mathf.Lerp(a0, a1, j / (float)K); arcBuf[j] = Art.P(Mathf.Cos(ang) * (r + 6) * sc, Mathf.Sin(ang) * (r + 6) * sc); }
+                a.SetPositions(arcBuf);
                 a.startColor = a.endColor = i < L ? (st == "max" ? MAX : U.Hex("#f2e6c8")) : new Color(242 / 255f, 230 / 255f, 200 / 255f, 0.18f);
             }
 
             // 속 그림
             float alpha = st == "poor" ? 0.55f : 1;
-            if (n.core) { inner.sprite = SpriteDB.Icon("core_" + n.br); Art.FitPx(inner, r * 1.3f * sc); inner.color = new Color(1, 1, 1, alpha); }
+            if (n.core) { inner.sprite = SpriteDB.Get("Icons/core_", n.br); Art.FitPx(inner, r * 1.3f * sc); inner.color = new Color(1, 1, 1, alpha); }
             else if (n.gem) { inner.sprite = SpriteDB.Icon("gem"); Art.FitPx(inner, r * (L > 0 ? 1.4f : 1.05f) * sc); inner.color = new Color(1, 1, 1, alpha); }
             else if (n.skill != null || n.icon != null) { inner.sprite = SpriteDB.Icon(n.icon ?? SKILLS[n.skill].icon); Art.FitPx(inner, r * (L > 0 ? 1.45f : 1.1f) * sc); inner.color = new Color(1, 1, 1, L > 0 ? alpha : 0.6f * alpha); }
             else if (L == 0) { inner.sprite = Art.Circle; inner.transform.localScale = Vector3.one * (r * 0.6f / Art.PPU) * sc; inner.color = new Color(brc.r, brc.g, brc.b, alpha); }
@@ -143,7 +158,7 @@ namespace MoreMush
             badgeText.color = st == "max" ? U.Hex("#5a3a00") : Color.white;
 
             // 이름표 두 줄
-            if (label.gameObject.activeSelf)
+            if (labelOn)
             {
                 if (n.core)
                 {
@@ -158,7 +173,7 @@ namespace MoreMush
                     label.color = n.gem ? U.Hex("#a8f5d4") : st == "poor" ? U.Hex("#cbbfa8") : U.Hex("#fff6e0");
                     label.transform.localPosition = Art.P(0, r + 14);
                     string lvTxt = n.max > 1 ? $"Lv {L}/{n.max}" : "";
-                    string costTxt = string.Join(" + ", new[] { cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : "", cost.gem > 0 ? $"균사석 {U.Fmt(cost.gem)}" : "" }.Where(x => x != ""));
+                    string costTxt = cost.gold > 0 && cost.gem > 0 ? $"{U.Fmt(cost.gold)}G + 균사석 {U.Fmt(cost.gem)}" : cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : cost.gem > 0 ? $"균사석 {U.Fmt(cost.gem)}" : "";
                     line2.text = st == "max" ? (n.max > 1 ? $"MAX {L}/{n.max}" : "MAX") : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
                     line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : MAX;
                     line2.transform.localPosition = Art.P(0, r + 32);

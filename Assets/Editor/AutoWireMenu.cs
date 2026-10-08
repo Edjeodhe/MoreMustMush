@@ -48,14 +48,16 @@ namespace MoreMush.EditorTools
                 {
                     if (f.GetValue(gf) is GameObject g && g != null) continue;
                     string want = char.ToUpperInvariant(f.Name[0]) + f.Name.Substring(1);
-                    var t = all.FirstOrDefault(x => x.name == want);
-                    if (t != null) { f.SetValue(gf, t.gameObject); n++; }
+                    var matches = all.Where(x => x.name == want).ToArray();
+                    if (matches.Length == 1) { f.SetValue(gf, matches[0].gameObject); n++; }
+                    else if (matches.Length > 1) Debug.LogWarning($"[AutoWire] GameFlow.{f.Name}: multiple objects named {want}; assign explicitly.", gf);
                     continue;
                 }
                 if (!typeof(Component).IsAssignableFrom(f.FieldType)) continue;
                 if (f.GetValue(gf) is Object o && o != null) continue;
-                var c = Object.FindFirstObjectByType(f.FieldType, FindObjectsInactive.Include);
-                if (c != null) { f.SetValue(gf, c); n++; }
+                var matchesByType = all.SelectMany(t => t.GetComponents(f.FieldType)).ToArray();
+                if (matchesByType.Length == 1) { f.SetValue(gf, matchesByType[0]); n++; }
+                else if (matchesByType.Length > 1) Debug.LogWarning($"[AutoWire] GameFlow.{f.Name}: multiple {f.FieldType.Name} components; assign explicitly.", gf);
             }
             return n;
         }

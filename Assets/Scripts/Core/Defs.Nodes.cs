@@ -368,7 +368,10 @@ namespace MoreMush
 
             Harvester AddHv(string id, string n, string type, string look, double unlock, double lvGold, Func<int, Dictionary<string, double>> ab, Func<int, string> text)
             {
-                var h = new Harvester { id = id, n = n, type = type, look = look, unlockGold = unlock, lvGold = lvGold, ab = ab, text = text };
+                // ab는 별 등급만 보는 순수 함수라 등급별 결과를 기억한다 (타격·프레임마다 Dictionary를 새로 만들지 않게). 결과는 읽기 전용으로 쓸 것
+                var memo = new Dictionary<string, double>[8];
+                Func<int, Dictionary<string, double>> cached = s => (uint)s < (uint)memo.Length ? memo[s] ??= ab(s) : ab(s);
+                var h = new Harvester { id = id, n = n, type = type, look = look, unlockGold = unlock, lvGold = lvGold, ab = cached, text = text };
                 HARVESTERS.Add(h); HV[id] = h; return h;
             }
             AddHv("sam", "낫 수확기", "기본형", "나무 막대에 날이 달린 낫", 0, 1500,

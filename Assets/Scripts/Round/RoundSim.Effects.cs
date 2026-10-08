@@ -19,11 +19,13 @@ namespace MoreMush
         void BurstAt(float x, float y, float rad, double dmg, Ball b, string col, bool quiet)
         {
             rings.Add(new Ring { x = x, y = y, r = rad, dur = quiet ? 0.2f : 0.35f, col = col, quiet = quiet });
-            foreach (var m in QueryCircle(x, y, rad + 30))
+            var q = QueryCircle(x, y, rad + 30);
+            foreach (var m in q)
             {
                 float reach = rad + m.r * 0.5f;
                 if (U.D2(x, y, m.x, m.y) < reach * reach) Damage(m, dmg, b, "skill");
             }
+            FreeQuery(q);
         }
 
         void ChainBolt(Shroom m0, Ball b)
@@ -36,7 +38,9 @@ namespace MoreMush
             for (int i = 0; i < n; i++)
             {
                 Shroom best = null; float bd = 280 * 280;
-                foreach (var m in QueryCircle(cx, cy, 280)) { if (hit.Contains(m)) continue; float dd = U.D2(cx, cy, m.x, m.y); if (dd < bd) { bd = dd; best = m; } }
+                var q = QueryCircle(cx, cy, 280);
+                foreach (var m in q) { if (hit.Contains(m)) continue; float dd = U.D2(cx, cy, m.x, m.y); if (dd < bd) { bd = dd; best = m; } }
+                FreeQuery(q);
                 if (best == null) break;
                 hit.Add(best); pts.Add(new Vector2(best.x, best.y));
                 float tx = best.x, ty = best.y;
@@ -89,7 +93,7 @@ namespace MoreMush
             for (int a = 0; a < 40 && p == null; a++)
             {
                 float x = U.Rand(FX0 + 90, FX1 - 90), y = U.Rand(FY0 + 90, NO_SPAWN_Y - 70);
-                if (AreaFree(new List<Shape> { Shape.C(x, y, 50) })) p = new Vector2(x, y);
+                if (AreaFree(Shape.C(x, y, 50))) p = new Vector2(x, y);
             }
             var pos = p ?? new Vector2(U.Rand(FX0 + 100, FX1 - 100), U.Rand(FY0 + 100, NO_SPAWN_Y - 100));
             double hp = st.atk * 2;   // 수확기로 직접 2번 맞히면 잡힌다
@@ -159,7 +163,7 @@ namespace MoreMush
                 {
                     float a = (float)i / k * U.TAU + rad, x = WW / 2 + Mathf.Cos(a) * rad, y = NO_SPAWN_Y / 2 + Mathf.Sin(a) * rad * 0.6f;
                     if (x - 90 < FX0 || x + 90 > FX1 || y - 90 < FY0 || y + 90 > NO_SPAWN_Y) continue;
-                    if (AreaFree(new List<Shape> { Shape.C(x, y, 90) })) return new Vector2(x, y);
+                    if (AreaFree(Shape.C(x, y, 90))) return new Vector2(x, y);
                 }
             }
             return new Vector2(WW / 2, NO_SPAWN_Y / 2);
@@ -178,23 +182,29 @@ namespace MoreMush
             foreach (var c in clouds) c.t -= h;
             clouds.RemoveAll(c => c.t <= 0);
             // 충격파
-            foreach (var w in waves.ToList())
+            // 아래 루프들은 시작할 때의 개수만큼만 돈다. 루프 안에서는 리스트에 더해지기만 하므로(빼기는 루프 뒤 RemoveAll) 예전 ToList() 사본과 같은 항목·같은 순서다
+            for (int wi = 0, wn = waves.Count; wi < wn; wi++)
             {
+                var w = waves[wi];
                 w.t += h; w.r = w.max * Mathf.Min(1, w.t / 0.22f);
-                foreach (var m in QueryCircle(w.x, w.y, w.r + 30))
+                var q = QueryCircle(w.x, w.y, w.r + 30);
+                foreach (var m in q)
                 {
                     if (w.hit.Contains(m)) continue;
                     float reach = w.r + m.r * 0.5f;
                     if (U.D2(w.x, w.y, m.x, m.y) < reach * reach) { w.hit.Add(m); Damage(m, w.dmg, w.b, "shock", 1, w); }
                 }
+                FreeQuery(q);
             }
             waves.RemoveAll(w => w.t >= 0.4f);
             // 회오리
-            foreach (var tn in tornados.ToList())
+            for (int ti = 0, tnN = tornados.Count; ti < tnN; ti++)
             {
+                var tn = tornados[ti];
                 tn.x += tn.dir * 2200 * h;
-                foreach (var m in shrooms.ToList())
+                for (int mi = 0, mn = shrooms.Count; mi < mn; mi++)
                 {
+                    var m = shrooms[mi];
                     if (m.dead || tn.hit.Contains(m)) continue;
                     if (Mathf.Abs(m.y - tn.y) < tn.h / 2 + m.r && Mathf.Abs(m.x - tn.x) < 40 + m.r) { tn.hit.Add(m); Damage(m, tn.dmg, tn.b, "skill"); }
                 }
@@ -202,9 +212,12 @@ namespace MoreMush
             tornados.RemoveAll(tn => !(tn.x > FX0 - 60 && tn.x < FX1 + 60));
             // 지연 실행
             foreach (var q in queue) q.t -= h;
-            var ready = queue.Where(q => q.t <= 0).ToList();
-            queue.RemoveAll(q => q.t <= 0);
-            foreach (var q in ready) q.f();
+            if (queue.Count > 0)   // 비어 있으면 Where/ToList를 만들지 않는다
+            {
+                var ready = queue.Where(q => q.t <= 0).ToList();
+                queue.RemoveAll(q => q.t <= 0);
+                foreach (var q in ready) q.f();
+            }
             // 거대 버섯
             if (giantState == "pending" && runT >= 4)
             {
@@ -264,14 +277,14 @@ namespace MoreMush
             {
                 f.t += h;
                 if (f.t < 0) continue;
-                if (!f.clock) { var s = HUD_SLOTS[f.cat]; f.tx = s.x / ZOOM; f.ty = s.y / ZOOM; }
+                if (!f.clock && harvestTargets.TryGetValue(f.cat, out var s)) { f.tx = s.x / ZOOM; f.ty = s.y / ZOOM; }
                 float k = Mathf.Min(1, f.t / f.dur), e = k * k * (3 - 2 * k);
                 f.x = U.Lerp(f.sx, f.tx, e) + Mathf.Sin(k * Mathf.PI) * -60 * (f.sx > f.tx ? -1 : 1) * 0.3f;
                 f.y = U.Lerp(f.sy, f.ty, e) - Mathf.Sin(k * Mathf.PI) * 120;
                 if (k >= 1) { f.done = true; if (!f.clock) slotBump[f.cat] = 1; }
             }
             flyers.RemoveAll(f => f.done);
-            foreach (var k in skillFlash.Keys.ToList()) skillFlash[k] -= h;
+            for (int i = 0; i < flashKeys.Count; i++) skillFlash[flashKeys[i]] -= h;
             scoreBump = Mathf.Max(0, scoreBump - h * 5);
             saleBump = Mathf.Max(0, saleBump - h * 5);
             foreach (var c in CAT_KEYS) slotBump[c] = Mathf.Max(0, slotBump[c] - h * 5);
@@ -321,7 +334,7 @@ namespace MoreMush
             {
                 UpdateWander(h);
                 RebuildGrid();
-                foreach (var b in balls.ToList()) UpdateBall(b, h);
+                for (int i = 0, n = balls.Count; i < n; i++) UpdateBall(balls[i], h);   // 루프 안에서는 더해지기만 한다 (빼기는 아래 RemoveAll)
                 balls.RemoveAll(b => b.dead);
                 if (balls.Count > maxBalls) maxBalls = balls.Count;
                 UpdateEffects(h);

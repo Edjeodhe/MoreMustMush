@@ -11,9 +11,8 @@ namespace MoreMush
         public TMP_Text info;
         float fpsAcc; int fpsN; int fps = 60;
 
-        void Awake() => gameObject.SetActive(false);
-
-        public void Toggle() { DBG.open = !DBG.open; gameObject.SetActive(DBG.open); transform.SetAsLastSibling(); }
+        // 씬에 꺼진 채 저장돼 있다. 예전 Awake(SetActive(false))는 첫 Toggle의 켜기를 바로 되돌려서 세 번 눌러야 열렸다
+        public void Toggle() { DBG.open = !gameObject.activeSelf; gameObject.SetActive(DBG.open); transform.SetAsLastSibling(); }
 
         void Update()
         {

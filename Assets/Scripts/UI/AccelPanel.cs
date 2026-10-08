@@ -29,7 +29,8 @@ namespace MoreMush
                 var B = BUILDING[b.id];
                 icon.sprite = SpriteDB.Get("Farm/Props/" + b.id);
                 title.text = $"{B.n} 건설 가속";
-                desc.text = $"{U.Iga(EvoName(SPC[b.critter]))} 짓고 있어요. 균사석으로 지금 바로 완성할 수 있어요. <color=#8a6a4a>(남은 {U.Fmt(BUILD_ACCEL_SEC / 60)}분마다 균사석 1개)</color>";
+                string who = SPC.TryGetValue(b.critter ?? "", out var k) ? EvoName(k) : "꼬마";   // 예전·손상 세이브에는 짓는 꼬마가 없을 수 있다
+                desc.text = $"{U.Iga(who)} 짓고 있어요. 균사석으로 지금 바로 완성할 수 있어요. <color=#8a6a4a>(남은 {U.Fmt(BUILD_ACCEL_SEC / 60)}분마다 균사석 1개)</color>";
                 left = (b.at - Now()) / 1000; cost = BuildAccelCost(b);
             }
             else

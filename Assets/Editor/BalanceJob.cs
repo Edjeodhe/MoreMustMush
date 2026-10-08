@@ -35,7 +35,7 @@ namespace MoreMush.EditorTools
         {
             if (Running) return "이미 돌고 있음";
             File.WriteAllText(LogPath, "");
-            Defs.ApplyPreset(BalanceSim.PRESET);
+            Defs.ApplyPreset(BalanceSim.PRESET, false);
             job = Run(plan, seeds);
             EditorApplication.update -= Tick;
             EditorApplication.update += Tick;

@@ -26,11 +26,8 @@ namespace MoreMush
             LAUNCH = new Vector2(WW / 2, WH - 150);
         }
 
-        // HUD slots that harvested mushrooms fly to (screen coords)
-        public static readonly Dictionary<string, Vector2> HUD_SLOTS = new Dictionary<string, Vector2>
-        {
-            ["ed"] = new Vector2(66, 186), ["md"] = new Vector2(66, 244), ["ps"] = new Vector2(66, 302),
-        };
+        // Visual-only destinations supplied by RoundHUD from the actual scene layout.
+        public readonly Dictionary<string, Vector2> harvestTargets = new Dictionary<string, Vector2>();
 
         // ===== 상태 =====
         public RoundStats st;
@@ -68,6 +65,8 @@ namespace MoreMush
         public readonly int[] madeT = new int[8], killT = new int[8];   // 티어별 생긴 수·수확한 수 (밸런스 시뮬의 티어별 처치율)
         public Dictionary<string, float> skillLabelT = new Dictionary<string, float>();
         public Dictionary<string, float> skillFlash = new Dictionary<string, float>();
+        readonly List<string> flashKeys = new List<string>();   // skillFlash의 키 목록 (프레임마다 Keys.ToList()를 만들지 않게)
+        void Flash(string id) { if (!skillFlash.ContainsKey(id)) flashKeys.Add(id); skillFlash[id] = 0.6f; }
         public float flashCd;
         public int flamePal; public float flameInt = 0.5f;
         public int chain; public float chainT, chainBump; public int fever; public float feverK;
@@ -117,14 +116,31 @@ namespace MoreMush
             return U.D2(c.x, c.y, px, py) < (c.r + m) * (c.r + m);
         }
 
+        readonly Shape areaLaunch = Shape.C(0, 0, 140), areaFloor = Shape.Rect(0, 0, W, H);
+        readonly Shape areaGiant = Shape.C(0, 0, 0), areaWarning = Shape.C(0, 0, 90);
+
         bool AreaFree(List<Shape> shapes, Colony skipCol = null)
         {
-            var ex = new List<(Shape s, float m)> { (Shape.C(LAUNCH.x, LAUNCH.y, 140), 0), (Shape.Rect(0, NO_SPAWN_Y, W, H), 0) };
-            foreach (var c in colonies) if (c != skipCol) ex.Add((c.shape, 10));
-            foreach (var d in devices) foreach (var s in d.Shapes()) ex.Add((s, 10));
-            if (giant != null) ex.Add((Shape.C(giant.x, giant.y, giant.r), 10));
-            if (giantWarn != null) ex.Add((Shape.C(giantWarn.x, giantWarn.y, 90), 10));
-            foreach (var s in shapes) foreach (var e in ex) if (Overlap(s, e.s, e.m)) return false;
+            foreach (var shape in shapes) if (!AreaFree(shape, skipCol)) return false;
+            return true;
+        }
+
+        bool AreaFree(Shape shape, Colony skipCol = null)
+        {
+            areaLaunch.x = LAUNCH.x; areaLaunch.y = LAUNCH.y; areaFloor.y0 = NO_SPAWN_Y;
+            if (Overlap(shape, areaLaunch, 0) || Overlap(shape, areaFloor, 0)) return false;
+            foreach (var c in colonies) if (c != skipCol && Overlap(shape, c.shape, 10)) return false;
+            foreach (var d in devices) foreach (var s in d.Shapes()) if (Overlap(shape, s, 10)) return false;
+            if (giant != null)
+            {
+                areaGiant.x = giant.x; areaGiant.y = giant.y; areaGiant.r = giant.r;
+                if (Overlap(shape, areaGiant, 10)) return false;
+            }
+            if (giantWarn != null)
+            {
+                areaWarning.x = giantWarn.x; areaWarning.y = giantWarn.y;
+                if (Overlap(shape, areaWarning, 10)) return false;
+            }
             return true;
         }
 
@@ -202,7 +218,7 @@ namespace MoreMush
                 for (int a = 0; a < 30; a++)
                 {
                     var cand = tryWall ? WallCandidate(n, r) : FloorCandidate(n, r);
-                    if (cand != null && AreaFree(new List<Shape> { cand.shape })) { CreateColony(sp, r, cand, instant); return true; }
+                    if (cand != null && AreaFree(cand.shape)) { CreateColony(sp, r, cand, instant); return true; }
                 }
                 if (!tryWall) return false;
             }
@@ -337,10 +353,15 @@ namespace MoreMush
             }
         }
 
+        // QueryCircle 결과 리스트 재사용. 맞힘 → 충격파 → 다시 조회처럼 중첩되므로 스택으로 빌려 주고, 다 쓰면 FreeQuery로 돌려받는다.
+        // (내용·순서는 예전과 같아 결과가 바뀌지 않는다. 돌려주지 않은 리스트는 그냥 버려질 뿐)
+        readonly Stack<List<Shroom>> queryPool = new Stack<List<Shroom>>();
+        void FreeQuery(List<Shroom> l) { l.Clear(); queryPool.Push(l); }
+
         List<Shroom> QueryCircle(float x, float y, float rad)
         {
             qsCounter++;
-            var o = new List<Shroom>();
+            var o = queryPool.Count > 0 ? queryPool.Pop() : new List<Shroom>(64);
             int x0 = Mathf.Clamp(Mathf.FloorToInt((x - rad) / CELL), 0, GW - 1), x1 = Mathf.Clamp(Mathf.FloorToInt((x + rad) / CELL), 0, GW - 1);
             int y0 = Mathf.Clamp(Mathf.FloorToInt((y - rad) / CELL), 0, GH - 1), y1 = Mathf.Clamp(Mathf.FloorToInt((y + rad) / CELL), 0, GH - 1);
             for (int gy = y0; gy <= y1; gy++)

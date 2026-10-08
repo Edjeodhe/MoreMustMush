@@ -20,7 +20,8 @@ namespace MoreMush
 
         Vector3 capRest, bodyRest, footLRest, footRRest;
         float blinkT;
-        string shownKind;
+        string shownKind, shownSkin, shownHat;   // 지금 그려진 모습 (문자열을 이어 붙여 비교하지 않고 칸별로 비교)
+        bool shownAny;
 
         SpriteRenderer[] renderers;
         bool shownSilhouette;
@@ -36,15 +37,16 @@ namespace MoreMush
         public void SetKind(string id)
         {
             kind = id;
-            string key = id + "|" + skin + "|" + hatId;
-            if (shownKind == key) return;
-            shownKind = key;
+            if (!LookDirty) return;
+            shownAny = true; shownKind = id; shownSkin = skin; shownHat = hatId;
             Defs.SKIN.TryGetValue(skin ?? "", out var sk);
-            var s = SpriteDB.Get("Characters/Critters/" + (sk != null ? "skin_" : "cap_") + id);
+            var s = SpriteDB.Get(sk != null ? "Characters/Critters/skin_" : "Characters/Critters/cap_", id);
             if (s != null) capSprite.sprite = s;
             Place(acc, sk?.acc);
             Place(hat, hatId);
         }
+
+        bool LookDirty => !shownAny || shownKind != kind || shownSkin != skin || shownHat != hatId;
 
         // Skin + hat for this critter (farm, skin shop, field). Null to take them off.
         public void SetLook(string id, string skinId, string hatName)
@@ -59,7 +61,7 @@ namespace MoreMush
             if (sr == null) return;
             sr.gameObject.SetActive(name != null);
             if (name == null) return;
-            var sp = SpriteDB.Get("Characters/Critters/Acc/" + name);
+            var sp = SpriteDB.Get("Characters/Critters/Acc/", name);
             sr.sprite = sp;
             if (sp == null || !Defs.ACC_PLACE.TryGetValue(name, out var p)) return;
             float s = p.w / sp.bounds.size.x;
@@ -77,7 +79,7 @@ namespace MoreMush
 
         void Update()
         {
-            if (shownKind != kind + "|" + skin + "|" + hatId) SetKind(kind);
+            if (LookDirty) SetKind(kind);
             if (shownSilhouette != silhouette)
             {
                 shownSilhouette = silhouette;

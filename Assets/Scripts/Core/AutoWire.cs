@@ -50,7 +50,9 @@ namespace MoreMush
                 }
                 if (!IsRef(ft)) continue;
                 if (f.GetValue(mb) is UnityEngine.Object cur && cur != null) continue;
-                var val = Special(mb, f) ?? Lookup(byName, f.Name, ft, mb.transform) ?? Own(mb, ft);
+                bool explicitPath = f.IsDefined(typeof(ScenePathAttribute)) || f.IsDefined(typeof(AssetPathAttribute));
+                var val = explicitPath ? Special(mb, f) : Lookup(byName, f.Name, ft, mb.transform);
+                if (!explicitPath && !byName.ContainsKey(Key(f.Name))) val ??= Own(mb, ft);
                 if (val != null) { f.SetValue(mb, val); n++; }
             }
             return n;
@@ -97,14 +99,20 @@ namespace MoreMush
         static UnityEngine.Object Lookup(Dictionary<string, List<Transform>> byName, string field, Type type, Transform self)
         {
             if (!byName.TryGetValue(Key(field), out var list)) return null;
+            UnityEngine.Object found = null;
             foreach (var t in list)
             {
                 if (t == self) continue;
-                if (type == typeof(GameObject)) return t.gameObject;
-                var c = t.GetComponent(type);
-                if (c != null) return c;
+                var candidate = type == typeof(GameObject) ? (UnityEngine.Object)t.gameObject : t.GetComponent(type);
+                if (candidate == null) continue;
+                if (found != null)
+                {
+                    Debug.LogWarning($"[AutoWire] {self.name}.{field}: multiple {type.Name} matches; assign explicitly in the Inspector.", self);
+                    return null;
+                }
+                found = candidate;
             }
-            return null;
+            return found;
         }
     }
 }

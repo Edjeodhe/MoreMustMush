@@ -18,7 +18,9 @@ namespace MoreMush
         static readonly Dictionary<long, AudioClip> cache = new Dictionary<long, AudioClip>();
         public AudioSource[] voices = new AudioSource[16];   // voice pool, placed on this object in the hierarchy
         int next;
-        readonly List<(float at, System.Action f)> delayed = new List<(float, System.Action)>();
+        // 조금 뒤에 낼 소리 (클로저 대신 값으로 들고 있어 소리마다 할당하지 않는다)
+        struct Pending { public float at, f, d, v, slide; public Wave type; }
+        readonly List<Pending> delayed = new List<Pending>();
 
         void Awake()
         {
@@ -28,10 +30,14 @@ namespace MoreMush
         void Update()
         {
             for (int i = delayed.Count - 1; i >= 0; i--)
-                if (Time.unscaledTime >= delayed[i].at) { var f = delayed[i].f; delayed.RemoveAt(i); f(); }
+                if (Time.unscaledTime >= delayed[i].at) { var p = delayed[i]; delayed.RemoveAt(i); Tone(p.f, p.d, p.type, p.v, p.slide); }
         }
 
-        static void Later(float sec, System.Action f) { if (I != null) I.delayed.Add((Time.unscaledTime + sec, f)); }
+        static void Later(float sec, float f, float d, Wave type, float v, float slide) { if (I != null) I.delayed.Add(new Pending { at = Time.unscaledTime + sec, f = f, d = d, type = type, v = v, slide = slide }); }
+
+        static readonly float[] RARE_F = { 660, 880, 1320 }, RECORD_F = { 523, 659, 784, 1046 };
+        static readonly Dictionary<float, string> skillKeys = new Dictionary<float, string>();
+        static string SkillKey(float f) { if (!skillKeys.TryGetValue(f, out var k)) skillKeys[f] = k = "sk" + f; return k; }
 
         public static void Tone(float f, float d = 0.08f, Wave type = Wave.Sine, float v = 1, float slide = 0, string key = null, float gap = 0.035f)
         {
@@ -80,13 +86,13 @@ namespace MoreMush
         public static void Harvest(int combo) => Tone(420 * Mathf.Pow(2, Mathf.Min(combo, 24) / 12f), 0.09f, Wave.Sine, 0.75f, 1.7f, "harv", 0.03f);
         public static void Bar() => Tone(240, 0.08f, Wave.Square, 0.25f, 1.6f, "bar");
         public static void Wall() => Tone(150, 0.04f, Wave.Triangle, 0.25f, 0.8f, "wall", 0.06f);
-        public static void Skill(float f) => Tone(f, 0.16f, Wave.Saw, 0.22f, 0.55f, "sk" + f, 0.08f);
-        public static void Rare() { float[] fs = { 660, 880, 1320 }; for (int i = 0; i < 3; i++) { float f = fs[i]; Later(i * 0.06f, () => Tone(f, 0.14f, Wave.Sine, 0.6f, 1.2f)); } }
-        public static void Buy() { Tone(520, 0.07f, Wave.Sine, 0.6f, 1.5f); Later(0.06f, () => Tone(780, 0.1f, Wave.Sine, 0.6f, 1.5f)); }
+        public static void Skill(float f) => Tone(f, 0.16f, Wave.Saw, 0.22f, 0.55f, SkillKey(f), 0.08f);
+        public static void Rare() { for (int i = 0; i < RARE_F.Length; i++) Later(i * 0.06f, RARE_F[i], 0.14f, Wave.Sine, 0.6f, 1.2f); }
+        public static void Buy() { Tone(520, 0.07f, Wave.Sine, 0.6f, 1.5f); Later(0.06f, 780, 0.1f, Wave.Sine, 0.6f, 1.5f); }
         public static void Ui() => Tone(720, 0.03f, Wave.Triangle, 0.35f, 0, "ui");
         public static void Err() => Tone(170, 0.12f, Wave.Square, 0.25f, 0.8f, "err");
         public static void Launch() => Tone(300, 0.2f, Wave.Sine, 0.6f, 3);
         public static void Bumper() => Tone(900, 0.06f, Wave.Square, 0.25f, 0.5f, "bump");
-        public static void Record() { float[] fs = { 523, 659, 784, 1046 }; for (int i = 0; i < 4; i++) { float f = fs[i]; Later(i * 0.07f, () => Tone(f, 0.12f, Wave.Triangle, 0.5f)); } }
+        public static void Record() { for (int i = 0; i < RECORD_F.Length; i++) Later(i * 0.07f, RECORD_F[i], 0.12f, Wave.Triangle, 0.5f, 0); }
     }
 }

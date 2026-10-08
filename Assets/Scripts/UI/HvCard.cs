@@ -17,8 +17,16 @@ namespace MoreMush
         public TMP_Text unlockText, toggleText, levelText;
         public Image toggleImage;
 
+        void Bind(Button button, string action)
+        {
+            var ua = button.GetComponent<UIAction>();
+            if (ua != null) { ua.act = action; ua.arg = id; }
+        }
+
         public void Render()
         {
+            // A duplicated card must operate on its own harvester, even if serialized args are stale.
+            Bind(unlock, "hvunlock"); Bind(toggle, "hvtoggle"); Bind(level, "hvlevel");
             var h = HV[id];
             int S = HvStar(id); bool on = HvOn(id);
             frame.color = S > 0 ? U.Hex("#fffaf0") : U.Hex("#efe6d4");

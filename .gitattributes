@@ -1,0 +1,3 @@
+
+# Static TMP atlas assets contain binary texture data.
+"*SDF.asset" merge=binary

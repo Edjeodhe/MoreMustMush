@@ -18,8 +18,12 @@ namespace MoreMush
             rows.Add(("스테이지", $"{StageNow()} · {UIUtil.Ic(th.icon)} {th.n}"));
             rows.Add(("플레이 시간", U.FmtTime(G.play)));
             rows.Add(("도감", $"{CodexCount()}/{SP_TOTAL} · 황금 {GoldenCount()}/{SP_TOTAL} · 특수 {SPECIALS.Count(s => HasSpecial(s.id))}/{SPECIALS.Length}"));
-            for (int i = 0; i < rows.Count && i < rowLabels.Length; i++)
+            // 씬의 줄 수가 기록 수보다 많으면 남는 줄은 숨긴다 (세금 줄을 지운 뒤 Row8이 "기록 / 0"으로 남아 있었다)
+            for (int i = 0; i < rowLabels.Length; i++)
             {
+                bool on = i < rows.Count;
+                UIUtil.Show(rowLabels[i].transform.parent, on);
+                if (!on) continue;
                 rowLabels[i].text = rows[i].Item1;
                 rowValues[i].text = rows[i].Item2;
             }

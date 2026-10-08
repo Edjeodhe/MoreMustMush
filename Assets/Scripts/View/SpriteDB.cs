@@ -37,8 +37,19 @@ namespace MoreMush
             return db.map.TryGetValue(key, out var s) ? s : null;
         }
 
-        public static Sprite Single(string spId) => Get("Mushrooms/Single/" + spId);
-        public static Sprite Colony(string spId) => Get("Mushrooms/Colony/" + spId);
-        public static Sprite Icon(string name) => Get("Icons/" + name);
+        // 접두어 + 이름으로 만든 키를 기억해 둔다. 프레임마다 그리는 곳에서 키 문자열을 새로 만들지 않게 쓴다
+        static readonly Dictionary<string, Dictionary<string, string>> keys = new Dictionary<string, Dictionary<string, string>>();
+        public static string Key(string prefix, string name)
+        {
+            if (name == null) return prefix;
+            if (!keys.TryGetValue(prefix, out var m)) keys[prefix] = m = new Dictionary<string, string>();
+            if (!m.TryGetValue(name, out var k)) m[name] = k = prefix + name;
+            return k;
+        }
+        public static Sprite Get(string prefix, string name) => Get(Key(prefix, name));
+
+        public static Sprite Single(string spId) => Get("Mushrooms/Single/", spId);
+        public static Sprite Colony(string spId) => Get("Mushrooms/Colony/", spId);
+        public static Sprite Icon(string name) => Get("Icons/", name);
     }
 }

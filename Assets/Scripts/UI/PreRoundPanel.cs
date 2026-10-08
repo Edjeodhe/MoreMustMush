@@ -19,9 +19,12 @@ namespace MoreMush
         public void Render()
         {
             stage.text = $"스테이지 {StageNow()}";
-            for (int i = 0; i < THEMES.Count; i++)
+            int count = Mathf.Min(THEMES.Count, themeCards.Length, themeIcons.Length, themeNames.Length, themeDescs.Length, themeCounts.Length);
+            for (int i = count; i < themeCards.Length; i++) UIUtil.Show(themeCards[i], false);
+            for (int i = 0; i < count; i++)
             {
                 var th = THEMES[i]; var card = themeCards[i];
+                UIUtil.Show(card, true);
                 bool ok = ThemeOpen(th), on = G.theme == th.id;
                 var ex = SPECIES.Where(sp => sp.theme == th.id).ToList();
                 card.color = on ? U.Hex("#eef7ff") : U.Hex("#fffaf0");

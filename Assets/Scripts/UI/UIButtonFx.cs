@@ -20,6 +20,11 @@ namespace MoreMush
             group = GetComponent<CanvasGroup>();
         }
 
+        float shownY = float.NaN, shownA = -1;   // 마지막으로 쓴 값 (바뀔 때만 RectTransform·CanvasGroup을 건드린다)
+
+        // 마우스를 올린 채 버튼이 꺼지면 Exit가 오지 않아, 다시 켜질 때 2px 떠 있었다
+        void OnDisable() { hover = down = false; }
+
         public void OnPointerEnter(PointerEventData e) => hover = true;
         public void OnPointerExit(PointerEventData e) { hover = false; down = false; }
         public void OnPointerDown(PointerEventData e) => down = true;
@@ -28,8 +33,9 @@ namespace MoreMush
         void Update()
         {
             bool on = button == null || button.interactable;
-            if (content != null) content.anchoredPosition = rest + new Vector2(0, !on ? 0 : down ? -2 : hover ? 2 : 0);
-            if (group != null) group.alpha = on ? 1 : 0.6f;
+            float y = !on ? 0 : down ? -2 : hover ? 2 : 0, a = on ? 1 : 0.6f;
+            if (content != null && y != shownY) { shownY = y; content.anchoredPosition = rest + new Vector2(0, y); }
+            if (group != null && a != shownA) { shownA = a; group.alpha = a; }
         }
     }
 }

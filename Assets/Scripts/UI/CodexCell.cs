@@ -24,10 +24,14 @@ namespace MoreMush
             if (ua != null) { ua.act = "codexsel"; ua.arg = id; }
         }
 
+        public void Select(string selected)
+        {
+            if (selOutline != null) selOutline.enabled = selected == id;
+        }
+
         public void Render(string selected)
         {
-            bool sel = selected == id;
-            if (selOutline != null) selOutline.enabled = sel;
+            Select(selected);
             if (id.StartsWith("sp:"))
             {
                 var k = SPC[id.Substring(3)];

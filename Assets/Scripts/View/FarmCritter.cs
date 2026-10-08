@@ -55,7 +55,7 @@ namespace MoreMush
             }
 
             // 건설 중: 리그 대신 망치질 그림 (내려치는 프레임에서 살짝 찌그러진다)
-            var bsp = p.bframe >= 0 ? SpriteDB.Get($"Characters/Critters/Build/build_{p.id}_{p.bframe}") : null;
+            var bsp = p.bframe >= 0 ? SpriteDB.Get(SpriteDB.Key("Characters/Critters/Build/build_", p.id), p.bframe == 0 ? "_0" : "_1") : null;
             bool hammering = bsp != null;
             if (hammering && p.bframe == 1) { sy = 0.94f; sx = 1.06f; }
 
@@ -114,7 +114,7 @@ namespace MoreMush
             }
 
             // 마우스를 올리면 이름·호감도
-            label.SetActive(hovered);
+            UIUtil.Show(label, hovered);
             if (hovered)
             {
                 string s = $"{EvoName(p.kind)} {HeartStr(p.id)}";
@@ -124,7 +124,7 @@ namespace MoreMush
 
             // 말풍선
             bool talking = p.sayT > 0;
-            say.SetActive(talking);
+            UIUtil.Show(say, talking);
             if (talking)
             {
                 float a = Mathf.Clamp01(Mathf.Min(1, Mathf.Min(p.sayT * 3, (2.8f - p.sayT) * 8 + 0.2f)));
@@ -139,12 +139,12 @@ namespace MoreMush
 
             // 부탁 말풍선 (목장)
             bool ask = request != null && !talking;
-            req.SetActive(ask);
+            UIUtil.Show(req, ask);
             if (ask)
             {
                 float by = -R0 * 2 - 74 + Mathf.Sin(now * 5 + p.x) * 5;
                 req.transform.localPosition = new Vector3(0, -(by + 31) / P, 0);
-                var icon = SpriteDB.Get("Farm/Icons/" + request.icon);
+                var icon = SpriteDB.Get("Farm/Icons/", request.icon);
                 if (reqIcon.sprite != icon) { reqIcon.sprite = icon; Art.FitPx(reqIcon, 44); }
             }
         }

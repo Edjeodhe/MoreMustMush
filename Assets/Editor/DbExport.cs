@@ -17,7 +17,7 @@ namespace MoreMush.EditorTools
     {
         public static string Export()
         {
-            Defs.ApplyPreset(BalanceSim.PRESET);
+            Defs.ApplyPreset(BalanceSim.PRESET, false);
             BalanceSim.LoadPriceTable();
             var nf = typeof(NF);
             var rows = NODES.Select(n =>

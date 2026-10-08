@@ -20,6 +20,18 @@ namespace MoreMush
         readonly List<Image> tongues = new List<Image>();
         readonly List<Image> embers = new List<Image>();
 
+        // 바뀔 때만 만드는 글자 (콤보 숫자·피버 배율·피버 문구)
+        readonly Dictionary<int, string> comboStr = new Dictionary<int, string>();
+        Flame shownFeverF; double shownFeverMul = double.NaN; string feverStr;
+        object shownMsg; string msgStr;
+
+        Vector2 feverOrigin;
+        void Awake()
+        {
+            feverOrigin = feverMul.rectTransform.anchoredPosition;
+            UIUtil.SubCanvas(flameLayer);
+        }   // 불꽃 수십 개가 매 프레임 움직여도 나머지 UI는 다시 배칭하지 않게
+
         Image Clone(Image template, List<Image> into)
         {
             var img = Instantiate(template, flameLayer);
@@ -43,14 +55,17 @@ namespace MoreMush
                 string outl = c >= FLAME_STEP ? F.@out : c >= FEVER[1].at ? "#c2200a" : c >= FEVER[0].at ? "#d2560e" : "#5a2a00";
                 combo.localScale = new Vector3(s, s, 1);
                 combo.localRotation = Quaternion.Euler(0, 0, 0.06f * Mathf.Rad2Deg);
-                Style(comboNum, c.ToString(), size, col, outl);
+                if (!comboStr.TryGetValue(c, out var cs)) comboStr[c] = cs = c.ToString();
+                Style(comboNum, cs, size, col, outl);
                 Style(comboLabel, "COMBO", Mathf.Max(26, size * 0.32f), col, outl);
                 comboLabel.rectTransform.anchoredPosition = new Vector2(0, -size * 0.62f);
                 UIUtil.Show(feverMul, R.fever > 0);
                 if (R.fever > 0)
                 {
-                    Style(feverMul, $"{F.icon} 점수 ×{R.FeverMulPublic}", 24, col, outl);
-                    feverMul.rectTransform.anchoredPosition = new Vector2(1590, -(300 + size * 0.62f + 36));
+                    double fm = R.FeverMulPublic;
+                    if (F != shownFeverF || fm != shownFeverMul) { shownFeverF = F; shownFeverMul = fm; feverStr = $"{F.icon} 점수 ×{fm}"; }
+                    Style(feverMul, feverStr, 24, col, outl);
+                    feverMul.rectTransform.anchoredPosition = feverOrigin + new Vector2(0, -size * 0.62f);
                 }
             }
             else UIUtil.Show(feverMul, false);
@@ -65,7 +80,8 @@ namespace MoreMush
                 feverMsg.localScale = new Vector3(sc, sc, 1);
                 feverMsg.localRotation = Quaternion.Euler(0, 0, 0.05f * Mathf.Rad2Deg);
                 var MF = m.pal >= 0 ? FLAME[m.pal] : null;
-                string txt = m.noIcon ? m.text : $"{(MF != null ? MF.icon : UIUtil.Ic("s_burst"))} {m.text}";
+                if (m != shownMsg) { shownMsg = m; msgStr = m.noIcon ? m.text : $"{(MF != null ? MF.icon : UIUtil.Ic("s_burst"))} {m.text}"; }
+                string txt = msgStr;
                 Style(feverTitle, txt, m.lv == 2 ? 92 : 80, MF?.text ?? "#ffe9a0", MF?.@out ?? "#a01a08", a);
                 UIUtil.Show(feverSub, m.sub != null);
                 if (m.sub != null) Style(feverSub, m.sub, 36, MF?.text ?? "#ffe9a0", MF?.@out ?? "#a01a08", a);

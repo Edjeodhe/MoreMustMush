@@ -49,13 +49,19 @@ namespace MoreMush
         readonly List<ShopRow> rows = new List<ShopRow>();
         readonly List<QuestRow> quests = new List<QuestRow>();
 
-        public double Qty(string id) => U.Clamp((float)System.Math.Floor(qty.TryGetValue(id, out var q) ? q : InvCount(id)), 0, (float)InvCount(id));
+        public double Qty(string id) => ClampQty(qty.TryGetValue(id, out var q) ? q : InvCount(id), InvCount(id));
+
+        public static double ClampQty(double value, double available)
+        {
+            if (double.IsNaN(value) || double.IsNaN(available) || available <= 0) return 0;
+            return System.Math.Max(0, System.Math.Min(System.Math.Floor(value), System.Math.Floor(available)));
+        }
 
         public void ResetQty() => qty.Clear();
 
         public void SetQty(string id, double v)
         {
-            qty[id] = U.Clamp((float)System.Math.Floor(v), 0, (float)InvCount(id));
+            qty[id] = ClampQty(v, InvCount(id));
             RefreshRow(id);
         }
 

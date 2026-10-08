@@ -27,12 +27,14 @@ namespace MoreMush
         }
 
         // lifted: being moved (the ghost shows where it goes; the old spot stays faintly visible)
+        long shownSec = -1;
+
         public void Draw(SaveData.Bld b, bool lifted = false)
         {
             var B = BUILDING[b.id];
             var r = BuildRect(B, b.gx, b.gy);
             transform.localPosition = Art.P(r.center.x, r.yMax);
-            Fit(sprite, SpriteDB.Get("Farm/Props/" + b.id), B.px);
+            Fit(sprite, SpriteDB.Get("Farm/Props/", b.id), B.px);
             int order = 1000 + Mathf.RoundToInt(r.yMax) - 6;
             sprite.sortingOrder = order;
             shadow.transform.localScale = new Vector3(r.width * 0.95f / Art.PPU, 0.3f, 1);
@@ -45,7 +47,8 @@ namespace MoreMush
             site.transform.localPosition = new Vector3(0, (r.height + 70) / Art.PPU, 0);
             barFill.transform.localScale = new Vector3(BAR * k / Art.PPU, barFill.transform.localScale.y, 1);
             barFill.transform.localPosition = new Vector3((-BAR / 2 + BAR * k / 2) / Art.PPU, barFill.transform.localPosition.y, 0);
-            UIUtil.SetText(timer, BuildLeftText(b));
+            long sec = System.Math.Max(0, (long)System.Math.Ceiling((b.at - Now()) / 1000));   // 남은 초가 바뀔 때만 글자를 다시 만든다
+            if (sec != shownSec) { shownSec = sec; UIUtil.SetText(timer, Mmss(sec)); }
             hammer.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Sin(Time.time * 10 + b.uid) * 25);
         }
     }
