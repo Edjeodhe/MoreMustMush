@@ -12,6 +12,7 @@ namespace MoreMush
         public int v = 2;
         public double gold, gem, spore, dia;       // dia 다이아몬드: 스킨·건물에 쓰는 코스메틱 재화
         public double autoT;                       // 자동 수확 보상을 마지막으로 받은 시각 (ms, 0 = 아직 시작 안 함)
+        public double seenT;                       // 마지막으로 게임 안에 있던 시각 (ms, 복귀 팝업용, 0 = 기록 없음)
         public Skins skins = new Skins();
         public Dictionary<string, int> nodes = new Dictionary<string, int>();
         public Dictionary<string, bool> seeds = new Dictionary<string, bool>();

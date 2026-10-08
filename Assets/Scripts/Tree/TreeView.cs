@@ -63,7 +63,6 @@ namespace MoreMush
                 hubLabels[i].text = CATS[br].name + " 균사";
                 hubLabels[i].transform.localPosition = Art.P(h.x + (br == "ed" ? 70 : br == "md" ? 58 : -58), h.y + (br == "ed" ? 0 : 34));
             }
-            grandpa.sparkle = NODES.Any(n => { var s = NodeState(n); return (s == "avail" || s == "owned") && CanAfford(NodeCost(n, Lv(n.id))); });
             grandpa.transform.localPosition = Art.P(-14, 82 + Mathf.Sin(now * 2) * 2);
 
             HandleInput();

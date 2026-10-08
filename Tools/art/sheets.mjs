@@ -251,28 +251,6 @@ export const SHEETS = [
     items: [["grandpa_ref", "a veteran mushroom-hunter grandpa: worn brown leather hunting hat with a feather, a scar over one eye, a braided grey beard, a long olive coat with a fur collar, a bandolier of little spore vials across the chest, dried mushroom trophies and a short dagger at the belt, a big scythe resting on his shoulder, sturdy boots, kind sparkly eyes"]],
   },
   {
-    id: "grandpa_parts", rows: 4, cols: 4, out: "Characters/Grandpa", refs: ["Art/Raw/grandpa_full.png"],
-    subject: "Cut-out animation parts of the SAME mushroom-hunter grandpa as the attached reference, all drawn at the same scale, each part separate with a little extra overlap at the joints so they can be rigged. Neutral pose, front three-quarter view.",
-    items: [
-      ["hat", "the leather hunting hat with the feather"],
-      ["head", "the head without the hat: face with the eye scar, ears, braided grey beard, no eyes drawn (blank eye area)"],
-      ["eyes_open", "a pair of kind open eyes"],
-      ["eyes_sparkle", "a pair of sparkling excited eyes with star highlights"],
-      ["eyes_closed", "a pair of closed eyes (blink)"],
-      ["torso", "the torso in the long olive coat with fur collar, spore vial bandolier and belt with mushroom trophies and dagger, no arms, no legs"],
-      ["coat_tail", "the lower hem of the coat (tail flap)"],
-      ["upper_arm_back", "the upper arm (shoulder to elbow) of the arm that holds the scythe"],
-      ["lower_arm_back", "the forearm and hand (elbow to fist) of the arm that holds the scythe"],
-      ["upper_arm_front", "the upper arm (shoulder to elbow) of the free arm"],
-      ["lower_arm_front", "the forearm and open hand (elbow to hand) of the free arm"],
-      ["leg_left", "the left leg with boot"],
-      ["leg_right", "the right leg with boot"],
-      ["scythe", "the big scythe alone"],
-      ["brow_left", "a bushy grey eyebrow"],
-      ["brow_right", "a bushy grey eyebrow, mirrored"],
-    ],
-  },
-  {
     id: "critters_full", rows: 2, cols: 5, out: "Characters/Critters",
     subject: "Ten cute chibi mushroom-critter characters of one family, front view, standing: each has a round cream face/body with big round eyes, a small smile and rosy cheeks, little brown feet, and a big mushroom cap on top. Same body shape for all; only the cap colors and the decoration differ.",
     items: CRITTERS.map(([id, look]) => [`${id}_ref`, look]),
@@ -447,6 +425,17 @@ export const SHEETS = [
       ["fruit_md", "a cluster of green medicinal mushrooms"],
       ["fruit_ps", "a cluster of purple poison mushrooms with tiny spots"],
     ],
+  },
+  // ===== 건설하는 꼬마 (망치질 2프레임: a 들어 올림 · b 내려침). Tools/art/align_frames.py로 두 프레임을 발 기준으로 맞춘다 =====
+  {
+    id: "critter_build_a", rows: 2, cols: 5, out: "Characters/Critters/Build", refs: ["Art/Raw/critters_full.png"],
+    subject: "The ten mushroom critters from the attached reference, now working as tiny builders. Keep each critter's body, face, cap shape, cap colors, spots and cap decoration exactly as in the reference, at the same scale for all ten. Every critter: three-quarter side view facing RIGHT, standing on its two little brown feet, with two tiny stubby cream nub arms, a small yellow construction hard hat worn tilted on the back of the cap so the cap decoration stays visible, and a wooden-handled builder's hammer held in both nub arms RAISED HIGH above and behind its head, ready to strike, a determined happy face. The hammer never goes below the feet. Nothing else: no ground, no planks, no effects, no shadow.",
+    items: CRITTERS.map(([id, look]) => [`build_${id}_0`, look]),
+  },
+  {
+    id: "critter_build_b", rows: 2, cols: 5, out: "Characters/Critters/Build", refs: ["Art/Raw/critter_build_a.png"],
+    subject: "Second animation frame for the attached sprite sheet: a WIDE sheet laid out exactly like the attached one (2 rows of 5 on a fully transparent background, no glow, no colored backdrop, no vignette). Redraw each of the ten builder critters from the attached sheet in the same cell, at the same size, with the same art style, outline, cap, spots, cap decoration, yellow hard hat, round cream body, face looking to the RIGHT, open happy eyes and little brown feet in the same place. Change ONLY the arms and hammer: the hammer has just been SWUNG DOWN to the right, the stubby nub arms stretched forward-down, the dark hammer head resting at foot level in front of (to the right of) the feet, the handle slanting up to the arms. Nothing else: no ground, no planks, no effects, no shadow.",
+    items: CRITTERS.map(([id, look]) => [`build_${id}_1`, look]),
   },
   {
     id: "bg_kitchen", kind: "image", out: "Backgrounds/bg_kitchen.png",

@@ -112,13 +112,13 @@ namespace MoreMush
         public static class TREE
         {
             public const int maxLv = 10;
-            public const float x = 570, y = 790;                  // 나무 밑동 (화면 좌표)
+            public const float x = 960, y = 480;                  // 나무 밑동 (화면 좌표): 목장 가운데 뒤쪽, 랜드마크 자리
             public static int Slots(int lv) => 3 + lv;            // 버섯이 열리는 자리 수
             public static double Cost(int lv) => 3000 * System.Math.Pow(3, lv - 1);   // lv → lv+1 골드
             public const float speedPerLv = 0.9f;                 // 성장 시간 × 0.9^(lv-1)
             public const float yieldPerLv = 0.15f;                // 수확량 × (1 + 0.15 × (lv-1))
             public static int Stage(int lv) => System.Math.Min(4, (lv - 1) / 2);   // 나무 그림 단계 (tree_0 ~ tree_4)
-            public static readonly float[] width = { 170, 240, 330, 430, 520 };   // 단계별 나무 너비 (px)
+            public static readonly float[] width = { 180, 240, 300, 360, 420 };   // 단계별 나무 너비 (px). 5단계 우듬지가 화면 위에 걸리지 않게
             // 단계별 버섯이 열리는 타원 (나무 그림 너비 대비: 가운데 x, 밑동에서 위로 y, 반지름 rx·ry) — Farm/Tree/tree_N 그림에서 잰 값
             public static readonly float[][] canopy =
             {
@@ -127,7 +127,8 @@ namespace MoreMush
             };
             public const float pick = 0.6f;                       // 버섯 하나 따는 시간 (초) ÷ 속도
             public const float accelSec = 600;                    // 균사석 1개로 줄이는 성장 시간 (초)
-            public const float zoneX0 = 300, zoneX1 = 840, zoneY0 = 260, zoneY1 = 840;   // 건물을 놓을 수 없는 나무 둘레 (Tools/art/make_build_grid.py도 같이)
+            public const float zoneX0 = 740, zoneX1 = 1180, zoneY0 = 260, zoneY1 = 540;   // 건물을 놓을 수 없는 나무 밑동 둘레 (Tools/art/make_build_grid.py도 같이)
+            public const int order = 880;                         // 나무는 꼬마·건물과 그 그림자(899~)보다 항상 뒤에 그린다 (그림자 −1 · 버섯 +1·+2 · 팻말 +3·+4)
         }
         // 나무에 열리는 버섯: w 열릴 확률 가중치 · time 자라는 시간(초) · gem 딸 때 균사석
         public class Fruit { public string n; public int gem; public float w, time; }
@@ -138,6 +139,14 @@ namespace MoreMush
             ["ps"] = new Fruit { n = "독버섯", w = 10, time = 900, gem = 12 },
         };
         public const float BUILD_ACCEL_SEC = 300;                 // 균사석 1개로 줄이는 건설 시간 (초)
+        public const float BUILD_HOLD = 0.35f, BUILD_DRAG = 18;   // 건물을 이만큼(초) 꾹 누르거나 이만큼(px) 끌면 옮기기 시작
+
+        // 건설하는 꼬마 그림 (Characters/Critters/Build/build_<id>_0 들어 올림 · _1 내려침)
+        public static class BUILDER
+        {
+            public const float w = 2.6f;                          // 그림 너비 = 꼬마 반지름 × w
+            public const float beat = 0.6f, strike = 0.2f;        // 망치질 한 번 (초) · 그중 내려친 프레임
+        }
 
         // ===== 자동 수확 보상 (마지막으로 받은 뒤 쌓인다, 최대 8시간) =====
         public static class AUTO
@@ -146,6 +155,7 @@ namespace MoreMush
             public const double goldTaxK = 0.25, goldMin = 200;   // 골드/시간 = max(goldMin, 이번 사이클 최소 세금 × goldTaxK)
             public const double gemH = 1, diaH = 0.4;             // 균사석·다이아몬드/시간
             public const float minClaim = 60;                      // 받을 수 있는 최소 시간 (초)
+            public const float returnMin = 600;                    // 이만큼(초) 자리를 비웠다 돌아오면 복귀 팝업
         }
 
         // ===== 스킨 (다이아몬드로 산다) =====

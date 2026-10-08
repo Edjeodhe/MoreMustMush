@@ -77,30 +77,8 @@ await save("FieldText", "Assets/Prefabs/Round/FieldText.prefab");
 }
 
 // ===== grandpa rig =====
-// Grandpa-sheet pixels, origin at the feet, y up. ~990 sheet px tall → 330 px (prototype height at s = 1).
-{
-  const K = 0.00333, s = K * 100;
-  const p = (x, y) => [x * K, y * K, 0];
-  const G = `${W}/GrandpaRig`;
-  const part = (path, sprite, order, pos, opt = {}) => b.go(path, { SpriteRenderer: SR(ART("Characters/Grandpa/" + sprite), order) }, { pos: p(...pos), scale: [s * (opt.flip ? -1 : 1) * (opt.k ?? 1), s * (opt.k ?? 1), 1], rot: opt.rot });
-  b.go(G, { GrandpaRig: {}, SortingGroup: { sortingOrder: 50 } });
-  b.go(`${G}/LegL`, {}, { pos: p(-62, 300) }); part(`${G}/LegL/LegLSprite`, "leg_left", 1, [0, -150]);
-  b.go(`${G}/LegR`, {}, { pos: p(62, 300) }); part(`${G}/LegR/LegRSprite`, "leg_right", 1, [0, -150]);
-  b.go(`${G}/CoatTail`, {}, { pos: p(0, 330) }); part(`${G}/CoatTail/CoatTailSprite`, "coat_tail", 2, [0, -95]);
-  b.go(`${G}/UpperArmBack`, {}, { pos: p(-150, 560) }); part(`${G}/UpperArmBack/UpperArmBackSprite`, "upper_arm_back", 3, [-20, -120]);
-  b.go(`${G}/UpperArmBack/LowerArmBack`, {}, { pos: p(-40, -230) }); part(`${G}/UpperArmBack/LowerArmBack/LowerArmBackSprite`, "lower_arm_back", 5, [-10, -70]);
-  part(`${G}/UpperArmBack/LowerArmBack/Scythe`, "scythe", 2, [40, 60], { k: 1.6, rot: [0, 0, 20] });
-  b.go(`${G}/Torso`, {}, { pos: p(0, 280) }); part(`${G}/Torso/TorsoSprite`, "torso", 6, [0, 150]);
-  b.go(`${G}/Head`, {}, { pos: p(0, 560) });
-  part(`${G}/Head/HeadSprite`, "head", 8, [0, 150]);
-  part(`${G}/Head/Eyes`, "eyes_open", 9, [4, 190], { k: 0.62 });
-  part(`${G}/Head/BrowL`, "brow_left", 10, [-52, 228], { k: 0.45 });
-  part(`${G}/Head/BrowR`, "brow_right", 10, [58, 228], { k: 0.45 });
-  part(`${G}/Head/Hat`, "hat", 11, [0, 300]);
-  b.go(`${G}/UpperArmFront`, {}, { pos: p(150, 560) }); part(`${G}/UpperArmFront/UpperArmFrontSprite`, "upper_arm_front", 12, [20, -110]);
-  b.go(`${G}/UpperArmFront/LowerArmFront`, {}, { pos: p(40, -215) }); part(`${G}/UpperArmFront/LowerArmFront/LowerArmFrontSprite`, "lower_arm_front", 13, [20, -80]);
-  await save("GrandpaRig", "Assets/Prefabs/Characters/GrandpaRig.prefab");
-}
+// Built from the reference illustration instead: Tools/art/build_grandpa_rig.py cuts the parts, and the prefab
+// (Assets/Prefabs/Characters/GrandpaRig.prefab) is laid out from its rig.json through MCP. Not rebuilt here.
 
 // ===== mycelium tree node =====
 {

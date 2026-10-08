@@ -24,7 +24,6 @@ await destroyPaths([F]);
 
 b.go(F, { FarmView: {} });
 b.go(`${F}/Background`, { SpriteRenderer: SR(ART("Backgrounds/bg_ranch"), 0) }, { pos: P(960, 540, 1), scale: [BG, BG, 1] });
-b.raw("manage_gameobject", { action: "create", name: "Grandpa", parent: F, prefab_path: "Assets/Prefabs/Characters/GrandpaRig.prefab", position: P(150, 960), scale: [0.55, 0.55, 1] });
 // the mushroom tree (sits at the trunk base): stage picture, 13 mushroom slots with ripe glows, level sign
 const T = `${F}/Tree`;
 b.go(T, { FarmTreeView: {} }, { pos: P(TREE.x, TREE.y) });

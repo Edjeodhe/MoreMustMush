@@ -114,9 +114,16 @@ namespace MoreMush
         void DrawPlaceBar()
         {
             var B = BUILDING[farm.PlaceId];
+            if (farm.Moving)
+            {
+                placeTitle.text = $"{B.n} 옮기기 <size=70%>({B.w}×{B.h}칸)</size>";
+                placeSub.text = farm.PlaceOk ? "<color=#3a8a2a>초록 칸</color>에서 놓으면 옮겨져요 · 오른쪽 클릭·Esc 취소"
+                    : "<color=#d23a2a>빨간 칸</color>이 있으면 놓을 수 없어요 (울타리 밖 · 나무 밑동 · 다른 건물)";
+                return;
+            }
             placeTitle.text = $"{B.n} <size=70%>({B.w}×{B.h}칸 · {UIUtil.Ic("dia")}{B.price} · {TimeText(BuildSeconds(B, null))})</size>";
             placeSub.text = farm.PlaceOk ? "<color=#3a8a2a>초록 칸</color>에서 왼쪽 클릭하면 바로 지어요 · 오른쪽 클릭·Esc 취소"
-                : "<color=#d23a2a>빨간 칸</color>이 있으면 지을 수 없어요 (울타리 밖 · 나무 둘레 · 다른 건물)";
+                : "<color=#d23a2a>빨간 칸</color>이 있으면 지을 수 없어요 (울타리 밖 · 나무 밑동 · 다른 건물)";
         }
     }
 }

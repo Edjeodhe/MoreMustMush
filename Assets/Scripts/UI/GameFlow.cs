@@ -53,7 +53,7 @@ namespace MoreMush
 
         void Update()
         {
-            if (G != null && Screen != "title") G.play += Time.unscaledDeltaTime;
+            if (G != null && Screen != "title") { G.play += Time.unscaledDeltaTime; if (Application.isFocused) G.seenT = Now(); }
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb == null) return;
             if (kb.backquoteKey.wasPressedThisFrame && debug != null) debug.Toggle();
@@ -61,8 +61,37 @@ namespace MoreMush
             if (Screen != "round" && kb.escapeKey.wasPressedThisFrame) { if (ModalOpen) CloseModal(); else if (Screen == "farm" && farm.Placing) { farm.CancelPlace(); farmScreen.Render(); } }
         }
 
-        void OnApplicationPause(bool paused) { if (paused && G != null && Screen != "title") SaveGame(); }
+        void OnApplicationPause(bool paused) { if (paused && G != null && Screen != "title") SaveGame(); Away(paused); }
+        void OnApplicationFocus(bool focus) => Away(!focus);
         void OnApplicationQuit() { if (G != null) SaveGame(); }
+
+        // ===== 복귀 팝업 (방치 보상) =====
+        double awayFrom;   // 창이 포커스를 잃은 시각 (ms, 0 = 자리에 있음)
+
+        void Away(bool leaving)
+        {
+            if (leaving) { if (awayFrom <= 0) awayFrom = Now(); return; }
+            if (awayFrom <= 0) return;
+            double away = Now() - awayFrom;
+            awayFrom = 0;
+            CheckReturn(away);
+        }
+
+        // 오래 자리를 비웠다 돌아오면 자동 수확 보상 창을 띄운다 (트리·농장 화면에서, 다른 창이 없을 때만).
+        void CheckReturn(double awayMs)
+        {
+            if (G == null || awayMs < AUTO.returnMin * 1000 || !AutoReady()) return;
+            if ((Screen != "tree" && Screen != "farm") || ModalOpen || (Screen == "farm" && farm.Placing)) return;
+            OpenAuto(awayMs);
+        }
+
+        void OpenAuto(double awayMs)
+        {
+            AutoEnsure();
+            auto.away = awayMs;
+            OpenModal(auto, () => { auto.away = 0; if (Screen == "tree") tree.Refresh(); else if (Screen == "farm") farmScreen.Render(); });
+            auto.Render();
+        }
 
         // ===== screens =====
         public void SetScreen(string s)
@@ -238,7 +267,14 @@ namespace MoreMush
             {
                 case "close": Snd.Ui(); CloseModal(); break;
                 case "newgame": G = new SaveData(); AutoEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast($"균사 트리에서 강화를 사거나 바로 수확하러 가 보세요! 세금은 {TAX.every}라운드마다 나와요"); break;
-                case "continue": G = SaveIO.Load() ?? new SaveData(); AutoEnsure(); Snd.Ui(); EnterTree(); break;
+                case "continue":
+                {
+                    G = SaveIO.Load() ?? new SaveData();
+                    double away = G.seenT > 0 ? Now() - G.seenT : 0;
+                    AutoEnsure(); Snd.Ui(); EnterTree();
+                    CheckReturn(away);
+                    break;
+                }
                 case "reset": OpenModal(resetPanel); break;
                 case "reset-yes": SaveIO.Wipe(); G = null; CloseModal(); RenderTitle(); ShowToast("초기화했어요"); break;
                 case "title": SaveGame(); CloseModal(); RenderTitle(); break;
@@ -372,6 +408,12 @@ namespace MoreMush
                 }
                 case "placeok":
                 {
+                    if (farm.Moving)
+                    {
+                        if (!farm.ConfirmMove()) { Snd.Err(); ShowToast("여기에는 설치할 수 없어요"); break; }
+                        Snd.Buy(); farmScreen.Render();
+                        break;
+                    }
                     var b = farm.ConfirmPlace();
                     if (b == null) { Snd.Err(); ShowToast(farm.Placing && !farm.PlaceOk ? "여기에는 설치할 수 없어요" : "지을 수 없어요"); break; }
                     Snd.Record();
@@ -381,14 +423,14 @@ namespace MoreMush
                 }
                 case "placecancel": Snd.Ui(); farm.CancelPlace(); farmScreen.Render(); break;
                 // ===== 자동 수확 보상 =====
-                case "autoharvest": Snd.Ui(); AutoEnsure(); OpenModal(auto, () => { if (Screen == "tree") tree.Refresh(); else if (Screen == "farm") farmScreen.Render(); }); auto.Render(); break;
+                case "autoharvest": Snd.Ui(); OpenAuto(0); break;
                 case "claimauto":
                 {
                     var r = ClaimAuto();
                     if (r == null) { Snd.Err(); break; }
                     Snd.Record();
                     ShowToast($"자동 수확 보상! {UIUtil.Ic("gold")}+{U.Fmt(r.Value.gold)}{(r.Value.debt > 0 ? $" (체납 {U.Fmt(r.Value.debt)} 차감)" : "")} {UIUtil.Ic("gem")}+{r.Value.gem} {UIUtil.Ic("dia")}+{r.Value.dia}");
-                    auto.Render();
+                    if (auto.away > 0) CloseModal(); else auto.Render();   // 복귀 팝업은 받으면 닫는다
                     break;
                 }
                 default:

@@ -15,6 +15,7 @@ namespace MoreMush
         public CritterRig rig;
         public SortingGroup rigGroup;
         public SpriteRenderer shadow, glow, surprise, tool;
+        public SpriteRenderer builder;          // child of body: hammering builder picture shown instead of the rig while building
         public SpriteRenderer[] stars = new SpriteRenderer[3];
         [Header("Hover label")]
         public GameObject label; public SpriteRenderer labelBack; public TMP_Text labelText;
@@ -24,7 +25,12 @@ namespace MoreMush
         public GameObject req; public SpriteRenderer reqBack, reqTail, reqIcon, reqDot; public TMP_Text reqMark;
 
         const float P = Art.PPU;
+        const int SAY_ORDER = 5100;             // 말풍선 배경 순서 (꼬리 −1, 글자 +1), 말풍선마다 3씩 위로
         string shownSay, shownLabel;
+
+        // 말풍선 자리 (농장 px, y 아래로). FarmView가 겹침을 풀고 PlaceSay로 놓는다
+        [System.NonSerialized] public Rect sayRect;
+        float sayFeetX, sayFeetY;
 
         public void Draw(FarmView.Critter p, float now, string hat, bool hovered, FarmKind request)
         {
@@ -48,6 +54,11 @@ namespace MoreMush
                 case "surprise": oy = -Mathf.Min(1, u * 6) * 26 * (1 - u); ox = Mathf.Sin(at * 50) * 4 * (1 - u); break;
             }
 
+            // 건설 중: 리그 대신 망치질 그림 (내려치는 프레임에서 살짝 찌그러진다)
+            var bsp = p.bframe >= 0 ? SpriteDB.Get($"Characters/Critters/Build/build_{p.id}_{p.bframe}") : null;
+            bool hammering = bsp != null;
+            if (hammering && p.bframe == 1) { sy = 0.94f; sx = 1.06f; }
+
             transform.localPosition = Art.P(p.x, p.y);
             int order = 1000 + Mathf.RoundToInt(p.y);
             body.localPosition = new Vector3(ox / P, -oy / P, 0);
@@ -56,6 +67,16 @@ namespace MoreMush
             body.localScale = new Vector3(sx * p.face * k, sy * k, 1);
             rig.SetLook(p.id, CharSkinOn(p.id)?.id, hat);
             rigGroup.sortingOrder = order;
+            if (rig.gameObject.activeSelf == hammering) rig.gameObject.SetActive(!hammering);
+            builder.enabled = hammering;
+            if (hammering)
+            {
+                if (builder.sprite != bsp) builder.sprite = bsp;
+                float s = BUILDER.w * rig.baseRadius / P / bsp.bounds.size.x;   // body space: rig.baseRadius units
+                builder.transform.localScale = new Vector3(s, s, 1);
+                builder.transform.localPosition = new Vector3(0, bsp.bounds.size.y * s / 2, 0);
+                builder.sortingOrder = order;
+            }
 
             shadow.transform.localPosition = new Vector3(ox / P, -2 / P, 0);
             shadow.transform.localScale = new Vector3(R0 * 1.5f * (1 + oy / 200) / P, R0 * 0.44f / P, 1);
@@ -110,9 +131,9 @@ namespace MoreMush
                 if (shownSay != p.say) { shownSay = p.say; sayText.text = p.say; sayText.ForceMeshUpdate(); }
                 float w = Mathf.Min(420, sayText.preferredWidth * P + 34);
                 float bx = Mathf.Clamp(p.x - w / 2, 10, W - w - 10), by = -R0 * 2 - 78;
-                say.transform.localPosition = new Vector3((bx + w / 2 - p.x) / P, -(by + 25) / P, 0);
+                sayRect = new Rect(bx, p.y + by, w, 50); sayFeetX = p.x; sayFeetY = p.y;
                 Art.SlicedPx(sayBack, w, 50);
-                sayTail.transform.localPosition = new Vector3((p.x - (bx + w / 2)) / P, -33 / P, 0);
+                PlaceSay(0, 0);
                 SetA(sayBack, a); SetA(sayTail, a); sayText.alpha = a;
             }
 
@@ -126,6 +147,16 @@ namespace MoreMush
                 var icon = SpriteDB.Get("Farm/Icons/" + request.icon);
                 if (reqIcon.sprite != icon) { reqIcon.sprite = icon; Art.FitPx(reqIcon, 44); }
             }
+        }
+
+        // 말풍선을 lift(px)만큼 위로 올리고, slot번째 그리기 순서를 준다 (겹쳐도 한 말풍선이 다른 것을 통째로 덮게).
+        public void PlaceSay(float lift, int slot)
+        {
+            float cx = sayRect.center.x;
+            say.transform.localPosition = new Vector3((cx - sayFeetX) / P, -(sayRect.y - lift - sayFeetY + 25) / P, 0);
+            sayTail.transform.localPosition = new Vector3((sayFeetX - cx) / P, -33 / P, 0);
+            int o = SAY_ORDER + slot * 3;
+            sayTail.sortingOrder = o - 1; sayBack.sortingOrder = o; if (sayText is TextMeshPro tm) tm.sortingOrder = o + 1;
         }
 
         static void SetA(SpriteRenderer sr, float a) { var c = sr.color; c.a = a; sr.color = c; }
