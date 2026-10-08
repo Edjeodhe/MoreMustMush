@@ -56,7 +56,16 @@ namespace MoreMush
         // 공격력·타격 점수 단계 노드(+1/+10/+100/+1000)와 단위를 맞춰, 새 지역에 갈 때마다 숫자가 한 자리씩 뛴다.
         public const double ZONE_STEP = 10, STAGE_GROWTH = 1.01;
         public static int ThemeIndex(string id) => Math.Max(0, THEMES.FindIndex(t => t.id == id));
-        public static double ZoneMul(string themeId, int stage) => Math.Pow(ZONE_STEP, ThemeIndex(themeId)) * Math.Pow(STAGE_GROWTH, stage - 1);
+        // 실험(구조안 S1, 사용자 결정 전): 0이 아니면 새 지역의 ×10을 해금 뒤 ZONE_RAMP판에 나눠 올린다(판마다 ×10^(1/ZONE_RAMP)).
+        // 기본 0 = 해금 즉시 ×10(지금 게임). 밸런스 시뮬에서만 명령줄 -ramp 10으로 켠다
+        public static int ZONE_RAMP = 0;
+        public static double ZoneMul(string themeId, int stage)
+        {
+            int i = ThemeIndex(themeId);
+            double e = i;
+            if (ZONE_RAMP > 0 && i >= 1) e = i - 1 + Math.Max(0, Math.Min(1, (stage - THEMES[i].from + 1) / (double)ZONE_RAMP));
+            return Math.Pow(ZONE_STEP, e) * Math.Pow(STAGE_GROWTH, stage - 1);
+        }
 
         // ===== 숲 장치 =====
         public static readonly string[] DEVICE_TYPES = { "stump", "moss", "mole", "stream", "acorn" };

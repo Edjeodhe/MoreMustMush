@@ -14,15 +14,16 @@ namespace MoreMush.EditorTools
     public static class BalanceJob
     {
         // finish: 기간(R104)의 몇 % 지점에서 다 사게 할지 (2시간 ≈ R104)
-        public class Plan { public int a = 1, b = 104, maxIters = 20; public double finish = 0.97, damp = 0.5; }
+        // finish 0.85 ≈ R88: 판매 전부 가정이라 덜 파는 플레이어 몫으로 널널하게(사용자 2026-10-08)
+        public class Plan { public int a = 1, b = 104, maxIters = 20; public double finish = 0.85, damp = 0.5; }
 
         // 수렴 조건: 기간 판의 BUY_FRAC 이상에서 무언가를 사고, 기간 끝에 골드 노드를 DONE_FRAC 이상 샀다
         public const double BUY_FRAC = 0.6, DONE_FRAC = 0.95;
         // 가격을 오름차순으로 늘어놓았을 때 바로 앞 대비 허용 배율. 곡선은 PRICE_STEP_MAX(1.4)로 맞추지만,
         // 효율 넘김으로 낮춘 가격이 빠진 자리와 유효숫자 반올림 때문에 약간 넘을 수 있어 2배까지 허용한다
         public const double STEP_LIMIT = 2.0;
-        // 가장 빨리 끝낸 시드도 R(b × FINISH_MIN) 이후에 트리를 끝내야 한다 (너무 빨리 끝나면 2시간 기준에 못 미침)
-        public const double FINISH_MIN = 0.9;
+        // 가장 빨리 끝낸 시드도 R(b × FINISH_MIN) 이후에 트리를 끝내야 한다. 2시간(R104)은 기준선이고 조금 빠른 건 괜찮다(사용자, 2026-10-08) → R84(약 90분)까지 허용
+        public const double FINISH_MIN = 0.8;
 
         static IEnumerator job;
         public static readonly string LogPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp/balance_job.log"));
@@ -34,6 +35,7 @@ namespace MoreMush.EditorTools
         {
             if (Running) return "이미 돌고 있음";
             File.WriteAllText(LogPath, "");
+            Defs.ApplyPreset(BalanceSim.PRESET);
             job = Run(plan, seeds);
             EditorApplication.update -= Tick;
             EditorApplication.update += Tick;
@@ -47,7 +49,7 @@ namespace MoreMush.EditorTools
         public static void RunBlocking(Plan plan, int seeds = 3)
         {
             File.WriteAllText(LogPath, "");
-            Log($"시작(배치): R{plan.a}~R{plan.b} · 시드 {seeds}개");
+            Log($"시작(배치): R{plan.a}~R{plan.b} · 시드 {seeds}개 · 프리셋 {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")}");
             var e = Run(plan, seeds);
             while (e.MoveNext()) { }
         }
@@ -65,7 +67,7 @@ namespace MoreMush.EditorTools
             for (int sd = 1; sd <= seeds; sd++)
                 for (int st = 1; st <= p.b; st++)
                 {
-                    BalanceSim.Progression(1, st > 1, sd, BalanceSim.SKILL, 1e9, 1000, false, p.b);
+                    BalanceSim.Progression(1, st > 1, sd, BalanceSim.SKILL, 1e9, 1, false, p.b);
                     yield return null;
                 }
         }

@@ -108,10 +108,12 @@ namespace MoreMush.EditorTools
             public int buyRounds, rounds;
             public List<double> inc = new List<double>();   // 스테이지별 번 골드 (인덱스 = 스테이지 - 1)
             public List<int> buys = new List<int>();        // 스테이지별 산 레벨 수
-            public void Set(int stage, double income, int bought)
+            public List<double> val = new List<double>();   // 스테이지별 수확한 버섯 가치(팔면 받을 골드, 봇은 팔지 않음)
+            public void Set(int stage, double income, int bought, double value = 0)
             {
                 while (inc.Count < stage) { inc.Add(0); buys.Add(0); }
-                inc[stage - 1] = income; buys[stage - 1] = bought;
+                while (val.Count < stage) val.Add(0);
+                inc[stage - 1] = income; buys[stage - 1] = bought; val[stage - 1] = value;
             }
         }
         static string PhasePath(int seed = 1) => Path.GetFullPath(Path.Combine(Application.dataPath, $"../Temp/balance_phase_s{seed}.json"));
@@ -149,12 +151,21 @@ namespace MoreMush.EditorTools
                         reserve = Math.Max(TaxAmount(G.tax.cycle), TAX.share * projected) * G.tax.roundsIn / TAX.every;
                     }
                     else { G.tax.roundsIn = 0; G.tax.income = 0; }
+                    // 판매·의뢰: 매 판 끝에 의뢰를 전부 하고 창고 버섯을 전부 판다(사용자 결정 2026-10-08 "의뢰+전부 판매 가정, 널널하게").
+                    // 판 수입(ph.inc)에 들어가서 가격 맞추기도 이 수입을 기준으로 한다. 끄려면 SELL = false(명령줄 -nosell)
+                    double sold = 0;
+                    if (SELL)
+                    {
+                        RefreshQuests();
+                        sold += QuestAll().gold;
+                        sold += SellMush(G.inv.Select(kv => (kv.Key, kv.Value)).ToList()).gold;
+                    }
                     int before = GoldLevels();
                     BulkBuy(new[] { "ed", "md", "ps" }, reserve, false);
                     G.play += r.duration + OVERHEAD_SEC;   // 추정 플레이 시간(초)
                     int bought = GoldLevels() - before;
                     ph.rounds++; if (bought > 0) ph.buyRounds++;
-                    ph.Set(r.stage, r.scoreGold + r.bonus, bought);
+                    ph.Set(r.stage, r.scoreGold + r.bonus + sold, bought, r.value);
                     string marks = "";
                     for (int t = 1; t <= 3; t++)
                     {
@@ -219,6 +230,11 @@ namespace MoreMush.EditorTools
         // 평균 배율은 약 1.1(약 250레벨로 수 골드 → 조 단위)이라, 지역이 바뀌어 수입이 10배 뛰는 곳에서만 걸린다.
         public const double PRICE_STEP_MAX = 1.4;
 
+        // 밸런스 기준 프리셋 (Defs.PRESETS). 새 플레이어 기본값인 tuned로 맞춘다 (2026-10-08 사용자 결정, 그전 시뮬은 에디터에 남은 spec으로 돌았음)
+        public const string PRESET = "tuned";
+        // 판매·의뢰 수입을 넣을지 (사용자 결정 2026-10-08: 의뢰 + 전부 판매 가정)
+        public static bool SELL = true;
+
         // 단계 노드 줄과 단계별 효과 크기. 다음 단계 첫 레벨의 "효과 +1당 골드"를 앞 단계 마지막 레벨의 CROSS배 이하로 둔다.
         // 앞 단계를 다 올렸을 때 다음 단계가 확실히 더 효율적이어야 효율 구간이 단계적으로 넘어간다(레퍼런스의 "효율 구간").
         public static readonly (string[] ids, double[] per)[] TIER_LINES =
@@ -227,7 +243,7 @@ namespace MoreMush.EditorTools
             (new[] { "ed_score", "ed_score1p", "ed_score2", "ed_score2p", "ed_score3", "ed_score3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }),
             (new[] { "ed_bonus", "ed_bonus1p", "ed_bonus2", "ed_bonus2p", "ed_bonus3", "ed_bonus3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }),
         };
-        public const double CROSS = 0.7;
+        public const double CROSS = 0.66;   // 조사 원칙 P7(다음 단계 효율 ≥ ×1.5) + 반올림 여유. 0.7(×1.43)은 I→II 세 곳이 ×1.5에 못 미쳤다(검증 2026-10-08)
         // 같은 노드 안에서 다음 레벨은 앞 레벨의 NODE_STEP_MAX배를 넘지 않는다 (한 노드 가격이 한 번에 크게 뛰지 않게)
         public const double NODE_STEP_MAX = 4;
         // 노드 안 배율·효율 넘김을 가격에 강제할지. 강제하면 값이 진동했다(2026-10-08): 효과가 단계마다 ×10인데
@@ -317,7 +333,7 @@ namespace MoreMush.EditorTools
                         var pa = price[ids[t - 1]]; var pb = price[ids[t]];
                         // 같은 단계 형제(I → I+)는 한 노드가 이어지는 것처럼 NODE_STEP_MAX배, 단계가 오를 때(I+ → II)는 효율 넘김
                         double need = per[t] == per[t - 1] ? pb[0] / NODE_STEP_MAX : pb[0] / per[t] * per[t - 1] / CROSS;
-                        if (pa[pa.Length - 1] < need) pa[pa.Length - 1] = Nice(need * 1.01);
+                        if (pa[pa.Length - 1] < need) pa[pa.Length - 1] = Nice(need * 1.06);
                         RaiseNode(pa);
                     }
             }
@@ -378,7 +394,7 @@ namespace MoreMush.EditorTools
                     var a = NODE[ids[t - 1]]; var b = NODE[ids[t]];
                     if (per[t] == per[t - 1]) { nodeStep = Math.Max(nodeStep, NodeCost(b, 0).gold / Math.Max(1, NodeCost(a, a.max - 1).gold)); continue; }
                     total++;
-                    if (NodeCost(b, 0).gold / per[t] <= NodeCost(a, a.max - 1).gold / per[t - 1] * CROSS * 1.05) ok++;
+                    if (NodeCost(b, 0).gold / per[t] <= NodeCost(a, a.max - 1).gold / per[t - 1] * CROSS * 1.001) ok++;   // 반올림 오차만 허용 (1.05였을 때 0.66이 실제 0.693 기준이 됐다, 검증 2026-10-08)
                 }
             return (maxStep, nodeStep, ok, total);
         }

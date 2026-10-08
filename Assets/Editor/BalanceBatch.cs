@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
@@ -24,26 +25,46 @@ namespace MoreMush.EditorTools
         });
 
         // 지금 가격표로 R1~R104를 새 게임부터 그대로 돌린다 (가격은 바꾸지 않음)
+        // 명령줄: -seeds 4,5,6 (기본 1,2,3) · -skill 0.75 (바 오차, 기본 BalanceSim.SKILL)
         public static void Measure() => Batch(() =>
         {
-            File.WriteAllText(BalanceJob.LogPath, "");
-            for (int sd = 1; sd <= 3; sd++) BalanceSim.Progression(104, false, sd, BalanceSim.SKILL, 1e9, 1000);
-            var (buy, done, fin) = BalanceSim.PriceStats(1, 104, 3);
-            File.AppendAllText(BalanceJob.LogPath, $"R1~R104: 산 판 {buy:P0} · R104 구매율 {done:P0} · 가장 빠른 완료 R{fin}\n");
-            Reports();
+            var seeds = (Arg("-seeds") ?? "1,2,3").Split(',').Select(int.Parse).ToArray();
+            float skill = Arg("-skill") is string k ? float.Parse(k, System.Globalization.CultureInfo.InvariantCulture) : BalanceSim.SKILL;
+            File.WriteAllText(BalanceJob.LogPath, $"프리셋: {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")} · 시드 {string.Join(",", seeds)} · 바 오차 {skill}\n");
+            foreach (int sd in seeds) BalanceSim.Progression(104, false, sd, skill, 1e9, 1);   // 판마다 한 줄(공격력·지역·별) — verify#3
+            if (seeds.SequenceEqual(new[] { 1, 2, 3 }))
+            {
+                var (buy, done, fin) = BalanceSim.PriceStats(1, 104, 3);
+                File.AppendAllText(BalanceJob.LogPath, $"R1~R104: 산 판 {buy:P0} · R104 구매율 {done:P0} · 가장 빠른 완료 R{fin}\n");
+            }
+            Reports(seeds);
         });
 
-        static void Reports()
+        static string Arg(string name)
+        {
+            var a = Environment.GetCommandLineArgs();
+            int i = Array.IndexOf(a, name);
+            return i >= 0 && i + 1 < a.Length ? a[i + 1] : null;
+        }
+
+        static void Reports(int[] seeds = null)
         {
             File.AppendAllText(BalanceJob.LogPath, "=== 효율 구간 (효과 +1당 골드)\n" + BalanceSim.EfficiencyReport());
-            for (int sd = 1; sd <= 3; sd++)
+            foreach (int sd in seeds ?? new[] { 1, 2, 3 })
                 File.AppendAllText(BalanceJob.LogPath, $"=== 시드 {sd}\n{BalanceSim.PhaseReport(sd)}\n");
             File.AppendAllText(BalanceJob.LogPath, "배치 끝\n");
         }
 
+        // 밸런스 기준 프리셋. 에디터 PlayerPrefs에 남은 값(예전엔 spec)을 쓰지 않고 항상 이 값으로 돈다 (2026-10-08 사용자 결정: tuned = 새 플레이어 기본값).
+        // 다른 프리셋으로 재려면 명령줄에 -preset spec
+        static string PresetArg() => Arg("-preset") ?? BalanceSim.PRESET;
+
         static void Batch(Action body)
         {
             int code = 0;
+            Defs.ApplyPreset(PresetArg());
+            if (Arg("-ramp") is string ramp) Defs.ZONE_RAMP = int.Parse(ramp);   // 구조안 S1 실험
+            if (Environment.GetCommandLineArgs().Contains("-nosell")) BalanceSim.SELL = false;
             try { body(); }
             catch (Exception e) { File.AppendAllText(BalanceJob.LogPath, "오류: " + e + "\n"); code = 1; }
             try

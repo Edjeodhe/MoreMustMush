@@ -1,0 +1,6 @@
+{"Exp_ID": "T2", "Exp_Time": "2026-10-08 13:03", "Exp_By": "test", "Preset": "tuned", "Price_Ver": "Defs.Prices.cs 12:39 수렴본 (spec으로 맞춘 것)",
+ "Seeds": "1,2,3", "Skill": 0.6, "Done_Round": "R75 / R75 / R75", "Done_Min": "81 / 81 / 81",
+ "Done_T1": "R19 / R19 / R20", "Done_T2": "R29 / R29 / R31", "Done_T3": "R75 / R75 / R75",
+ "Buy_Rate": "57% (가장 느린 시드)", "Buy_Gap": "1 / 5판", "Step_Max": 1.77, "Node_Step": 4.0, "Cross": "7/7 (허용오차 1.05 기준)",
+ "Verdict": "가격이 tuned에 비해 쌈 — 목표 R104보다 29판 빠름. 이론 외삽(R74)과 일치. 가격 재맞춤(T3) 필요", "Checked": "관리자 재계산 일치 (13:25)",
+ "Source": "BalanceData/test/before_1313, 밸런스설계/테스트.md T2", "Note": "spec→tuned로 초반 완료 R41~45 → R19~20"}

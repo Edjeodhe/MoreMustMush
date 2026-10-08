@@ -1,0 +1,6 @@
+{"Exp_ID": "T3", "Exp_Time": "2026-10-08 14:17~14:35", "Exp_By": "test", "Preset": "tuned", "Price_Ver": "Defs.Prices.cs T3 (tuned 재맞춤, 3회 수렴)",
+ "Seeds": "1,2,3", "Skill": 0.6, "Done_Round": "R90 / R91 / R91", "Done_Min": "95 / 96 / 96",
+ "Done_T1": "R32 / R34 / R34", "Done_T2": "R45 / R45 / R45", "Done_T3": "R90 / R91 / R91",
+ "Buy_Rate": "81 / 83 / 81 판 (완료까지 90~91판 중)", "Buy_Gap": "1 / 3판", "Step_Max": 1.75, "Node_Step": 3.88, "Cross": "7/7 (CROSS 0.66, 허용오차 없음)",
+ "Verdict": "수렴 — 완료 목표 R84~R104 안. 한 판 최다 구매 19~26레벨", "Checked": "관리자 재계산 일치 (14:36)",
+ "Source": "BalanceData/balance_job.log, balance_phase_s1~3.json (14:35)", "Note": "FINISH_MIN 0.8, 지역 램프 0(지금 게임 구조)"}
