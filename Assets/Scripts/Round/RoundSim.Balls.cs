@@ -402,7 +402,7 @@ namespace MoreMush
             if (st.multiP > 0 && U.Chance((float)st.multiP)) { drop *= 3; AddLabel("×3 배수 획득!", m.x, m.y - m.r - 34, "#ffe36e", 24); }
             gains[sp.c] += drop;
             bag[sp.id] = (bag.TryGetValue(sp.id, out var bv) ? bv : 0) + drop;
-            harvests++;
+            harvests++; killT[sp.t]++;
             ComboHit();
             value += drop * UnitPrice(sp, st.priceMul);
             saleBump = 1;

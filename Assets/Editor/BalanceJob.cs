@@ -49,7 +49,7 @@ namespace MoreMush.EditorTools
         public static void RunBlocking(Plan plan, int seeds = 3)
         {
             File.WriteAllText(LogPath, "");
-            Log($"시작(배치): R{plan.a}~R{plan.b} · 시드 {seeds}개 · 프리셋 {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")}");
+            Log($"시작(배치): R{plan.a}~R{plan.b} · 시드 {seeds}개 · 프리셋 {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")} · 지역 이동 {(BalanceSim.GAME_ZONE ? "게임(해금 즉시)" : "봇(공격력 기준)")}");
             var e = Run(plan, seeds);
             while (e.MoveNext()) { }
         }

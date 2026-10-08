@@ -18,7 +18,8 @@ namespace MoreMush.EditorTools
         {
             public int stage; public string weather;
             public double score, scoreGold, bonus, value, duration;
-            public int harvests, maxCombo, cols, balls;
+            public int harvests, maxCombo, cols, balls, spawned;
+            public int[] madeT, killT;   // 티어별 생긴 수·수확한 수
             public string zone; public double atk;
         }
 
@@ -75,7 +76,7 @@ namespace MoreMush.EditorTools
             }
             res.maxCombo = R.maxCombo;
             var s = R.Finish();
-            res.score = s.score; res.scoreGold = s.scoreGold; res.bonus = s.bonusGold; res.value = s.value; res.harvests = s.harvests;
+            res.score = s.score; res.scoreGold = s.scoreGold; res.bonus = s.bonusGold; res.value = s.value; res.harvests = s.harvests; res.spawned = R.shroomsMade; res.madeT = (int[])R.madeT.Clone(); res.killT = (int[])R.killT.Clone();
             return res;
         }
 
@@ -108,12 +109,22 @@ namespace MoreMush.EditorTools
             public int buyRounds, rounds;
             public List<double> inc = new List<double>();   // 스테이지별 번 골드 (인덱스 = 스테이지 - 1)
             public List<int> buys = new List<int>();        // 스테이지별 산 레벨 수
-            public List<double> val = new List<double>();   // 스테이지별 수확한 버섯 가치(팔면 받을 골드, 봇은 팔지 않음)
-            public void Set(int stage, double income, int bought, double value = 0)
+            public List<double> val = new List<double>();   // 스테이지별 수확한 버섯 가치(팔면 받을 골드)
+            public List<double> kill = new List<double>();  // 스테이지별 처치율 = 수확한 버섯 ÷ 그 판에 생긴 버섯
+            public List<string> zone = new List<string>();  // 스테이지별 지역
+            public List<int[]> madeT = new List<int[]>(), killT = new List<int[]>();   // 스테이지별 티어별 생긴 수·수확한 수 (처치율 P13)
+            public void Set(int stage, double income, int bought, double value = 0, double killRate = 0, string zoneId = "")
             {
                 while (inc.Count < stage) { inc.Add(0); buys.Add(0); }
                 while (val.Count < stage) val.Add(0);
-                inc[stage - 1] = income; buys[stage - 1] = bought; val[stage - 1] = value;
+                while (kill.Count < stage) kill.Add(0);
+                while (zone.Count < stage) zone.Add("");
+                inc[stage - 1] = income; buys[stage - 1] = bought; val[stage - 1] = value; kill[stage - 1] = killRate; zone[stage - 1] = zoneId;
+            }
+            public void SetTiers(int stage, int[] made, int[] killed)
+            {
+                while (madeT.Count < stage) { madeT.Add(new int[0]); killT.Add(new int[0]); }
+                madeT[stage - 1] = made ?? new int[0]; killT[stage - 1] = killed ?? new int[0];
             }
         }
         static string PhasePath(int seed = 1) => Path.GetFullPath(Path.Combine(Application.dataPath, $"../Temp/balance_phase_s{seed}.json"));
@@ -141,7 +152,7 @@ namespace MoreMush.EditorTools
                 {
                     if (sw.Elapsed.TotalSeconds > maxWallSec || (stopStage > 0 && StageNow() > stopStage)) break;
                     var rnd = new System.Random(seed * 1000 + G.rounds); UnityEngine.Random.InitState(seed * 1000 + G.rounds);
-                    var r = PlayRound(rnd, skill);
+                    var r = PlayRound(rnd, skill, !GAME_ZONE);
                     // 세금은 제거 예정이라 기본은 빼고 계산한다 (withTax = true면 납부·추정분 비축)
                     double reserve = 0;
                     if (withTax)
@@ -165,7 +176,8 @@ namespace MoreMush.EditorTools
                     G.play += r.duration + OVERHEAD_SEC;   // 추정 플레이 시간(초)
                     int bought = GoldLevels() - before;
                     ph.rounds++; if (bought > 0) ph.buyRounds++;
-                    ph.Set(r.stage, r.scoreGold + r.bonus + sold, bought, r.value);
+                    ph.Set(r.stage, r.scoreGold + r.bonus + sold, bought, r.value, r.spawned > 0 ? (double)r.harvests / r.spawned : 0, r.zone);
+                    ph.SetTiers(r.stage, r.madeT, r.killT);
                     string marks = "";
                     for (int t = 1; t <= 3; t++)
                     {
@@ -234,6 +246,9 @@ namespace MoreMush.EditorTools
         public const string PRESET = "tuned";
         // 판매·의뢰 수입을 넣을지 (사용자 결정 2026-10-08: 의뢰 + 전부 판매 가정)
         public static bool SELL = true;
+        // 지역 이동: 게임처럼 해금 판(R20·45·75)에 자동으로 새 지역으로 옮기고 그대로 머문다(RoundSim.Finish).
+        // false면 예전 봇 규칙(PickZone: 공격력이 될 때까지 옛 지역) — 2026-10-08 실제 플레이에서 해금 직후 못 잡는 버섯이 많다는 사용자 관찰로 게임 규칙으로 바꿈. 명령줄 -pickzone
+        public static bool GAME_ZONE = true;
 
         // 단계 노드 줄과 단계별 효과 크기. 다음 단계 첫 레벨의 "효과 +1당 골드"를 앞 단계 마지막 레벨의 CROSS배 이하로 둔다.
         // 앞 단계를 다 올렸을 때 다음 단계가 확실히 더 효율적이어야 효율 구간이 단계적으로 넘어간다(레퍼런스의 "효율 구간").

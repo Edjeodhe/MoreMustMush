@@ -64,7 +64,8 @@ namespace MoreMush
         public bool festOn, paused;
         public float barX, barLen, barFx;
         public Vector2? aimStart, aimCur;
-        public int deviceSpawned, colId = 1;
+        public int deviceSpawned, colId = 1, shroomsMade;   // shroomsMade: 이번 판에 생긴 버섯 수 (밸런스 시뮬의 처치율 = 수확 ÷ 이것)
+        public readonly int[] madeT = new int[8], killT = new int[8];   // 티어별 생긴 수·수확한 수 (밸런스 시뮬의 티어별 처치율)
         public Dictionary<string, float> skillLabelT = new Dictionary<string, float>();
         public Dictionary<string, float> skillFlash = new Dictionary<string, float>();
         public float flashCd;
@@ -227,7 +228,7 @@ namespace MoreMush
                     golden = U.Chance((float)st.golden), cluster = cl, solid = cl, dropMul = cl ? U.RandI(7, 10) : 1,
                     jelly = sp.jelly, spore = sp.spore, grow = instant ? 1 : 0, wall = col.wall,
                 };
-                col.members.Add(m); shrooms.Add(m);
+                col.members.Add(m); shrooms.Add(m); shroomsMade++; madeT[sp.t]++;
             }
             colonies.Add(col);
             if (!instant)

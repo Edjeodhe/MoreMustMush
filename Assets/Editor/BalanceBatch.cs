@@ -30,7 +30,7 @@ namespace MoreMush.EditorTools
         {
             var seeds = (Arg("-seeds") ?? "1,2,3").Split(',').Select(int.Parse).ToArray();
             float skill = Arg("-skill") is string k ? float.Parse(k, System.Globalization.CultureInfo.InvariantCulture) : BalanceSim.SKILL;
-            File.WriteAllText(BalanceJob.LogPath, $"프리셋: {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")} · 시드 {string.Join(",", seeds)} · 바 오차 {skill}\n");
+            File.WriteAllText(BalanceJob.LogPath, $"프리셋: {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")} · 지역 이동 {(BalanceSim.GAME_ZONE ? "게임(해금 즉시)" : "봇(공격력 기준)")} · 시드 {string.Join(",", seeds)} · 바 오차 {skill}\n");
             foreach (int sd in seeds) BalanceSim.Progression(104, false, sd, skill, 1e9, 1);   // 판마다 한 줄(공격력·지역·별) — verify#3
             if (seeds.SequenceEqual(new[] { 1, 2, 3 }))
             {
@@ -65,6 +65,7 @@ namespace MoreMush.EditorTools
             Defs.ApplyPreset(PresetArg());
             if (Arg("-ramp") is string ramp) Defs.ZONE_RAMP = int.Parse(ramp);   // 구조안 S1 실험
             if (Environment.GetCommandLineArgs().Contains("-nosell")) BalanceSim.SELL = false;
+            if (Environment.GetCommandLineArgs().Contains("-pickzone")) BalanceSim.GAME_ZONE = false;
             try { body(); }
             catch (Exception e) { File.AppendAllText(BalanceJob.LogPath, "오류: " + e + "\n"); code = 1; }
             try

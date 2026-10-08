@@ -1,0 +1,6 @@
+{"Exp_ID": "T4", "Exp_Time": "2026-10-08 14:48~15:07", "Exp_By": "test", "Preset": "tuned + 구조안 S1(지역 램프 10판)", "Price_Ver": "T4 재맞춤 (BalanceData/test/prices_T4_S1, 게임 미적용)",
+ "Seeds": "1,2,3", "Skill": 0.6, "Done_Round": "R87 / R85 / R85", "Done_Min": "89 / 87 / 89",
+ "Done_T1": "R43 / R42 / R37", "Done_T2": "R53 / R53 / R52", "Done_T3": "R87 / R85 / R85",
+ "Buy_Rate": "70% (가장 느린 시드)", "Buy_Gap": "1 / 4판", "Step_Max": 1.75, "Node_Step": 3.93, "Cross": "7/7",
+ "Verdict": "실험 — 바다 R75 진입, 경계 점프 일부만 줄어듦. 판매 없음·봇 지역 규칙이라 T6(판매+게임 지역 규칙)로 다시 잴 것", "Checked": "관리자 재계산 일치 (15:14)",
+ "Source": "BalanceData/test/T4_S1/", "Note": "S1은 사용자 결정 전"}

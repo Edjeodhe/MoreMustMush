@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# 주의: openpyxl 저장은 Skima 도형을 지운다. 사용자 DB에 쓸 때는 db_apply_com.py(Excel COM)를 쓴다.
 """엑셀 DB(MMM_DB)의 Balance_Log 시트에 밸런스 실험 결과를 한 줄씩 기록한다. 쓰는 사람은 관리자(메인 에이전트) 하나.
 사용: python BalanceData/db/db_log.py <결과.json>   (같은 Exp_ID가 있으면 그 줄을 덮어쓴다)
 결과.json: {"Exp_ID": "T1", ...아래 COLS 키...}"""
@@ -6,7 +7,7 @@ import io, json, os, sys
 import openpyxl
 from openpyxl.styles import Font, PatternFill
 
-DB = os.environ.get("MMM_DB", r"C:\Users\user\Desktop\MMM_DB_Ver.02.xlsx")
+DB = os.environ.get("MMM_DB", r"C:\Users\user\Desktop\MMM_DB_Ver.03.xlsx")
 SHEET = "Balance_Log"
 # (한글 이름, 키, 타입)
 COLS = [
