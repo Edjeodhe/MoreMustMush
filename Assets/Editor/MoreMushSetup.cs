@@ -69,7 +69,7 @@ namespace MoreMush.EditorTools
             {
                 string p = AssetDatabase.GUIDToAssetPath(guid);
                 var sp = AssetDatabase.LoadAssetAtPath<Sprite>(p);
-                if (sp == null) continue;
+                if (sp == null || p.EndsWith("/grandpa_ref.png")) continue;
                 string key = p.Substring(GenRoot.Length + 1);
                 key = key.Substring(0, key.Length - Path.GetExtension(key).Length);
                 db.entries.Add(new SpriteDB.Entry { key = key, sprite = sp });
@@ -97,6 +97,7 @@ namespace MoreMush.EditorTools
                 so.ApplyModifiedPropertiesWithoutUndo();
             }
             AssetDatabase.SaveAssets();
+            ProjectOptimization.BakeFonts();
         }
 
         static TMP_FontAsset MakeFontAsset(string ttf, string path)

@@ -12,6 +12,10 @@ namespace MoreMush
         public SpriteRenderer fire;      // fire critter perk
         public SpriteRenderer[] debuff = new SpriteRenderer[4];
 
+        Vector3[] trailPoints = new Vector3[32];
+        string auraKey;
+        Color skinAura;
+
         public void Show(Ball b, RoundSim R, float now)
         {
             var st = R.st;
@@ -19,7 +23,7 @@ namespace MoreMush
             transform.localPosition = Art.P(b.x, b.y);
 
             var skin = Game.HvSkinOn(b.hv);
-            body.sprite = SpriteDB.Get("Harvesters/" + (skin != null ? skin.id : b.hv));
+            body.sprite = SpriteDB.Get("Harvesters/", skin != null ? skin.id : b.hv);
             Art.FitPx(body, b.r * 2.3f);
             body.transform.localRotation = Quaternion.Euler(0, 0, -b.ang * Mathf.Rad2Deg);
             body.color = new Color(1, 1, 1, b.perm ? 1 : Mathf.Min(0.85f, b.life));
@@ -30,8 +34,10 @@ namespace MoreMush
             if (trail.enabled)
             {
                 trail.positionCount = b.trail.Count + 1;
-                for (int i = 0; i < b.trail.Count; i++) trail.SetPosition(i, Art.P(b.trail[i].x - b.x, b.trail[i].y - b.y));
-                trail.SetPosition(b.trail.Count, Vector3.zero);
+                if (trailPoints.Length < b.trail.Count + 1) System.Array.Resize(ref trailPoints, Mathf.NextPowerOfTwo(b.trail.Count + 1));
+                for (int i = 0; i < b.trail.Count; i++) trailPoints[i] = Art.P(b.trail[i].x - b.x, b.trail[i].y - b.y);
+                trailPoints[b.trail.Count] = Vector3.zero;
+                trail.SetPositions(trailPoints);
                 trail.widthMultiplier = b.r * 0.5f / Art.PPU;
                 var c = b.moss > 0 ? new Color(120 / 255f, 220 / 255f, 120 / 255f, 0.28f) : b.accel > 0 ? new Color(120 / 255f, 200 / 255f, 1, 0.3f) : new Color(1, 1, 1, 0.2f);
                 trail.startColor = new Color(c.r, c.g, c.b, 0); trail.endColor = c;
@@ -56,7 +62,8 @@ namespace MoreMush
             }
             else if (skin != null)
             {
-                var ac = U.Hex(skin.aura); ac.a = 0.3f * (b.perm ? 1 : Mathf.Min(0.85f, b.life)); aura.color = ac;
+                if (auraKey != skin.aura) { auraKey = skin.aura; skinAura = U.Hex(auraKey); }
+                var ac = skinAura; ac.a = 0.3f * (b.perm ? 1 : Mathf.Min(0.85f, b.life)); aura.color = ac;
                 aura.transform.localScale = Vector3.one * (b.r * 3.4f / Art.PPU);
             }
 

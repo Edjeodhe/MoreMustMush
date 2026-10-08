@@ -19,10 +19,13 @@ namespace MoreMush
         public static float D2(float ax, float ay, float bx, float by) { float dx = ax - bx, dy = ay - by; return dx * dx + dy * dy; }
         public static T Pick<T>(IList<T> arr) => arr[Mathf.Min(arr.Count - 1, Mathf.FloorToInt(UnityEngine.Random.value * arr.Count))];
 
+        static double[] pickBuf = new double[64];   // PickWeighted 가중치 버퍼 (군락 생성마다 새로 만들지 않게). wf 안에서 다시 부르지 말 것
+
         public static T PickWeighted<T>(IList<T> arr, Func<T, double> wf) where T : class
         {
             double tot = 0;
-            var ws = new double[arr.Count];
+            if (pickBuf.Length < arr.Count) pickBuf = new double[arr.Count];
+            var ws = pickBuf;
             for (int i = 0; i < arr.Count; i++) { ws[i] = Math.Max(0, wf(arr[i])); tot += ws[i]; }
             if (tot <= 0) return null;
             double r = UnityEngine.Random.value * tot;
@@ -79,9 +82,13 @@ namespace MoreMush
 
         public static string Pct(double v) => FmtN(v * 100, 1) + "%";
 
+        // 색 문자열은 데이터·리터럴로 정해진 몇십 개뿐이라, 한 번 파싱한 결과를 기억해 둔다 (트리 화면만 프레임당 수백 번 부름).
+        static readonly Dictionary<string, Color> hexCache = new Dictionary<string, Color>();
+
         public static Color Hex(string hex)
         {
-            ColorUtility.TryParseHtmlString(hex, out var c);
+            if (hex == null) { ColorUtility.TryParseHtmlString(hex, out var c0); return c0; }
+            if (!hexCache.TryGetValue(hex, out var c)) { ColorUtility.TryParseHtmlString(hex, out c); hexCache[hex] = c; }
             return c;
         }
 

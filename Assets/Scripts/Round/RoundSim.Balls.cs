@@ -103,7 +103,8 @@ namespace MoreMush
                     float rr = BladeRadius(b);
                     double dmg = (st.blade ? st.bladeDmg : st.atk * 0.4) * Wk(b);
                     bool any = false;
-                    foreach (var m in QueryCircle(b.x, b.y, rr + 30))
+                    var q = QueryCircle(b.x, b.y, rr + 30);
+                    foreach (var m in q)
                     {
                         float reach = rr + m.r * 0.6f;
                         if (U.D2(b.x, b.y, m.x, m.y) < reach * reach)
@@ -113,6 +114,7 @@ namespace MoreMush
                             if (mill != null && U.Chance((float)mill["p"])) MillChip(m);
                         }
                     }
+                    FreeQuery(q);
                     if (any) b.bladeFx = 0.12f;
                 }
             }
@@ -125,7 +127,9 @@ namespace MoreMush
             if (b.magnet > 0)
             {
                 Shroom best = null; float bd = 1e12f;
-                foreach (var m in QueryCircle(b.x, b.y, 500)) { if (m.jelly) continue; float dd = U.D2(b.x, b.y, m.x, m.y); if (dd < bd) { bd = dd; best = m; } }
+                var q = QueryCircle(b.x, b.y, 500);
+                foreach (var m in q) { if (m.jelly) continue; float dd = U.D2(b.x, b.y, m.x, m.y); if (dd < bd) { bd = dd; best = m; } }
+                FreeQuery(q);
                 if (best != null)
                 {
                     float cur = Mathf.Atan2(b.dy, b.dx), want = Mathf.Atan2(best.y - b.y, best.x - b.x);
@@ -149,13 +153,15 @@ namespace MoreMush
             if (b.dy > 0 && b.y + b.r >= top && py + b.r <= top + 2 && Mathf.Abs(b.x - barX) <= barLen / 2 + b.r * 0.6f) BarHit(b);
             // 버섯
             bool inJ = false; List<Shroom> jl = null;
-            var inside = new List<Shroom>();
-            foreach (var m in QueryCircle(b.x, b.y, b.r + 2))
+            // 지난 판정의 b.inside와 번갈아 쓰는 두 번째 리스트 (서브스텝마다 새 리스트를 만들지 않게)
+            var inside = b.insideNext; inside.Clear();
+            var hits = QueryCircle(b.x, b.y, b.r + 2);
+            foreach (var m in hits)
             {
                 if (m.grow < 0.5f) continue;
                 float ddx = b.x - m.x, ddy = b.y - m.y, rr = b.r + m.r, dd = ddx * ddx + ddy * ddy;
                 if (dd >= rr * rr) continue;
-                if (m.jelly) { inJ = true; (jl ??= new List<Shroom>()).Add(m); continue; }
+                if (m.jelly) { inJ = true; if (jl == null) { jl = jellyBuf; jl.Clear(); } jl.Add(m); continue; }
                 if (b.inside.Contains(m)) { inside.Add(m); continue; }
                 if (!m.solid) { inside.Add(m); DirectHit(m, b, 1); continue; }
                 var pk = st.sk["pierce"];
@@ -169,7 +175,8 @@ namespace MoreMush
                 b.lastHit = m; b.lastHitT = t;
                 DirectHit(m, b, 1);
             }
-            b.inside = inside;
+            FreeQuery(hits);
+            b.insideNext = b.inside; b.inside = inside;
             if (inJ)
             {
                 if (!b.inJelly) { b.inJelly = true; b.jTick = 0.15f; }
@@ -229,16 +236,9 @@ namespace MoreMush
                 {
                     if (b.mole <= 0)
                     {
-                        foreach (var (p, q) in new[] { (d.a, d.b), (d.b, d.a) })
-                        {
-                            if (U.D2(b.x, b.y, p.x, p.y) < d.r * d.r)
-                            {
-                                b.x = q.x + b.dx * (d.r + b.r + 4); b.y = q.y + b.dy * (d.r + b.r + 4); b.mole = 1; b.trail.Clear();
-                                for (int i = 0; i < 8; i++) AddPart(q.x, q.y, U.Rand(-80, 80), U.Rand(-80, 80), 0.4f, U.Hex("#8a6a4a"), 4);
-                                Snd.Tone(200, 0.12f, Snd.Wave.Sine, 0.4f, 2.5f, "mole");
-                                break;
-                            }
-                        }
+                        // a 구멍 → b, 아니면 b 구멍 → a (예전 순서 그대로, 배열을 만들지 않게 펼쳐 씀)
+                        if (U.D2(b.x, b.y, d.a.x, d.a.y) < d.r * d.r) MoleWarp(b, d, d.b);
+                        else if (U.D2(b.x, b.y, d.b.x, d.b.y) < d.r * d.r) MoleWarp(b, d, d.a);
                     }
                 }
                 else if (d.type == "acorn")
@@ -249,7 +249,7 @@ namespace MoreMush
                         if (d.lit[i] == 0 && U.D2(b.x, b.y, p.x, p.y) < (18 * DEV_SCALE + b.r) * (18 * DEV_SCALE + b.r))
                         {
                             d.lit[i] = 1; Snd.Tone(700 + i * 150, 0.08f, Snd.Wave.Triangle, 0.4f);
-                            if (d.lit.All(x => x > 0) && d.offT <= 0)
+                            if (d.lit[0] > 0 && d.lit[1] > 0 && d.lit[2] > 0 && d.offT <= 0)
                             {
                                 acornT = 5 * (float)st.devMul; d.offT = 1;
                                 AddLabel("도토리 점등! 점수 ×2", (d.pts[0].x + d.pts[2].x) / 2, d.pts[1].y - 40, "#ffe070", 30);
@@ -293,7 +293,7 @@ namespace MoreMush
 
         void SkillFx(string id, float x, float y)
         {
-            skillFlash[id] = 0.6f;
+            Flash(id);
             if (skillLabelT.TryGetValue(id, out var lt) && lt > t) return;   // 같은 스킬 이름은 1.5초에 한 번만
             skillLabelT[id] = t + 1.5f;
             string n = null, col = "#ffffff";
@@ -364,7 +364,7 @@ namespace MoreMush
             if (m.spore != null && m.sporeCd <= 0 && U.Chance((float)st.sporeP)) { m.sporeCd = 2; SpawnCloud(m.x, m.y, m.spore); }
             var sk = st.sk;
             if (sk["burst"].on && U.Chance((float)sk["burst"].p)) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
-            if (sk["tspore"].on && U.Chance((float)sk["tspore"].p)) { AddTime(0.3f * (float)sk["tspore"].pm, "tspore", b.x, b.y); skillFlash["tspore"] = 0.6f; }
+            if (sk["tspore"].on && U.Chance((float)sk["tspore"].p)) { AddTime(0.3f * (float)sk["tspore"].pm, "tspore", b.x, b.y); Flash("tspore"); }
             if (sk["magnet"].on && U.Chance((float)sk["magnet"].p)) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
             if (sk["bolt"].on && U.Chance((float)(sk["bolt"].p * (st.wId == "thunder" ? 2 : 1)))) { ChainBolt(m, b); SkillFx("bolt", b.x, b.y); }
         }
@@ -384,10 +384,22 @@ namespace MoreMush
             if (flyers.Count < 120) flyers.Add(new Flyer { x = m.x, y = m.y, sx = m.x, sy = m.y, dur = 0.5f, sp = sp, cat = sp.c });
         }
 
+        readonly List<Shroom> jellyBuf = new List<Shroom>();   // StepBall에서 지금 젤리 안에 있는 버섯 (서브스텝마다 새 리스트를 만들지 않게)
+
+        // 두더지 굴: 들어간 반대편 구멍(to)으로 튀어나온다
+        void MoleWarp(Ball b, Device d, Vector2 to)
+        {
+            b.x = to.x + b.dx * (d.r + b.r + 4); b.y = to.y + b.dy * (d.r + b.r + 4); b.mole = 1; b.trail.Clear();
+            for (int i = 0; i < 8; i++) AddPart(to.x, to.y, U.Rand(-80, 80), U.Rand(-80, 80), 0.4f, U.Hex("#8a6a4a"), 4);
+            Snd.Tone(200, 0.12f, Snd.Wave.Sine, 0.4f, 2.5f, "mole");
+        }
+
         void SamCleave(Shroom m0, Ball b)
         {
             Shroom best = null; float bd = 160 * 160;
-            foreach (var m in QueryCircle(m0.x, m0.y, 160)) { if (m.dead || m == m0) continue; float dd = U.D2(m0.x, m0.y, m.x, m.y); if (dd < bd) { bd = dd; best = m; } }
+            var q = QueryCircle(m0.x, m0.y, 160);
+            foreach (var m in q) { if (m.dead || m == m0) continue; float dd = U.D2(m0.x, m0.y, m.x, m.y); if (dd < bd) { bd = dd; best = m; } }
+            FreeQuery(q);
             if (best == null) return;
             bolts.Add(new Bolt { pts = new List<Vector2> { new Vector2(m0.x, m0.y), new Vector2(best.x, best.y) }, t = 0.2f, slash = true });
             Damage(best, st.atk * 2 * Wk(b), b, "skill");

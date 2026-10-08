@@ -10,10 +10,16 @@ namespace MoreMush
         public SpriteRenderer[] glows = new SpriteRenderer[3];
         public LineRenderer link;               // mole tunnel dashed line
         readonly List<LineRenderer> chevrons = new List<LineRenderer>();
+        SpriteRenderer[] abc;                                    // acorn 세 개 (프레임마다 배열을 만들지 않게)
+        static readonly float[] LANES = { 0.3f, 0.7f };          // 물줄기 화살표가 지나가는 줄 (폭의 30%·70%)
+        readonly Vector3[] chevronPts = new Vector3[6];          // SetPositions가 복사하므로 다시 써도 된다
 
         public void Show(Device d, float now)
         {
             a.enabled = b.enabled = c.enabled = false;
+            // 풀 슬롯은 라운드마다 다른 장치를 맡는다. 이끼·물줄기가 바꾼 9-slice 모드를 다른 장치에 남기지 않는다
+            var mode = d.type == "moss" || d.type == "stream" ? SpriteDrawMode.Sliced : SpriteDrawMode.Simple;
+            if (a.drawMode != mode) a.drawMode = mode;
             foreach (var g in glows) g.enabled = false;
             link.enabled = false;
             int used = 0;
@@ -51,7 +57,7 @@ namespace MoreMush
                 }
                 case "acorn":
                 {
-                    var rs = new[] { a, b, c };
+                    var rs = abc ??= new[] { a, b, c };
                     for (int i = 0; i < 3; i++)
                     {
                         rs[i].enabled = true;
@@ -76,30 +82,32 @@ namespace MoreMush
             if (d.fx != 0)
             {
                 for (float x = d.x0 - 80; x < d.x1; x += 80)
-                    foreach (var yy in new[] { 0.3f, 0.7f })
+                    foreach (var yy in LANES)
                     {
                         float xx = x + (d.fx > 0 ? off : 80 - off), y = U.Lerp(d.y0, d.y1, yy);
                         if (xx < d.x0 || xx + 30 > d.x1) continue;
                         float hx = d.fx > 0 ? xx + 30 : xx;
-                        Chevron(n++, new[] { Art.P(xx, y), Art.P(xx + 30, y), Art.P(hx, y), Art.P(hx - d.fx * 8, y - 6), Art.P(hx, y), Art.P(hx - d.fx * 8, y + 6) });
+                        Chevron(n++, Art.P(xx, y), Art.P(xx + 30, y), Art.P(hx, y), Art.P(hx - d.fx * 8, y - 6), Art.P(hx, y), Art.P(hx - d.fx * 8, y + 6));
                     }
             }
             else
             {
                 for (float y = d.y0 - 80; y < d.y1; y += 80)
-                    foreach (var xf in new[] { 0.3f, 0.7f })
+                    foreach (var xf in LANES)
                     {
                         float yy = y + (d.fy > 0 ? off : 80 - off), x = U.Lerp(d.x0, d.x1, xf);
                         if (yy < d.y0 || yy + 30 > d.y1) continue;
                         float hy = d.fy > 0 ? yy + 30 : yy;
-                        Chevron(n++, new[] { Art.P(x, yy), Art.P(x, yy + 30), Art.P(x, hy), Art.P(x - 6, hy - d.fy * 8), Art.P(x, hy), Art.P(x + 6, hy - d.fy * 8) });
+                        Chevron(n++, Art.P(x, yy), Art.P(x, yy + 30), Art.P(x, hy), Art.P(x - 6, hy - d.fy * 8), Art.P(x, hy), Art.P(x + 6, hy - d.fy * 8));
                     }
             }
             return n;
         }
 
-        void Chevron(int i, Vector3[] pts)
+        void Chevron(int i, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4, Vector3 p5)
         {
+            var pts = chevronPts;
+            pts[0] = p0; pts[1] = p1; pts[2] = p2; pts[3] = p3; pts[4] = p4; pts[5] = p5;
             while (chevrons.Count <= i)
             {
                 var lr = Instantiate(link, transform);

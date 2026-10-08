@@ -67,6 +67,7 @@ namespace MoreMush
         public bool PlaceOk => Placing && CanPlace(BUILDING[PlaceId], placeX, placeY, MoveUid);
         Vector2 grab;                                     // 잡은 곳 − 건물 가운데 (옮길 때 건물이 손 밑에서 튀지 않게)
         SaveData.Bld pressB; Vector2 pressAt; float pressT;   // 누르고 있는 건물 (꾹 누르거나 끌면 옮기기)
+        bool pressOverUI;                                     // 지금 누르고 있는 손가락·버튼이 UI 위에서 시작했는지
 
         Pool<FarmCritter> critPool;
         Pool<BuildingView> buildPool;
@@ -99,8 +100,14 @@ namespace MoreMush
             foreach (var w in crits) if (w.job >= 0) { PickFruit(w.job, w.id); w.job = -1; w.state = "idle"; w.tool = null; }
             foreach (var j in jobs) PickFruit(j, null);
             jobs.Clear(); busy.Clear();
+            saveT = -1;
             SaveGame();
         }
+
+        // 버섯을 딸 때마다 저장하면 '모두 따기'에서 몇 초 동안 십여 번 저장한다 → 잠깐 모았다가 한 번에 저장.
+        // 저장 전에 꺼져도 딴 버섯이 다시 다 자란 상태로 돌아갈 뿐 (재화가 늘거나 사라지지 않음)
+        float saveT = -1;
+        void SaveSoon() { if (saveT < 0) saveT = 1.5f; }
 
         static Critter NewCritter(Special k, float x, float y) => new Critter
         { id = k.id, kind = k, x = x, y = y, tx = x, ty = y, t = U.Rand(0.2f, 2), face = U.Chance(0.5f) ? 1 : -1, hop = U.Rand(0, 6) };
@@ -120,10 +127,18 @@ namespace MoreMush
 
         static Vector2 WanderSpot() => new Vector2(U.Rand(FARM.x0, FARM.x1), U.Rand(FARM.y0, FARM.y1));
 
+        // 그 꼬마가 짓고 있는 건물 (없으면 null). 꼬마마다 프레임에 몇 번씩 불려서 LINQ 대신 루프로 찾는다
+        static SaveData.Bld ActiveBuild(string critter)
+        {
+            var l = G.farm.blds;
+            for (int i = 0; i < l.Count; i++) if (!l[i].done && l[i].critter == critter) return l[i];
+            return null;
+        }
+
         // 짓고 있는 건물 앞 (그 꼬마가 서는 곳)
         static Vector2? BuilderSpot(string critter)
         {
-            var b = G.farm.blds.FirstOrDefault(x => !x.done && x.critter == critter);
+            var b = ActiveBuild(critter);
             if (b == null) return null;
             var r = BuildRect(BUILDING[b.id], b.gx, b.gy);
             return new Vector2(r.center.x + (b.uid % 2 == 0 ? -1 : 1) * r.width * 0.32f, r.yMax + 14);
@@ -131,7 +146,7 @@ namespace MoreMush
 
         static float BuildCenterX(string critter)
         {
-            var b = G.farm.blds.FirstOrDefault(x => !x.done && x.critter == critter);
+            var b = ActiveBuild(critter);
             return b == null ? 0 : BuildRect(BUILDING[b.id], b.gx, b.gy).center.x;
         }
 
@@ -293,7 +308,7 @@ namespace MoreMush
                         var y = PickFruit(slot, p.id);
                         if (y != null)
                         {
-                            SaveGame(); dirty = true; Snd.Buy();
+                            SaveSoon(); dirty = true; Snd.Buy();
                             AddFloat(pos.x, pos.y - 30, $"+{y.Value.gem}{(y.Value.spore > 0 ? $"  포자 +{y.Value.spore}" : "")}", true, U.Hex("#a8f5d4"));
                             GemBurst(pos.x, pos.y, 6);
                         }
@@ -452,6 +467,7 @@ namespace MoreMush
             if (G?.farm == null) return;
             float dt = Mathf.Min(Time.deltaTime, 0.05f), now = Time.time;
             if ((buildTickT -= dt) <= 0) { buildTickT = 0.5f; TickBuilds(); }
+            if (saveT >= 0 && (saveT -= Time.unscaledDeltaTime) < 0) SaveGame();
             HandleInput();
             UpdateCritters(dt);
             foreach (var q in parts) { q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; if (q.k == "gem" || q.k == "dirt") q.vy += 700 * dt; }
@@ -465,7 +481,7 @@ namespace MoreMush
             for (int i = 0; i < crits.Count; i++)
             {
                 var p = crits[i];
-                string hat = BuilderSpot(p.id) != null ? "hardhat" : p.job >= 0 ? "straw" : null;
+                string hat = ActiveBuild(p.id) != null ? "hardhat" : p.job >= 0 ? "straw" : null;
                 // 건설 중: 망치를 들어 올렸다(0) 내려친다(1). 내려치는 순간 불똥이 튄다
                 int fr = p.state == "build" && p.anim == null ? ((now + p.hop) % BUILDER.beat > BUILDER.beat - BUILDER.strike ? 1 : 0) : -1;
                 if (fr == 1 && p.bframe == 0) HammerSparks(p);
@@ -481,13 +497,15 @@ namespace MoreMush
         const float SAY_GAP = 6;
         readonly List<int> sayIdx = new List<int>();
         readonly List<Rect> sayPlaced = new List<Rect>();
+        System.Comparison<int> sayOrder;
 
         void SpreadSays()
         {
             sayIdx.Clear(); sayPlaced.Clear();
             for (int i = 0; i < crits.Count; i++) if (crits[i].sayT > 0) sayIdx.Add(i);
             if (sayIdx.Count < 2) return;
-            sayIdx.Sort((a, b) => crits[b].y.CompareTo(crits[a].y));
+            sayOrder ??= (a, b) => crits[b].y.CompareTo(crits[a].y);   // 비교 함수는 한 번만 만든다 (말풍선이 2개 이상이면 매 프레임 정렬)
+            sayIdx.Sort(sayOrder);
             for (int k = 0; k < sayIdx.Count; k++)
             {
                 var fc = critPool.Get(sayIdx[k]);
@@ -500,7 +518,9 @@ namespace MoreMush
                     {
                         var cur = new Rect(r.x, r.y - lift, r.width, r.height);
                         if (!cur.Overlaps(new Rect(q.x, q.y - SAY_GAP, q.width, q.height + SAY_GAP * 2))) continue;
-                        lift = r.y + r.height + SAY_GAP - q.y; moved = true;
+                        // 더 올려야 할 때만 받는다. float 오차로 경계가 살짝 겹쳐 같은 값을 다시 계산하면 무한 루프가 됐다 (WebGL float32)
+                        float nl = r.y + r.height + SAY_GAP - q.y;
+                        if (nl > lift) { lift = nl; moved = true; }
                     }
                 }
                 sayPlaced.Add(new Rect(r.x, r.y - lift, r.width, r.height));
@@ -519,7 +539,7 @@ namespace MoreMush
             var b = BUILDING[PlaceId]; var r = BuildRect(b, placeX, placeY);
             bool ok = PlaceOk;
             ghost.transform.localPosition = Art.P(r.center.x, r.yMax);
-            BuildingView.Fit(ghostSprite, SpriteDB.Get("Farm/Props/" + b.id), b.px);
+            BuildingView.Fit(ghostSprite, SpriteDB.Get("Farm/Props/", b.id), b.px);
             ghostSprite.color = ok ? new Color(1, 1, 1, 0.75f) : new Color(1, 0.65f, 0.65f, 0.6f);
             // 칸마다 초록(놓을 수 있음) · 빨강(막힘)
             int n = 0;
@@ -580,7 +600,11 @@ namespace MoreMush
             UIUtil.Show(buildGrid, Placing);
             if (p == null || GameFlow.I.ModalOpen) { pressB = null; return; }
             bool isMouse = p is Mouse;
-            bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(isMouse ? -1 : 0);
+            // -1 = 지금 쓰는 포인터. 터치 id는 0이 아니어서 예전처럼 0을 넘기면 UI 위를 눌러도 false가 나와 농장까지 눌렸다.
+            // 손을 뗀 프레임에는 터치 기록이 이미 없을 수 있어, 누를 때 UI 위였는지를 기억해 둔다.
+            bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+            if (p.press.wasPressedThisFrame) pressOverUI = overUI;
+            else if (p.press.wasReleasedThisFrame) overUI |= pressOverUI;
             var s = ToStage(p.position.ReadValue());
             if (Moving)
             {

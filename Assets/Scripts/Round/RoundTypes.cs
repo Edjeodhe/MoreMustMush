@@ -51,16 +51,23 @@ namespace MoreMush
         public Vector2[] pts; public int[] lit; public float offT;   // acorn
         public int viewId = -1;
 
+        readonly List<Shape> shapes = new List<Shape>(3);
+
+        // Borrowed buffer: callers may read it, but must not retain or modify its contents.
         public List<Shape> Shapes()
         {
-            switch (type)
+            int count = type == "mole" ? 2 : type == "acorn" ? (pts?.Length ?? 0) :
+                type == "stump" || type == "moss" || type == "stream" ? 1 : 0;
+            while (shapes.Count < count) shapes.Add(new Shape());
+            if (shapes.Count > count) shapes.RemoveRange(count, shapes.Count - count);
+            for (int i = 0; i < count; i++)
             {
-                case "stump": return new List<Shape> { Shape.C(x, y, r) };
-                case "moss": case "stream": return new List<Shape> { Shape.Rect(x0, y0, x1, y1) };
-                case "mole": return new List<Shape> { Shape.C(a.x, a.y, 30), Shape.C(b.x, b.y, 30) };
-                case "acorn": var l = new List<Shape>(); foreach (var p in pts) l.Add(Shape.C(p.x, p.y, 18)); return l;
+                var s = shapes[i]; s.circle = type != "moss" && type != "stream";
+                if (!s.circle) { s.x0 = x0; s.y0 = y0; s.x1 = x1; s.y1 = y1; }
+                else if (type == "stump") { s.x = x; s.y = y; s.r = r; }
+                else { var p = type == "mole" ? (i == 0 ? a : b) : pts[i]; s.x = p.x; s.y = p.y; s.r = type == "mole" ? 30 : 18; }
             }
-            return new List<Shape>();
+            return shapes;
         }
     }
 
@@ -75,6 +82,7 @@ namespace MoreMush
         public Shroom lastHit;
         public List<Vector2> trail = new List<Vector2>();
         public List<Shroom> inside = new List<Shroom>();
+        public List<Shroom> insideNext = new List<Shroom>();   // StepBall이 inside와 번갈아 쓰는 버퍼
     }
 
     public class Cloud { public float x, y, r, t, max; public bool slow, weak; }
@@ -83,7 +91,7 @@ namespace MoreMush
     public class Bolt { public List<Vector2> pts; public float t; public bool slash, big; public string col; public float jitterSeed; }
     public class Ring { public float x, y, r, t, dur; public string col; public bool quiet; }
     public class Part { public float x, y, vx, vy, t, life, size; public Color col; }
-    public class FloatText { public float x, y, t; public double v; public int tier; public bool crit, golden, coin; }
+    public class FloatText { public float x, y, t; public double v; public int tier; public bool crit, golden, coin; public string view; }   // view: 화면이 만든 글자 (시뮬레이션은 읽지 않음)
     public class Label { public string text; public float x, y, size, t; public string col; }
     public class Flyer { public float x, y, sx, sy, tx, ty, t, dur; public Species sp; public bool golden, clock, done; public string cat; }
     public class Ember { public float x, y, vx, vy, t, life, s; }

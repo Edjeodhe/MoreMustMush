@@ -65,12 +65,22 @@ namespace MoreMush
     public static class SaveIO
     {
         public const string SAVE_KEY = "mushroomPinball_save_v2";
+        public const string BAD_KEY = SAVE_KEY + "_bad";   // 읽지 못한 세이브 원문 (새 게임이 덮어쓰기 전에 남겨 둠)
+
+        // true면 저장하지 않는다. 밸런스 봇(BalanceSim)이 돌 때 실제 세이브 키를 건드리지 않게 한다.
+        public static bool Suspended;
+        // 마지막 Load()가 세이브를 읽지 못해 null을 돌려줬는지 (세이브가 아예 없을 때는 false)
+        public static bool LastLoadFailed { get; private set; }
 
         public static void Save(SaveData g)
         {
-            if (g == null) return;
-            PlayerPrefs.SetString(SAVE_KEY, JsonConvert.SerializeObject(g));
-            PlayerPrefs.Save();
+            if (g == null || Suspended) return;
+            try
+            {
+                PlayerPrefs.SetString(SAVE_KEY, JsonConvert.SerializeObject(g));
+                PlayerPrefs.Save();
+            }
+            catch (Exception e) { Debug.LogError("Save failed: " + e); }   // 저장 실패가 라운드·버튼 처리 중간을 끊지 않게
         }
 
         public static bool HasSave() => PlayerPrefs.HasKey(SAVE_KEY);
@@ -79,37 +89,63 @@ namespace MoreMush
 
         public static SaveData Load()
         {
+            LastLoadFailed = false;
+            string s = PlayerPrefs.GetString(SAVE_KEY, null);
+            if (string.IsNullOrEmpty(s)) return null;
             try
             {
-                string s = PlayerPrefs.GetString(SAVE_KEY, null);
-                if (string.IsNullOrEmpty(s)) return null;
-                var g = JsonConvert.DeserializeObject<SaveData>(s) ?? new SaveData();
-                // prototype loadSave() migrations that still apply
-                foreach (var br in Defs.CAT_KEYS)
-                    foreach (var n in Defs.NODES)
-                        if (n.br == br && !n.core && g.nodes.ContainsKey(n.id) && g.nodes[n.id] > 0) { g.nodes["core_" + br] = 1; break; }
-                foreach (var id in g.hv.Keys) if (!g.hvOn.ContainsKey(id)) g.hvOn[id] = true;
-                foreach (var n in Defs.NODES) if (g.nodes.TryGetValue(n.id, out var L) && L > n.max) g.nodes[n.id] = n.max;
-                foreach (var id in new List<string>(g.hv.Keys)) g.hv[id] = Math.Min(5, g.hv[id]);
-                if (!Defs.THEME.ContainsKey(g.theme ?? "")) g.theme = "forest";
-                g.skins ??= new SaveData.Skins();
-                g.quests ??= new List<SaveData.Quest>();
-                g.farm ??= new SaveData.Farm();
-                g.farm.next ??= new Dictionary<string, double>(); g.farm.kind ??= new Dictionary<string, string>();
-                g.farm.love ??= new Dictionary<string, int>(); g.farm.evo ??= new Dictionary<string, int>();
-                g.farm.star ??= new Dictionary<string, int>();
-                g.farm.blds = g.farm.blds?.FindAll(b => b != null && Defs.BUILDING.ContainsKey(b.id ?? "")) ?? new List<SaveData.Bld>();
-                g.farm.tree ??= new SaveData.Tree();
-                g.farm.tree.lv = Math.Max(1, Math.Min(Defs.TREE.maxLv, g.farm.tree.lv));
-                g.farm.tree.slots = g.farm.tree.slots?.FindAll(f => f != null && Defs.FRUITS.ContainsKey(f.kind ?? "")) ?? new List<SaveData.Fruit>();
-
+                var g = JsonConvert.DeserializeObject<SaveData>(s) ?? throw new JsonSerializationException("save root is null");
+                Sanitize(g);
                 return g;
             }
             catch (Exception e)
             {
-                Debug.LogWarning("Save load failed: " + e.Message);
+                Debug.LogError("Save load failed: " + e);
+                LastLoadFailed = true;
+                // 다음 저장이 원래 세이브를 덮어쓰기 전에 원문을 따로 남긴다 (처음 실패한 것만)
+                try { if (!PlayerPrefs.HasKey(BAD_KEY)) { PlayerPrefs.SetString(BAD_KEY, s); PlayerPrefs.Save(); } }
+                catch (Exception e2) { Debug.LogError("Save backup failed: " + e2); }
                 return null;
             }
         }
+
+        // 빈 칸·범위 밖 값을 채우고 자른다. 올바른 세이브에는 아무것도 바꾸지 않는다.
+        static void Sanitize(SaveData g)
+        {
+            g.nodes ??= new Dictionary<string, int>(); g.seeds ??= new Dictionary<string, bool>();
+            g.codex ??= new Dictionary<string, SaveData.CodexEntry>(); g.inv ??= new Dictionary<string, double>();
+            g.specials ??= new Dictionary<string, bool>();
+            g.hv ??= new Dictionary<string, int> { ["sam"] = 1 }; g.hvOn ??= new Dictionary<string, bool>();
+            g.rec ??= new SaveData.Records();
+            g.skins ??= new SaveData.Skins();
+            g.skins.own ??= new Dictionary<string, bool>(); g.skins.ch ??= new Dictionary<string, string>(); g.skins.hv ??= new Dictionary<string, string>();
+            foreach (var k in new List<string>(g.codex.Keys)) if (g.codex[k] == null) g.codex.Remove(k);
+            g.quests = g.quests?.FindAll(q => q != null && q.id != null && Defs.SP.ContainsKey(q.id)) ?? new List<SaveData.Quest>();
+            g.rounds = Math.Max(0, g.rounds);
+            if (!IsFinite(g.gold)) g.gold = 0;
+            if (!IsFinite(g.gem)) g.gem = 0;
+            if (!IsFinite(g.spore)) g.spore = 0;
+            if (!IsFinite(g.dia)) g.dia = 0;
+
+            // prototype loadSave() migrations that still apply
+            foreach (var br in Defs.CAT_KEYS)
+                foreach (var n in Defs.NODES)
+                    if (n.br == br && !n.core && g.nodes.ContainsKey(n.id) && g.nodes[n.id] > 0) { g.nodes["core_" + br] = 1; break; }
+            foreach (var id in g.hv.Keys) if (!g.hvOn.ContainsKey(id)) g.hvOn[id] = true;
+            foreach (var n in Defs.NODES) if (g.nodes.TryGetValue(n.id, out var L) && (L > n.max || L < 0)) g.nodes[n.id] = Math.Max(0, Math.Min(n.max, L));
+            foreach (var id in new List<string>(g.hv.Keys)) g.hv[id] = Math.Max(1, Math.Min(5, g.hv[id]));
+            if (!Defs.THEME.ContainsKey(g.theme ?? "")) g.theme = "forest";
+            g.farm ??= new SaveData.Farm();
+            g.farm.next ??= new Dictionary<string, double>(); g.farm.kind ??= new Dictionary<string, string>();
+            g.farm.love ??= new Dictionary<string, int>(); g.farm.evo ??= new Dictionary<string, int>();
+            g.farm.star ??= new Dictionary<string, int>();
+            g.farm.blds = g.farm.blds?.FindAll(b => b != null && Defs.BUILDING.ContainsKey(b.id ?? "")) ?? new List<SaveData.Bld>();
+            foreach (var b in g.farm.blds) if (b.uid >= g.farm.nextUid) g.farm.nextUid = b.uid + 1;   // 새 건물 uid가 기존 것과 겹치지 않게
+            g.farm.tree ??= new SaveData.Tree();
+            g.farm.tree.lv = Math.Max(1, Math.Min(Defs.TREE.maxLv, g.farm.tree.lv));
+            g.farm.tree.slots = g.farm.tree.slots?.FindAll(f => f != null && Defs.FRUITS.ContainsKey(f.kind ?? "")) ?? new List<SaveData.Fruit>();
+        }
+
+        static bool IsFinite(double v) => !double.IsNaN(v) && !double.IsInfinity(v);
     }
 }

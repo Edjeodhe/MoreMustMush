@@ -38,8 +38,9 @@ namespace MoreMush
         public static int Lv(string id) => G.nodes.TryGetValue(id, out var L) ? L : 0;
         public static bool IsUnlockedSp(Species sp) => sp.init || (G.seeds.TryGetValue(sp.id, out var b) && b) || DBG.allSeeds;
         public static bool Harvested(string id) => G.codex.TryGetValue(id, out var e) && e.n > 0;
-        public static int CodexCount() => SPECIES.Count(s => Harvested(s.id));
-        public static int GoldenCount() => SPECIES.Count(s => G.codex.TryGetValue(s.id, out var e) && e.gold);
+        // 라운드 HUD가 프레임마다 부르므로 LINQ 대신 루프로 센다
+        public static int CodexCount() { int c = 0; for (int i = 0; i < SPECIES.Count; i++) if (Harvested(SPECIES[i].id)) c++; return c; }
+        public static int GoldenCount() { int c = 0; for (int i = 0; i < SPECIES.Count; i++) if (G.codex.TryGetValue(SPECIES[i].id, out var e) && e.gold) c++; return c; }
         public static bool SetDone(string id) => SETS.First(x => x.id == id).ids.All(Harvested);
         public static bool HasSpecial(string id) => G.specials.TryGetValue(id, out var b) && b;
 
@@ -122,18 +123,20 @@ namespace MoreMush
             return ParentOk(pp) ? "locked" : "hidden";
         }
 
-        public static bool BuyNode(Node n)
+        public static bool BuyNode(Node n, bool save = true)
         {
             int L = Lv(n.id);
             if (L >= n.max) return false;
             if (!ParentOk(n)) return false;
             var c = NodeCost(n, L);
             if (!CanAfford(c)) return false;
-            Pay(c); G.nodes[n.id] = L + 1; SaveGame();
+            Pay(c); G.nodes[n.id] = L + 1;
+            if (save) SaveGame();
             return true;
         }
 
-        public static int BuyMax(Node n) { int k = 0; while (BuyNode(n)) k++; return k; }
+        // 여러 레벨을 한 번에 사도 저장(JSON 직렬화 + PlayerPrefs 쓰기)은 한 번만 한다
+        public static int BuyMax(Node n) { int k = 0; while (BuyNode(n, false)) k++; if (k > 0) SaveGame(); return k; }
 
         // 가장 싼 강화부터 산다. dry = true면 결과만 계산하고 되돌린다.
         public static (int levels, double spent) BulkBuy(ICollection<string> brs, double reserve, bool dry)
@@ -158,7 +161,9 @@ namespace MoreMush
 
         // ===== 창고·판매 =====
         // 같은 능력치에 붙는 보너스(노드·코어·꼬마·별·세트)는 곱하지 않고 더한다
-        public static double PriceMul() => NF.ed_price(Lv("ed_price")) + NF.ed_price2(Lv("ed_price2")) + (Lv("core_ed") > 0 ? 0.1 : 0) + StarAbilities()["price"] + GoldenSetBonus();
+        public static double PriceMul() => PriceMul(StarAbilities());
+        // 이미 계산한 별 능력치를 넘겨 받으면 StarAbilities()를 다시 만들지 않는다 (같은 값, 같은 덧셈 순서)
+        public static double PriceMul(Dictionary<string, double> ab) => NF.ed_price(Lv("ed_price")) + NF.ed_price2(Lv("ed_price2")) + (Lv("core_ed") > 0 ? 0.1 : 0) + ab["price"] + GoldenSetBonus();
         public static double UnitPrice(Species sp, double pm) => TIERS[sp.t].drop * SELL_PRICE * pm;
         public static double InvCount(string id) => Math.Floor(G.inv.TryGetValue(id, out var v) ? v : 0);
         public static double InvTotal(string cat = null) { double n = 0; foreach (var sp in SPECIES) if (cat == null || sp.c == cat) n += InvCount(sp.id); return n; }
@@ -214,7 +219,7 @@ namespace MoreMush
             double harvFlat = 1 + NF.ed_bonus(Lv("ed_bonus")) + NF.ed_bonus1p(Lv("ed_bonus1p")) + NF.ed_bonus2(Lv("ed_bonus2")) + NF.ed_bonus2p(Lv("ed_bonus2p")) + NF.ed_bonus3(Lv("ed_bonus3")) + NF.ed_bonus3p(Lv("ed_bonus3p"));
             st.harvestMul = harvFlat * (1 + ab["harvest"] + BStat("harvest")) * NF.gm_harvest(Lv("gm_harvest")) * st.zoneMul;
             st.multiP = MultiRate(Lv("ed_multi"));
-            st.priceMul = PriceMul();
+            st.priceMul = PriceMul(ab);
             st.colMax = NF.ed_size(Lv("ed_size"));
             st.zoom = MAP_ZOOM[Lv("md_map")];
             double area = Math.Pow(1 / (st.zoom * st.zoom), 0.7);

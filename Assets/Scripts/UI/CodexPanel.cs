@@ -36,7 +36,13 @@ namespace MoreMush
             Render();
         }
 
-        public void Select(string id) { selected = id; Render(); }
+        public void Select(string id)
+        {
+            if (selected == id) return;
+            string previous = selected; selected = id;
+            foreach (var c in cells) if (c.id == previous || c.id == selected) c.Select(selected);
+            RenderDetail();
+        }
 
         void Render()
         {
@@ -63,7 +69,8 @@ namespace MoreMush
             detailEmpty.SetActive(selected == null);
             detail.SetActive(selected != null);
             if (selected == null) return;
-            foreach (var t in new[] { detailStars, detailAb, detailTrait, detailWarn, detailRec }) UIUtil.Show(t, true);
+            UIUtil.Show(detailStars, true); UIUtil.Show(detailAb, true); UIUtil.Show(detailTrait, true);
+            UIUtil.Show(detailWarn, true); UIUtil.Show(detailRec, true);
             if (selected.StartsWith("sp:"))
             {
                 var k = SPC[selected.Substring(3)]; bool own = HasSpecial(k.id);

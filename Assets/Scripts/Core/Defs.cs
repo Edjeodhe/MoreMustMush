@@ -50,14 +50,14 @@ namespace MoreMush
         public static Preset TUNE = PRESETS["tuned"];
         const string PresetKey = "mushroomPinball_preset";
 
-        public static void ApplyPreset(string id)
+        public static void ApplyPreset(string id, bool persist = true)
         {
             TUNE = PRESETS.TryGetValue(id ?? "", out var p) ? p : PRESETS["tuned"];
             for (int i = 0; i < TIERS.Length; i++) { TIERS[i].r = Mathf.Round(BASE_R[i] * TUNE.rMul); TIERS[i].hp = TUNE.hp[i]; }
-            PlayerPrefs.SetString(PresetKey, TUNE.id);
+            if (persist) PlayerPrefs.SetString(PresetKey, TUNE.id);
         }
 
-        public static void LoadPreset() => ApplyPreset(PlayerPrefs.GetString(PresetKey, "tuned"));
+        public static void LoadPreset() => ApplyPreset(PlayerPrefs.GetString(PresetKey, "tuned"), false);
 
         // 라운드 시간: 처음 15초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다
         public const float BASE_TIME = 15;

@@ -117,8 +117,18 @@ namespace MoreMush
         public static int BuiltCount(string id) => G.farm.blds.Count(b => b.id == id);          // 짓는 중 포함
         public static bool IsBuilding(string critter) { double now = Now(); return G.farm.blds.Any(b => !b.done && now < b.at && b.critter == critter); }
         public static List<Special> FreeCritters() => FarmOwned().Where(k => !IsBuilding(k.id)).ToList();
-        // 완성된 건물 능력치 합
-        public static float BStat(string stat) { if (G?.farm?.blds == null) return 0; float v = 0; foreach (var b in G.farm.blds) if (b.done && BUILDING[b.id].stat == stat) v += BUILDING[b.id].val; return v; }
+        // 완성된 건물 능력치 합. 농장 밖에 있는 동안 완성 시각이 지난 건물도 친다 (done 표시는 농장 화면의 BuildTick이 함)
+        public static float BStat(string stat)
+        {
+            if (G?.farm?.blds == null) return 0;
+            float v = 0; double now = -1;
+            foreach (var b in G.farm.blds)
+            {
+                if (!b.done) { if (now < 0) now = Now(); if (now < b.at) continue; }
+                if (BUILDING[b.id].stat == stat) v += BUILDING[b.id].val;
+            }
+            return v;
+        }
 
         public static double BuildSeconds(Building b, string critter)
         {
@@ -301,7 +311,20 @@ namespace MoreMush
         public static string TimeText(double s) => s >= 3600 ? $"{(int)(s / 3600)}시간 {U.JsRound(s % 3600 / 60)}분" : s >= 60 ? $"{U.JsRound(s / 60)}분" : $"{Math.Ceiling(s)}초";
 
         // ===== 자동 수확 보상 =====
-        public static void AutoEnsure() { if (G.autoT <= 0) G.autoT = Now(); }
+        public static void AutoEnsure() { if (G.autoT <= 0) G.autoT = Now(); FixClock(); }
+
+        // 기기 시계가 앞서 있다가 뒤로 맞춰지면 미래 시각에 멈춘 타이머를 지금 기준으로 당긴다 (남은 시간은 그대로). 정상 시계면 아무것도 안 함
+        public static void FixClock()
+        {
+            if (G?.farm == null) return;
+            double now = Now();
+            if (G.autoT > now) G.autoT = now;
+            if (G.farm.tree?.slots != null)
+                foreach (var f in G.farm.tree.slots) if (f.t0 > now) { f.at = now + (f.at - f.t0); f.t0 = now; }
+            foreach (var b in G.farm.blds) if (!b.done && b.t0 > now) { b.at = now + (b.at - b.t0); b.t0 = now; }
+            double maxWait = now + Math.Max(FARM.first, FARM.wait[1]) * 1000;   // 부탁 대기는 이보다 길 수 없다
+            foreach (var id in new List<string>(G.farm.next.Keys)) if (G.farm.next[id] > maxWait) G.farm.next[id] = maxWait;
+        }
         public static double AutoHours() => G == null || G.autoT <= 0 ? 0 : Math.Min(AUTO.maxHours, Math.Max(0, (Now() - G.autoT) / 3600000.0));
         public static double AutoMul() => (1 + BStat("auto")) * NF.gm_herb(Lv("gm_herb"));
         // 시간당 보상

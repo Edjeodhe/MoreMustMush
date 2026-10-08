@@ -27,13 +27,14 @@ namespace MoreMush
         RoundSim.Summary sum;
         readonly List<NewCard> unlockList = new List<NewCard>(), newsList = new List<NewCard>();
         float t0;
-        bool rolledSound;
+        bool rolledSound, animating;
+        float animationEnd;
         readonly List<(RectTransform rt, float delay, float y)> drops = new List<(RectTransform, float, float)>();
 
 
         public void Show(RoundSim.Summary s)
         {
-            sum = s; t0 = Time.unscaledTime; rolledSound = false;
+            sum = s; t0 = Time.unscaledTime; rolledSound = false; animating = true;
             for (int i = 0; i < 3; i++) gainTexts[i].text = $"+{U.Fmt(s.gains[CAT_KEYS[i]])}개";
             scoreLabel.text = $"얻은 점수 → 골드 <size=70%><color=#8a6a4a>(×{U.FmtN(s.goldMul)})</color></size>";
             bonusRow.SetActive(s.bonusGold > 0);
@@ -57,6 +58,7 @@ namespace MoreMush
             recsText.text = string.Join("\n", recs);
             toTreeText.text = "균사 트리로 ▶";
             SpawnBasket(s);
+            animationEnd = Mathf.Max(1.9f, drops.Count == 0 ? 0 : drops[drops.Count - 1].delay + 0.6f);
             FitCards();
             FitToScreen();
         }
@@ -126,11 +128,19 @@ namespace MoreMush
             var pool = new List<string>();
             foreach (var c in CAT_KEYS) { int n = Mathf.Min(14, Mathf.CeilToInt(Mathf.Sqrt((float)s.gains[c]))); for (int i = 0; i < n; i++) pool.Add(c); }
             pool = pool.OrderBy(_ => Random.value).ToList();
+            var harvested = new Dictionary<string, List<Species>>();
+            var fallback = new Dictionary<string, Species>();
+            foreach (var c in CAT_KEYS) harvested[c] = new List<Species>();
+            foreach (var sp in SPECIES)
+            {
+                if (!fallback.ContainsKey(sp.c)) fallback[sp.c] = sp;
+                if (Harvested(sp.id)) harvested[sp.c].Add(sp);
+            }
             for (int i = 0; i < pool.Count; i++)
             {
                 string c = pool[i];
-                var got = SPECIES.Where(x => x.c == c && Harvested(x.id)).ToList();
-                var sp = got.Count > 0 ? U.Pick(got) : SPECIES.First(x => x.c == c);
+                var got = harvested[c];
+                var sp = got.Count > 0 ? U.Pick(got) : fallback[c];
                 var img = Instantiate(basketShroomPrefab, basket);
                 img.gameObject.SetActive(true);
                 img.sprite = SpriteDB.Single(sp.id);
@@ -142,7 +152,7 @@ namespace MoreMush
 
         void Update()
         {
-            if (sum == null) return;
+            if (sum == null || !animating) return;
             float el = Time.unscaledTime - t0;
             // 바구니에 버섯이 후두둑 (cubic-bezier 오버슈트 근사)
             foreach (var d in drops)
@@ -150,7 +160,7 @@ namespace MoreMush
                 float k = Mathf.Clamp01((el - d.delay) / 0.6f);
                 float e = 1 - Mathf.Pow(1 - k, 3) + Mathf.Sin(k * Mathf.PI) * 0.15f;
                 d.rt.anchoredPosition = new Vector2(d.rt.anchoredPosition.x, Mathf.Lerp(40, -d.y, e));
-                d.rt.gameObject.SetActive(el >= d.delay);
+                UIUtil.Show(d.rt, el >= d.delay);
             }
             // 롤링 카운터
             float Ease(float delay) { float k = Mathf.Clamp01((el * 1000 - delay) / 1100); return 1 - Mathf.Pow(1 - k, 3); }
@@ -159,6 +169,7 @@ namespace MoreMush
             float e3 = Ease(800);
             goldValue.text = $"{UIUtil.Ic("gold")}{U.Fmt(sum.net * e3)}";
             if (e3 >= 1 && !rolledSound) { rolledSound = true; Snd.Buy(); }
+            if (el >= animationEnd) animating = false;
         }
     }
 }

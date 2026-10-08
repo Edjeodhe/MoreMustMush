@@ -48,7 +48,10 @@ namespace MoreMush
                 starUpText.text = $"★{st + 1} 강화  <size=80%>{UIUtil.Ic("gold")}{U.Fmt(cost.Value.gold)} {UIUtil.Ic("gem")}{cost.Value.gem}</size>";
             }
 
-            for (int i = 0; i < FARM.hearts; i++)
+            int heartCount = Mathf.Min(FARM.hearts, hearts.Length, heartFills.Length);
+            for (int i = 0; i < hearts.Length; i++) UIUtil.Show(hearts[i], i < heartCount);
+            for (int i = heartCount; i < heartFills.Length; i++) UIUtil.Show(heartFills[i], false);
+            for (int i = 0; i < heartCount; i++)
             {
                 hearts[i].text = i < h ? "♥" : "♡";
                 hearts[i].color = i < h ? U.Hex("#ff5a8a") : U.Hex("#e8b8c8");

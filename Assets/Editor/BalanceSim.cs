@@ -34,9 +34,12 @@ namespace MoreMush.EditorTools
             string orig = PlayerPrefs.GetString(SaveIO.SAVE_KEY, "");
             var prevG = G;
             var prevR = RoundSim.R;
+            bool prevSuspended = SaveIO.Suspended;
+            SaveIO.Suspended = true;   // 봇의 SaveGame()이 실제 세이브 키에 쓰지 않게 (중간에 끊겨도 개발 세이브가 남음)
             try { return f(); }
             finally
             {
+                SaveIO.Suspended = prevSuspended;
                 if (had) PlayerPrefs.SetString(SaveIO.SAVE_KEY, orig); else PlayerPrefs.DeleteKey(SaveIO.SAVE_KEY);
                 PlayerPrefs.Save();
                 G = prevG; RoundSim.R = prevR;

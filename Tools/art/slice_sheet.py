@@ -122,8 +122,13 @@ def main():
         y0, y1, x0, x1 = max(ys.min() - PAD, 0), min(ys.max() + PAD + 1, h), max(xs.min() - PAD, 0), min(xs.max() + PAD + 1, w)
         crop = arr[y0:y1, x0:x1].copy()
         crop[:, :, 3] = np.where(keep[y0:y1, x0:x1], crop[:, :, 3], 0)
+        # Pad transparently instead of stretching. Block compression requires multiples of four.
+        # Keep the crop origin and all existing pixels unchanged for rig metadata consumers.
+        ph, pw = (-crop.shape[0]) % 4, (-crop.shape[1]) % 4
+        if ph or pw:
+            crop = np.pad(crop, ((0, ph), (0, pw), (0, 0)), mode="constant")
         Image.fromarray(crop).save(os.path.join(out_dir, f"{name}.png"))
-        items[name] = {"w": int(x1 - x0), "h": int(y1 - y0), "blobs": len(blobs), "x": int(x0), "y": int(y0)}
+        items[name] = {"w": int(crop.shape[1]), "h": int(crop.shape[0]), "blobs": len(blobs), "x": int(x0), "y": int(y0)}
     print(json.dumps({"items": items, "warnings": warnings}, ensure_ascii=False))
 
 

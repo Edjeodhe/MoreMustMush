@@ -38,10 +38,12 @@ namespace MoreMush
         }
 
         static readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+        // 셰이더 속성 id는 한 번만 구한다 (라운드에서 프레임마다 수백 번 불림)
+        static readonly int GoldId = Shader.PropertyToID("_Gold"), DarkId = Shader.PropertyToID("_Dark"), FlashId = Shader.PropertyToID("_Flash");
         public static void SetFx(Renderer r, float gold = 0, float dark = 0, float flash = 0)
         {
             r.GetPropertyBlock(mpb);
-            mpb.SetFloat("_Gold", gold); mpb.SetFloat("_Dark", dark); mpb.SetFloat("_Flash", flash);
+            mpb.SetFloat(GoldId, gold); mpb.SetFloat(DarkId, dark); mpb.SetFloat(FlashId, flash);
             r.SetPropertyBlock(mpb);
         }
     }

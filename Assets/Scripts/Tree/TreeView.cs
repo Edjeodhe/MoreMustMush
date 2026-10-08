@@ -56,11 +56,13 @@ namespace MoreMush
             for (int i = 0; i < 3; i++)
             {
                 string br = CAT_KEYS[i]; var h = hubs[br];
-                bool lit = NODES.Any(n => n.br == br && Lv(n.id) > 0);
+                bool lit = false;   // 이 가지에 산 노드가 있나 (프레임마다 LINQ 클로저를 만들지 않게 루프로)
+                foreach (var n in NODES) if (n.br == br && Lv(n.id) > 0) { lit = true; break; }
                 trunks[i].positionCount = 2;
                 trunks[i].SetPosition(0, Vector3.zero); trunks[i].SetPosition(1, Art.P(h.x, h.y));
                 trunks[i].startColor = trunks[i].endColor = lit ? U.Hex("#f2e6c8") : new Color(240 / 255f, 225 / 255f, 195 / 255f, 0.45f);
-                hubLabels[i].text = CATS[br].name + " 균사";
+                hubText[i] ??= CATS[br].name + " 균사";
+                UIUtil.SetText(hubLabels[i], hubText[i]);
                 hubLabels[i].transform.localPosition = Art.P(h.x + (br == "ed" ? 70 : br == "md" ? 58 : -58), h.y + (br == "ed" ? 0 : 34));
             }
             grandpa.transform.localPosition = Art.P(-14, 82 + Mathf.Sin(now * 2) * 2);
@@ -68,6 +70,8 @@ namespace MoreMush
             HandleInput();
             foreach (var nv in nodes) nv.Draw(ParentPos(nv.Node), now, hover == nv, camZ, dt);
         }
+
+        readonly string[] hubText = new string[3];
 
         TreeNodeView Hit(Vector2 s)
         {
@@ -87,7 +91,9 @@ namespace MoreMush
             if (GameFlow.I.ModalOpen) { screen.tooltip.Hide(); return; }
             var ts = Touchscreen.current;
             // 두 손가락 확대·축소
-            if (ts != null && ts.touches.Count(t => t.press.isPressed) >= 2)
+            int pressed = 0;
+            if (ts != null) for (int i = 0; i < ts.touches.Count; i++) if (ts.touches[i].press.isPressed) pressed++;
+            if (pressed >= 2)
             {
                 var tt = ts.touches.Where(t => t.press.isPressed).Take(2).Select(t => stageMapper.ToStage(t.position.ReadValue())).ToArray();
                 float d = Vector2.Distance(tt[0], tt[1]); Vector2 mid = (tt[0] + tt[1]) / 2;
@@ -104,7 +110,7 @@ namespace MoreMush
             if (p == null) return;
             bool isMouse = p is Mouse;
             var s = stageMapper.ToStage(p.position.ReadValue());
-            bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(isMouse ? -1 : 0);
+            bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();   // -1 = 지금 포인터 (터치 id는 0이 아니라 0을 넘기면 UI 위 판정이 틀렸다)
 
             var mouse = Mouse.current;
             if (mouse != null && isMouse && !overUI)

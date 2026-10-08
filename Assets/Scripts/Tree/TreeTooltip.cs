@@ -13,10 +13,17 @@ namespace MoreMush
 
         public void Hide() { if (gameObject.activeSelf) gameObject.SetActive(false); }
 
+        // 마우스를 올려 둔 동안 매 프레임 불린다. 노드·레벨·상태·살 수 있는지가 그대로면 글자는 다시 만들지 않고 위치만 옮긴다
+        string shownId, shownS; int shownL = -1; bool shownPoorGold, shownPoorGem;
+
         public void Show(Node n, Vector2 at)
         {
             if (n == null || NodeState(n) == "hidden") { Hide(); return; }
             int L = Lv(n.id); string s = NodeState(n);
+            var cc = L < n.max ? NodeCost(n, L) : default;
+            bool poorGold = G.gold + 1e-9 < cc.gold, poorGem = G.gem + 1e-9 < cc.gem;
+            if (n.id == shownId && L == shownL && s == shownS && poorGold == shownPoorGold && poorGem == shownPoorGem) { Place(at); return; }
+            shownId = n.id; shownL = L; shownS = s; shownPoorGold = poorGold; shownPoorGem = poorGem;
             title.text = (n.gem ? UIUtil.Ic("gem") + " " : "") + n.n;
             title.color = U.Hex(n.gem ? "#2a9a74" : CATS[n.br].color);
             lv.text = $"LVL {L} / {n.max}";
@@ -45,7 +52,12 @@ namespace MoreMush
                 noteTxt += (noteTxt != "" ? "\n" : "") + (RoundController.IsTouch ? $"한 번 더 누르면 강화{(n.max > 1 ? " · 길게 누르면 재화가 되는 만큼 한 번에" : "")}" : n.max > 1 ? "Shift+클릭 · 우클릭: 골드가 되는 만큼 한 번에 강화" : "");
             cost.text = costTxt; UIUtil.Show(cost, costTxt != "");
             note.text = noteTxt; UIUtil.Show(note, noteTxt != "");
-            gameObject.SetActive(true);
+            Place(at);
+        }
+
+        void Place(Vector2 at)
+        {
+            if (!gameObject.activeSelf) gameObject.SetActive(true);
             float tx = U.Clamp(at.x + 24 + 330 > W ? at.x - 350 : at.x + 24, 10, W - 340);
             rect.anchoredPosition = new Vector2(tx, -U.Clamp(at.y - 20, 90, H - 260));
         }

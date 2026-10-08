@@ -70,7 +70,7 @@ namespace MoreMush
             treeSprite.sortingOrder = TREE.order; shadow.sortingOrder = TREE.order - 1;
             var sl = G.farm.tree.slots; double t0 = Now();
             float px = FruitPx;
-            for (int i = 0; i < fruits.Length; i++)
+            for (int i = 0; i < Mathf.Min(fruits.Length, glows.Length); i++)
             {
                 bool on = i < sl.Count && i < slots.Count;
                 fruits[i].enabled = on;
@@ -78,7 +78,7 @@ namespace MoreMush
                 var f = sl[i];
                 bool ripe = t0 >= f.at;
                 float k = ripe ? 1 : Mathf.Clamp01((float)((t0 - f.t0) / System.Math.Max(1, f.at - f.t0)));
-                var spr = SpriteDB.Get("Farm/Tree/fruit_" + f.kind);
+                var spr = SpriteDB.Get("Farm/Tree/fruit_", f.kind);
                 if (fruits[i].sprite != spr) fruits[i].sprite = spr;
                 float size = px * (0.3f + 0.7f * k) * (hover == i ? 1.15f : 1);
                 Art.FitPx(fruits[i], size);

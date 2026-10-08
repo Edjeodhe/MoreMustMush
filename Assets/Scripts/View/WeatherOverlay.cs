@@ -18,6 +18,17 @@ namespace MoreMush
         static readonly int HolesId = Shader.PropertyToID("_Holes"), CountId = Shader.PropertyToID("_Count"), ColorId = Shader.PropertyToID("_Color");
         readonly Vector4[] holes = new Vector4[65];
         MaterialPropertyBlock mpb;
+        string shownWeather;
+        readonly Vector3[] linePoints = new Vector3[40];
+        static readonly Color[] AutumnColors = { U.Hex("#e8892a"), U.Hex("#d9542a"), U.Hex("#f2c14e") };
+        static readonly Color[] RainbowColors = { U.Hex("#ff6b6b"), U.Hex("#ffb347"), U.Hex("#fff36b"), U.Hex("#7be07b"), U.Hex("#6bb8ff"), U.Hex("#b07bff") };
+
+        static void Configure(LineRenderer line, int count, float width, Color color)
+        {
+            line.positionCount = count; line.widthMultiplier = width / Art.PPU;
+            line.startColor = line.endColor = color;
+            line.transform.localPosition = Vector3.zero;
+        }
 
         LineRenderer Line(int i)
         {
@@ -35,6 +46,8 @@ namespace MoreMush
         {
             const float W = Defs.W, H = Defs.H;
             string w = R.st.wId;
+            bool changed = w != shownWeather;
+            shownWeather = w;
             bool night = R.st.theme.id == "night";
             int nl = 0, nd = 0;
             mpb ??= new MaterialPropertyBlock();
@@ -75,8 +88,14 @@ namespace MoreMush
                 for (int i = 0; i < n; i++)
                 {
                     float x = Mod(i * 97 + now * 300, W), y = Mod(i * 53 + now * fall, H);
-                    var l = Line(nl++); l.positionCount = 2; l.widthMultiplier = 2 / Art.PPU; l.startColor = l.endColor = col;
-                    l.SetPosition(0, Art.P(x, y)); l.SetPosition(1, Art.P(x - 8, y + len));
+                    var l = Line(nl++);
+                    if (changed)
+                    {
+                        Configure(l, 2, 2, col);
+                        linePoints[0] = Vector3.zero; linePoints[1] = Art.P(-8, len);
+                        l.SetPositions(linePoints);
+                    }
+                    l.transform.localPosition = Art.P(x, y);
                 }
             }
             else if (w == "cold")
@@ -85,8 +104,9 @@ namespace MoreMush
                 for (int i = 0; i < 70; i++)
                 {
                     float x = Mod(i * 131 + Mathf.Sin(now + i) * 30, W), y = Mod(i * 67 + now * 60, H);
-                    var d = Dot(nd++); d.sprite = Art.Circle; d.color = new Color(1, 1, 1, 0.85f);
-                    d.transform.localPosition = Art.P(x, y); d.transform.localScale = Vector3.one * ((2 + i % 3) * 2 / Art.PPU);
+                    var d = Dot(nd++);
+                    if (changed) { d.sprite = Art.Circle; d.color = new Color(1, 1, 1, 0.85f); d.transform.localRotation = Quaternion.identity; d.transform.localScale = Vector3.one * ((2 + i % 3) * 2 / Art.PPU); }
+                    d.transform.localPosition = Art.P(x, y);
                 }
             }
             else if (w == "drought")
@@ -95,19 +115,20 @@ namespace MoreMush
                 for (int i = 0; i < 12; i++)
                 {
                     float y = Mod(i * 90 + now * 40, H);
-                    var l = Line(nl++); l.positionCount = 33; l.widthMultiplier = 3 / Art.PPU; l.startColor = l.endColor = U.Rgba(255, 220, 160, 0.25f);
-                    for (int k = 0; k <= 32; k++) { float x = k * 60; l.SetPosition(k, Art.P(x, y + Mathf.Sin(x / 80 + now * 3 + i) * 6)); }
+                    var l = Line(nl++);
+                    if (changed) Configure(l, 33, 3, U.Rgba(255, 220, 160, 0.25f));
+                    for (int k = 0; k <= 32; k++) { float x = k * 60; linePoints[k] = Art.P(x, y + Mathf.Sin(x / 80 + now * 3 + i) * 6); }
+                    l.SetPositions(linePoints);
                 }
             }
             else if (w == "autumn")
             {
-                string[] cols = { "#e8892a", "#d9542a", "#f2c14e" };
                 for (int i = 0; i < 30; i++)
                 {
                     float x = Mod(i * 131 + now * 60 + Mathf.Sin(now + i) * 40, W), y = Mod(i * 71 + now * 80, H);
-                    var d = Dot(nd++); d.sprite = SpriteDB.Get("Props/leaf"); d.color = U.Hex(cols[i % 3]);
+                    var d = Dot(nd++);
+                    if (changed) { d.sprite = SpriteDB.Get("Props/leaf"); d.color = AutumnColors[i % 3]; Art.FitPx(d, 20); }
                     d.transform.localPosition = Art.P(x, y); d.transform.localRotation = Quaternion.Euler(0, 0, -(now + i) * Mathf.Rad2Deg);
-                    Art.FitPx(d, 20);
                 }
             }
             else if (w == "wind")
@@ -115,26 +136,32 @@ namespace MoreMush
                 for (int i = 0; i < 18; i++)
                 {
                     float x = Mod(i * 211 + now * 500, W + 300) - 150, y = 80 + (i * 97) % 800;
-                    var l = Line(nl++); l.positionCount = 12; l.widthMultiplier = 3 / Art.PPU; l.startColor = l.endColor = U.Rgba(210, 190, 240, 0.4f);
-                    for (int k = 0; k < 12; k++)
+                    var l = Line(nl++);
+                    if (changed)
                     {
-                        float t = k / 11f, u = 1 - t;
-                        float bx = u * u * u * x + 3 * u * u * t * (x + 40) + 3 * u * t * t * (x + 80) + t * t * t * (x + 140);
-                        float by = u * u * u * y + 3 * u * u * t * (y - 12) + 3 * u * t * t * (y + 12) + t * t * t * y;
-                        l.SetPosition(k, Art.P(bx, by));
+                        Configure(l, 12, 3, U.Rgba(210, 190, 240, 0.4f));
+                        for (int k = 0; k < 12; k++)
+                        {
+                            float t = k / 11f, u = 1 - t;
+                            linePoints[k] = Art.P(3 * u * u * t * 40 + 3 * u * t * t * 80 + t * t * t * 140, -36 * u * u * t + 36 * u * t * t);
+                        }
+                        l.SetPositions(linePoints);
                     }
+                    l.transform.localPosition = Art.P(x, y);
                 }
             }
             else if (w == "thunder") Tint(U.Rgba(20, 20, 50, 0.18f));
             else if (w == "rainbow")
             {
-                string[] cols = { "#ff6b6b", "#ffb347", "#fff36b", "#7be07b", "#6bb8ff", "#b07bff" };
                 for (int i = 0; i < 6; i++)
                 {
-                    var l = Line(nl++); l.positionCount = 40; l.widthMultiplier = 16 / Art.PPU;
-                    var c = U.Hex(cols[i]); c.a = 0.18f; l.startColor = l.endColor = c;
+                    var l = Line(nl++);
+                    if (!changed) continue;
+                    var c = RainbowColors[i]; c.a = 0.18f;
+                    Configure(l, 40, 16, c);
                     float r = 1150 - i * 16;
-                    for (int k = 0; k < 40; k++) { float a = Mathf.PI * (1.15f + 0.7f * k / 39f); l.SetPosition(k, Art.P(960 + Mathf.Cos(a) * r, 1250 + Mathf.Sin(a) * r)); }
+                    for (int k = 0; k < 40; k++) { float a = Mathf.PI * (1.15f + 0.7f * k / 39f); linePoints[k] = Art.P(960 + Mathf.Cos(a) * r, 1250 + Mathf.Sin(a) * r); }
+                    l.SetPositions(linePoints);
                 }
             }
             for (int i = nl; i < lines.Count; i++) lines[i].enabled = false;

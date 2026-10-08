@@ -45,7 +45,9 @@ namespace MoreMush
         void Awake()
         {
             I = this;
-            Application.targetFrameRate = 60;
+#if !UNITY_WEBGL || UNITY_EDITOR
+            Application.targetFrameRate = 60;   // WebGL은 브라우저 requestAnimationFrame에 맡긴다 (값을 주면 타이머 루프로 바뀌어 덜 부드럽다)
+#endif
         }
 
         void Start() => RenderTitle();
@@ -61,7 +63,8 @@ namespace MoreMush
         }
 
         void OnApplicationPause(bool paused) { if (paused && G != null && Screen != "title") SaveGame(); Away(paused); }
-        void OnApplicationFocus(bool focus) => Away(!focus);
+        // WebGL에서는 OnApplicationPause가 오지 않고 탭을 닫을 때 OnApplicationQuit도 믿을 수 없어서, 포커스를 잃을 때도 저장한다
+        void OnApplicationFocus(bool focus) { if (!focus && G != null && Screen != "title") SaveGame(); Away(!focus); }
         void OnApplicationQuit() { if (G != null) SaveGame(); }
 
         // ===== 복귀 팝업 (방치 보상) =====
@@ -134,7 +137,7 @@ namespace MoreMush
 
         void FarmEvolve(string id)
         {
-            var k = SPC[id];
+            if (!SPC.TryGetValue(id ?? "", out var k)) return;
             string before = EvoName(k);
             if (!Game.FarmEvolve(id)) { Snd.Err(); ShowToast($"호감도 {FARM.hearts}칸을 모두 채우면 진화할 수 있어요"); return; }
             Snd.Record();
@@ -230,7 +233,12 @@ namespace MoreMush
                 case "newgame": G = new SaveData(); AutoEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!"); break;
                 case "continue":
                 {
-                    G = SaveIO.Load() ?? new SaveData();
+                    G = SaveIO.Load();
+                    if (G == null)
+                    {
+                        G = new SaveData();
+                        if (SaveIO.LastLoadFailed) ShowToast("세이브를 읽지 못해 새로 시작해요 (이전 세이브는 따로 보관했어요)");
+                    }
                     double away = G.seenT > 0 ? Now() - G.seenT : 0;
                     AutoEnsure(); Snd.Ui(); EnterTree();
                     CheckReturn(away);
@@ -261,7 +269,7 @@ namespace MoreMush
                 case "sporeshop": Snd.Ui(); shop.mode = "spore"; OpenShop(); break;
                 case "shopmode": Snd.Ui(); shop.mode = arg; shop.Render(); break;
                 case "shoptab": Snd.Ui(); shop.tab = arg; shop.Render(); break;
-                case "shopq": { var p = arg.Split('|'); shop.StepQty(p[0], double.Parse(p[1])); break; }
+                case "shopq": { var p = arg.Split('|'); shop.StepQty(p[0], double.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture)); break; }
                 case "shopset": { var p = arg.Split('|'); shop.SetQtyFrac(p[0], double.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture)); break; }
                 case "shopsell": Sell(new[] { (arg, shop.Qty(arg)) }); break;
                 case "shopsellall": Sell(ShopList(shop.tab).Select(sp => (sp.id, InvCount(sp.id)))); break;
@@ -281,7 +289,7 @@ namespace MoreMush
                 }
                 case "buyspore":
                 {
-                    double n = arg == "max" ? SporeMax() : double.Parse(arg);
+                    double n = arg == "max" ? SporeMax() : double.Parse(arg, System.Globalization.CultureInfo.InvariantCulture);
                     if (!BuySpore(n)) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
                     Snd.Buy(); ShowToast($"{UIUtil.Ic("spore")} 버섯 포자 {U.Fmt(n)}개 구입 (−{U.Fmt(n * SporePrice())}골드)"); shop.Render();
                     break;
@@ -319,10 +327,15 @@ namespace MoreMush
                     break;
                 }
                 case "farmcard": Snd.Ui(); OpenPetCard(arg); break;
-                case "evolve": FarmEvolve(arg); break;
+                // 꼬마 카드의 진화·별 버튼은 씬에 arg가 없다 → 지금 열린 카드의 꼬마
+                case "evolve": FarmEvolve(string.IsNullOrEmpty(arg) ? petCard.id : arg); break;
                 case "starup":
-                    if (!StarUp(arg)) { Snd.Err(); ShowToast("골드나 균사석이 부족해요"); break; }
-                    Snd.Record(); farm.StarredUp(arg); ShowToast($"{EvoName(SPC[arg])} ★{CStarOf(arg)}! {FxText(arg)}"); petCard.Render(); break;
+                {
+                    string id = string.IsNullOrEmpty(arg) ? petCard.id : arg;
+                    if (!SPC.ContainsKey(id ?? "")) break;
+                    if (!StarUp(id)) { Snd.Err(); ShowToast("골드나 균사석이 부족해요"); break; }
+                    Snd.Record(); farm.StarredUp(id); ShowToast($"{EvoName(SPC[id])} ★{CStarOf(id)}! {FxText(id)}"); petCard.Render(); break;
+                }
                 // ===== 버섯 나무 =====
                 case "treepanel": Snd.Ui(); farmScreen.treeOpen = arg == "open" || !farmScreen.treeOpen; farmScreen.Render(); break;
                 case "treeup":
@@ -391,7 +404,8 @@ namespace MoreMush
                     break;
                 }
                 default:
-                    if (act.StartsWith("dbg-") && debug != null) debug.Do(act, arg);
+                    if (act != null && act.StartsWith("dbg-")) { if (debug != null) debug.Do(act, arg); }
+                    else if (act != "none") Debug.LogWarning($"[GameFlow] 처리하지 않는 버튼 액션: '{act}' (arg '{arg}', {(src != null ? src.name : "코드")})");   // 오타·지운 case를 바로 알 수 있게
                     break;
             }
         }

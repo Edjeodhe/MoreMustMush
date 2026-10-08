@@ -62,7 +62,7 @@ namespace MoreMush.EditorTools
         static void Batch(Action body)
         {
             int code = 0;
-            Defs.ApplyPreset(PresetArg());
+            Defs.ApplyPreset(PresetArg(), false);
             if (Arg("-ramp") is string ramp) Defs.ZONE_RAMP = int.Parse(ramp);   // 구조안 S1 실험
             if (Environment.GetCommandLineArgs().Contains("-nosell")) BalanceSim.SELL = false;
             if (Environment.GetCommandLineArgs().Contains("-pickzone")) BalanceSim.GAME_ZONE = false;

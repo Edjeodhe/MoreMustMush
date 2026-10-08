@@ -18,7 +18,11 @@ namespace MoreMush
             diaText.text = $"{UIUtil.Ic("dia")}{U.Fmt(G.dia)}";
             int own = FarmOwned().Count, free = FreeCritters().Count;
             workers.text = $"일할 수 있는 꼬마 {free}/{own}";
-            for (int i = 0; i < cards.Length; i++) cards[i].Set(BUILDINGS[i]);
+            for (int i = 0; i < cards.Length; i++)
+            {
+                bool on = i < BUILDINGS.Length; UIUtil.Show(cards[i], on);
+                if (on) cards[i].Set(BUILDINGS[i]);
+            }
         }
     }
 }
