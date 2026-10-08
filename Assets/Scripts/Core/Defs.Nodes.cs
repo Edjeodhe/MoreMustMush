@@ -31,6 +31,8 @@ namespace MoreMush
         //   다음 단계는 앞 단계를 최대 레벨까지 올려야 열린다(가격이 아니라 구조로 막는다).
         // - 버섯 체력·보상도 지역마다 ×10씩 커지므로(ZoneMul) 단계가 오를 때마다 숫자 단위가 한 자리씩 뛴다.
         // - 곱셈은 균사석 노드(후반)에서만 들어온다.
+        // - 지역·스테이지로 노드를 잠그지 않는다. 기본 노드는 골드로만 사고, 단계(초반·중반·후반)는 가격으로만 구분한다.
+        //   가격은 산 순서대로 늘어놓았을 때 한 번에 크게 뛰지 않게 맞춘다(Defs.Prices.cs, BalanceSim.TunePrices).
         public static double SkillRate(int S) => 0.10 + 0.10 * S;
         public static double SkillPow(int P) => 1 + 0.75 * P;   // 스킬 위력 배율 (피해·시간·속도)
         public static double KidRate(int L) => 0.12 * L;
@@ -50,6 +52,15 @@ namespace MoreMush
             public static double ed_bonus(int L) => 1 * L;      // 버섯 하나당 수확 개수 +
             public static double ed_bonus2(int L) => 10 * L;
             public static double ed_bonus3(int L) => 100 * L;
+            // 형제 노드 (I+ · II+ · III+): 같은 단계 효과를 한 번 더. 최대 레벨을 늘리지 않고 줄의 레벨 수를 늘린다
+            public static double ed_score1p(int L) => 1 * L;
+            public static double ed_score2p(int L) => 10 * L;
+            public static double ed_score3p(int L) => 100 * L;
+            public static double ed_bonus1p(int L) => 1 * L;
+            public static double ed_bonus2p(int L) => 10 * L;
+            public static double ed_bonus3p(int L) => 100 * L;
+            public static double ps_atk2p(int L) => 10 * L;
+            public static double ps_atk3p(int L) => 100 * L;
             public static double ed_price(int L) => 1 + 0.3 * L;
             public static double ed_price2(int L) => 0.5 * L;   // 판매가 +50%씩 (I에 더함)
             public static int ed_cols2(int L) => 4 * L;         // 군락지 수 +4씩
@@ -103,7 +114,6 @@ namespace MoreMush
             public bool core, sub, gem;
             public bool needMax;   // 부모 노드를 최대 레벨까지 올려야 열린다 (단계 노드 I → II → III)
             public int tier = 1;   // 성장 단계: 1 초반 · 2 중반 · 3 후반
-            public int zone;       // 이 지역(THEMES 순서)이 열려야 살 수 있다. 기본은 단계 - 1 (초반 숲 · 중반 달빛 밤 · 후반 들판)
             public int max;
             public double costGold, costGem, g;   // costGold·g: 가격표가 없을 때의 기본가와 사는 순서 기준
             public double[] costs;                // 레벨별 골드 가격 (Defs.Prices.cs)
@@ -114,9 +124,9 @@ namespace MoreMush
         public static readonly Dictionary<string, Node> NODE = new Dictionary<string, Node>();
         public static readonly string[] TIER_NAMES = { "", "초반", "중반", "후반" };
 
-        static Node N(string id, string br, string parent, string n, int max, double gold, double g, Func<int, string> eff, double gem = 0, bool core = false, bool sub = false, string skill = null, string icon = null, string col = null, int tier = 1, bool needMax = false, int zone = -1)
+        static Node N(string id, string br, string parent, string n, int max, double gold, double g, Func<int, string> eff, double gem = 0, bool core = false, bool sub = false, string skill = null, string icon = null, string col = null, int tier = 1, bool needMax = false)
         {
-            var node = new Node { id = id, br = br, parent = parent, n = n, max = max, costGold = gold, costGem = gem, g = g, eff = eff, core = core, sub = sub, skill = skill, icon = icon, col = col, gem = gem > 0, tier = tier, needMax = needMax, zone = zone >= 0 ? zone : tier - 1 };
+            var node = new Node { id = id, br = br, parent = parent, n = n, max = max, costGold = gold, costGem = gem, g = g, eff = eff, core = core, sub = sub, skill = skill, icon = icon, col = col, gem = gem > 0, tier = tier, needMax = needMax };
             NODES.Add(node);
             return node;
         }
@@ -133,16 +143,23 @@ namespace MoreMush
             ["core_ed"] = "💰 돈·수확 쪽 강화 가지예요. 점수, 판매가, 세금 감면, 마을 의뢰 보상, 군락지 수·재생, 수확량, 황금 변종, 거대·특수 버섯 등장을 올릴 수 있어요.",
             ["core_md"] = "🎯 바·스킬·시간·필드 쪽 강화 가지예요. 필드 넓히기, 바 넓이, 콤보, 꼬마 수확기, 스킬 15종(가속·포자 폭발·충격파…), 버프 지속, 요리 효과를 올릴 수 있어요.",
             ["core_ps"] = "⚔️ 전투 쪽 강화 가지예요. 공격력, 수확기 크기·속도, 제한시간, 치명타, 핀볼 수, 회전 칼날, 단단한 버섯 피해, 포자 저항을 올릴 수 있어요.",
-            ["ed_score"] = "버섯을 칠 때마다 얻는 점수에 고정값을 더해요. 점수는 라운드가 끝나면 골드로 바뀌어요. 끝까지 올리면 타격 점수 II가 열려요.",
-            ["ed_score2"] = "타격 점수를 10 단위로 더해요. 끝까지 올리면 타격 점수 III이 열려요.",
-            ["ed_score3"] = "타격 점수를 100 단위로 더해요.",
-            ["ed_bonus2"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 10 단위로 더해요. 끝까지 올리면 수확량 III이 열려요.",
-            ["ed_bonus3"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 100 단위로 더해요.",
+            ["ed_score"] = "버섯을 칠 때마다 얻는 점수에 고정값을 더해요. 점수는 라운드가 끝나면 골드로 바뀌어요. 끝까지 올리면 타격 점수 I+가 열려요.",
+            ["ed_score1p"] = "타격 점수를 1 단위로 한 번 더 더해요. 끝까지 올리면 타격 점수 II가 열려요.",
+            ["ed_score2"] = "타격 점수를 10 단위로 더해요. 끝까지 올리면 타격 점수 II+가 열려요.",
+            ["ed_score2p"] = "타격 점수를 10 단위로 한 번 더 더해요. 끝까지 올리면 타격 점수 III이 열려요.",
+            ["ed_score3"] = "타격 점수를 100 단위로 더해요. 끝까지 올리면 타격 점수 III+가 열려요.",
+            ["ed_score3p"] = "타격 점수를 100 단위로 한 번 더 더해요.",
+            ["ed_bonus2"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 10 단위로 더해요. 끝까지 올리면 수확량 II+가 열려요.",
+            ["ed_bonus2p"] = "수확 개수를 10 단위로 한 번 더 더해요. 끝까지 올리면 수확량 III이 열려요.",
+            ["ed_bonus3"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 100 단위로 더해요. 끝까지 올리면 수확량 III+가 열려요.",
+            ["ed_bonus3p"] = "수확 개수를 100 단위로 한 번 더 더해요.",
             ["ed_cols2"] = "군락지 수를 끝까지 올린 뒤 군락지를 더 늘려요.",
             ["ed_price2"] = "판매 가격을 끝까지 올린 뒤 판매가를 더 올려요.",
             ["md_combo2"] = "콤보 계수를 끝까지 올린 뒤 콤보당 배율을 더 키워요.",
-            ["ps_atk2"] = "공격력을 10 단위로 더해요. 지역이 바뀌면 버섯 체력이 10배가 되니, 다음 지역에 가기 전에 올려 두세요. 끝까지 올리면 공격력 III이 열려요.",
-            ["ps_atk3"] = "공격력을 100 단위로 더해요. 끝까지 올리면 공격력 IV가 열려요.",
+            ["ps_atk2"] = "공격력을 10 단위로 더해요. 지역이 바뀌면 버섯 체력이 10배가 되니, 다음 지역에 가기 전에 올려 두세요. 끝까지 올리면 공격력 II+가 열려요.",
+            ["ps_atk2p"] = "공격력을 10 단위로 한 번 더 더해요. 끝까지 올리면 공격력 III이 열려요.",
+            ["ps_atk3"] = "공격력을 100 단위로 더해요. 끝까지 올리면 공격력 III+가 열려요.",
+            ["ps_atk3p"] = "공격력을 100 단위로 한 번 더 더해요. 끝까지 올리면 공격력 IV가 열려요.",
             ["ps_atk4"] = "공격력을 1000 단위로 더해요.",
             ["ps_ball2"] = "영구 핀볼을 하나 더 늘려요.",
             ["ps_ball3"] = "영구 핀볼을 두 개까지 더 늘려요.",
@@ -153,7 +170,8 @@ namespace MoreMush
             ["ed_regen"] = "군락지를 다 수확해서 사라진 뒤, 새 군락지가 다시 돋아날 때까지 걸리는 시간이에요. 숫자가 작을수록 빨리 돋아나요.",
             ["ed_rare"] = "새로 돋는 군락지가 에픽·유니크·레전드리 버섯일 확률을 높여요.",
             ["ed_gold"] = "버섯이 황금 변종으로 나올 확률이에요. 황금 버섯은 점수 ×10, 수확량 ×5이고 도감에 황금으로 기록돼요.",
-            ["ed_bonus"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 늘려요. 끝까지 올리면 수확량 II가 열려요.",
+            ["ed_bonus"] = "버섯 하나를 수확할 때 창고에 들어오는 개수를 늘려요. 끝까지 올리면 수확량 I+가 열려요.",
+            ["ed_bonus1p"] = "수확 개수를 1 단위로 한 번 더 더해요. 끝까지 올리면 수확량 II가 열려요.",
             ["ed_multi"] = "버섯을 수확할 때 일정 확률로 수확량이 3배가 돼요.",
             ["ed_size"] = "군락지 하나에서 가운데 무더기 둘레에 나는 개별 버섯 수의 최대치를 늘려요.",
             ["ed_tax"] = "세금 고지서 금액을 줄여요.",
@@ -246,8 +264,6 @@ namespace MoreMush
                 ["sharpen"] = 2, ["magnet"] = 2, ["sip"] = 2, ["clear"] = 2, ["device"] = 2,
                 ["split"] = 3, ["clone"] = 3, ["shock"] = 3, ["bolt"] = 3, ["tornado"] = 3, ["fest"] = 3,
             };
-            // 기본(단계 - 1)보다 늦게 여는 스킬: 바다(3). 폐허(4)는 기본 트리 이후(무한 모드) 지역으로 남긴다
-            var SKILL_ZONE = new Dictionary<string, int> { ["bolt"] = 3, ["tornado"] = 3, ["fest"] = 3 };
 
             // 핵심 코어 (1레벨 고정)
             N("core_ed", "ed", null, "식용 균사", 1, 10, 1, L => L > 0 ? "열림 · 버섯 판매가 +10%" : "사면 식용 가지가 열리고 버섯 판매가 +10%", core: true);
@@ -263,9 +279,13 @@ namespace MoreMush
             N("ed_regen", "ed", "ed_score", "군락 재생 속도", 3, 50, 2.2, L => $"사라진 군락지가 {F(NF.ed_regen(L))}초 뒤 다시 돋아남");
             N("ed_price", "ed", "ed_score", "판매 가격", 3, 60, 2.2, L => $"버섯 판매가 {Plus(NF.ed_price(L))}");
             N("ed_bonus", "ed", "ed_regen", "수확량 I", 3, 40, 2.2, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus(L))}개");
+            N("ed_score1p", "ed", "ed_score", "타격 점수 I+", 3, 150, 2.2, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score1p(L))}", needMax: true);
+            N("ed_bonus1p", "ed", "ed_bonus", "수확량 I+", 3, 400, 2.2, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus1p(L))}개", needMax: true);
             // 중반
-            N("ed_score2", "ed", "ed_score", "타격 점수 II", 3, 2000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score2(L))}", tier: 2, needMax: true);
-            N("ed_bonus2", "ed", "ed_bonus", "수확량 II", 3, 3000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus2(L))}개", tier: 2, needMax: true);
+            N("ed_score2", "ed", "ed_score1p", "타격 점수 II", 3, 2000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score2(L))}", tier: 2, needMax: true);
+            N("ed_bonus2", "ed", "ed_bonus1p", "수확량 II", 3, 3000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus2(L))}개", tier: 2, needMax: true);
+            N("ed_score2p", "ed", "ed_score2", "타격 점수 II+", 3, 40000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score2p(L))}", tier: 2, needMax: true);
+            N("ed_bonus2p", "ed", "ed_bonus2", "수확량 II+", 3, 60000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus2p(L))}개", tier: 2, needMax: true);
             N("ed_cols2", "ed", "ed_cols", "군락지 수 II", 2, 10000, 3, L => $"군락지 +{NF.ed_cols2(L)}개", tier: 2, needMax: true);
             N("ed_price2", "ed", "ed_price", "판매 가격 II", 2, 15000, 3, L => $"버섯 판매가 +{U.JsRound(NF.ed_price2(L) * 100)}%", tier: 2, needMax: true);
             N("ed_rare", "ed", "ed_cols", "변종 출현율", 3, 5000, 2.2, L => $"에픽 이상 가중치 {Plus(NF.ed_rare(L))}", tier: 2);
@@ -273,8 +293,10 @@ namespace MoreMush
             N("ed_dev", "ed", "ed_regen", "숲 장치 수", 2, 3000, 2.2, L => $"라운드마다 {NF.ed_dev(L)}개", tier: 2);
             N("ed_tax", "ed", "ed_price", "세금 감면", 2, 8000, 2.2, L => $"세금 -{U.JsRound((1 - NF.ed_tax(L)) * 100)}%", tier: 2);
             // 후반
-            N("ed_score3", "ed", "ed_score2", "타격 점수 III", 3, 1000000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score3(L))}", tier: 3, needMax: true);
-            N("ed_bonus3", "ed", "ed_bonus2", "수확량 III", 3, 1500000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus3(L))}개", tier: 3, needMax: true);
+            N("ed_score3", "ed", "ed_score2p", "타격 점수 III", 3, 1000000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score3(L))}", tier: 3, needMax: true);
+            N("ed_bonus3", "ed", "ed_bonus2p", "수확량 III", 3, 1500000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus3(L))}개", tier: 3, needMax: true);
+            N("ed_score3p", "ed", "ed_score3", "타격 점수 III+", 3, 20000000, 3, L => $"버섯을 칠 때 점수 +{Num(NF.ed_score3p(L))}", tier: 3, needMax: true);
+            N("ed_bonus3p", "ed", "ed_bonus3", "수확량 III+", 3, 30000000, 3, L => $"버섯 하나당 수확 +{Num(NF.ed_bonus3p(L))}개", tier: 3, needMax: true);
             N("ed_trade", "ed", "ed_price", "단골 거래", 2, 3000000, 2.2, L => $"마을 의뢰 보상 {Plus(NF.ed_trade(L))}", tier: 3);
             N("ed_gold", "ed", "ed_rare", "황금 변종", 2, 3000000, 2.2, L => $"버섯마다 {U.Pct(NF.ed_gold(L))}", tier: 3);
             N("ed_giant", "ed", "ed_rare", "거대 버섯", 2, 2000000, 2.2, L => $"라운드마다 {U.Pct(NF.ed_giant(L))} 확률로 거대 버섯", tier: 3);
@@ -291,11 +313,11 @@ namespace MoreMush
             N("md_stump", "md", "md_combo", "숲 장치 강화", 2, 2000000, 2.2, L => $"숲 장치 효과 {Plus(NF.md_stump(L))}", tier: 3);
             foreach (var id in SKILL_IDS)
             {
-                var s = SKILLS[id]; int tr = SKILL_TIER[id]; int zn = SKILL_ZONE.TryGetValue(id, out var z) ? z : tr - 1;
+                var s = SKILLS[id]; int tr = SKILL_TIER[id];
                 N(id, "md", SKILL_TREE[id], s.n, 1, s.costGold, 1,
-                    L => L > 0 ? $"사용 중 · {(s.noRate ? "" : "발동률 10% · ")}{s.eff(0)}" : $"해금하면 {(s.noRate ? "" : "발동률 10%로 ")}사용 시작", skill: id, icon: s.icon, col: s.col, tier: tr, zone: zn);
-                if (!s.noRate) N(id + "_rate", "md", id, s.n + " 발동률", 2, s.costGold * 2, 3, L => $"발동률 {U.Pct(SkillRate(L))}", sub: true, tier: tr, zone: zn);
-                if (!s.noPow) N(id + "_pow", "md", id, s.n + " 위력", 2, s.costGold * 2, 3, L => s.eff(L), sub: true, tier: tr, zone: zn);
+                    L => L > 0 ? $"사용 중 · {(s.noRate ? "" : "발동률 10% · ")}{s.eff(0)}" : $"해금하면 {(s.noRate ? "" : "발동률 10%로 ")}사용 시작", skill: id, icon: s.icon, col: s.col, tier: tr);
+                if (!s.noRate) N(id + "_rate", "md", id, s.n + " 발동률", 2, s.costGold * 2, 3, L => $"발동률 {U.Pct(SkillRate(L))}", sub: true, tier: tr);
+                if (!s.noPow) N(id + "_pow", "md", id, s.n + " 위력", 2, s.costGold * 2, 3, L => s.eff(L), sub: true, tier: tr);
             }
             N("md_buffdur", "md", "accel", "버프 지속", 2, 30000, 2.2, L => $"가속·맑은 포자막 지속 {Plus(NF.md_buffdur(L))}, 날 갈기 {Math.Ceiling(3 * NF.md_buffdur(L))}타", tier: 2);
             // ── 독 (전투) ──
@@ -308,16 +330,18 @@ namespace MoreMush
             // 중반
             N("ps_atk2", "ps", "ps_atk", "공격력 II", 4, 2000, 2.5, L => $"공격력 +{Num(NF.ps_atk2(L))}", tier: 2, needMax: true);
             N("ps_ball2", "ps", "ps_atk2", "핀볼 +1 (II)", 1, 50000, 1, L => $"영구 핀볼 +{L}개", tier: 2);
+            N("ps_atk2p", "ps", "ps_atk2", "공격력 II+", 3, 60000, 2.5, L => $"공격력 +{Num(NF.ps_atk2p(L))}", tier: 2, needMax: true);
             N("ps_dur2", "ps", "ps_dur", "지속시간 II", 2, 15000, 3, L => $"라운드 시간 +{NF.ps_dur2(L)}초 더", tier: 2, needMax: true);
             N("ps_crit", "ps", "ps_size", "치명타", 3, 6000, 2.2, L => L > 0 ? $"{U.Pct(NF.ps_crit(L))} (피해·점수 ×3)" : "0%", tier: 2);
             N("ps_resist", "ps", "ps_spd", "포자 저항", 2, 10000, 2.2, L => $"느림·약화 디버프 지속 -{U.JsRound((1 - NF.ps_resist(L)) * 100)}%", tier: 2);
             N("ps_rush", "ps", "ps_dur", "선제 공격", 2, 25000, 2.2, L => $"라운드 시작 후 3초 동안 공격력 ×{F(NF.ps_rush(L))}", tier: 2);
             N("bl", "ps", "ps_size", "회전 칼날", 1, 60000, 1, L => L > 0 ? "사용 중 · 범위 안 버섯에 주기적 피해" : "해금하면 칼날 사용 시작", icon: "s_blade", col: "#e6e6f0", tier: 2);
             // 후반
-            N("ps_atk3", "ps", "ps_atk2", "공격력 III", 4, 1000000, 2.5, L => $"공격력 +{Num(NF.ps_atk3(L))}", tier: 3, needMax: true);
-            N("ps_atk4", "ps", "ps_atk3", "공격력 IV", 3, 100000000, 3, L => $"공격력 +{Num(NF.ps_atk4(L))}", tier: 3, needMax: true, zone: 3);
-            N("ps_ball3", "ps", "ps_atk3", "핀볼 +2 (III)", 2, 50000000, 5, L => $"영구 핀볼 +{L}개", tier: 3, zone: 3);
-            N("ps_crit2", "ps", "ps_crit", "치명타 피해", 2, 20000000, 3, L => $"치명타 피해·점수 ×{NF.ps_crit2(L)}", tier: 3, needMax: true, zone: 3);
+            N("ps_atk3", "ps", "ps_atk2p", "공격력 III", 4, 1000000, 2.5, L => $"공격력 +{Num(NF.ps_atk3(L))}", tier: 3, needMax: true);
+            N("ps_atk3p", "ps", "ps_atk3", "공격력 III+", 3, 20000000, 2.5, L => $"공격력 +{Num(NF.ps_atk3p(L))}", tier: 3, needMax: true);
+            N("ps_atk4", "ps", "ps_atk3p", "공격력 IV", 3, 200000000, 3, L => $"공격력 +{Num(NF.ps_atk4(L))}", tier: 3, needMax: true);
+            N("ps_ball3", "ps", "ps_atk3", "핀볼 +2 (III)", 2, 50000000, 5, L => $"영구 핀볼 +{L}개", tier: 3);
+            N("ps_crit2", "ps", "ps_crit", "치명타 피해", 2, 20000000, 3, L => $"치명타 피해·점수 ×{NF.ps_crit2(L)}", tier: 3, needMax: true);
             N("ps_heavy", "ps", "ps_crit", "무더기 파쇄", 2, 4000000, 2.2, L => $"군락 무더기·거대 버섯 피해 ×{F(NF.ps_heavy(L))}", tier: 3);
             N("bl_pow", "ps", "bl", "칼날 위력", 2, 3000000, 3, L => $"피해 공격력×{F(NF.bl_pow(L))}", sub: true, tier: 3);
             N("bl_range", "ps", "bl", "칼날 범위", 2, 2000000, 3, L => $"수확기 반지름 + {U.JsRound(NF.bl_range(L))}px", sub: true, tier: 3);

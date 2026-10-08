@@ -109,17 +109,13 @@ namespace MoreMush
 
         // 부모 조건: 보통은 1레벨 이상, 단계 노드(II·III·IV)는 부모가 최대 레벨이어야 한다
         public static bool ParentOk(Node n) => n.parent == null || Lv(n.parent) >= (n.needMax ? NODE[n.parent].max : 1);
-        // 지역 조건: 노드의 지역이 열려야(스테이지 도달) 살 수 있다
-        public static bool ZoneOk(Node n) => n.zone <= 0 || ThemeOpen(THEMES[Math.Min(n.zone, THEMES.Count - 1)]);
-        public static Theme ZoneOf(Node n) => THEMES[Math.Min(Math.Max(0, n.zone), THEMES.Count - 1)];
 
         public static string NodeState(Node n)
         {
             int L = Lv(n.id);
             if (L >= n.max) return "max";
             if (L > 0) return "owned";
-            if (ParentOk(n) && ZoneOk(n)) return "avail";
-            if (ParentOk(n)) return "locked";   // 지역이 아직 안 열림
+            if (ParentOk(n)) return "avail";
             // 부모를 이미 샀으면(단계 노드가 최대 레벨을 기다리는 중 포함) 잠긴 채로 보여 준다
             if (Lv(n.parent) > 0) return "locked";
             var pp = NODE[n.parent];
@@ -130,7 +126,7 @@ namespace MoreMush
         {
             int L = Lv(n.id);
             if (L >= n.max) return false;
-            if (!ParentOk(n) || !ZoneOk(n)) return false;
+            if (!ParentOk(n)) return false;
             var c = NodeCost(n, L);
             if (!CanAfford(c)) return false;
             Pay(c); G.nodes[n.id] = L + 1; SaveGame();
@@ -207,7 +203,7 @@ namespace MoreMush
             // 지역 배율: 버섯 체력·점수·수확 개수가 함께 커진다
             st.zoneMul = ZoneMul(st.theme.id, st.stage);
             // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
-            double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
+            double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
             st.atk = atkFlat * (1 + (Core("core_ps") ? 0.1 : 0) + ab["atk"]);
             double spd = (NF.ps_spd(Lv("ps_spd")) + ab["spd"]) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
@@ -220,14 +216,14 @@ namespace MoreMush
             st.critMul = NF.ps_crit2(Lv("ps_crit2"));
             st.comboK = NF.md_combo(Lv("md_combo")) + NF.md_combo2(Lv("md_combo2")) + 0.1 * ab["combo"];
             // 타격 점수 = (등급 기본 점수 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합) × 지역 배율
-            st.scoreFlat = NF.ed_score(Lv("ed_score")) + NF.ed_score2(Lv("ed_score2")) + NF.ed_score3(Lv("ed_score3"));
+            st.scoreFlat = NF.ed_score(Lv("ed_score")) + NF.ed_score1p(Lv("ed_score1p")) + NF.ed_score2(Lv("ed_score2")) + NF.ed_score2p(Lv("ed_score2p")) + NF.ed_score3(Lv("ed_score3")) + NF.ed_score3p(Lv("ed_score3p"));
             st.scoreMul = (1 + (SetDone("cook") ? 0.5 : 0) + ab["score"]) * st.zoneMul;
             st.maxCol = Math.Max(3, (int)Math.Ceiling((ColCount(Lv("ed_cols")) + NF.ed_cols2(Lv("ed_cols2"))) * (1 + ab["cols"]) * (wId == "rain" ? 1.2 : 1) * (wId == "drought" ? 0.7 : 1)));
             st.regen = NF.ed_regen(Lv("ed_regen")) / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1) * (wId == "storm" ? 2 : 1);
             st.rareMul = NF.ed_rare(Lv("ed_rare")) + ab["rare"];
             st.stageMul = 1 + 0.03 * (st.stage - 1);
             // 수확 개수 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합) × 균사석 × 지역 배율
-            double harvFlat = 1 + NF.ed_bonus(Lv("ed_bonus")) + NF.ed_bonus2(Lv("ed_bonus2")) + NF.ed_bonus3(Lv("ed_bonus3"));
+            double harvFlat = 1 + NF.ed_bonus(Lv("ed_bonus")) + NF.ed_bonus1p(Lv("ed_bonus1p")) + NF.ed_bonus2(Lv("ed_bonus2")) + NF.ed_bonus2p(Lv("ed_bonus2p")) + NF.ed_bonus3(Lv("ed_bonus3")) + NF.ed_bonus3p(Lv("ed_bonus3p"));
             st.harvestMul = harvFlat * (1 + ab["harvest"] + BStat("harvest")) * NF.gm_harvest(Lv("gm_harvest")) * st.zoneMul;
             st.multiP = MultiRate(Lv("ed_multi"));
             st.priceMul = PriceMul();

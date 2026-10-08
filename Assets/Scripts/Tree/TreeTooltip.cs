@@ -23,8 +23,7 @@ namespace MoreMush
             desc.text = Iconize(n.d);
             string costTxt = "", noteTxt = "";
             if (s == "locked")
-                eff.text = !ParentOk(n) ? (n.needMax ? $"선행: {NODE[n.parent].n} 최대 레벨 ({Lv(n.parent)}/{NODE[n.parent].max})" : $"선행: {NODE[n.parent].n}")
-                    : $"{ZoneOf(n).n} 지역이 열리면 살 수 있어요 (스테이지 {ZoneOf(n).from}부터)";
+                eff.text = n.needMax ? $"선행: {NODE[n.parent].n} 최대 레벨 ({Lv(n.parent)}/{NODE[n.parent].max})" : $"선행: {NODE[n.parent].n}";
             else
             {
                 eff.text = n.eff(L) + (L < n.max ? $"\n<b>→</b> {n.eff(L + 1)}" : "");
