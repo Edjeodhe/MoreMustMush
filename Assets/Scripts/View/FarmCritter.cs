@@ -15,6 +15,7 @@ namespace MoreMush
         public CritterRig rig;
         public SortingGroup rigGroup;
         public SpriteRenderer shadow, glow, surprise, tool;
+        public SpriteRenderer builder;          // child of body: hammering builder picture shown instead of the rig while building
         public SpriteRenderer[] stars = new SpriteRenderer[3];
         [Header("Hover label")]
         public GameObject label; public SpriteRenderer labelBack; public TMP_Text labelText;
@@ -48,6 +49,11 @@ namespace MoreMush
                 case "surprise": oy = -Mathf.Min(1, u * 6) * 26 * (1 - u); ox = Mathf.Sin(at * 50) * 4 * (1 - u); break;
             }
 
+            // 건설 중: 리그 대신 망치질 그림 (내려치는 프레임에서 살짝 찌그러진다)
+            var bsp = p.bframe >= 0 ? SpriteDB.Get($"Characters/Critters/Build/build_{p.id}_{p.bframe}") : null;
+            bool hammering = bsp != null;
+            if (hammering && p.bframe == 1) { sy = 0.94f; sx = 1.06f; }
+
             transform.localPosition = Art.P(p.x, p.y);
             int order = 1000 + Mathf.RoundToInt(p.y);
             body.localPosition = new Vector3(ox / P, -oy / P, 0);
@@ -56,6 +62,16 @@ namespace MoreMush
             body.localScale = new Vector3(sx * p.face * k, sy * k, 1);
             rig.SetLook(p.id, CharSkinOn(p.id)?.id, hat);
             rigGroup.sortingOrder = order;
+            if (rig.gameObject.activeSelf == hammering) rig.gameObject.SetActive(!hammering);
+            builder.enabled = hammering;
+            if (hammering)
+            {
+                if (builder.sprite != bsp) builder.sprite = bsp;
+                float s = BUILDER.w * rig.baseRadius / P / bsp.bounds.size.x;   // body space: rig.baseRadius units
+                builder.transform.localScale = new Vector3(s, s, 1);
+                builder.transform.localPosition = new Vector3(0, bsp.bounds.size.y * s / 2, 0);
+                builder.sortingOrder = order;
+            }
 
             shadow.transform.localPosition = new Vector3(ox / P, -2 / P, 0);
             shadow.transform.localScale = new Vector3(R0 * 1.5f * (1 + oy / 200) / P, R0 * 0.44f / P, 1);

@@ -1,11 +1,11 @@
 """Build-placement grid overlay for the farm: one rounded cell per tile that can hold a building
-(cell center inside the fence ellipse and outside the mushroom-tree zone). Same numbers as Defs.GRID / Defs.TREE —
+(cell center inside the fence ellipse and outside the mushroom-tree trunk zone). Same numbers as Defs.GRID / Defs.TREE —
 rerun after changing them:  python Tools/art/make_build_grid.py"""
 from PIL import Image, ImageDraw
 
 CELL, X0, Y0, COLS, ROWS = 40, 120, 260, 42, 16
 ECX, ECY, ERX, ERY = 960, 565, 840, 285
-ZX0, ZX1, ZY0, ZY1 = 300, 840, 260, 840   # TREE.zone
+ZX0, ZX1, ZY0, ZY1 = 740, 1180, 260, 540   # TREE.zone
 
 img = Image.new("RGBA", (COLS * CELL, ROWS * CELL), (0, 0, 0, 0))
 d = ImageDraw.Draw(img)

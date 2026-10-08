@@ -26,7 +26,8 @@ namespace MoreMush
             sr.transform.localPosition = new Vector3(0, s.bounds.size.y * k / 2 - 0.06f, 0);
         }
 
-        public void Draw(SaveData.Bld b)
+        // lifted: being moved (the ghost shows where it goes; the old spot stays faintly visible)
+        public void Draw(SaveData.Bld b, bool lifted = false)
         {
             var B = BUILDING[b.id];
             var r = BuildRect(B, b.gx, b.gy);
@@ -36,10 +37,11 @@ namespace MoreMush
             sprite.sortingOrder = order;
             shadow.transform.localScale = new Vector3(r.width * 0.95f / Art.PPU, 0.3f, 1);
 
-            UIUtil.Show(site, !b.done);
-            if (b.done) { sprite.color = Color.white; return; }
+            UIUtil.Show(site, !b.done && !lifted);
+            if (b.done) { sprite.color = new Color(1, 1, 1, lifted ? 0.3f : 1); return; }
             float k = Mathf.Clamp01((float)((Now() - b.t0) / System.Math.Max(1, b.at - b.t0)));
-            sprite.color = new Color(0.8f, 0.72f, 0.62f, 0.45f + 0.35f * k);
+            sprite.color = new Color(0.8f, 0.72f, 0.62f, lifted ? 0.25f : 0.45f + 0.35f * k);
+            if (lifted) return;
             site.transform.localPosition = new Vector3(0, (r.height + 70) / Art.PPU, 0);
             barFill.transform.localScale = new Vector3(BAR * k / Art.PPU, barFill.transform.localScale.y, 1);
             barFill.transform.localPosition = new Vector3((-BAR / 2 + BAR * k / 2) / Art.PPU, barFill.transform.localPosition.y, 0);

@@ -11,7 +11,8 @@ namespace MoreMush
     // Mushroom farm world: one ranch with the mushroom tree inside. Caught critters wander and ask for things, walk to
     // the tree to pick ripe mushrooms, and build buildings (a builder is busy until the building is done, real time).
     // Placing a building: the ghost follows the mouse over a tile grid inside the fence; each footprint tile turns green
-    // (free) or red (blocked) and a left click builds right there.
+    // (free) or red (blocked) and a left click builds right there. Moving a building: press and hold it (or drag it), and
+    // the same ghost follows the pointer until it is released on free tiles.
     // Fixed objects (background, tree, ghost tiles) are placed in the hierarchy; critters, buildings, particles and
     // floating texts are clones of hidden template slots.
     public class FarmView : MonoBehaviour
@@ -45,6 +46,7 @@ namespace MoreMush
             public int face = 1;
             public string state = "idle", anim, say, tool;   // state: idle · walk · work (picking) · build
             public int job = -1;                             // tree slot this critter is going to pick
+            public int bframe = -1;                          // hammering frame while building (0 raised · 1 strike, -1 not building)
         }
         class Part { public string k; public float x, y, vx, vy, t, life; }
         class Float { public float x, y, t; public string text; public bool gem; public Color col; }
@@ -57,11 +59,15 @@ namespace MoreMush
         Critter hover; int hoverFruit = -1;
         public bool dirty;                                // HUD needs a redraw (FarmScreen polls it)
 
-        // placement (건물 배치)
+        // placement (건물 배치 · 옮기기)
         public string PlaceId { get; private set; }
+        public int MoveUid { get; private set; }          // 옮기는 중인 건물 (0 = 새로 짓기)
         public int placeX, placeY;
         public bool Placing => PlaceId != null;
-        public bool PlaceOk => Placing && CanPlace(BUILDING[PlaceId], placeX, placeY);
+        public bool Moving => Placing && MoveUid != 0;
+        public bool PlaceOk => Placing && CanPlace(BUILDING[PlaceId], placeX, placeY, MoveUid);
+        Vector2 grab;                                     // 잡은 곳 − 건물 가운데 (옮길 때 건물이 손 밑에서 튀지 않게)
+        SaveData.Bld pressB; Vector2 pressAt; float pressT;   // 누르고 있는 건물 (꾹 누르거나 끌면 옮기기)
 
         Pool<FarmCritter> critPool;
         Pool<BuildingView> buildPool;
@@ -265,6 +271,7 @@ namespace MoreMush
                 if (site != null)
                 {
                     if (p.job >= 0) { jobs.Add(p.job); p.job = -1; }
+                    if (p.state == "build" && (Mathf.Abs(p.x - site.Value.x) > 6 || Mathf.Abs(p.y - site.Value.y) > 6)) p.state = "walk";   // 짓던 건물을 옮겼다
                     if (p.state != "build")
                     {
                         p.state = "walk"; p.tool = null;
@@ -361,17 +368,39 @@ namespace MoreMush
         {
             var spot = FirstSpot(BUILDING[id]);
             if (spot == null) return false;
-            PlaceId = id; placeX = spot.Value.x; placeY = spot.Value.y;
+            PlaceId = id; MoveUid = 0; grab = Vector2.zero; placeX = spot.Value.x; placeY = spot.Value.y;
             dirty = true;
             return true;
         }
 
-        public void CancelPlace() { if (PlaceId == null) return; PlaceId = null; dirty = true; }
+        // 지은(짓는 중인) 건물 들어 올리기: at = 잡은 곳 (화면 좌표)
+        public void BeginMove(SaveData.Bld b, Vector2 at)
+        {
+            PlaceId = b.id; MoveUid = b.uid; placeX = b.gx; placeY = b.gy;
+            grab = at - BuildRect(BUILDING[b.id], b.gx, b.gy).center;
+            dirty = true;
+        }
+
+        public void CancelPlace() { pressB = null; if (PlaceId == null) return; PlaceId = null; MoveUid = 0; dirty = true; }
+
+        // 옮기는 건물을 지금 자리에 내려놓기 (못 놓으면 false, 계속 들고 있다)
+        public bool ConfirmMove()
+        {
+            if (!Moving || !PlaceOk) return false;
+            var old = G.farm.blds.FirstOrDefault(x => x.uid == MoveUid);
+            if (old != null && old.gx == placeX && old.gy == placeY) { CancelPlace(); return true; }   // 제자리에 내려놓음
+            if (!BuildMove(MoveUid, placeX, placeY)) return false;
+            var r = BuildRect(BUILDING[PlaceId], placeX, placeY);
+            PlaceId = null; MoveUid = 0; dirty = true;
+            AddFloat(r.center.x, r.yMin - 20, "옮겼어요!", false, U.Hex("#fff6e0"));
+            for (int i = 0; i < 10; i++) parts.Add(new Part { k = "star", x = r.center.x + U.Rand(-r.width / 2, r.width / 2), y = r.yMax - U.Rand(0, 20), vx = U.Rand(-60, 60), vy = U.Rand(-160, -60), life = U.Rand(0.4f, 0.7f) });
+            return true;
+        }
 
         // 그 자리에 건설 시작 → 맡은 꼬마가 들어 있는 건물 (못 지으면 null)
         public SaveData.Bld ConfirmPlace()
         {
-            if (!PlaceOk) return null;
+            if (!PlaceOk || Moving) return null;
             var idle = crits.Where(p => p.job < 0 && BuilderSpot(p.id) == null).Select(p => p.id).ToList();
             var bld = BuildStart(PlaceId, placeX, placeY, idle);
             if (bld == null) return null;
@@ -381,10 +410,11 @@ namespace MoreMush
             return bld;
         }
 
-        // 마우스(손가락) 위치를 건물 가운데로 삼아 격자에 맞춘다
+        // 마우스(손가락) 위치를 건물 가운데로 삼아 격자에 맞춘다 (옮길 때는 잡은 곳 기준)
         void MoveGhost(float x, float y)
         {
             var b = BUILDING[PlaceId];
+            x -= grab.x; y -= grab.y;
             int gx = Mathf.RoundToInt((x - GRID.x0) / GRID.cell - b.w / 2f), gy = Mathf.RoundToInt((y - GRID.y0) / GRID.cell - b.h / 2f);
             gx = Mathf.Clamp(gx, 0, GRID.cols - b.w); gy = Mathf.Clamp(gy, 0, GRID.rows - b.h);
             if (gx != placeX || gy != placeY) { placeX = gx; placeY = gy; dirty = true; }
@@ -408,6 +438,11 @@ namespace MoreMush
         }
 
         // ===== effects =====
+        void HammerSparks(Critter p)
+        {
+            float R = Radius(p.id), x = p.x + p.face * R * 1.3f, y = p.y - 8;
+            for (int i = 0; i < 3; i++) parts.Add(new Part { k = "star", x = x, y = y, vx = p.face * U.Rand(20, 120), vy = U.Rand(-170, -80), life = U.Rand(0.25f, 0.4f) });
+        }
         void GemBurst(float x, float y, int n) { for (int i = 0; i < n; i++) parts.Add(new Part { k = "gem", x = x, y = y, vx = U.Rand(-160, 160), vy = U.Rand(-320, -120), life = U.Rand(0.6f, 1) }); }
         void AddFloat(float x, float y, string text, bool gem, Color col, float t = 0) => floats.Add(new Float { x = x, y = y, text = text, gem = gem, col = col, t = t });
 
@@ -433,6 +468,10 @@ namespace MoreMush
             {
                 var p = crits[i];
                 string hat = BuilderSpot(p.id) != null ? "hardhat" : p.job >= 0 ? "straw" : null;
+                // 건설 중: 망치를 들어 올렸다(0) 내려친다(1). 내려치는 순간 불똥이 튄다
+                int fr = p.state == "build" && p.anim == null ? ((now + p.hop) % BUILDER.beat > BUILDER.beat - BUILDER.strike ? 1 : 0) : -1;
+                if (fr == 1 && p.bframe == 0) HammerSparks(p);
+                p.bframe = fr;
                 critPool.Get(i).Draw(p, now, hat, hover == p, FarmReady(p.id) ? FarmKindOf(p.id) : null);
             }
             critPool.Trim(crits.Count);
@@ -442,7 +481,7 @@ namespace MoreMush
         void DrawBuildings()
         {
             var list = G.farm.blds;
-            for (int i = 0; i < list.Count; i++) buildPool.Get(i).Draw(list[i]);
+            for (int i = 0; i < list.Count; i++) buildPool.Get(i).Draw(list[i], Moving && list[i].uid == MoveUid);
             buildPool.Trim(list.Count);
 
             UIUtil.Show(ghost, Placing);
@@ -462,7 +501,7 @@ namespace MoreMush
                     t.enabled = true;
                     float cx = GRID.x0 + (placeX + x + 0.5f) * GRID.cell, cy = GRID.y0 + (placeY + y + 0.5f) * GRID.cell;
                     t.transform.localPosition = new Vector3((cx - r.center.x) / Art.PPU, -(cy - r.yMax) / Art.PPU, 0);
-                    t.color = TileOk(placeX + x, placeY + y) ? new Color(0.35f, 1, 0.45f, 0.5f) : new Color(1, 0.25f, 0.2f, 0.55f);
+                    t.color = TileOk(placeX + x, placeY + y, MoveUid) ? new Color(0.35f, 1, 0.45f, 0.5f) : new Color(1, 0.25f, 0.2f, 0.55f);
                 }
             for (; n < ghostTiles.Length; n++) ghostTiles[n].enabled = false;
         }
@@ -509,10 +548,18 @@ namespace MoreMush
             var p = Pointer.current;
             hover = null; hoverFruit = -1;
             UIUtil.Show(buildGrid, Placing);
-            if (p == null || GameFlow.I.ModalOpen) return;
+            if (p == null || GameFlow.I.ModalOpen) { pressB = null; return; }
             bool isMouse = p is Mouse;
             bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(isMouse ? -1 : 0);
             var s = ToStage(p.position.ReadValue());
+            if (Moving)
+            {
+                // 옮기기: 누른 채로 끌면(마우스는 올리기만 해도) 따라오고, 떼면 그 자리에 놓는다 (빨간 칸이면 계속 들고 있다)
+                if (!overUI && (isMouse || p.press.isPressed)) MoveGhost(s.x, s.y);
+                if (isMouse && Mouse.current.rightButton.wasPressedThisFrame) { GameFlow.I.OnAction("placecancel", null, null); return; }
+                if (!overUI && p.press.wasReleasedThisFrame) GameFlow.I.OnAction("placeok", null, null);
+                return;
+            }
             if (Placing)
             {
                 // 마우스: 올리면 잔상이 따라오고, 왼쪽 클릭이면 바로 짓는다 (오른쪽 클릭 = 취소)
@@ -530,22 +577,45 @@ namespace MoreMush
                 }
                 return;
             }
-            if (overUI) return;
+            if (overUI) { pressB = null; return; }
             if (isMouse) { hover = CritterAt(s.x, s.y); if (hover == null) hoverFruit = tree.FruitAt(s.x, s.y); }
+
+            // 누르고 있는 건물: 꾹 누르거나 끌면 들어 올리고, 그냥 떼면 누른 것으로 친다
+            if (pressB != null)
+            {
+                if (p.press.isPressed)
+                {
+                    if (Time.unscaledTime - pressT >= BUILD_HOLD || (s - pressAt).magnitude >= BUILD_DRAG)
+                    {
+                        var held = pressB; pressB = null;
+                        BeginMove(held, pressAt); MoveGhost(s.x, s.y); Snd.Ui();
+                    }
+                    return;
+                }
+                var tapped = pressB; pressB = null;
+                if (p.press.wasReleasedThisFrame) BuildingClick(tapped);
+                return;
+            }
+
             if (!p.press.wasPressedThisFrame) return;
             var c = CritterAt(s.x, s.y);
             if (c != null) { ClickCritter(c); return; }
             int fruit = tree.FruitAt(s.x, s.y);
             if (fruit >= 0) { FruitClick(fruit); return; }
+            // 건물은 나무 앞에 그려지므로 밑동보다 먼저 본다
+            var b = G.farm.blds.OrderBy(x => x.gy + BUILDING[x.id].h).LastOrDefault(x => BuildRect(BUILDING[x.id], x.gx, x.gy).Contains(new Vector2(s.x, s.y)));
+            if (b != null) { pressB = b; pressAt = s; pressT = Time.unscaledTime; return; }
             if (tree.TrunkAt(s.x, s.y)) { GameFlow.I.OnAction("treepanel", "open", null); return; }
-            var b = G.farm.blds.LastOrDefault(x => BuildRect(BUILDING[x.id], x.gx, x.gy).Contains(new Vector2(s.x, s.y)));
-            if (b != null)
-            {
-                if (!b.done && Now() < b.at) { GameFlow.I.OpenAccel("build", b.uid); return; }
-                var r = BuildRect(BUILDING[b.id], b.gx, b.gy);
-                AddFloat(r.center.x, r.yMin - 20, string.Format(BUILDING[b.id].statFmt, U.Pct(BUILDING[b.id].val)), false, U.Hex("#fff6e0"));
-                Snd.Ui();
-            }
+        }
+
+        // 건물을 짧게 눌렀다: 짓는 중이면 가속 창, 다 지었으면 능력치 · 옮기는 법
+        void BuildingClick(SaveData.Bld b)
+        {
+            if (!b.done && Now() < b.at) { GameFlow.I.OpenAccel("build", b.uid); return; }
+            var r = BuildRect(BUILDING[b.id], b.gx, b.gy);
+            AddFloat(r.center.x, r.yMin - 20, string.Format(BUILDING[b.id].statFmt, U.Pct(BUILDING[b.id].val)), false, U.Hex("#fff6e0"));
+            AddFloat(r.center.x, r.yMin + 10, "꾹 누르면 옮길 수 있어요", false, U.Hex("#d8f0c0"), -0.2f);
+            Snd.Ui();
         }
     }
 }

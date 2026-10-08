@@ -161,7 +161,7 @@ namespace MoreMush
                 {
                     if (!CanPlace(b, gx, gy)) continue;
                     var c = BuildRect(b, gx, gy).center;
-                    float d = (c - new Vector2(1180, 560)).sqrMagnitude;
+                    float d = (c - new Vector2(TREE.x, 700)).sqrMagnitude;
                     if (d < bd) { bd = d; best = new Vector2Int(gx, gy); }
                 }
             return best;
@@ -190,6 +190,16 @@ namespace MoreMush
             G.farm.blds.Add(bld);
             SaveGame();
             return bld;
+        }
+
+        // 지은(짓는 중인) 건물 옮기기: 자기 자리는 빈 칸으로 본다. 비용·시간은 들지 않는다
+        public static bool BuildMove(int uid, int gx, int gy)
+        {
+            var b = G.farm.blds.FirstOrDefault(x => x.uid == uid);
+            if (b == null || !CanPlace(BUILDING[b.id], gx, gy, uid)) return false;
+            b.gx = gx; b.gy = gy;
+            SaveGame();
+            return true;
         }
 
         // 다 지은 건물을 완성 처리하고 돌려준다 (꼬마는 다시 쉰다)

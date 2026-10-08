@@ -8,7 +8,8 @@ namespace MoreMush
 {
     // The mushroom tree on the farm: its growth-stage picture (bigger and lusher with level), the mushrooms ripening on
     // the canopy (one fixed slot per possible mushroom, placed in the hierarchy), and a little level sign.
-    // The object sits at the trunk base (Defs.TREE.x, y).
+    // The object sits at the trunk base (Defs.TREE.x, y). It is a landmark at the back of the ranch and is always drawn
+    // behind critters and buildings (Defs.TREE.order), so it never hides them.
     public class FarmTreeView : MonoBehaviour
     {
         public SpriteRenderer treeSprite, shadow;
@@ -66,7 +67,7 @@ namespace MoreMush
         {
             Layout();
             transform.localPosition = Art.P(TREE.x, TREE.y);
-            treeSprite.sortingOrder = 1000 + Mathf.RoundToInt(TREE.y);
+            treeSprite.sortingOrder = TREE.order; shadow.sortingOrder = TREE.order - 1;
             var sl = G.farm.tree.slots; double t0 = Now();
             float px = FruitPx;
             for (int i = 0; i < fruits.Length; i++)

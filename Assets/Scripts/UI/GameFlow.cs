@@ -372,6 +372,12 @@ namespace MoreMush
                 }
                 case "placeok":
                 {
+                    if (farm.Moving)
+                    {
+                        if (!farm.ConfirmMove()) { Snd.Err(); ShowToast("여기에는 설치할 수 없어요"); break; }
+                        Snd.Buy(); farmScreen.Render();
+                        break;
+                    }
                     var b = farm.ConfirmPlace();
                     if (b == null) { Snd.Err(); ShowToast(farm.Placing && !farm.PlaceOk ? "여기에는 설치할 수 없어요" : "지을 수 없어요"); break; }
                     Snd.Record();

@@ -49,6 +49,46 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f535db6bdc23cc94fa331d57c31d135d, type: 3}
   - key: Characters/Critters/Acc/tophat
     sprite: {fileID: 21300000, guid: a79f5402bc1712e499273a54cde49a72, type: 3}
+  - key: Characters/Critters/Build/build_chest_0
+    sprite: {fileID: 21300000, guid: b5e16c6c05ef8e7478b7b58765c1c66c, type: 3}
+  - key: Characters/Critters/Build/build_chest_1
+    sprite: {fileID: 21300000, guid: 1bbb4b19db607934d97bee5d98e82d3e, type: 3}
+  - key: Characters/Critters/Build/build_coin_0
+    sprite: {fileID: 21300000, guid: 38c3e920ca147c44997ae64cb99ad8ab, type: 3}
+  - key: Characters/Critters/Build/build_coin_1
+    sprite: {fileID: 21300000, guid: bb544850030876c4e8aba33ad292c8d2, type: 3}
+  - key: Characters/Critters/Build/build_dew_0
+    sprite: {fileID: 21300000, guid: 3fff9a1146ce10645af20aeb8004a749, type: 3}
+  - key: Characters/Critters/Build/build_dew_1
+    sprite: {fileID: 21300000, guid: f341f6789ff5e4849a3107dedb578184, type: 3}
+  - key: Characters/Critters/Build/build_fire_0
+    sprite: {fileID: 21300000, guid: 40a9fe2be80c35542801c8ce66f3b58a, type: 3}
+  - key: Characters/Critters/Build/build_fire_1
+    sprite: {fileID: 21300000, guid: e1f0ce5f23bfa0f48bc35a48e9567d98, type: 3}
+  - key: Characters/Critters/Build/build_leaf_0
+    sprite: {fileID: 21300000, guid: bff4a0cdac57cbe41b497bd0d4fa66da, type: 3}
+  - key: Characters/Critters/Build/build_leaf_1
+    sprite: {fileID: 21300000, guid: 9bae9e78833dded4d99eb533a23308ba, type: 3}
+  - key: Characters/Critters/Build/build_moon_0
+    sprite: {fileID: 21300000, guid: 849282497db2d75489c597b4076a0496, type: 3}
+  - key: Characters/Critters/Build/build_moon_1
+    sprite: {fileID: 21300000, guid: e6ffc98dbeb88aa42828b73176b7c9c1, type: 3}
+  - key: Characters/Critters/Build/build_rock_0
+    sprite: {fileID: 21300000, guid: 0bde2fdf10d065c42bacaa8bee1f177a, type: 3}
+  - key: Characters/Critters/Build/build_rock_1
+    sprite: {fileID: 21300000, guid: e42a3abe71a5c3b45b91b86a30fcfbd1, type: 3}
+  - key: Characters/Critters/Build/build_spark_0
+    sprite: {fileID: 21300000, guid: ff69834d08267d147bb34af24be9402b, type: 3}
+  - key: Characters/Critters/Build/build_spark_1
+    sprite: {fileID: 21300000, guid: dbe099840b5062446afdc2c14033c333, type: 3}
+  - key: Characters/Critters/Build/build_star_0
+    sprite: {fileID: 21300000, guid: a7dcdececccced14da2de760af97498c, type: 3}
+  - key: Characters/Critters/Build/build_star_1
+    sprite: {fileID: 21300000, guid: dbc8d28e933efda449483860b630b7e2, type: 3}
+  - key: Characters/Critters/Build/build_wind_0
+    sprite: {fileID: 21300000, guid: ef2db783ea7904b46a0ba74708ceb84d, type: 3}
+  - key: Characters/Critters/Build/build_wind_1
+    sprite: {fileID: 21300000, guid: 68ec442cffda72e4cb7504aab30590c7, type: 3}
   - key: Characters/Critters/blush
     sprite: {fileID: 21300000, guid: 5c45121e56a9f7740b8456d69b152956, type: 3}
   - key: Characters/Critters/body

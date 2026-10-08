@@ -448,6 +448,17 @@ export const SHEETS = [
       ["fruit_ps", "a cluster of purple poison mushrooms with tiny spots"],
     ],
   },
+  // ===== 건설하는 꼬마 (망치질 2프레임: a 들어 올림 · b 내려침). Tools/art/align_frames.py로 두 프레임을 발 기준으로 맞춘다 =====
+  {
+    id: "critter_build_a", rows: 2, cols: 5, out: "Characters/Critters/Build", refs: ["Art/Raw/critters_full.png"],
+    subject: "The ten mushroom critters from the attached reference, now working as tiny builders. Keep each critter's body, face, cap shape, cap colors, spots and cap decoration exactly as in the reference, at the same scale for all ten. Every critter: three-quarter side view facing RIGHT, standing on its two little brown feet, with two tiny stubby cream nub arms, a small yellow construction hard hat worn tilted on the back of the cap so the cap decoration stays visible, and a wooden-handled builder's hammer held in both nub arms RAISED HIGH above and behind its head, ready to strike, a determined happy face. The hammer never goes below the feet. Nothing else: no ground, no planks, no effects, no shadow.",
+    items: CRITTERS.map(([id, look]) => [`build_${id}_0`, look]),
+  },
+  {
+    id: "critter_build_b", rows: 2, cols: 5, out: "Characters/Critters/Build", refs: ["Art/Raw/critter_build_a.png"],
+    subject: "Second animation frame for the attached sprite sheet: a WIDE sheet laid out exactly like the attached one (2 rows of 5 on a fully transparent background, no glow, no colored backdrop, no vignette). Redraw each of the ten builder critters from the attached sheet in the same cell, at the same size, with the same art style, outline, cap, spots, cap decoration, yellow hard hat, round cream body, face looking to the RIGHT, open happy eyes and little brown feet in the same place. Change ONLY the arms and hammer: the hammer has just been SWUNG DOWN to the right, the stubby nub arms stretched forward-down, the dark hammer head resting at foot level in front of (to the right of) the feet, the handle slanting up to the arms. Nothing else: no ground, no planks, no effects, no shadow.",
+    items: CRITTERS.map(([id, look]) => [`build_${id}_1`, look]),
+  },
   {
     id: "bg_kitchen", kind: "image", out: "Backgrounds/bg_kitchen.png",
     prompt: "Wide landscape 16:9 game background, slight top-down 3/4 view: the inside of a cozy little mushroom-village kitchen restaurant. Warm wooden walls with shelves of jars and hanging herbs at the top, a window, and a wooden plank floor filling the lower two-thirds, kept plain so furniture and characters can be placed on it. No furniture on the floor, no characters, no text, no UI.",
