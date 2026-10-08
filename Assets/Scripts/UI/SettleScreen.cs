@@ -18,8 +18,14 @@ namespace MoreMush
         public GameObject bonusRow, debtRow, themeBox, unlockBox, newsBox, recsBox;
         public RectTransform unlockCards, newsCards;
         [AssetPath("Assets/Prefabs/UI/NewCard.prefab")] public NewCard cardPrefab;
+        public RectTransform card;
+        public NewCard unlockMore, newsMore;     // "+n개" 칸 (각 Cards 안에 숨겨 둔 슬롯)
+
+        const int UNLOCK_ROWS = 1, NEWS_ROWS = 3;  // 카드 칸 줄 수 상한
+        const float SCREEN_MARGIN = 24;            // 정산 카드 위아래 여백
 
         RoundSim.Summary sum;
+        readonly List<NewCard> unlockList = new List<NewCard>(), newsList = new List<NewCard>();
         float t0;
         bool rolledSound;
         readonly List<(RectTransform rt, float delay, float y)> drops = new List<(RectTransform, float, float)>();
@@ -40,31 +46,68 @@ namespace MoreMush
             themeBox.SetActive(s.newTheme != null);
             if (s.newTheme != null) { var th = THEME[s.newTheme]; themeText.text = $"{UIUtil.Ic(th.icon)} 새 지역 열림: <color=#2a6ab8>{th.n}</color>\n<size=55%><color=#4a6a8a>{th.d} · 다음 라운드부터 이 지역으로 가요</color></size>"; }
 
-            Clear(unlockCards); Clear(newsCards);
-            foreach (var id in s.unlocks) Card(unlockCards, SpriteDB.Single(id), 0, SP[id].n, "해금", "unlock");
-            unlockBox.SetActive(s.unlocks.Count > 0);
-            foreach (var id in s.newSpecies) Card(newsCards, SpriteDB.Single(id), 0, SP[id].n, "NEW", "");
-            foreach (var id in s.newGolden) Card(newsCards, SpriteDB.Single(id), 3, "황금 " + SP[id].n, "★", "gold");
-            foreach (var (id, st) in s.newStars) Card(newsCards, SpriteDB.Single(id), 0, SP[id].n, new string('★', st) + " " + AB[SP[id].ab].n, "star");
-            if (s.specialGot != null) Card(newsCards, SpriteDB.Get("Characters/Critters/" + s.specialGot + "_ref"), 0, SPC[s.specialGot].n, "특수", "special");
-            newsBox.SetActive(newsCards.childCount > 0);
+            Clear(unlockList); Clear(newsList);
+            foreach (var id in s.unlocks) Card(unlockCards, unlockList, SpriteDB.Single(id), 0, SP[id].n, "해금", "unlock");
+            unlockBox.SetActive(unlockList.Count > 0);
+            if (s.specialGot != null) Card(newsCards, newsList, SpriteDB.Get("Characters/Critters/" + s.specialGot + "_ref"), 0, SPC[s.specialGot].n, "NEW", "special");
+            foreach (var id in s.newSpecies) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "");
+            foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, "황금 " + SP[id].n, "NEW", "gold");
+            foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "star");
+            newsBox.SetActive(newsList.Count > 0);
             var recs = s.recs.Select(r => $"신기록! {RECORD_NAMES[r.k]} <color=#3b2414>{U.Fmt(r.v)}</color>{(r.old > 0 ? $" <size=70%><color=#8a6a4a>(이전 {U.Fmt(r.old)})</color></size>" : "")}").ToList();
             if (s.goldHv) recs.Insert(0, $"{UIUtil.Ic("medal")} 황금 수확기 해금!");
             recsBox.SetActive(recs.Count > 0);
             recsText.text = string.Join("\n", recs);
             toTreeText.text = due ? "세금 고지서 확인 ▶" : "균사 트리로 ▶";
             SpawnBasket(s);
-            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
+            FitCards();
         }
 
-        void Card(RectTransform parent, Sprite s, int fx, string name, string tag, string style)
+        // 카드가 많으면 줄 수를 상한까지 자르고, 그래도 정산 카드가 화면을 넘치면 새 버섯 → 해금 순으로 한 줄씩 더 줄인다.
+        void FitCards()
+        {
+            int unlockRows = UNLOCK_ROWS, newsRows = NEWS_ROWS;
+            float limit = ((RectTransform)transform).rect.height - SCREEN_MARGIN * 2;
+            while (true)
+            {
+                Limit(unlockList, unlockMore, unlockCards, unlockRows);
+                Limit(newsList, newsMore, newsCards, newsRows);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(card);   // 화면 루트에는 레이아웃이 없어 자식까지 내려가지 않음
+                if (card.rect.height <= limit) break;
+                if (newsRows > 1 && newsList.Count > Cols(newsCards) * (newsRows - 1)) newsRows--;
+                else if (unlockRows > 1 && unlockList.Count > Cols(unlockCards) * (unlockRows - 1)) unlockRows--;
+                else break;
+            }
+        }
+
+        static int Cols(RectTransform cards) => cards.GetComponent<GridLayoutGroup>().constraintCount;
+
+        static void Limit(List<NewCard> list, NewCard more, RectTransform cards, int rows)
+        {
+            int slots = Cols(cards) * rows;
+            bool over = list.Count > slots;
+            int shown = over ? slots - 1 : list.Count;
+            for (int i = 0; i < list.Count; i++) list[i].gameObject.SetActive(i < shown);
+            more.gameObject.SetActive(over);
+            if (!over) return;
+            more.label.text = $"+{list.Count - shown}개";
+            more.transform.SetAsLastSibling();
+        }
+
+        void Card(RectTransform parent, List<NewCard> list, Sprite s, int fx, string name, string tag, string style)
         {
             var c = Instantiate(cardPrefab, parent);
             c.gameObject.SetActive(true);
             c.Set(s, fx, name, tag, style);
+            list.Add(c);
         }
 
-        static void Clear(Transform t) { for (int i = t.childCount - 1; i >= 0; i--) Destroy(t.GetChild(i).gameObject); }
+        // 만든 카드만 지운다 ("+n개" 슬롯은 남김). Destroy는 프레임 끝에 일어나므로 먼저 꺼서 이번 레이아웃 계산에서 빠지게 한다.
+        static void Clear(List<NewCard> list)
+        {
+            foreach (var c in list) if (c != null) { c.gameObject.SetActive(false); Destroy(c.gameObject); }
+            list.Clear();
+        }
 
         void SpawnBasket(RoundSim.Summary s)
         {
