@@ -25,7 +25,12 @@ namespace MoreMush
         public GameObject req; public SpriteRenderer reqBack, reqTail, reqIcon, reqDot; public TMP_Text reqMark;
 
         const float P = Art.PPU;
+        const int SAY_ORDER = 5100;             // 말풍선 배경 순서 (꼬리 −1, 글자 +1), 말풍선마다 3씩 위로
         string shownSay, shownLabel;
+
+        // 말풍선 자리 (농장 px, y 아래로). FarmView가 겹침을 풀고 PlaceSay로 놓는다
+        [System.NonSerialized] public Rect sayRect;
+        float sayFeetX, sayFeetY;
 
         public void Draw(FarmView.Critter p, float now, string hat, bool hovered, FarmKind request)
         {
@@ -126,9 +131,9 @@ namespace MoreMush
                 if (shownSay != p.say) { shownSay = p.say; sayText.text = p.say; sayText.ForceMeshUpdate(); }
                 float w = Mathf.Min(420, sayText.preferredWidth * P + 34);
                 float bx = Mathf.Clamp(p.x - w / 2, 10, W - w - 10), by = -R0 * 2 - 78;
-                say.transform.localPosition = new Vector3((bx + w / 2 - p.x) / P, -(by + 25) / P, 0);
+                sayRect = new Rect(bx, p.y + by, w, 50); sayFeetX = p.x; sayFeetY = p.y;
                 Art.SlicedPx(sayBack, w, 50);
-                sayTail.transform.localPosition = new Vector3((p.x - (bx + w / 2)) / P, -33 / P, 0);
+                PlaceSay(0, 0);
                 SetA(sayBack, a); SetA(sayTail, a); sayText.alpha = a;
             }
 
@@ -142,6 +147,16 @@ namespace MoreMush
                 var icon = SpriteDB.Get("Farm/Icons/" + request.icon);
                 if (reqIcon.sprite != icon) { reqIcon.sprite = icon; Art.FitPx(reqIcon, 44); }
             }
+        }
+
+        // 말풍선을 lift(px)만큼 위로 올리고, slot번째 그리기 순서를 준다 (겹쳐도 한 말풍선이 다른 것을 통째로 덮게).
+        public void PlaceSay(float lift, int slot)
+        {
+            float cx = sayRect.center.x;
+            say.transform.localPosition = new Vector3((cx - sayFeetX) / P, -(sayRect.y - lift - sayFeetY + 25) / P, 0);
+            sayTail.transform.localPosition = new Vector3((sayFeetX - cx) / P, -33 / P, 0);
+            int o = SAY_ORDER + slot * 3;
+            sayTail.sortingOrder = o - 1; sayBack.sortingOrder = o; if (sayText is TextMeshPro tm) tm.sortingOrder = o + 1;
         }
 
         static void SetA(SpriteRenderer sr, float a) { var c = sr.color; c.a = a; sr.color = c; }

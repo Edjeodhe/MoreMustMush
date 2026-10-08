@@ -155,6 +155,7 @@ namespace MoreMush
             public const double goldTaxK = 0.25, goldMin = 200;   // 골드/시간 = max(goldMin, 이번 사이클 최소 세금 × goldTaxK)
             public const double gemH = 1, diaH = 0.4;             // 균사석·다이아몬드/시간
             public const float minClaim = 60;                      // 받을 수 있는 최소 시간 (초)
+            public const float returnMin = 600;                    // 이만큼(초) 자리를 비웠다 돌아오면 복귀 팝업
         }
 
         // ===== 스킨 (다이아몬드로 산다) =====

@@ -20,7 +20,6 @@ namespace MoreMush
         public static FarmView I;
 
         [Header("Scene")]
-        public GrandpaRig grandpa;
         public FarmTreeView tree;
 
         [Header("Buildings")]
@@ -461,7 +460,6 @@ namespace MoreMush
             foreach (var f in floats) { f.t += dt; f.y -= 40 * dt; }
             floats.RemoveAll(f => f.t >= 1.4f);
 
-            grandpa.sparkle = FarmReadyCount() > 0 && Mathf.Sin(now * 2) > 0;
             tree.Draw(now, busy, hoverFruit);
             DrawBuildings();
             for (int i = 0; i < crits.Count; i++)
@@ -475,7 +473,39 @@ namespace MoreMush
                 critPool.Get(i).Draw(p, now, hat, hover == p, FarmReady(p.id) ? FarmKindOf(p.id) : null);
             }
             critPool.Trim(crits.Count);
+            SpreadSays();
             DrawFx();
+        }
+
+        // 말풍선 겹침 풀기: 앞(아래)에 선 꼬마의 말풍선부터 제자리에 놓고, 뒤 꼬마의 말풍선은 겹치지 않을 때까지 위로 올린다.
+        const float SAY_GAP = 6;
+        readonly List<int> sayIdx = new List<int>();
+        readonly List<Rect> sayPlaced = new List<Rect>();
+
+        void SpreadSays()
+        {
+            sayIdx.Clear(); sayPlaced.Clear();
+            for (int i = 0; i < crits.Count; i++) if (crits[i].sayT > 0) sayIdx.Add(i);
+            if (sayIdx.Count < 2) return;
+            sayIdx.Sort((a, b) => crits[b].y.CompareTo(crits[a].y));
+            for (int k = 0; k < sayIdx.Count; k++)
+            {
+                var fc = critPool.Get(sayIdx[k]);
+                var r = fc.sayRect;
+                float lift = 0;
+                for (bool moved = true; moved;)
+                {
+                    moved = false;
+                    foreach (var q in sayPlaced)
+                    {
+                        var cur = new Rect(r.x, r.y - lift, r.width, r.height);
+                        if (!cur.Overlaps(new Rect(q.x, q.y - SAY_GAP, q.width, q.height + SAY_GAP * 2))) continue;
+                        lift = r.y + r.height + SAY_GAP - q.y; moved = true;
+                    }
+                }
+                sayPlaced.Add(new Rect(r.x, r.y - lift, r.width, r.height));
+                fc.PlaceSay(lift, sayIdx.Count - 1 - k);   // 앞 꼬마의 말풍선이 가장 위에 그려진다
+            }
         }
 
         void DrawBuildings()

@@ -58620,87 +58620,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 225860283807942028, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
   m_PrefabInstance: {fileID: 606020167}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &606868228
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 756729308}
-    m_Modifications:
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -9.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5307469362484710309, guid: ec65b3931ae401547be975e95a101569, type: 3}
-      propertyPath: m_Name
-      value: Grandpa
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ec65b3931ae401547be975e95a101569, type: 3}
---- !u!4 &606868229 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
-  m_PrefabInstance: {fileID: 606868228}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &606868230 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7857810873563301372, guid: ec65b3931ae401547be975e95a101569, type: 3}
-  m_PrefabInstance: {fileID: 606868228}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d66829c2f0da72489099a792408ffe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.GrandpaRig
 --- !u!1 &608387931
 GameObject:
   m_ObjectHideFlags: 0
@@ -72508,7 +72427,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436ddb28266d77942934a306799a5db5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreMush.FarmView
-  grandpa: {fileID: 606868230}
   tree: {fileID: 1933035770}
   buildLayer: {fileID: 1546709607}
   buildingTemplate: {fileID: 450551136}
@@ -72562,7 +72480,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1010567996}
-  - {fileID: 606868229}
   - {fileID: 1933035769}
   - {fileID: 1546709607}
   - {fileID: 1292033067}
@@ -98912,15 +98829,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.2
+      value: 1.65
       objectReference: {fileID: 0}
     - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.2
+      value: 1.65
       objectReference: {fileID: 0}
     - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.5
+      value: 2.62
       objectReference: {fileID: 0}
     - target: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
       propertyPath: m_LocalPosition.y
@@ -98972,17 +98889,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3269335048264323227, guid: ec65b3931ae401547be975e95a101569, type: 3}
   m_PrefabInstance: {fileID: 1070957406}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1070957408 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7857810873563301372, guid: ec65b3931ae401547be975e95a101569, type: 3}
-  m_PrefabInstance: {fileID: 1070957406}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d66829c2f0da72489099a792408ffe6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.GrandpaRig
 --- !u!1 &1071347651
 GameObject:
   m_ObjectHideFlags: 0
@@ -146715,7 +146621,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreMush.TitleBackdrop
   background: {fileID: 2128202332}
-  grandpa: {fileID: 1070957408}
   harvester: {fileID: 1732146304}
 --- !u!1 &1603844074
 GameObject:
@@ -157116,7 +157021,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 60
+  m_SortingOrder: 40
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: c294feb022d140442818fe2e139f8bcf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -157817,6 +157722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebc176999acdc6c4e99f780d9c7fce28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoreMush.AutoPanel
+  title: {fileID: 1700498511}
   stage: {fileID: 970558398}
   timeText: {fileID: 226321351}
   rates: {fileID: 1988900495}
@@ -161580,6 +161486,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1772261986}
   - component: {fileID: 1772261987}
+  - component: {fileID: 1772261989}
+  - component: {fileID: 1772261988}
   m_Layer: 0
   m_Name: TitleScreen
   m_TagString: Untagged
@@ -161630,6 +161538,46 @@ MonoBehaviour:
   newGameButton: {fileID: 181563158}
   resetButton: {fileID: 863278295}
   howto: {fileID: 242777086}
+--- !u!114 &1772261988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772261985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &1772261989
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772261985}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 45
+  m_TargetDisplay: 0
 --- !u!1 &1772501263
 GameObject:
   m_ObjectHideFlags: 0
@@ -187240,7 +187188,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MoreMush
+  m_text: More Must Mush
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: e4fbeb2b322ed7948aef3fd72d94f44a, type: 2}

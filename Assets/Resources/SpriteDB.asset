@@ -169,44 +169,16 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 303d325ad277ecc4599851844f360a38, type: 3}
   - key: Characters/Critters/wind_ref
     sprite: {fileID: 21300000, guid: 816a9c1eafd13f2448808cf5678fa2a3, type: 3}
-  - key: Characters/Grandpa/brow_left
-    sprite: {fileID: 21300000, guid: 6acfcfbbc2b779a468128476799133ca, type: 3}
-  - key: Characters/Grandpa/brow_right
-    sprite: {fileID: 21300000, guid: a03b65e04c598f94d8e10b26f6316641, type: 3}
-  - key: Characters/Grandpa/coat_tail
-    sprite: {fileID: 21300000, guid: c02cca9835695bb4583ad4bebfe904d5, type: 3}
-  - key: Characters/Grandpa/eyes_closed
-    sprite: {fileID: 21300000, guid: bf29772b90370854996b3d3f931cdab8, type: 3}
-  - key: Characters/Grandpa/eyes_open
-    sprite: {fileID: 21300000, guid: 94dc4342e43d40b40acbeac0cb7375ad, type: 3}
-  - key: Characters/Grandpa/eyes_sparkle
-    sprite: {fileID: 21300000, guid: fb13d9ec4ee37a541a015d6b69ae1c39, type: 3}
+  - key: Characters/Grandpa/Rig/body
+    sprite: {fileID: 21300000, guid: ef4cf2aa915f8d845be2ba311531909c, type: 3}
+  - key: Characters/Grandpa/Rig/eyes_closed
+    sprite: {fileID: 21300000, guid: 3121b5af6666a0d4b8124ada7f9e50e8, type: 3}
+  - key: Characters/Grandpa/Rig/head_cover
+    sprite: {fileID: 21300000, guid: 817f880114c44c545a6cbf1b7a2f6cc3, type: 3}
+  - key: Characters/Grandpa/Rig/scythe
+    sprite: {fileID: 21300000, guid: 4d65c699f1ba2584e983630efbf93907, type: 3}
   - key: Characters/Grandpa/grandpa_ref
     sprite: {fileID: 21300000, guid: c7dcbef043753db4cb8f41850c674cd4, type: 3}
-  - key: Characters/Grandpa/hat
-    sprite: {fileID: 21300000, guid: f51dc8702a7ec5c4ea102b30ac4a814e, type: 3}
-  - key: Characters/Grandpa/head
-    sprite: {fileID: 21300000, guid: 5c155f1df0f8264458735a4960efd384, type: 3}
-  - key: Characters/Grandpa/leg_left
-    sprite: {fileID: 21300000, guid: 20506778a776b4e43ae6f181e82534b0, type: 3}
-  - key: Characters/Grandpa/leg_right
-    sprite: {fileID: 21300000, guid: 2f5006256e5bf55489752291916db1e4, type: 3}
-  - key: Characters/Grandpa/lower_arm_back
-    sprite: {fileID: 21300000, guid: 25ae82f9e5c3901438f46b0ea7cf5acd, type: 3}
-  - key: Characters/Grandpa/lower_arm_front
-    sprite: {fileID: 21300000, guid: 871e4b60e7dbfb646b86c75239c6c3ff, type: 3}
-  - key: Characters/Grandpa/pelvis
-    sprite: {fileID: 21300000, guid: 9c5c9bbe1c5b0814cbae71b375653ac8, type: 3}
-  - key: Characters/Grandpa/scythe
-    sprite: {fileID: 21300000, guid: 04b76cb14ba6fc24d860297b228fc1a3, type: 3}
-  - key: Characters/Grandpa/torso
-    sprite: {fileID: 21300000, guid: e2ad097ea819d324381e9d208e091db2, type: 3}
-  - key: Characters/Grandpa/torso_v2
-    sprite: {fileID: 21300000, guid: 822d8f7e33d47c3439511ea281e3aae5, type: 3}
-  - key: Characters/Grandpa/upper_arm_back
-    sprite: {fileID: 21300000, guid: 408cc167d7bd89f43b50c59a0fa9a82a, type: 3}
-  - key: Characters/Grandpa/upper_arm_front
-    sprite: {fileID: 21300000, guid: 21c7cb1694f75d1469d354f24f534a45, type: 3}
   - key: Characters/NPC/baker
     sprite: {fileID: 21300000, guid: 2f5d52f07491b234d8720a47e5d7ebac, type: 3}
   - key: Characters/NPC/dr
