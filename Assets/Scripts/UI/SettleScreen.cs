@@ -61,6 +61,19 @@ namespace MoreMush
             toTreeText.text = due ? "세금 고지서 확인 ▶" : "균사 트리로 ▶";
             SpawnBasket(s);
             FitCards();
+            FitToScreen();
+        }
+
+        // 줄 수를 다 줄여도 화면을 넘으면(기록·지역 알림이 많을 때 등) 비율을 유지한 채 축소한다.
+        void FitToScreen()
+        {
+            var host = (RectTransform)transform;
+            card.localScale = Vector3.one;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(card);
+            float availH = host.rect.height - SCREEN_MARGIN * 2, availW = host.rect.width - SCREEN_MARGIN * 2;
+            if (availH <= 0 || availW <= 0) return;
+            float k = Mathf.Min(1f, availH / card.rect.height, availW / card.rect.width);
+            card.localScale = new Vector3(k, k, 1f);
         }
 
         // 카드가 많으면 줄 수를 상한까지 자르고, 그래도 정산 카드가 화면을 넘치면 새 버섯 → 해금 순으로 한 줄씩 더 줄인다.

@@ -11,7 +11,9 @@ namespace MoreMush
         // ===== 기본 상수 (1920×1080 논리 좌표) =====
         public const int W = 1920, H = 1080;
         public const float BAR_T = 14;
-        public static readonly float[] MAP_ZOOM = { 1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1.0f };
+        // 화면에서 잘 보이게 키우는 배율. 그림과 충돌 범위를 같이 키운다 (수확기 = 핀볼, 장치 = 그루터기·이끼·두더지굴·개울·도토리)
+        public const float BALL_SCALE = 1.5f, DEV_SCALE = 1.4f;
+        public static readonly float[] MAP_ZOOM = { 1.5f, 1.35f, 1.2f, 1.1f, 1.0f };   // 필드 넓히기 0~4레벨
         public const int MAX_BALLS = 60;
 
         // ===== 분류 =====
@@ -38,11 +40,12 @@ namespace MoreMush
         static readonly float[] BASE_R = TIERS.Select(t => t.r).ToArray();
 
         // ===== 밸런스 프리셋 =====
-        public class Preset { public string id, n; public float col0, colG, rMul, ball0, launch, min; public float[] hp; }
+        // colStep: 군락지 수 강화 레벨당 늘어나는 군락지 수 (덧셈식)
+        public class Preset { public string id, n; public float col0, colStep, rMul, ball0, launch, min; public float[] hp; }
         public static readonly Dictionary<string, Preset> PRESETS = new Dictionary<string, Preset>
         {
-            ["tuned"] = new Preset { id = "tuned", n = "조정안", col0 = 12, colG = 1.32f, rMul = 1.25f, ball0 = 18, hp = new float[] { 1, 4, 12, 40 }, launch = 1200, min = 700 },
-            ["spec"] = new Preset { id = "spec", n = "명세 원본", col0 = 3, colG = 1.75f, rMul = 1, ball0 = 14, hp = new float[] { 3, 10, 30, 100 }, launch = 900, min = 320 },
+            ["tuned"] = new Preset { id = "tuned", n = "조정안", col0 = 12, colStep = 5, rMul = 1.25f, ball0 = 18, hp = new float[] { 1, 4, 12, 40 }, launch = 1200, min = 700 },
+            ["spec"] = new Preset { id = "spec", n = "명세 원본", col0 = 3, colStep = 3, rMul = 1, ball0 = 14, hp = new float[] { 3, 10, 30, 100 }, launch = 900, min = 320 },
         };
         public static Preset TUNE = PRESETS["tuned"];
         const string PresetKey = "mushroomPinball_preset";
@@ -56,11 +59,13 @@ namespace MoreMush
 
         public static void LoadPreset() => ApplyPreset(PlayerPrefs.GetString(PresetKey, "tuned"));
 
-        public const float BASE_TIME = 20;
+        // 라운드 시간: 처음 15초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다
+        public const float BASE_TIME = 15;
+        public static double StageTime(int stage) => Math.Min(10, 0.5 * (stage - 1));
         public const float INCOME_MUL = 3;
         public const float SCORE_GOLD = 1;
         public const float COST_MUL = 1;
-        public static int ColCount(int L) => Mathf.CeilToInt(TUNE.col0 * Mathf.Pow(TUNE.colG, L));
+        public static int ColCount(int L) => Mathf.CeilToInt(TUNE.col0 + TUNE.colStep * L);
 
         // ===== 도감 75종 =====
         public class Species

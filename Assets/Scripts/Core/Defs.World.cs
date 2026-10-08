@@ -33,7 +33,7 @@ namespace MoreMush
         public static readonly Dictionary<string, Weather> WEATHER = new Dictionary<string, Weather>();
         public const string WEATHER_GOOD = "#5fb8ff", WEATHER_BAD = "#ff5a4a";
 
-        // ===== 지역 (10스테이지마다) =====
+        // ===== 지역 (기본 트리 2시간 기준: 숲 1 · 밤 20 · 들판 45 · 바다 75 · 폐허 105스테이지부터) =====
         public class Theme
         {
             public string id, n, icon, d;
@@ -44,13 +44,28 @@ namespace MoreMush
         public static readonly List<Theme> THEMES = new List<Theme>
         {
             new Theme { id = "forest", n = "숲", icon = "t_forest", from = 1, d = "버섯 사냥의 시작. 축축한 숲 바닥", fav = new[] { "표고", "느타리", "구름버섯", "잔나비걸상버섯", "광대버섯", "노란다발" } },
-            new Theme { id = "night", n = "달빛 밤", icon = "t_night", from = 11, d = "달빛 아래 발광 버섯이 빛나는 밤의 숲. 필드가 조금 어둡다", fav = new[] { "화경버섯", "독우산광대버섯", "송이버섯", "동충하초", "먹물버섯", "갈색고리갓버섯" } },
-            new Theme { id = "field", n = "들판", icon = "t_field", from = 21, d = "바람 부는 너른 들판. 꽃과 풀 사이에 버섯 고리", fav = new[] { "양송이", "말불버섯", "큰갓버섯", "목도리방귀버섯", "노란각시버섯", "땀버섯" } },
-            new Theme { id = "sea", n = "바다", icon = "t_sea", from = 31, d = "버섯이 해변 모래사장까지 번졌다", fav = new[] { "목이버섯", "흰목이", "이끼꽃버섯", "붉은싸리버섯", "소혀버섯", "꽃송이버섯" } },
-            new Theme { id = "ruins", n = "버섯 폐허 도시", icon = "t_ruins", from = 41, d = "거대 버섯이 집어삼킨 마을. 이야기의 끝", fav = new[] { "먹물버섯", "갈황색미치광이버섯", "말굽버섯", "상황버섯", "마귀광대버섯", "송로버섯" } },
+            new Theme { id = "night", n = "달빛 밤", icon = "t_night", from = 20, d = "달빛 아래 발광 버섯이 빛나는 밤의 숲. 필드가 조금 어둡다", fav = new[] { "화경버섯", "독우산광대버섯", "송이버섯", "동충하초", "먹물버섯", "갈색고리갓버섯" } },
+            new Theme { id = "field", n = "들판", icon = "t_field", from = 45, d = "바람 부는 너른 들판. 꽃과 풀 사이에 버섯 고리", fav = new[] { "양송이", "말불버섯", "큰갓버섯", "목도리방귀버섯", "노란각시버섯", "땀버섯" } },
+            new Theme { id = "sea", n = "바다", icon = "t_sea", from = 75, d = "버섯이 해변 모래사장까지 번졌다", fav = new[] { "목이버섯", "흰목이", "이끼꽃버섯", "붉은싸리버섯", "소혀버섯", "꽃송이버섯" } },
+            new Theme { id = "ruins", n = "버섯 폐허 도시", icon = "t_ruins", from = 105, d = "거대 버섯이 집어삼킨 마을. 이야기의 끝", fav = new[] { "먹물버섯", "갈황색미치광이버섯", "말굽버섯", "상황버섯", "마귀광대버섯", "송로버섯" } },
         };
         public static readonly Dictionary<string, Theme> THEME = new Dictionary<string, Theme>();
         public const float THEME_FAV_MUL = 3;
+
+        // 버섯 체력·보상(점수·수확 개수) 배율: 지역마다 ×10, 스테이지마다 ×1.01.
+        // 공격력·타격 점수 단계 노드(+1/+10/+100/+1000)와 단위를 맞춰, 새 지역에 갈 때마다 숫자가 한 자리씩 뛴다.
+        public const double ZONE_STEP = 10, STAGE_GROWTH = 1.01;
+        public static int ThemeIndex(string id) => Math.Max(0, THEMES.FindIndex(t => t.id == id));
+        // 실험(구조안 S1, 사용자 결정 전): 0이 아니면 새 지역의 ×10을 해금 뒤 ZONE_RAMP판에 나눠 올린다(판마다 ×10^(1/ZONE_RAMP)).
+        // 기본 0 = 해금 즉시 ×10(지금 게임). 밸런스 시뮬에서만 명령줄 -ramp 10으로 켠다
+        public static int ZONE_RAMP = 0;
+        public static double ZoneMul(string themeId, int stage)
+        {
+            int i = ThemeIndex(themeId);
+            double e = i;
+            if (ZONE_RAMP > 0 && i >= 1) e = i - 1 + Math.Max(0, Math.Min(1, (stage - THEMES[i].from + 1) / (double)ZONE_RAMP));
+            return Math.Pow(ZONE_STEP, e) * Math.Pow(STAGE_GROWTH, stage - 1);
+        }
 
         // ===== 숲 장치 =====
         public static readonly string[] DEVICE_TYPES = { "stump", "moss", "mole", "stream", "acorn" };

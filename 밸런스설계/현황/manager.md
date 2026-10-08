@@ -1,0 +1,52 @@
+# manager 현황
+지금: 2차 — 사용자 결정 "tuned 기준"(14:15) 반영: 시뮬 프리셋을 tuned로 고정, test에 tuned 기준선·가격 재맞춤 할당, 엑셀 DB(MMM_DB_Ver.02.xlsx) 기록 시작
+
+## 공유할 결과
+- **사용자 결정(14:53): 버섯 판매 = "의뢰 + 전부 판매 가정, 단 빡빡하게 말고 어느 정도 널널하게".** 관리자 코드: `BalanceSim.SELL = true` — 매 판 끝에 `RefreshQuests`·`QuestAll`·창고 전부 `SellMush`, 판 수입(ph.inc)에 포함(명령줄 `-nosell`로 끔). 가격 맞추기 목표 `Plan.finish` 0.97 → 0.85(≈R88, 덜 파는 플레이어 여유). 완료 허용 R84~R104 그대로 · 14:53
+- 엑셀 DB 반영 준비 끝: `BalanceData/db/db_apply_com.py`(Excel COM, Skima 도형 복원 포함). 복사본 시험 통과(관리자가 drawing1.xml 확인). 사용자가 엑셀을 닫으면 적용 · 14:53
+- `Assets/Editor/DbExport.cs` 추가 · 노드 정의·레벨별 효과·가격을 `BalanceData/db/nodes_export.json`으로 내보냄(엑셀 DB 갱신용, 배치: `-executeMethod MoreMush.EditorTools.DbExport.Batch`) · 14:36
+- **사용자 결정(14:13): 2시간(R104)은 "기준선 플레이"이고 조금 빠른 건 괜찮다.** 완료 목표를 R84~R104(약 90분~2시간)로 둔다. `BalanceJob.FINISH_MIN` 0.9 → 0.8(다음 Unity 실행부터, 지금 도는 T3는 0.9 기준이라 더 엄격). 조사 P10(±5%)·verify 견고성 조건은 이 범위로 바꿔 판정 · 14:13
+- 관리자 코드 수정(verify 2단계 지적) · `BalanceSim.PriceCheck` 효율 넘김 허용오차 ×1.05 → ×1.001(0.66이 실제 0.693 기준이던 것), `EnforceShape` 효율 넘김 올림 `Nice(need×1.01)` → `Nice(need×1.06)`(유효숫자 반올림으로 4.8%까지 내려가던 것), `Measure`·가격 맞추기가 판마다 한 줄씩 `balance.log`에 남김(verify#3: 공격력·지역·별) · 13:20
+- [정정] 관리자가 이 파일에 14:xx로 적은 시각은 잘못(시계 확인 안 함). 실제는 12:50~13:20 사이. 이후 시각은 `date`로 확인해 적는다 · 13:20
+- 엑셀 DB `C:/Users/user/Desktop/MMM_DB_Ver.02.xlsx` · 사용자 지정 DB. 쓰는 사람은 관리자 하나. 원본 백업 `BalanceData/db_backup/`. 결과 기록 `Balance_Log` 시트(`BalanceData/db/db_log.py`), T1 기록함. Upgrade·Upgrade_Cost 갱신은 T3(tuned 재맞춤) 뒤 · 14:40
+- `BalanceSim.CROSS` 0.7 → **0.66** (verify manager#7 · 조사 P7 ≥ ×1.5). T3 가격 재맞춤부터 적용 · 14:40
+- `문서.md` "다음 세션 시작점 (2026-10-08 12:45)" · 현재 기준: 트리 완료 R97~R98(102~103분), 최대 뜀 ×1.77, 노드 안 ×4, 효율 넘김 7/7, 단계 겹침(중반 시작 R32~37 < 초반 끝 R41~45) · 13:20
+- `BalanceData/balance_phase_s1~3.json`, `balance_state_s1~3.json`, `price_table.json`, `balance_job.log` · 위 수렴 실행의 시뮬 기록(판별 수입 `inc`, 구매 `buys`, 단계 `first/done`) · 13:20
+
+## 요청
+- [x] #1 → research: Bills Must Be Paid와 인크리멘탈 레벨·경제 디자인을 조사해 `조사.md`에 원칙 P1~Pn(측정 가능한 형태)으로 정리. 이론이 바로 쓸 수 있게 다음은 꼭 수치나 범위로: (a) 다음 구매까지 대기 시간, (b) 레벨당 비용 증가율·노드 안 가격 배율, (c) 효율 구간(단계 업그레이드)이 넘어가는 방식과 효과 배율, (d) 세션·단계 길이 배분, (e) 단계가 겹치는 것이 좋은지. 확인 못 한 것은 "추정" 표시 (13:20) [참고]
+- [x] #2 → theory: 지금 시뮬 기록(`BalanceData/balance_phase_s*.json`)과 실제 공식(`Game.ComputeStats`, `Defs.Nodes.cs` NF, `Defs.World.cs` ZoneMul)으로 판 수입 근사 모델을 만들고, 현재 가격표(`BalanceData/price_table.json`)로 진행을 다시 계산해 트리 완료 R97~R98을 ±15% 안에서 재현할 것. 재현되면 `조사.md` 원칙(아직 없으면 `문서.md` 기준으로 가정)에 비춰 현재 가격의 문제점과 개선 수치안을 `이론.md`에. 레퍼런스 근거가 필요하면 research에, 특정 구성의 판 수입이 필요하면 test에 요청 (13:20) [참고]
+- [x] #3 → verify: 1단계(이론 나오기 전): 현재 상태를 독립 검증 — (a) `Game.ComputeStats`가 형제 노드(I+·II+·III+)를 빠짐없이 더하는지, (b) `BalanceSim.TIER_LINES`의 단계별 효과(per)가 `Defs.Nodes.cs` NF 값과 맞는지, (c) `price_table.json`으로 최대 가격 뜀·노드 안 배율·효율 넘김을 파이썬으로 다시 재서 `balance_job.log`의 ×1.77 · ×4.00 · 7/7과 같은지, (d) `BalanceSim`의 봇 가정(세금 제외·한 판 +30초·가장 느린 시드)이 결과를 어느 쪽으로 치우치게 하는지. 2단계: `이론.md`가 나오면 그 모델을 검증 (13:20) [참고]
+- [x] #4 → test: 기준선 측정 — Unity가 꺼져 있는지 확인 후 원본 프로젝트에서 `BalanceBatch.Measure`를 배치로 돌려 현재 가격표의 시드 1~3 결과를 `테스트.md`에 표로. 시뮬 기록에서 "구매 사이 판 수" 분포(중앙값·최대)와 단계별 구간도 뽑을 것. 실제 확인은 Unity MCP가 끊겨 있으면 건너뛰고 적기. 이후 theory·verify의 측정 요청을 받아 처리. Unity를 돌리는 동안에도 요청보기를 확인할 것 (13:20) [참고]
+
+- [x] #5 → test: (사용자 결정 14:15: 밸런스 기준 = **tuned** 프리셋) 관리자가 `BalanceBatch`·`BalanceJob`이 항상 `BalanceSim.PRESET`("tuned")으로 돌게 고쳤다(명령줄 `-preset spec`으로 바꿀 수 있음, `balance_job.log` 첫 줄에 프리셋 표시). T2: 지금 가격표 그대로 `BalanceBatch.Measure`(tuned) → spec T1과 비교 표. T3: 관리자 승인 — `BalanceBatch.Run`(tuned로 가격 재맞춤, 최대 20회·1회 1~5분) → 결과 표 + `조사.md` 원칙 P1·P6·P10 수치(구매 간격, 5판 중앙 수입 증가, 완료 판). 각 실행 전 `BalanceData/`를 `BalanceData/test/before_<시각>/`에 백업 (14:20) [참고]
+- [x] #6 → theory: (사용자 결정) 기준은 **tuned**. 지금 모델은 spec 기록으로 맞춘 것이니 "spec 기준" 표시를 유지하고, test의 T2(tuned 기록)가 나오면 다시 맞출 것. `조사.md`(P1~P12) 나왔음 — 특히 P6(5판 중앙 수입 ×5 이하, 지역 경계 ×10)과 P7(효율 넘김 ≥ ×1.5, 지금 CROSS 0.7 = ×1.43)·P10(R104 ±5%)을 개선안 기준으로. 개선안은 노드별 `Code_Key`(Defs.Nodes.cs id) 기준 표로 — 관리자가 엑셀 DB에 옮긴다 (14:20) [참고]
+- [x] #7 → verify: (사용자 결정) 기준은 **tuned**. 1단계 결과의 프리셋 관련 결론은 tuned 기준으로 다시 적을 것. `조사.md` 원칙 중 이 프로젝트 결정과 충돌하는 것(P7 "효율 ≥ ×1.5" vs CROSS 0.7, P10 ±5% [추정])을 검토해 의견 (14:20) [참고]
+
+- [x] #8 → verify: 정정 확인: 민감도 결론이 둘이 다르다 — verify 1단계 "수입 ×0.9면 R121 또는 못 끝냄(절벽)" vs theory "현재 가격 ×0.8에서 R109.5, 절벽 없음"(이론.md, theory 반환 14:55). 같은 spec 기록·같은 가격표인데 왜 다른지(지역 판정 규칙, 몬테카를로 잡음 유무, 공격력 배율 보간 A4 등) 원인을 찾아 검증.md 2단계에 적을 것. tuned 재적합 때 같은 실수가 없게 두 스크립트의 민감도 계산을 맞출 것 (14:58) [참고]
+
+- [x] #9 → research: (추가 14:13: 사용자 결정 — 완료 목표 R84~R104, 빠른 쪽 허용. P10도 이 범위로 고칠 것) 원칙 P6(판 수입 연속성 "5판 중앙값 ×5 이하") 보완 — theory 지적: 초반 +1 단위 덧셈 성장은 판당 ×1.4 이상이라 5판 ×5와 원래 안 맞는다(이론.md 2판). 레퍼런스·인크리멘탈 자료로 "구간별(초반/중반/후반) 판 수입 증가율의 적정 범위"와 "지역·단계 전환 때 점프의 적정 크기"를 다시 정하고 조사.md P6를 고칠 것. 이론 구조안 S1(지역 ×10을 해금 뒤 10판에 나눠 올림)이 레퍼런스 관행과 맞는지도 의견 (14:15) [참고]
+
+- [ ] #10 → test: T3가 끝나면 순서대로 — (1) 새 가격표 확인 Measure(시드 1~3) (2) verify#1: `-seeds 4,5,6` (3) verify#2: phase json의 새 `val` 배열로 판매 가치 비율 (4) **T4 구조안 S1 실험**: 관리자가 `Defs.ZONE_RAMP`(기본 0 = 지금 게임) 실험 플래그를 넣었다. `BalanceBatch.Run -ramp 10`으로 S1 + 가격 재맞춤 → T3와 비교표(완료 판·바다 진입 판·P6 5판 중앙값 비·무구매 최대·한 판 최다 구매). **T4 전에 `Assets/Scripts/Core/Defs.Prices.cs`와 `BalanceData/price_table.json`을 `BalanceData/test/prices_T3/`에 복사하고, T4가 끝나면 둘 다 T3 것으로 되돌릴 것**(S1은 사용자 결정 전이라 게임 가격은 T3로 둔다). T4 가격표는 `BalanceData/test/prices_T4_S1/`에 보관. 이어서 `-ramp 10`으로 `-skill 0.75` Measure 한 번(수입 낮은 플레이어 견고성, verify 위험 ③) (14:18) [참고]
+- [x] #11 → theory: verify 2단계 (2) 수정 요청(검증.md) 반영 — 특히 들판 수입을 약 ×0.7로 낮게 잡는 문제(지역별 보정), 가격 올린 안에서 잡음 민감도. T3 기록(판마다 공격력·지역·별)이 나오면 A4를 별 수 함수로 다시 맞추고, research의 "구간 증가율 합산 10^7.8 vs 필요 10^8.4(0.6자릿수 부족)" 확인. 관리자가 S1을 시뮬 실험 플래그(`Defs.ZONE_RAMP`, `-ramp 10`)로 넣었으니 test T4 결과와 모델을 대조할 것 (14:18) [참고]
+
+- [ ] #12 → theory: 정정: 이론.md 3판이 P6를 아직 "5판 ×5"로 판정한다. research가 조사.md P6를 2판(구간별 판당 증가율: 초반 ×1.3~1.6 · 중반 ×1.15~1.3 · 후반 ×1.08~1.2, 경계 램프 가산, 정체 하한)으로 고쳤다 — T3 대조 때 P6 판정과 S1·S5 평가를 2판 기준으로 다시 할 것 (14:24) [참고]
+
+- [ ] #13 → test: (사용자 결정 판매 반영) T4(-ramp 10, 판매 없음)가 끝나면 가격표를 T3로 복원하고, 남은 "-ramp 10 -skill 0.75" Measure는 **취소**(판매 없는 수입 모델이라 의미 없어짐). 이어서 T5: `BalanceBatch.Run`(판매 전부 기본값, 지역 램프 0) — 로그 첫 줄 "판매 전부" 확인, 컴파일 오류 먼저 확인. 결과: 완료 판·P1·P6·판별 판매 몫(ph.inc − 점수골드는 balance.log로). T5 가격표를 `BalanceData/test/prices_T5/`에 보관(이게 새 게임 가격). 그다음 T6: T5 가격표에서 `-ramp 10`으로 Run(S1 + 판매) → prices_T6_S1/에 보관 후 **게임 가격은 T5로 복원** (14:53) [참고]
+- [ ] #14 → theory: (사용자 결정) 판 수입에 판매·의뢰 전부가 들어간다. T5 기록이 나오면 판매 몫을 포함해 재적합하고, S1(T6)과 대조. 판매 수입은 버섯 가치(val)에 비례하니 수확량·판매가 노드가 이제 골드에 직접 기여한다(이전엔 "골드와 무관한 노드 12%") — 가격 순서·효율 넘김 판정에 반영 (14:53) [참고]
+
+## 받은 요청 처리
+- [x] 검증: test verify#1·#2 확인 — 시드 4~6 완료 R91×3, val/수입 비 R10 0.28~0.35 · R40 4.45~6.93 · R70 9.6~10.8 · R100 8.35~11.63 관리자 재계산 일치 (14:53)
+- [x] 검증: T3(가격 재맞춤) 확인 — balance_phase_s1~3.json 재계산: 완료 R90/R91/R91(95~96분), 초반 R32~34·중반 R45, 구매 간격 최대 3/2/2·중앙 1, 한 판 최다 21/19/26레벨. 로그 ×1.75·×3.88·7/7. 가격표 사본 BalanceData/test/prices_T3/. DB 기록은 엑셀이 열려 있어 대기(BalanceData/db/T3.json) (14:36)
+- [x] 검증: theory manager#11 확인 — 지역 보정 뒤 표본 밖(시드 4~6) 편향 +0.03, S1/O1 견고성 같음(×0.8 R108, ×1.25 R85~87), P6 최대 뜀의 구매 몫 ×43은 S1로 안 줄어듦. 단 P6 판정이 옛 기준이라 manager#12로 정정 요청 (14:24)
+- [x] 검증: verify 2단계 (2) 확인 — S1 조건부 통과, 위험 3개(×10 체감 약화=사용자 판단, P6 개선 재현 안 됨, 수입 ×0.8 견고성 모델 간 상반). 관리자 판단: S1은 게임에 넣지 않고 시뮬 실험 플래그로만 측정(T4) 후 사용자에게 결정 요청 (14:18)
+- [x] test#1 → 관리자가 코드 추가: `BalanceSim.PhaseLog.val`(판별 버섯 가치, `ph.Set(..., r.value)`). 지금 도는 T3에는 안 들어감 — T3 뒤 새 가격표 Measure부터 phase json에 `val` 배열이 생긴다. verify#2는 그 Measure로 처리 (14:17)
+- [x] 검증: research manager#9 확인 — P6 2판(구간별 판당 증가율), S1 의견 확인. P10은 정정 2회 뒤 R84~R104로 반영된 것 grep으로 확인 (14:16)
+- [x] 검증: theory 2판 반환 확인 — 옛 theory_fit.json·theory_curve.csv 삭제가 verify.py에 영향 없음 확인(참조 없음). 수치 판정은 verify 2단계 (2)에 맡김 (14:15)
+- [x] 검증: test T2 확인 — before_1313/phase json 재계산: 완료 R75/R75/R75(81분), 초반 R19/R19/R20, 중반 R29/R29/R31, 구매 간격 최대 5/5/4·중앙 1. 테스트 보고와 일치. DB Balance_Log T2 기록 (13:25)
+- [x] 검증: verify 2단계(방법) 확인 — manager#8 원인(별 공격력 보너스 0) 인정·철회 확인. CROSS 허용오차 지적은 BalanceSim.cs:384에서 직접 확인 후 수정 (13:20)
+- [x] verify#3 → 관리자가 코드로 처리: Measure·Run이 판마다 balance.log에 공격력·지역·별 수를 남긴다. test는 T3부터 이 기록을 쓰면 됨 (13:20)
+- [x] 검증: verify manager#3·#7 확인 — 형제 노드 합산(Game.cs 206·219·226)·TIER_LINES 계수 직접 확인, 일치. 정정 반영: 문서.md 공격력 최대 3,775. P10 견고성 조건(시드 6개·수입 ×0.8/×1.25)은 T3 뒤 검토로 보류 (14:40)
+- [x] 검증: research manager#1 확인 — 조사.md §3의 시뮬 수치(무구매 연속 4판 R54~57, 겹침, 완료 R97~98)는 관리자 재계산·test T1과 일치. BMBP 세부 수치 대부분 [추정] 표시 확인. P10 ±5%는 추정이라 목표는 문서.md 기준(약 R104) 유지 (14:18)
+- [x] 검증: test T1(manager#4) 확인 — 관리자가 balance_phase_s1~3.json에서 직접 다시 계산: 트리 완료 R97/R97/R98, 완료 전 산 판 87/87/86, 구매 간격 최대 5/5/4 · 중앙 1 · 평균 1.12/1.10/1.14로 테스트.md와 일치. 출처 줄(balance_job.log:9~25)도 맞음 (14:08)
+- [x] theory#1 → 관리자가 직접 확인: 에디터 PlayerPrefs `mushroomPinball_preset` = "spec"(레지스트리 HKCU\Software\Unity\UnityEditor\DefaultCompany\MoreMustMush, 값 73 70 65 63 = spec). `Defs.LoadPreset()`(Defs.cs:60)이 이 값을 읽으므로 지금까지 모든 배치 시뮬·가격 맞추기는 **spec** 프리셋. 빌드의 새 플레이어는 기본값 **tuned**. 어느 쪽을 기준으로 할지는 사용자 결정 대기 — 그동안 spec 기준으로 계속 (14:05)

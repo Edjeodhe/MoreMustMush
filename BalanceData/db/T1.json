@@ -1,0 +1,6 @@
+{"Exp_ID": "T1", "Exp_Time": "2026-10-08 12:53", "Exp_By": "test", "Preset": "spec (이전 기준)", "Price_Ver": "Defs.Prices.cs 12:39 수렴본",
+ "Seeds": "1,2,3", "Skill": 0.6, "Done_Round": "R97 / R97 / R98", "Done_Min": "102 / 102 / 103",
+ "Done_T1": "R43 / R41 / R45", "Done_T2": "R53 / R53 / R57", "Done_T3": "R97 / R97 / R98",
+ "Buy_Rate": "87 / 87 / 86 판 (104판 중)", "Buy_Gap": "1 / 5판", "Step_Max": 1.77, "Node_Step": 4.0, "Cross": "7/7",
+ "Verdict": "무효 — spec 프리셋으로 잼(새 플레이어 기본 tuned와 다름)", "Checked": "관리자 재계산 일치 (14:08)",
+ "Source": "BalanceData/test/before_1239, 밸런스설계/테스트.md T1", "Note": "사용자 결정(14:15): 기준 = tuned. T2부터 tuned"}

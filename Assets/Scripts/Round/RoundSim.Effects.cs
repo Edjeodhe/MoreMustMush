@@ -29,7 +29,7 @@ namespace MoreMush
         void ChainBolt(Shroom m0, Ball b)
         {
             int P = st.sk["bolt"].P, n = 2 + P;
-            double dmg = st.atk * Math.Pow(2, P) * st.skillDmg * Wk(b);
+            double dmg = st.atk * st.sk["bolt"].pm * st.skillDmg * Wk(b);
             var hit = new HashSet<Shroom> { m0 };
             var pts = new List<Vector2> { new Vector2(m0.x, m0.y) };
             float cx = m0.x, cy = m0.y;
@@ -50,16 +50,16 @@ namespace MoreMush
         void SpawnTornado(Ball b, string side)
         {
             if (tornados.Count >= 4) return;
-            int P = st.sk["tornado"].P; float hh = 50 * Mathf.Pow(1.3f, P);
+            var sk = st.sk["tornado"]; float hh = (float)NF.tornado_h(sk.P);
             float dir = side == "l" ? 1 : side == "r" ? -1 : (b.x < 960 ? 1 : -1);
-            tornados.Add(new Tornado { y = U.Clamp(b.y, FY0 + hh / 2, NO_SPAWN_Y), h = hh, x = dir > 0 ? FX0 : FX1, dir = dir, dmg = st.atk * 2 * Math.Pow(2, P) * st.skillDmg * Wk(b), b = b });
+            tornados.Add(new Tornado { y = U.Clamp(b.y, FY0 + hh / 2, NO_SPAWN_Y), h = hh, x = dir > 0 ? FX0 : FX1, dir = dir, dmg = st.atk * 2 * sk.pm * st.skillDmg * Wk(b), b = b });
             SkillFx("tornado", b.x, b.y); Snd.Skill(420);
         }
 
         void MakeWave(float x, float y, int depth, Ball b)
         {
-            int P = st.sk["shock"].P;
-            waves.Add(new Wave { x = x, y = y, max = 100 * Mathf.Pow(1.2f, P), dmg = st.atk * Math.Pow(2, P) * st.skillDmg * Wk(b), depth = depth, b = b });
+            var sk = st.sk["shock"];
+            waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b });
             if (depth > maxChain) maxChain = depth;
             if (depth > 1) AddLabel($"연쇄 {depth}", x, y - 30, "#ffd0a0", 18 + depth);
             Snd.Skill(260 + depth * 40);

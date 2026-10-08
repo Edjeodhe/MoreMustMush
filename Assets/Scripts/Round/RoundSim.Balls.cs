@@ -216,7 +216,7 @@ namespace MoreMush
                         if (b.stumpT <= 0)
                         {
                             b.stumpT = 0.05f; d.hitT = 0.2f;
-                            AddScore(TIERS[0].score * ScoreMulFor(null, b) * 5 * st.devMul, d.x, d.y - d.r, 0, false, false);
+                            AddScore((TIERS[0].score + st.scoreFlat) * ScoreMulFor(null, b) * 5 * st.devMul, d.x, d.y - d.r, 0, false, false);
                             Snd.Bumper();
                         }
                     }
@@ -231,9 +231,9 @@ namespace MoreMush
                     {
                         foreach (var (p, q) in new[] { (d.a, d.b), (d.b, d.a) })
                         {
-                            if (U.D2(b.x, b.y, p.x, p.y) < 30 * 30)
+                            if (U.D2(b.x, b.y, p.x, p.y) < d.r * d.r)
                             {
-                                b.x = q.x + b.dx * (30 + b.r + 4); b.y = q.y + b.dy * (30 + b.r + 4); b.mole = 1; b.trail.Clear();
+                                b.x = q.x + b.dx * (d.r + b.r + 4); b.y = q.y + b.dy * (d.r + b.r + 4); b.mole = 1; b.trail.Clear();
                                 for (int i = 0; i < 8; i++) AddPart(q.x, q.y, U.Rand(-80, 80), U.Rand(-80, 80), 0.4f, U.Hex("#8a6a4a"), 4);
                                 Snd.Tone(200, 0.12f, Snd.Wave.Sine, 0.4f, 2.5f, "mole");
                                 break;
@@ -246,7 +246,7 @@ namespace MoreMush
                     for (int i = 0; i < 3; i++)
                     {
                         var p = d.pts[i];
-                        if (d.lit[i] == 0 && U.D2(b.x, b.y, p.x, p.y) < (18 + b.r) * (18 + b.r))
+                        if (d.lit[i] == 0 && U.D2(b.x, b.y, p.x, p.y) < (18 * DEV_SCALE + b.r) * (18 * DEV_SCALE + b.r))
                         {
                             d.lit[i] = 1; Snd.Tone(700 + i * 150, 0.08f, Snd.Wave.Triangle, 0.4f);
                             if (d.lit.All(x => x > 0) && d.offT <= 0)
@@ -325,9 +325,9 @@ namespace MoreMush
             if (m.dead) return;
             if (m.cluster || m.giant) amt *= st.heavyMul;
             bool crit = forceCrit || U.Chance((float)st.crit);
-            m.hp -= amt * (crit ? 3 : 1);
+            m.hp -= amt * (crit ? st.critMul : 1);
             m.squish = 1;
-            double sc = TIERS[m.sp.t].score * ScoreMulFor(m, b) * (crit ? 3 : 1) * scoreF;
+            double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF;
             AddScore(sc, m.x, m.y - m.r, m.giant ? 3 : m.sp.t, crit, m.golden);
             if (m.hp <= 0) Harvest(m, b, kind, wave);
         }
@@ -346,7 +346,7 @@ namespace MoreMush
             }
             if (hv == "coin")
             {
-                double g = TIERS[m.sp.t].drop * SELL_PRICE * st.priceMul * a["k"];
+                double g = TIERS[m.sp.t].drop * SELL_PRICE * st.priceMul * a["k"] * st.zoneMul;
                 bonusGold += g; coinGold += g;
                 if (texts.Count < 20) texts.Add(new FloatText { x = m.x + U.Rand(-10, 10), y = m.y - m.r - 18, v = g, coin = true });
                 Snd.Tone(1200, 0.05f, Snd.Wave.Triangle, 0.25f, 1.3f, "coin", 0.05f);

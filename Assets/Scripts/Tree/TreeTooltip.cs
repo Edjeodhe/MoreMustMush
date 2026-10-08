@@ -22,7 +22,8 @@ namespace MoreMush
             lv.text = $"LVL {L} / {n.max}";
             desc.text = Iconize(n.d);
             string costTxt = "", noteTxt = "";
-            if (s == "locked") eff.text = $"선행: {NODE[n.parent].n}";
+            if (s == "locked")
+                eff.text = n.needMax ? $"선행: {NODE[n.parent].n} 최대 레벨 ({Lv(n.parent)}/{NODE[n.parent].max})" : $"선행: {NODE[n.parent].n}";
             else
             {
                 eff.text = n.eff(L) + (L < n.max ? $"\n<b>→</b> {n.eff(L + 1)}" : "");
