@@ -16,8 +16,10 @@ namespace MoreMush
 
         public void Render()
         {
-            sub.text = "수확기마다 <color=#3a8a2a>고유 능력</color>이 달라요(우열 없음). <color=#3a8a2a>활성화</color>한 수확기들 중에서 핀볼마다 무작위로 나오고, 분열·분신으로 생긴 핀볼도 무작위예요.\n" +
-                $"지금 활성: {string.Join(" · ", ActiveHvs().Select(id => HV[id].n))}. 강화하면 별(최대 5성)이 오르며 능력이 세지고, 5성이면 날이 늘어요.";
+            int on = OnHvs().Count, slots = HvSlots();
+            string count = on > slots ? $"<color=#d04a3a>{on}/{slots}</color>" : $"{on}/{slots}";
+            sub.text = Loc.T("수확기마다 <color=#3a8a2a>고유 능력</color>이 달라요. 영구 핀볼마다 <color=#3a8a2a>장착 칸</color>이 하나씩 있고, 켠 수확기가 한 칸씩 차지해요(같은 종류는 하나만). 남은 칸은 기본 수확기가 채우고, 분열·분신으로 생긴 핀볼은 기본 수확기 분신(공격력 20%)이에요.") + "\n" +
+                Loc.F("장착 {0}: {1}", count, string.Join(" · ", ActiveHvs().Select(id => HV[id].n))) + (on > slots ? $"  <color=#d04a3a>{Loc.T(GameFlow.HV_OVER_MSG)}</color>" : "");
             goldText.text = $"{UIUtil.Ic("gold")}{U.Fmt(G.gold)}";
             foreach (var c in cards) c.Render();
             foreach (var w in weathers) w.Render();

@@ -30,7 +30,7 @@ namespace MoreMush
                 tab.GetComponentInChildren<TMP_Text>().color = on ? Color.white : U.Hex("#3b2414");
             }
             var p = BulkBuy(Branches, 0, true);
-            plan.text = $"보유 {U.Fmt(G.gold)}골드 → 강화 <color=#2a6ab8>{p.levels}</color>단계 · 비용 <color=#2a6ab8>{U.Fmt(p.spent)}</color>골드 · 남는 골드 {U.Fmt(G.gold - p.spent)}";
+            plan.text = Loc.F("보유 {0}골드 → 강화 <color=#2a6ab8>{1}</color>단계 · 비용 <color=#2a6ab8>{2}</color>골드 · 남는 골드 {3}", U.Fmt(G.gold), p.levels, U.Fmt(p.spent), U.Fmt(G.gold - p.spent));
             goButton.interactable = p.levels > 0;
         }
 
@@ -41,7 +41,7 @@ namespace MoreMush
             if (res.levels == 0) { Snd.Err(); return; }
             GameFlow.I.tree.world.MarkGrown(G.nodes.Where(kv => kv.Value > 0 && !before.Contains(kv.Key)).Select(kv => kv.Key));
             Snd.Buy(); GameFlow.I.CloseModal(); GameFlow.I.tree.Refresh();
-            GameFlow.I.ShowToast($"{res.levels}단계 강화 완료! (−{U.Fmt(res.spent)}골드)");
+            GameFlow.I.ShowToast(Loc.F("{0}단계 강화 완료! (−{1}골드)", res.levels, U.Fmt(res.spent)));
         }
     }
 }

@@ -81,12 +81,12 @@ namespace MoreMush
 
         public static string UnlockText(Species sp)
         {
-            if (sp.init) return "처음부터 등장";
-            if (sp.boss > 0) return $"스테이지 {sp.boss} 보스 · 스테이지 {sp.boss} 도달 시 해금 (현재 {StageNow()})";
-            if (sp.theme != null) { var t = THEME[sp.theme]; return $"{t.n} 지역 전용 (스테이지 {t.from}부터, 그 지역에서만 등장)"; }
+            if (sp.init) return Loc.T("처음부터 등장");
+            if (sp.boss > 0) return Loc.F("스테이지 {0} 보스 · 스테이지 {1} 도달 시 해금 (현재 {2})", sp.boss, sp.boss, StageNow());
+            if (sp.theme != null) { var t = THEME[sp.theme]; return Loc.F("{0} 지역 전용 (스테이지 {1}부터, 그 지역에서만 등장)", t.n, t.from); }
             double have = G.codex.TryGetValue(sp.afterId, out var e) ? e.n : 0;
             var pre = SP[sp.afterId];
-            return $"{(Harvested(pre.id) || IsUnlockedSp(pre) ? pre.n : "???")} {Math.Min(have, sp.cnt)}/{sp.cnt}개 수확 시 해금";
+            return Loc.F("{0} {1}/{2}개 수확 시 해금", (Harvested(pre.id) || IsUnlockedSp(pre) ? pre.n : "???"), Math.Min(have, sp.cnt), sp.cnt);
         }
 
         public static List<string> CheckUnlocks()
@@ -159,21 +159,26 @@ namespace MoreMush
             return (levels, spent);
         }
 
-        // ===== 창고·판매 =====
-        // 같은 능력치에 붙는 보너스(노드·코어·꼬마·별·세트)는 곱하지 않고 더한다
-        public static double PriceMul() => PriceMul(StarAbilities());
-        // 이미 계산한 별 능력치를 넘겨 받으면 StarAbilities()를 다시 만들지 않는다 (같은 값, 같은 덧셈 순서)
-        public static double PriceMul(Dictionary<string, double> ab) => NF.ed_price(Lv("ed_price")) + NF.ed_price2(Lv("ed_price2")) + (Lv("core_ed") > 0 ? 0.1 : 0) + ab["price"] + GoldenSetBonus();
-        public static double UnitPrice(Species sp, double pm) => TIERS[sp.t].drop * SELL_PRICE * pm;
-        public static double InvCount(string id) => Math.Floor(G.inv.TryGetValue(id, out var v) ? v : 0);
-        public static double InvTotal(string cat = null) { double n = 0; foreach (var sp in SPECIES) if (cat == null || sp.c == cat) n += InvCount(sp.id); return n; }
-        public static double InvValue(string cat = null) { double pm = PriceMul(), v = 0; foreach (var sp in SPECIES) if (cat == null || sp.c == cat) v += InvCount(sp.id) * UnitPrice(sp, pm); return v; }
+        // ===== 정산 골드 =====
+        // 버섯 판매가 없어진 뒤, 예전 판매가 보너스(노드·코어·별 능력치)는 정산 골드 +%로 쓴다. 보너스끼리는 더한다
+        public static double SettleBonus(Dictionary<string, double> ab) =>
+            (NF.ed_price(Lv("ed_price")) - 1) + NF.ed_price2(Lv("ed_price2")) + (NF.ed_trade(Lv("ed_trade")) - 1) + (Lv("core_ed") > 0 ? 0.1 : 0) + ab["price"];
+        // 버섯 한 개의 골드 값어치 (엽전 수확기가 쓴다): 등급 기본가 × (1 + 정산 보너스 + 황금 세트)
+        public static double PriceMul(Dictionary<string, double> ab) => 1 + SettleBonus(ab) + GoldenSetBonus();
 
         // ===== 수확기·날씨 =====
+        // 장착 칸 = 영구 핀볼 수. 수확기는 종류마다 한 칸씩, 남은 칸은 기본 수확기로 채운다
+        public static int HvSlots() => 1 + Lv("ps_ball") + Lv("ps_ball2") + Lv("ps_ball3");
+        public static List<string> OnHvs() => HARVESTERS.Where(h => HvOn(h.id)).Select(h => h.id).ToList();
+        // 켠 수확기가 장착 칸보다 많으면 라운드를 시작할 수 없다
+        public static bool HvOver() => OnHvs().Count > HvSlots();
+        // 이번 라운드의 장착 목록 (길이 = 장착 칸, i번째 영구 핀볼이 i번째 수확기)
         public static List<string> ActiveHvs()
         {
-            var a = HARVESTERS.Where(h => G.hv.ContainsKey(h.id) && (!G.hvOn.TryGetValue(h.id, out var on) || on)).Select(h => h.id).ToList();
-            return a.Count > 0 ? a : new List<string> { "sam" };
+            int slots = HvSlots();
+            var a = OnHvs().Take(slots).ToList();
+            while (a.Count < slots) a.Add(BASE_HV);
+            return a;
         }
         public static bool WeatherOpen(Weather w) => w.need == 0 || CodexCount() >= w.need;
         public static string RollWeather() => U.PickWeighted(WEATHERS.Where(WeatherOpen).ToList(), w => w.p).id;
@@ -191,7 +196,7 @@ namespace MoreMush
             var ab = st.ab = StarAbilities();
             bool Core(string id) => Lv(id) > 0;
             st.hvs = ActiveHvs();
-            st.hvStar = st.hvs.ToDictionary(id => id, id => G.hv.TryGetValue(id, out var s) ? s : 1);
+            st.hvStar = st.hvs.Distinct().ToDictionary(id => id, id => G.hv.TryGetValue(id, out var s) ? s : 1);
             // 노드·코어·별 능력치·꼬마 보너스는 더하고, 날씨(라운드마다 바뀌는 조건)만 곱한다
             // 지역 배율: 버섯 체력·점수·수확 개수가 함께 커진다
             st.zoneMul = ZoneMul(st.theme.id, st.stage);
@@ -226,7 +231,7 @@ namespace MoreMush
             st.maxCol = Math.Max(4, (int)U.JsRound(st.maxCol * area));
             st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"]) * (wId == "moon" ? 3 : 1);
             st.devices = Math.Max(1, (int)U.JsRound(NF.ed_dev(Lv("ed_dev")) * area));
-            st.permBalls = 1 + Lv("ps_ball") + Lv("ps_ball2") + Lv("ps_ball3");
+            st.permBalls = st.hvs.Count;
             st.comboWin = COMBO_WINDOW;
             st.meteor = Lv("gm_meteor") > 0 ? NF.gm_meteor(Lv("gm_meteor")) : (NF.Meteor?)null;
             st.wanderP = wId == "autumn" ? 0.3 : 0.08;
@@ -238,7 +243,7 @@ namespace MoreMush
             st.debuffDur = 3 * (wId == "wind" ? 2 : 1) * NF.ps_resist(Lv("ps_resist")) * NF.gm_toxin(Lv("gm_toxin"));
             st.goldBonus = (1 + GoldenSetBonus()) * (wId == "rainbow" ? 1.5 : 1);
             st.harvestMul *= INCOME_MUL;
-            st.goldMul = st.goldBonus * SCORE_GOLD;
+            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab));
             st.giantP = wId == "rainbow" ? 1 : NF.ed_giant(Lv("ed_giant"));
             st.specialP = SPECIAL_P + NF.ed_special(Lv("ed_special"));
             st.specialLife = NF.ed_special_life(Lv("ed_special"));

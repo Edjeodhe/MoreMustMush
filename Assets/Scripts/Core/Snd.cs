@@ -10,7 +10,15 @@ namespace MoreMush
         public enum Wave { Sine, Triangle, Square, Saw }
 
         public static Snd I;
-        public static bool muted;
+        const string MutePref = "mmm_mute";
+        static bool mutedV;
+        static bool muteLoaded;
+        // 소리 끔은 기기에 남긴다 (옵션 화면·M키)
+        public static bool muted
+        {
+            get { if (!muteLoaded) { muteLoaded = true; mutedV = PlayerPrefs.GetInt(MutePref, 0) == 1; } return mutedV; }
+            set { muteLoaded = true; if (mutedV == value) return; mutedV = value; PlayerPrefs.SetInt(MutePref, value ? 1 : 0); PlayerPrefs.Save(); }
+        }
         public static float vol = 0.2f;
         const int RATE = 44100;
 

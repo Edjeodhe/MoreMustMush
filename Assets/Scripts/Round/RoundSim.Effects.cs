@@ -65,7 +65,7 @@ namespace MoreMush
             var sk = st.sk["shock"];
             waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b });
             if (depth > maxChain) maxChain = depth;
-            if (depth > 1) AddLabel($"연쇄 {depth}", x, y - 30, "#ffd0a0", 18 + depth);
+            if (depth > 1) AddLabel(Loc.F("연쇄 {0}", depth), x, y - 30, "#ffd0a0", 18 + depth);
             Snd.Skill(260 + depth * 40);
         }
 
@@ -99,7 +99,7 @@ namespace MoreMush
             double hp = st.atk * 2;   // 수확기로 직접 2번 맞히면 잡힌다
             float life = (float)st.specialLife;
             special = new SpecialMush { kind = kind, x = pos.x, y = pos.y, r = 50, hp = hp, maxHp = hp, t = life, max = life, hopT = 0.4f };
-            AddLabel($"{kind.n} 등장! {life}초 안에 잡아요!", pos.x, pos.y - 80, kind.c2, 34);
+            AddLabel(Loc.F("{0} 등장! {1}초 안에 잡아요!", kind.n, life), pos.x, pos.y - 80, kind.c2, 34);
             shake = Mathf.Max(shake, 0.3f); Snd.Rare();
             for (int i = 0; i < 20; i++) AddPart(pos.x, pos.y, U.Rand(-200, 200), U.Rand(-260, -40), 0.6f, i % 2 == 1 ? U.Hex(kind.c1) : Color.white, 5);
         }
@@ -119,14 +119,14 @@ namespace MoreMush
             if (!HasSpecial(k.id))
             {
                 G.specials[k.id] = true; specialGot = k.id; SaveGame();
-                AddLabel($"{k.n} 포획! 영구 능력 획득", sm.x, sm.y - 70, "#fff7c2", 38);
-                AddLabel(k.n + " · 버섯 농장에 들어와요!", sm.x, sm.y - 20, k.c2, 24);
+                AddLabel(Loc.F("{0} 포획! 영구 능력 획득", k.n), sm.x, sm.y - 70, "#fff7c2", 38);
+                AddLabel(Loc.F("{0} · 세계수에 들어와요!", k.n), sm.x, sm.y - 20, k.c2, 24);
             }
             else
             {
                 double bonus = Math.Ceiling(StageGold(StageNow()) * 0.3);
                 bonusGold += bonus;
-                AddLabel($"{k.n} 포획! 보너스 +{U.Fmt(bonus)}골드", sm.x, sm.y - 70, "#ffe36e", 34);
+                AddLabel(Loc.F("{0} 포획! 보너스 +{1}골드", k.n, U.Fmt(bonus)), sm.x, sm.y - 70, "#ffe36e", 34);
             }
             flash = Mathf.Max(flash, 0.6f); shake = Mathf.Max(shake, 0.6f);
             hitstop = Mathf.Max(hitstop, 0.15f); hitstopCd = 0.6f;
@@ -149,7 +149,7 @@ namespace MoreMush
             if (sm.t <= 0)
             {
                 special = null;
-                AddLabel($"{U.Iga(sm.kind.n)} 숲으로 도망쳤어요…", sm.x, sm.y - 50, "#e8dcc4", 28);
+                AddLabel(Loc.F("{0} 숲으로 도망쳤어요…", U.Iga(sm.kind.n)), sm.x, sm.y - 50, "#e8dcc4", 28);
                 for (int i = 0; i < 16; i++) AddPart(sm.x, sm.y, U.Rand(-80, 80), U.Rand(-120, -20), 0.6f, new Color(230 / 255f, 230 / 255f, 220 / 255f, 0.9f), 8);
             }
         }
@@ -233,7 +233,7 @@ namespace MoreMush
                     double hp = T.hp * 40 * st.shroomHp;
                     var g = new Shroom { sp = sp, x = giantWarn.x, y = giantWarn.y, r = 90, hp = hp, maxHp = hp, giant = true, golden = U.Chance((float)st.golden), solid = true, spore = sp.spore, grow = 0.5f };
                     giant = g; shrooms.Add(g); giantWarn = null; giantState = "up";
-                    AddLabel($"거대 {sp.n} 등장!", g.x, g.y - 130, "#ffffff", 40);
+                    AddLabel(Loc.F("거대 {0} 등장!", sp.n), g.x, g.y - 130, "#ffffff", 40);
                     for (int i = 0; i < 40; i++) AddPart(g.x + U.Rand(-90, 90), g.y + U.Rand(40, 90), U.Rand(-150, 150), U.Rand(-300, -80), 0.8f, U.Hex("#8a6a4a"), 6);
                 }
             }
@@ -257,7 +257,7 @@ namespace MoreMush
             }
             // 도토리
             if (acornT > 0) acornT -= h;
-            foreach (var d in devices) if (d.type == "acorn" && d.offT > 0) { d.offT -= h; if (d.offT <= 0) d.lit = new int[3]; }
+            devices.RemoveAll(d => d.gone);
             foreach (var d in devices) if (d.hitT > 0) d.hitT -= h;
         }
 
@@ -308,7 +308,7 @@ namespace MoreMush
                 if (!newRec.Contains(k) && prev > 0 && CurRec(k) > prev)
                 {
                     newRec.Add(k);
-                    AddLabel("신기록! " + RECORD_NAMES[k], WW / 2, WH * 0.28f, "#ffef7a", 40);
+                    AddLabel(Loc.F("신기록! {0}", RECORD_NAMES[k]), WW / 2, WH * 0.28f, "#ffef7a", 40);
                     Snd.Record();
                 }
             }
@@ -415,19 +415,20 @@ namespace MoreMush
             public int harvests;
         }
 
-        // 점수 → 골드, 수확한 버섯 → 창고 (prototype finishRound)
+        // 지금까지 모은 점수·보너스로 받을 정산 골드 (라운드 중 HUD가 보여 준다)
+        public double GoldSoFar => Math.Floor(score * st.goldMul) + Math.Floor(bonusGold);
+
+        // 점수 → 골드 (prototype finishRound). 수확한 버섯은 도감·의뢰 진행에만 쓰이고 창고에 쌓이지 않는다
         public Summary Finish()
         {
             double scoreGold = Math.Floor(score * st.goldMul);
             double bonus = Math.Floor(bonusGold);
-            double val = Math.Floor(value);
             G.gold += scoreGold + bonus;
-            var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = val, net = scoreGold + bonus, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold) };
-            foreach (var kv in bag) G.inv[kv.Key] = (G.inv.TryGetValue(kv.Key, out var v) ? v : 0) + kv.Value;
+            var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold) };
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
-            if (G.rounds % QUEST_EVERY == 0) G.quests.Clear();   // 마을 의뢰는 몇 라운드마다 새로
-            if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hv["gold"] = 1; G.hvOn["gold"] = true; s.goldHv = true; }
+            QuestOnRound(harvests, picks, maxCombo);
+            if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hvOn["gold"] = OnHvs().Count < HvSlots(); G.hv["gold"] = 1; s.goldHv = true; }
             var newTheme = THEMES.FirstOrDefault(th => th.from > 1 && th.from == StageNow());
             if (newTheme != null) G.theme = newTheme.id;
             s.unlocks = CheckUnlocks();

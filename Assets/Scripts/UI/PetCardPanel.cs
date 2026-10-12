@@ -33,19 +33,19 @@ namespace MoreMush
 
             pic.Set(id, CharSkinOn(id));
             ring.color = e == 2 ? new Color(1, 0.82f, 0.23f, 0.85f) : e == 1 ? new Color(0.56f, 0.94f, 0.78f, 0.85f) : new Color(1, 1, 1, 0);
-            evoStars.text = e == 0 ? "진화 전" : $"진화 {e}단계";
+            evoStars.text = e == 0 ? Loc.T("진화 전") : Loc.F("진화 {0}단계", e);
             title.text = EvoName(k);
-            perk.text = $"보유 효과: {FxText(id)}" + (st < CSTAR.max ? $" <color=#8a6a4a>(다음 별: {U.Pct(FxOf(id, st + 1))})</color>" : "");
+            perk.text = Loc.F("보유 효과: {0}", FxText(id)) + (st < CSTAR.max ? " <color=#8a6a4a>" + Loc.F("(다음 별: {0})", U.Pct(FxOf(id, st + 1))) + "</color>" : "");
 
             // 별 등급
             gradeStars.text = $"<color=#e8a900>{new string('★', st)}</color><color=#d9c6a2>{new string('★', CSTAR.max - st)}</color>";
-            gradeInfo.text = $"건설 속도 +{U.Pct(CSTAR.build * st)} · 버섯 따기 속도 +{U.Pct(CSTAR.work * st)} <color=#8a6a4a>(별마다 +{U.Pct(CSTAR.build)})</color>";
+            gradeInfo.text = Loc.F("건설 속도 +{0} · 버섯 따기 속도 +{1} <color=#8a6a4a>(별마다 +{2})</color>", U.Pct(CSTAR.build * st), U.Pct(CSTAR.work * st), U.Pct(CSTAR.build));
             var cost = StarCost(id);
             UIUtil.Show(starUp, cost != null); UIUtil.Show(starMax, cost == null);
             if (cost != null)
             {
                 starUp.interactable = G.gold >= cost.Value.gold && G.gem >= cost.Value.gem;
-                starUpText.text = $"★{st + 1} 강화  <size=80%>{UIUtil.Ic("gold")}{U.Fmt(cost.Value.gold)} {UIUtil.Ic("gem")}{cost.Value.gem}</size>";
+                starUpText.text = Loc.F("★{0} 강화  <size=80%>{1}{2} {3}{4}</size>", st + 1, UIUtil.Ic("gold"), U.Fmt(cost.Value.gold), UIUtil.Ic("gem"), cost.Value.gem);
             }
 
             int heartCount = Mathf.Min(FARM.hearts, hearts.Length, heartFills.Length);
@@ -59,26 +59,26 @@ namespace MoreMush
                 UIUtil.Show(heartFills[i], part);
                 if (part) heartFills[i].fillAmount = HeartFrac(id);
             }
-            note.text = full ? (e < FARM.evoMax ? "가득 찼어요! 진화할 수 있어요" : "가득") : $"다음 칸까지 부탁 {HeartLeft(id)}번 (한 칸 = 부탁 {per}번)";
+            note.text = full ? (e < FARM.evoMax ? Loc.T("가득 찼어요! 진화할 수 있어요") : Loc.T("가득")) : Loc.F("다음 칸까지 부탁 {0}번 (한 칸 = 부탁 {1}번)", HeartLeft(id), per);
             list.text =
-                $"· 부탁 보상: 균사석 ×{U.FmtN(FARM.evoGem[e])} {(e < FARM.evoMax ? $"(진화하면 ×{U.FmtN(FARM.evoGem[e + 1])})" : "")} · {UIUtil.Ic("dia")} 가끔, 호감도 칸을 채우면 +{FARM.diaHeart}\n" +
-                $"· 호감도 보너스: 부탁 때 <b>{U.JsRound(FARM.bonusP * h * 100)}%</b> 확률로 균사석 +1~{2 + e}\n" +
-                $"· 부탁 간격 ×{U.FmtN(FARM.evoWait[e])} · 진화 일 속도 ×{U.FmtN(FARM.evoSpd[e])}";
+                Loc.F("· 부탁 보상: 균사석 ×{0} {1} · 가끔 +1, 호감도 칸을 채우면 +{2}", U.FmtN(FARM.evoGem[e]), e < FARM.evoMax ? Loc.F("(진화하면 ×{0})", U.FmtN(FARM.evoGem[e + 1])) : "", FARM.gemHeart) + "\n" +
+                Loc.F("· 호감도 보너스: 부탁 때 <b>{0}%</b> 확률로 균사석 +1~{1}", U.JsRound(FARM.bonusP * h * 100), 2 + e) + "\n" +
+                Loc.F("· 부탁 간격 ×{0} · 진화 일 속도 ×{1}", U.FmtN(FARM.evoWait[e]), U.FmtN(FARM.evoSpd[e]));
 
             bool max = e >= FARM.evoMax;
             UIUtil.Show(evolve, !max); UIUtil.Show(evoMax, max);
-            if (!max) { evolve.interactable = full; evolveText.text = $"진화하기 → {EvoName(k, e + 1)}"; }
+            if (!max) { evolve.interactable = full; evolveText.text = Loc.F("진화하기 → {0}", EvoName(k, e + 1)); }
 
             if (SkinOwn(sk.id))
             {
                 skinAction.act = "wearskin"; skinAction.arg = sk.id + "|card";
-                skinText.text = worn ? $"{sk.n} 착용 중 (벗기)" : $"{sk.n} 입기";
+                skinText.text = worn ? Loc.F("{0} 착용 중 (벗기)", sk.n) : Loc.F("{0} 입기", sk.n);
                 skinImage.color = worn ? U.Hex("#b8f0d8") : new Color(1, 1, 1, 0.75f);
             }
             else
             {
                 skinAction.act = "skinshop"; skinAction.arg = null;
-                skinText.text = $"스킨 상점: {sk.n} ({UIUtil.Ic("dia")}{sk.price})";
+                skinText.text = Loc.F("스킨 상점: {0} ({1}{2})", sk.n, UIUtil.Ic("gem"), sk.price);
                 skinImage.color = new Color(1, 1, 1, 0.75f);
             }
         }

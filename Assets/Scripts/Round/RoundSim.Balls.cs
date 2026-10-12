@@ -38,7 +38,9 @@ namespace MoreMush
             for (int i = 0; i < n; i++)
             {
                 if (balls.Count >= MAX_BALLS) break;
-                var b = MakeBall(x, y, false, null, life * (float)st.tempLife, small);
+                // 스킬로 생긴 수확기는 기본 수확기 모양의 분신 (공격력 CLONE_STAT 배)
+                var b = MakeBall(x, y, false, BASE_HV, life * (float)st.tempLife, small);
+                b.statMul = CLONE_STAT;
                 float a = baseAng.HasValue ? baseAng.Value + (i - (n - 1) / 2f) * 0.4f + U.Rand(-0.15f, 0.15f) : U.Rand(0, U.TAU);
                 b.dx = Mathf.Cos(a); b.dy = Mathf.Sin(a); FixDir(b);
                 balls.Add(b); made.Add(b);
@@ -60,7 +62,14 @@ namespace MoreMush
             Snd.Launch();
         }
 
-        static float Wk(Ball b) => b != null && b.weak > 0 ? 0.5f : 1;
+        // 수확기 한 개의 공격력 배율: 약화 구름 ×0.5, 분신 ×statMul, 그루터기 버프
+        float Wk(Ball b)
+        {
+            if (b == null) return 1;
+            float m = (b.weak > 0 ? 0.5f : 1) * b.statMul;
+            if (b.stumpAtk > 0) m *= 1 + (STUMP_ATK_MUL - 1) * (float)st.devMul;
+            return m;
+        }
 
         float EffMul(Ball b)
         {
@@ -73,7 +82,7 @@ namespace MoreMush
 
         void UpdateBall(Ball b, float h)
         {
-            b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.clear -= h; b.magnet -= h; b.mole -= h; b.stumpT -= h; b.bladeFx -= h;
+            b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.clear -= h; b.magnet -= h; b.stumpAtk -= h; b.stumpT -= h; b.bladeFx -= h;
             if (!b.perm)
             {
                 b.life -= h;
@@ -141,8 +150,6 @@ namespace MoreMush
             float v = b.spd * EffMul(b);
             float py = b.y;
             b.x += b.dx * v * h; b.y += b.dy * v * h;
-            foreach (var d in devices)
-                if (d.type == "stream" && b.x > d.x0 && b.x < d.x1 && b.y > d.y0 && b.y < d.y1) { b.x += d.fx * 250 * h; b.y += d.fy * 250 * h; }
             // 벽
             if (b.x - b.r < FX0) { b.x = FX0 + b.r; b.dx = Mathf.Abs(b.dx); FixDir(b); WallHit(b, "l"); }
             else if (b.x + b.r > FX1) { b.x = FX1 - b.r; b.dx = -Mathf.Abs(b.dx); FixDir(b); WallHit(b, "r"); }
@@ -219,7 +226,7 @@ namespace MoreMush
                         float nx = ddx / dl, ny = ddy / dl, dot = b.dx * nx + b.dy * ny;
                         if (dot < 0) { b.dx -= 2 * dot * nx; b.dy -= 2 * dot * ny; FixDir(b); }
                         b.x = d.x + nx * (rr + 0.5f); b.y = d.y + ny * (rr + 0.5f);
-                        b.spd = (float)st.launch * 1.5f;
+                        b.stumpAtk = STUMP_ATK_DUR;
                         if (b.stumpT <= 0)
                         {
                             b.stumpT = 0.05f; d.hitT = 0.2f;
@@ -232,16 +239,7 @@ namespace MoreMush
                 {
                     if (b.x > d.x0 && b.x < d.x1 && b.y > d.y0 && b.y < d.y1) b.moss = 2;
                 }
-                else if (d.type == "mole")
-                {
-                    if (b.mole <= 0)
-                    {
-                        // a 구멍 → b, 아니면 b 구멍 → a (예전 순서 그대로, 배열을 만들지 않게 펼쳐 씀)
-                        if (U.D2(b.x, b.y, d.a.x, d.a.y) < d.r * d.r) MoleWarp(b, d, d.b);
-                        else if (U.D2(b.x, b.y, d.b.x, d.b.y) < d.r * d.r) MoleWarp(b, d, d.a);
-                    }
-                }
-                else if (d.type == "acorn")
+                else if (d.type == "acorn" && !d.gone)
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -249,10 +247,10 @@ namespace MoreMush
                         if (d.lit[i] == 0 && U.D2(b.x, b.y, p.x, p.y) < (18 * DEV_SCALE + b.r) * (18 * DEV_SCALE + b.r))
                         {
                             d.lit[i] = 1; Snd.Tone(700 + i * 150, 0.08f, Snd.Wave.Triangle, 0.4f);
-                            if (d.lit[0] > 0 && d.lit[1] > 0 && d.lit[2] > 0 && d.offT <= 0)
+                            if (d.lit[0] > 0 && d.lit[1] > 0 && d.lit[2] > 0)
                             {
-                                acornT = 5 * (float)st.devMul; d.offT = 1;
-                                AddLabel("도토리 점등! 점수 ×2", (d.pts[0].x + d.pts[2].x) / 2, d.pts[1].y - 40, "#ffe070", 30);
+                                acornT = 5 * (float)st.devMul; d.gone = true;   // 한 번 버프를 주고 사라진다 (RoundSim.Effects가 치움)
+                                AddLabel(Loc.T("도토리 점등! 점수 ×2"), (d.pts[0].x + d.pts[2].x) / 2, d.pts[1].y - 40, "#ffe070", 30);
                             }
                         }
                     }
@@ -286,7 +284,6 @@ namespace MoreMush
             if (Proc("accel")) { b.accel = 3 * (float)st.buffMul; b.accelMul = 1 + 0.15f * (float)sk["accel"].pm; SkillFx("accel", b.x, b.y); }
             if (Proc("sharpen")) { b.sharpen = Mathf.CeilToInt(3 * (float)st.buffMul); b.sharpMul = 2 * (float)sk["sharpen"].pm; SkillFx("sharpen", b.x, b.y); }
             if (Proc("split")) { SpawnTemp(b.x, b.y - 4, 1 + sk["split"].P, 6, false, Mathf.Atan2(b.dy, b.dx)); SkillFx("split", b.x, b.y); }
-            if (Proc("sip")) { AddTime(0.3f * (float)sk["sip"].pm, "sip", b.x, b.y); SkillFx("sip", b.x, b.y); }
             if (Proc("clear")) { b.clear = 1.5f * (float)sk["clear"].pm * (float)st.buffMul; b.slow = 0; b.weak = 0; SkillFx("clear", b.x, b.y); }
             if (st.kidP > 0 && U.Chance((float)st.kidP)) { SpawnTemp(b.x, b.y - 4, 1, 8, true, -Mathf.PI / 2 + U.Rand(-0.7f, 0.7f)); SkillFx("md_kid", b.x, b.y); }
         }
@@ -299,8 +296,8 @@ namespace MoreMush
             string n = null, col = "#ffffff";
             if (SKILLS.TryGetValue(id, out var s)) { n = s.n; col = s.col; }
             else if (NODE.TryGetValue(id, out var nd)) { n = nd.n; col = nd.col ?? "#ffffff"; }
-            else if (id == "spark") { n = "찌릿 번개"; col = "#ffe03a"; }
-            else if (id == "hv_split") { n = "세포 분열"; col = "#ff8a80"; }
+            else if (id == "spark") { n = Loc.T("찌릿 번개"); col = "#ffe03a"; }
+            else if (id == "hv_split") { n = Loc.T("세포 분열"); col = "#ff8a80"; }
             if (n != null) AddLabel(n + "!", x, y - 30, col, 20);
         }
 
@@ -341,7 +338,7 @@ namespace MoreMush
             string hv = b.hv; var a = HV[hv].ab(b.hs);
             if (hv == "gold" && !m.golden && !m.dead && U.Chance((float)a["p"]))
             {
-                m.golden = true; AddLabel("황금!", m.x, m.y - m.r - 20, "#ffd23a", 22);
+                m.golden = true; AddLabel(Loc.T("황금!"), m.x, m.y - m.r - 20, "#ffd23a", 22);
                 for (int i = 0; i < 8; i++) AddPart(m.x, m.y, U.Rand(-120, 120), U.Rand(-160, -40), 0.5f, U.Hex("#ffe36e"), 4);
             }
             if (hv == "coin")
@@ -364,7 +361,6 @@ namespace MoreMush
             if (m.spore != null && m.sporeCd <= 0 && U.Chance((float)st.sporeP)) { m.sporeCd = 2; SpawnCloud(m.x, m.y, m.spore); }
             var sk = st.sk;
             if (sk["burst"].on && U.Chance((float)sk["burst"].p)) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
-            if (sk["tspore"].on && U.Chance((float)sk["tspore"].p)) { AddTime(0.3f * (float)sk["tspore"].pm, "tspore", b.x, b.y); Flash("tspore"); }
             if (sk["magnet"].on && U.Chance((float)sk["magnet"].p)) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
             if (sk["bolt"].on && U.Chance((float)(sk["bolt"].p * (st.wId == "thunder" ? 2 : 1)))) { ChainBolt(m, b); SkillFx("bolt", b.x, b.y); }
         }
@@ -380,19 +376,12 @@ namespace MoreMush
         {
             var sp = m.sp; double n = st.harvestMul;
             bag[sp.id] = (bag.TryGetValue(sp.id, out var v) ? v : 0) + n; gains[sp.c] += n;
-            value += n * UnitPrice(sp, st.priceMul); saleBump = 1;
+            saleBump = 1;
             if (flyers.Count < 120) flyers.Add(new Flyer { x = m.x, y = m.y, sx = m.x, sy = m.y, dur = 0.5f, sp = sp, cat = sp.c });
         }
 
         readonly List<Shroom> jellyBuf = new List<Shroom>();   // StepBall에서 지금 젤리 안에 있는 버섯 (서브스텝마다 새 리스트를 만들지 않게)
 
-        // 두더지 굴: 들어간 반대편 구멍(to)으로 튀어나온다
-        void MoleWarp(Ball b, Device d, Vector2 to)
-        {
-            b.x = to.x + b.dx * (d.r + b.r + 4); b.y = to.y + b.dy * (d.r + b.r + 4); b.mole = 1; b.trail.Clear();
-            for (int i = 0; i < 8; i++) AddPart(to.x, to.y, U.Rand(-80, 80), U.Rand(-80, 80), 0.4f, U.Hex("#8a6a4a"), 4);
-            Snd.Tone(200, 0.12f, Snd.Wave.Sine, 0.4f, 2.5f, "mole");
-        }
 
         void SamCleave(Shroom m0, Ball b)
         {
@@ -411,28 +400,28 @@ namespace MoreMush
             m.dead = true; m.hp = 0;
             var sp = m.sp;
             double drop = m.dropMul * st.harvestMul * (m.golden ? 5 : 1) * (m.giant ? 30 : 1) * (sp.c == "ps" ? st.poisonMul : 1) * (festOn ? st.festMul : 1);
-            if (st.multiP > 0 && U.Chance((float)st.multiP)) { drop *= 3; AddLabel("×3 배수 획득!", m.x, m.y - m.r - 34, "#ffe36e", 24); }
+            if (st.multiP > 0 && U.Chance((float)st.multiP)) { drop *= 3; AddLabel(Loc.T("×3 배수 획득!"), m.x, m.y - m.r - 34, "#ffe36e", 24); }
             gains[sp.c] += drop;
             bag[sp.id] = (bag.TryGetValue(sp.id, out var bv) ? bv : 0) + drop;
             harvests++; killT[sp.t]++;
+            picks[sp.id] = (picks.TryGetValue(sp.id, out var pc) ? pc : 0) + 1;
             ComboHit();
-            value += drop * UnitPrice(sp, st.priceMul);
             saleBump = 1;
             int star0 = StarOf(sp.id);
             if (!G.codex.TryGetValue(sp.id, out var e)) e = G.codex[sp.id] = new SaveData.CodexEntry();
             if (e.n <= 0)
             {
                 e.first = G.rounds + 1; newSpecies.Add(sp.id); codexShake = 1;
-                AddLabel("새 버섯! " + sp.n, m.x, m.y - 50, "#fff7c2", 30);
+                AddLabel(Loc.F("새 버섯! {0}", sp.n), m.x, m.y - 50, "#fff7c2", 30);
             }
             e.n++;
             int star1 = StarOf(sp.id);
             if (star1 > star0)
             {
                 newStars.Add((sp.id, star1));
-                AddLabel($"{new string('★', star1)} {sp.n} {star1}성! {AB[sp.ab].n} {AbFmt(sp.ab, AbPerStar(sp))}", m.x, m.y - 80, "#ffe36e", 26);
+                AddLabel(Loc.F("{0} {1} {2}성! {3} {4}", new string('★', star1), sp.n, star1, AB[sp.ab].n, AbFmt(sp.ab, AbPerStar(sp))), m.x, m.y - 80, "#ffe36e", 26);
             }
-            if (m.golden && !e.gold) { e.gold = true; newGolden.Add(sp.id); AddLabel("황금 " + sp.n + "!", m.x, m.y - 80, "#ffd23a", 30); }
+            if (m.golden && !e.gold) { e.gold = true; newGolden.Add(sp.id); AddLabel(Loc.F("황금 {0}!", sp.n), m.x, m.y - 80, "#ffd23a", 30); }
             if (m.giant) e.giant = true;
             // 연출
             var col = U.Hex(CATS[sp.c].color);
@@ -455,7 +444,7 @@ namespace MoreMush
                 rings.Add(new Ring { x = m.x, y = m.y, r = m.r * 2.2f, dur = 0.35f, col = CATS[sp.c].color });
                 Snd.Tone(300, 0.18f, Snd.Wave.Sine, 0.7f, 2.2f, "heap", 0.05f);
             }
-            if (m.giant) { hitstop = 0.3f; hitstopCd = 0.8f; flash = 0.8f; shake = 1; Snd.Rare(); giant = null; AddLabel("거대 버섯 수확!", m.x, m.y - 120, "#ffffff", 44); }
+            if (m.giant) { hitstop = 0.3f; hitstopCd = 0.8f; flash = 0.8f; shake = 1; Snd.Rare(); giant = null; AddLabel(Loc.T("거대 버섯 수확!"), m.x, m.y - 120, "#ffffff", 44); }
             else if (sp.t >= 2)
             {
                 if (hitstopCd <= 0) { hitstop = Mathf.Max(hitstop, sp.t == 3 ? 0.12f : 0.06f); hitstopCd = 0.6f; }
@@ -469,7 +458,7 @@ namespace MoreMush
                 m.col.alive--;
                 if (m.col.alive <= 0) { colonies.Remove(m.col); regen.Add((float)st.regen); }
             }
-            if (b != null && b.hv == "sam" && kind != "skill" && U.Chance((float)HV["sam"].ab(b.hs)["p"])) queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
+            if (b != null && b.hv == "sam" && b.statMul >= 1 && kind != "skill" && U.Chance((float)HV["sam"].ab(b.hs)["p"])) queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
             var sk = st.sk;
             if (kind == "shock")
             {
@@ -481,11 +470,6 @@ namespace MoreMush
             }
             else if (sk["shock"].on && U.Chance((float)sk["shock"].p)) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
             if (sk["clone"].on && U.Chance((float)sk["clone"].p)) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
-            if (sk["device"].on && deviceSpawned < 10 && U.Chance((float)sk["device"].p))
-            {
-                var d = PlaceDevice(U.Pick(DEVICE_TYPES), new Vector2(m.x, m.y));
-                if (d != null) { deviceSpawned++; SkillFx("device", m.x, m.y); }
-            }
         }
 
         void AddScore(double v, float x, float y, int tier, bool crit, bool golden)
@@ -506,18 +490,6 @@ namespace MoreMush
         {
             if (labels.Count > 10) labels.RemoveAt(0);
             labels.Add(new Label { text = text, x = U.Clamp(x, 120, WW - 120), y = U.Clamp(y, 80, WH - 60), col = col, size = size });
-        }
-
-        void AddTime(float amount, string kind, float x, float y)
-        {
-            float cap = kind == "tspore" ? 15 : 10;
-            float used = kind == "tspore" ? tsporeUsed : sipUsed;
-            float a = Mathf.Min(amount, cap - used);
-            if (a <= 0) return;
-            if (kind == "tspore") tsporeUsed += a; else sipUsed += a;
-            timeLeft += a; timeMax = Mathf.Max(timeMax, timeLeft);
-            if (flyers.Count < 90) flyers.Add(new Flyer { x = x, y = y, sx = x, sy = y, dur = 0.6f, clock = true, tx = 960 / ZOOM, ty = 32 / ZOOM });
-            AddLabel($"+{U.FmtN(a, 1)}초", x, y - 20, "#9ee6ff", 20);
         }
     }
 }

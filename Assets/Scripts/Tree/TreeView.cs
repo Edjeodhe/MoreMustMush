@@ -61,10 +61,12 @@ namespace MoreMush
                 trunks[i].positionCount = 2;
                 trunks[i].SetPosition(0, Vector3.zero); trunks[i].SetPosition(1, Art.P(h.x, h.y));
                 trunks[i].startColor = trunks[i].endColor = lit ? U.Hex("#f2e6c8") : new Color(240 / 255f, 225 / 255f, 195 / 255f, 0.45f);
-                hubText[i] ??= CATS[br].name + " 균사";
+                if (hubLang != Loc.Lang) hubText[i] = null;
+                hubText[i] ??= Loc.F("{0} 균사", CATS[br].name);
                 UIUtil.SetText(hubLabels[i], hubText[i]);
                 hubLabels[i].transform.localPosition = Art.P(h.x + (br == "ed" ? 70 : br == "md" ? 58 : -58), h.y + (br == "ed" ? 0 : 34));
             }
+            hubLang = Loc.Lang;
             grandpa.transform.localPosition = Art.P(-14, 82 + Mathf.Sin(now * 2) * 2);
 
             HandleInput();
@@ -72,6 +74,7 @@ namespace MoreMush
         }
 
         readonly string[] hubText = new string[3];
+        string hubLang;                         // hubText를 만든 언어 (바뀌면 다시 만든다)
 
         TreeNodeView Hit(Vector2 s)
         {
@@ -167,7 +170,7 @@ namespace MoreMush
         {
             var n = nv.Node;
             string st = NodeState(n);
-            if (st == "locked") { Snd.Err(); GameFlow.I.ShowToast(n.needMax ? "앞 단계를 최대 레벨까지 올려야 열려요" : "선행 노드를 먼저 사야 열려요"); return; }
+            if (st == "locked") { Snd.Err(); GameFlow.I.ShowToast(n.needMax ? Loc.T("앞 단계를 최대 레벨까지 올려야 열려요") : Loc.T("선행 노드를 먼저 사야 열려요")); return; }
             if (st == "max") return;
             int before = Lv(n.id);
             int k = max ? BuyMax(n) : BuyNode(n) ? 1 : 0;
@@ -176,12 +179,12 @@ namespace MoreMush
                 Snd.Buy(); if (before == 0) nv.growAnim = 0;
                 screen.Refresh(); screen.tooltip.Show(n, s);
                 screen.Burst(s, U.Hex(CATS[n.br].color));
-                if (k > 1) GameFlow.I.ShowToast($"{n.n} +{k}단계 한 번에 강화!");
+                if (k > 1) GameFlow.I.ShowToast(Loc.F("{0} +{1}단계 한 번에 강화!", n.n, k));
             }
             else
             {
                 Snd.Err();
-                GameFlow.I.ShowToast(n.gem && G.gold >= NodeCost(n, Lv(n.id)).gold ? "균사석이 부족해요 (버섯 농장에서 얻어요)" : "골드가 부족해요");
+                GameFlow.I.ShowToast(n.gem && G.gold >= NodeCost(n, Lv(n.id)).gold ? Loc.T("균사석이 부족해요 (세계수에서 얻어요)") : Loc.T("골드가 부족해요"));
             }
         }
 

@@ -30,7 +30,7 @@ namespace MoreMush
         // 지난 프레임에 그린 상태. 이것이 같고 자라는 애니메이션도 없으면 선·레벨 칸·속 그림·이름표를 다시 만들지 않는다
         // (노드 108개가 매 프레임 LineRenderer 점 수천 개와 이름표 문자열을 새로 만들고 있었다)
         bool? shownHidden;
-        string shownS, shownSt; int shownL = -1; bool shownHover, shownLabel;
+        string shownS, shownSt; int shownL = -1; bool shownHover, shownLabel; string shownLang;
         static readonly Vector3[] linkBuf = new Vector3[21], arcBuf = new Vector3[11];   // SetPositions가 복사하므로 노드끼리 같이 써도 된다
 
         static void Show(Component c, bool on) => UIUtil.Show(c, on);
@@ -63,8 +63,8 @@ namespace MoreMush
             float sc = hover ? 1.15f : 1;
             bool locked = st == "locked";
             bool labelOn = !locked && (!n.sub || hover || camZ > 0.8f || n.core);
-            bool dirty = growAnim >= 0 || s != shownS || st != shownSt || L != shownL || hover != shownHover || labelOn != shownLabel;
-            shownS = s; shownSt = st; shownL = L; shownHover = hover; shownLabel = labelOn;
+            bool dirty = growAnim >= 0 || s != shownS || st != shownSt || L != shownL || hover != shownHover || labelOn != shownLabel || shownLang != Loc.Lang;
+            shownS = s; shownSt = st; shownL = L; shownHover = hover; shownLabel = labelOn; shownLang = Loc.Lang;
 
             // 연결 균사 (부모 → 나)
             bool owned = L > 0;
@@ -162,18 +162,18 @@ namespace MoreMush
             {
                 if (n.core)
                 {
-                    label.text = ""; line2.text = st == "max" ? "열림" : $"{U.Fmt(cost.gold)}G";
+                    label.text = ""; line2.text = st == "max" ? Loc.T("열림") : $"{U.Fmt(cost.gold)}G";
                     line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : MAX;
                     line2.transform.localPosition = Art.P(0, r + 14);
                 }
                 else
                 {
-                    label.text = n.sub ? n.n.Substring(n.n.LastIndexOf(' ') + 1) : n.n;
+                    label.text = n.sub ? n.subLabel : n.n;
                     label.fontSize = (n.sub ? 15 : 18) / 10f;
                     label.color = n.gem ? U.Hex("#a8f5d4") : st == "poor" ? U.Hex("#cbbfa8") : U.Hex("#fff6e0");
                     label.transform.localPosition = Art.P(0, r + 14);
                     string lvTxt = n.max > 1 ? $"Lv {L}/{n.max}" : "";
-                    string costTxt = cost.gold > 0 && cost.gem > 0 ? $"{U.Fmt(cost.gold)}G + 균사석 {U.Fmt(cost.gem)}" : cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : cost.gem > 0 ? $"균사석 {U.Fmt(cost.gem)}" : "";
+                    string costTxt = cost.gold > 0 && cost.gem > 0 ? Loc.F("{0}G + 균사석 {1}", U.Fmt(cost.gold), U.Fmt(cost.gem)) : cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : cost.gem > 0 ? Loc.F("균사석 {0}", U.Fmt(cost.gem)) : "";
                     line2.text = st == "max" ? (n.max > 1 ? $"MAX {L}/{n.max}" : "MAX") : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
                     line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : MAX;
                     line2.transform.localPosition = Art.P(0, r + 32);

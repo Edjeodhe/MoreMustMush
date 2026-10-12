@@ -32,24 +32,24 @@ namespace MoreMush
                 var a = U.Hex(sk.aura); a.a = 0.45f; hvAura.color = a;
             }
             title.text = sk.n;
-            who.text = ch ? (has ? EvoName(SPC[sk.of]) : "아직 못 잡은 꼬마") : (has ? HV[sk.of].n : "아직 없는 수확기");
+            who.text = ch ? (has ? EvoName(SPC[sk.of]) : Loc.T("아직 못 잡은 꼬마")) : (has ? HV[sk.of].n : Loc.T("아직 없는 수확기"));
 
             if (!own)
             {
-                action.act = "buyskin"; button.interactable = G.dia >= sk.price;
-                buttonText.text = $"{UIUtil.Ic("dia")}{sk.price} 구입";
+                action.act = "buyskin"; button.interactable = G.gem >= sk.price;
+                buttonText.text = Loc.F("{0}{1} 구입", UIUtil.Ic("gem"), sk.price);
                 buttonImage.color = Color.white;
             }
             else if (!has)
             {
                 action.act = "none"; button.interactable = false;
-                buttonText.text = ch ? "꼬마를 잡으면 입혀요" : "수확기를 얻으면 써요";
+                buttonText.text = ch ? Loc.T("꼬마를 잡으면 입혀요") : Loc.T("수확기를 얻으면 써요");
                 buttonImage.color = Color.white;
             }
             else
             {
                 action.act = "wearskin"; button.interactable = true;
-                buttonText.text = worn ? "착용 중 (벗기)" : "착용하기";
+                buttonText.text = worn ? Loc.T("착용 중 (벗기)") : Loc.T("착용하기");
                 buttonImage.color = worn ? U.Hex("#9fd2ff") : new Color(1, 1, 1, 0.75f);
             }
             action.arg = sk.id;

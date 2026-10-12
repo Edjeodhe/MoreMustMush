@@ -329,7 +329,7 @@ namespace MoreMush
         readonly Dictionary<object, TextSlot> slotOf = new Dictionary<object, TextSlot>();
         readonly Dictionary<int, string> comboStr = new Dictionary<int, string>();
         int textFrame;
-        string specialStr; int specialTenths = -1; Special specialKind;
+        string specialStr, specialLang; int specialTenths = -1; Special specialKind;
 
         void DrawTexts(RoundSim R, float z)
         {
@@ -339,7 +339,7 @@ namespace MoreMush
                 float life = t.tier >= 2 ? 1.2f : 0.8f, k = t.t / life;
                 float size = TierSizes[t.tier] * (t.crit ? 1.1f : 1), pop = t.t < 0.1f ? 0.6f + t.t * 4 : 1;
                 string col = t.coin ? "#ffd23a" : t.golden ? "#ffd23a" : t.crit ? "#ff5a4a" : TierCols[t.tier];
-                t.view ??= t.coin ? $"+{U.FmtN(t.v, 1)}G" : (t.crit ? "치명! " : "+") + U.Fmt(t.v);   // 값이 바뀌지 않으니 한 번만 만든다
+                t.view ??= t.coin ? $"+{U.FmtN(t.v, 1)}G" : (t.crit ? Loc.T("치명!") + " " : "+") + U.Fmt(t.v);   // 값이 바뀌지 않으니 한 번만 만든다
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
             foreach (var l in R.labels)
@@ -354,7 +354,7 @@ namespace MoreMush
             {
                 var sm = R.special; float rr = sm.r + 22;
                 int tenths = Mathf.RoundToInt(sm.t * 10);   // F1 표시가 바뀔 때만 다시 만든다
-                if (tenths != specialTenths || sm.kind != specialKind) { specialTenths = tenths; specialKind = sm.kind; specialStr = $"{sm.kind.n} {sm.t:F1}초"; }
+                if (tenths != specialTenths || sm.kind != specialKind || specialLang != Loc.Lang) { specialTenths = tenths; specialKind = sm.kind; specialLang = Loc.Lang; specialStr = Loc.F("{0} {1:F1}초", sm.kind.n, sm.t); }
                 Text(sm, specialStr, sm.x, sm.y - rr - 14 - 16, 18, 1, "#ffffff", 1, z);
             }
             ReleaseTexts(false);

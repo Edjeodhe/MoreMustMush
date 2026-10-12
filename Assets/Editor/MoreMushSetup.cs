@@ -39,7 +39,6 @@ namespace MoreMush.EditorTools
                 ["UI/btn_danger"] = (w, h) => Uniform(w, h, 0.42f),
                 ["UI/bar_log"] = (w, h) => new Vector4(Mathf.Min(w * 0.2f, h * 1.6f), 0, Mathf.Min(w * 0.2f, h * 1.6f), 0),
                 ["Props/moss"] = (w, h) => Uniform(w, h, 0.3f),
-                ["Props/stream"] = (w, h) => Uniform(w, h, 0.3f),
             };
             foreach (var kv in rules)
             {
@@ -80,42 +79,12 @@ namespace MoreMush.EditorTools
             Debug.Log($"[MoreMush] SpriteDB: {db.entries.Count} sprites");
         }
 
-        // ===== Fonts: Jua (display) with Noto Sans KR fallback, and Noto for body text =====
+        // ===== Fonts: 언어별 제목·본문 폰트 세트 (LocTools) =====
         [MenuItem("MoreMush/Build Font Assets")]
         public static void BuildFontAssets()
         {
-            var noto = MakeFontAsset("Assets/Fonts/NotoSansKR-Regular.ttf", "Assets/Fonts/NotoSansKR SDF.asset");
-            var jua = MakeFontAsset("Assets/Fonts/Jua-Regular.ttf", "Assets/Fonts/Jua SDF.asset");
-            if (jua.fallbackFontAssetTable == null) jua.fallbackFontAssetTable = new List<TMP_FontAsset>();
-            if (!jua.fallbackFontAssetTable.Contains(noto)) jua.fallbackFontAssetTable.Add(noto);
-            EditorUtility.SetDirty(jua);
-            var settings = TMP_Settings.instance;
-            if (settings != null)
-            {
-                var so = new SerializedObject(settings);
-                so.FindProperty("m_defaultFontAsset").objectReferenceValue = jua;
-                so.ApplyModifiedPropertiesWithoutUndo();
-            }
-            AssetDatabase.SaveAssets();
-            ProjectOptimization.BakeFonts();
-        }
-
-        static TMP_FontAsset MakeFontAsset(string ttf, string path)
-        {
-            var existing = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path);
-            if (existing != null) return existing;
-            var font = AssetDatabase.LoadAssetAtPath<Font>(ttf);
-            var fa = TMP_FontAsset.CreateFontAsset(font, 64, 8, UnityEngine.TextCore.LowLevel.GlyphRenderMode.SDFAA, 2048, 2048, AtlasPopulationMode.Dynamic, true);
-            fa.name = Path.GetFileNameWithoutExtension(path);
-            AssetDatabase.CreateAsset(fa, path);
-            // atlas texture and material must live inside the font asset
-            fa.atlasTextures[0].name = fa.name + " Atlas";
-            AssetDatabase.AddObjectToAsset(fa.atlasTextures[0], fa);
-            fa.material.name = fa.name + " Material";
-            AssetDatabase.AddObjectToAsset(fa.material, fa);
-            EditorUtility.SetDirty(fa);
-            AssetDatabase.SaveAssets();
-            return fa;
+            LocTools.BuildFonts();
+            LocTools.BakeFonts();
         }
 
         // ===== Inline icons for TMP text: <sprite name="gold"> =====
@@ -205,14 +174,7 @@ namespace MoreMush.EditorTools
             Mat("Assets/Materials/SpriteAdditive.mat", "MoreMush/Sprite", m => m.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.One));
             Mat("Assets/Materials/WeatherMask.mat", "MoreMush/WeatherMask", null);
             Mat("Assets/Materials/UIFx.mat", "MoreMush/UISprite", null);
-            // TMP outline presets used by field numbers, labels and titles
-            var jua = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/Jua SDF.asset");
-            if (jua != null)
-            {
-                OutlinePreset(jua, "Jua Outline Dark", new Color32(0x2a, 0x1a, 0x10, 255), 0.28f);
-                OutlinePreset(jua, "Jua Outline Wood", new Color32(0x3b, 0x24, 0x14, 255), 0.22f);
-                OutlinePreset(jua, "Jua Outline Brown", new Color32(0x5a, 0x2a, 0x00, 255), 0.3f);
-            }
+            // TMP 외곽선 프리셋은 폰트마다 LocTools.BuildFonts가 만든다
             AssetDatabase.SaveAssets();
         }
 
@@ -221,18 +183,6 @@ namespace MoreMush.EditorTools
             var m = AssetDatabase.LoadAssetAtPath<Material>(path);
             if (m == null) { m = new Material(Shader.Find(shader)); AssetDatabase.CreateAsset(m, path); }
             setup?.Invoke(m);
-            EditorUtility.SetDirty(m);
-        }
-
-        static void OutlinePreset(TMP_FontAsset font, string name, Color32 col, float width)
-        {
-            string path = $"Assets/Fonts/{name}.mat";
-            var m = AssetDatabase.LoadAssetAtPath<Material>(path);
-            if (m == null) { m = new Material(font.material); AssetDatabase.CreateAsset(m, path); }
-            m.EnableKeyword("OUTLINE_ON");
-            m.SetColor(ShaderUtilities.ID_OutlineColor, col);
-            m.SetFloat(ShaderUtilities.ID_OutlineWidth, width);
-            m.SetFloat(ShaderUtilities.ID_FaceDilate, width * 0.5f);
             EditorUtility.SetDirty(m);
         }
     }

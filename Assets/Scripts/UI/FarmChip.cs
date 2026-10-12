@@ -40,7 +40,7 @@ namespace MoreMush
             title.text = EvoName(k) + (st > 0 ? $" <color=#e8a900><size=80%>★{st}</size></color>" : "");
             UIUtil.Show(evoBadge, evo);
             UIUtil.Show(evoStars, !evo && EvoOf(k.id) > 0);
-            evoStars.text = $"진화 {EvoOf(k.id)}";
+            evoStars.text = Loc.F("진화 {0}", EvoOf(k.id));
             RefreshTime();
         }
 

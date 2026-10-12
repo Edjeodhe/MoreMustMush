@@ -9,7 +9,10 @@ namespace MoreMush
         // ===== 날씨 =====
         public class Weather
         {
-            public string id, n, icon, d;
+            public string id, icon;
+            public string nKo, dKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+            public string d { get => Loc.T(dKo); set => dKo = value; }
             public float p, favMul = 1;
             public bool good;
             public int need = 0, favTier = -1;
@@ -36,7 +39,10 @@ namespace MoreMush
         // ===== 지역 (기본 트리 2시간 기준: 숲 1 · 밤 20 · 들판 45 · 바다 75 · 폐허 105스테이지부터) =====
         public class Theme
         {
-            public string id, n, icon, d;
+            public string id, icon;
+            public string nKo, dKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+            public string d { get => Loc.T(dKo); set => dKo = value; }
             public int from;
             public string[] fav;
             public HashSet<string> favIds = new HashSet<string>();
@@ -68,14 +74,23 @@ namespace MoreMush
         }
 
         // ===== 숲 장치 =====
-        public static readonly string[] DEVICE_TYPES = { "stump", "moss", "mole", "stream", "acorn" };
-        public static readonly Dictionary<string, string> DEVICE_NAME = new Dictionary<string, string>
+        // 라운드 시작 때만 놓인다 (라운드 중 생성 스킬은 없음)
+        public static readonly string[] DEVICE_TYPES = { "stump", "moss", "acorn" };
+        public static readonly LocMap DEVICE_NAME = new LocMap(new Dictionary<string, string>
         {
-            ["stump"] = "그루터기 범퍼", ["moss"] = "이끼 길", ["mole"] = "두더지 굴", ["stream"] = "개울", ["acorn"] = "도토리 스위치",
-        };
+            ["stump"] = "그루터기 범퍼", ["moss"] = "이끼 길", ["acorn"] = "도토리 스위치",
+        });
+        // 그루터기에 튕긴 수확기: 공격력 ×(1 + (STUMP_ATK_MUL-1)×숲 장치 강화), STUMP_ATK_DUR초 (다시 맞으면 시간만 갱신)
+        public const float STUMP_ATK_MUL = 1.5f, STUMP_ATK_DUR = 3f;
 
         // ===== 도감 세트 =====
-        public class CodexSet { public string id, n, d, cat; public string[] m; public List<string> ids; }
+        public class CodexSet
+        {
+            public string id, cat; public string[] m; public List<string> ids;
+            public string nKo, dKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+            public string d { get => Loc.T(dKo); set => dKo = value; }
+        }
         public static readonly List<CodexSet> SETS = new List<CodexSet>
         {
             new CodexSet { id = "amanita", n = "광대버섯 가문", m = new[] { "광대버섯", "뱀껍질광대버섯", "알광대버섯", "개나리광대버섯", "독우산광대버섯", "마귀광대버섯" }, d = "독버섯 수확량 +30%" },
@@ -96,7 +111,12 @@ namespace MoreMush
         public const float COMBO_WINDOW = 1.5f;
         public static readonly (int at, string n, float mul)[] FEVER = { (25, "FEVER!", 1.5f), (70, "SUPER FEVER!!", 2f) };
         public const int FLAME_STEP = 10000;
-        public class Flame { public string n, icon, text, @out; public UnityEngine.Color core, mid, edge; }
+        public class Flame
+        {
+            public string icon, text, @out; public UnityEngine.Color core, mid, edge;
+            public string nKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+        }
         // generated burst icon tinted with the palette's text colour (the prototype used 🔥🔵🟣🟢⚪)
         const string FLAME_ICON = "<sprite name=\"s_burst\" tint=1>";
         public static readonly Flame[] FLAME =

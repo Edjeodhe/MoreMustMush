@@ -163,12 +163,12 @@ namespace MoreMush
             if (FarmReady(p.id))
             {
                 var r = FarmServe(p.id).Value; SaveGame(); Snd.Buy();
-                Say(p, r.full ? "호감도 가득! 진화할 수 있어!" : U.Pick(FARM_LINES["thanks"]), free ? "heart" : null);
+                Say(p, r.full ? Loc.T("호감도 가득! 진화할 수 있어!") : U.Pick(FARM_LINES["thanks"]), free ? "heart" : null);
                 AddFloat(p.x, p.y - 200, $"+{r.gem}", true, U.Hex("#a8f5d4"));
-                if (r.bonus > 0) AddFloat(p.x + 60, p.y - 240, $"보너스 +{r.bonus}", true, U.Hex("#ffe36e"), -0.15f);
-                if (r.dia > 0) AddFloat(p.x - 70, p.y - 240, $"{UIUtil.Ic("dia")}+{r.dia}", false, U.Hex("#f2b8ff"), -0.1f);
+                if (r.bonus > 0) AddFloat(p.x + 60, p.y - 240, Loc.F("보너스 +{0}", r.bonus), true, U.Hex("#ffe36e"), -0.15f);
+                if (r.extra > 0) AddFloat(p.x - 70, p.y - 240, Loc.F("추가 +{0}", r.extra), true, U.Hex("#a8f5d4"), -0.1f);
                 GemBurst(p.x, p.y - 40, 12);
-                if (r.heart) AddFloat(p.x, p.y - 280, $"호감도 {HeartStr(p.id)}", false, U.Hex("#ff7aa8"), -0.3f);
+                if (r.heart) AddFloat(p.x, p.y - 280, Loc.F("호감도 {0}", HeartStr(p.id)), false, U.Hex("#ff7aa8"), -0.3f);
                 dirty = true;
                 return;
             }
@@ -176,32 +176,32 @@ namespace MoreMush
             if (p.state == "build") { Say(p, U.Pick(FARM_LINES["build"]), null); return; }
             if (p.job >= 0) { Say(p, U.Pick(FARM_LINES["field"]), null); return; }
             string anim = U.Pick(FARM_ANIMS.Keys.ToList());
-            Say(p, anim == "sleep" ? "쿨쿨... 음냐..." : U.Pick(FARM_LINES[p.id].Concat(FARM_LINES["all"]).ToList()), anim);
+            Say(p, anim == "sleep" ? Loc.T("쿨쿨... 음냐...") : U.Pick(FARM_LINES[p.id].Concat(FARM_LINES["all"]).ToList()), anim);
         }
 
         // 모두 돌보기 → (돌본 꼬마 수, 균사석, 보너스, 다이아몬드)
-        public (int n, int gem, int bonus, int dia) CareAll()
+        public (int n, int gem, int bonus, int extra) CareAll()
         {
-            int n = 0, gem = 0, bonus = 0, dia = 0;
+            int n = 0, gem = 0, bonus = 0, extra = 0;
             foreach (var p in crits)
             {
                 var rr = FarmServe(p.id); if (rr == null) continue;
                 var r = rr.Value;
-                n++; gem += r.gem; bonus += r.bonus; dia += r.dia;
-                Say(p, r.full ? "호감도 가득! 진화할 수 있어!" : U.Pick(FARM_LINES["thanks"]), p.job < 0 && p.state != "build" ? "jump" : null);
+                n++; gem += r.gem; bonus += r.bonus; extra += r.extra;
+                Say(p, r.full ? Loc.T("호감도 가득! 진화할 수 있어!") : U.Pick(FARM_LINES["thanks"]), p.job < 0 && p.state != "build" ? "jump" : null);
                 AddFloat(p.x, p.y - 200, $"+{r.gem + r.bonus}", true, U.Hex("#a8f5d4"));
                 GemBurst(p.x, p.y - 40, 5);
             }
             if (n > 0) { SaveGame(); dirty = true; }
-            return (n, gem, bonus, dia);
+            return (n, gem, bonus, extra);
         }
 
         public void Evolved(string id)
         {
             var p = crits.FirstOrDefault(q => q.id == id);
             if (p == null) return;
-            Say(p, "반짝반짝… 몸이 커졌어!", "spin");
-            AddFloat(p.x, p.y - 200, "진화!", false, U.Hex("#ffe36e"));
+            Say(p, Loc.T("반짝반짝… 몸이 커졌어!"), "spin");
+            AddFloat(p.x, p.y - 200, Loc.T("진화!"), false, U.Hex("#ffe36e"));
             Stars(p.x, p.y - 50);
         }
 
@@ -209,7 +209,7 @@ namespace MoreMush
         {
             var p = crits.FirstOrDefault(q => q.id == id);
             if (p == null) return;
-            Say(p, "힘이 솟아나! 더 열심히 할게!", p.job < 0 && p.state != "build" ? "jump" : null);
+            Say(p, Loc.T("힘이 솟아나! 더 열심히 할게!"), p.job < 0 && p.state != "build" ? "jump" : null);
             AddFloat(p.x, p.y - 200, $"★{CStarOf(id)}", false, U.Hex("#ffe36e"));
             Stars(p.x, p.y - 50);
         }
@@ -217,9 +217,9 @@ namespace MoreMush
         public void TreeLeveled()
         {
             var top = tree.Top;
-            AddFloat(TREE.x, top - 30, $"버섯 나무 Lv.{TreeLv()}!", false, U.Hex("#ffe36e"));
+            AddFloat(TREE.x, top - 30, Loc.F("세계수 나무 Lv.{0}!", TreeLv()), false, U.Hex("#ffe36e"));
             Stars(TREE.x, (top + TREE.y) / 2);
-            foreach (var p in crits) if (p.job < 0 && p.state != "build" && Vector2.Distance(new Vector2(p.x, p.y), new Vector2(TREE.x, TREE.y)) < 500) Say(p, "나무가 커졌다!", "jump");
+            foreach (var p in crits) if (p.job < 0 && p.state != "build" && Vector2.Distance(new Vector2(p.x, p.y), new Vector2(TREE.x, TREE.y)) < 500) Say(p, Loc.T("나무가 커졌다!"), "jump");
         }
 
         void Stars(float x, float y) { for (int i = 0; i < 30; i++) { float a = U.Rand(0, U.TAU), v = U.Rand(80, 300); parts.Add(new Part { k = "star", x = x, y = y, vx = Mathf.Cos(a) * v, vy = Mathf.Sin(a) * v, life = U.Rand(0.6f, 1.1f) }); } }
@@ -309,7 +309,7 @@ namespace MoreMush
                         if (y != null)
                         {
                             SaveSoon(); dirty = true; Snd.Buy();
-                            AddFloat(pos.x, pos.y - 30, $"+{y.Value.gem}{(y.Value.spore > 0 ? $"  포자 +{y.Value.spore}" : "")}", true, U.Hex("#a8f5d4"));
+                            AddFloat(pos.x, pos.y - 30, $"+{y.Value}", true, U.Hex("#a8f5d4"));
                             GemBurst(pos.x, pos.y, 6);
                         }
                     }
@@ -349,7 +349,7 @@ namespace MoreMush
             if (!FruitRipe(sl[slot])) return false;
             if (Workers == 0)
             {
-                if (!quiet) { Snd.Err(); GameFlow.I.ShowToast(crits.Count == 0 ? "특수 버섯(꼬마)을 잡으면 버섯을 따 줘요" : "꼬마들이 모두 건물을 짓고 있어요"); }
+                if (!quiet) { Snd.Err(); GameFlow.I.ShowToast(crits.Count == 0 ? Loc.T("특수 버섯(꼬마)을 잡으면 버섯을 따 줘요") : Loc.T("꼬마들이 모두 건물을 짓고 있어요")); }
                 return false;
             }
             jobs.Add(slot); busy.Add(slot);
@@ -406,7 +406,7 @@ namespace MoreMush
             if (!BuildMove(MoveUid, placeX, placeY)) return false;
             var r = BuildRect(BUILDING[PlaceId], placeX, placeY);
             PlaceId = null; MoveUid = 0; dirty = true;
-            AddFloat(r.center.x, r.yMin - 20, "옮겼어요!", false, U.Hex("#fff6e0"));
+            AddFloat(r.center.x, r.yMin - 20, Loc.T("옮겼어요!"), false, U.Hex("#fff6e0"));
             for (int i = 0; i < 10; i++) parts.Add(new Part { k = "star", x = r.center.x + U.Rand(-r.width / 2, r.width / 2), y = r.yMax - U.Rand(0, 20), vx = U.Rand(-60, 60), vy = U.Rand(-160, -60), life = U.Rand(0.4f, 0.7f) });
             return true;
         }
@@ -420,7 +420,7 @@ namespace MoreMush
             if (bld == null) return null;
             PlaceId = null; dirty = true;
             var c = crits.FirstOrDefault(p => p.id == bld.critter);
-            if (c != null) { c.anim = null; Say(c, "내가 지을게! 뚝딱뚝딱!", null); }
+            if (c != null) { c.anim = null; Say(c, Loc.T("내가 지을게! 뚝딱뚝딱!"), null); }
             return bld;
         }
 
@@ -441,12 +441,12 @@ namespace MoreMush
             foreach (var b in BuildTick())
             {
                 var B = BUILDING[b.id]; var r = BuildRect(B, b.gx, b.gy);
-                AddFloat(r.center.x, r.yMin - 30, $"{B.n} 완성!", false, U.Hex("#ffe36e"));
+                AddFloat(r.center.x, r.yMin - 30, Loc.F("{0} 완성!", B.n), false, U.Hex("#ffe36e"));
                 Stars(r.center.x, r.center.y);
                 Snd.Record();
-                GameFlow.I.ShowToast($"{B.n} 완성! {string.Format(B.statFmt, U.Pct(B.val))}");
+                GameFlow.I.ShowToast(Loc.F("{0} 완성! {1}", B.n, string.Format(B.statFmt, U.Pct(B.val))));
                 var c = crits.FirstOrDefault(p => p.id == b.critter);
-                if (c != null) { c.state = "idle"; c.tool = null; Say(c, "다 지었다! 어때?", "jump"); }
+                if (c != null) { c.state = "idle"; c.tool = null; Say(c, Loc.T("다 지었다! 어때?"), "jump"); }
                 dirty = true;
             }
         }
@@ -668,7 +668,7 @@ namespace MoreMush
             if (!b.done && Now() < b.at) { GameFlow.I.OpenAccel("build", b.uid); return; }
             var r = BuildRect(BUILDING[b.id], b.gx, b.gy);
             AddFloat(r.center.x, r.yMin - 20, string.Format(BUILDING[b.id].statFmt, U.Pct(BUILDING[b.id].val)), false, U.Hex("#fff6e0"));
-            AddFloat(r.center.x, r.yMin + 10, "꾹 누르면 옮길 수 있어요", false, U.Hex("#d8f0c0"), -0.2f);
+            AddFloat(r.center.x, r.yMin + 10, Loc.T("꾹 누르면 옮길 수 있어요"), false, U.Hex("#d8f0c0"), -0.2f);
             Snd.Ui();
         }
     }

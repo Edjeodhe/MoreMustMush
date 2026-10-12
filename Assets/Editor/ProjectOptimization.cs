@@ -137,54 +137,9 @@ namespace MoreMush.EditorTools
             AssetDatabase.SaveAssets();
         }
 
-        public static string FontCharacters()
-        {
-            var chars = new SortedSet<char>(Enumerable.Range(32, 95).Select(i => (char)i));
-            // Include shipped strings and serialized labels, without baking Korean editor comments.
-            foreach (string path in Directory.GetFiles("Assets/Scripts", "*.cs", SearchOption.AllDirectories)
-                .Concat(Directory.GetFiles("Assets/Scenes", "*.unity", SearchOption.AllDirectories))
-                .Concat(Directory.GetFiles("Assets/Prefabs", "*.prefab", SearchOption.AllDirectories)))
-            {
-                string source = File.ReadAllText(path);
-                if (path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
-                    source = Regex.Replace(source, @"//[^\r\n]*|/\*[\s\S]*?\*/|@""(?:""""|[^""])*""|""(?:\\.|[^""\\])*""",
-                        m => m.Value.StartsWith("//") || m.Value.StartsWith("/*") ? "" : m.Value);
-                string text = Regex.Replace(source, @"\\u([0-9a-fA-F]{4})", m => ((char)Convert.ToInt32(m.Groups[1].Value, 16)).ToString());
-                foreach (char c in text) if ((c >= '\uac00' && c <= '\ud7a3') || (c >= '\u3131' && c <= '\u318e')) chars.Add(c);
-            }
-            foreach (char c in "★☆♥♡●○▲▼▶◀→←↑↓×÷±−–—…·≈≥≤∞①②③④⑤⑥⑦⑧⑨⑩巨°⚠") chars.Add(c);
-            return new string(chars.ToArray());
-        }
-
+        // 언어별 폰트 굽기는 LocTools가 번역표(strings.txt)의 언어 열로 한다
         [MenuItem("MoreMush/Optimize/Bake Static Fonts")]
-        public static void BakeFonts()
-        {
-            string chars = FontCharacters();
-            var fonts = new[] { "Assets/Fonts/NotoSansKR SDF.asset", "Assets/Fonts/Jua SDF.asset" }.Select(AssetDatabase.LoadAssetAtPath<TMP_FontAsset>).ToArray();
-            foreach (var font in fonts)
-            {
-                if (font == null) throw new InvalidOperationException("Run Build Font Assets first.");
-                font.atlasPopulationMode = AtlasPopulationMode.Dynamic;
-                font.ClearFontAssetData();
-                font.isMultiAtlasTexturesEnabled = true;
-                font.TryAddCharacters(chars, out string missing);
-                font.atlasPopulationMode = AtlasPopulationMode.Static;
-                font.isMultiAtlasTexturesEnabled = false;
-                // Newly created atlas pages need to be persisted as subassets too.
-                foreach (var texture in font.atlasTextures)
-                {
-                    if (!AssetDatabase.Contains(texture)) AssetDatabase.AddObjectToAsset(texture, font);
-                    EditorUtility.SetDirty(texture);
-                }
-                EditorUtility.SetDirty(font);
-                Debug.Log($"[MoreMush] {font.name}: {font.characterTable.Count} characters, {font.atlasTextures.Length} static page(s)");
-            }
-            string unsupported = new string(chars.Where(c => !fonts.Any(f => f.HasCharacter(c))).ToArray());
-            if (unsupported.Length > 0) throw new InvalidOperationException("No font glyphs for: " + unsupported);
-            Directory.CreateDirectory("Logs");
-            File.WriteAllText("Logs/font-characters.txt", chars, Encoding.UTF8);
-            AssetDatabase.SaveAssets();
-        }
+        public static void BakeFonts() => Debug.Log("[MoreMush] " + LocTools.BakeFonts());
 
         [MenuItem("MoreMush/Optimize/Move Unused TMP Samples")]
         public static void MoveUnusedTmpResources()

@@ -12,7 +12,7 @@ namespace MoreMush
         [ScenePath("World/TreeWorld")] public TreeView world;
         public TreeTooltip tooltip;
         public Image stageIcon; public TMP_Text stageTitle, stageSub;
-        public TMP_Text goldText, gemText, sporeText, diaText;
+        public TMP_Text goldText, gemText;
         public TMP_Text codexButtonText, workshopButtonText;
         public GameObject workshopButton;
         public GameObject farmBadge; public TMP_Text farmBadgeText;   // 꼬마 부탁 + 다 자란 작물
@@ -29,14 +29,12 @@ namespace MoreMush
             var th = THEME.TryGetValue(G.theme, out var tt) ? tt : LatestTheme();
             Theme nextT = null; foreach (var x in THEMES) if (x.from > StageNow()) { nextT = x; break; }
             stageIcon.sprite = SpriteDB.Icon(th.icon);
-            stageTitle.text = $"스테이지 {StageNow()}";
-            stageSub.text = th.n + (nextT != null ? $" · {UIUtil.Ic(nextT.icon)} {nextT.from - StageNow()}스테이지 뒤" : "");
+            stageTitle.text = Loc.F("스테이지 {0}", StageNow());
+            stageSub.text = nextT != null ? Loc.F("{0} · {1} {2}스테이지 뒤", th.n, UIUtil.Ic(nextT.icon), nextT.from - StageNow()) : th.n;
             goldText.text = U.Fmt(G.gold);
             gemText.text = U.Fmt(G.gem);
-            diaText.text = U.Fmt(G.dia);
-            sporeText.text = U.Fmt(G.spore);
-            codexButtonText.text = $"{UIUtil.Ic("book")} 도감 ({CodexCount()}/{SP_TOTAL})";
-            workshopButtonText.text = "공방";
+            codexButtonText.text = Loc.F("{0} 도감 ({1}/{2})", UIUtil.Ic("book"), CodexCount(), SP_TOTAL);
+            workshopButtonText.text = Loc.T("공방");
             RefreshFarmBadge();
         }
 
@@ -47,7 +45,7 @@ namespace MoreMush
             UIUtil.Show(farmBadge, farmN > 0);
             farmBadgeText.text = farmN.ToString();
             double h = AutoHours();
-            autoText.text = $"{UIUtil.Ic("auto_harvest")} 자동 수확 <size=75%>{(int)h}:{(int)(h * 60 % 60):00}</size>";
+            autoText.text = Loc.F("{0} 자동 수확 <size=75%>{1}:{2:00}</size>", UIUtil.Ic("auto_harvest"), (int)h, (int)(h * 60 % 60));
             UIUtil.Show(autoBadge, h >= Defs.AUTO.maxHours || h >= 1);
         }
 

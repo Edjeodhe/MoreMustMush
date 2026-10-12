@@ -34,26 +34,26 @@ namespace MoreMush
             icon.sprite = SpriteDB.Get("Harvesters/" + (Game.HvSkinOn(id) is Skin sk ? sk.id : id)) ?? SpriteDB.Get("Harvesters/" + id);
             icon.color = S > 0 ? Color.white : new Color(1, 1, 1, 0.55f);
             title.text = h.n;
-            stars.text = S > 0 ? $"<color=#e8a900>{U.Stars(S)}</color>" : "<color=#8a6a4a>미보유</color>";
+            stars.text = S > 0 ? $"<color=#e8a900>{U.Stars(S)}</color>" : Loc.T("<color=#8a6a4a>미보유</color>");
             type.text = $"{h.type} · {h.look}";
             trait.text = h.text(System.Math.Max(1, S));
             UIUtil.Show(next, S > 0 && S < 5);
-            if (S > 0 && S < 5) { string t = h.text(S + 1); int c = t.IndexOf(": "); next.text = $"다음 ★{S + 1}: {(c >= 0 ? t.Substring(c + 2) : t)}"; }
+            if (S > 0 && S < 5) { string t = h.text(S + 1); int c = t.IndexOf(": "); next.text = Loc.F("다음 ★{0}: {1}", S + 1, c >= 0 ? t.Substring(c + 2) : t); }
 
             UIUtil.Show(unlock, S == 0 && h.unlockGold >= 0);
             UIUtil.Show(req, S == 0 && h.unlockGold < 0);
-            req.text = $"황금 도감 15종 달성 보상 ({GoldenCount()}/15)";
-            if (S == 0 && h.unlockGold >= 0) { unlock.interactable = G.gold >= h.unlockGold; unlockText.text = $"해금 {UIUtil.Ic("gold")}{U.Fmt(h.unlockGold)}"; }
+            req.text = Loc.F("황금 도감 15종 달성 보상 ({0}/15)", GoldenCount());
+            if (S == 0 && h.unlockGold >= 0) { unlock.interactable = G.gold >= h.unlockGold; unlockText.text = Loc.F("해금 {0}{1}", UIUtil.Ic("gold"), U.Fmt(h.unlockGold)); }
 
             UIUtil.Show(toggle, S > 0);
             UIUtil.Show(level, S > 0);
             if (S > 0)
             {
-                toggleText.text = on ? "켜짐" : "꺼짐";
+                toggleText.text = on ? Loc.T("켜짐") : Loc.T("꺼짐");
                 toggleImage.color = on ? U.Hex("#9fd2ff") : new Color(1, 1, 1, 0.75f);
                 var lc = HvLevelCost(h);
                 level.interactable = lc != null && CanAfford(lc.Value);
-                levelText.text = lc != null ? $"★{S + 1} {UIUtil.Ic("gold")}{U.Fmt(lc.Value.gold)}" : "★ 최대";
+                levelText.text = lc != null ? $"★{S + 1} {UIUtil.Ic("gold")}{U.Fmt(lc.Value.gold)}" : Loc.T("★ 최대");
             }
         }
     }

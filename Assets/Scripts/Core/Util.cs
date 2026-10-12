@@ -77,7 +77,7 @@ namespace MoreMush
         {
             long t = (long)Math.Floor(s);
             long h = t / 3600, m = (t % 3600) / 60, ss = t % 60;
-            return h > 0 ? $"{h}시간 {m}분" : m > 0 ? $"{m}분 {ss}초" : $"{ss}초";
+            return h > 0 ? Loc.F("{0}시간 {1}분", h, m) : m > 0 ? Loc.F("{0}분 {1}초", m, ss) : Loc.F("{0}초", ss);
         }
 
         public static string Pct(double v) => FmtN(v * 100, 1) + "%";
@@ -94,9 +94,10 @@ namespace MoreMush
 
         public static Color Rgba(int r, int g, int b, float a) => new Color(r / 255f, g / 255f, b / 255f, a);
 
-        // "가" or "이" depending on the last syllable's final consonant (prototype iga()).
+        // "가" or "이" depending on the last syllable's final consonant (prototype iga()). 한국어가 아니면 단어만 돌려준다
         public static string Iga(string w)
         {
+            if (!Loc.IsKo || string.IsNullOrEmpty(w)) return w;
             int c = w[w.Length - 1] - 0xAC00;
             return w + (c >= 0 && c < 11172 && c % 28 != 0 ? "이" : "가");
         }

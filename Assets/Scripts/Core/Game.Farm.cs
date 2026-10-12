@@ -18,7 +18,7 @@ namespace MoreMush
         // ===== 꼬마 =====
         public static List<Special> FarmOwned() => SPECIALS.Where(k => HasSpecial(k.id)).ToList();
 
-        // 잡은 꼬마는 부탁 시각이 없으면 만들어 준다 (자동 입주). 나무 버섯 자리도 채운다
+        // 잡은 꼬마는 부탁 시각이 없으면 만들어 준다 (자동 입주). 세계수 버섯 자리도 채운다
         public static void FarmEnsure()
         {
             foreach (var k in FarmOwned())
@@ -28,7 +28,7 @@ namespace MoreMush
 
         public static bool FarmReady(string id) => G.farm.next.TryGetValue(id, out var t) && Now() >= t;
         public static int FarmPetCount() => G?.farm == null ? 0 : FarmOwned().Count(k => FarmReady(k.id));
-        public static int FarmReadyCount() => FarmPetCount() + TreeRipeCount();   // 균사 트리 버튼 알림: 꼬마 부탁 + 다 자란 나무 버섯
+        public static int FarmReadyCount() => FarmPetCount() + TreeRipeCount();   // 균사 트리 버튼 알림: 꼬마 부탁 + 다 자란 세계수 버섯
 
         // 호감도·진화
         public static int EvoOf(string id) => Math.Min(FARM.evoMax, G.farm.evo.TryGetValue(id, out var e) ? e : 0);
@@ -41,7 +41,7 @@ namespace MoreMush
         public static string EvoName(Special k, int e = -1)
         {
             if (e < 0) e = EvoOf(k.id);
-            return e == 0 ? k.n : e == 1 ? k.n.Replace("꼬마", "버섯") : k.n.Replace("꼬마", "대왕버섯");
+            return e == 0 || !SPECIAL_EVO.TryGetValue(k.id, out var evo) ? k.n : Loc.T(evo[Math.Min(e, evo.Length) - 1]);
         }
         public static string HeartStr(string id) => new string('♥', HeartsOf(id)) + new string('♡', FARM.hearts - HeartsOf(id));
 
@@ -56,26 +56,25 @@ namespace MoreMush
 
         public static string FarmLeftText(string id)
         {
-            if (FarmReady(id)) return "부탁 있음!";
+            if (FarmReady(id)) return Loc.T("부탁 있음!");
             long s = Math.Max(0, (long)Math.Ceiling(((G.farm.next.TryGetValue(id, out var t) ? t : Now()) - Now()) / 1000));
             return Mmss(s);
         }
 
-        // 부탁 들어주기 → gem 균사석, bonus 호감도 보너스, dia 다이아몬드, heart 새 칸을 채움, full 5칸 다 참
-        public struct Serve { public int gem, bonus, dia; public bool heart, full; }
+        // 부탁 들어주기 → gem 균사석, bonus 호감도 보너스, extra 확률·새 호감도 칸 보너스 균사석, heart 새 칸을 채움, full 5칸 다 참
+        public struct Serve { public int gem, bonus, extra; public bool heart, full; }
         public static Serve? FarmServe(string id)
         {
             if (!FarmReady(id)) return null;
             int h0 = HeartsOf(id), gem = FarmReward(id);
             int bonus = U.Chance(FARM.bonusP * h0) ? U.RandI(1, 2 + EvoOf(id)) : 0;
-            G.gem += gem + bonus;
             if (h0 < FARM.hearts) G.farm.love[id] = Love(id) + 1;
             FarmSchedule(id);
             int h1 = HeartsOf(id);
             bool heart = h1 > h0;
-            int dia = (U.Chance(FARM.diaP + BStat("dia") + Fx("dia")) ? 1 : 0) + (heart ? FARM.diaHeart : 0);
-            G.dia += dia;
-            return new Serve { gem = gem, bonus = bonus, dia = dia, heart = heart, full = h1 >= FARM.hearts && h0 < FARM.hearts };
+            int extra = (U.Chance(FARM.extraGemP + BStat("serveGem") + Fx("serveGem")) ? 1 : 0) + (heart ? FARM.gemHeart : 0);
+            G.gem += gem + bonus + extra;
+            return new Serve { gem = gem, bonus = bonus, extra = extra, heart = heart, full = h1 >= FARM.hearts && h0 < FARM.hearts };
         }
 
         public static bool FarmEvolve(string id)
@@ -177,12 +176,12 @@ namespace MoreMush
             return best;
         }
 
-        public enum BuildFail { None, Max, Dia, NoCritter, Spot }
+        public enum BuildFail { None, Max, Gem, NoCritter, Spot }
         public static BuildFail CanBuild(string id)
         {
             var b = BUILDING[id];
             if (BuiltCount(id) >= b.max) return BuildFail.Max;
-            if (G.dia < b.price) return BuildFail.Dia;
+            if (G.gem < b.price) return BuildFail.Gem;
             if (FreeCritters().Count == 0) return BuildFail.NoCritter;
             return BuildFail.None;
         }
@@ -195,7 +194,7 @@ namespace MoreMush
             var free = FreeCritters().Select(k => k.id).ToList();
             string critter = U.Pick(prefer != null && prefer.Any(free.Contains) ? prefer.Where(free.Contains).ToList() : free);
             double now = Now();
-            G.dia -= b.price;
+            G.gem -= b.price;
             var bld = new SaveData.Bld { uid = G.farm.nextUid++, id = id, gx = gx, gy = gy, critter = critter, t0 = now, at = now + BuildSeconds(b, critter) * 1000 };
             G.farm.blds.Add(bld);
             SaveGame();
@@ -225,7 +224,7 @@ namespace MoreMush
 
         public static string BuildLeftText(SaveData.Bld b) => Mmss(Math.Max(0, (long)Math.Ceiling((b.at - Now()) / 1000)));
 
-        // ===== 버섯 나무 =====
+        // ===== 세계수 나무 =====
         public static int TreeLv() => G?.farm?.tree == null ? 1 : G.farm.tree.lv;
         public static double FruitSeconds(string kind) => FRUITS[kind].time * Math.Pow(TREE.speedPerLv, TreeLv() - 1) * NF.gm_farm(Lv("gm_farm"))
             * (1 - BStat("grow")) * Math.Max(0.2, 1 - Fx("grow"));
@@ -246,34 +245,47 @@ namespace MoreMush
         public static int TreeRipeCount() => G?.farm?.tree?.slots == null ? 0 : G.farm.tree.slots.Count(FruitRipe);
         public static double TreeYieldMul() => 1 + TREE.yieldPerLv * (TreeLv() - 1);
 
-        // 버섯 따기: 균사석 (나무 레벨·보유 효과·건물·노드, 소수점은 확률로) + 포자 (0~1 + 보너스)
-        public static (int gem, int spore) PickYield(string kind, string critter)
+        // 버섯 따기: 균사석 (나무 레벨·보유 효과·건물·노드, 소수점은 확률로) + 확률 보너스 균사석
+        public static int PickYield(string kind, string critter)
         {
             double mul = TreeYieldMul() * (1 + BStat("fieldGem") + Fx("fieldGem") + (NF.gm_gourmet(Lv("gm_gourmet")) - 1)
                          + (critter != null && CRITTER_FX[critter].key == "fieldGemSelf" ? FxOf(critter) : 0));
             double g = FRUITS[kind].gem * mul;
             int gem = (int)Math.Floor(g) + (U.Chance((float)(g - Math.Floor(g))) ? 1 : 0);
-            int sp = U.RandI(0, 1) + (U.Chance((float)NF.gm_spore(Lv("gm_spore"))) ? 2 : 0) + (U.Chance(BStat("spore") + Fx("spore")) ? 1 : 0);
-            return (gem, sp);
+            gem += (U.Chance((float)NF.gm_spore(Lv("gm_spore"))) ? 2 : 0) + (U.Chance(BStat("pickGem") + Fx("pickGem")) ? 1 : 0);
+            return gem;
         }
 
         // 딴 자리에는 새 버섯이 바로 자라기 시작한다
-        public static (int gem, int spore)? PickFruit(int slot, string critter)
+        public static int? PickFruit(int slot, string critter)
         {
             var sl = G.farm.tree.slots;
             if (slot < 0 || slot >= sl.Count || !FruitRipe(sl[slot])) return null;
-            var y = PickYield(sl[slot].kind, critter);
-            G.gem += y.gem; G.spore += y.spore;
+            int gem = PickYield(sl[slot].kind, critter);
+            G.gem += gem;
             sl[slot] = NewFruit();
-            return y;
+            return gem;
         }
 
         public static double TreeUpCost() => TreeLv() >= TREE.maxLv ? 0 : TREE.Cost(TreeLv());
-        public static bool TreeUp()
+        public static double TreeExp() => G?.farm?.tree == null ? 0 : G.farm.tree.exp;
+        public static double TreeExpNeed() => TREE.ExpNeed(TreeLv());
+        public static bool TreeExpFull() => TreeExp() >= TreeExpNeed();
+
+        public enum TreeUpFail { None, Max, Exp, Gold }
+        public static TreeUpFail CanTreeUp()
         {
             double c = TreeUpCost();
-            if (c <= 0 || G.gold < c) return false;
-            G.gold -= c; G.farm.tree.lv++;
+            if (c <= 0) return TreeUpFail.Max;
+            if (!TreeExpFull()) return TreeUpFail.Exp;
+            return G.gold < c ? TreeUpFail.Gold : TreeUpFail.None;
+        }
+
+        // 경험치를 다 채우고 골드를 내면 레벨이 오른다. 쓰고 남은 경험치는 다음 레벨로 넘어간다
+        public static bool TreeUp()
+        {
+            if (CanTreeUp() != TreeUpFail.None) return false;
+            G.gold -= TreeUpCost(); G.farm.tree.exp -= TreeExpNeed(); G.farm.tree.lv++;
             TreeEnsure(); SaveGame();
             return true;
         }
@@ -308,7 +320,7 @@ namespace MoreMush
             return true;
         }
 
-        public static string TimeText(double s) => s >= 3600 ? $"{(int)(s / 3600)}시간 {U.JsRound(s % 3600 / 60)}분" : s >= 60 ? $"{U.JsRound(s / 60)}분" : $"{Math.Ceiling(s)}초";
+        public static string TimeText(double s) => s >= 3600 ? Loc.F("{0}시간 {1}분", (int)(s / 3600), U.JsRound(s % 3600 / 60)) : s >= 60 ? Loc.F("{0}분", U.JsRound(s / 60)) : Loc.F("{0}초", Math.Ceiling(s));
 
         // ===== 자동 수확 보상 =====
         public static void AutoEnsure() { if (G.autoT <= 0) G.autoT = Now(); FixClock(); }
@@ -328,26 +340,26 @@ namespace MoreMush
         public static double AutoHours() => G == null || G.autoT <= 0 ? 0 : Math.Min(AUTO.maxHours, Math.Max(0, (Now() - G.autoT) / 3600000.0));
         public static double AutoMul() => (1 + BStat("auto")) * NF.gm_herb(Lv("gm_herb"));
         // 시간당 보상
-        public static (double gold, double gem, double dia) AutoRates()
+        public static (double gold, double gem) AutoRates()
         {
             double m = AutoMul();
             double gold = Math.Max(AUTO.goldMin, StageGold(StageNow()) * AUTO.goldStageK) * (1 + Fx("autoGold")) * m;
-            return (gold, AUTO.gemH * (1 + Fx("autoGem")) * m, AUTO.diaH * m);
+            return (gold, AUTO.gemH * (1 + Fx("autoGem")) * m);
         }
-        public static (double gold, int gem, int dia) AutoReward()
+        public static (double gold, int gem) AutoReward()
         {
             var r = AutoRates(); double h = AutoHours();
-            return (Math.Floor(r.gold * h), (int)Math.Floor(r.gem * h), (int)Math.Floor(r.dia * h));
+            return (Math.Floor(r.gold * h), (int)Math.Floor(r.gem * h));
         }
         public static bool AutoReady() => AutoHours() * 3600 >= AUTO.minClaim;
 
-        public static (double gold, int gem, int dia)? ClaimAuto()
+        public static (double gold, int gem)? ClaimAuto()
         {
             if (!AutoReady()) return null;
             var r = AutoReward();
-            G.gold += r.gold; G.gem += r.gem; G.dia += r.dia; G.autoT = Now();
+            G.gold += r.gold; G.gem += r.gem; G.autoT = Now();
             SaveGame();
-            return (r.gold, r.gem, r.dia);
+            return (r.gold, r.gem);
         }
     }
 }

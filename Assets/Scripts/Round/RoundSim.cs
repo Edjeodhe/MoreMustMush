@@ -32,7 +32,7 @@ namespace MoreMush
         // ===== 상태 =====
         public RoundStats st;
         public string phase = "aim";   // aim · run · end
-        public float t, runT, timeLeft, timeMax, tsporeUsed, sipUsed;
+        public float t, runT, timeLeft, timeMax;
         public List<Ball> balls = new List<Ball>();
         public List<Colony> colonies = new List<Colony>();
         public List<Shroom> shrooms = new List<Shroom>();
@@ -61,7 +61,7 @@ namespace MoreMush
         public bool festOn, paused;
         public float barX, barLen, barFx;
         public Vector2? aimStart, aimCur;
-        public int deviceSpawned, colId = 1, shroomsMade;   // shroomsMade: 이번 판에 생긴 버섯 수 (밸런스 시뮬의 처치율 = 수확 ÷ 이것)
+        public int colId = 1, shroomsMade;   // shroomsMade: 이번 판에 생긴 버섯 수 (밸런스 시뮬의 처치율 = 수확 ÷ 이것)
         public readonly int[] madeT = new int[8], killT = new int[8];   // 티어별 생긴 수·수확한 수 (밸런스 시뮬의 티어별 처치율)
         public Dictionary<string, float> skillLabelT = new Dictionary<string, float>();
         public Dictionary<string, float> skillFlash = new Dictionary<string, float>();
@@ -75,7 +75,8 @@ namespace MoreMush
         public float codexShake, scoreBump, saleBump, endT;
         public Dictionary<string, float> slotBump = new Dictionary<string, float> { ["ed"] = 0, ["md"] = 0, ["ps"] = 0 };
         public Dictionary<string, double> bag = new Dictionary<string, double>();
-        public double value, bonusGold, coinGold;
+        public readonly Dictionary<string, int> picks = new Dictionary<string, int>();   // 버섯별 수확 횟수 (의뢰 진행도)
+        public double bonusGold, coinGold;
         public SpecialMush special;
         public float specialAt;
         public string specialGot;
@@ -101,7 +102,7 @@ namespace MoreMush
             r.specialAt = U.Chance((float)st.specialP) ? U.Rand(3, Mathf.Max(4, (float)(st.duration - st.specialLife - 1))) : -1;
             for (int i = 0; i < st.devices; i++) r.PlaceDevice(U.Pick(DEVICE_TYPES), null);
             for (int i = 0; i < st.maxCol; i++) r.SpawnColony(true);
-            for (int i = 0; i < st.permBalls; i++) r.balls.Add(r.MakeBall(LAUNCH.x, LAUNCH.y, true));
+            for (int i = 0; i < st.permBalls; i++) r.balls.Add(r.MakeBall(LAUNCH.x, LAUNCH.y, true, st.hvs[i % st.hvs.Count]));
             r.RebuildGrid();
             return r;
         }
@@ -308,28 +309,6 @@ namespace MoreMush
                     var p = Pos(140 * DEV_SCALE); bool hz = U.Chance(0.5f); float w = (hz ? 260 : 50) * DEV_SCALE, hh = (hz ? 50 : 260) * DEV_SCALE;
                     return new Device { type = type, x0 = p.x - w / 2, y0 = p.y - hh / 2, x1 = p.x + w / 2, y1 = p.y + hh / 2, hz = hz };
                 }
-                case "mole":
-                {
-                    float mr = 40 * DEV_SCALE;
-                    var a = Pos(mr);
-                    for (int k = 0; k < 30; k++)
-                    {
-                        var b = new Vector2(U.Rand(FX0 + mr, FX1 - mr), U.Rand(FY0 + mr, NO_SPAWN_Y - mr));
-                        if (U.D2(a.x, a.y, b.x, b.y) >= 600 * 600) return new Device { type = type, a = a, b = b, r = 30 * DEV_SCALE };
-                    }
-                    return null;
-                }
-                case "stream":
-                    if (U.Chance(0.5f))
-                    {
-                        float y = near.HasValue ? U.Clamp(near.Value.y + U.Rand(-160, 160), FY0 + 70, NO_SPAWN_Y - 70) : U.Rand(FY0 + 70, NO_SPAWN_Y - 70);
-                        return new Device { type = type, x0 = FX0, x1 = FX1, y0 = y - 35 * DEV_SCALE, y1 = y + 35 * DEV_SCALE, fx = U.Chance(0.5f) ? 1 : -1, fy = 0 };
-                    }
-                    else
-                    {
-                        float x = near.HasValue ? U.Clamp(near.Value.x + U.Rand(-160, 160), FX0 + 70, FX1 - 70) : U.Rand(FX0 + 70, FX1 - 70);
-                        return new Device { type = type, x0 = x - 35 * DEV_SCALE, x1 = x + 35 * DEV_SCALE, y0 = FY0, y1 = NO_SPAWN_Y, fx = 0, fy = U.Chance(0.5f) ? 1 : -1 };
-                    }
                 case "acorn":
                 {
                     var p = Pos(110 * DEV_SCALE); bool hz = U.Chance(0.6f); float gap = 70 * DEV_SCALE;

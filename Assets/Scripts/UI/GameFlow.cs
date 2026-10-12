@@ -27,8 +27,9 @@ namespace MoreMush
         public PreRoundPanel preRound;
         public GameObject pausePanel;
         public RecordsPanel records;
+        public QuestPanel quests;
+        public OptionsPanel options;
         public BulkPanel bulk;
-        public ShopPanel shop;
         public WorkshopPanel workshop;
         public SkinPanel skins;
         public BuildPanel build;
@@ -45,12 +46,35 @@ namespace MoreMush
         void Awake()
         {
             I = this;
+            Loc.Changed += OnLangChanged;
 #if !UNITY_WEBGL || UNITY_EDITOR
             Application.targetFrameRate = 60;   // WebGL은 브라우저 requestAnimationFrame에 맡긴다 (값을 주면 타이머 루프로 바뀌어 덜 부드럽다)
 #endif
         }
 
+        void OnDestroy() => Loc.Changed -= OnLangChanged;
+
         void Start() => RenderTitle();
+
+        // 언어를 바꾸면 씬 글자(LocText)는 스스로 바뀌고, 코드가 그리는 화면은 여기서 다시 그린다
+        void OnLangChanged()
+        {
+            switch (Screen)
+            {
+                case "title": title.Show(SaveIO.HasSave()); break;
+                case "tree": tree.Refresh(); break;
+                case "farm": farmScreen.Render(); break;
+            }
+            if (options != null && options.gameObject.activeInHierarchy) options.Render();
+        }
+
+        public void OpenOptions()
+        {
+            bool fromPause = pausePanel != null && pausePanel.activeInHierarchy;
+            if (fromPause) CloseModal();   // 일시정지 창을 닫으면 라운드가 풀리므로, 옵션을 닫을 때 다시 멈춘다
+            OpenModal(options, () => { if (fromPause) OpenPause(); });
+            options.Render();
+        }
 
         void Update()
         {
@@ -58,7 +82,7 @@ namespace MoreMush
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb == null) return;
             if (kb.backquoteKey.wasPressedThisFrame && debug != null) debug.Toggle();
-            if (kb.mKey.wasPressedThisFrame) { Snd.muted = !Snd.muted; ShowToast(Snd.muted ? "소리 끔" : "소리 켬"); }
+            if (kb.mKey.wasPressedThisFrame) { Snd.muted = !Snd.muted; ShowToast(Snd.muted ? Loc.T("소리 끔") : Loc.T("소리 켬")); }
             if (Screen != "round" && kb.escapeKey.wasPressedThisFrame) { if (ModalOpen) CloseModal(); else if (Screen == "farm" && farm.Placing) { farm.CancelPlace(); farmScreen.Render(); } }
         }
 
@@ -139,10 +163,10 @@ namespace MoreMush
         {
             if (!SPC.TryGetValue(id ?? "", out var k)) return;
             string before = EvoName(k);
-            if (!Game.FarmEvolve(id)) { Snd.Err(); ShowToast($"호감도 {FARM.hearts}칸을 모두 채우면 진화할 수 있어요"); return; }
+            if (!Game.FarmEvolve(id)) { Snd.Err(); ShowToast(Loc.F("호감도 {0}칸을 모두 채우면 진화할 수 있어요", FARM.hearts)); return; }
             Snd.Record();
             farm.Evolved(id);
-            ShowToast($"{U.Iga(before)} {EvoName(k)}(으)로 진화했어요! 부탁 보상 ×{U.FmtN(FARM.evoGem[EvoOf(id)])}");
+            ShowToast(Loc.F("{0} {1}(으)로 진화했어요! 부탁 보상 ×{2}", U.Iga(before), EvoName(k), U.FmtN(FARM.evoGem[EvoOf(id)])));
             CloseModal(); farmScreen.Render();
         }
 
@@ -169,32 +193,20 @@ namespace MoreMush
             OpenModal(pausePanel, () => { if (RoundSim.R != null) RoundSim.R.paused = false; });
         }
 
-        // ===== shop =====
-        public void OpenShop()
-        {
-            string from = Screen;
-            shop.ResetQty();
-            OpenModal(shop, () =>
-            {
-                shop.ResetQty();
-                if (Screen == "tree") tree.Refresh();
-                else if (Screen == "farm") farmScreen.Render();
-            });
-            shop.Render();
-        }
-
-        void Sell(System.Collections.Generic.IEnumerable<(string id, double cnt)> ids)
-        {
-            var r = SellMush(ids);
-            if (r.n == 0) { Snd.Err(); return; }
-            foreach (var (id, _) in ids) shop.qty.Remove(id);
-            Snd.Buy(); ShowToast($"버섯 {U.Fmt(r.n)}개 판매 +{U.Fmt(r.gold)}골드");
-            shop.Render();
-        }
-
         // ===== round =====
+        public const string HV_OVER_MSG = "수확기가 많습니다. 장착 가능 수확기 이하로 활성화가 필요합니다.";
+
+        // 켠 수확기가 장착 칸보다 많으면 시작하지 않고 알린다
+        bool BlockedByHarvesters()
+        {
+            if (!HvOver()) return false;
+            Snd.Err(); ShowToast(Loc.T(HV_OVER_MSG));
+            return true;
+        }
+
         public void OpenPreRound()
         {
+            if (BlockedByHarvesters()) return;
             if (!THEME.TryGetValue(G.theme, out var th) || !ThemeOpen(th)) G.theme = LatestTheme().id;
             if (THEMES.Count(ThemeOpen) <= 1) { BeginRound(); return; }
             OpenModal(preRound);
@@ -203,6 +215,7 @@ namespace MoreMush
 
         public void BeginRound()
         {
+            if (BlockedByHarvesters()) return;
             string w = RollWeather();
             if (!THEME.TryGetValue(G.theme, out var th) || !ThemeOpen(th)) G.theme = LatestTheme().id;
             CloseModal();
@@ -220,7 +233,7 @@ namespace MoreMush
 
         public void AfterSettle()
         {
-            if (CodexCount() >= SP_TOTAL && !G.ending) { G.ending = true; SaveGame(); ShowToast($"버섯 도감 {SP_TOTAL}종 완성! (엔딩 컷신은 3단계에서 추가돼요)"); }
+            if (CodexCount() >= SP_TOTAL && !G.ending) { G.ending = true; SaveGame(); ShowToast(Loc.F("버섯 도감 {0}종 완성! (엔딩 컷신은 3단계에서 추가돼요)", SP_TOTAL)); }
             EnterTree();
         }
 
@@ -230,24 +243,34 @@ namespace MoreMush
             switch (act)
             {
                 case "close": Snd.Ui(); CloseModal(); break;
-                case "newgame": G = new SaveData(); AutoEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!"); break;
+                case "newgame": G = new SaveData(); AutoEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast(Loc.T("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!")); break;
                 case "continue":
                 {
                     G = SaveIO.Load();
                     if (G == null)
                     {
                         G = new SaveData();
-                        if (SaveIO.LastLoadFailed) ShowToast("세이브를 읽지 못해 새로 시작해요 (이전 세이브는 따로 보관했어요)");
+                        if (SaveIO.LastLoadFailed) ShowToast(Loc.T("세이브를 읽지 못해 새로 시작해요 (이전 세이브는 따로 보관했어요)"));
                     }
                     double away = G.seenT > 0 ? Now() - G.seenT : 0;
                     AutoEnsure(); Snd.Ui(); EnterTree();
                     CheckReturn(away);
+                    if (!string.IsNullOrEmpty(SaveMigration.Notice)) { ShowToast(SaveMigration.Notice); SaveMigration.Notice = null; SaveGame(); }
                     break;
                 }
                 case "reset": OpenModal(resetPanel); break;
-                case "reset-yes": SaveIO.Wipe(); G = null; CloseModal(); RenderTitle(); ShowToast("초기화했어요"); break;
+                case "reset-yes": SaveIO.Wipe(); G = null; CloseModal(); RenderTitle(); ShowToast(Loc.T("초기화했어요")); break;
                 case "title": SaveGame(); CloseModal(); RenderTitle(); break;
                 case "records": Snd.Ui(); OpenModal(records); records.Render(); break;
+                case "quests": Snd.Ui(); OpenModal(quests, () => { if (Screen == "tree") tree.Refresh(); else if (Screen == "farm") farmScreen.Render(); }); quests.Render(); break;
+                case "questclaim":
+                {
+                    var exp = QuestClaim(arg);
+                    if (exp == null) { Snd.Err(); break; }
+                    Snd.Record(); ShowToast(TreeExpFull() && TreeLv() < TREE.maxLv ? Loc.F("세계수 경험치 +{0}! 세계수 나무를 키울 수 있어요", exp) : Loc.F("세계수 경험치 +{0}", exp));
+                    quests.Render();
+                    break;
+                }
                 case "codex":
                     Snd.Ui(); codex.Open(Screen == "round");
                     if (Screen == "round" && RoundSim.R != null) RoundSim.R.paused = true;
@@ -260,55 +283,30 @@ namespace MoreMush
                 case "pretheme": Snd.Ui(); G.theme = arg; SaveGame(); preRound.Render(); break;
                 case "startround": BeginRound(); break;
                 case "resume": CloseModal(); break;
-                case "endnow": CloseModal(); if (RoundSim.R != null) { var R = RoundSim.R; R.timeLeft = 0; R.phase = "end"; R.endT = 0.01f; } break;
-                case "mute": Snd.muted = !Snd.muted; break;
+                case "endnow": if (RoundSim.R != null) { var R = RoundSim.R; R.timeLeft = 0; R.phase = "end"; R.endT = 0.01f; } CloseModal(); break;   // 먼저 끝내야 옵션→일시정지로 되돌아가지 않는다
+                case "mute": Snd.muted = !Snd.muted; if (options != null && options.gameObject.activeInHierarchy) options.Render(); break;
+                case "options": Snd.Ui(); OpenOptions(); break;
+                case "lang": Snd.Ui(); Loc.SetLang(arg); break;
                 case "pause": OpenPause(); break;
                 case "speed": RoundController.NextSpeed(); Snd.Ui(); break;
                 case "totree": Snd.Ui(); AfterSettle(); break;
-                case "shop": Snd.Ui(); OpenShop(); break;
-                case "sporeshop": Snd.Ui(); shop.mode = "spore"; OpenShop(); break;
-                case "shopmode": Snd.Ui(); shop.mode = arg; shop.Render(); break;
-                case "shoptab": Snd.Ui(); shop.tab = arg; shop.Render(); break;
-                case "shopq": { var p = arg.Split('|'); shop.StepQty(p[0], double.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture)); break; }
-                case "shopset": { var p = arg.Split('|'); shop.SetQtyFrac(p[0], double.Parse(p[1], System.Globalization.CultureInfo.InvariantCulture)); break; }
-                case "shopsell": Sell(new[] { (arg, shop.Qty(arg)) }); break;
-                case "shopsellall": Sell(ShopList(shop.tab).Select(sp => (sp.id, InvCount(sp.id)))); break;
-                case "quest":
-                {
-                    var r = DoQuest(int.Parse(arg));
-                    if (r == null) { Snd.Err(); break; }
-                    Snd.Record(); ShowToast($"의뢰 완료! +{U.Fmt(r.Value)}골드"); shop.Render();
-                    break;
-                }
-                case "questall":
-                {
-                    var r = QuestAll();
-                    if (r.n == 0) { Snd.Err(); ShowToast("지금 전달할 수 있는 의뢰가 없어요"); break; }
-                    Snd.Record(); ShowToast($"의뢰 {r.n}개 완료! +{U.Fmt(r.gold)}골드"); shop.Render();
-                    break;
-                }
-                case "buyspore":
-                {
-                    double n = arg == "max" ? SporeMax() : double.Parse(arg, System.Globalization.CultureInfo.InvariantCulture);
-                    if (!BuySpore(n)) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
-                    Snd.Buy(); ShowToast($"{UIUtil.Ic("spore")} 버섯 포자 {U.Fmt(n)}개 구입 (−{U.Fmt(n * SporePrice())}골드)"); shop.Render();
-                    break;
-                }
                 case "workshop": Snd.Ui(); OpenModal(workshop, () => tree.Refresh()); workshop.Render(); break;
                 case "hvunlock":
                     if (!HvUnlock(arg)) { Snd.Err(); break; }
-                    Snd.Buy(); ShowToast($"{HV[arg].n} 해금! 활성화되어 무작위로 나와요"); workshop.Render(); break;
+                    Snd.Buy(); ShowToast(HvOn(arg) ? Loc.F("{0} 해금! 빈 장착 칸에 들어갔어요", HV[arg].n) : Loc.F("{0} 해금! 장착 칸이 모자라 꺼 두었어요", HV[arg].n)); workshop.Render(); break;
                 case "hvlevel":
                     if (!HvLevel(arg)) { Snd.Err(); break; }
-                    Snd.Buy(); ShowToast($"{HV[arg].n} {U.Stars(HvStar(arg))}{(HvStar(arg) >= 5 ? " 최대! 날이 늘었어요" : "")}"); workshop.Render(); break;
+                    Snd.Buy(); ShowToast(HvStar(arg) >= 5 ? Loc.F("{0} {1} 최대! 날이 늘었어요", HV[arg].n, U.Stars(HvStar(arg))) : $"{HV[arg].n} {U.Stars(HvStar(arg))}"); workshop.Render(); break;
                 case "hvtoggle":
-                    if (!HvToggle(arg)) { Snd.Err(); ShowToast("수확기는 최소 1개는 켜져 있어야 해요"); break; }
-                    Snd.Ui(); workshop.Render(); break;
+                    HvToggle(arg);
+                    Snd.Ui(); workshop.Render();
+                    if (HvOver()) ShowToast(Loc.T(HV_OVER_MSG));
+                    break;
                 case "skinshop": Snd.Ui(); OpenModal(skins, () => { if (Screen == "farm") farmScreen.Render(); else if (Screen == "tree") tree.Refresh(); }); skins.Render(); break;
                 case "skintab": Snd.Ui(); skins.tab = arg; skins.Render(); break;
                 case "buyskin":
-                    if (!BuySkin(arg)) { Snd.Err(); ShowToast("다이아몬드가 부족해요"); break; }
-                    Snd.Record(); ShowToast($"{SKIN[arg].n} 스킨을 샀어요!"); skins.Render(); break;
+                    if (!BuySkin(arg)) { Snd.Err(); ShowToast(Loc.T("균사석이 부족해요")); break; }
+                    Snd.Record(); ShowToast(Loc.F("{0} 스킨을 샀어요!", SKIN[arg].n)); skins.Render(); break;
                 case "wearskin":
                 {
                     var p = arg.Split('|');
@@ -316,14 +314,14 @@ namespace MoreMush
                     if (p.Length > 1) petCard.Render(); else skins.Render();
                     break;
                 }
-                // ===== 버섯 농장 =====
+                // ===== 세계수 =====
                 case "farm": Snd.Ui(); EnterFarm(null); break;
                 case "totree2": Snd.Ui(); EnterTree(); break;
                 case "farmall":
                 {
                     var r = farm.CareAll();
-                    if (r.n == 0) { Snd.Err(); ShowToast("지금 부탁하는 꼬마가 없어요"); break; }
-                    Snd.Record(); ShowToast($"꼬마 {r.n}마리를 돌봤어요! 균사석 +{U.Fmt(r.gem)}{(r.bonus > 0 ? $" (호감도 보너스 +{r.bonus})" : "")}{(r.dia > 0 ? $" · 다이아몬드 +{r.dia}" : "")}"); farmScreen.Render();
+                    if (r.n == 0) { Snd.Err(); ShowToast(Loc.T("지금 부탁하는 꼬마가 없어요")); break; }
+                    Snd.Record(); ShowToast(Loc.F("꼬마 {0}마리를 돌봤어요! 균사석 +{1}", r.n, U.Fmt(r.gem)) + (r.bonus > 0 ? " " + Loc.F("(호감도 보너스 +{0})", r.bonus) : "") + (r.extra > 0 ? " · " + Loc.F("추가 +{0}", r.extra) : "")); farmScreen.Render();
                     break;
                 }
                 case "farmcard": Snd.Ui(); OpenPetCard(arg); break;
@@ -333,28 +331,28 @@ namespace MoreMush
                 {
                     string id = string.IsNullOrEmpty(arg) ? petCard.id : arg;
                     if (!SPC.ContainsKey(id ?? "")) break;
-                    if (!StarUp(id)) { Snd.Err(); ShowToast("골드나 균사석이 부족해요"); break; }
+                    if (!StarUp(id)) { Snd.Err(); ShowToast(Loc.T("골드나 균사석이 부족해요")); break; }
                     Snd.Record(); farm.StarredUp(id); ShowToast($"{EvoName(SPC[id])} ★{CStarOf(id)}! {FxText(id)}"); petCard.Render(); break;
                 }
-                // ===== 버섯 나무 =====
+                // ===== 세계수 나무 =====
                 case "treepanel": Snd.Ui(); farmScreen.treeOpen = arg == "open" || !farmScreen.treeOpen; farmScreen.Render(); break;
                 case "treeup":
-                    if (!TreeUp()) { Snd.Err(); ShowToast("골드가 부족해요"); break; }
+                    if (!TreeUp()) { Snd.Err(); ShowToast(CanTreeUp() == TreeUpFail.Exp ? Loc.T("세계수 경험치가 모자라요 (의뢰로 모아요)") : Loc.T("골드가 부족해요")); break; }
                     Snd.Record(); farm.TreeLeveled();
-                    ShowToast($"버섯 나무 Lv.{TreeLv()}! 버섯 자리 {TREE.Slots(TreeLv())}개 · 수확량 ×{U.FmtN(TreeYieldMul())}"); farmScreen.Render(); break;
+                    ShowToast(Loc.F("세계수 나무 Lv.{0}! 버섯 자리 {1}개 · 수확량 ×{2}", TreeLv(), TREE.Slots(TreeLv()), U.FmtN(TreeYieldMul()))); farmScreen.Render(); break;
                 case "pickall":
                 {
                     int n = farm.PickAll();
-                    if (n == 0) { Snd.Err(); ShowToast(farm.Workers == 0 && farm.crits.Count > 0 ? "꼬마들이 모두 건물을 짓고 있어요" : farm.crits.Count == 0 ? "특수 버섯(꼬마)을 잡으면 버섯을 따 줘요" : "다 자란 버섯이 없어요"); break; }
-                    Snd.Ui(); ShowToast($"꼬마들이 버섯 {n}개를 따러 가요!"); farmScreen.Render();
+                    if (n == 0) { Snd.Err(); ShowToast(farm.Workers == 0 && farm.crits.Count > 0 ? Loc.T("꼬마들이 모두 건물을 짓고 있어요") : farm.crits.Count == 0 ? Loc.T("특수 버섯(꼬마)을 잡으면 버섯을 따 줘요") : Loc.T("다 자란 버섯이 없어요")); break; }
+                    Snd.Ui(); ShowToast(Loc.F("꼬마들이 버섯 {0}개를 따러 가요!", n)); farmScreen.Render();
                     break;
                 }
                 case "treeaccel": OpenAccel("tree", 0); break;
                 case "accelok":
                 {
                     bool ok = accel.kind == "build" ? BuildAccel(accel.uid) : TreeAccel();
-                    if (!ok) { Snd.Err(); ShowToast("균사석이 부족해요"); break; }
-                    Snd.Record(); ShowToast(accel.kind == "build" ? "건설 완료!" : "버섯이 모두 다 자랐어요!");
+                    if (!ok) { Snd.Err(); ShowToast(Loc.T("균사석이 부족해요")); break; }
+                    Snd.Record(); ShowToast(accel.kind == "build" ? Loc.T("건설 완료!") : Loc.T("버섯이 모두 다 자랐어요!"));
                     CloseModal(); farmScreen.Render();
                     break;
                 }
@@ -369,10 +367,10 @@ namespace MoreMush
                     if (fail != BuildFail.None)
                     {
                         Snd.Err();
-                        ShowToast(fail == BuildFail.Max ? "더 지을 수 없어요 (최대 개수)" : fail == BuildFail.Dia ? "다이아몬드가 부족해요" : "쉬고 있는 꼬마가 없어요 (모두 건설 중)");
+                        ShowToast(fail == BuildFail.Max ? Loc.T("더 지을 수 없어요 (최대 개수)") : fail == BuildFail.Gem ? Loc.T("균사석이 부족해요") : Loc.T("쉬고 있는 꼬마가 없어요 (모두 건설 중)"));
                         break;
                     }
-                    if (!farm.BeginPlace(arg)) { Snd.Err(); ShowToast("목장에 놓을 자리가 없어요"); break; }
+                    if (!farm.BeginPlace(arg)) { Snd.Err(); ShowToast(Loc.T("목장에 놓을 자리가 없어요")); break; }
                     Snd.Ui(); CloseModal(); farmScreen.Render();
                     break;
                 }
@@ -380,14 +378,14 @@ namespace MoreMush
                 {
                     if (farm.Moving)
                     {
-                        if (!farm.ConfirmMove()) { Snd.Err(); ShowToast("여기에는 설치할 수 없어요"); break; }
+                        if (!farm.ConfirmMove()) { Snd.Err(); ShowToast(Loc.T("여기에는 설치할 수 없어요")); break; }
                         Snd.Buy(); farmScreen.Render();
                         break;
                     }
                     var b = farm.ConfirmPlace();
-                    if (b == null) { Snd.Err(); ShowToast(farm.Placing && !farm.PlaceOk ? "여기에는 설치할 수 없어요" : "지을 수 없어요"); break; }
+                    if (b == null) { Snd.Err(); ShowToast(farm.Placing && !farm.PlaceOk ? Loc.T("여기에는 설치할 수 없어요") : Loc.T("지을 수 없어요")); break; }
                     Snd.Record();
-                    ShowToast($"{U.Iga(EvoName(SPC[b.critter]))} {BUILDING[b.id].n}을(를) 짓기 시작했어요! ({BuildLeftText(b)})");
+                    ShowToast(Loc.F("{0} {1}을(를) 짓기 시작했어요! ({2})", U.Iga(EvoName(SPC[b.critter])), BUILDING[b.id].n, BuildLeftText(b)));
                     farmScreen.Render();
                     break;
                 }
@@ -399,7 +397,7 @@ namespace MoreMush
                     var r = ClaimAuto();
                     if (r == null) { Snd.Err(); break; }
                     Snd.Record();
-                    ShowToast($"자동 수확 보상! {UIUtil.Ic("gold")}+{U.Fmt(r.Value.gold)} {UIUtil.Ic("gem")}+{r.Value.gem} {UIUtil.Ic("dia")}+{r.Value.dia}");
+                    ShowToast(Loc.F("자동 수확 보상! {0}+{1} {2}+{3}", UIUtil.Ic("gold"), U.Fmt(r.Value.gold), UIUtil.Ic("gem"), r.Value.gem));
                     if (auto.away > 0) CloseModal(); else auto.Render();   // 복귀 팝업은 받으면 닫는다
                     break;
                 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4173397489017592090}
   - component: {fileID: 8503448342976151069}
   - component: {fileID: 1650857609112380337}
+  - component: {fileID: 3855101505979585332}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -67,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: NEW
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
-  m_sharedMaterial: {fileID: 4061831175275164547, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_sharedMaterial: {fileID: 1883410513914278816, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -137,6 +138,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3855101505979585332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593673741621127020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: 
 --- !u!1 &6020263831010177747
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,6 +166,7 @@ GameObject:
   - component: {fileID: 6764733987916280690}
   - component: {fileID: 7923896620065782}
   - component: {fileID: 2827971187164694073}
+  - component: {fileID: 3870718719385769738}
   m_Layer: 0
   m_Name: Name
   m_TagString: Untagged
@@ -206,8 +223,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC591\uC1A1\uC774"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
-  m_sharedMaterial: {fileID: 4061831175275164547, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_sharedMaterial: {fileID: 1883410513914278816, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -310,6 +327,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 2
   m_VerticalFit: 0
+--- !u!114 &3870718719385769738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6020263831010177747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uC591\uC1A1\uC774"
 --- !u!1 &6680306048607872902
 GameObject:
   m_ObjectHideFlags: 0

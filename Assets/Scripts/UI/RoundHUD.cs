@@ -30,7 +30,7 @@ namespace MoreMush
         // 숫자 글자는 값이 바뀔 때만 다시 만든다 (예전엔 매 프레임 문자열 30여 개를 만들었다)
         RoundStats shownSt;
         readonly List<(string id, string icon, string col)> icons = new List<(string, string, string)>();
-        string festStr;
+        string festStr, shownLang;
         Outline bannerOutline;
         double shownScore = double.NaN, shownValue = double.NaN;
         readonly double[] shownGain = { double.NaN, double.NaN, double.NaN };
@@ -75,21 +75,21 @@ namespace MoreMush
                 while (skillIcons.Count <= i) { var im = Instantiate(skillIconPrefab, skillRow); skillIcons.Add(im); skillInner.Add(im.transform.GetChild(0).GetComponent<Image>()); }
                 skillInner[i].sprite = SpriteDB.Icon(icons[i].icon);
             }
-            festStr = $"{UIUtil.Ic("s_fest")} 풍년! 점수·수확량 ×{U.FmtN(st.festMul)}";
+            festStr = Loc.F("{0} 풍년! 점수·수확량 ×{1}", UIUtil.Ic("s_fest"), U.FmtN(st.festMul));
 
             var w = st.weather;
             string wcol = w.good ? WEATHER_GOOD : WEATHER_BAD;
             if (bannerOutline == null) bannerOutline = weatherBannerFrame.GetComponent<Outline>();
             if (bannerOutline != null) bannerOutline.effectColor = U.Hex(wcol);
             weatherBannerIcon.sprite = SpriteDB.Icon(w.icon);
-            UIUtil.SetText(weatherBannerTitle, $"오늘의 날씨: {w.n}");
+            UIUtil.SetText(weatherBannerTitle, Loc.F("오늘의 날씨: {0}", w.n));
             weatherBannerTitle.color = U.Hex(wcol);
-            UIUtil.SetText(weatherBannerDesc, $"{(w.good ? "좋은 날씨" : "나쁜 날씨")} · {w.d}");
+            UIUtil.SetText(weatherBannerDesc, (w.good ? Loc.T("좋은 날씨") : Loc.T("나쁜 날씨")) + " · " + w.d);
             weatherBannerDesc.color = U.Hex(w.good ? "#cfe8ff" : "#ffd0c8");
             cornerWeatherIcon.sprite = SpriteDB.Icon(w.icon);
             UIUtil.SetText(cornerWeather, w.n);
             cornerWeather.color = U.Hex(wcol);
-            UIUtil.SetText(cornerRegion, $"{UIUtil.Ic(st.theme.icon)} {st.theme.n} · 스테이지 {st.stage}");
+            UIUtil.SetText(cornerRegion, Loc.F("{0} {1} · 스테이지 {2}", UIUtil.Ic(st.theme.icon), st.theme.n, st.stage));
             shownBalls = -1;   // 능력치 줄은 새 라운드 값으로 다시
         }
 
@@ -97,6 +97,7 @@ namespace MoreMush
         public void Draw(RoundSim R, float now, int speed, bool touch)
         {
             var st = R.st;
+            if (shownLang != Loc.Lang) { shownLang = Loc.Lang; shownSt = null; shownTenths = int.MinValue; shownBalls = -1; shownCodex = -1; }   // 언어가 바뀌면 글자 캐시를 다시
             if (st != shownSt) RoundChanged(R);
             float bump = 1 + R.scoreBump * 0.06f;
             scoreValue.localScale = new Vector3(bump, bump, 1);
@@ -110,13 +111,14 @@ namespace MoreMush
             }
             float gb = 1 + R.saleBump * 0.1f;
             valueIcon.localScale = new Vector3(gb, gb, 1);
-            if (R.value != shownValue) { shownValue = R.value; UIUtil.SetText(valueText, U.Fmt(R.value)); }
+            double gold = R.GoldSoFar;   // 판매가 없어진 뒤로 이 칸은 예상 정산 골드
+            if (gold != shownValue) { shownValue = gold; UIUtil.SetText(valueText, U.Fmt(gold)); }
 
             float frac = Mathf.Clamp01(R.timeLeft / R.timeMax);
             timeFill.fillAmount = frac;
             timeFill.color = R.timeLeft <= 5 ? (Mathf.Sin(now * 12) > 0 ? U.Hex("#ff5a4a") : U.Hex("#ff9a4a")) : R.timeLeft <= 10 ? U.Hex("#ffc44a") : U.Hex("#7fd65a");
             int tenths = Game.DBG.infinite ? int.MaxValue : Mathf.RoundToInt(R.timeLeft * 10);
-            if (tenths != shownTenths) { shownTenths = tenths; UIUtil.SetText(timeText, Game.DBG.infinite ? "∞" : $"{R.timeLeft:F1}초"); }
+            if (tenths != shownTenths) { shownTenths = tenths; UIUtil.SetText(timeText, Game.DBG.infinite ? "∞" : Loc.F("{0:F1}초", R.timeLeft)); }
             UIUtil.Show(festText, R.festOn);
             if (R.festOn) UIUtil.SetText(festText, festStr);
 
@@ -145,15 +147,15 @@ namespace MoreMush
                 UIUtil.SetText(cornerSpeed, spd > 1 ? $"▶▶ ×{spd}" : "▶ ×1");
                 cornerSpeed.color = spd > 1 ? U.Hex("#ffd23a") : U.Hex("#bbbbbb");
             }
-            UIUtil.SetText(cornerHint, touch ? "눌러서 배속" : "누르기·F·우클릭 배속");
+            UIUtil.SetText(cornerHint, touch ? Loc.T("눌러서 배속") : Loc.T("누르기·F·우클릭 배속"));
 
             float sh = R.codexShake > 0 ? Mathf.Sin(now * 40) * 6 * R.codexShake : 0;
             codexButton.anchoredPosition = codexOrigin + new Vector2(sh, 0);
             int codex = Game.CodexCount();
-            if (codex != shownCodex) { shownCodex = codex; UIUtil.SetText(codexText, $"{UIUtil.Ic("book")} 도감 {codex}/{SP_TOTAL}"); }
+            if (codex != shownCodex) { shownCodex = codex; UIUtil.SetText(codexText, Loc.F("{0} 도감 {1}/{2}", UIUtil.Ic("book"), codex, SP_TOTAL)); }
 
             UIUtil.Show(aimHint, R.phase == "aim");
-            if (R.phase == "aim") UIUtil.SetText(aimHint2, touch ? "발사 후에는 화면을 손가락으로 좌우로 밀어 바로 받아치세요 (안 움직여도 괜찮아요)" : "발사 후에는 마우스를 좌우로 움직여 바로 받아치세요 (안 움직여도 괜찮아요)");
+            if (R.phase == "aim") UIUtil.SetText(aimHint2, touch ? Loc.T("발사 후에는 화면을 손가락으로 좌우로 밀어 바로 받아치세요 (안 움직여도 괜찮아요)") : Loc.T("발사 후에는 마우스를 좌우로 움직여 바로 받아치세요 (안 움직여도 괜찮아요)"));
 
             UIUtil.Show(endDim, R.phase == "end");
             if (R.phase == "end")

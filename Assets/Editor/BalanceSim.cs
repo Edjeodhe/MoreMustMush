@@ -138,15 +138,8 @@ namespace MoreMush.EditorTools
                     if (sw.Elapsed.TotalSeconds > maxWallSec || (stopStage > 0 && StageNow() > stopStage)) break;
                     var rnd = new System.Random(seed * 1000 + G.rounds); UnityEngine.Random.InitState(seed * 1000 + G.rounds);
                     var r = PlayRound(rnd, skill, !GAME_ZONE);
-                    // 판매·의뢰: 매 판 끝에 의뢰를 전부 하고 창고 버섯을 전부 판다(사용자 결정 2026-10-08 "의뢰+전부 판매 가정, 널널하게").
-                    // 판 수입(ph.inc)에 들어가서 가격 맞추기도 이 수입을 기준으로 한다. 끄려면 SELL = false(명령줄 -nosell)
+                    // 버섯 판매·마을 의뢰는 v3에서 없어졌다. 판 수입은 정산 골드뿐이다 (SELL 설정은 이제 효과 없음)
                     double sold = 0;
-                    if (SELL)
-                    {
-                        RefreshQuests();
-                        sold += QuestAll().gold;
-                        sold += SellMush(G.inv.Select(kv => (kv.Key, kv.Value)).ToList()).gold;
-                    }
                     int before = GoldLevels();
                     BulkBuy(new[] { "ed", "md", "ps" }, 0, false);
                     G.play += r.duration + OVERHEAD_SEC;   // 추정 플레이 시간(초)
@@ -161,7 +154,7 @@ namespace MoreMush.EditorTools
                         if (ph.done[t] == 0 && GoldLevels(t) == GoldLevelsMax(t)) { ph.done[t] = r.stage; ph.doneMin[t] = G.play / 60; ph.doneInc[t] = r.scoreGold; marks += $" ← {TIER_NAMES[t]} 완료"; }
                     }
                     if (r.stage % every == 0 || r.stage <= 10 || marks != "")
-                        Log(sb, $"R{r.stage} | {G.play / 60:F0}분 | {THEME[r.zone].n} | {r.duration:F0}s | {r.balls} | {U.Fmt(r.atk)} | {U.Fmt(r.scoreGold)} | {r.harvests} | {U.Fmt(G.gold)} | +{bought} | {GoldLevels(1)}/{GoldLevelsMax(1)} {GoldLevels(2)}/{GoldLevelsMax(2)} {GoldLevels(3)}/{GoldLevelsMax(3)} | 도감 {CodexCount()} 별 {SPECIES.Sum(sp => StarOf(sp.id))} 최고등급 {SPECIES.Where(IsUnlockedSp).Max(sp => sp.t)} 황금 {GoldenCount()}{marks}");
+                        Log(sb, $"R{r.stage} | {G.play / 60:F0}분 | {THEME[r.zone].nKo} | {r.duration:F0}s | {r.balls} | {U.Fmt(r.atk)} | {U.Fmt(r.scoreGold)} | {r.harvests} | {U.Fmt(G.gold)} | +{bought} | {GoldLevels(1)}/{GoldLevelsMax(1)} {GoldLevels(2)}/{GoldLevelsMax(2)} {GoldLevels(3)}/{GoldLevelsMax(3)} | 도감 {CodexCount()} 별 {SPECIES.Sum(sp => StarOf(sp.id))} 최고등급 {SPECIES.Where(IsUnlockedSp).Max(sp => sp.t)} 황금 {GoldenCount()}{marks}");
                     File.WriteAllText(StatePath(seed), JsonConvert.SerializeObject(G));
                     File.WriteAllText(PhasePath(seed), JsonConvert.SerializeObject(ph));
                 }
@@ -405,7 +398,7 @@ namespace MoreMush.EditorTools
                     var cs = Enumerable.Range(0, n.max).Select(l => NodeCost(n, l).gold / per[t]).ToList();
                     if (t > 0) { total++; if (cs[0] < lastPer) ok++; }
                     lastPer = cs.Last();
-                    parts.Add($"{n.n}: " + string.Join(" → ", cs.Select(c => U.Fmt(c))));
+                    parts.Add($"{n.nKo}: " + string.Join(" → ", cs.Select(c => U.Fmt(c))));
                 }
                 sb.AppendLine($"{string.Join(" | ", parts)}  (효율 넘김 {ok}/{total})");
             }

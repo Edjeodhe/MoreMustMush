@@ -13,11 +13,44 @@ namespace MoreMush
         public const float BAR_T = 14;
         // 화면에서 잘 보이게 키우는 배율. 그림과 충돌 범위를 같이 키운다 (수확기 = 핀볼, 장치 = 그루터기·이끼·두더지굴·개울·도토리)
         public const float BALL_SCALE = 1.5f, DEV_SCALE = 1.4f;
+        // 기본 수확기: 빈 장착 칸을 채우고, 스킬이 만드는 분신도 이 모양이다. 분신 공격력 = 기본의 CLONE_STAT 배
+        public const string BASE_HV = "sam";
+        public const float CLONE_STAT = 0.2f;
         public static readonly float[] MAP_ZOOM = { 1.5f, 1.35f, 1.2f, 1.1f, 1.0f };   // 필드 넓히기 0~4레벨
         public const int MAX_BALLS = 60;
 
+        // 값이 화면용 한국어 문구인 사전. 읽을 때 지금 언어로 번역한다 (키는 그대로)
+        public sealed class LocMap
+        {
+            readonly Dictionary<string, string> ko;
+            public LocMap(Dictionary<string, string> ko) { this.ko = ko; }
+            public string this[string key] => Loc.T(ko[key]);
+            public string Raw(string key) => ko[key];
+            public bool ContainsKey(string key) => ko.ContainsKey(key);
+            public bool TryGetValue(string key, out string value)
+            {
+                if (ko.TryGetValue(key, out var v)) { value = Loc.T(v); return true; }
+                value = null; return false;
+            }
+            public IEnumerable<string> Keys => ko.Keys;
+        }
+
+        // 값이 화면용 한국어 문구 목록인 사전 (꼬마 대사). 읽을 때 지금 언어로 번역한 새 배열을 준다
+        public sealed class LocLines
+        {
+            readonly Dictionary<string, string[]> ko;
+            public LocLines(Dictionary<string, string[]> ko) { this.ko = ko; }
+            public string[] this[string key] => Array.ConvertAll(ko[key], Loc.T);
+            public bool ContainsKey(string key) => ko.ContainsKey(key);
+        }
+
         // ===== 분류 =====
-        public class Cat { public string key, name, color, dark, light; }
+        public class Cat
+        {
+            public string key, color, dark, light;
+            public string nameKo;                                              // 한국어 원문
+            public string name { get => Loc.T(nameKo); set => nameKo = value; }   // 화면용 (지금 언어)
+        }
         public static readonly Dictionary<string, Cat> CATS = new Dictionary<string, Cat>
         {
             ["ed"] = new Cat { key = "ed", name = "식용", color = "#f28c28", dark = "#b85e0e", light = "#ffe2c2" },
@@ -29,7 +62,12 @@ namespace MoreMush
         public const float SELL_PRICE = 1;
 
         // ===== 등급 =====
-        public class Tier { public string name, color; public float hp, score, drop, r, w; }
+        public class Tier
+        {
+            public string color; public float hp, score, drop, r, w;
+            public string nameKo;
+            public string name { get => Loc.T(nameKo); set => nameKo = value; }
+        }
         public static readonly Tier[] TIERS =
         {
             new Tier { name = "일반", hp = 3, score = 1, drop = 1, r = 26, w = 50, color = "#cfc8b8" },
@@ -41,7 +79,12 @@ namespace MoreMush
 
         // ===== 밸런스 프리셋 =====
         // colStep: 군락지 수 강화 레벨당 늘어나는 군락지 수 (덧셈식)
-        public class Preset { public string id, n; public float col0, colStep, rMul, ball0, launch, min; public float[] hp; }
+        public class Preset
+        {
+            public string id; public float col0, colStep, rMul, ball0, launch, min; public float[] hp;
+            public string nKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+        }
         public static readonly Dictionary<string, Preset> PRESETS = new Dictionary<string, Preset>
         {
             ["tuned"] = new Preset { id = "tuned", n = "조정안", col0 = 12, colStep = 5, rMul = 1.25f, ball0 = 18, hp = new float[] { 1, 4, 12, 40 }, launch = 1200, min = 700 },
@@ -70,7 +113,10 @@ namespace MoreMush
         // ===== 도감 75종 =====
         public class Species
         {
-            public string c, n, sh, c1, c2, pat, d;
+            public string c, sh, c1, c2, pat;
+            public string nKo, dKo;   // 이름·특징 한 줄의 한국어 원문 (사전 키·비교는 nKo로)
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+            public string d { get => Loc.T(dKo); set => dKo = value; }
             public int t, idx;
             public string id, trait, ab, afterId, after, theme, spore;
             public int cnt, boss;   // boss: 이 버섯이 보스로 나오는 스테이지 (보스 전투는 아직 없어 그 스테이지에 닿으면 해금)
@@ -166,7 +212,13 @@ namespace MoreMush
         };
 
         // ===== 별 능력치 =====
-        public class Ability { public string n, unit; public float per; public bool pct, pp; }
+        public class Ability
+        {
+            public float per; public bool pct, pp;
+            public string nKo, unitKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+            public string unit { get => Loc.T(unitKo); set => unitKo = value; }
+        }
         public static readonly Dictionary<string, Ability> AB = new Dictionary<string, Ability>
         {
             ["atk"] = new Ability { n = "공격력", per = 0.02f, pct = true },
@@ -180,7 +232,7 @@ namespace MoreMush
             ["combo"] = new Ability { n = "콤보 계수", per = 0.02f, pct = true },
             ["score"] = new Ability { n = "타격 점수", per = 0.03f, pct = true },
             ["harvest"] = new Ability { n = "수확량", per = 0.02f, pct = true },
-            ["price"] = new Ability { n = "판매가", per = 0.03f, pct = true },
+            ["price"] = new Ability { n = "정산 골드", per = 0.03f, pct = true },
             ["rare"] = new Ability { n = "에픽 이상 출현", per = 0.02f, pct = true },
             ["golden"] = new Ability { n = "황금 변종 확률", per = 0.0005f, pct = true, pp = true },
             ["regen"] = new Ability { n = "군락 재생 속도", per = 0.015f, pct = true },
@@ -215,20 +267,34 @@ namespace MoreMush
 
         public static readonly int[] STAR_N = { 10, 50, 200, 800, 3000 };
 
-        // ===== 특수 버섯 (꼬마): 라운드에서 잡으면 버섯 농장에 들어온다. 능력은 농장(아웃게임)에만 있다 · Defs.CRITTER_FX =====
-        public class Special { public string id, n, c1, c2, perk; }
+        // ===== 특수 버섯 (꼬마): 라운드에서 잡으면 세계수에 들어온다. 능력은 농장(아웃게임)에만 있다 · Defs.CRITTER_FX =====
+        public class Special
+        {
+            public string id, c1, c2;
+            public string nKo, perkKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+            public string perk { get => Loc.T(perkKo); set => perkKo = value; }
+        }
         public static readonly Special[] SPECIALS =
         {
             new Special { id = "fire", n = "불씨 꼬마", c1 = "#ff7a2a", c2 = "#ffd34a", perk = "보유 효과: 불씨 꼬마가 버섯을 따면 균사석 +20%" },
             new Special { id = "spark", n = "찌릿 꼬마", c1 = "#ffe03a", c2 = "#fff7b0", perk = "보유 효과: 모든 건물 건설 속도 +10%" },
-            new Special { id = "dew", n = "이슬 꼬마", c1 = "#5fc8ff", c2 = "#d8f4ff", perk = "보유 효과: 나무 버섯 성장 시간 −5%" },
+            new Special { id = "dew", n = "이슬 꼬마", c1 = "#5fc8ff", c2 = "#d8f4ff", perk = "보유 효과: 세계수 버섯 성장 시간 −5%" },
             new Special { id = "coin", n = "동전 꼬마", c1 = "#f5c518", c2 = "#fff2a8", perk = "보유 효과: 자동 수확 골드 +10%" },
-            new Special { id = "star", n = "별똥 꼬마", c1 = "#b07bff", c2 = "#f2e2ff", perk = "보유 효과: 부탁을 들어줄 때 다이아몬드 확률 +5%p" },
-            new Special { id = "leaf", n = "새싹 꼬마", c1 = "#5fc85a", c2 = "#d8f8c0", perk = "보유 효과: 버섯 딸 때 포자 +1 확률 +20%p" },
+            new Special { id = "star", n = "별똥 꼬마", c1 = "#b07bff", c2 = "#f2e2ff", perk = "보유 효과: 부탁을 들어줄 때 균사석 +1 확률 +5%p" },
+            new Special { id = "leaf", n = "새싹 꼬마", c1 = "#5fc85a", c2 = "#d8f8c0", perk = "보유 효과: 버섯 딸 때 균사석 +1 확률 +20%p" },
             new Special { id = "moon", n = "달빛 꼬마", c1 = "#3a4a8a", c2 = "#f6f0b0", perk = "보유 효과: 자동 수확 균사석 +10%" },
             new Special { id = "wind", n = "바람 꼬마", c1 = "#5fd8c0", c2 = "#e8fff8", perk = "보유 효과: 모든 꼬마 버섯 따기 속도 +10%" },
             new Special { id = "rock", n = "조약돌 꼬마", c1 = "#8a8a86", c2 = "#c8c6bc", perk = "보유 효과: 조약돌 꼬마가 지으면 건설 시간 −20%" },
-            new Special { id = "chest", n = "꿀밤 꼬마", c1 = "#a0602a", c2 = "#f0c890", perk = "보유 효과: 나무 버섯 균사석 +5%" },
+            new Special { id = "chest", n = "꿀밤 꼬마", c1 = "#a0602a", c2 = "#f0c890", perk = "보유 효과: 세계수 버섯 균사석 +5%" },
+        };
+        // 진화한 꼬마 이름 (1단계 · 2단계). 번역표 키가 되도록 원문을 그대로 적어 둔다
+        public static readonly Dictionary<string, string[]> SPECIAL_EVO = new Dictionary<string, string[]>
+        {
+            ["fire"] = new[] { "불씨 버섯", "불씨 대왕버섯" }, ["spark"] = new[] { "찌릿 버섯", "찌릿 대왕버섯" }, ["dew"] = new[] { "이슬 버섯", "이슬 대왕버섯" },
+            ["coin"] = new[] { "동전 버섯", "동전 대왕버섯" }, ["star"] = new[] { "별똥 버섯", "별똥 대왕버섯" }, ["leaf"] = new[] { "새싹 버섯", "새싹 대왕버섯" },
+            ["moon"] = new[] { "달빛 버섯", "달빛 대왕버섯" }, ["wind"] = new[] { "바람 버섯", "바람 대왕버섯" }, ["rock"] = new[] { "조약돌 버섯", "조약돌 대왕버섯" },
+            ["chest"] = new[] { "꿀밤 버섯", "꿀밤 대왕버섯" },
         };
         public static readonly Dictionary<string, Special> SPC = SPECIALS.ToDictionary(s => s.id);
         public const float SPECIAL_P = 0.3f, SPECIAL_LIFE = 10;
@@ -240,19 +306,19 @@ namespace MoreMush
         // 포자 값·자동 수확 골드·특수 버섯 보너스의 기준. 100골드에서 3스테이지마다 ×1.5
         public static double StageGold(int stage) => Math.Ceiling(100 * Math.Pow(1.5, (stage - 1) / 3) / 10) * 10;
 
-        public static readonly Dictionary<string, string> TRAIT_TEXT = new Dictionary<string, string>
+        public static readonly LocMap TRAIT_TEXT = new LocMap(new Dictionary<string, string>
         {
             ["jelly"] = "젤리(통과): 튕기지 않고 통과하며 여러 개를 한 번에 긁는다",
             ["slow"] = "포자 뿜기: 맞으면 확률로 포자 구름(느림)",
             ["weak"] = "포자 뿜기: 맞으면 확률로 포자 구름(약화)",
             ["both"] = "포자 뿜기: 맞으면 확률로 포자 구름(느림+약화)",
             ["wander"] = "떠돌이: 군락지가 필드를 돌아다닌다 (점수 ×1.5)",
-        };
+        });
 
-        public static readonly Dictionary<string, string> RECORD_NAMES = new Dictionary<string, string>
+        public static readonly LocMap RECORD_NAMES = new LocMap(new Dictionary<string, string>
         {
             ["score"] = "한 라운드 최고 점수", ["combo"] = "최장 콤보 (연속 수확)", ["harvest"] = "한 라운드 최다 수확", ["balls"] = "최대 동시 핀볼 수", ["chain"] = "충격파 최장 연쇄",
-        };
+        });
         public static readonly string[] RECORD_KEYS = { "score", "combo", "harvest", "balls", "chain" };
 
         static Defs()
@@ -288,12 +354,12 @@ namespace MoreMush
                 s.idx = idx[s.c]++;
                 s.id = s.c + s.idx;
                 s.trait = s.jelly ? "jelly" : s.spore != null ? "spore" : s.wander ? "wander" : null;
-                SPECIES.Add(s); SP[s.id] = s; SP_BY_NAME[s.n] = s;
+                SPECIES.Add(s); SP[s.id] = s; SP_BY_NAME[s.nKo] = s;
             }
             foreach (var s in SPECIES)
             {
                 if (s.after != null) s.afterId = SP_BY_NAME[s.after].id;
-                s.ab = SP_AB[s.n];
+                s.ab = SP_AB[s.nKo];
             }
             InitSkillsAndNodes();
             InitWorld();

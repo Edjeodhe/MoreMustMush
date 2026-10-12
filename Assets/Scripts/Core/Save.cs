@@ -9,21 +9,23 @@ namespace MoreMush
     [Serializable]
     public class SaveData
     {
-        public int v = 2;
-        public double gold, gem, spore, dia;       // dia 다이아몬드: 스킨·건물에 쓰는 코스메틱 재화
+        public int v = SaveMigration.CURRENT;
+        public double gold, gem;                   // gem 균사석: 노드·꼬마·건물·스킨에 쓴다
+        // v2 세이브의 다이아몬드. 읽기만 하고(SaveMigration이 균사석으로 바꿈) 다시 저장하지 않는다
+        [JsonProperty("dia")] public double legacyDia;
+        public bool ShouldSerializelegacyDia() => false;
         public double autoT;                       // 자동 수확 보상을 마지막으로 받은 시각 (ms, 0 = 아직 시작 안 함)
         public double seenT;                       // 마지막으로 게임 안에 있던 시각 (ms, 복귀 팝업용, 0 = 기록 없음)
         public Skins skins = new Skins();
         public Dictionary<string, int> nodes = new Dictionary<string, int>();
         public Dictionary<string, bool> seeds = new Dictionary<string, bool>();
         public Dictionary<string, CodexEntry> codex = new Dictionary<string, CodexEntry>();
-        public Dictionary<string, double> inv = new Dictionary<string, double>();
         public Dictionary<string, bool> specials = new Dictionary<string, bool>();
         public Dictionary<string, int> hv = new Dictionary<string, int> { ["sam"] = 1 };
         public Dictionary<string, bool> hvOn = new Dictionary<string, bool> { ["sam"] = true };
         public string theme = "forest";
-        public List<Quest> quests = new List<Quest>();   // 마을 의뢰 (버섯 상점)
-        public Farm farm = new Farm();             // 버섯 농장 (목장·밭)
+        public Farm farm = new Farm();             // 세계수 (목장·밭)
+        public Quests quest = new Quests();        // 일일·주간 의뢰 (예전 마을 의뢰 "quests"와는 다른 필드)
         public Records rec = new Records();
         public int rounds;
         public double play;
@@ -31,7 +33,7 @@ namespace MoreMush
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
         // next 다음 부탁 시각(ms, 실제 시간) · kind 부탁 종류 · love 호감도(부탁 수) · evo 진화 단계 · star 별 등급
-        // tree 버섯 나무 · blds 지은(짓는) 건물
+        // tree 세계수 나무 · blds 지은(짓는) 건물
         [Serializable]
         public class Farm
         {
@@ -42,12 +44,15 @@ namespace MoreMush
             public Tree tree = new Tree();
             public List<Bld> blds = new List<Bld>();
         }
-        // 버섯 나무: lv 레벨 · slots 버섯 자리마다 지금 열리는 버섯 (kind, t0 열리기 시작한 시각, at 다 자라는 시각, ms)
-        [Serializable] public class Tree { public int lv = 1; public List<Fruit> slots = new List<Fruit>(); }
+        // 세계수 나무: lv 레벨 · exp 의뢰로 모은 경험치 · slots 버섯 자리마다 지금 열리는 버섯 (kind, t0 열리기 시작한 시각, at 다 자라는 시각, ms)
+        [Serializable] public class Tree { public int lv = 1; public double exp; public List<Fruit> slots = new List<Fruit>(); }
+        // 의뢰: day·week 마지막으로 뽑은 KST 날짜·주 번호 (-1 = 아직) · 의뢰마다 진행도
+        [Serializable] public class Quests { public long day = -1, week = -1; public List<QuestProg> daily = new List<QuestProg>(), weekly = new List<QuestProg>(); }
+        // id 의뢰 정의 · arg 지정한 버섯 id (species) · prog 진행도 · claimed 보상 받음
+        [Serializable] public class QuestProg { public string id, arg; public int prog; public bool claimed; }
         [Serializable] public class Fruit { public string kind; public double t0, at; }
         // 건물 하나: 격자 칸(gx, gy)이 왼쪽 위 · critter 짓는 꼬마 · at 다 지어지는 시각(ms) · done 완성
         [Serializable] public class Bld { public int uid, gx, gy; public string id, critter; public double t0, at; public bool done; }
-        [Serializable] public class Quest { public string id, npc; public double cnt; public int line; }
         [Serializable] public class CodexEntry { public double n; public int first; public bool gold, giant; }
 
         [Serializable]
@@ -113,19 +118,17 @@ namespace MoreMush
         static void Sanitize(SaveData g)
         {
             g.nodes ??= new Dictionary<string, int>(); g.seeds ??= new Dictionary<string, bool>();
-            g.codex ??= new Dictionary<string, SaveData.CodexEntry>(); g.inv ??= new Dictionary<string, double>();
+            g.codex ??= new Dictionary<string, SaveData.CodexEntry>();
             g.specials ??= new Dictionary<string, bool>();
             g.hv ??= new Dictionary<string, int> { ["sam"] = 1 }; g.hvOn ??= new Dictionary<string, bool>();
             g.rec ??= new SaveData.Records();
             g.skins ??= new SaveData.Skins();
             g.skins.own ??= new Dictionary<string, bool>(); g.skins.ch ??= new Dictionary<string, string>(); g.skins.hv ??= new Dictionary<string, string>();
             foreach (var k in new List<string>(g.codex.Keys)) if (g.codex[k] == null) g.codex.Remove(k);
-            g.quests = g.quests?.FindAll(q => q != null && q.id != null && Defs.SP.ContainsKey(q.id)) ?? new List<SaveData.Quest>();
             g.rounds = Math.Max(0, g.rounds);
             if (!IsFinite(g.gold)) g.gold = 0;
             if (!IsFinite(g.gem)) g.gem = 0;
-            if (!IsFinite(g.spore)) g.spore = 0;
-            if (!IsFinite(g.dia)) g.dia = 0;
+            if (!IsFinite(g.legacyDia) || g.legacyDia < 0) g.legacyDia = 0;
 
             // prototype loadSave() migrations that still apply
             foreach (var br in Defs.CAT_KEYS)
@@ -144,8 +147,15 @@ namespace MoreMush
             g.farm.tree ??= new SaveData.Tree();
             g.farm.tree.lv = Math.Max(1, Math.Min(Defs.TREE.maxLv, g.farm.tree.lv));
             g.farm.tree.slots = g.farm.tree.slots?.FindAll(f => f != null && Defs.FRUITS.ContainsKey(f.kind ?? "")) ?? new List<SaveData.Fruit>();
+            if (!IsFinite(g.farm.tree.exp) || g.farm.tree.exp < 0) g.farm.tree.exp = 0;
+            g.quest ??= new SaveData.Quests();
+            g.quest.daily = g.quest.daily?.FindAll(QuestOk) ?? new List<SaveData.QuestProg>();
+            g.quest.weekly = g.quest.weekly?.FindAll(QuestOk) ?? new List<SaveData.QuestProg>();
+            SaveMigration.Run(g);
         }
 
         static bool IsFinite(double v) => !double.IsNaN(v) && !double.IsInfinity(v);
+        // 정의에 있는 의뢰이고, 지정 버섯이 있다면 도감에 있는 버섯이어야 한다
+        static bool QuestOk(SaveData.QuestProg p) => p != null && Defs.QUEST.ContainsKey(p.id ?? "") && (p.arg == null || Defs.SP.ContainsKey(p.arg));
     }
 }

@@ -1198,6 +1198,7 @@ GameObject:
   - component: {fileID: 9047152859743937534}
   - component: {fileID: 2611010318843565818}
   - component: {fileID: 981676782198497803}
+  - component: {fileID: 655140831803559950}
   m_Layer: 0
   m_Name: Line2
   m_TagString: Untagged
@@ -1249,7 +1250,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1295,8 +1296,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Lv 0/5 \xB7 16G"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1368,6 +1369,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 2611010318843565818}
   m_maskType: 0
+--- !u!114 &655140831803559950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5102154666962279685}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: 0
+  key: 
 --- !u!1 &5250679308009116720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,6 +1675,7 @@ GameObject:
   - component: {fileID: 4786145050738368300}
   - component: {fileID: 5706879913983607831}
   - component: {fileID: 4383509676682971674}
+  - component: {fileID: 2541962090148312839}
   m_Layer: 0
   m_Name: QMark
   m_TagString: Untagged
@@ -1710,7 +1727,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1756,8 +1773,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '?'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1829,6 +1846,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5706879913983607831}
   m_maskType: 0
+--- !u!114 &2541962090148312839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5380037545938362125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: 0
+  key: 
 --- !u!1 &6026079463842335563
 GameObject:
   m_ObjectHideFlags: 0
@@ -1840,6 +1872,7 @@ GameObject:
   - component: {fileID: 1882806806716300960}
   - component: {fileID: 8866987573315240206}
   - component: {fileID: 7306873400023580310}
+  - component: {fileID: 1497242121759608994}
   m_Layer: 0
   m_Name: Label
   m_TagString: Untagged
@@ -1891,7 +1924,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1937,8 +1970,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uB178\uB4DC"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2010,6 +2043,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 8866987573315240206}
   m_maskType: 0
+--- !u!114 &1497242121759608994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6026079463842335563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: 0
+  key: "\uB178\uB4DC"
 --- !u!1 &6143272113781911192
 GameObject:
   m_ObjectHideFlags: 0
@@ -2021,6 +2069,7 @@ GameObject:
   - component: {fileID: 970781182582583488}
   - component: {fileID: 5305840382611798645}
   - component: {fileID: 2490452650237610012}
+  - component: {fileID: 7215028276336622693}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -2072,7 +2121,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2118,8 +2167,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u25B2"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 854913b21747bcc4d91b2e339519d3c3, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 505c97dcdd41f494cb8cd90dbcaec0ea, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2191,3 +2240,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5305840382611798645}
   m_maskType: 0
+--- !u!114 &7215028276336622693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6143272113781911192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: 0
+  key: 

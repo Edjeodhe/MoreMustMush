@@ -35,28 +35,28 @@ namespace MoreMush
         public void Show(RoundSim.Summary s)
         {
             sum = s; t0 = Time.unscaledTime; rolledSound = false; animating = true;
-            for (int i = 0; i < 3; i++) gainTexts[i].text = $"+{U.Fmt(s.gains[CAT_KEYS[i]])}개";
-            scoreLabel.text = $"얻은 점수 → 골드 <size=70%><color=#8a6a4a>(×{U.FmtN(s.goldMul)})</color></size>";
+            for (int i = 0; i < 3; i++) gainTexts[i].text = Loc.F("+{0}개", U.Fmt(s.gains[CAT_KEYS[i]]));
+            scoreLabel.text = Loc.F("얻은 점수 → 골드 <size=70%><color=#8a6a4a>(×{0})</color></size>", U.FmtN(s.goldMul));
             bonusRow.SetActive(s.bonusGold > 0);
-            bonusLabel.text = $"보너스 골드 <size=70%><color=#8a6a4a>(엽전 수확기 {U.Fmt(s.coinGold)} · 특수 버섯 {U.Fmt(s.bonusGold - s.coinGold)})</color></size>";
+            bonusLabel.text = Loc.F("보너스 골드 <size=70%><color=#8a6a4a>(엽전 수확기 {0} · 특수 버섯 {1})</color></size>", U.Fmt(s.coinGold), U.Fmt(s.bonusGold - s.coinGold));
             bonusValue.text = "+" + U.Fmt(s.bonusGold);
-            meta.text = $"창고 {U.Fmt(InvTotal())}개 (≈{U.Fmt(InvValue())}골드)";
+            meta.text = Loc.F("수확 {0}번", U.Fmt(s.harvests));
             themeBox.SetActive(s.newTheme != null);
-            if (s.newTheme != null) { var th = THEME[s.newTheme]; themeText.text = $"{UIUtil.Ic(th.icon)} 새 지역 열림: <color=#2a6ab8>{th.n}</color>\n<size=55%><color=#4a6a8a>{th.d} · 다음 라운드부터 이 지역으로 가요</color></size>"; }
+            if (s.newTheme != null) { var th = THEME[s.newTheme]; themeText.text = Loc.F("{0} 새 지역 열림: <color=#2a6ab8>{1}</color>", UIUtil.Ic(th.icon), th.n) + "\n" + Loc.F("<size=55%><color=#4a6a8a>{0} · 다음 라운드부터 이 지역으로 가요</color></size>", th.d); }
 
             Clear(unlockList); Clear(newsList);
-            foreach (var id in s.unlocks) Card(unlockCards, unlockList, SpriteDB.Single(id), 0, SP[id].n, "해금", "unlock");
+            foreach (var id in s.unlocks) Card(unlockCards, unlockList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("해금"), "unlock");
             unlockBox.SetActive(unlockList.Count > 0);
             if (s.specialGot != null) Card(newsCards, newsList, SpriteDB.Get("Characters/Critters/" + s.specialGot + "_ref"), 0, SPC[s.specialGot].n, "NEW", "special");
             foreach (var id in s.newSpecies) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "");
-            foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, "황금 " + SP[id].n, "NEW", "gold");
+            foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, Loc.F("황금 {0}", SP[id].n), "NEW", "gold");
             foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "star");
             newsBox.SetActive(newsList.Count > 0);
-            var recs = s.recs.Select(r => $"신기록! {RECORD_NAMES[r.k]} <color=#3b2414>{U.Fmt(r.v)}</color>{(r.old > 0 ? $" <size=70%><color=#8a6a4a>(이전 {U.Fmt(r.old)})</color></size>" : "")}").ToList();
-            if (s.goldHv) recs.Insert(0, $"{UIUtil.Ic("medal")} 황금 수확기 해금!");
+            var recs = s.recs.Select(r => Loc.F("신기록! {0} <color=#3b2414>{1}</color>", RECORD_NAMES[r.k], U.Fmt(r.v)) + (r.old > 0 ? " <size=70%><color=#8a6a4a>" + Loc.F("(이전 {0})", U.Fmt(r.old)) + "</color></size>" : "")).ToList();
+            if (s.goldHv) recs.Insert(0, Loc.F("{0} 황금 수확기 해금!", UIUtil.Ic("medal")) + (HvOn("gold") ? "" : " " + Loc.T("(장착 칸이 차서 꺼 두었어요)")));
             recsBox.SetActive(recs.Count > 0);
             recsText.text = string.Join("\n", recs);
-            toTreeText.text = "균사 트리로 ▶";
+            toTreeText.text = Loc.T("균사 트리로 ▶");
             SpawnBasket(s);
             animationEnd = Mathf.Max(1.9f, drops.Count == 0 ? 0 : drops[drops.Count - 1].delay + 0.6f);
             FitCards();
@@ -102,7 +102,7 @@ namespace MoreMush
             for (int i = 0; i < list.Count; i++) list[i].gameObject.SetActive(i < shown);
             more.gameObject.SetActive(over);
             if (!over) return;
-            more.label.text = $"+{list.Count - shown}개";
+            more.label.text = Loc.F("+{0}개", list.Count - shown);
             more.transform.SetAsLastSibling();
         }
 
@@ -165,7 +165,7 @@ namespace MoreMush
             // 롤링 카운터
             float Ease(float delay) { float k = Mathf.Clamp01((el * 1000 - delay) / 1100); return 1 - Mathf.Pow(1 - k, 3); }
             scoreValue.text = "+" + U.Fmt(sum.scoreGold * Ease(0));
-            saleValue.text = "≈" + U.Fmt(sum.value * Ease(400));
+            saleValue.text = "~" + U.Fmt(sum.value * Ease(400));
             float e3 = Ease(800);
             goldValue.text = $"{UIUtil.Ic("gold")}{U.Fmt(sum.net * e3)}";
             if (e3 >= 1 && !rolledSound) { rolledSound = true; Snd.Buy(); }

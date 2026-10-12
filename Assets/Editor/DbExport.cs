@@ -26,7 +26,7 @@ namespace MoreMush.EditorTools
                 bool numeric = m != null && (m.ReturnType == typeof(double) || m.ReturnType == typeof(int));
                 return new
                 {
-                    n.id, name = n.n, n.br, n.parent, n.max, n.tier, n.needMax, n.core, n.sub, n.skill, gem = n.gem || n.costGem > 0,
+                    n.id, name = n.nKo, n.br, n.parent, n.max, n.tier, n.needMax, n.core, n.sub, n.skill, gem = n.gem || n.costGem > 0,
                     baseGold = n.costGold, n.g, priced = n.costs != null,
                     levels = Enumerable.Range(1, n.max).Select(L => new
                     {

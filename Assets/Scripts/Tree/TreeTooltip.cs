@@ -30,7 +30,7 @@ namespace MoreMush
             desc.text = Iconize(n.d);
             string costTxt = "", noteTxt = "";
             if (s == "locked")
-                eff.text = n.needMax ? $"선행: {NODE[n.parent].n} 최대 레벨 ({Lv(n.parent)}/{NODE[n.parent].max})" : $"선행: {NODE[n.parent].n}";
+                eff.text = n.needMax ? Loc.F("선행: {0} 최대 레벨 ({1}/{2})", NODE[n.parent].n, Lv(n.parent), NODE[n.parent].max) : Loc.F("선행: {0}", NODE[n.parent].n);
             else
             {
                 eff.text = n.eff(L) + (L < n.max ? $"\n<b>→</b> {n.eff(L + 1)}" : "");
@@ -40,16 +40,16 @@ namespace MoreMush
                     costTxt = $"{UIUtil.Ic("gold")} {(G.gold + 1e-9 < c.gold ? "<color=#d23a2a>" : "")}{U.Fmt(c.gold)}{(G.gold + 1e-9 < c.gold ? "</color>" : "")}"
                         + (c.gem > 0 ? $"   {UIUtil.Ic("gem")} {(G.gem + 1e-9 < c.gem ? "<color=#d23a2a>" : "")}{U.Fmt(c.gem)}{(G.gem + 1e-9 < c.gem ? "</color>" : "")}" : "");
                 }
-                else costTxt = "<color=#b8860b>최대 레벨</color>";
+                else costTxt = Loc.T("<color=#b8860b>최대 레벨</color>");
             }
             if (n.skill != null)
             {
                 string k = SKILLS[n.skill].kind;
-                noteTxt = k == "bar" ? "바 버프 · 영구 핀볼이 바에 맞을 때 발동" : k == "hit" ? "스킬 · 버섯을 칠 때 발동률로 자동 발동" : k == "harvest" ? "스킬 · 버섯을 딸 때 발동률로 자동 발동" : k == "wall" ? "스킬 · 벽에 튕길 때 발동률로 자동 발동" : k == "pierce" ? "스킬 · 단단한 버섯에 부딪힐 때 발동률로 관통" : "스킬 · 라운드 마지막 5초 자동";
+                noteTxt = k == "bar" ? Loc.T("바 버프 · 영구 핀볼이 바에 맞을 때 발동") : k == "hit" ? Loc.T("스킬 · 버섯을 칠 때 발동률로 자동 발동") : k == "harvest" ? Loc.T("스킬 · 버섯을 딸 때 발동률로 자동 발동") : k == "wall" ? Loc.T("스킬 · 벽에 튕길 때 발동률로 자동 발동") : k == "pierce" ? Loc.T("스킬 · 단단한 버섯에 부딪힐 때 발동률로 관통") : Loc.T("스킬 · 라운드 마지막 5초 자동");
             }
-            if (n.id == "md_kid") noteTxt = "임시 핀볼은 바 버프를 받지 않아요";
+            if (n.id == "md_kid") noteTxt = Loc.T("임시 핀볼은 바 버프를 받지 않아요");
             if (s != "locked" && L < n.max)
-                noteTxt += (noteTxt != "" ? "\n" : "") + (RoundController.IsTouch ? $"한 번 더 누르면 강화{(n.max > 1 ? " · 길게 누르면 재화가 되는 만큼 한 번에" : "")}" : n.max > 1 ? "Shift+클릭 · 우클릭: 골드가 되는 만큼 한 번에 강화" : "");
+                noteTxt += (noteTxt != "" ? "\n" : "") + (RoundController.IsTouch ? (n.max > 1 ? Loc.T("한 번 더 누르면 강화 · 길게 누르면 재화가 되는 만큼 한 번에") : Loc.T("한 번 더 누르면 강화")) : n.max > 1 ? Loc.T("Shift+클릭 · 우클릭: 골드가 되는 만큼 한 번에 강화") : "");
             cost.text = costTxt; UIUtil.Show(cost, costTxt != "");
             note.text = noteTxt; UIUtil.Show(note, noteTxt != "");
             Place(at);

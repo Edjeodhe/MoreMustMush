@@ -6,7 +6,7 @@ using static MoreMush.Game;
 
 namespace MoreMush
 {
-    // Skin shop modal (prototype openSkinShop): critter skins (10) and harvester skins (7), bought with diamonds.
+    // Skin shop modal (prototype openSkinShop): critter skins (10) and harvester skins (7), bought with 균사석 (gem).
     // Ten cards are placed in the hierarchy; the harvester tab uses the first seven.
     public class SkinPanel : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace MoreMush
 
         public void Render()
         {
-            gemText.text = $"{UIUtil.Ic("dia")}{U.Fmt(G.dia)}";
+            gemText.text = $"{UIUtil.Ic("gem")}{U.Fmt(G.gem)}";
             for (int i = 0; i < 2; i++)
             {
                 bool on = (i == 0 ? "ch" : "hv") == tab;

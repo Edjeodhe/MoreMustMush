@@ -22,7 +22,7 @@ namespace MoreMush
 
         // 바뀔 때만 만드는 글자 (콤보 숫자·피버 배율·피버 문구)
         readonly Dictionary<int, string> comboStr = new Dictionary<int, string>();
-        Flame shownFeverF; double shownFeverMul = double.NaN; string feverStr;
+        Flame shownFeverF; double shownFeverMul = double.NaN; string feverStr, feverLang;
         object shownMsg; string msgStr;
 
         Vector2 feverOrigin;
@@ -62,7 +62,7 @@ namespace MoreMush
                 if (R.fever > 0)
                 {
                     double fm = R.FeverMulPublic;
-                    if (F != shownFeverF || fm != shownFeverMul) { shownFeverF = F; shownFeverMul = fm; feverStr = $"{F.icon} 점수 ×{fm}"; }
+                    if (F != shownFeverF || fm != shownFeverMul || feverLang != Loc.Lang) { shownFeverF = F; shownFeverMul = fm; feverLang = Loc.Lang; feverStr = Loc.F("{0} 점수 ×{1}", F.icon, fm); }
                     Style(feverMul, feverStr, 24, col, outl);
                     feverMul.rectTransform.anchoredPosition = feverOrigin + new Vector2(0, -size * 0.62f);
                 }

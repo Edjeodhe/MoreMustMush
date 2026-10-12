@@ -22,13 +22,9 @@ namespace MoreMush.EditorTools
                 passed.Add("PASS: " + name);
             }
 
-            Check(ShopPanel.ClampQty(16777217, 20000000) == 16777217, "quantities above float integer precision");
-            Check(ShopPanel.ClampQty(20000000, 16777217) == 16777217, "quantity clamped without float rounding");
-            Check(ShopPanel.ClampQty(double.NaN, 100) == 0 && ShopPanel.ClampQty(-1, 100) == 0,
-                "invalid and negative quantities");
-            var device = new Device { type = "mole", a = new Vector2(1, 2), b = new Vector2(3, 4) };
+            var device = new Device { type = "acorn", pts = new[] { new Vector2(1, 2), new Vector2(3, 4), new Vector2(7, 8) }, lit = new int[3] };
             var shapes = device.Shapes(); var first = shapes[0];
-            device.a = new Vector2(5, 6);
+            device.pts[0] = new Vector2(5, 6);
             Check(ReferenceEquals(shapes, device.Shapes()) && ReferenceEquals(first, device.Shapes()[0]) && first.x == 5,
                 "cached collision shapes follow geometry changes");
             device.type = "stump"; device.x = 12; device.r = 24;

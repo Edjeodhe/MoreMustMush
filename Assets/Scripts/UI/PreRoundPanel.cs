@@ -18,7 +18,7 @@ namespace MoreMush
 
         public void Render()
         {
-            stage.text = $"스테이지 {StageNow()}";
+            stage.text = Loc.F("스테이지 {0}", StageNow());
             int count = Mathf.Min(THEMES.Count, themeCards.Length, themeIcons.Length, themeNames.Length, themeDescs.Length, themeCounts.Length);
             for (int i = count; i < themeCards.Length; i++) UIUtil.Show(themeCards[i], false);
             for (int i = 0; i < count; i++)
@@ -33,10 +33,12 @@ namespace MoreMush
                 card.GetComponent<Button>().interactable = ok;
                 themeIcons[i].sprite = SpriteDB.Icon(th.icon);
                 themeNames[i].text = th.n;
-                themeDescs[i].text = ok ? th.d : $"스테이지 {th.from}부터 열려요";
-                themeCounts[i].text = ok ? $"전용 버섯 {ex.Count(sp => Harvested(sp.id))}/{ex.Count}" : UIUtil.Ic("lock");
+                themeDescs[i].text = ok ? th.d : Loc.F("스테이지 {0}부터 열려요", th.from);
+                themeCounts[i].text = ok ? Loc.F("전용 버섯 {0}/{1}", ex.Count(sp => Harvested(sp.id)), ex.Count) : UIUtil.Ic("lock");
             }
-            harvesters.text = string.Join("   ", ActiveHvs().Select(id => $"{HV[id].n} <color=#e8a900>{U.Stars(G.hv.TryGetValue(id, out var s) ? s : 1)}</color>"));
+            harvesters.text = HvOver()
+                ? $"<color=#d04a3a>{Loc.T(GameFlow.HV_OVER_MSG)}</color>"
+                : string.Join("   ", ActiveHvs().Select(id => $"{HV[id].n} <color=#e8a900>{U.Stars(G.hv.TryGetValue(id, out var s) ? s : 1)}</color>"));
         }
     }
 }
