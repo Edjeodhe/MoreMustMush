@@ -54,7 +54,7 @@ namespace MoreMush.EditorTools
             AssetDatabase.SaveAssets();
         }
 
-        static void BuildAtlases()
+        public static void BuildAtlases()
         {
             Directory.CreateDirectory(AtlasRoot);
             var groups = new Dictionary<string, List<Object>>();
@@ -63,8 +63,11 @@ namespace MoreMush.EditorTools
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 string relative = path.Substring(ArtRoot.Length + 1);
                 // WeatherMask and procedural FX use 0..1 UVs; never atlas these textures.
-                if (relative.StartsWith("FX/") || relative.StartsWith("Backgrounds/") || relative.Contains("/Backgrounds/") || relative.EndsWith("grandpa_ref.png")) continue;
+                if (relative.StartsWith("FX/") || relative.EndsWith("grandpa_ref.png")) continue;
                 string group = relative.Split('/')[0];
+                // Keep each full-screen background separate. The atlas adds compression padding
+                // without resampling the NPOT source or changing the sprite's dimensions.
+                if (relative.StartsWith("Backgrounds/")) group = "Background_" + Path.GetFileNameWithoutExtension(path);
                 if (relative.StartsWith("Characters/")) group += "_" + relative.Split('/')[1];
                 if (relative.StartsWith("Mushrooms/")) group += "_" + relative.Split('/')[1];
                 if (!groups.TryGetValue(group, out var items)) groups[group] = items = new List<Object>();
@@ -74,27 +77,30 @@ namespace MoreMush.EditorTools
             foreach (var pair in groups)
             {
                 var atlas = new SpriteAtlasAsset();
-                atlas.SetIncludeInBuild(true);
-                var packing = atlas.GetPackingSettings();
-                packing.enableRotation = false; packing.enableTightPacking = false; packing.padding = 4;
-                atlas.SetPackingSettings(packing);
-                var texture = atlas.GetTextureSettings();
-                texture.readable = false; texture.generateMipMaps = false; texture.sRGB = true; texture.filterMode = FilterMode.Bilinear;
-                atlas.SetTextureSettings(texture);
-                foreach (var platform in new[] { "DefaultTexturePlatform", "Standalone", "WebGL" })
-                {
-                    var settings = atlas.GetPlatformSettings(platform);
-                    settings.name = platform; settings.maxTextureSize = 2048;
-                    settings.format = TextureImporterFormat.DXT5; settings.textureCompression = TextureImporterCompression.CompressedHQ;
-                    settings.overridden = platform != "DefaultTexturePlatform";
-                    atlas.SetPlatformSettings(settings);
-                }
                 atlas.Add(pair.Value.ToArray());
                 string path = AtlasRoot + "/" + pair.Key + ".spriteatlasv2";
                 SpriteAtlasAsset.Save(atlas, path);
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+                // V2 settings belong to the importer; SpriteAtlasAsset setters are obsolete no-ops.
+                var importer = (SpriteAtlasImporter)AssetImporter.GetAtPath(path);
+                importer.includeInBuild = true;
+                var packing = importer.packingSettings;
+                packing.enableRotation = false; packing.enableTightPacking = false; packing.padding = 4;
+                importer.packingSettings = packing;
+                var texture = importer.textureSettings;
+                texture.readable = false; texture.generateMipMaps = false; texture.sRGB = true; texture.filterMode = FilterMode.Bilinear;
+                importer.textureSettings = texture;
+                foreach (var platform in new[] { "DefaultTexturePlatform", "Standalone", "WebGL" })
+                {
+                    var settings = importer.GetPlatformSettings(platform);
+                    settings.name = platform; settings.maxTextureSize = 2048;
+                    settings.format = TextureImporterFormat.DXT5; settings.textureCompression = TextureImporterCompression.CompressedHQ;
+                    settings.overridden = platform != "DefaultTexturePlatform";
+                    importer.SetPlatformSettings(settings);
+                }
+                importer.SaveAndReimport();
             }
-            Debug.Log($"[MoreMush] {groups.Count} sprite atlases created; FX/backgrounds excluded.");
+            Debug.Log($"[MoreMush] {groups.Count} sprite atlases created; FX excluded, backgrounds packed separately.");
         }
 
         [MenuItem("MoreMush/Optimize/Player and Render Settings")]
@@ -134,15 +140,19 @@ namespace MoreMush.EditorTools
         public static string FontCharacters()
         {
             var chars = new SortedSet<char>(Enumerable.Range(32, 95).Select(i => (char)i));
-            // Compile all shipped Korean text, including interpolated strings and serialized labels.
+            // Include shipped strings and serialized labels, without baking Korean editor comments.
             foreach (string path in Directory.GetFiles("Assets/Scripts", "*.cs", SearchOption.AllDirectories)
                 .Concat(Directory.GetFiles("Assets/Scenes", "*.unity", SearchOption.AllDirectories))
                 .Concat(Directory.GetFiles("Assets/Prefabs", "*.prefab", SearchOption.AllDirectories)))
             {
-                string text = Regex.Replace(File.ReadAllText(path), @"\\u([0-9a-fA-F]{4})", m => ((char)Convert.ToInt32(m.Groups[1].Value, 16)).ToString());
+                string source = File.ReadAllText(path);
+                if (path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                    source = Regex.Replace(source, @"//[^\r\n]*|/\*[\s\S]*?\*/|@""(?:""""|[^""])*""|""(?:\\.|[^""\\])*""",
+                        m => m.Value.StartsWith("//") || m.Value.StartsWith("/*") ? "" : m.Value);
+                string text = Regex.Replace(source, @"\\u([0-9a-fA-F]{4})", m => ((char)Convert.ToInt32(m.Groups[1].Value, 16)).ToString());
                 foreach (char c in text) if ((c >= '\uac00' && c <= '\ud7a3') || (c >= '\u3131' && c <= '\u318e')) chars.Add(c);
             }
-            foreach (char c in "★☆♥♡●○▲▼▶◀→←↑↓×÷±−–—…·≈≥≤∞①②③④⑤⑥⑦⑧⑨⑩巨") chars.Add(c);
+            foreach (char c in "★☆♥♡●○▲▼▶◀→←↑↓×÷±−–—…·≈≥≤∞①②③④⑤⑥⑦⑧⑨⑩巨°⚠") chars.Add(c);
             return new string(chars.ToArray());
         }
 
@@ -204,15 +214,26 @@ namespace MoreMush.EditorTools
             }
             long bytes = textures.Sum(t => UnityEngine.Profiling.Profiler.GetRuntimeMemorySizeLong(t));
             sb.AppendLine($"Source textures: {textures.Count}, loaded memory: {bytes / 1048576.0:F2} MiB (Editor, excludes atlas substitution)");
-            foreach (var guid in AssetDatabase.FindAssets("t:SpriteAtlas", new[] { AtlasRoot }))
+            var packedTextures = new HashSet<Texture2D>();
+            var packedPaths = new HashSet<string>();
+            foreach (var guid in AssetDatabase.IsValidFolder(AtlasRoot) ? AssetDatabase.FindAssets("t:SpriteAtlas", new[] { AtlasRoot }) : Array.Empty<string>())
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 var atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(path);
+                foreach (var packable in SpriteAtlasExtensions.GetPackables(atlas)) packedPaths.Add(AssetDatabase.GetAssetPath(packable));
                 var sprites = new Sprite[atlas.spriteCount]; atlas.GetSprites(sprites);
                 foreach (var t in sprites.Where(s => s != null).Select(s => s.texture).Distinct())
+                {
+                    packedTextures.Add(t);
                     sb.AppendLine($"{path}: {t.width}x{t.height}, {t.format}, {UnityEngine.Profiling.Profiler.GetRuntimeMemorySizeLong(t) / 1048576.0:F2} MiB");
+                }
                 foreach (var sprite in sprites) if (sprite != null) Object.DestroyImmediate(sprite);
             }
+            // Editor memory includes extra native copies. Report GPU payload separately, counting atlas pages once.
+            long Payload(Texture2D t) => (long)UnityEngine.Experimental.Rendering.GraphicsFormatUtility.ComputeMipmapSize(t.width, t.height, t.graphicsFormat);
+            long atlasBytes = packedTextures.Sum(Payload);
+            long looseBytes = textures.Cast<Texture2D>().Where(t => !packedPaths.Contains(AssetDatabase.GetAssetPath(t)) && !t.name.EndsWith("grandpa_ref")).Sum(Payload);
+            sb.AppendLine($"GPU payload estimate (base mip, generated art): atlas {atlasBytes / 1048576.0:F2} + standalone {looseBytes / 1048576.0:F2} = {(atlasBytes + looseBytes) / 1048576.0:F2} MiB; excludes fonts, render targets, driver overhead.");
             Directory.CreateDirectory("Logs"); File.WriteAllText("Logs/texture-optimization.txt", sb.ToString());
             Debug.Log(sb.ToString());
         }

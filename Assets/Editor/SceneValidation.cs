@@ -83,7 +83,7 @@ namespace MoreMush.EditorTools
                     case PreRoundPanel p:
                         Slots(nameof(p.themeCards), p.themeCards, Defs.THEMES.Count); Slots(nameof(p.themeIcons), p.themeIcons, Defs.THEMES.Count);
                         Slots(nameof(p.themeNames), p.themeNames, Defs.THEMES.Count); Slots(nameof(p.themeDescs), p.themeDescs, Defs.THEMES.Count); Slots(nameof(p.themeCounts), p.themeCounts, Defs.THEMES.Count);
-                        for (int i = 0; i < Math.Min(p.themeCards.Length, Defs.THEMES.Count); i++)
+                        for (int i = 0; i < Math.Min(p.themeCards?.Length ?? 0, Defs.THEMES.Count); i++)
                             CheckAction(p.themeCards[i], "pretheme", Defs.THEMES[i].id, errors);
                         break;
                     case BuildPanel p: Slots(nameof(p.cards), p.cards, Defs.BUILDINGS.Length); break;
@@ -91,6 +91,19 @@ namespace MoreMush.EditorTools
                     case PetCardPanel p: Slots(nameof(p.hearts), p.hearts, Defs.FARM.hearts); Slots(nameof(p.heartFills), p.heartFills, Defs.FARM.hearts); break;
                     case SkinPanel p: Slots(nameof(p.cards), p.cards, Math.Max(Defs.CHAR_SKINS.Length, Defs.HV_SKINS.Length)); break;
                     case FarmTreeView p: Slots(nameof(p.fruits), p.fruits, Defs.TREE.Slots(Defs.TREE.maxLv)); Slots(nameof(p.glows), p.glows, Defs.TREE.Slots(Defs.TREE.maxLv)); break;
+                    case RoundHUD p:
+                        Slots(nameof(p.slotIcons), p.slotIcons, Defs.CAT_KEYS.Length);
+                        Slots(nameof(p.slotTexts), p.slotTexts, Defs.CAT_KEYS.Length);
+                        var speed = p.cornerSpeed == null ? null : p.cornerSpeed.GetComponent<UIAction>();
+                        if (speed == null || speed.act != "speed" || !p.cornerSpeed.raycastTarget)
+                            errors.Add(PathOf(p) + ": speed label must receive clicks through its speed UIAction");
+                        break;
+                    case RoundView p:
+                        if (p.textLayer != null && p.textLayer.GetComponent<Canvas>() == null) errors.Add(PathOf(p) + ": textLayer needs a scene Canvas");
+                        break;
+                    case ComboHUD p:
+                        if (p.flameLayer != null && p.flameLayer.GetComponent<Canvas>() == null) errors.Add(PathOf(p) + ": flameLayer needs a scene Canvas");
+                        break;
                     case TreeNodeView p:
                         if (!Defs.NODE.TryGetValue(p.nodeId ?? "", out var node)) errors.Add(PathOf(p) + ": unknown node " + p.nodeId);
                         else if (node.max > 1) Slots(nameof(p.levelArcs), p.levelArcs, node.max);
@@ -143,6 +156,8 @@ namespace MoreMush.EditorTools
             foreach (var field in mb.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
             {
                 if (field.IsStatic || field.IsInitOnly || field.IsNotSerialized || (!field.IsPublic && !field.IsDefined(typeof(SerializeField)))) continue;
+                // Some buttons only dim their CanvasGroup and intentionally have no moving label.
+                if (mb is UIButtonFx && field.Name == nameof(UIButtonFx.content)) continue;
                 var value = field.GetValue(mb);
                 if (typeof(Object).IsAssignableFrom(field.FieldType)) Check(field.Name, value as Object);
                 else if (field.FieldType.IsArray && typeof(Object).IsAssignableFrom(field.FieldType.GetElementType()))
