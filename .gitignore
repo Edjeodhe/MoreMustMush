@@ -115,3 +115,6 @@ InitTestScene*.unity*
 # Local verification screenshots (MCP captures)
 /[Aa]ssets/[Ss]creenshots/
 /[Aa]ssets/[Ss]creenshots.meta
+
+# Claude Code 개인용 지침
+CLAUDE.local.md
