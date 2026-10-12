@@ -8,7 +8,7 @@ namespace MoreMush
 {
     // Round HUD (prototype drawHUD): score, harvest slots, value, time bar, stat line, weather banner,
     // weather/region/speed corner, codex & pause buttons, aim hints, "수확 끝!" and pause dim.
-    // References left empty are found by their hierarchy names on Awake.
+    // All references and base positions are assigned in the scene.
     public class RoundHUD : MonoBehaviour
     {
         public RectTransform scoreValue; public TMP_Text scoreText;
@@ -45,7 +45,7 @@ namespace MoreMush
             if (layoutReady) return;
             layoutReady = true;
             statOrigin = statBar.anchoredPosition; codexOrigin = codexButton.anchoredPosition;
-            festOffset = festText.rectTransform.rect.height;
+            festOffset = statBar.rect.height;
         }
 
         // The scene owns HUD positions. The simulation only receives the visual destinations.

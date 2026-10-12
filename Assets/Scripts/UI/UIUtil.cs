@@ -25,17 +25,6 @@ namespace MoreMush
             return s;
         }
 
-        // 매 프레임 움직이는 UI 층(필드 글자, 피버 불꽃)에 하위 Canvas를 붙인다. 바뀐 층만 다시 배칭하고 나머지 UI는 그대로 둔다.
-        // 클릭은 받지 않는 층이라 GraphicRaycaster는 붙이지 않는다. (씬에 Canvas를 직접 달아 두면 이 함수는 아무것도 안 한다)
-        public static void SubCanvas(Component layer)
-        {
-            if (layer == null || layer.GetComponent<Canvas>() != null) return;
-            var parent = layer.GetComponentInParent<Canvas>();
-            var cv = layer.gameObject.AddComponent<Canvas>();
-            if (parent != null) cv.additionalShaderChannels = parent.additionalShaderChannels;
-            cv.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.Normal | AdditionalCanvasShaderChannels.Tangent;   // TMP SDF
-        }
-
         // Shared UI materials for codex states (assets on the SpriteDB): 0 normal, 1 locked silhouette,
         // 2 unlocked-not-harvested, 3 golden
         public static Material Fx(int state) => SpriteDB.I.uiFx[state];

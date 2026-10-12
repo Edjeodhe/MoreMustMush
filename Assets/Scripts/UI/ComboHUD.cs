@@ -29,7 +29,6 @@ namespace MoreMush
         void Awake()
         {
             feverOrigin = feverMul.rectTransform.anchoredPosition;
-            UIUtil.SubCanvas(flameLayer);
         }   // 불꽃 수십 개가 매 프레임 움직여도 나머지 UI는 다시 배칭하지 않게
 
         Image Clone(Image template, List<Image> into)

@@ -57,7 +57,6 @@ namespace MoreMush
             flyers = new Pool<SpriteRenderer>(flyerPrefab, flyerRoot);
             lines = new Pool<LineRenderer>(linePrefab, fxRoot);
             aimLines = new Pool<LineRenderer>(linePrefab, fxRoot);
-            UIUtil.SubCanvas(textLayer);   // 매 프레임 움직이는 필드 글자만 따로 배칭
         }
 
         public void Clear()

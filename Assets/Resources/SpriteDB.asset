@@ -177,8 +177,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 817f880114c44c545a6cbf1b7a2f6cc3, type: 3}
   - key: Characters/Grandpa/Rig/scythe
     sprite: {fileID: 21300000, guid: 4d65c699f1ba2584e983630efbf93907, type: 3}
-  - key: Characters/Grandpa/grandpa_ref
-    sprite: {fileID: 21300000, guid: c7dcbef043753db4cb8f41850c674cd4, type: 3}
   - key: Characters/NPC/baker
     sprite: {fileID: 21300000, guid: 2f5d52f07491b234d8720a47e5d7ebac, type: 3}
   - key: Characters/NPC/dr
