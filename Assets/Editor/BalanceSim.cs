@@ -93,8 +93,8 @@ namespace MoreMush.EditorTools
             return res;
         }
 
-        public static int GoldLevels(int tier = 0) => NODES.Where(n => n.costGem <= 0 && (tier == 0 || n.tier == tier)).Sum(n => Lv(n.id));
-        public static int GoldLevelsMax(int tier = 0) => NODES.Where(n => n.costGem <= 0 && (tier == 0 || n.tier == tier)).Sum(n => n.max);
+        public static int GoldLevels(int tier = 0) => NODES.Where(n => !n.gem && (tier == 0 || n.tier == tier)).Sum(n => Lv(n.id));
+        public static int GoldLevelsMax(int tier = 0) => NODES.Where(n => !n.gem && (tier == 0 || n.tier == tier)).Sum(n => n.max);
 
         // 단계별 기록: 처음 산 판 · 다 산 판 · 그때의 판당 수입. 이어 돌려도 남도록 파일에 둔다
         public class PhaseLog
@@ -185,7 +185,7 @@ namespace MoreMush.EditorTools
 
         // ===== 가격 맞추기 =====
         // 지역 하나(그 지역에서 열리는 노드)의 레벨별 가격을, 직전 시뮬레이션에서 그 지역 기간에 번 골드에 맞춰 다시 매긴다.
-        // 사는 순서는 노드의 기본가 × 증가율^레벨 순서를 그대로 따르고, 지역 기간의 finish 비율 안에서 고르게 사도록 나눈다.
+        // 사는 순서는 엑셀 DB 가격 순서(OrderedLevels)를 그대로 따르고, 지역 기간의 finish 비율 안에서 고르게 사도록 나눈다.
         static readonly string PricePath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp/price_table.json"));
 
         public static void LoadPriceTable()
@@ -205,7 +205,7 @@ namespace MoreMush.EditorTools
         public static Dictionary<string, double[]> SnapshotPrices()
         {
             LoadPriceTable();
-            return NODES.Where(n => n.costs != null && n.costGem <= 0 && !n.core).ToDictionary(n => n.id, n => (double[])n.costs.Clone());
+            return NODES.Where(n => !n.gem).ToDictionary(n => n.id, n => (double[])n.costs.Clone());
         }
 
         // 두 가격표의 레벨별 기하평균을 새 가격표로 쓴다. 두 쪽이 노드 안 배율·효율 넘김 조건을 지키면 평균도 지킨다
@@ -256,7 +256,7 @@ namespace MoreMush.EditorTools
         public const bool ENFORCE_TIER_RULES = true;
 
         // 기본 골드 노드 전부(지역 잠금 없음)의 레벨별 가격을, 직전 시뮬레이션의 R a~b 수입에 맞춰 다시 매긴다.
-        // 사는 순서는 노드의 기본가 × 증가율^레벨 순서를 따르고, 기간의 finish 비율 안에서 고르게 사도록 나눈다.
+        // 사는 순서는 엑셀 DB 가격 순서(OrderedLevels)를 따르고, 기간의 finish 비율 안에서 고르게 사도록 나눈다.
         // 단계(초반·중반·후반)는 잠금이 아니라 이 순서와 가격으로만 나뉜다. 다음 단계 노드(+10)가 앞 단계 마지막 레벨(+1)보다
         // 골드당 효과가 좋아지는 지점에서 효율 구간이 자연스럽게 넘어간다(EfficiencyReport로 확인).
         public static string TunePrices(int a, int b, double finish = 0.9, double damp = 0.5, int seeds = 1)
@@ -315,7 +315,7 @@ namespace MoreMush.EditorTools
         public static void EnforceShape()
         {
             LoadPriceTable();
-            var price = NODES.Where(n => n.costs != null && n.costGem <= 0 && !n.core).ToDictionary(n => n.id, n => n.costs);
+            var price = NODES.Where(n => !n.gem).ToDictionary(n => n.id, n => n.costs);
             void RaiseNode(double[] v)
             {
                 for (int i = 1; i < v.Length; i++) v[i] = Math.Max(v[i], v[i - 1]);
@@ -349,12 +349,14 @@ namespace MoreMush.EditorTools
             SavePriceTable();
         }
 
-        // 가격을 매기는 순서: 골드 노드의 모든 레벨을 기본가 × 증가율^레벨 순으로 (코어 노드는 고정가라 뺀다)
+        // 가격을 매기는 순서: 골드 노드의 모든 레벨을 엑셀 DB 가격(이 도구가 바꾸기 전 값, DbOrder) 순으로. 맞추는 중에 바뀐 가격으로 순서를 다시 정하지 않는다(되먹임 방지)
+        static readonly Dictionary<string, double[]> DbOrder = NODES.ToDictionary(n => n.id, n => (double[])n.costs.Clone());   // BalanceSim을 처음 쓸 때(가격표를 불러오기 전)의 DB 가격
+
         public static List<(Node n, int lv)> OrderedLevels()
         {
             var levels = new List<(Node n, int lv, double order)>();
-            foreach (var n in NODES.Where(n => n.costGem <= 0 && !n.core))
-                for (int lv = 0; lv < n.max; lv++) levels.Add((n, lv, n.costGold * Math.Pow(n.g, lv)));
+            foreach (var n in NODES.Where(n => !n.gem))
+                for (int lv = 0; lv < n.max; lv++) levels.Add((n, lv, DbOrder[n.id][lv]));
             return levels.OrderBy(x => x.order).Select(x => (x.n, x.lv)).ToList();
         }
 
@@ -365,7 +367,7 @@ namespace MoreMush.EditorTools
             int finish = int.MaxValue;
             // 구매 판 비율은 기간 수입이 가장 적은(가장 느린) 시드로 본다
             double buy = 0, done = 1, slowInc = double.MaxValue;
-            var nodes = NODES.Where(n => n.costGem <= 0 && !n.core).ToList();
+            var nodes = NODES.Where(n => !n.gem).ToList();
             int maxLv = nodes.Sum(n => n.max);
             for (int sd = 1; sd <= seeds; sd++)
             {
@@ -388,7 +390,7 @@ namespace MoreMush.EditorTools
             var ps = OrderedLevels().Select(x => NodeCost(x.n, x.lv).gold).OrderBy(v => v).ToList();
             double maxStep = 1, nodeStep = 1;
             for (int k = 1; k < ps.Count; k++) maxStep = Math.Max(maxStep, ps[k] / Math.Max(1, ps[k - 1]));
-            foreach (var n in NODES.Where(n => n.costGem <= 0 && !n.core))
+            foreach (var n in NODES.Where(n => !n.gem))
                 for (int l = 1; l < n.max; l++) nodeStep = Math.Max(nodeStep, NodeCost(n, l).gold / Math.Max(1, NodeCost(n, l - 1).gold));
             int ok = 0, total = 0;
             foreach (var (ids, per) in TIER_LINES)
@@ -424,33 +426,16 @@ namespace MoreMush.EditorTools
             return sb.ToString();
         }
 
-        // Temp/price_table.json을 Assets/Scripts/Core/Defs.Prices.cs로 쓴다
+        // Temp/price_table.json(맞춘 가격표)을 BalanceData/db/tuned_prices.json으로 내보낸다.
+        // 엑셀 DB에 넣기: python BalanceData/db/db_write.py prices <Assets/DB/MMM_DB_Ver.NN.xlsx> BalanceData/db/tuned_prices.json
+        // (엑셀을 COM으로 고친다. 저장하면 Unity가 db.json을 다시 만든다)
         public static string WritePriceFile()
         {
             LoadPriceTable();
-            var sb = new StringBuilder();
-            sb.AppendLine("using System.Collections.Generic;");
-            sb.AppendLine();
-            sb.AppendLine("namespace MoreMush");
-            sb.AppendLine("{");
-            sb.AppendLine("    public static partial class Defs");
-            sb.AppendLine("    {");
-            sb.AppendLine("        // 노드 레벨별 골드 가격표. Assets/Editor/BalanceSim.cs의 가격 맞추기(TunePrices)로 생성한다.");
-            sb.AppendLine("        // 기준: 평균 이하 플레이어(BalanceSim.SKILL), 기본 트리 약 2시간, 지역 잠금 없이 골드로만. 비어 있는 노드는 기본가 × 증가율^레벨을 쓴다.");
-            sb.AppendLine("        public static readonly Dictionary<string, double[]> PRICE_TABLE = new Dictionary<string, double[]>");
-            sb.AppendLine("        {");
-            for (int t = 1; t <= 3; t++)
-            {
-                var ns = NODES.Where(n => n.costs != null && n.tier == t).ToList();
-                if (ns.Count == 0) continue;
-                sb.AppendLine($"            // {TIER_NAMES[t]}");
-                foreach (var n in ns) sb.AppendLine($"            [\"{n.id}\"] = new double[] {{ {string.Join(", ", n.costs.Select(c => c.ToString("0")))} }},");
-            }
-            sb.AppendLine("        };");
-            sb.AppendLine("    }");
-            sb.AppendLine("}");
-            File.WriteAllText(Path.Combine(Application.dataPath, "Scripts/Core/Defs.Prices.cs"), sb.ToString());
-            return "written";
+            var t = NODES.Where(n => !n.gem).ToDictionary(n => n.id, n => n.costs);
+            string path = Path.GetFullPath(Path.Combine(Application.dataPath, "../BalanceData/db/tuned_prices.json"));
+            File.WriteAllText(path, JsonConvert.SerializeObject(t, Formatting.Indented));
+            return $"{path} (노드 {t.Count}개) → python BalanceData/db/db_write.py prices {DbImport.LatestDb()} BalanceData/db/tuned_prices.json";
         }
 
         // 진행 상태를 이름 붙여 저장·복원 (지역 경계에서 가격을 바꿔 가며 다시 돌리기)
@@ -490,7 +475,7 @@ namespace MoreMush.EditorTools
                 for (int i = 0; i < n; i++)
                 {
                     G = new SaveData { rounds = stage - 1 };
-                    G.nodes = nodes != null ? new Dictionary<string, int>(nodes) : NODES.Where(x => x.costGem <= 0).ToDictionary(x => x.id, x => x.max);
+                    G.nodes = nodes != null ? new Dictionary<string, int>(nodes) : NODES.Where(x => !x.gem).ToDictionary(x => x.id, x => x.max);
                     var r = PlayRound(rnd);
                     acc.score += r.score / n; acc.scoreGold += r.scoreGold / n; acc.value += r.value / n;
                     acc.harvests += r.harvests / n; acc.maxCombo += r.maxCombo / n; acc.duration += r.duration / n; acc.cols = r.cols;
@@ -499,7 +484,7 @@ namespace MoreMush.EditorTools
             });
         }
 
-        public static Dictionary<string, int> MaxGold() => NODES.Where(x => x.costGem <= 0).ToDictionary(x => x.id, x => x.max);
+        public static Dictionary<string, int> MaxGold() => NODES.Where(x => !x.gem).ToDictionary(x => x.id, x => x.max);
 
         // 전부 최대인 구성에서 노드 하나씩 0으로 내려 수입이 얼마나 줄어드는지 본다
         public static string Ablation(IEnumerable<string> ids, int n = 2, double maxWallSec = 60, bool withChildren = false)

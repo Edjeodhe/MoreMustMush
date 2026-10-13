@@ -16,7 +16,7 @@ namespace MoreMush.EditorTools
         static readonly string Temp = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp"));
         static readonly string Keep = Path.GetFullPath(Path.Combine(Application.dataPath, "../BalanceData"));
 
-        // 가격 맞추기: R1~R104 전체. 끝나면 Assets/Scripts/Core/Defs.Prices.cs를 다시 쓴다
+        // 가격 맞추기: R1~R104 전체. 끝나면 BalanceData/db/tuned_prices.json을 쓴다 (엑셀 반영은 db_write.py prices)
         public static void Run() => Batch(() =>
         {
             // 노드에 지역 잠금이 없으므로 R1~R104 전체를 가격 곡선 하나로 맞춘다
@@ -62,6 +62,8 @@ namespace MoreMush.EditorTools
         static void Batch(Action body)
         {
             int code = 0;
+            // 에디터가 꺼진 채 엑셀만 저장했을 수 있으니, 게임 표(Defs)를 만들기 전에 엑셀 DB를 먼저 다시 가져온다
+            File.AppendAllText(BalanceJob.LogPath, DbImport.Import() + "\n");
             Defs.ApplyPreset(PresetArg(), false);
             if (Arg("-ramp") is string ramp) Defs.ZONE_RAMP = int.Parse(ramp);   // 구조안 S1 실험
             if (Environment.GetCommandLineArgs().Contains("-nosell")) BalanceSim.SELL = false;

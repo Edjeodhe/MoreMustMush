@@ -22,7 +22,7 @@ namespace MoreMush.EditorTools
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
             var views = parent.GetComponentsInChildren<TreeNodeView>(true);
             var have = views.Select(v => v.nodeId).ToHashSet();
-            var made = Defs.NODES.Where(n => !n.core && !have.Contains(n.id)).Select(n =>
+            var made = Defs.NODES.Where(n => !have.Contains(n.id)).Select(n =>
             {
                 var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
                 go.name = n.id;

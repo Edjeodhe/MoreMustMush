@@ -16,7 +16,7 @@ namespace MoreMush
         // 기본 수확기: 빈 장착 칸을 채우고, 스킬이 만드는 분신도 이 모양이다. 분신 공격력 = 기본의 CLONE_STAT 배
         public const string BASE_HV = "sam";
         public const float CLONE_STAT = 0.2f;
-        public static readonly float[] MAP_ZOOM = { 1.5f, 1.35f, 1.2f, 1.1f, 1.0f };   // 필드 넓히기 0~4레벨
+        public static readonly float[] MAP_ZOOM = new float[5];   // 필드 넓히기 0~4레벨 화면 확대 (DB Upgrade md_map의 Efx_Lv0~4)
         public const int MAX_BALLS = 60;
 
         // 값이 화면용 한국어 문구인 사전. 읽을 때 지금 언어로 번역한다 (키는 그대로)

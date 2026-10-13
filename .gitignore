@@ -118,3 +118,6 @@ InitTestScene*.unity*
 
 # Claude Code 개인용 지침
 CLAUDE.local.md
+
+# 엑셀 DB 자동 백업 (BalanceData/db/db_write.py)
+BalanceData/db_backup/auto/

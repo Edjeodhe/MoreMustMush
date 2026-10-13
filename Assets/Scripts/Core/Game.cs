@@ -108,9 +108,9 @@ namespace MoreMush
         public struct Cost { public double gold, gem; }
         public static Cost NodeCost(Node n, int L) => new Cost
         {
-            // 가격표(Defs.Prices.cs)가 있으면 레벨별 가격을 쓰고, 없으면 기본가 × 증가율^레벨
-            gold = Math.Ceiling((n.costs != null && L < n.costs.Length ? n.costs[L] : n.costGold * Math.Pow(n.g, L)) * COST_MUL),
-            gem = n.costGem > 0 ? Math.Ceiling(n.costGem * Math.Pow(n.g, L) * COST_MUL) : 0,
+            // 레벨별 가격 (엑셀 DB Upgrade_Cost: Cost_Lv = 골드, Gem_Lv = 균사석)
+            gold = L < n.costs.Length ? Math.Ceiling(n.costs[L] * COST_MUL) : 0,
+            gem = L < n.gems.Length && n.gems[L] > 0 ? Math.Ceiling(n.gems[L] * COST_MUL) : 0,
         };
         public static bool CanAfford(Cost c) => G.gold + 1e-9 >= c.gold && G.gem + 1e-9 >= c.gem;
         static void Pay(Cost c) { G.gold -= c.gold; G.gem -= c.gem; }
@@ -155,7 +155,7 @@ namespace MoreMush
                 Node best = null; double bc = double.PositiveInfinity;
                 foreach (var n in NODES)
                 {
-                    if (!brs.Contains(n.br) || n.costGem > 0) continue;
+                    if (!brs.Contains(n.br) || n.gem) continue;
                     var s = NodeState(n); if (s != "avail" && s != "owned") continue;
                     if (!ParentOk(n)) continue;   // 산 노드라도 선행(부모·최대 레벨 선행)이 안 맞으면 더 못 올린다
                     double c = NodeCost(n, Lv(n.id)).gold; if (c < bc) { bc = c; best = n; }
@@ -188,9 +188,14 @@ namespace MoreMush
             while (a.Count < slots) a.Add(BASE_HV);
             return a;
         }
-        // 일반 채집은 좋은 날씨만, 보스 채집은 나쁜 날씨만 같은 확률로 (전투 기획서 Ver05 · 날씨 변경점)
+        // 일반 채집은 좋은 날씨만, 보스 채집은 나쁜 날씨만 (전투 기획서 Ver05 · 날씨 변경점). 같은 유형 안에서는 DB Wea_Rate 가중치로
         public static List<Weather> WeatherPool(bool boss) => WEATHERS.Where(w => w.good != boss).ToList();
-        public static string RollWeather(bool boss) => U.Pick(WeatherPool(boss)).id;
+        public static string RollWeather(bool boss)
+        {
+            var pool = WeatherPool(boss);
+            // 가중치가 모두 같으면 예전처럼 고르게 뽑는다 (난수 소비가 같아 봇 시뮬 결과가 그대로)
+            return (pool.All(w => w.rate == pool[0].rate) ? U.Pick(pool) : (U.PickWeighted(pool, w => w.rate) ?? U.Pick(pool))).id;
+        }
 
         static SkillInfo SkillInfoOf(string id)
         {

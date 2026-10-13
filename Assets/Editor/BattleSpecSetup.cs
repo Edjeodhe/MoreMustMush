@@ -47,7 +47,7 @@ namespace MoreMush.EditorTools
             foreach (var n in NODES)
             {
                 if (byId.ContainsKey(n.id)) continue;
-                var tpl = views.First(v => v.Node.sub == n.sub && !v.Node.core);
+                var tpl = views.First(v => v.Node.sub == n.sub);
                 var go = Object.Instantiate(tpl.gameObject, tpl.transform.parent);
                 go.name = "Node " + n.id;
                 var nv = go.GetComponent<TreeNodeView>();

@@ -47,7 +47,7 @@ namespace MoreMush
         }
 
         // 같은 쪽(일반 채집 = 좋은 날씨 · 보스 채집 = 나쁜 날씨) 안에서의 확률
-        public static double WeatherChance(Weather w) => 1.0 / WeatherPool(!w.good).Count;
+        public static double WeatherChance(Weather w) { var pool = WeatherPool(!w.good); double sum = pool.Sum(x => x.rate); return sum > 0 ? w.rate / sum : 0; }
         public static string FavText(Weather w) =>
             w.fav != null ? string.Join(", ", w.fav.Select(n => SP_BY_NAME[n].n)) + $" ×{U.FmtN(w.favMul)}" : w.favTier >= 0 ? Loc.F("{0} 전체 ×{1}", TIERS[w.favTier].name, U.FmtN(w.favMul)) : "-";
     }

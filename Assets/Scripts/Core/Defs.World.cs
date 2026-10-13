@@ -16,20 +16,14 @@ namespace MoreMush
             public float favMul = 1;
             public bool good;
             public int favTier = -1;
+            public double rate = 1;   // 같은 유형 안에서 뽑힐 가중치 (DB Wea_Rate)
             public string[] fav;
             public HashSet<string> favIds = new HashSet<string>();
         }
         // 전투 기획서 Ver05(2026-10-12 회의): 날씨를 6종으로 줄였다. 일반 채집 = 좋은 날씨 3종, 보스 채집 = 나쁜 날씨 3종, 같은 확률.
         // (가을 낙엽·천둥번개·무지개·짙은 안개·가뭄 삭제, 해금 조건 없음)
-        public static readonly List<Weather> WEATHERS = new List<Weather>
-        {
-            new Weather { id = "clear", n = "맑음", icon = "w_clear", good = true, d = "변화 없음" },
-            new Weather { id = "rain", n = "보슬비", icon = "w_rain", good = true, d = "군락 재생 속도 ×2, 군락지 +20%", fav = new[] { "먹물버섯", "이끼꽃버섯", "목이버섯", "흰목이" }, favMul = 3 },
-            new Weather { id = "moon", n = "보름달 밤", icon = "w_moon", good = true, d = "필드가 어두워지고 발광 버섯이 빛남, 황금 변종 ×3", fav = new[] { "화경버섯", "독우산광대버섯", "송이버섯", "송로버섯", "갈색고리갓버섯" }, favMul = 4 },
-            new Weather { id = "storm", n = "폭우", icon = "w_storm", good = false, d = "수확기 속도 ×0.8, 군락 재생이 2배 느려짐" },
-            new Weather { id = "wind", n = "포자 바람", icon = "w_wind", good = false, d = "버섯이 포자를 2배 자주 뿜고, 느림·약화 디버프가 2배 오래 간다", fav = new[] { "말불버섯", "목도리방귀버섯", "광대버섯", "뱀껍질광대버섯", "알광대버섯", "개나리광대버섯", "독우산광대버섯", "마귀광대버섯" }, favMul = 3 },
-            new Weather { id = "cold", n = "한파", icon = "w_cold", good = false, d = "바 길이 ×0.75, 제한시간 −3초" },
-        };
+        // DB Weader 시트의 행 순서. Weader_Type 1 = 일반 채집(좋은 날씨), 0 = 보스 채집(나쁜 날씨). 설명은 String 시트 wea:<키>:desc
+        public static readonly List<Weather> WEATHERS = new List<Weather>();
         public static readonly Dictionary<string, Weather> WEATHER = new Dictionary<string, Weather>();
         public const string WEATHER_GOOD = "#5fb8ff", WEATHER_BAD = "#ff5a4a";
 
@@ -57,7 +51,7 @@ namespace MoreMush
 
         // 버섯 체력·보상(점수·수확 개수) 배율: 지역마다 ×10, 스테이지마다 ×1.01.
         // 공격력·타격 점수 단계 노드(+1/+10/+100/+1000)와 단위를 맞춰, 새 지역에 갈 때마다 숫자가 한 자리씩 뛴다.
-        public const double ZONE_STEP = 10, STAGE_GROWTH = 1.01;
+        public static readonly double ZONE_STEP = Db.CPos("ZONE_STEP"), STAGE_GROWTH = Db.CPos("STAGE_GROWTH");
         public static int ThemeIndex(string id) => Math.Max(0, THEMES.FindIndex(t => t.id == id));
         // 실험(구조안 S1, 사용자 결정 전): 0이 아니면 새 지역의 ×10을 해금 뒤 ZONE_RAMP판에 나눠 올린다(판마다 ×10^(1/ZONE_RAMP)).
         // 기본 0 = 해금 즉시 ×10(지금 게임). 밸런스 시뮬에서만 명령줄 -ramp 10으로 켠다
@@ -78,7 +72,7 @@ namespace MoreMush
             ["stump"] = "그루터기 범퍼", ["moss"] = "이끼 길", ["acorn"] = "도토리 스위치",
         });
         // 그루터기에 튕긴 수확기: 공격력 ×(1 + (STUMP_ATK_MUL-1)×숲 장치 강화), STUMP_ATK_DUR초 (다시 맞으면 시간만 갱신)
-        public const float STUMP_ATK_MUL = 1.5f, STUMP_ATK_DUR = 5f;   // 전투 기획서 Ver05: 예시 5초
+        public static readonly float STUMP_ATK_MUL = (float)Db.C("STUMP_ATK_MUL"), STUMP_ATK_DUR = (float)Db.C("STUMP_ATK_DUR");   // 전투 기획서 Ver05: 예시 5초
 
         // ===== 도감 세트 =====
         public class CodexSet
@@ -105,7 +99,7 @@ namespace MoreMush
         public static double[] GOLDEN_STEP_BONUS = { 0.10, 0.25, 0.60 };
 
         // ===== 콤보·피버 =====
-        public const float COMBO_WINDOW = 1.5f;
+        public static readonly float COMBO_WINDOW = (float)Db.CPos("COMBO_WINDOW");
         public static readonly (int at, string n, float mul)[] FEVER = { (25, "FEVER!", 1.5f), (70, "SUPER FEVER!!", 2f) };
         public const int FLAME_STEP = 10000;
         public class Flame
@@ -134,7 +128,23 @@ namespace MoreMush
 
         static void InitWorld()
         {
-            foreach (var w in WEATHERS) { WEATHER[w.id] = w; if (w.fav != null) foreach (var n in w.fav) w.favIds.Add(SP_BY_NAME[n].id); }
+            foreach (var r in Db.Data.Weader)
+            {
+                if (r.Weader_Type != 0 && r.Weader_Type != 1) throw new InvalidOperationException($"[DB] Weader {r.Wea_Key}: Weader_Type은 1(일반) 또는 0(보스) ({r.Weader_Type})");
+                if (r.Wea_Rate < 0) throw new InvalidOperationException($"[DB] Weader {r.Wea_Key}: Wea_Rate는 0 이상 ({r.Wea_Rate})");
+                WEATHERS.Add(new Weather
+                {
+                    id = r.Wea_Key, nKo = r.Wea_Name, dKo = Db.Text($"wea:{r.Wea_Key}:desc"), icon = r.Icon, good = r.Weader_Type == 1, rate = r.Wea_Rate,
+                    favMul = (float)r.Fav_Mul, favTier = r.Fav_Tier, fav = string.IsNullOrEmpty(r.Fav) ? null : r.Fav.Split(',').Select(x => x.Trim()).ToArray(),
+                });
+            }
+            foreach (var w in WEATHERS)
+            {
+                WEATHER[w.id] = w;
+                if (w.fav == null) continue;
+                foreach (var n in w.fav)
+                    w.favIds.Add(SP_BY_NAME.TryGetValue(n, out var sp) ? sp.id : throw new InvalidOperationException($"[DB] Weader {w.id}: 도감에 없는 선호 버섯 '{n}'"));
+            }
             foreach (var t in THEMES) { THEME[t.id] = t; foreach (var n in t.fav) t.favIds.Add(SP_BY_NAME[n].id); }
             foreach (var s in SETS) s.ids = s.cat != null ? SPECIES.Where(x => x.c == s.cat).Select(x => x.id).ToList() : s.m.Select(n => SP_BY_NAME[n].id).ToList();
             GOLDEN_STEPS = new[] { new[] { 5 }, new[] { 15 }, new[] { SP_TOTAL } };

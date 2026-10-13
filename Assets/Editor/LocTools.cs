@@ -16,7 +16,7 @@ namespace MoreMush.EditorTools
     // 폰트 세트는 언어마다 제목(Title)·본문(Body) 두 벌. 언어를 늘리면 FONT_SETS에 한 줄 더하고 TTF를 Assets/Fonts에 넣는다.
     public static class LocTools
     {
-        const string FontDir = "Assets/Fonts", LocFontsPath = "Assets/Resources/Loc/LocFonts.asset", TablePath = "Assets/Resources/Loc/strings.txt";
+        const string FontDir = "Assets/Fonts", LocFontsPath = "Assets/Resources/Loc/LocFonts.asset", NewStringsPath = "BalanceData/db/new_strings.json";
         const int SamplingSize = 64, Padding = 8, AtlasSize = 2048;
 
         // 언어, 제목 TTF, 본문 TTF (확장자 없는 파일 이름)
@@ -189,7 +189,8 @@ namespace MoreMush.EditorTools
         static bool ContainsHangul(string s) => s != null && s.Any(c => c >= '가' && c <= '힣');
 
         // ===== 3. 번역표 =====
-        // 소스의 한국어 리터럴 + 씬·프리팹 LocText 키를 모아 strings.txt를 다시 쓴다. 있던 번역은 그대로 두고, 안 쓰는 줄은 지운다.
+        // 번역표 = 엑셀 DB의 String 시트. 소스의 한국어 리터럴 + 씬·프리팹 LocText 키 + DB 데이터 이름을 모아,
+        // String 시트에 없는 문구를 맨 아래에 추가한다(BalanceData/db/db_write.py, Excel COM). 안 쓰는 줄은 지우지 않고 알려만 준다(번역 보존).
         [MenuItem("MoreMush/다국어/3 번역표 갱신")]
         public static string ExportTable()
         {
@@ -205,46 +206,60 @@ namespace MoreMush.EditorTools
                     Add(lit);
                 }
             foreach (var k in SceneKeys()) Add(k);
+            Db.Reload();
+            var db = Db.Data;
+            foreach (var u in db.Upgrade) Add(u.Upg_Name);
+            foreach (var r in db.Skill) Add(r.Skill_Name);
+            foreach (var r in db.Ball) { Add(r.Ball_Name); Add(r.Ball_Type); Add(r.Ball_Look); }
+            foreach (var r in db.Weader) Add(r.Wea_Name);
+            foreach (var r in db.Boss) Add(r.Boss_Name);
+            foreach (var r in db.String) if (r.Str_Name != "ui") Add(r.Str_KR);   // 데이터 설명 문구 (upg:·wea:·boss: …)
 
-            var langs = Loc.LANGS;
-            var old = ReadTable();
-            var sb = new StringBuilder();
-            sb.Append(string.Join("\t", langs)).Append('\n');
-            int filled = 0;
-            foreach (var k in keys)
+            var have = new HashSet<string>(db.String.Select(r => r.Str_KR));
+            var missing = keys.Where(k => !have.Contains(k)).ToList();
+            int unused = db.String.Count(r => r.Str_Name == "ui" && !seen.Contains(r.Str_KR));
+            int filled = db.String.Sum(r => (string.IsNullOrEmpty(r.Str_EN) ? 0 : 1) + (string.IsNullOrEmpty(r.Str_JA) ? 0 : 1));
+            string msg = $"문구 {keys.Count}개 · DB String {db.String.Count}줄 (번역 칸 {filled}/{db.String.Count * 2}) · 안 쓰는 UI 줄 {unused}";
+            string xlsx = DbImport.LatestDb();
+            if (missing.Count > 0 && xlsx == null) msg += $"\n새 문구 {missing.Count}개가 있지만 Assets/DB에 엑셀 DB가 없어요";
+            else if (missing.Count > 0)
             {
-                old.TryGetValue(k, out var row);
-                sb.Append(Loc.Escape(k));
-                for (int i = 1; i < langs.Length; i++)
-                {
-                    string v = row != null && row.TryGetValue(langs[i], out var x) ? x : "";
-                    if (v.Length > 0) filled++;
-                    sb.Append('\t').Append(Loc.Escape(v));
-                }
-                sb.Append('\n');
+                File.WriteAllText(NewStringsPath, Newtonsoft.Json.JsonConvert.SerializeObject(missing, Newtonsoft.Json.Formatting.Indented), new UTF8Encoding(false));
+                var (ok, output) = RunPython("BalanceData/db/db_write.py", "strings", xlsx, NewStringsPath);
+                msg += ok ? $"\n새 문구 {missing.Count}개를 {Path.GetFileName(xlsx)} String 시트에 추가: {output}\n" + DbImport.Import()
+                          : $"\n새 문구 {missing.Count}개를 DB에 넣지 못했어요 (엑셀이 열려 있으면 닫고 다시): {output}\n목록: {NewStringsPath}";
             }
-            Directory.CreateDirectory(Path.GetDirectoryName(TablePath));
-            File.WriteAllText(TablePath, sb.ToString(), new UTF8Encoding(false));
-            AssetDatabase.ImportAsset(TablePath);
-            int removed = old.Keys.Count(k => !seen.Contains(k));
-            string msg = $"키 {keys.Count}개 (번역 칸 {filled}/{keys.Count * (langs.Length - 1)}), 지운 줄 {removed}";
             if (interp.Count > 0) msg += $"\n보간 문자열에 한국어 {interp.Count}곳 (Loc.F로 바꿔야 함):\n" + string.Join("\n", interp.Take(40));
             return msg;
         }
 
-        static Dictionary<string, Dictionary<string, string>> ReadTable()
+        // python 스크립트 실행 (엑셀 COM 쓰기). 끝날 때까지 기다린다
+        static (bool ok, string output) RunPython(string script, params string[] args)
         {
-            var map = new Dictionary<string, Dictionary<string, string>>();
-            if (!File.Exists(TablePath)) return map;
-            string[] header = null;
-            foreach (var row in Loc.ParseTsv(File.ReadAllText(TablePath)))
+            var psi = new System.Diagnostics.ProcessStartInfo("python", string.Join(" ", new[] { script }.Concat(args).Select(a => $"\"{a}\"")))
             {
-                if (header == null) { header = row; continue; }
-                var d = new Dictionary<string, string>();
-                for (int i = 1; i < row.Length && i < header.Length; i++) d[header[i]] = row[i];
-                map[row[0]] = d;
+                UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true,
+                StandardOutputEncoding = Encoding.UTF8, StandardErrorEncoding = Encoding.UTF8,
+            };
+            psi.EnvironmentVariables["PYTHONIOENCODING"] = "utf-8";
+            const int TimeoutMs = 180000;
+            try
+            {
+                EditorUtility.DisplayProgressBar("엑셀 DB", "엑셀(COM)에 쓰는 중… (최대 3분)", 0.5f);
+                using var p = System.Diagnostics.Process.Start(psi);
+                // 출력은 비동기로 받고 종료를 먼저 기다린다 (엑셀이 멈춰도 타임아웃이 걸리게)
+                var outTask = p.StandardOutput.ReadToEndAsync();
+                var errTask = p.StandardError.ReadToEndAsync();
+                if (!p.WaitForExit(TimeoutMs))
+                {
+                    try { p.Kill(); } catch (InvalidOperationException) { }
+                    return (false, "3분 안에 끝나지 않았어요. 작업 관리자에서 남은 EXCEL.EXE를 닫은 뒤 다시 하세요");
+                }
+                p.WaitForExit();   // 출력 스트림까지 다 닫히게
+                return (p.ExitCode == 0, (outTask.Result + errTask.Result).Trim());
             }
-            return map;
+            catch (Exception e) { return (false, "python을 실행하지 못했어요 (Windows + Excel + pywin32 필요): " + e.Message); }
+            finally { EditorUtility.ClearProgressBar(); }
         }
 
         static IEnumerable<string> SceneKeys()
@@ -292,18 +307,18 @@ namespace MoreMush.EditorTools
         });
 
         // ===== 4. 폰트 굽기 =====
-        // 폰트마다 그 폰트를 쓰는 언어 열의 글자만 굽는다 (WebGL 메모리). 만능 대체 폰트는 한국어 + 언어 이름 + 기호.
+        // 폰트마다 그 폰트를 쓰는 언어(DB String 시트의 Str_KR·Str_EN·Str_JA 열) 글자만 굽는다 (WebGL 메모리). 만능 대체 폰트는 한국어 + 언어 이름 + 기호.
         [MenuItem("MoreMush/다국어/4 폰트 굽기")]
         public static string BakeFonts()
         {
-            var table = ReadTable();
+            Db.Reload();
             var langChars = new Dictionary<string, HashSet<char>>();
             foreach (var l in Loc.LANGS) langChars[l] = new HashSet<char>();
-            foreach (var kv in table)
+            foreach (var r in Db.Data.String)
             {
-                langChars["ko"].UnionWith(kv.Key);
-                foreach (var l in Loc.LANGS.Skip(1))
-                    if (kv.Value.TryGetValue(l, out var v)) langChars[l].UnionWith(v);
+                langChars["ko"].UnionWith(r.Str_KR ?? "");
+                langChars["en"].UnionWith(r.Str_EN ?? "");
+                langChars["ja"].UnionWith(r.Str_JA ?? "");
             }
             var basic = new HashSet<char>(Enumerable.Range(32, 95).Select(i => (char)i));
             basic.UnionWith(SYMBOLS);

@@ -137,7 +137,7 @@ namespace MoreMush.EditorTools
             AssetDatabase.SaveAssets();
         }
 
-        // 언어별 폰트 굽기는 LocTools가 번역표(strings.txt)의 언어 열로 한다
+        // 언어별 폰트 굽기는 LocTools가 번역표(DB String 시트)의 언어 열로 한다
         [MenuItem("MoreMush/Optimize/Bake Static Fonts")]
         public static void BakeFonts() => Debug.Log("[MoreMush] " + LocTools.BakeFonts());
 
