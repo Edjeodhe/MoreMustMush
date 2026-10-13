@@ -183,6 +183,8 @@ namespace MoreMush
             AddLabel(Loc.T("다음 스테이지가 열렸어요"), WW / 2, WH * 0.3f + 60, "#ffe36e", 28);
             clouds.RemoveAll(c => c.fog);
             Snd.Record();
+            // 보스를 쓰러뜨리면 남은 시간과 관계없이 라운드를 바로 끝낸다 (끝 연출 1.5초 뒤 정산, 시간이 다 된 때와 같음)
+            if (phase == "run") { phase = "end"; endT = 1.5f; festOn = false; }
         }
     }
 }
