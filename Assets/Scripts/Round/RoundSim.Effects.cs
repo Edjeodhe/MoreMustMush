@@ -102,12 +102,15 @@ namespace MoreMush
         void UpdateEffects(float h)
         {
             runT += h;
-            // 군락지 재생
-            for (int i = 0; i < regen.Count; i++) regen[i] -= h;
-            for (int i = regen.Count - 1; i >= 0; i--)
-                if (regen[i] <= 0) { if (SpawnColony(false)) regen.RemoveAt(i); else regen[i] = 0.5f; }
-            int missing = st.maxCol - colonies.Count - regen.Count;
-            for (int i = 0; i < missing; i++) regen.Add((float)st.regen);
+            // 군락지 재생 (보스 라운드에는 없음)
+            if (!BossRound)
+            {
+                for (int i = 0; i < regen.Count; i++) regen[i] -= h;
+                for (int i = regen.Count - 1; i >= 0; i--)
+                    if (regen[i] <= 0) { if (SpawnColony(false)) regen.RemoveAt(i); else regen[i] = 0.5f; }
+                int missing = st.maxCol - colonies.Count - regen.Count;
+                for (int i = 0; i < missing; i++) regen.Add((float)st.regen);
+            }
             // 포자 구름
             foreach (var c in clouds) c.t -= h;
             clouds.RemoveAll(c => c.t <= 0);

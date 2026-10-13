@@ -93,13 +93,14 @@ namespace MoreMush
             var r = new RoundSim { st = st, themeId = st.theme.id };
             R = r;
             r.timeLeft = r.timeMax = (float)st.duration;
-            r.giantState = U.Chance((float)st.giantP) ? "pending" : "none";
+            // 보스 라운드에는 보스 말고 다른 버섯이 나오지 않는다 (군락지·재생·거대 버섯 없음). 확률은 그대로 굴려 난수 순서를 지킨다
+            r.giantState = U.Chance((float)st.giantP) && st.boss == null ? "pending" : "none";
             r.barX = WW / 2; r.barLen = (float)st.barLen;
             if (st.boss != null) r.SpawnBoss(st.boss);   // 군락지·장치보다 먼저 자리를 잡는다
             foreach (var d in st.devTypes) r.PlaceDevice(d, null);
             r.barLen = Mathf.Min(r.barLen, WW / 3);   // 슬라이드 바 최대 길이: 화면의 1/3
             r.PlaceFixBars(st.fixBars);
-            for (int i = 0; i < st.maxCol; i++) r.SpawnColony(true);
+            if (st.boss == null) for (int i = 0; i < st.maxCol; i++) r.SpawnColony(true);
             for (int i = 0; i < st.permBalls; i++) r.balls.Add(r.MakeBall(LAUNCH.x, LAUNCH.y, true, st.hvs[i % st.hvs.Count]));
             r.RebuildGrid();
             return r;
