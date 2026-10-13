@@ -32,7 +32,7 @@ namespace MoreMush
         {
             new BossDef { id = "king", cat = "ed", look = "송이버섯", col = "#c9a27a", n = "대왕송이", gimmick = "다른 보스보다 체력이 훨씬 높아요", hpMul = 1.6 },
             new BossDef { id = "cleaner", cat = "md", look = "선녀낙엽버섯", col = "#7ad07a", n = "숲 속의 청소부", gimmick = "3초마다 최대 체력의 5%를 회복해요" },
-            new BossDef { id = "angel", cat = "ps", look = "독우산광대버섯", col = "#b48cff", n = "죽음의 천사", gimmick = "독 안개를 뿌려요. 닿은 수확기는 이동 속도 −50%" },
+            new BossDef { id = "angel", cat = "ps", look = "독우산광대버섯", col = "#b48cff", n = "죽음의 천사", gimmick = "2초마다 필드의 임시 수확기를 모두 없애요" },
             new BossDef { id = "phantom", cat = "ps", look = "광대버섯", col = "#ff6b6b", n = "환상 버섯", gimmick = "체력 66%·33%에서 분신을 불러요. 분신까지 모두 쓰러뜨려야 해요", hpMul = 0.6 },
             new BossDef { id = "mover", cat = "md", look = "동충하초", col = "#f2a64a", n = "움직이는 버섯", gimmick = "쉴 새 없이 좌우로 움직여요" },
         };
@@ -40,7 +40,7 @@ namespace MoreMush
 
         // 기믹 수치 (기획서: 개발 단계에서 조정 가능)
         public const float CLEANER_HEAL = 0.05f, CLEANER_INT = 3;
-        public const float FOG_INT = 3.5f, FOG_LIFE = 5, FOG_R = 150, FOG_SLOW = 0.5f;
+        public const float ANGEL_PURGE_INT = 2;   // 죽음의 천사: 이 간격(초)마다 임시 수확기를 모두 없앤다 (2026-10-13, 예전 독 안개 기믹 대체)
         public static readonly float[] PHANTOM_SPLIT = { 0.66f, 0.33f };
         public const float MOVER_SPD = 260;
 

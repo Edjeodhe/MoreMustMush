@@ -26,7 +26,7 @@ namespace MoreMush
             new Weather { id = "clear", n = "맑음", icon = "w_clear", good = true, d = "변화 없음" },
             new Weather { id = "rain", n = "보슬비", icon = "w_rain", good = true, d = "군락 재생 속도 ×2, 군락지 +20%", fav = new[] { "먹물버섯", "이끼꽃버섯", "목이버섯", "흰목이" }, favMul = 3 },
             new Weather { id = "moon", n = "보름달 밤", icon = "w_moon", good = true, d = "필드가 어두워지고 발광 버섯이 빛남, 황금 변종 ×3", fav = new[] { "화경버섯", "독우산광대버섯", "송이버섯", "송로버섯", "갈색고리갓버섯" }, favMul = 4 },
-            new Weather { id = "storm", n = "폭우", icon = "w_storm", good = false, d = "핀볼 속도 ×0.8, 군락 재생이 2배 느려짐" },
+            new Weather { id = "storm", n = "폭우", icon = "w_storm", good = false, d = "수확기 속도 ×0.8, 군락 재생이 2배 느려짐" },
             new Weather { id = "wind", n = "포자 바람", icon = "w_wind", good = false, d = "버섯이 포자를 2배 자주 뿜고, 느림·약화 디버프가 2배 오래 간다", fav = new[] { "말불버섯", "목도리방귀버섯", "광대버섯", "뱀껍질광대버섯", "알광대버섯", "개나리광대버섯", "독우산광대버섯", "마귀광대버섯" }, favMul = 3 },
             new Weather { id = "cold", n = "한파", icon = "w_cold", good = false, d = "바 길이 ×0.75, 제한시간 −3초" },
         };

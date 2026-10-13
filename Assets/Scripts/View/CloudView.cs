@@ -11,7 +11,7 @@ namespace MoreMush
         {
             transform.localPosition = Art.P(c.x, c.y);
             float a = Mathf.Min(1, c.t / 0.5f) * 0.35f;
-            Color col = c.fog ? U.Rgba(90, 170, 90, a * 1.4f) : c.slow && c.weak ? U.Rgba(150, 110, 170, a) : c.slow ? U.Rgba(160, 120, 200, a) : U.Rgba(150, 150, 150, a);
+            Color col = c.slow && c.weak ? U.Rgba(150, 110, 170, a) : c.slow ? U.Rgba(160, 120, 200, a) : U.Rgba(150, 150, 150, a);
             float k = c.r / 120;   // 독 안개는 포자 구름보다 크다
             for (int i = 0; i < puffs.Length; i++)
             {
