@@ -216,11 +216,12 @@ namespace MoreMush
         public void BeginRound()
         {
             if (BlockedByHarvesters()) return;
-            string w = RollWeather();
+            var boss = BossRoundNext() ? BossAt(StageNow()) : null;
+            string w = RollWeather(boss != null);
             if (!THEME.TryGetValue(G.theme, out var th) || !ThemeOpen(th)) G.theme = LatestTheme().id;
             CloseModal();
             SetScreen("round");
-            round.Begin(w, G.theme);
+            round.Begin(w, G.theme, boss);
             SaveGame();
         }
 
@@ -280,6 +281,11 @@ namespace MoreMush
                 case "bulktab": Snd.Ui(); bulk.SetBranch(arg); break;
                 case "bulkgo": bulk.Go(); break;
                 case "go": Snd.Ui(); OpenPreRound(); break;
+                case "bosstoggle":
+                    G.bossOn = !G.bossOn; SaveGame(); Snd.Ui();
+                    ShowToast(G.bossOn ? Loc.F("보스 도전 켬 · 스테이지 {0}에서 보스와 싸워요", NextBossStage(StageNow())) : Loc.T("보스 도전 끔 · 보스 스테이지에서는 파밍만 해요"));
+                    if (Screen == "tree") tree.Refresh();
+                    break;
                 case "pretheme": Snd.Ui(); G.theme = arg; SaveGame(); preRound.Render(); break;
                 case "startround": BeginRound(); break;
                 case "resume": CloseModal(); break;

@@ -5,6 +5,9 @@ namespace MoreMush
     // One pinball (harvester token). Prefab: Assets/Prefabs/Round/BallView.prefab
     public class BallView : MonoBehaviour
     {
+        // 전용 그림이 없는 수확기는 비슷한 수확기 그림 (약초 괭이 → 오래된 낫)
+        public static string HvLook(string hv) => hv == "hoe" ? Defs.BASE_HV : hv;
+
         public SpriteRenderer body;
         public LineRenderer trail;
         public SpriteRenderer blade;     // rotating blade range
@@ -23,7 +26,7 @@ namespace MoreMush
             transform.localPosition = Art.P(b.x, b.y);
 
             var skin = Game.HvSkinOn(b.hv);
-            body.sprite = SpriteDB.Get("Harvesters/", skin != null ? skin.id : b.hv);
+            body.sprite = SpriteDB.Get("Harvesters/", skin != null ? skin.id : b.hv) ?? SpriteDB.Get("Harvesters/", HvLook(b.hv));
             Art.FitPx(body, b.r * 2.3f);
             body.transform.localRotation = Quaternion.Euler(0, 0, -b.ang * Mathf.Rad2Deg);
             body.color = new Color(1, 1, 1, b.perm ? 1 : Mathf.Min(0.85f, b.life));
@@ -74,14 +77,14 @@ namespace MoreMush
                 fire.transform.localScale = Vector3.one * (b.r * 2.8f * fl / Art.PPU);
             }
 
-            bool deb = b.slow > 0 || b.weak > 0;
+            bool deb = b.slow > 0 || b.weak > 0 || b.fog > 0;
             for (int i = 0; i < debuff.Length; i++)
             {
                 debuff[i].enabled = deb;
                 if (!deb) continue;
                 float a = now * 4 + i * U.TAU / 4;
                 debuff[i].transform.localPosition = Art.P(Mathf.Cos(a) * b.r * 1.4f, Mathf.Sin(a) * b.r * 1.4f);
-                debuff[i].color = (i % 2 == 1 && b.weak > 0) || b.slow <= 0 ? new Color(140 / 255f, 140 / 255f, 140 / 255f, 0.9f) : new Color(170 / 255f, 110 / 255f, 220 / 255f, 0.9f);
+                debuff[i].color = b.fog > 0 && i % 2 == 0 ? new Color(90 / 255f, 190 / 255f, 90 / 255f, 0.9f) : (i % 2 == 1 && b.weak > 0) || b.slow <= 0 ? new Color(140 / 255f, 140 / 255f, 140 / 255f, 0.9f) : new Color(170 / 255f, 110 / 255f, 220 / 255f, 0.9f);
             }
         }
     }

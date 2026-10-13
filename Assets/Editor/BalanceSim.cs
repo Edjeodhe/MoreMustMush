@@ -21,6 +21,7 @@ namespace MoreMush.EditorTools
             public int harvests, maxCombo, cols, balls, spawned;
             public int[] madeT, killT;   // 티어별 생긴 수·수확한 수
             public string zone; public double atk;
+            public string boss; public bool bossCleared; public double bossHpLeft;   // 보스 라운드 결과 (남은 체력 비율)
         }
 
         // MCP 호출이 시간 초과로 끊겨도 결과가 남도록 줄마다 파일에도 쓴다 (프로젝트 Temp 폴더)
@@ -61,10 +62,13 @@ namespace MoreMush.EditorTools
         {
             if (autoZone) G.theme = PickZone();
             else if (!THEME.TryGetValue(G.theme ?? "", out var th) || !ThemeOpen(th)) G.theme = LatestTheme().id;
-            string w = RollWeather();
-            var R = RoundSim.Start(w, G.theme);
-            var res = new RoundResult { stage = StageNow(), weather = w, duration = R.st.duration, cols = R.st.maxCol, zone = G.theme, atk = R.st.atk, balls = R.st.permBalls };
-            R.Launch(Mathf.Atan2(-1f, (float)(rnd.NextDouble() * 0.8 - 0.4)));
+            var boss = BossRoundNext() ? BossAt(StageNow()) : null;
+            string w = RollWeather(boss != null);
+            var R = RoundSim.Start(w, G.theme, boss);
+            var res = new RoundResult { stage = StageNow(), weather = w, duration = R.st.duration, cols = R.st.maxCol, zone = G.theme, atk = R.st.atk, balls = R.st.permBalls, boss = boss?.id };
+            // 보스 라운드는 사람처럼 보스를 겨눠 쏜다
+            if (boss != null) { var bm = R.BossMain; R.Launch(Mathf.Atan2(bm.y - RoundSim.LAUNCH.y, bm.x - RoundSim.LAUNCH.x) + (float)(rnd.NextDouble() * 0.2 - 0.1)); }
+            else R.Launch(Mathf.Atan2(-1f, (float)(rnd.NextDouble() * 0.8 - 0.4)));
             float h = 1 / 30f, sim = 0, noise = 0, nt = 0;   // 측정 속도를 위해 30fps (충돌은 속도에 맞춰 잘게 나눠 계산된다)
             while (!(R.phase == "end" && R.endT <= 0) && sim < 300)
             {
@@ -78,6 +82,12 @@ namespace MoreMush.EditorTools
                 R.SimFrame(h); sim += h;
             }
             res.maxCombo = R.maxCombo;
+            if (boss != null)
+            {
+                res.bossCleared = R.bossCleared;
+                double left = 0, max = 0; foreach (var b in R.bosses) { left += Math.Max(0, b.hp); max += b.maxHp; }
+                res.bossHpLeft = max > 0 ? left / max : 0;
+            }
             var s = R.Finish();
             res.score = s.score; res.scoreGold = s.scoreGold; res.bonus = s.bonusGold; res.value = s.value; res.harvests = s.harvests; res.spawned = R.shroomsMade; res.madeT = (int[])R.madeT.Clone(); res.killT = (int[])R.killT.Clone();
             return res;
@@ -104,7 +114,8 @@ namespace MoreMush.EditorTools
                 while (val.Count < stage) val.Add(0);
                 while (kill.Count < stage) kill.Add(0);
                 while (zone.Count < stage) zone.Add("");
-                inc[stage - 1] = income; buys[stage - 1] = bought; val[stage - 1] = value; kill[stage - 1] = killRate; zone[stage - 1] = zoneId;
+                inc[stage - 1] += income; buys[stage - 1] += bought;   // 보스에게 지면 같은 스테이지를 여러 판 돈다 → 더한다
+                val[stage - 1] = value; kill[stage - 1] = killRate; zone[stage - 1] = zoneId;
             }
             public void SetTiers(int stage, int[] made, int[] killed)
             {
@@ -123,6 +134,8 @@ namespace MoreMush.EditorTools
         public const float SKILL = 0.6f;
 
         // every: 몇 판마다 한 줄씩 남길지. 트리를 다 산 판은 항상 남긴다
+        static int botFarm; static bool botBoughtSinceFail;
+
         public static string Progression(int rounds, bool resume = false, int seed = 1, float skill = SKILL, double maxWallSec = 20, int every = 1, int stopStage = 0)
         {
             LoadPriceTable();
@@ -132,11 +145,14 @@ namespace MoreMush.EditorTools
                 var ph = resume && File.Exists(PhasePath(seed)) ? JsonConvert.DeserializeObject<PhaseLog>(File.ReadAllText(PhasePath(seed))) : new PhaseLog();
                 var sb = new StringBuilder();
                 var sw = System.Diagnostics.Stopwatch.StartNew();
+                if (!resume) { botFarm = 0; botBoughtSinceFail = false; }
                 if (!resume) Log(sb, "판 | 누적 | 지역 | 시간 | 핀볼 | 공격력 | 점수골드 | 수확 | 보유골드 | 산 레벨 | 초반/중반/후반");
                 for (int i = 0; i < rounds; i++)
                 {
                     if (sw.Elapsed.TotalSeconds > maxWallSec || (stopStage > 0 && StageNow() > stopStage)) break;
                     var rnd = new System.Random(seed * 1000 + G.rounds); UnityEngine.Random.InitState(seed * 1000 + G.rounds);
+                    // 봇의 보스 재도전: 지고 나면 파밍하다가, 무언가 사고 나서 또는 3판마다 다시 켠다
+                    if (IsBossStage(StageNow()) && !G.bossOn && (botBoughtSinceFail || ++botFarm >= 3)) { G.bossOn = true; botFarm = 0; botBoughtSinceFail = false; }
                     var r = PlayRound(rnd, skill, !GAME_ZONE);
                     // 버섯 판매·마을 의뢰는 v3에서 없어졌다. 판 수입은 정산 골드뿐이다 (SELL 설정은 이제 효과 없음)
                     double sold = 0;
@@ -144,6 +160,9 @@ namespace MoreMush.EditorTools
                     BulkBuy(new[] { "ed", "md", "ps" }, 0, false);
                     G.play += r.duration + OVERHEAD_SEC;   // 추정 플레이 시간(초)
                     int bought = GoldLevels() - before;
+                    if (bought > 0) botBoughtSinceFail = true;
+                    if (r.boss != null && !r.bossCleared) botBoughtSinceFail = false;   // 패배 뒤에 산 것만 센다
+                    if (r.boss != null) Log(sb,$"  보스 R{r.stage} {BOSS[r.boss].nKo}: {(r.bossCleared ? "처치" : $"실패 (남은 체력 {r.bossHpLeft:P0})")}");
                     ph.rounds++; if (bought > 0) ph.buyRounds++;
                     ph.Set(r.stage, r.scoreGold + r.bonus + sold, bought, r.value, r.spawned > 0 ? (double)r.harvests / r.spawned : 0, r.zone);
                     ph.SetTiers(r.stage, r.madeT, r.killT);

@@ -237,24 +237,6 @@ namespace MoreMush
                     for (int i = 0; i < 40; i++) AddPart(g.x + U.Rand(-90, 90), g.y + U.Rand(40, 90), U.Rand(-150, 150), U.Rand(-300, -80), 0.8f, U.Hex("#8a6a4a"), 6);
                 }
             }
-            // 천둥번개 날씨
-            if (st.wId == "thunder")
-            {
-                lightningT -= h;
-                if (lightningT <= 0)
-                {
-                    lightningT = U.Rand(2.5f, 4.5f);
-                    var alive = shrooms.Where(m => !m.dead).ToList();
-                    if (alive.Count > 0)
-                    {
-                        var m = U.Pick(alive);
-                        bolts.Add(new Bolt { pts = new List<Vector2> { new Vector2(m.x + U.Rand(-80, 80), 0), new Vector2(m.x + U.Rand(-30, 30), m.y * 0.5f), new Vector2(m.x, m.y) }, t = 0.35f, big = true });
-                        flash = Mathf.Max(flash, 0.3f);
-                        BurstAt(m.x, m.y, 70, st.atk * 2 * st.skillDmg, null, "#fff36b", true);
-                        Snd.Skill(80);
-                    }
-                }
-            }
             // 도토리
             if (acornT > 0) acornT -= h;
             devices.RemoveAll(d => d.gone);
@@ -339,6 +321,8 @@ namespace MoreMush
                 if (balls.Count > maxBalls) maxBalls = balls.Count;
                 UpdateEffects(h);
                 UpdateSpecial(h);
+                UpdateBoss(h);
+                UpdateBars(h);
                 if (st.meteor.HasValue)
                 {
                     meteorT = (meteorT ?? (float)st.meteor.Value.interval) - h;
@@ -413,6 +397,11 @@ namespace MoreMush
             public List<(string k, double old, double v)> recs = new List<(string, double, double)>();
             public bool goldHv;
             public int harvests;
+            public string bossId;               // 보스 라운드였다면 그 보스
+            public bool bossCleared;
+            public double bossPenalty;          // 보스 실패로 깎인 골드
+            public double bossGold; public int bossGem, bossShrooms;   // 보스 처치 보상 (골드·균사석·더 받은 버섯 수)
+            public int stage, nextStage;
         }
 
         // 지금까지 모은 점수·보너스로 받을 정산 골드 (라운드 중 HUD가 보여 준다)
@@ -423,13 +412,24 @@ namespace MoreMush
         {
             double scoreGold = Math.Floor(score * st.goldMul);
             double bonus = Math.Floor(bonusGold);
-            G.gold += scoreGold + bonus;
-            var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold) };
+            // 보스에게 지면 이번 판 골드 ×BOSS_FAIL_GOLD
+            double penalty = BossFailed ? Math.Ceiling((scoreGold + bonus) * (1 - BOSS_FAIL_GOLD)) : 0;
+            // 보스를 쓰러뜨리면 이번 판 골드·버섯의 BOSS_REWARD_MUL배를 더 받고 균사석도 받는다
+            double bossGold = BossRound && bossCleared ? Math.Floor((scoreGold + bonus) * BOSS_REWARD_MUL) : 0;
+            int bossGem = BossRound && bossCleared ? BossGem(G.stage) + (int)st.bossGemAdd : 0;
+            int bossShrooms = BossRound && bossCleared ? BossShroomReward() : 0;
+            G.gold += scoreGold + bonus - penalty + bossGold;
+            G.gem += bossGem;
+            var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage };
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
+            // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍)
+            if (!IsBossStage(G.stage) || (BossRound && bossCleared)) G.stage++;
+            else if (BossRound) G.bossOn = false;
+            s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);
             if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hvOn["gold"] = OnHvs().Count < HvSlots(); G.hv["gold"] = 1; s.goldHv = true; }
-            var newTheme = THEMES.FirstOrDefault(th => th.from > 1 && th.from == StageNow());
+            var newTheme = s.nextStage > s.stage ? THEMES.FirstOrDefault(th => th.from > 1 && th.from == StageNow()) : null;
             if (newTheme != null) G.theme = newTheme.id;
             s.unlocks = CheckUnlocks();
             SaveGame();

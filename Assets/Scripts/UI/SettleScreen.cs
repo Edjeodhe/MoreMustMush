@@ -53,6 +53,8 @@ namespace MoreMush
             foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "star");
             newsBox.SetActive(newsList.Count > 0);
             var recs = s.recs.Select(r => Loc.F("신기록! {0} <color=#3b2414>{1}</color>", RECORD_NAMES[r.k], U.Fmt(r.v)) + (r.old > 0 ? " <size=70%><color=#8a6a4a>" + Loc.F("(이전 {0})", U.Fmt(r.old)) + "</color></size>" : "")).ToList();
+            var bossLine = BossLine(s);
+            if (bossLine != null) recs.Insert(0, bossLine);
             if (s.goldHv) recs.Insert(0, Loc.F("{0} 황금 수확기 해금!", UIUtil.Ic("medal")) + (HvOn("gold") ? "" : " " + Loc.T("(장착 칸이 차서 꺼 두었어요)")));
             recsBox.SetActive(recs.Count > 0);
             recsText.text = string.Join("\n", recs);
@@ -61,6 +63,21 @@ namespace MoreMush
             animationEnd = Mathf.Max(1.9f, drops.Count == 0 ? 0 : drops[drops.Count - 1].delay + 0.6f);
             FitCards();
             FitToScreen();
+        }
+
+        static string BossLine(RoundSim.Summary s)
+        {
+            if (s.bossId != null)
+            {
+                var b = BOSS[s.bossId];
+                return s.bossCleared
+                    ? Loc.F("{0} 보스 {1} 처치! 스테이지 {2} 열림", UIUtil.Ic(BOSS_ICON), b.n, s.nextStage) + "\n<size=80%>" +
+                      Loc.F("처치 보상: {0}+{1} · {2}+{3} · 버섯 +{4}개", UIUtil.Ic("gold"), U.Fmt(s.bossGold), UIUtil.Ic("gem"), s.bossGem, U.Fmt(s.bossShrooms)) + "</size>"
+                    : $"<color=#d04a3a>{Loc.F("보스 {0}에게 졌어요… 골드 −{1} (−{2}%)", b.n, U.Fmt(s.bossPenalty), Mathf.RoundToInt((float)(1 - BOSS_FAIL_GOLD) * 100))}</color>\n<size=80%>" +
+                      Loc.T("보스 도전이 꺼졌어요. 이 스테이지에서 파밍하다가 균사 트리의 보스 도전 버튼으로 다시 도전하세요") + "</size>";
+            }
+            if (IsBossStage(s.stage)) return Loc.F("스테이지 {0} 보스가 기다려요 (보스 도전 꺼짐 · 파밍 중)", s.stage);
+            return null;
         }
 
         // 줄 수를 다 줄여도 화면을 넘으면(기록·지역 알림이 많을 때 등) 비율을 유지한 채 축소한다.

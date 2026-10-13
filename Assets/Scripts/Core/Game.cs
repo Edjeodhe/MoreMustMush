@@ -14,16 +14,19 @@ namespace MoreMush
         public Dictionary<string, double> ab;
         public List<string> hvs; public Dictionary<string, int> hvStar;
         public double atk, spdMul, launch, minSpd, ballR, barLen, duration, crit, comboK, scoreMul;
-        public int maxCol, colMax, devices, permBalls;
+        public int maxCol, colMax, permBalls, fixBars;
+        public List<string> devTypes;   // 해금한 숲 장치 (라운드마다 하나씩)
         public double regen, rareMul, stageMul, harvestMul, multiP, priceMul, sparkP, zoom, golden;
         public bool fire, blade;
         public NF.Meteor? meteor;
         public double comboWin, wanderP, wanderMul, poisonMul, jellySlow, skillDmg, sporeP, debuffDur;
         public double goldBonus, goldMul, giantP, specialP, specialLife;
         public double bladeR, bladeInt, bladeDmg, kidP, buffMul, tempLife, devMul, heavyMul, rushMul;
+        public double barSpd = 1, barDur, barRate, powAtk, powSkill, bossMul = 1, bossGemAdd;   // 슬라이드 바 수치 강화(독 가지)·균사석 노드
         public Dictionary<string, SkillInfo> sk = new Dictionary<string, SkillInfo>();
         public double burstR, festMul, shroomHp = 1;
         public double zoneMul = 1, scoreFlat, critMul = 3;
+        public BossDef boss; public double bossHp;   // 보스 라운드면 보스와 그 체력 (아니면 null)
     }
 
     // Game rules on the save data (prototype "조회 · 해금 · 비용 · 판매 · 능력치" sections).
@@ -51,7 +54,11 @@ namespace MoreMush
             return b;
         }
 
-        public static int StageNow() => G != null ? G.rounds + 1 : 1;
+        public static int StageNow() => G != null ? G.stage : 1;
+        // 이번 라운드가 보스 라운드인가: 보스 스테이지에서 보스 도전이 켜져 있을 때
+        public static bool BossRoundNext() => G != null && G.bossOn && IsBossStage(StageNow());
+        // 보스 스테이지는 보스를 쓰러뜨려야 넘어가므로, 지나온 보스 스테이지는 모두 쓰러뜨린 것이다
+        public static bool BossCleared(int stage) => StageNow() > stage;
         public static bool ThemeOpen(Theme t) => StageNow() >= t.from;
         public static Theme LatestTheme() => THEMES.Where(ThemeOpen).Last();
 
@@ -73,7 +80,7 @@ namespace MoreMush
         public static bool UnlockReady(Species sp)
         {
             if (sp.init) return true;
-            if (sp.boss > 0) return StageNow() >= sp.boss;
+            if (sp.boss > 0) return BossCleared(sp.boss);
             if (sp.theme != null) return ThemeOpen(THEME[sp.theme]);
             if (sp.afterId != null) return G.codex.TryGetValue(sp.afterId, out var e) && e.n >= sp.cnt;
             return false;
@@ -82,7 +89,7 @@ namespace MoreMush
         public static string UnlockText(Species sp)
         {
             if (sp.init) return Loc.T("처음부터 등장");
-            if (sp.boss > 0) return Loc.F("스테이지 {0} 보스 · 스테이지 {1} 도달 시 해금 (현재 {2})", sp.boss, sp.boss, StageNow());
+            if (sp.boss > 0) return Loc.F("스테이지 {0} 보스({1})를 쓰러뜨리면 해금 (현재 스테이지 {2})", sp.boss, BossAt(sp.boss).n, StageNow());
             if (sp.theme != null) { var t = THEME[sp.theme]; return Loc.F("{0} 지역 전용 (스테이지 {1}부터, 그 지역에서만 등장)", t.n, t.from); }
             double have = G.codex.TryGetValue(sp.afterId, out var e) ? e.n : 0;
             var pre = SP[sp.afterId];
@@ -180,8 +187,9 @@ namespace MoreMush
             while (a.Count < slots) a.Add(BASE_HV);
             return a;
         }
-        public static bool WeatherOpen(Weather w) => w.need == 0 || CodexCount() >= w.need;
-        public static string RollWeather() => U.PickWeighted(WEATHERS.Where(WeatherOpen).ToList(), w => w.p).id;
+        // 일반 채집은 좋은 날씨만, 보스 채집은 나쁜 날씨만 같은 확률로 (전투 기획서 Ver05 · 날씨 변경점)
+        public static List<Weather> WeatherPool(bool boss) => WEATHERS.Where(w => w.good != boss).ToList();
+        public static string RollWeather(bool boss) => U.Pick(WeatherPool(boss)).id;
 
         static SkillInfo SkillInfoOf(string id)
         {
@@ -190,7 +198,7 @@ namespace MoreMush
         }
 
         // ===== 라운드 능력치 =====
-        public static RoundStats ComputeStats(string wId, string themeId)
+        public static RoundStats ComputeStats(string wId, string themeId, BossDef boss = null)
         {
             var st = new RoundStats { wId = wId, weather = WEATHER.TryGetValue(wId, out var w) ? w : WEATHER["clear"], theme = THEME.TryGetValue(themeId, out var th) ? th : THEMES[0], stage = StageNow() };
             var ab = st.ab = StarAbilities();
@@ -202,13 +210,13 @@ namespace MoreMush
             st.zoneMul = ZoneMul(st.theme.id, st.stage);
             // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
             double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
-            st.atk = atkFlat * (1 + (Core("core_ps") ? 0.1 : 0) + ab["atk"]);
+            st.atk = atkFlat * (1 + (Core("core_ps") ? 0.1 : 0) + ab["atk"]) * NF.gm_atk(Lv("gm_atk"));
             double spd = (NF.ps_spd(Lv("ps_spd")) + ab["spd"]) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
             st.launch = TUNE.launch * spd;
             st.minSpd = TUNE.min * spd;
             st.ballR = TUNE.ball0 * BALL_SCALE * (NF.ps_size(Lv("ps_size")) + ab["size"]);
-            st.barLen = (150 * (NF.md_bar(Lv("md_bar")) + (Core("core_md") ? 0.1 : 0) + ab["bar"]) + (SetDone("shelf") ? 40 : 0)) * (wId == "cold" ? 0.75 : 1);
+            st.barLen = (150 * (NF.md_bar(Lv("md_bar")) + NF.ps_bar(Lv("ps_bar")) + (Core("core_md") ? 0.1 : 0) + ab["bar"]) + (SetDone("shelf") ? 40 : 0)) * NF.gm_bar(Lv("gm_bar")) * (wId == "cold" ? 0.75 : 1);   // 최대 필드 폭의 1/3 (RoundSim.Start)
             st.duration = BASE_TIME + StageTime(st.stage) + NF.ps_dur(Lv("ps_dur")) + NF.ps_dur2(Lv("ps_dur2")) + ab["dur"] - (wId == "cold" ? 3 : 0);
             st.crit = NF.ps_crit(Lv("ps_crit")) + (SetDone("coral") ? 0.05 : 0) + ab["crit"];
             st.critMul = NF.ps_crit2(Lv("ps_crit2"));
@@ -216,7 +224,7 @@ namespace MoreMush
             // 타격 점수 = (등급 기본 점수 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합) × 지역 배율
             st.scoreFlat = NF.ed_score(Lv("ed_score")) + NF.ed_score1p(Lv("ed_score1p")) + NF.ed_score2(Lv("ed_score2")) + NF.ed_score2p(Lv("ed_score2p")) + NF.ed_score3(Lv("ed_score3")) + NF.ed_score3p(Lv("ed_score3p"));
             st.scoreMul = (1 + (SetDone("cook") ? 0.5 : 0) + ab["score"]) * st.zoneMul;
-            st.maxCol = Math.Max(3, (int)Math.Ceiling((ColCount(Lv("ed_cols")) + NF.ed_cols2(Lv("ed_cols2"))) * (1 + ab["cols"]) * (wId == "rain" ? 1.2 : 1) * (wId == "drought" ? 0.7 : 1)));
+            st.maxCol = Math.Max(3, (int)Math.Ceiling((ColCount(Lv("ed_cols")) + NF.ed_cols2(Lv("ed_cols2"))) * (1 + ab["cols"]) * (wId == "rain" ? 1.2 : 1)));
             st.regen = NF.ed_regen(Lv("ed_regen")) / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1) * (wId == "storm" ? 2 : 1);
             st.rareMul = NF.ed_rare(Lv("ed_rare")) + ab["rare"];
             st.stageMul = 1 + 0.03 * (st.stage - 1);
@@ -230,21 +238,22 @@ namespace MoreMush
             double area = Math.Pow(1 / (st.zoom * st.zoom), 0.7);
             st.maxCol = Math.Max(4, (int)U.JsRound(st.maxCol * area));
             st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"]) * (wId == "moon" ? 3 : 1);
-            st.devices = Math.Max(1, (int)U.JsRound(NF.ed_dev(Lv("ed_dev")) * area));
+            st.devTypes = DEVICE_TYPES.Where(d => Lv("dev_" + d) > 0).ToList();
+            st.fixBars = Lv("md_fixbar");
             st.permBalls = st.hvs.Count;
             st.comboWin = COMBO_WINDOW;
             st.meteor = Lv("gm_meteor") > 0 ? NF.gm_meteor(Lv("gm_meteor")) : (NF.Meteor?)null;
-            st.wanderP = wId == "autumn" ? 0.3 : 0.08;
-            st.wanderMul = (wId == "autumn" ? 2 : 1.5) * (SetDone("cordy") ? 1.5 : 1);
+            st.wanderP = 0.08;
+            st.wanderMul = 1.5 * (SetDone("cordy") ? 1.5 : 1);
             st.poisonMul = SetDone("amanita") ? 1.3 : 1;
             st.jellySlow = SetDone("jelly") ? 0.75 : 0.55;
             st.skillDmg = 1 + (SetDone("herb") ? 0.25 : 0) + ab["skillDmg"];
             st.sporeP = 0.25 * (wId == "wind" ? 2 : 1) * NF.gm_toxin(Lv("gm_toxin"));
             st.debuffDur = 3 * (wId == "wind" ? 2 : 1) * NF.ps_resist(Lv("ps_resist")) * NF.gm_toxin(Lv("gm_toxin"));
-            st.goldBonus = (1 + GoldenSetBonus()) * (wId == "rainbow" ? 1.5 : 1);
+            st.goldBonus = 1 + GoldenSetBonus();
             st.harvestMul *= INCOME_MUL;
-            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab));
-            st.giantP = wId == "rainbow" ? 1 : NF.ed_giant(Lv("ed_giant"));
+            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab)) * NF.gm_score(Lv("gm_score"));
+            st.giantP = NF.ed_giant(Lv("ed_giant"));
             st.specialP = SPECIAL_P + NF.ed_special(Lv("ed_special"));
             st.specialLife = NF.ed_special_life(Lv("ed_special"));
             st.blade = Lv("bl") > 0;
@@ -257,10 +266,18 @@ namespace MoreMush
             st.devMul = NF.md_stump(Lv("md_stump"));
             st.heavyMul = NF.ps_heavy(Lv("ps_heavy"));
             st.rushMul = NF.ps_rush(Lv("ps_rush"));
-            foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= 1 + ab["skill"]; st.sk[id] = si; }
+            st.barSpd = NF.ps_barspd(Lv("ps_barspd"));
+            st.barDur = NF.ps_bardur(Lv("ps_bardur"));
+            st.barRate = NF.ps_barrate(Lv("ps_barrate"));
+            st.powAtk = NF.ps_power(Lv("ps_power")); st.powSkill = NF.ps_power(Lv("ps_power")) * POWER_SKILL / POWER_ATK;
+            st.bossMul = NF.gm_boss(Lv("gm_boss")); st.bossGemAdd = NF.gm_bossgem(Lv("gm_bossgem"));
+            foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= (1 + ab["skill"]) * NF.gm_skill(Lv("gm_skill")); st.sk[id] = si; }
             st.burstR = NF.burst_r(st.sk["burst"].P) + (SetDone("fart") ? 30 : 0);
             st.festMul = 2 * st.sk["fest"].pm;
             st.shroomHp = st.zoneMul;
+            // 보스 체력은 고른 지역이 아니라 그 스테이지의 최신 지역 기준 (예전 지역을 골라 쉽게 잡지 못하게)
+            st.boss = boss;
+            if (boss != null) st.bossHp = BossHp(boss, LatestTheme().id, st.stage);
             return st;
         }
     }

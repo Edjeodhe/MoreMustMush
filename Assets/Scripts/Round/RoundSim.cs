@@ -57,7 +57,7 @@ namespace MoreMush
         public Shroom giant;
         public string giantState;
         public GiantWarn giantWarn;
-        public float acornT, lightningT, hitstop, hitstopCd, shake, flash;
+        public float acornT, hitstop, hitstopCd, shake, flash;
         public bool festOn, paused;
         public float barX, barLen, barFx;
         public Vector2? aimStart, aimCur;
@@ -89,18 +89,20 @@ namespace MoreMush
         readonly List<Shroom>[] grid = Enumerable.Range(0, GW * GH).Select(_ => new List<Shroom>()).ToArray();
         int qsCounter;
 
-        public static RoundSim Start(string wId, string themeId)
+        public static RoundSim Start(string wId, string themeId, BossDef boss = null)
         {
-            var st = ComputeStats(wId, themeId);
+            var st = ComputeStats(wId, themeId, boss);
             SetWorld((float)st.zoom);
             var r = new RoundSim { st = st, themeId = st.theme.id };
             R = r;
             r.timeLeft = r.timeMax = (float)st.duration;
             r.giantState = U.Chance((float)st.giantP) ? "pending" : "none";
-            r.lightningT = U.Rand(2, 4);
             r.barX = WW / 2; r.barLen = (float)st.barLen;
             r.specialAt = U.Chance((float)st.specialP) ? U.Rand(3, Mathf.Max(4, (float)(st.duration - st.specialLife - 1))) : -1;
-            for (int i = 0; i < st.devices; i++) r.PlaceDevice(U.Pick(DEVICE_TYPES), null);
+            if (st.boss != null) r.SpawnBoss(st.boss);   // 군락지·장치보다 먼저 자리를 잡는다
+            foreach (var d in st.devTypes) r.PlaceDevice(d, null);
+            r.barLen = Mathf.Min(r.barLen, WW / 3);   // 슬라이드 바 최대 길이: 화면의 1/3
+            r.PlaceFixBars(st.fixBars);
             for (int i = 0; i < st.maxCol; i++) r.SpawnColony(true);
             for (int i = 0; i < st.permBalls; i++) r.balls.Add(r.MakeBall(LAUNCH.x, LAUNCH.y, true, st.hvs[i % st.hvs.Count]));
             r.RebuildGrid();
@@ -137,6 +139,7 @@ namespace MoreMush
                 areaGiant.x = giant.x; areaGiant.y = giant.y; areaGiant.r = giant.r;
                 if (Overlap(shape, areaGiant, 10)) return false;
             }
+            if (BossBlocks(shape)) return false;
             if (giantWarn != null)
             {
                 areaWarning.x = giantWarn.x; areaWarning.y = giantWarn.y;
@@ -268,6 +271,7 @@ namespace MoreMush
                 foreach (var o in colonies) if (o != c && Overlap(shape, o.shape, 10)) { blocked = o.shape; break; }
                 if (blocked == null) foreach (var d in devices) { foreach (var s in d.Shapes()) if (Overlap(shape, s, 10)) { blocked = s; break; } if (blocked != null) break; }
                 if (blocked == null && giant != null && Overlap(shape, Shape.C(giant.x, giant.y, giant.r), 10)) blocked = Shape.C(giant.x, giant.y, giant.r);
+                if (blocked == null) blocked = BossBlocker(shape);
                 if (blocked != null)
                 {
                     float a = Mathf.Atan2(c.y - blocked.CY, c.x - blocked.CX) + U.Rand(-0.4f, 0.4f);

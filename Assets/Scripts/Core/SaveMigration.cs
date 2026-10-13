@@ -6,7 +6,7 @@ namespace MoreMush
     // 세이브 버전 올리기. SaveIO.Load가 Sanitize 끝에서 부르며, 한 버전씩 차례로 올린다.
     public static class SaveMigration
     {
-        public const int CURRENT = 3;
+        public const int CURRENT = 4;
 
         // 이번 로드에서 플레이어에게 알릴 문장 (GameFlow가 토스트로 띄우고 비운다)
         public static string Notice;
@@ -27,6 +27,7 @@ namespace MoreMush
         public static void Run(SaveData g)
         {
             if (g.v < 3) ToV3(g);
+            if (g.v < 4) ToV4(g);
             g.v = Math.Max(g.v, CURRENT);
         }
 
@@ -53,6 +54,37 @@ namespace MoreMush
                 AddNotice(Loc.F("다이아몬드 {0}개를 균사석으로 바꿨어요", U.Fmt(d)));
             }
             g.legacyDia = 0;
+        }
+
+        // v4: 스테이지가 판 수와 따로 간다(보스를 못 깨면 멈춘다). 지나온 보스는 쓰러뜨린 것으로 친다
+        // v4에서 지운 노드: 숲 장치 수(장치는 종류별 해금 노드로), 맑은 포자막 발동률(바에 맞으면 늘 발동)
+        static readonly Dictionary<string, double[]> RETIRED_V4 = new Dictionary<string, double[]>
+        {
+            ["ed_dev"] = new double[] { 150000, 410000 },
+            ["clear_rate"] = new double[] { 13000000, 47000000 },
+        };
+
+        static void ToV4(SaveData g)
+        {
+            g.stage = g.rounds + 1;
+            g.bossOn = true;
+            double refund = Refund(g, RETIRED_V4);
+            if (refund > 0) AddNotice(Loc.F("바뀐 강화 노드에 쓴 골드 {0}을 돌려받았어요", U.Fmt(refund)));
+            // 예전엔 숲 장치가 늘 나왔다. 이미 진행한 세이브는 장치 셋을 해금해 준다
+            if (g.rounds > 0) foreach (var id in new[] { "dev_stump", "dev_moss", "dev_acorn" }) g.nodes[id] = 1;
+        }
+
+        static double Refund(SaveData g, Dictionary<string, double[]> retired)
+        {
+            double refund = 0;
+            foreach (var kv in retired)
+            {
+                if (!g.nodes.TryGetValue(kv.Key, out int L)) continue;
+                for (int i = 0; i < Math.Min(L, kv.Value.Length); i++) refund += Math.Ceiling(kv.Value[i] * Defs.COST_MUL);
+                g.nodes.Remove(kv.Key);
+            }
+            g.gold += refund;
+            return refund;
         }
 
         // 예전엔 수확기를 모두 켤 수 있었다. 장착 칸(영구 핀볼 수)을 넘으면 별이 높은 것부터 칸만큼만 남기고 끈다

@@ -18,9 +18,9 @@ namespace MoreMush
         Vector2 mouse = new Vector2(960, 540);
         RoundSim finishedR;   // 이미 정산을 넘긴 라운드. 정산 중 예외가 나도 다음 프레임에 또 정산(골드·판 수 중복)하지 않게
 
-        public void Begin(string weatherId, string themeId)
+        public void Begin(string weatherId, string themeId, Defs.BossDef boss = null)
         {
-            var round = RoundSim.Start(weatherId, themeId);
+            var round = RoundSim.Start(weatherId, themeId, boss);
             hud.BindFlyerTargets(round);
             view.Clear();
             gameObject.SetActive(true);
@@ -43,10 +43,10 @@ namespace MoreMush
             float dt = Mathf.Min(0.05f, Time.unscaledDeltaTime);
             HandleInput(R);
 
-            // 바는 마우스 x를 부드럽게 따라감
+            // 바는 마우스 속도를 100% 따라온다 (전투 기획서 Ver05)
             float target = U.Clamp(mouse.x / RoundSim.ZOOM, RoundSim.FX0 + R.barLen / 2, RoundSim.FX1 - R.barLen / 2);
             bool modal = GameFlow.I != null && GameFlow.I.ModalOpen;
-            if (!R.paused) R.barX = U.Lerp(R.barX, target, 1 - Mathf.Exp(-18 * dt));
+            if (!R.paused) R.barX = target;
             bool live = !R.paused && !modal && R.hitstop <= 0;   // 이번 프레임에 시뮬레이션이 진행되는지
             if (!R.paused && !modal)
             {

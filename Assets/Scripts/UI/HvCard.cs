@@ -31,7 +31,7 @@ namespace MoreMush
             int S = HvStar(id); bool on = HvOn(id);
             frame.color = S > 0 ? U.Hex("#fffaf0") : U.Hex("#efe6d4");
             border.effectColor = on ? U.Hex("#5fb8ff") : U.Hex("#cdb68e");
-            icon.sprite = SpriteDB.Get("Harvesters/" + (Game.HvSkinOn(id) is Skin sk ? sk.id : id)) ?? SpriteDB.Get("Harvesters/" + id);
+            icon.sprite = SpriteDB.Get("Harvesters/" + (Game.HvSkinOn(id) is Skin sk ? sk.id : id)) ?? SpriteDB.Get("Harvesters/" + id) ?? SpriteDB.Get("Harvesters/" + BallView.HvLook(id));
             icon.color = S > 0 ? Color.white : new Color(1, 1, 1, 0.55f);
             title.text = h.n;
             stars.text = S > 0 ? $"<color=#e8a900>{U.Stars(S)}</color>" : Loc.T("<color=#8a6a4a>미보유</color>");

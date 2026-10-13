@@ -13,25 +13,22 @@ namespace MoreMush
             public string nKo, dKo;
             public string n { get => Loc.T(nKo); set => nKo = value; }
             public string d { get => Loc.T(dKo); set => dKo = value; }
-            public float p, favMul = 1;
+            public float favMul = 1;
             public bool good;
-            public int need = 0, favTier = -1;
+            public int favTier = -1;
             public string[] fav;
             public HashSet<string> favIds = new HashSet<string>();
         }
+        // 전투 기획서 Ver05(2026-10-12 회의): 날씨를 6종으로 줄였다. 일반 채집 = 좋은 날씨 3종, 보스 채집 = 나쁜 날씨 3종, 같은 확률.
+        // (가을 낙엽·천둥번개·무지개·짙은 안개·가뭄 삭제, 해금 조건 없음)
         public static readonly List<Weather> WEATHERS = new List<Weather>
         {
-            new Weather { id = "clear", n = "맑음", icon = "w_clear", p = 34, good = true, d = "변화 없음" },
-            new Weather { id = "rain", n = "보슬비", icon = "w_rain", p = 10, good = true, d = "군락 재생 속도 ×2, 군락지 +20%", fav = new[] { "먹물버섯", "이끼꽃버섯", "목이버섯", "흰목이" }, favMul = 3 },
-            new Weather { id = "moon", n = "보름달 밤", icon = "w_moon", p = 7, good = true, d = "필드가 어두워지고 발광 버섯이 빛남, 황금 변종 ×3", fav = new[] { "화경버섯", "독우산광대버섯", "송이버섯", "송로버섯", "갈색고리갓버섯" }, favMul = 4 },
-            new Weather { id = "autumn", n = "가을 낙엽", icon = "w_autumn", p = 8, good = true, d = "떠돌이 군락 30%, 떠돌이 점수 ×2", fav = new[] { "동충하초", "눈꽃동충하초", "꽃송이버섯", "잎새버섯", "능이버섯" }, favMul = 3 },
-            new Weather { id = "thunder", n = "천둥번개", icon = "w_thunder", p = 7, good = true, d = "연쇄 번개 확률 ×2, 가끔 필드에 번개", fav = new[] { "차가버섯", "영지버섯", "붉은사슴뿔버섯" }, favMul = 3 },
-            new Weather { id = "rainbow", n = "무지개", icon = "w_rainbow", p = 2, good = true, d = "거대 버섯 확정 등장, 점수 골드 +50%", favTier = 3, favMul = 3, need = 40 },
-            new Weather { id = "fog", n = "짙은 안개", icon = "w_fog", p = 8, good = false, d = "시야가 흐려져 핀볼 주변만 보인다" },
-            new Weather { id = "wind", n = "포자 바람", icon = "w_wind", p = 8, good = false, d = "버섯이 포자를 2배 자주 뿜고, 느림·약화 디버프가 2배 오래 간다", fav = new[] { "말불버섯", "목도리방귀버섯", "광대버섯", "뱀껍질광대버섯", "알광대버섯", "개나리광대버섯", "독우산광대버섯", "마귀광대버섯" }, favMul = 3 },
-            new Weather { id = "storm", n = "폭우", icon = "w_storm", p = 6, good = false, d = "핀볼 속도 ×0.8, 군락 재생이 2배 느려짐" },
-            new Weather { id = "cold", n = "한파", icon = "w_cold", p = 6, good = false, d = "바 길이 ×0.75, 제한시간 −3초" },
-            new Weather { id = "drought", n = "가뭄", icon = "w_drought", p = 4, good = false, d = "군락지 수 ×0.7" },
+            new Weather { id = "clear", n = "맑음", icon = "w_clear", good = true, d = "변화 없음" },
+            new Weather { id = "rain", n = "보슬비", icon = "w_rain", good = true, d = "군락 재생 속도 ×2, 군락지 +20%", fav = new[] { "먹물버섯", "이끼꽃버섯", "목이버섯", "흰목이" }, favMul = 3 },
+            new Weather { id = "moon", n = "보름달 밤", icon = "w_moon", good = true, d = "필드가 어두워지고 발광 버섯이 빛남, 황금 변종 ×3", fav = new[] { "화경버섯", "독우산광대버섯", "송이버섯", "송로버섯", "갈색고리갓버섯" }, favMul = 4 },
+            new Weather { id = "storm", n = "폭우", icon = "w_storm", good = false, d = "핀볼 속도 ×0.8, 군락 재생이 2배 느려짐" },
+            new Weather { id = "wind", n = "포자 바람", icon = "w_wind", good = false, d = "버섯이 포자를 2배 자주 뿜고, 느림·약화 디버프가 2배 오래 간다", fav = new[] { "말불버섯", "목도리방귀버섯", "광대버섯", "뱀껍질광대버섯", "알광대버섯", "개나리광대버섯", "독우산광대버섯", "마귀광대버섯" }, favMul = 3 },
+            new Weather { id = "cold", n = "한파", icon = "w_cold", good = false, d = "바 길이 ×0.75, 제한시간 −3초" },
         };
         public static readonly Dictionary<string, Weather> WEATHER = new Dictionary<string, Weather>();
         public const string WEATHER_GOOD = "#5fb8ff", WEATHER_BAD = "#ff5a4a";
@@ -74,14 +71,14 @@ namespace MoreMush
         }
 
         // ===== 숲 장치 =====
-        // 라운드 시작 때만 놓인다 (라운드 중 생성 스킬은 없음)
+        // 라운드 시작 때만 놓인다. 약용 '바 넓이' 다음 노드로 종류별로 해금하고, 해금한 장치는 라운드마다 1개씩 반드시 놓인다
         public static readonly string[] DEVICE_TYPES = { "stump", "moss", "acorn" };
         public static readonly LocMap DEVICE_NAME = new LocMap(new Dictionary<string, string>
         {
             ["stump"] = "그루터기 범퍼", ["moss"] = "이끼 길", ["acorn"] = "도토리 스위치",
         });
         // 그루터기에 튕긴 수확기: 공격력 ×(1 + (STUMP_ATK_MUL-1)×숲 장치 강화), STUMP_ATK_DUR초 (다시 맞으면 시간만 갱신)
-        public const float STUMP_ATK_MUL = 1.5f, STUMP_ATK_DUR = 3f;
+        public const float STUMP_ATK_MUL = 1.5f, STUMP_ATK_DUR = 5f;   // 전투 기획서 Ver05: 예시 5초
 
         // ===== 도감 세트 =====
         public class CodexSet

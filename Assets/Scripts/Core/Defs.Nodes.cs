@@ -36,6 +36,11 @@ namespace MoreMush
         // - 지역·스테이지로 노드를 잠그지 않는다. 기본 노드는 골드로만 사고, 단계(초반·중반·후반)는 가격으로만 구분한다.
         //   가격은 산 순서대로 늘어놓았을 때 한 번에 크게 뛰지 않게 맞춘다(Defs.Prices.cs, BalanceSim.TunePrices).
         public static double SkillRate(int S) => 0.10 + 0.10 * S;
+        // 슬라이드 바 스킬 지속시간: 3 + n초 (n = 위력 레벨). 기운 북돋기: 공격력 +20%·스킬 발동률 +5%p × (1 + 위력 레벨)
+        public static double BarSkillDur(int P) => 3 + P;
+        public const double POWER_ATK = 0.2, POWER_SKILL = 0.05;
+        public const float BAR_CLONE_DUR = 5; public const int BAR_CLONE_MAX = 2;
+        public const float FIX_BAR_LEN = 120;
         public static double SkillPow(int P) => 1 + 0.75 * P;   // 스킬 위력 배율 (피해·시간·속도)
         public static double KidRate(int L) => 0.12 * L;
         public static double MultiRate(int L) => 0.10 * L;
@@ -77,8 +82,13 @@ namespace MoreMush
             public static double ed_special(int L) => 0.1 * L;
             public static double ed_special_life(int L) => SPECIAL_LIFE + 2 * L;
             public static int ed_size(int L) => 5 + 2 * L;   // 군락지당 최대 버섯 수
-            public static int ed_dev(int L) => 2 + 2 * L;    // 라운드 시작 숲 장치 수
             public static double md_bar(int L) => 1 + 0.25 * L;
+            // 슬라이드 바 수치 강화 (독 가지): 바 길이 +20%p씩(기본 150 기준) · 바 반사 속도 · 바 스킬 지속 +초 · 바 스킬 발동률 +%p · 기운 북돋기 공격력 +%p (발동률은 1/4)
+            public static double ps_bar(int L) => 0.2 * L;
+            public static double ps_barspd(int L) => 1 + 0.08 * L;
+            public static double ps_bardur(int L) => 0.5 * L;
+            public static double ps_barrate(int L) => 0.04 * L;
+            public static double ps_power(int L) => 0.1 * L;
             public static double md_combo(int L) => 0.1 + 0.05 * L;
             public static double md_chef(int L) => Math.Pow(0.92, L);        // 건설 시간 배율 (농장)
             public static double md_buffdur(int L) => 1 + 0.4 * L;
@@ -104,6 +114,12 @@ namespace MoreMush
             public static double gm_toxin(int L) => Math.Pow(0.75, L);
             public static double gm_herb(int L) => 1 + 0.2 * L;              // 자동 수확 보상 배율
             public static double gm_gourmet(int L) => 1 + 0.1 * L;           // 밭 수확 균사석 배율
+            public static double gm_atk(int L) => 1 + 0.1 * L;               // 공격력 배율
+            public static double gm_score(int L) => 1 + 0.1 * L;             // 정산 골드 배율
+            public static double gm_boss(int L) => 1 + 0.15 * L;             // 보스에게 주는 피해 배율
+            public static int gm_bossgem(int L) => 2 * L;                    // 보스 처치 균사석 +
+            public static double gm_skill(int L) => 1 + 0.1 * L;             // 모든 스킬 발동률 배율
+            public static double gm_bar(int L) => 1 + 0.1 * L;               // 바 길이 배율 (필드 폭 1/3까지)
             public static double gm_farm(int L) => Math.Pow(0.8, L);
             public struct Meteor { public double interval, dmg, r; }
             public static Meteor gm_meteor(int L) => new Meteor { interval = 3.5 * Math.Pow(0.8, Math.Max(0, L - 1)), dmg = 3 * Math.Pow(2, Math.Max(0, L - 1)), r = 110 + 20 * L };
@@ -147,6 +163,8 @@ namespace MoreMush
             ["accel"] = "md_bar", ["burst"] = "accel", ["sharpen"] = "accel",
             ["magnet"] = "burst", ["clone"] = "burst", ["split"] = "sharpen", ["clear"] = "sharpen",
             ["bolt"] = "magnet", ["shock"] = "clone", ["tornado"] = "split", ["fest"] = "shock", ["pierce"] = "accel",
+            // 전투 기획서 Ver05 · 슬라이드 바 기능: 버프(공격력·스킬 발동률), 유도, 분신 바
+            ["power"] = "md_bar", ["homing"] = "pierce", ["barclone"] = "split",
         };
 
         static readonly Dictionary<string, string> NODE_DESC = new Dictionary<string, string>
@@ -195,9 +213,26 @@ namespace MoreMush
             ["ps_resist"] = "포자 구름에 닿았을 때 걸리는 느림·약화 디버프가 짧아져요.",
             ["ps_rush"] = "라운드를 시작하고 3초 동안 공격력이 올라가요. 처음 쏜 핀볼로 크게 터뜨리기 좋아요.",
             ["ps_heavy"] = "군락 가운데 버섯 무더기와 거대 버섯처럼 단단한 버섯에 주는 피해를 늘려요.",
-            ["ed_dev"] = "라운드 시작 때 필드에 놓이는 숲 장치(그루터기 범퍼·이끼 길·도토리 스위치) 수를 늘려요. 숲 장치는 라운드 시작 때만 놓여요.",
+            ["dev_stump"] = "숲 장치 그루터기를 해금해요. 라운드마다 하나가 놓이고, 부딪힌 수확기는 잠시 공격력이 올라가요(다시 부딪히면 시간이 처음으로).",
+            ["dev_moss"] = "숲 장치 이끼 길을 해금해요. 라운드마다 하나가 놓이고, 지나간 수확기가 잠시 빨라져요.",
+            ["dev_acorn"] = "숲 장치 도토리 스위치를 해금해요. 라운드마다 하나가 놓이고, 도토리 셋을 모두 켜면 5초 동안 점수 ×2 (한 판에 한 번).",
+            ["ps_bar"] = "슬라이드 바 길이를 더 늘려요. 바 넓이 노드와 더해지며, 최대 길이는 필드 폭의 1/3이에요.",
+            ["ps_barspd"] = "핀볼이 슬라이드 바에 튕길 때 더 빠르게 날아가요.",
+            ["ps_bardur"] = "바에 맞을 때 생기는 스킬(기운 북돋기·맑은 포자막·관통·유도·분신 바)의 지속시간이 길어져요.",
+            ["ps_barrate"] = "바 스킬(가속·날 갈기·관통·유도·분열·분신 바)이 터질 확률이 올라가요.",
+            ["ps_power"] = "기운 북돋기 버프의 공격력 증가와 스킬 발동률 증가를 더 키워요.",
+            ["gm_atk"] = "균사석으로 여는 특수 노드. 공격력에 곱해져요.",
+            ["gm_boss"] = "균사석으로 여는 특수 노드. 보스에게 주는 피해가 늘어요.",
+            ["gm_score"] = "균사석으로 여는 특수 노드. 정산 골드에 곱해져요.",
+            ["gm_bossgem"] = "균사석으로 여는 특수 노드. 보스를 쓰러뜨릴 때 균사석을 더 받아요.",
+            ["gm_skill"] = "균사석으로 여는 특수 노드. 모든 스킬이 터질 확률에 곱해져요.",
+            ["gm_bar"] = "균사석으로 여는 특수 노드. 슬라이드 바 길이에 곱해져요(필드 폭 1/3까지).",
+            ["md_fixbar"] = "필드 안쪽에 작은 슬라이드 바를 고정으로 놓아요. 버섯 군락은 통과하고, 위에서 떨어지는 수확기는 위로 튕겨 주며 바 버프도 줘요.",
+            ["power"] = "영구 핀볼이 바에 맞을 때마다 잠시 공격력과 스킬 발동률이 올라가요. 조작하는 만큼 강해지는 초반 핵심 버프예요.",
+            ["homing"] = "영구 핀볼이 바에 맞을 때 확률로, 잠시 동안 바에 튕길 때마다 가장 가까운 버섯 군락(보스 스테이지에서는 보스) 쪽으로 곧게 날아가요. 숲 장치·바는 노리지 않아요.",
+            ["barclone"] = "영구 핀볼이 바에 맞을 때 확률로 필드 가운데나 양옆에 분신 슬라이드 바가 잠시 생겨요. 분신 바도 위로 튕겨 주고 바 버프를 줘요.",
             ["md_map"] = "버섯 밭(필드)을 넓혀요. 처음엔 필드가 좁아 화면이 확대되어 수확기·버섯이 크게 보이고, 넓힐수록 군락지와 숲 장치가 더 많이 들어가요(수입 증가). 4레벨이면 원래 크기예요.",
-            ["md_bar"] = "화면 아래 슬라이드 바(통나무)의 길이예요. 길수록 핀볼을 받아치기 쉬워요.",
+            ["md_bar"] = "화면 아래 슬라이드 바(통나무)의 길이예요. 길수록 핀볼을 받아치기 쉬워요. 최대 길이는 필드 폭의 1/3이에요.",
             ["md_combo"] = "핀볼이 바에 맞을 때마다 콤보가 쌓이고, 콤보마다 점수 배율이 올라요. 그 배율이 오르는 폭을 키워요. 바닥 벽에 닿으면 콤보가 끊겨요.",
             ["md_kid"] = "영구 핀볼이 바에 맞을 때 확률로 작은 임시 핀볼이 하나 튀어나와요.",
             ["ps_atk"] = "수확기가 버섯에 부딪힐 때 주는 피해에 고정값을 더해요. 대부분의 스킬 피해도 공격력에 비례해요. 끝까지 올리면 공격력 II가 열려요.",
@@ -213,14 +248,14 @@ namespace MoreMush
             ["accel"] = "영구 핀볼이 바에 맞을 때 확률로 3초 동안 빨라져요.",
             ["sharpen"] = "영구 핀볼이 바에 맞을 때 확률로 다음 3번의 타격 피해가 커져요.",
             ["split"] = "영구 핀볼이 바에 맞을 때 확률로 임시 핀볼이 갈라져 나와요.",
-            ["clear"] = "영구 핀볼이 바에 맞을 때 확률로 포자 구름의 느림·약화 디버프를 지우고 잠시 막아 줘요.",
+            ["clear"] = "영구 핀볼이 바에 맞을 때마다 포자 구름·독 안개의 디버프를 지우고 잠시 막아 줘요.",
             ["burst"] = "버섯을 칠 때 확률로 그 자리에 포자 폭발이 일어나 주변 버섯에 범위 피해를 줘요.",
             ["clone"] = "버섯을 수확할 때 확률로 작은 분신 핀볼이 생겨요.",
             ["magnet"] = "버섯을 칠 때 확률로 1초 동안 가까운 버섯 쪽으로 휘어 날아가요.",
             ["bolt"] = "버섯을 칠 때 확률로 주변 버섯들로 번개가 튀며 연속으로 피해를 줘요.",
             ["tornado"] = "벽에 튕길 때 확률로 회오리가 가로로 필드를 쓸고 지나가요.",
             ["shock"] = "버섯을 수확할 때 확률로 충격파가 퍼지고, 충격파로 수확한 버섯이 또 충격파를 일으켜요(최대 8단계).",
-            ["pierce"] = "단단한 버섯(군락 가운데 무더기·거대 버섯)에 부딪힐 때 확률로 튕기지 않고 뚫고 지나가요.",
+            ["pierce"] = "영구 핀볼이 바에 맞을 때 확률로, 잠시 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해를 줘요(보스는 뚫지 못해요).",
             ["fest"] = "라운드 마지막 5초 동안 점수와 수확량이 몇 배가 돼요.",
             ["gm_harvest"] = "균사석으로 여는 특수 노드. 라운드에서 수확하는 모든 버섯 개수를 늘려요.",
             ["gm_spore"] = "균사석으로 여는 특수 노드. 세계수 나무에서 버섯을 딸 때 균사석을 더 얻을 확률이 생겨요.",
@@ -241,6 +276,8 @@ namespace MoreMush
             public string look { get => Loc.T(lookKo); set => lookKo = value; }
             public double unlockGold = -1;   // -1: 공방에서 해금 불가(보상), 0: 처음부터
             public double lvGold;
+            // 유형 기본 능력치 (전투 기획서 Ver05 · 02. 수확기): 공격력·이동 속도·크기 배율, 치명타 확률 +
+            public double atkMul = 1, spdMul = 1, sizeMul = 1, crit;
             public Func<int, Dictionary<string, double>> ab;
             public Func<int, string> text;
         }
@@ -257,19 +294,24 @@ namespace MoreMush
             AddSkill("accel", "가속", "bar", 150, "#6fd3ff", P => Loc.F("3초간 속도 ×{0}", F(1 + 0.15 * SkillPow(P))));
             AddSkill("sharpen", "날 갈기", "bar", 5000, "#dfe6ee", P => Loc.F("다음 3타 피해 ×{0}", F(2 * SkillPow(P), 1)));
             AddSkill("split", "분열", "bar", 2000000, "#ffe36e", P => Loc.F("임시 핀볼 {0}개 (6초)", 1 + P));
-            AddSkill("clear", "맑은 포자막", "bar", 15000, "#bff6ff", P => Loc.F("{0}초 디버프 무시·해제", F(1.5 * SkillPow(P), 2)));
+            AddSkill("clear", "맑은 포자막", "bar", 15000, "#bff6ff", P => Loc.F("바에 맞을 때마다 디버프 해제 · {0}초 보호", F(BarSkillDur(P), 1)), noRate: true);
             AddSkill("burst", "포자 폭발", "hit", 400, "#ffb347", P => Loc.F("반경 {0}, 피해 공격력×{1}", U.JsRound(NF.burst_r(P)), F(2 * SkillPow(P), 1)));
             AddSkill("clone", "분신 수확기", "harvest", 5000000, "#c9d6ff", P => Loc.F("작은 임시 핀볼 {0}개, 4초", 1 + P));
             AddSkill("magnet", "버섯 자석", "hit", 15000, "#ff6b8b", P => Loc.F("1초간 가까운 버섯 쪽으로 초당 {0}°", U.JsRound(20 * SkillPow(P))));
             AddSkill("bolt", "연쇄 번개", "hit", 20000000, "#fff36b", P => Loc.F("주변 {0}개, 피해 공격력×{1}", 2 + P, F(SkillPow(P), 1)));
             AddSkill("tornado", "회오리", "wall", 30000000, "#b8f0e0", P => Loc.F("띠 높이 {0}, 피해 공격력×{1}", U.JsRound(NF.tornado_h(P)), F(2 * SkillPow(P), 1)));
             AddSkill("shock", "충격파", "harvest", 10000000, "#ffd0a0", P => Loc.F("반경 {0}, 피해 공격력×{1}, 연쇄 최대 8단계", U.JsRound(NF.shock_r(P)), F(SkillPow(P), 1)));
-            AddSkill("pierce", "관통", "pierce", 300, "#ffd6d6", P => Loc.F("단단한 버섯(무더기·거대)을 튕기지 않고 뚫고 지나가며 피해 공격력×{0}", F(SkillPow(P), 1)));
+            AddSkill("pierce", "관통", "bar", 300, "#ffd6d6", P => Loc.F("{0}초 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해", F(BarSkillDur(P), 1)));
+            AddSkill("homing", "유도", "bar", 12000, "#ffa8e0", P => Loc.F("{0}초 동안 바에 튕길 때마다 가장 가까운 군락(보스 스테이지는 보스)으로 날아감", F(BarSkillDur(P), 1)));
+            AddSkill("power", "기운 북돋기", "bar", 120, "#ff9a5a", P => Loc.F("바에 맞을 때마다 {0}초 동안 공격력 +{1}% · 스킬 발동률 +{2}%p", F(BarSkillDur(P), 1), U.JsRound(POWER_ATK * (1 + P) * 100), U.JsRound(POWER_SKILL * (1 + P) * 100)), noRate: true);
+            AddSkill("barclone", "분신 바", "bar", 3000000, "#a8d8ff", P => Loc.F("{0}초 동안 필드 가운데나 양옆에 분신 슬라이드 바 (최대 {1}개)", F(BAR_CLONE_DUR + P, 1), BAR_CLONE_MAX));
             AddSkill("fest", "풍년", "fest", 100000000, "#ffd84a", P => Loc.F("라운드 마지막 5초 모든 점수·수확량 ×{0}", F(2 * SkillPow(P), 1)), noRate: true);
+            // 전용 아이콘이 없는 바 스킬은 비슷한 기존 아이콘을 쓴다
+            SKILLS["power"].icon = "s_sharpen"; SKILLS["homing"].icon = "s_magnet"; SKILLS["barclone"].icon = "s_split";
             var SKILL_TIER = new Dictionary<string, int>
             {
-                ["accel"] = 1, ["burst"] = 1, ["pierce"] = 1,
-                ["sharpen"] = 2, ["magnet"] = 2, ["clear"] = 2,
+                ["accel"] = 1, ["burst"] = 1, ["pierce"] = 1, ["power"] = 1,
+                ["sharpen"] = 2, ["magnet"] = 2, ["clear"] = 2, ["homing"] = 2, ["barclone"] = 3,
                 ["split"] = 3, ["clone"] = 3, ["shock"] = 3, ["bolt"] = 3, ["tornado"] = 3, ["fest"] = 3,
             };
 
@@ -298,7 +340,6 @@ namespace MoreMush
             N("ed_price2", "ed", "ed_price", "정산 보너스 II", 2, 15000, 3, L => Loc.F("정산 골드 +{0}%", U.JsRound(NF.ed_price2(L) * 100)), tier: 2, needMax: true);
             N("ed_rare", "ed", "ed_cols", "변종 출현율", 3, 5000, 2.2, L => Loc.F("에픽 이상 가중치 {0}", Plus(NF.ed_rare(L))), tier: 2);
             N("ed_size", "ed", "ed_regen", "군락지 버섯 수", 3, 4000, 2.2, L => Loc.F("군락지당 3~{0}개", NF.ed_size(L)), tier: 2);
-            N("ed_dev", "ed", "ed_regen", "숲 장치 수", 2, 3000, 2.2, L => Loc.F("라운드마다 {0}개", NF.ed_dev(L)), tier: 2);
             // 후반
             N("ed_score3", "ed", "ed_score2p", "타격 점수 III", 3, 1000000, 3, L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score3(L))), tier: 3, needMax: true);
             N("ed_bonus3", "ed", "ed_bonus2p", "수확량 III", 3, 1500000, 3, L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus3(L))), tier: 3, needMax: true);
@@ -313,6 +354,10 @@ namespace MoreMush
             N("md_map", "md", "core_md", "필드 넓히기", 4, 40, 2.2, L => Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / MAP_ZOOM[L]), U.JsRound(H / MAP_ZOOM[L]), F(MAP_ZOOM[L])));
             N("md_bar", "md", "core_md", "바 넓이", 3, 15, 2.2, L => $"{U.JsRound(150 * NF.md_bar(L))}px");
             N("md_combo", "md", "md_bar", "콤보 계수", 3, 60, 2.2, L => Loc.F("콤보당 +{0}배", F(NF.md_combo(L), 3)));
+            // 숲 장치: 바 넓이 바로 다음에 골드로 해금. 해금하면 라운드마다 반드시 1개씩 놓인다
+            N("dev_stump", "md", "md_bar", "그루터기", 1, 200, 1, L => L > 0 ? Loc.F("라운드마다 1개 · 부딪히면 {0}초 공격력 ×{1}", STUMP_ATK_DUR, STUMP_ATK_MUL) : Loc.T("해금하면 라운드마다 놓여요"), icon: "s_device");
+            N("dev_moss", "md", "md_bar", "이끼 길", 1, 600, 1, L => L > 0 ? Loc.T("라운드마다 1개 · 지나가면 2초 가속") : Loc.T("해금하면 라운드마다 놓여요"), icon: "s_device");
+            N("dev_acorn", "md", "md_bar", "도토리 스위치", 1, 1500, 1, L => L > 0 ? Loc.T("라운드마다 1개 · 셋 다 켜면 5초 점수 ×2 (한 번)") : Loc.T("해금하면 라운드마다 놓여요"), icon: "s_device");
             N("md_kid", "md", "md_bar", "꼬마 수확기", 3, 300, 2.2, L => L > 0 ? Loc.F("영구 핀볼이 바에 맞을 때 {0} 확률로 작은 임시 핀볼 1개 (8초)", U.Pct(KidRate(L))) : Loc.T("없음"), icon: "s_kid", col: "#9fd8ff");
             N("md_combo2", "md", "md_combo", "콤보 계수 II", 2, 8000, 3, L => Loc.F("콤보당 +{0}배 더", F(NF.md_combo2(L), 2)), tier: 2, needMax: true);
             N("md_templife", "md", "md_kid", "임시 핀볼 수명", 2, 20000, 2.2, L => Loc.F("임시 핀볼 지속시간 {0}", Plus(NF.md_templife(L))), tier: 2);
@@ -326,6 +371,7 @@ namespace MoreMush
                 if (!s.noRate) NameWith(N(id + "_rate", "md", id, s.nKo + " 발동률", 2, s.costGold * 2, 3, L => Loc.F("발동률 {0}", U.Pct(SkillRate(L))), sub: true, tier: tr), "{0} 발동률", s.nKo);
                 if (!s.noPow) NameWith(N(id + "_pow", "md", id, s.nKo + " 위력", 2, s.costGold * 2, 3, L => s.eff(L), sub: true, tier: tr), "{0} 위력", s.nKo);
             }
+            N("md_fixbar", "md", "power", "설치형 바", 3, 8000, 3.5, L => Loc.F("필드에 작은 바 {0}개가 고정으로 놓여요 (군락은 통과)", L), tier: 2);
             N("md_buffdur", "md", "accel", "버프 지속", 2, 30000, 2.2, L => Loc.F("가속·맑은 포자막 지속 {0}, 날 갈기 {1}타", Plus(NF.md_buffdur(L)), Math.Ceiling(3 * NF.md_buffdur(L))), tier: 2);
             // ── 독 (전투) ──
             // 초반
@@ -343,6 +389,12 @@ namespace MoreMush
             N("ps_resist", "ps", "ps_spd", "포자 저항", 2, 10000, 2.2, L => Loc.F("느림·약화 디버프 지속 -{0}%", U.JsRound((1 - NF.ps_resist(L)) * 100)), tier: 2);
             N("ps_rush", "ps", "ps_dur", "선제 공격", 2, 25000, 2.2, L => Loc.F("라운드 시작 후 3초 동안 공격력 ×{0}", F(NF.ps_rush(L))), tier: 2);
             N("bl", "ps", "ps_size", "회전 칼날", 1, 60000, 1, L => L > 0 ? Loc.T("사용 중 · 범위 안 버섯에 주기적 피해") : Loc.T("해금하면 칼날 사용 시작"), icon: "s_blade", col: "#e6e6f0", tier: 2);
+            // 슬라이드 바 수치 강화 (보라 가지). 가격은 가안
+            N("ps_bar", "ps", "ps_size", "바 넓이 II", 3, 5000, 2.5, L => Loc.F("바 길이 +{0}px (필드 폭 1/3까지)", U.JsRound(150 * NF.ps_bar(L))), tier: 2);
+            N("ps_barspd", "ps", "ps_spd", "바 반사 속도", 3, 8000, 2.5, L => Loc.F("바에 튕길 때 속도 {0}", Plus(NF.ps_barspd(L))), tier: 2);
+            N("ps_bardur", "ps", "ps_dur", "바 스킬 지속", 3, 12000, 2.5, L => Loc.F("바 스킬 지속시간 +{0}초", F(NF.ps_bardur(L), 1)), tier: 2);
+            N("ps_barrate", "ps", "ps_bardur", "바 스킬 발동률", 3, 400000, 2.5, L => Loc.F("바 스킬 발동률 +{0}%p", U.JsRound(NF.ps_barrate(L) * 100)), tier: 3);
+            N("ps_power", "ps", "ps_barrate", "북돋기 강화", 3, 2000000, 2.5, L => Loc.F("기운 북돋기 공격력 +{0}%p · 발동률 +{1}%p", U.JsRound(NF.ps_power(L) * 100), U.JsRound(NF.ps_power(L) * 100 * POWER_SKILL / POWER_ATK)), tier: 3);
             // 후반
             N("ps_atk3", "ps", "ps_atk2p", "공격력 III", 4, 1000000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk3(L))), tier: 3, needMax: true);
             N("ps_atk3p", "ps", "ps_atk3", "공격력 III+", 3, 20000000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk3p(L))), tier: 3, needMax: true);
@@ -366,6 +418,13 @@ namespace MoreMush
                 return Loc.F("{0}초마다 균사석이 떨어져 반경 {1} 피해 공격력×{2}", F(m.interval), m.r, m.dmg);
             }, gem: 25, col: "#8ff0c8", tier: 3);
             N("gm_toxin", "ps", "ps_resist", "독성 내성", 3, 2000, 2, L => Loc.F("포자 디버프 지속 ×{0} · 독버섯 포자 구름 ×{1}", F(NF.gm_toxin(L)), F(NF.gm_toxin(L))), gem: 8, tier: 3);
+            // 균사석 노드 추가 (가안): 공격력·정산 골드·보스·스킬·바·보스 균사석
+            N("gm_atk", "ps", "ps_atk3p", "균사 투지", 3, 3000, 2, L => Loc.F("공격력 ×{0}", F(NF.gm_atk(L))), gem: 12, tier: 3);
+            N("gm_boss", "ps", "ps_heavy", "보스 파쇄", 3, 3000, 2, L => Loc.F("보스에게 주는 피해 ×{0}", F(NF.gm_boss(L))), gem: 15, tier: 3);
+            N("gm_score", "ed", "ed_score3p", "균사 정산", 3, 3000, 2, L => Loc.F("정산 골드 ×{0}", F(NF.gm_score(L))), gem: 12, tier: 3);
+            N("gm_bossgem", "md", "md_fixbar", "보스의 전리품", 3, 2500, 2, L => Loc.F("보스를 쓰러뜨릴 때 균사석 +{0}", NF.gm_bossgem(L)), gem: 10, tier: 3);
+            N("gm_skill", "md", "md_buffdur", "균사 술법", 3, 3000, 2, L => Loc.F("모든 스킬 발동률 ×{0}", F(NF.gm_skill(L))), gem: 12, tier: 3);
+            N("gm_bar", "md", "md_templife", "균사 바", 3, 2500, 2, L => Loc.F("바 길이 ×{0} (필드 폭 1/3까지)", F(NF.gm_bar(L))), gem: 8, tier: 3);
 
             foreach (var n in NODES)
             {
@@ -385,18 +444,22 @@ namespace MoreMush
                 var h = new Harvester { id = id, n = n, type = type, look = look, unlockGold = unlock, lvGold = lvGold, ab = cached, text = text };
                 HARVESTERS.Add(h); HV[id] = h; return h;
             }
-            AddHv("sam", "낫 수확기", "기본형", "나무 막대에 날이 달린 낫", 0, 1500,
+            // 유형: 기본형(공격력 약간 높음) · 속도형(작고 빠름, 튕기기 효과) · 치명타형(범위 좁고 치명타 높음) · 분열형 · 범위형(크고 넓음)
+            AddHv("sam", "오래된 낫", "기본형", "검게 산화된 날과 호두나무 손잡이의 낡은 낫", 0, 1500,
                 s => D(("p", 0.15 + 0.07 * (s - 1))),
                 s => Loc.F("휘두르기: 버섯을 수확할 때 {0} 확률로 가까운 버섯 하나를 함께 벤다 (공격력×2)", U.Pct(HV["sam"].ab(s)["p"])));
-            AddHv("saw", "표창 수확기", "치명타형", "날이 넓은 네 방향 표창", 3000, 0,
+            AddHv("saw", "절삭 수리검", "속도형", "은빛 합금 날의 작은 수리검", 3000, 0,
+                s => D(("k", 0.25 + 0.1 * (s - 1)), ("max", 3)),
+                s => Loc.F("튕겨 베기: 벽·바에 튕길 때마다 다음 타격 피해 +{0} (최대 {1}번 쌓임, 맞히면 사라짐)", U.Pct(HV["saw"].ab(s)["k"]), HV["saw"].ab(s)["max"]));
+            AddHv("hoe", "약초 괭이", "치명타형", "흑철 날 끝이 송곳처럼 뾰족한 괭이", 3500, 0,
                 s => D(("p", 0.2 + 0.1 * (s - 1))),
-                s => Loc.F("급소 찌르기: 에픽 이상 버섯을 맞히면 {0} 확률로 확정 치명타 (피해·점수 ×3)", U.Pct(HV["saw"].ab(s)["p"])));
-            AddHv("mill", "회전칼날 수확기", "수확형", "동그라미 + 회전 칼날", 5000, 0,
+                s => Loc.F("급소 찌르기: 에픽 이상 버섯을 맞히면 {0} 확률로 확정 치명타 (피해·점수 ×3)", U.Pct(HV["hoe"].ab(s)["p"])));
+            AddHv("mill", "회전칼날 수확기", "범위형", "동그라미 + 회전 칼날", 5000, 0,
                 s => D(("r", 34 + 8 * s), ("p", 0.1 + 0.04 * (s - 1))),
                 s => Loc.F("갈아내기: 늘 작은 회전 칼날(범위 {0}px)을 두르고, 칼날이 벨 때 {1} 확률로 버섯 조각(추가 수확) 획득", HV["mill"].ab(s)["r"], U.Pct(HV["mill"].ab(s)["p"])));
             AddHv("spore", "분열 수확기", "분열형", "포자가 맺힌 버섯 갓", 4000, 0,
-                s => D(("p", 0.08 + 0.04 * (s - 1)), ("life", 3 + s)),
-                s => Loc.F("세포 분열: 버섯을 맞히면 {0} 확률로 작은 임시 핀볼로 분열 ({1}초, 수확기 종류는 무작위)", U.Pct(HV["spore"].ab(s)["p"]), HV["spore"].ab(s)["life"]));
+                s => D(("p", 0.08 + 0.04 * (s - 1)), ("hits", 2)),
+                s => Loc.F("세포 분열: 버섯을 맞히면 {0} 확률로 능력치 50%인 작은 수확기를 소환 ({1}번 부딪히면 사라짐)", U.Pct(HV["spore"].ab(s)["p"]), HV["spore"].ab(s)["hits"]));
             AddHv("bell", "방울 수확기", "울림형", "큰 도토리 방울", 8000, 0,
                 s => D(("r", 40 + 12 * s), ("dmg", 0.4 + 0.15 * s)),
                 s => Loc.F("딸랑 울림: 버섯을 맞힐 때마다 작은 충격파 (반경 {0}, 피해 공격력×{1})", HV["bell"].ab(s)["r"], U.FmtN(HV["bell"].ab(s)["dmg"])));
@@ -406,6 +469,11 @@ namespace MoreMush
             AddHv("gold", "황금 수확기", "보상", "금빛 낫", -1, 15000,
                 s => D(("p", 0.03 + 0.02 * (s - 1))),
                 s => Loc.F("황금 손길: 맞힌 버섯이 {0} 확률로 황금 변종으로 변한다", U.Pct(HV["gold"].ab(s)["p"])));
+            // 유형 기본 능력치 [임시값]
+            HV["sam"].atkMul = 1.1;
+            HV["saw"].spdMul = 1.2; HV["saw"].sizeMul = 0.85;
+            HV["hoe"].crit = 0.15; HV["hoe"].sizeMul = 0.9; HV["hoe"].spdMul = 0.95;
+            HV["mill"].sizeMul = 1.3;
         }
     }
 }

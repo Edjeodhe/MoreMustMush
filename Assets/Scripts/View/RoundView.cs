@@ -38,7 +38,8 @@ namespace MoreMush
 
         Pool<ShroomView> shrooms; Pool<BallView> balls; Pool<DeviceView> devices; Pool<CloudView> clouds;
         Pool<SpriteRenderer> parts, flyers; Pool<LineRenderer> lines;
-        Pool<LineRenderer> aimLines;            // 조준 화살표 전용 (화살촉의 뾰족한 굵기 곡선이 공용 선 풀에 남지 않게)
+        Pool<LineRenderer> aimLines;
+        Pool<SpriteRenderer> extraBars;         // 설치형·분신 바 (씬의 바를 템플릿으로 복제)            // 조준 화살표 전용 (화살촉의 뾰족한 굵기 곡선이 공용 선 풀에 남지 않게)
         string bgTheme;
 
         static readonly AnimationCurve Taper = AnimationCurve.Linear(0, 1, 1, 0);
@@ -57,11 +58,13 @@ namespace MoreMush
             flyers = new Pool<SpriteRenderer>(flyerPrefab, flyerRoot);
             lines = new Pool<LineRenderer>(linePrefab, fxRoot);
             aimLines = new Pool<LineRenderer>(linePrefab, fxRoot);
+            extraBars = new Pool<SpriteRenderer>(bar, bar.transform.parent);
         }
 
         public void Clear()
         {
-            shrooms.Trim(0); balls.Trim(0); devices.Trim(0); clouds.Trim(0); parts.Trim(0); flyers.Trim(0); lines.Trim(0); aimLines.Trim(0);
+            bossStr.Clear();
+            shrooms.Trim(0); balls.Trim(0); extraBars.Trim(0); devices.Trim(0); clouds.Trim(0); parts.Trim(0); flyers.Trim(0); lines.Trim(0); aimLines.Trim(0);
             ReleaseTexts(true);
         }
 
@@ -234,6 +237,18 @@ namespace MoreMush
             }
             else bar.color = Color.white;
             Art.SetFx(bar, 0, 0, R.barFx > 0 ? 0.6f : 0);
+            // 설치형 바는 군락 아래에, 분신 바는 반투명 하늘색
+            for (int i = 0; i < R.extraBars.Count; i++)
+            {
+                var s = R.extraBars[i]; var sr = extraBars.Get(i);
+                sr.transform.localPosition = Art.P(s.x, s.y);
+                sr.size = new Vector2(s.len / Art.PPU, (BAR_T + 10) / Art.PPU);
+                sr.sortingOrder = s.fixedBar ? 900 : bar.sortingOrder;
+                float blink = s.clone && s.life < 1 ? 0.4f + 0.4f * Mathf.Abs(Mathf.Sin(now * 12)) : 0.8f;
+                sr.color = s.clone ? new Color(0.65f, 0.85f, 1, blink) : new Color(0.9f, 0.8f, 0.65f, 1);
+                Art.SetFx(sr);
+            }
+            extraBars.Trim(R.extraBars.Count);
         }
 
         int DrawAim(RoundSim R, float now, int nl)
@@ -330,6 +345,7 @@ namespace MoreMush
         readonly Dictionary<int, string> comboStr = new Dictionary<int, string>();
         int textFrame;
         string specialStr, specialLang; int specialTenths = -1; Special specialKind;
+        readonly Dictionary<Shroom, (int pct, string lang, string s)> bossStr = new Dictionary<Shroom, (int, string, string)>();   // 보스 글자 (체력 %가 바뀔 때만 다시 만든다)
 
         void DrawTexts(RoundSim R, float z)
         {
@@ -350,6 +366,16 @@ namespace MoreMush
                     if (!comboStr.TryGetValue(b.combo, out var cs)) comboStr[b.combo] = cs = "x" + b.combo;
                     Text(b, cs, b.x, b.y - b.r - 14, 16, 1, "#fff3b0", 1, z);
                 }
+            // 보스 이름·남은 체력 (체력 막대 위)
+            for (int i = 0; i < R.bosses.Count; i++)
+            {
+                var bm = R.bosses[i];
+                if (bm.dead) continue;
+                int pct = Mathf.CeilToInt((float)(bm.hp / bm.maxHp) * 100);
+                if (!bossStr.TryGetValue(bm, out var bs) || bs.pct != pct || bs.lang != Loc.Lang)
+                    bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + $"  {pct}%");
+                Text(bm, bs.s, bm.x, bm.y + bm.r * 1.2f + 30, bm.bossClone ? 20 : 26, 1, R.Boss.col, 1, z);
+            }
             if (R.special != null)
             {
                 var sm = R.special; float rr = sm.r + 22;

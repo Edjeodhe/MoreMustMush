@@ -207,7 +207,7 @@ namespace MoreMush
         public static readonly Skin[] HV_SKINS =
         {
             new Skin { id = "hs_sam", of = "sam", n = "벚꽃 낫", aura = "#ffb0c8", price = 40 },
-            new Skin { id = "hs_saw", of = "saw", n = "흑요석 표창", aura = "#b88aff", price = 50 },
+            new Skin { id = "hs_saw", of = "saw", n = "흑요석 수리검", aura = "#b88aff", price = 50 },
             new Skin { id = "hs_mill", of = "mill", n = "얼음 칼날", aura = "#9fe8ff", price = 50 },
             new Skin { id = "hs_spore", of = "spore", n = "은하 포자", aura = "#8a8aff", price = 50 },
             new Skin { id = "hs_bell", of = "bell", n = "황금 방울", aura = "#ffd84a", price = 60 },

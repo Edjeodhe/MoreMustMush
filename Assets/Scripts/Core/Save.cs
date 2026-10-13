@@ -28,6 +28,8 @@ namespace MoreMush
         public Quests quest = new Quests();        // 일일·주간 의뢰 (예전 마을 의뢰 "quests"와는 다른 필드)
         public Records rec = new Records();
         public int rounds;
+        public int stage = 1;                      // 지금 스테이지. 보스 스테이지(10의 배수)는 보스를 쓰러뜨려야 넘어간다
+        public bool bossOn = true;                 // 보스 도전 (끄면 보스 스테이지에서 파밍만 한다. 보스에게 지면 꺼진다)
         public double play;
         public bool ending;
 
@@ -126,6 +128,7 @@ namespace MoreMush
             g.skins.own ??= new Dictionary<string, bool>(); g.skins.ch ??= new Dictionary<string, string>(); g.skins.hv ??= new Dictionary<string, string>();
             foreach (var k in new List<string>(g.codex.Keys)) if (g.codex[k] == null) g.codex.Remove(k);
             g.rounds = Math.Max(0, g.rounds);
+            g.stage = Math.Max(1, g.stage);
             if (!IsFinite(g.gold)) g.gold = 0;
             if (!IsFinite(g.gem)) g.gem = 0;
             if (!IsFinite(g.legacyDia) || g.legacyDia < 0) g.legacyDia = 0;

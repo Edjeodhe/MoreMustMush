@@ -16,7 +16,7 @@ namespace MoreMush
             return new Ball
             {
                 hv = hv, hs = st.hvStar.TryGetValue(hv, out var s) ? s : 1,
-                x = x, y = y, spd = (float)st.launch, r = (float)st.ballR * (small ? 0.65f : 1), perm = perm, life = life, maxLife = life,
+                x = x, y = y, spd = (float)st.launch, r = (float)st.ballR * (small ? 0.65f : 1) * (float)HV[hv].sizeMul, perm = perm, life = life, maxLife = life,
                 bladeT = U.Rand(0, (float)st.bladeInt), ang = U.Rand(0, U.TAU),
             };
         }
@@ -66,23 +66,25 @@ namespace MoreMush
         float Wk(Ball b)
         {
             if (b == null) return 1;
-            float m = (b.weak > 0 ? 0.5f : 1) * b.statMul;
+            float m = (b.weak > 0 ? 0.5f : 1) * b.statMul * (float)HV[b.hv].atkMul;
             if (b.stumpAtk > 0) m *= 1 + (STUMP_ATK_MUL - 1) * (float)st.devMul;
+            if (b.powT > 0) m *= 1 + (float)(POWER_ATK * (1 + b.powLv) + st.powAtk);
             return m;
         }
 
         float EffMul(Ball b)
         {
-            float m = b.jf;
+            float m = b.jf * (float)HV[b.hv].spdMul;
             if (b.accel > 0) m *= b.accelMul;
             if (b.moss > 0) m *= 1 + 0.4f * (float)st.devMul;
             if (b.slow > 0) m *= 0.65f;
+            if (b.fog > 0) m *= FOG_SLOW;
             return m;
         }
 
         void UpdateBall(Ball b, float h)
         {
-            b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.clear -= h; b.magnet -= h; b.stumpAtk -= h; b.stumpT -= h; b.bladeFx -= h;
+            b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.fog -= h; b.pierceT -= h; b.homeT -= h; b.powT -= h; b.clear -= h; b.magnet -= h; b.stumpAtk -= h; b.stumpT -= h; b.bladeFx -= h;
             if (!b.perm)
             {
                 b.life -= h;
@@ -99,6 +101,7 @@ namespace MoreMush
                 {
                     if (c.slow) b.slow = (float)st.debuffDur;
                     if (c.weak) b.weak = (float)st.debuffDur;
+                    if (c.fog) b.fog = (float)st.debuffDur;
                 }
             }
             // 회전 칼날 (강화 트리 칼날 또는 회전칼날 수확기 고유 칼날)
@@ -155,9 +158,8 @@ namespace MoreMush
             else if (b.x + b.r > FX1) { b.x = FX1 - b.r; b.dx = -Mathf.Abs(b.dx); FixDir(b); WallHit(b, "r"); }
             if (b.y - b.r < FY0) { b.y = FY0 + b.r; b.dy = Mathf.Abs(b.dy); FixDir(b); WallHit(b, "t"); }
             else if (b.y + b.r > FY1) { b.y = FY1 - b.r; b.dy = -Mathf.Abs(b.dy); FixDir(b); b.combo = 0; WallHit(b, "b"); }
-            // 슬라이드 바 (위에서 내려오는 핀볼만)
-            float top = BAR_Y - BAR_T / 2;
-            if (b.dy > 0 && b.y + b.r >= top && py + b.r <= top + 2 && Mathf.Abs(b.x - barX) <= barLen / 2 + b.r * 0.6f) BarHit(b);
+            // 슬라이드 바·설치형 바·분신 바 (RoundSim.Bar)
+            BarCollide(b, py);
             // 버섯
             bool inJ = false; List<Shroom> jl = null;
             // 지난 판정의 b.inside와 번갈아 쓰는 두 번째 리스트 (서브스텝마다 새 리스트를 만들지 않게)
@@ -171,8 +173,8 @@ namespace MoreMush
                 if (m.jelly) { inJ = true; if (jl == null) { jl = jellyBuf; jl.Clear(); } jl.Add(m); continue; }
                 if (b.inside.Contains(m)) { inside.Add(m); continue; }
                 if (!m.solid) { inside.Add(m); DirectHit(m, b, 1); continue; }
-                var pk = st.sk["pierce"];
-                if (pk.on && U.Chance((float)pk.p)) { inside.Add(m); DirectHit(m, b, pk.pm); SkillFx("pierce", b.x, b.y); continue; }
+                // 관통 (바 스킬): 지속 중엔 군락을 튕기지 않고 뚫고 지나간다. 보스는 뚫지 못한다
+                if (b.pierceT > 0 && !m.boss) { inside.Add(m); DirectHit(m, b, 1); continue; }
                 float dl = Mathf.Sqrt(dd); if (dl == 0) dl = 0.01f;
                 float nx = ddx / dl, ny = ddy / dl;
                 float dot = b.dx * nx + b.dy * ny;
@@ -264,28 +266,9 @@ namespace MoreMush
             float a = Mathf.Atan2(b.dy, b.dx) + U.Rand(-0.07f, 0.07f);
             b.dx = Mathf.Cos(a); b.dy = Mathf.Sin(a); FixDir(b);
             Snd.Wall();
+            SawBounce(b);
             var sk = st.sk["tornado"];
-            if (sk.on && U.Chance((float)sk.p)) SpawnTornado(b, side);
-        }
-
-        void BarHit(Ball b)
-        {
-            float tt = U.Clamp((b.x - barX) / (barLen / 2), -1, 1), a = tt * 65 * Mathf.Deg2Rad;
-            b.dx = Mathf.Sin(a); b.dy = -Mathf.Cos(a);
-            b.y = BAR_Y - BAR_T / 2 - b.r;
-            b.spd = Mathf.Max(b.spd, (float)st.launch);
-            b.combo++;
-            barFx = 0.15f;
-            Snd.Bar();
-            for (int i = 0; i < 5; i++) AddPart(b.x, BAR_Y - 8, U.Rand(-120, 120), U.Rand(-200, -60), 0.35f, U.Hex("#ffe9a8"), 3);
-            if (!b.perm) return;   // 임시 핀볼은 바 버프를 받지 않음
-            var sk = st.sk;
-            bool Proc(string id) => sk[id].on && U.Chance((float)sk[id].p);
-            if (Proc("accel")) { b.accel = 3 * (float)st.buffMul; b.accelMul = 1 + 0.15f * (float)sk["accel"].pm; SkillFx("accel", b.x, b.y); }
-            if (Proc("sharpen")) { b.sharpen = Mathf.CeilToInt(3 * (float)st.buffMul); b.sharpMul = 2 * (float)sk["sharpen"].pm; SkillFx("sharpen", b.x, b.y); }
-            if (Proc("split")) { SpawnTemp(b.x, b.y - 4, 1 + sk["split"].P, 6, false, Mathf.Atan2(b.dy, b.dx)); SkillFx("split", b.x, b.y); }
-            if (Proc("clear")) { b.clear = 1.5f * (float)sk["clear"].pm * (float)st.buffMul; b.slow = 0; b.weak = 0; SkillFx("clear", b.x, b.y); }
-            if (st.kidP > 0 && U.Chance((float)st.kidP)) { SpawnTemp(b.x, b.y - 4, 1, 8, true, -Mathf.PI / 2 + U.Rand(-0.7f, 0.7f)); SkillFx("md_kid", b.x, b.y); }
+            if (sk.on && U.Chance((float)SkP("tornado", b))) SpawnTornado(b, side);
         }
 
         void SkillFx(string id, float x, float y)
@@ -309,7 +292,7 @@ namespace MoreMush
             {
                 if (m.golden) x *= 10;
                 if (m.col != null && m.col.wander) x *= st.wanderMul;
-                if (m.giant) x *= 3;
+                if (m.giant || m.boss) x *= 3;
             }
             if (acornT > 0) x *= 2;
             if (festOn) x *= st.festMul;
@@ -320,12 +303,19 @@ namespace MoreMush
         void Damage(Shroom m, double amt, Ball b, string kind, double scoreF = 1, Wave wave = null, bool forceCrit = false)
         {
             if (m.dead) return;
-            if (m.cluster || m.giant) amt *= st.heavyMul;
-            bool crit = forceCrit || U.Chance((float)st.crit);
+            if (m.cluster || m.giant || m.boss) amt *= st.heavyMul;
+            if (m.boss) amt *= st.bossMul;
+            bool crit = forceCrit || U.Chance((float)(st.crit + (b != null ? HV[b.hv].crit : 0)));
             m.hp -= amt * (crit ? st.critMul : 1);
             m.squish = 1;
             double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF;
-            AddScore(sc, m.x, m.y - m.r, m.giant ? 3 : m.sp.t, crit, m.golden);
+            AddScore(sc, m.x, m.y - m.r, m.giant || m.boss ? 3 : m.sp.t, crit, m.golden);
+            if (m.boss)
+            {
+                BossDamaged(m);
+                if (m.hp <= 0) BossDown(m, b);
+                return;
+            }
             if (m.hp <= 0) Harvest(m, b, kind, wave);
         }
 
@@ -333,6 +323,7 @@ namespace MoreMush
         {
             double amt = st.atk * Wk(b) * mul * (st.fire ? 1.3 : 1) * (runT < 3 ? st.rushMul : 1);
             if (b.sharpen > 0) { amt *= b.sharpMul; b.sharpen--; }
+            if (b.sawStk > 0) { amt *= 1 + HV["saw"].ab(b.hs)["k"] * b.sawStk; b.sawStk = 0; }
             if (st.fire && parts.Count < 120)
                 for (int i = 0; i < 2; i++) AddPart(m.x + U.Rand(-m.r, m.r) * 0.5f, m.y, U.Rand(-40, 40), U.Rand(-160, -60), 0.35f, U.Hex(i % 2 == 1 ? "#ff7a2a" : "#ffd34a"), 4);
             string hv = b.hv; var a = HV[hv].ab(b.hs);
@@ -348,21 +339,38 @@ namespace MoreMush
                 if (texts.Count < 20) texts.Add(new FloatText { x = m.x + U.Rand(-10, 10), y = m.y - m.r - 18, v = g, coin = true });
                 Snd.Tone(1200, 0.05f, Snd.Wave.Triangle, 0.25f, 1.3f, "coin", 0.05f);
             }
-            Damage(m, amt, b, "direct", 1, null, hv == "saw" && m.sp.t >= 1 && U.Chance((float)a["p"]));
+            Damage(m, amt, b, "direct", 1, null, hv == "hoe" && (m.sp.t >= 1 || m.boss) && U.Chance((float)a["p"]));
             Snd.Hit();
             if (hv == "bell") BurstAt(m.x, m.y, (float)a["r"], st.atk * a["dmg"] * Wk(b), b, "#e8c08a", true);
             // 분열로 생긴 핀볼은 다시 분열하지 않는다 (연쇄 폭주 방지)
-            if (hv == "spore" && !b.noSplit && U.Chance((float)a["p"]))
-            {
-                foreach (var c in SpawnTemp(b.x, b.y, 1, (float)a["life"], true, Mathf.Atan2(b.dy, b.dx) + U.Rand(-0.8f, 0.8f))) c.noSplit = true;
-                SkillFx("hv_split", b.x, b.y);
-            }
+            if (hv == "spore" && !b.noSplit && U.Chance((float)a["p"])) SporeSplit(b, (int)a["hits"]);
+            // 분열로 나온 소형 수확기는 정해진 횟수만큼 부딪히면 사라진다
+            if (b.hitsLeft > 0 && --b.hitsLeft == 0) { b.dead = true; for (int i = 0; i < 6; i++) AddPart(b.x, b.y, U.Rand(-60, 60), U.Rand(-60, 60), 0.4f, U.Hex("#dfe8f0"), 3); }
             if (st.sparkP > 0 && U.Chance((float)st.sparkP)) { ChainBolt(m, b); SkillFx("spark", b.x, b.y); }
             if (m.spore != null && m.sporeCd <= 0 && U.Chance((float)st.sporeP)) { m.sporeCd = 2; SpawnCloud(m.x, m.y, m.spore); }
             var sk = st.sk;
-            if (sk["burst"].on && U.Chance((float)sk["burst"].p)) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
-            if (sk["magnet"].on && U.Chance((float)sk["magnet"].p)) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
-            if (sk["bolt"].on && U.Chance((float)(sk["bolt"].p * (st.wId == "thunder" ? 2 : 1)))) { ChainBolt(m, b); SkillFx("bolt", b.x, b.y); }
+            if (sk["burst"].on && U.Chance((float)SkP("burst", b))) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
+            if (sk["magnet"].on && U.Chance((float)SkP("magnet", b))) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
+            if (sk["bolt"].on && U.Chance((float)SkP("bolt", b))) { ChainBolt(m, b); SkillFx("bolt", b.x, b.y); }
+        }
+
+        // 분열형: 능력치 50%인 작은 같은 수확기 (다시 분열하지 않음)
+        void SporeSplit(Ball b, int hits)
+        {
+            if (balls.Count >= MAX_BALLS) return;
+            var c = MakeBall(b.x, b.y, false, b.hv, 30, true);
+            c.statMul = b.statMul * 0.5f; c.noSplit = true; c.hitsLeft = hits; c.hs = b.hs;
+            float a = Mathf.Atan2(b.dy, b.dx) + U.Rand(-0.8f, 0.8f);
+            c.dx = Mathf.Cos(a); c.dy = Mathf.Sin(a); FixDir(c);
+            balls.Add(c);
+            SkillFx("hv_split", b.x, b.y);
+        }
+
+        // 속도형(절삭 수리검): 벽·바에 튕길 때마다 다음 타격 피해가 쌓인다
+        void SawBounce(Ball b)
+        {
+            if (b.hv != "saw") return;
+            b.sawStk = Mathf.Min((int)HV["saw"].ab(b.hs)["max"], b.sawStk + 1);
         }
 
         public float BladeRadius(Ball b)
@@ -468,8 +476,8 @@ namespace MoreMush
                     queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, dp, wb) });
                 }
             }
-            else if (sk["shock"].on && U.Chance((float)sk["shock"].p)) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
-            if (sk["clone"].on && U.Chance((float)sk["clone"].p)) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
+            else if (sk["shock"].on && U.Chance((float)SkP("shock", b))) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
+            if (sk["clone"].on && U.Chance((float)SkP("clone", b))) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
         }
 
         void AddScore(double v, float x, float y, int tier, bool crit, bool golden)

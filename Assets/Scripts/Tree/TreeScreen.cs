@@ -17,6 +17,7 @@ namespace MoreMush
         public GameObject workshopButton;
         public GameObject farmBadge; public TMP_Text farmBadgeText;   // 꼬마 부탁 + 다 자란 작물
         public TMP_Text autoText; public GameObject autoBadge;        // 자동 수확 보상: 쌓인 시간, 가득 차면 알림
+        public Image bossButtonFrame; public TMP_Text bossButtonText;  // 보스 도전 켜고 끄기 (UIAction bosstoggle)
         public RectTransform sparkLayer;
         public Spark sparkTemplate;     // hidden template slot under sparkLayer, cloned per spark
 
@@ -31,11 +32,24 @@ namespace MoreMush
             stageIcon.sprite = SpriteDB.Icon(th.icon);
             stageTitle.text = Loc.F("스테이지 {0}", StageNow());
             stageSub.text = nextT != null ? Loc.F("{0} · {1} {2}스테이지 뒤", th.n, UIUtil.Ic(nextT.icon), nextT.from - StageNow()) : th.n;
+            RefreshBoss();
             goldText.text = U.Fmt(G.gold);
             gemText.text = U.Fmt(G.gem);
             codexButtonText.text = Loc.F("{0} 도감 ({1}/{2})", UIUtil.Ic("book"), CodexCount(), SP_TOTAL);
             workshopButtonText.text = Loc.T("공방");
             RefreshFarmBadge();
+        }
+
+        // 보스 도전 버튼: 켜짐이면 보스 스테이지에서 보스와 싸우고, 꺼짐이면 그 스테이지에서 파밍만 한다
+        void RefreshBoss()
+        {
+            if (bossButtonText == null) return;
+            int bs = NextBossStage(StageNow());
+            var b = BossAt(bs);
+            string state = G.bossOn ? $"<color=#b8321e>{Loc.T("보스 도전: 켜짐")}</color>" : $"<color=#2a5a9a>{Loc.T("보스 도전: 꺼짐 (파밍)")}</color>";
+            string where = bs == StageNow() ? Loc.F("지금 스테이지 {0} · {1}", bs, b.n) : Loc.F("스테이지 {0} · {1}", bs, b.n);
+            bossButtonText.text = $"{UIUtil.Ic(BOSS_ICON)} {state}\n<size=70%>{where}</size>";
+            if (bossButtonFrame != null) bossButtonFrame.color = G.bossOn ? U.Hex("#fff0e6") : U.Hex("#eef7ff");
         }
 
         int farmN = -1; float farmT;
