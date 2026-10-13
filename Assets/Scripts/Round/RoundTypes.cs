@@ -78,7 +78,7 @@ namespace MoreMush
         public bool perm, inJelly, dead, noSplit;
         public float statMul = 1;   // 분신(스킬로 생긴 임시 수확기)은 기본 수확기의 CLONE_STAT 배 공격력
         public int combo, sharpen;
-        public float accel, accelMul = 1, moss, slow, weak, fog, clear, sharpMul = 1, magnet, magRate, stumpAtk;
+        public float accel, accelMul = 1, moss, slow, weak, clear, sharpMul = 1, magnet, magRate, stumpAtk;
         public float jf = 1, jTick, bladeT, bladeFx, ang, lastHitT, stumpT;
         public float pierceT, homeT, powT; public int powLv;
         public int sawStk, hitsLeft;   // 수리검 튕기기 누적 · 분열 소형 수확기가 사라지기까지 남은 충돌 (0 = 제한 없음)   // 바 스킬: 관통·유도·기운 북돋기 남은 시간
@@ -88,7 +88,7 @@ namespace MoreMush
         public List<Shroom> insideNext = new List<Shroom>();   // StepBall이 inside와 번갈아 쓰는 버퍼
     }
 
-    public class Cloud { public float x, y, r, t, max; public bool slow, weak, fog; }   // fog: 죽음의 천사 독 안개 (이동 속도 ×FOG_SLOW)
+    public class Cloud { public float x, y, r, t, max; public bool slow, weak; }
     public class Wave { public float x, y, r, max, t; public double dmg; public int depth; public HashSet<Shroom> hit = new HashSet<Shroom>(); public bool child; public Ball b; }
     public class Tornado { public float y, h, x, dir; public double dmg; public HashSet<Shroom> hit = new HashSet<Shroom>(); public Ball b; }
     public class Bolt { public List<Vector2> pts; public float t; public bool slash, big; public string col; public float jitterSeed; }

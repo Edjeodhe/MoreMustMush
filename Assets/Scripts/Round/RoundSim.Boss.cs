@@ -12,7 +12,7 @@ namespace MoreMush
         public readonly List<Shroom> bosses = new List<Shroom>();   // 본체 + 분신. 죽은 것도 남겨 둔다 (클리어 판정·화면용)
         public bool bossCleared;
         public float bossClearT;   // 클리어 연출 시각 (runT)
-        float bossHealT, bossFogT;
+        float bossHealT, bossPurgeT;
         int bossSplits;
         float moverDir = 1;
         readonly Shape bossArea = Shape.C(0, 0, 0), moverLane = Shape.Rect(0, 0, 0, 0);
@@ -27,7 +27,7 @@ namespace MoreMush
             float x = WW / 2, y = FY0 + (NO_SPAWN_Y - FY0) * 0.3f;
             double hp = st.bossHp;
             bosses.Add(MakeBossBody(def, x, y, hp, false));
-            bossHealT = CLEANER_INT; bossFogT = 1.5f;
+            bossHealT = CLEANER_INT; bossPurgeT = ANGEL_PURGE_INT;
             AddLabel(Loc.F("보스 {0} 등장!", def.n), x, y - BOSS_R - 60, "#ffffff", 44);
             AddLabel(def.gimmick, x, y - BOSS_R - 20, def.col, 24);
         }
@@ -84,15 +84,23 @@ namespace MoreMush
                     }
                     break;
                 case "angel":
-                    bossFogT -= h;
-                    if (bossFogT <= 0 && !main.dead)
+                    // ANGEL_PURGE_INT초마다 필드의 임시 수확기(분열·분신·꼬마 수확기 등)를 모두 없앤다. 영구 수확기는 그대로
+                    bossPurgeT -= h;
+                    if (bossPurgeT <= 0 && !main.dead)
                     {
-                        bossFogT += FOG_INT;
-                        // 보스 둘레 한 곳에 독 안개 (필드 아래쪽 바 근처까지는 내려오지 않는다)
-                        float a = U.Rand(0, U.TAU), d = U.Rand(180, 520);
-                        float fx = U.Clamp(main.x + Mathf.Cos(a) * d, FX0 + FOG_R, FX1 - FOG_R), fy = U.Clamp(main.y + Mathf.Abs(Mathf.Sin(a)) * d, FY0 + FOG_R, NO_SPAWN_Y - FOG_R * 0.5f);
-                        clouds.Add(new Cloud { x = fx, y = fy, r = FOG_R, t = FOG_LIFE, max = FOG_LIFE, fog = true });
-                        Snd.Tone(110, 0.4f, Snd.Wave.Sine, 0.3f, 0.5f, "puff", 0.1f);
+                        bossPurgeT += ANGEL_PURGE_INT;
+                        int n = 0;
+                        foreach (var b in balls)
+                        {
+                            if (b.perm || b.dead) continue;
+                            b.dead = true; n++;
+                            for (int i = 0; i < 6; i++) AddPart(b.x, b.y, U.Rand(-120, 120), U.Rand(-160, -20), 0.45f, U.Hex(i % 2 == 0 ? st.boss.col : "#ffffff"), 4);
+                        }
+                        if (n > 0)
+                        {
+                            AddLabel(Loc.F("임시 수확기 {0}개 소멸!", n), main.x, main.y - main.r - 40, st.boss.col, 28);
+                            Snd.Tone(110, 0.4f, Snd.Wave.Sine, 0.3f, 0.5f, "puff", 0.1f);
+                        }
                     }
                     break;
                 case "mover":
@@ -181,7 +189,6 @@ namespace MoreMush
             hitstop = 0.35f; hitstopCd = 0.8f; flash = 0.9f; shake = 1;
             AddLabel(Loc.F("보스 {0} 처치!", st.boss.n), WW / 2, WH * 0.3f, "#fff7c2", 54);
             AddLabel(Loc.T("다음 스테이지가 열렸어요"), WW / 2, WH * 0.3f + 60, "#ffe36e", 28);
-            clouds.RemoveAll(c => c.fog);
             Snd.Record();
             // 보스를 쓰러뜨리면 남은 시간과 관계없이 라운드를 바로 끝낸다 (끝 연출 1.5초 뒤 정산, 시간이 다 된 때와 같음)
             if (phase == "run") { phase = "end"; endT = 1.5f; festOn = false; }

@@ -19,7 +19,7 @@ namespace MoreMush
             fpsAcc += Time.unscaledDeltaTime; fpsN++;
             if (fpsAcc > 0.5f) { fps = Mathf.RoundToInt(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0; }
             var R = RoundSim.R;
-            info.text = $"FPS {fps}" + (R != null ? " · " + Loc.F("핀볼 {0} · 버섯 {1} · 군락지 {2}/{3}", R.balls.Count, R.shrooms.Count, R.colonies.Count, R.st.maxCol) : "")
+            info.text = $"FPS {fps}" + (R != null ? " · " + Loc.F("수확기 {0} · 버섯 {1} · 군락지 {2}/{3}", R.balls.Count, R.shrooms.Count, R.colonies.Count, R.st.maxCol) : "")
                 + "\n" + Loc.F("배속 {0} · 해금 {1} · 무한 {2} · 밸런스 {3}", DBG.speed, DBG.allSeeds ? "ON" : "off", DBG.infinite ? "ON" : "off", TUNE.n)
                 + HarvesterSpeedText(R);
         }
@@ -39,25 +39,24 @@ namespace MoreMush
                 speedByHv.TryGetValue(b.hv, out var e);
                 speedByHv[b.hv] = (e.sum + b.spd, Mathf.Max(e.max, b.spd), e.n + 1);
             }
-            // 이번 라운드에서 영구 핀볼 속도가 오간 범위와, 지금 걸린 속도 효과(가속·느림·안개) 수
+            // 이번 라운드에서 영구 수확기 속도가 오간 범위와, 지금 걸린 속도 효과(가속·느림) 수
             if (R != trackedRound) { trackedRound = R; roundMin = float.MaxValue; roundMax = 0; }
-            int nAccel = 0, nSlow = 0, nFog = 0;
+            int nAccel = 0, nSlow = 0;
             foreach (var b in R.balls)
             {
                 if (!b.perm) continue;
                 roundMin = Mathf.Min(roundMin, b.spd); roundMax = Mathf.Max(roundMax, b.spd);
                 if (b.accel > 0) nAccel++;
                 if (b.slow > 0) nSlow++;
-                if (b.fog > 0) nFog++;
             }
             var sb = speedSb; sb.Clear();
             sb.Append('\n').Append(Loc.F("수확기 속도 (px/초) · 발사 {0} · 최저 {1} · 배율 ×{2}", U.JsRound(R.st.launch), U.JsRound(R.st.minSpd), U.FmtN(R.st.spdMul, 2)));
-            sb.Append('\n').Append(Loc.F("이번 판 범위 {0} ~ {1} · 가속 {2} · 느림 {3} · 안개 {4}", roundMin == float.MaxValue ? 0 : Mathf.RoundToInt(roundMin), Mathf.RoundToInt(roundMax), nAccel, nSlow, nFog));
+            sb.Append('\n').Append(Loc.F("이번 판 범위 {0} ~ {1} · 가속 {2} · 느림 {3}", roundMin == float.MaxValue ? 0 : Mathf.RoundToInt(roundMin), Mathf.RoundToInt(roundMax), nAccel, nSlow));
             foreach (var kv in speedByHv)
                 sb.Append('\n').Append(HV.TryGetValue(kv.Key, out var h) ? h.n : kv.Key).Append(" ×").Append(kv.Value.n)
                   .Append("  ").Append(Loc.T("지금")).Append(' ').Append(Mathf.RoundToInt(kv.Value.sum / kv.Value.n))
                   .Append("  ").Append(Loc.T("최고")).Append(' ').Append(Mathf.RoundToInt(kv.Value.max));
-            if (tmpN > 0) sb.Append('\n').Append(Loc.T("임시 핀볼")).Append(" ×").Append(tmpN).Append("  ").Append(Loc.T("지금")).Append(' ').Append(Mathf.RoundToInt(tmpSum / tmpN)).Append("  ").Append(Loc.T("최고")).Append(' ').Append(Mathf.RoundToInt(tmpMax));
+            if (tmpN > 0) sb.Append('\n').Append(Loc.T("임시 수확기")).Append(" ×").Append(tmpN).Append("  ").Append(Loc.T("지금")).Append(' ').Append(Mathf.RoundToInt(tmpSum / tmpN)).Append("  ").Append(Loc.T("최고")).Append(' ').Append(Mathf.RoundToInt(tmpMax));
             return sb.ToString();
         }
 

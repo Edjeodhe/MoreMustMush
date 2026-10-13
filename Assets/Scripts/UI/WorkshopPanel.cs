@@ -18,7 +18,7 @@ namespace MoreMush
         {
             int on = OnHvs().Count, slots = HvSlots();
             string count = on > slots ? $"<color=#d04a3a>{on}/{slots}</color>" : $"{on}/{slots}";
-            sub.text = Loc.T("수확기마다 <color=#3a8a2a>고유 능력</color>이 달라요. 영구 핀볼마다 <color=#3a8a2a>장착 칸</color>이 하나씩 있고, 켠 수확기가 한 칸씩 차지해요(같은 종류는 하나만). 남은 칸은 기본 수확기가 채우고, 분열·분신으로 생긴 핀볼은 기본 수확기 분신(공격력 20%)이에요.") + "\n" +
+            sub.text = Loc.T("수확기마다 <color=#3a8a2a>고유 능력</color>이 달라요. 영구 수확기마다 <color=#3a8a2a>장착 칸</color>이 하나씩 있고, 켠 수확기가 한 칸씩 차지해요(같은 종류는 하나만). 남은 칸은 기본 수확기가 채우고, 분열·분신으로 생긴 수확기는 기본 수확기 분신(공격력 20%)이에요.") + "\n" +
                 Loc.F("장착 {0}: {1}", count, string.Join(" · ", ActiveHvs().Select(id => HV[id].n))) + (on > slots ? $"  <color=#d04a3a>{Loc.T(GameFlow.HV_OVER_MSG)}</color>" : "");
             goldText.text = $"{UIUtil.Ic("gold")}{U.Fmt(G.gold)}";
             foreach (var c in cards) c.Render();

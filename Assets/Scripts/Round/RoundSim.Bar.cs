@@ -82,7 +82,7 @@ namespace MoreMush
             bool On(string id) => sk[id].on;
             float Dur(string id) => (float)((BarSkillDur(sk[id].P) + st.barDur) * st.buffMul);
             if (On("power")) { b.powT = Dur("power"); b.powLv = sk["power"].P; Flash("power"); }
-            if (On("clear")) { b.clear = Dur("clear"); b.slow = 0; b.weak = 0; b.fog = 0; Flash("clear"); }
+            if (On("clear")) { b.clear = Dur("clear"); b.slow = 0; b.weak = 0; Flash("clear"); }
             if (Proc("accel")) { b.accel = 3 * (float)st.buffMul; b.accelMul = 1 + 0.15f * (float)sk["accel"].pm; SkillFx("accel", b.x, b.y); }
             if (Proc("sharpen")) { b.sharpen = Mathf.CeilToInt(3 * (float)st.buffMul); b.sharpMul = 2 * (float)sk["sharpen"].pm; SkillFx("sharpen", b.x, b.y); }
             if (Proc("pierce")) { b.pierceT = Dur("pierce"); SkillFx("pierce", b.x, b.y); }

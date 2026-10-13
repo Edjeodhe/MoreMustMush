@@ -78,13 +78,12 @@ namespace MoreMush
             if (b.accel > 0) m *= b.accelMul;
             if (b.moss > 0) m *= 1 + 0.4f * (float)st.devMul;
             if (b.slow > 0) m *= 0.65f;
-            if (b.fog > 0) m *= FOG_SLOW;
             return m;
         }
 
         void UpdateBall(Ball b, float h)
         {
-            b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.fog -= h; b.pierceT -= h; b.homeT -= h; b.powT -= h; b.clear -= h; b.magnet -= h; b.stumpAtk -= h; b.stumpT -= h; b.bladeFx -= h;
+            b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.pierceT -= h; b.homeT -= h; b.powT -= h; b.clear -= h; b.magnet -= h; b.stumpAtk -= h; b.stumpT -= h; b.bladeFx -= h;
             if (!b.perm)
             {
                 b.life -= h;
@@ -101,7 +100,6 @@ namespace MoreMush
                 {
                     if (c.slow) b.slow = (float)st.debuffDur;
                     if (c.weak) b.weak = (float)st.debuffDur;
-                    if (c.fog) b.fog = (float)st.debuffDur;
                 }
             }
             // 회전 칼날 (강화 트리 칼날 또는 회전칼날 수확기 고유 칼날)

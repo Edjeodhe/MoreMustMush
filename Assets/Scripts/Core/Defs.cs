@@ -320,7 +320,7 @@ namespace MoreMush
 
         public static readonly LocMap RECORD_NAMES = new LocMap(new Dictionary<string, string>
         {
-            ["score"] = "한 라운드 최고 점수", ["combo"] = "최장 콤보 (연속 수확)", ["harvest"] = "한 라운드 최다 수확", ["balls"] = "최대 동시 핀볼 수", ["chain"] = "충격파 최장 연쇄",
+            ["score"] = "한 라운드 최고 점수", ["combo"] = "최장 콤보 (연속 수확)", ["harvest"] = "한 라운드 최다 수확", ["balls"] = "최대 동시 수확기 수", ["chain"] = "충격파 최장 연쇄",
         });
         public static readonly string[] RECORD_KEYS = { "score", "combo", "harvest", "balls", "chain" };
 
