@@ -68,8 +68,9 @@ namespace MoreMush
 
             // 연결 균사 (부모 → 나)
             bool owned = L > 0;
-            Show(link, !n.core);
-            if (!n.core && dirty)
+            bool hasLink = !n.core && n.parent != null;   // 시작 노드는 부모 줄이 없다
+            Show(link, hasLink);
+            if (hasLink && dirty)
             {
                 Vector2 p = parentPos;
                 float mx = (p.x + me.x) / 2 - (me.y - p.y) * bend, my = (p.y + me.y) / 2 + (me.x - p.x) * bend;

@@ -114,31 +114,6 @@ k.button(`${M}/BulkPanel/Go`, "한 번에 강화하기", "bulkgo", { style: "go"
 k.close(`${M}/BulkPanel`);
 await b.send("bulk");
 
-// pre-round
-k.panel(`${M}/PreRoundPanel`, 1560, { gap: 10, comps: { PreRoundPanel: {} } });
-b.go(`${M}/PreRoundPanel/Header`, { RectTransform: {}, HorizontalLayoutGroup: hlay({ gap: 16, cw: true, ch: true }), LayoutElement: le({ h: 54 }) });
-k.text(`${M}/PreRoundPanel/Header/Title`, "수확 준비", 42, INK, { le: {} });
-k.text(`${M}/PreRoundPanel/Header/Stage`, "스테이지 1", 30, "#8a6a4a", { le: {} });
-k.text(`${M}/PreRoundPanel/ThemesHead`, "지역 <size=65%><color=#8a6a4a>(10스테이지마다 새 지역이 열려요 · 지역 전용 버섯은 그 지역에서만 나와요)</color></size>", 26, INK, { align: "MidlineLeft", le: {} });
-b.go(`${M}/PreRoundPanel/Themes`, { RectTransform: {}, HorizontalLayoutGroup: hlay({ gap: 12, cw: true, ch: true, fh: true }), LayoutElement: le({ h: 200 }) });
-for (const id of ["forest", "night", "field", "sea", "ruins"]) {
-  const p = `${M}/PreRoundPanel/Themes/${id}`;
-  b.go(p, { RectTransform: {}, Image: { sprite: PAPER, type: "Sliced", color: col("#fffaf0"), raycastTarget: true }, Outline: outline("#cdb68e", 3), CanvasGroup: {}, Button: {}, UIAction: { act: "pretheme", arg: id }, UIButtonFx: {}, LayoutElement: le({ flex: 1 }), VerticalLayoutGroup: vlay({ gap: 4, pad: { left: 10, right: 10, top: 10, bottom: 10 } }) });
-  k.image(`${p}/Icon`, ART("Icons/t_" + id), { aspect: true, le: { h: 56 } });
-  k.text(`${p}/Name`, id, 20, INK, { le: {} });
-  k.body(`${p}/Desc`, "", 13, "#6a5040", { le: { h: 40 } });
-  k.text(`${p}/Count`, "", 15, INK, { le: {} });
-}
-k.text(`${M}/PreRoundPanel/HvHead`, "활성 수확기 <size=65%><color=#8a6a4a>(핀볼마다 무작위 · 공방에서 켜고 끄기)</color></size>", 26, INK, { align: "MidlineLeft", le: {} });
-k.text(`${M}/PreRoundPanel/Harvesters`, "", 20, INK, { align: "MidlineLeft", le: {} });
-k.text(`${M}/PreRoundPanel/DishesHead`, "준비된 요리 <size=65%><color=#8a6a4a>(이번 라운드에 적용)</color></size>", 26, INK, { align: "MidlineLeft", le: {} });
-k.text(`${M}/PreRoundPanel/Dishes`, "", 20, INK, { align: "MidlineLeft", le: {} });
-k.body(`${M}/PreRoundPanel/WeatherNote`, "날씨는 출발할 때 무작위로 정해져요.", 17, "#6a5040", { align: "Left", le: {} });
-b.go(`${M}/PreRoundPanel/GoRow`, { RectTransform: {}, HorizontalLayoutGroup: hlay({ cw: false, ch: false }), LayoutElement: le({ h: 84 }) });
-k.button(`${M}/PreRoundPanel/GoRow/Go`, "출발! ▶", "startround", { rect: R(0, 0, 300, 76), style: "go", size: 34 });
-k.close(`${M}/PreRoundPanel`);
-await b.send("pre-round");
-
 // codex
 const CX = `${M}/CodexPanel`;
 k.panel(CX, 1780, { gap: 8, pad: { left: 30, right: 30, top: 22, bottom: 22 }, comps: { CodexPanel: {} } });
@@ -216,7 +191,7 @@ await b.send("toast + debug");
 
 // ---------- initial visibility ----------
 // children first: a hidden parent's children can no longer be found by path
-for (const p of ["Canvas/TreeScreen/Tooltip", `${M}/PausePanel`, `${M}/ResetPanel`, `${M}/RecordsPanel`, `${M}/BulkPanel`, `${M}/PreRoundPanel`, `${M}/CodexPanel`,
+for (const p of ["Canvas/TreeScreen/Tooltip", `${M}/PausePanel`, `${M}/ResetPanel`, `${M}/RecordsPanel`, `${M}/BulkPanel`, `${M}/CodexPanel`,
   "Canvas/TreeScreen", "Canvas/RoundUI", "Canvas/SettleScreen", "Canvas/TaxScreen", "Canvas/Modal", "Canvas/DebugPanel", "World/Round", "World/TreeWorld"])
   b.raw("manage_gameobject", { action: "modify", target: p, search_method: "by_path", set_active: false });
 await b.send("visibility");

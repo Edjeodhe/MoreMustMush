@@ -7,6 +7,7 @@ namespace MoreMush
 {
     // Radial mycelium tree layout (prototype layoutTree + relaxTree). Coordinates are tree pixels centered on
     // the grandpa (y down). Used once to place the node objects in the scene; afterwards the scene positions win.
+    // 시작 노드(ROOT_NODE) 하나가 가운데 위에 있고, 그 아래 첫 줄(공격력·타격 점수·바 넓이)부터 가지 방향으로 퍼진다.
     public static class TreeLayout
     {
         public static readonly Dictionary<string, (float a, float span)> BRANCH = new Dictionary<string, (float, float)>
@@ -21,13 +22,16 @@ namespace MoreMush
             return o;
         }
 
+        public static readonly Vector2 ROOT_POS = new Vector2(0, -150);   // 할아버지 머리 위
+
         public static Dictionary<string, (Vector2 pos, int depth)> Compute()
         {
             var kids = new Dictionary<string, List<Node>>();
             foreach (var n in NODES)
             {
-                if (n.core) continue;
-                string p = n.parent != null && !NODE[n.parent].core ? n.parent : "hub_" + n.br;
+                if (n.core || n.parent == null) continue;
+                // 시작 노드의 바로 아래 노드는 자기 가지 방향으로 (가지별 부채꼴)
+                string p = n.parent != ROOT_NODE && !NODE[n.parent].core ? n.parent : "hub_" + n.br;
                 if (!kids.TryGetValue(p, out var l)) kids[p] = l = new List<Node>();
                 l.Add(n);
             }
@@ -58,8 +62,8 @@ namespace MoreMush
             {
                 var B = BRANCH[br];
                 Place("hub_" + br, B.a - B.span / 2, B.a + B.span / 2, 1, br);
-                pos["core_" + br] = hubs[br]; depth["core_" + br] = 0;
             }
+            foreach (var n in NODES) if (n.parent == null && !n.core) { pos[n.id] = ROOT_POS; depth[n.id] = 0; }
             Relax(pos, hubs);
             return pos.ToDictionary(kv => kv.Key, kv => (kv.Value, depth[kv.Key]));
         }
@@ -69,9 +73,8 @@ namespace MoreMush
         // 노드(이름표 포함)끼리 겹치지 않도록 서로 밀어낸다
         static void Relax(Dictionary<string, Vector2> pos, Dictionary<string, Vector2> hubs)
         {
-            var fixedC = new List<(Vector2 p, float r)> { (Vector2.zero, 200) };
-            foreach (var br in CAT_KEYS) fixedC.Add((hubs[br], 110));
-            var L = NODES.Where(n => !n.core).ToList();
+            var fixedC = new List<(Vector2 p, float r)> { (Vector2.zero, 190), (ROOT_POS, 150) };
+            var L = NODES.Where(n => !n.core && n.parent != null).ToList();
             for (int it = 0; it < 600; it++)
             {
                 bool moved = false;

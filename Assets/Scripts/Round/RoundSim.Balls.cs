@@ -260,6 +260,9 @@ namespace MoreMush
             }
         }
 
+        // 임시 핀볼(분신·분열·꼬마)은 스킬을 쓰지 않는다. 공을 거치지 않는 효과(b가 null)는 그대로
+        static bool Skillful(Ball b) => b == null || b.perm;
+
         void WallHit(Ball b, string side)
         {
             // 무손실 반사만으로는 같은 궤도를 반복하므로 ±4° 흔들어 준다
@@ -268,7 +271,7 @@ namespace MoreMush
             Snd.Wall();
             SawBounce(b);
             var sk = st.sk["tornado"];
-            if (sk.on && U.Chance((float)SkP("tornado", b))) SpawnTornado(b, side);
+            if (sk.on && Skillful(b) && U.Chance((float)SkP("tornado", b))) SpawnTornado(b, side);
         }
 
         void SkillFx(string id, float x, float y)
@@ -346,12 +349,12 @@ namespace MoreMush
             if (hv == "spore" && !b.noSplit && U.Chance((float)a["p"])) SporeSplit(b, (int)a["hits"]);
             // 분열로 나온 소형 수확기는 정해진 횟수만큼 부딪히면 사라진다
             if (b.hitsLeft > 0 && --b.hitsLeft == 0) { b.dead = true; for (int i = 0; i < 6; i++) AddPart(b.x, b.y, U.Rand(-60, 60), U.Rand(-60, 60), 0.4f, U.Hex("#dfe8f0"), 3); }
-            if (st.sparkP > 0 && U.Chance((float)st.sparkP)) { ChainBolt(m, b); SkillFx("spark", b.x, b.y); }
+            if (st.sparkP > 0 && Skillful(b) && U.Chance((float)st.sparkP)) { ChainBolt(m, b); SkillFx("spark", b.x, b.y); }
             if (m.spore != null && m.sporeCd <= 0 && U.Chance((float)st.sporeP)) { m.sporeCd = 2; SpawnCloud(m.x, m.y, m.spore); }
             var sk = st.sk;
-            if (sk["burst"].on && U.Chance((float)SkP("burst", b))) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
-            if (sk["magnet"].on && U.Chance((float)SkP("magnet", b))) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
-            if (sk["bolt"].on && U.Chance((float)SkP("bolt", b))) { ChainBolt(m, b); SkillFx("bolt", b.x, b.y); }
+            if (sk["burst"].on && Skillful(b) && U.Chance((float)SkP("burst", b))) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
+            if (sk["magnet"].on && Skillful(b) && U.Chance((float)SkP("magnet", b))) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
+            if (sk["bolt"].on && Skillful(b) && U.Chance((float)SkP("bolt", b))) { ChainBolt(m, b); SkillFx("bolt", b.x, b.y); }
         }
 
         // 분열형: 능력치 50%인 작은 같은 수확기 (다시 분열하지 않음)
@@ -476,8 +479,8 @@ namespace MoreMush
                     queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, dp, wb) });
                 }
             }
-            else if (sk["shock"].on && U.Chance((float)SkP("shock", b))) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
-            if (sk["clone"].on && U.Chance((float)SkP("clone", b))) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
+            else if (sk["shock"].on && Skillful(b) && U.Chance((float)SkP("shock", b))) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
+            if (sk["clone"].on && Skillful(b) && U.Chance((float)SkP("clone", b))) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
         }
 
         void AddScore(double v, float x, float y, int tier, bool crit, bool golden)

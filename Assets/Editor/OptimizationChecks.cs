@@ -53,15 +53,6 @@ namespace MoreMush.EditorTools
                 Check(SceneValidation.Validate(scene).Any(e => e.Contains("unknown action")), "validator detects unknown actions");
             }
             finally { speed.act = "speed"; }
-            var pre = all.OfType<PreRoundPanel>().Single();
-            var cards = pre.themeCards;
-            try
-            {
-                pre.themeCards = null;
-                Check(SceneValidation.Validate(scene).Any(e => e.Contains("themeCards") && e.Contains("needs")),
-                    "validator reports missing slots without throwing");
-            }
-            finally { pre.themeCards = cards; }
             var farm = all.OfType<FarmScreen>().Single();
             var title = farm.title;
             try

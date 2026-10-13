@@ -30,7 +30,7 @@ namespace MoreMush
             desc.text = Iconize(n.d);
             string costTxt = "", noteTxt = "";
             if (s == "locked")
-                eff.text = n.needMax ? Loc.F("선행: {0} 최대 레벨 ({1}/{2})", NODE[n.parent].n, Lv(n.parent), NODE[n.parent].max) : Loc.F("선행: {0}", NODE[n.parent].n);
+                eff.text = n.req != null && Lv(n.req) < NODE[n.req].max ? Loc.F("선행: {0} 최대 레벨 ({1}/{2})", NODE[n.req].n, Lv(n.req), NODE[n.req].max) : Loc.F("선행: {0}", NODE[n.parent].n);
             else
             {
                 eff.text = n.eff(L) + (L < n.max ? $"\n<b>→</b> {n.eff(L + 1)}" : "");

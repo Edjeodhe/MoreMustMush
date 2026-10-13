@@ -77,7 +77,7 @@ namespace MoreMush
                       Loc.T("보스 도전이 꺼졌어요. 이 스테이지에서 파밍하다가 균사 트리의 보스 도전 버튼으로 다시 도전하세요") + "</size>";
             }
             if (IsBossStage(s.stage)) return Loc.F("스테이지 {0} 보스가 기다려요 (보스 도전 꺼짐 · 파밍 중)", s.stage);
-            return null;
+            return s.nextStage > s.stage ? Loc.F("스테이지 {0} 완료 → 스테이지 {1}", s.stage, s.nextStage) : null;
         }
 
         // 줄 수를 다 줄여도 화면을 넘으면(기록·지역 알림이 많을 때 등) 비율을 유지한 채 축소한다.

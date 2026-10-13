@@ -26,7 +26,6 @@ namespace MoreMush
         public float camX, camY, camZ = 0.95f;
         readonly List<TreeNodeView> nodes = new List<TreeNodeView>();
         readonly Dictionary<string, TreeNodeView> byId = new Dictionary<string, TreeNodeView>();
-        Dictionary<string, Vector2> hubs;
         TreeNodeView hover, sel;
         Vector2? dragStart; Vector2 dragCam; bool dragMoved;
         float pressT = -1; bool pressDone;
@@ -36,13 +35,12 @@ namespace MoreMush
         {
             content.GetComponentsInChildren(true, nodes);
             foreach (var n in nodes) byId[n.nodeId] = n;
-            hubs = TreeLayout.Hubs();
         }
 
         public Vector2 W2S(Vector2 p) => new Vector2((p.x - camX) * camZ + 960, (p.y - camY) * camZ + 560);
         public Vector2 S2W(Vector2 s) => new Vector2((s.x - 960) / camZ + camX, (s.y - 560) / camZ + camY);
 
-        Vector2 ParentPos(Node n) => n.parent != null ? byId[n.parent].TreePos : hubs[n.br];
+        Vector2 ParentPos(Node n) => n.parent != null ? byId[n.parent].TreePos : Vector2.zero;   // 시작 노드는 부모 줄을 그리지 않는다
 
         void Update()
         {
@@ -53,28 +51,20 @@ namespace MoreMush
             soil.transform.localPosition = Art.P(960, 540, 1);
             Art.SizePx(soil.transform, soil.sprite, W, H);
 
-            for (int i = 0; i < 3; i++)
+            // 가지 코어(식용·약용·독 균사)가 없어졌다: 가운데에서 허브로 가는 줄기·가지 이름표를 끈다
+            if (!trunksOff)
             {
-                string br = CAT_KEYS[i]; var h = hubs[br];
-                bool lit = false;   // 이 가지에 산 노드가 있나 (프레임마다 LINQ 클로저를 만들지 않게 루프로)
-                foreach (var n in NODES) if (n.br == br && Lv(n.id) > 0) { lit = true; break; }
-                trunks[i].positionCount = 2;
-                trunks[i].SetPosition(0, Vector3.zero); trunks[i].SetPosition(1, Art.P(h.x, h.y));
-                trunks[i].startColor = trunks[i].endColor = lit ? U.Hex("#f2e6c8") : new Color(240 / 255f, 225 / 255f, 195 / 255f, 0.45f);
-                if (hubLang != Loc.Lang) hubText[i] = null;
-                hubText[i] ??= Loc.F("{0} 균사", CATS[br].name);
-                UIUtil.SetText(hubLabels[i], hubText[i]);
-                hubLabels[i].transform.localPosition = Art.P(h.x + (br == "ed" ? 70 : br == "md" ? 58 : -58), h.y + (br == "ed" ? 0 : 34));
+                trunksOff = true;
+                for (int i = 0; i < trunks.Length; i++) { trunks[i].positionCount = 0; trunks[i].enabled = false; }
+                foreach (var l in hubLabels) if (l != null) l.gameObject.SetActive(false);
             }
-            hubLang = Loc.Lang;
             grandpa.transform.localPosition = Art.P(-14, 82 + Mathf.Sin(now * 2) * 2);
 
             HandleInput();
             foreach (var nv in nodes) nv.Draw(ParentPos(nv.Node), now, hover == nv, camZ, dt);
         }
 
-        readonly string[] hubText = new string[3];
-        string hubLang;                         // hubText를 만든 언어 (바뀌면 다시 만든다)
+        bool trunksOff;
 
         TreeNodeView Hit(Vector2 s)
         {

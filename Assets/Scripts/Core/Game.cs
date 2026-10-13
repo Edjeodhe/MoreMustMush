@@ -116,7 +116,7 @@ namespace MoreMush
         static void Pay(Cost c) { G.gold -= c.gold; G.gem -= c.gem; }
 
         // 부모 조건: 보통은 1레벨 이상, 단계 노드(II·III·IV)는 부모가 최대 레벨이어야 한다
-        public static bool ParentOk(Node n) => n.parent == null || Lv(n.parent) >= (n.needMax ? NODE[n.parent].max : 1);
+        public static bool ParentOk(Node n) => (n.parent == null || Lv(n.parent) >= 1) && (n.req == null || Lv(n.req) >= NODE[n.req].max);
 
         public static string NodeState(Node n)
         {
@@ -125,7 +125,7 @@ namespace MoreMush
             if (L > 0) return "owned";
             if (ParentOk(n)) return "avail";
             // 부모를 이미 샀으면(단계 노드가 최대 레벨을 기다리는 중 포함) 잠긴 채로 보여 준다
-            if (Lv(n.parent) > 0) return "locked";
+            if (n.parent == null || Lv(n.parent) > 0) return "locked";
             var pp = NODE[n.parent];
             return ParentOk(pp) ? "locked" : "hidden";
         }
@@ -157,6 +157,7 @@ namespace MoreMush
                 {
                     if (!brs.Contains(n.br) || n.costGem > 0) continue;
                     var s = NodeState(n); if (s != "avail" && s != "owned") continue;
+                    if (!ParentOk(n)) continue;   // 산 노드라도 선행(부모·최대 레벨 선행)이 안 맞으면 더 못 올린다
                     double c = NodeCost(n, Lv(n.id)).gold; if (c < bc) { bc = c; best = n; }
                 }
                 if (best == null || G.gold - bc < reserve) break;
@@ -169,7 +170,7 @@ namespace MoreMush
         // ===== 정산 골드 =====
         // 버섯 판매가 없어진 뒤, 예전 판매가 보너스(노드·코어·별 능력치)는 정산 골드 +%로 쓴다. 보너스끼리는 더한다
         public static double SettleBonus(Dictionary<string, double> ab) =>
-            (NF.ed_price(Lv("ed_price")) - 1) + NF.ed_price2(Lv("ed_price2")) + (NF.ed_trade(Lv("ed_trade")) - 1) + (Lv("core_ed") > 0 ? 0.1 : 0) + ab["price"];
+            (NF.ed_price(Lv("ed_price")) - 1) + NF.ed_price2(Lv("ed_price2")) + (NF.ed_trade(Lv("ed_trade")) - 1) + 0.1 /* 예전 식용 코어 보너스, 코어가 없어져 기본으로 */ + ab["price"];
         // 버섯 한 개의 골드 값어치 (엽전 수확기가 쓴다): 등급 기본가 × (1 + 정산 보너스 + 황금 세트)
         public static double PriceMul(Dictionary<string, double> ab) => 1 + SettleBonus(ab) + GoldenSetBonus();
 
@@ -193,7 +194,7 @@ namespace MoreMush
 
         static SkillInfo SkillInfoOf(string id)
         {
-            int S = Lv(id + "_rate"), P = Lv(id + "_pow");
+            var (S, P) = SkillSP(SKILLS[id], Lv(id));
             return new SkillInfo { on = Lv(id) > 0, S = S, p = SkillRate(S), P = P, pm = SkillPow(P) };
         }
 
@@ -202,7 +203,6 @@ namespace MoreMush
         {
             var st = new RoundStats { wId = wId, weather = WEATHER.TryGetValue(wId, out var w) ? w : WEATHER["clear"], theme = THEME.TryGetValue(themeId, out var th) ? th : THEMES[0], stage = StageNow() };
             var ab = st.ab = StarAbilities();
-            bool Core(string id) => Lv(id) > 0;
             st.hvs = ActiveHvs();
             st.hvStar = st.hvs.Distinct().ToDictionary(id => id, id => G.hv.TryGetValue(id, out var s) ? s : 1);
             // 노드·코어·별 능력치·꼬마 보너스는 더하고, 날씨(라운드마다 바뀌는 조건)만 곱한다
@@ -210,13 +210,13 @@ namespace MoreMush
             st.zoneMul = ZoneMul(st.theme.id, st.stage);
             // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
             double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
-            st.atk = atkFlat * (1 + (Core("core_ps") ? 0.1 : 0) + ab["atk"]) * NF.gm_atk(Lv("gm_atk"));
+            st.atk = atkFlat * (1 + 0.1 + ab["atk"]) * NF.gm_atk(Lv("gm_atk"));
             double spd = (NF.ps_spd(Lv("ps_spd")) + ab["spd"]) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
             st.launch = TUNE.launch * spd;
             st.minSpd = TUNE.min * spd;
             st.ballR = TUNE.ball0 * BALL_SCALE * (NF.ps_size(Lv("ps_size")) + ab["size"]);
-            st.barLen = (150 * (NF.md_bar(Lv("md_bar")) + NF.ps_bar(Lv("ps_bar")) + (Core("core_md") ? 0.1 : 0) + ab["bar"]) + (SetDone("shelf") ? 40 : 0)) * NF.gm_bar(Lv("gm_bar")) * (wId == "cold" ? 0.75 : 1);   // 최대 필드 폭의 1/3 (RoundSim.Start)
+            st.barLen = (150 * (NF.md_bar(Lv("md_bar")) + NF.ps_bar(Lv("ps_bar")) + 0.1 + ab["bar"]) + (SetDone("shelf") ? 40 : 0)) * NF.gm_bar(Lv("gm_bar")) * (wId == "cold" ? 0.75 : 1);   // 최대 필드 폭의 1/3 (RoundSim.Start)
             st.duration = BASE_TIME + StageTime(st.stage) + NF.ps_dur(Lv("ps_dur")) + NF.ps_dur2(Lv("ps_dur2")) + ab["dur"] - (wId == "cold" ? 3 : 0);
             st.crit = NF.ps_crit(Lv("ps_crit")) + (SetDone("coral") ? 0.05 : 0) + ab["crit"];
             st.critMul = NF.ps_crit2(Lv("ps_crit2"));
@@ -257,9 +257,10 @@ namespace MoreMush
             st.specialP = SPECIAL_P + NF.ed_special(Lv("ed_special"));
             st.specialLife = NF.ed_special_life(Lv("ed_special"));
             st.blade = Lv("bl") > 0;
-            st.bladeR = st.ballR + NF.bl_range(Lv("bl_range"));
-            st.bladeInt = NF.bl_spd(Lv("bl_spd"));
-            st.bladeDmg = st.atk * NF.bl_pow(Lv("bl_pow"));
+            var (bRange, bSpd, bPow) = BladeLv(Lv("bl"));
+            st.bladeR = st.ballR + NF.bl_range(bRange);
+            st.bladeInt = NF.bl_spd(bSpd);
+            st.bladeDmg = st.atk * NF.bl_pow(bPow);
             st.kidP = KidRate(Lv("md_kid"));
             st.buffMul = NF.md_buffdur(Lv("md_buffdur"));
             st.tempLife = NF.md_templife(Lv("md_templife"));

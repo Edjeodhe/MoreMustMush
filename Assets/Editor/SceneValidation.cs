@@ -80,12 +80,6 @@ namespace MoreMush.EditorTools
                 }
                 switch (mb)
                 {
-                    case PreRoundPanel p:
-                        Slots(nameof(p.themeCards), p.themeCards, Defs.THEMES.Count); Slots(nameof(p.themeIcons), p.themeIcons, Defs.THEMES.Count);
-                        Slots(nameof(p.themeNames), p.themeNames, Defs.THEMES.Count); Slots(nameof(p.themeDescs), p.themeDescs, Defs.THEMES.Count); Slots(nameof(p.themeCounts), p.themeCounts, Defs.THEMES.Count);
-                        for (int i = 0; i < Math.Min(p.themeCards?.Length ?? 0, Defs.THEMES.Count); i++)
-                            CheckAction(p.themeCards[i], "pretheme", Defs.THEMES[i].id, errors);
-                        break;
                     case BuildPanel p: Slots(nameof(p.cards), p.cards, Defs.BUILDINGS.Length); break;
                     case FarmScreen p: Slots(nameof(p.chipList), p.chipList, Defs.SPECIALS.Length); break;
                     case PetCardPanel p: Slots(nameof(p.hearts), p.hearts, Defs.FARM.hearts); Slots(nameof(p.heartFills), p.heartFills, Defs.FARM.hearts); break;

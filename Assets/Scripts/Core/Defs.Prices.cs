@@ -9,9 +9,6 @@ namespace MoreMush
         public static readonly Dictionary<string, double[]> PRICE_TABLE = new Dictionary<string, double[]>
         {
             // 초반
-            ["core_ed"] = new double[] { 20 },
-            ["core_md"] = new double[] { 20 },
-            ["core_ps"] = new double[] { 20 },
             ["ed_score"] = new double[] { 390, 1500, 5800 },
             ["ed_cols"] = new double[] { 65, 120, 320 },
             ["ed_regen"] = new double[] { 120, 330, 1000 },

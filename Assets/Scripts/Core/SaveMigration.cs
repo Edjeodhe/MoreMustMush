@@ -6,7 +6,7 @@ namespace MoreMush
     // 세이브 버전 올리기. SaveIO.Load가 Sanitize 끝에서 부르며, 한 버전씩 차례로 올린다.
     public static class SaveMigration
     {
-        public const int CURRENT = 4;
+        public const int CURRENT = 5;
 
         // 이번 로드에서 플레이어에게 알릴 문장 (GameFlow가 토스트로 띄우고 비운다)
         public static string Notice;
@@ -28,6 +28,7 @@ namespace MoreMush
         {
             if (g.v < 3) ToV3(g);
             if (g.v < 4) ToV4(g);
+            if (g.v < 5) ToV5(g);
             g.v = Math.Max(g.v, CURRENT);
         }
 
@@ -72,6 +73,26 @@ namespace MoreMush
             if (refund > 0) AddNotice(Loc.F("바뀐 강화 노드에 쓴 골드 {0}을 돌려받았어요", U.Fmt(refund)));
             // 예전엔 숲 장치가 늘 나왔다. 이미 진행한 세이브는 장치 셋을 해금해 준다
             if (g.rounds > 0) foreach (var id in new[] { "dev_stump", "dev_moss", "dev_acorn" }) g.nodes[id] = 1;
+        }
+
+        // v5: 트리 개편. 가지 코어(식용·약용·독 균사)가 없어지고 기운 북돋기가 시작 노드가 됐다.
+        // 스킬의 발동률·위력 하위 노드(2레벨씩)는 스킬 노드 4레벨로 합친다: 새 레벨 = 1 + 하위 노드 레벨 합(최대 4). 회전 칼날도 같은 식
+        // 진행한 세이브는 시작 노드만 1레벨로 준다. 부모가 바뀐 노드는 새 부모를 사야 더 올릴 수 있다 (조상을 공짜로 채우지 않는다)
+        static void ToV5(SaveData g)
+        {
+            int Get(string id) => g.nodes.TryGetValue(id, out var L) ? L : 0;
+            foreach (var s in Defs.SKILL_IDS)
+            {
+                int sub = Get(s + "_rate") + Get(s + "_pow");
+                g.nodes.Remove(s + "_rate"); g.nodes.Remove(s + "_pow");
+                if (Get(s) > 0) g.nodes[s] = Math.Min(Defs.SKILL_MAX, 1 + sub);
+            }
+            int bl = Get("bl_range") + Get("bl_spd") + Get("bl_pow");
+            foreach (var k in new[] { "bl_range", "bl_spd", "bl_pow", "core_ed", "core_md", "core_ps" }) g.nodes.Remove(k);
+            if (Get("bl") > 0) g.nodes["bl"] = Math.Min(Defs.SKILL_MAX, 1 + (bl + 1) / 2);
+            bool any = false; foreach (var kv in g.nodes) if (kv.Value > 0) { any = true; break; }
+            if (any && Get(Defs.ROOT_NODE) <= 0) g.nodes[Defs.ROOT_NODE] = 1;
+            if (g.nodes.Count > 0) AddNotice(Loc.T("균사 트리가 바뀌었어요. 스킬 강화는 스킬 노드의 레벨로 합쳤어요"));
         }
 
         static double Refund(SaveData g, Dictionary<string, double[]> retired)

@@ -134,9 +134,6 @@ namespace MoreMush
             if (!IsFinite(g.legacyDia) || g.legacyDia < 0) g.legacyDia = 0;
 
             // prototype loadSave() migrations that still apply
-            foreach (var br in Defs.CAT_KEYS)
-                foreach (var n in Defs.NODES)
-                    if (n.br == br && !n.core && g.nodes.ContainsKey(n.id) && g.nodes[n.id] > 0) { g.nodes["core_" + br] = 1; break; }
             foreach (var id in g.hv.Keys) if (!g.hvOn.ContainsKey(id)) g.hvOn[id] = true;
             foreach (var n in Defs.NODES) if (g.nodes.TryGetValue(n.id, out var L) && (L > n.max || L < 0)) g.nodes[n.id] = Math.Max(0, Math.Min(n.max, L));
             foreach (var id in new List<string>(g.hv.Keys)) g.hv[id] = Math.Max(1, Math.Min(5, g.hv[id]));

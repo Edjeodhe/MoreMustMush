@@ -50,9 +50,11 @@ namespace MoreMush
         {
             // 단계 노드: 고정값 더하기 (I +1 · II +10 · III +100 · IV +1000)
             public static double ps_atk(int L) => 1 * L;
-            public static double ps_atk2(int L) => 10 * L;
-            public static double ps_atk3(int L) => 100 * L;
-            public static double ps_atk4(int L) => 1000 * L;
+            // 공격력 II 이상은 증가량 25% 너프 (사용자 지시 2026-10-13: II부터 너무 강함)
+            public const double ATK_HI_K = 0.75;
+            public static double ps_atk2(int L) => 10 * ATK_HI_K * L;
+            public static double ps_atk3(int L) => 100 * ATK_HI_K * L;
+            public static double ps_atk4(int L) => 1000 * ATK_HI_K * L;
             public static double ed_score(int L) => 1 * L;      // 타격 점수 +
             public static double ed_score2(int L) => 10 * L;
             public static double ed_score3(int L) => 100 * L;
@@ -66,8 +68,8 @@ namespace MoreMush
             public static double ed_bonus1p(int L) => 1 * L;
             public static double ed_bonus2p(int L) => 10 * L;
             public static double ed_bonus3p(int L) => 100 * L;
-            public static double ps_atk2p(int L) => 10 * L;
-            public static double ps_atk3p(int L) => 100 * L;
+            public static double ps_atk2p(int L) => 10 * ATK_HI_K * L;
+            public static double ps_atk3p(int L) => 100 * ATK_HI_K * L;
             public static double ed_price(int L) => 1 + 0.3 * L;
             public static double ed_price2(int L) => 0.5 * L;   // 정산 골드 +50%씩 (I에 더함)
             public static int ed_cols2(int L) => 4 * L;         // 군락지 수 +4씩
@@ -136,7 +138,8 @@ namespace MoreMush
             public string subLabel => nTpl != null ? Loc.F(nTpl, "").Trim() : n.Substring(n.LastIndexOf(' ') + 1);
             public string d { get => dFn != null ? dFn() : Loc.T(dKo); set => dKo = value; }
             public bool core, sub, gem;
-            public bool needMax;   // 부모 노드를 최대 레벨까지 올려야 열린다 (단계 노드 I → II → III)
+            public string req;      // 이 노드를 최대 레벨까지 올려야 열린다 (단계 노드 I → II → III). 부모와 다를 수 있다(공격력 I → 공속 → 공격력 II)
+            public bool needMax => req != null;
             public int tier = 1;   // 성장 단계: 1 초반 · 2 중반 · 3 후반
             public int max;
             public double costGold, costGem, g;   // costGold·g: 가격표가 없을 때의 기본가와 사는 순서 기준
@@ -148,9 +151,9 @@ namespace MoreMush
         public static readonly Dictionary<string, Node> NODE = new Dictionary<string, Node>();
         public static readonly string[] TIER_NAMES = { "", "초반", "중반", "후반" };
 
-        static Node N(string id, string br, string parent, string n, int max, double gold, double g, Func<int, string> eff, double gem = 0, bool core = false, bool sub = false, string skill = null, string icon = null, string col = null, int tier = 1, bool needMax = false)
+        static Node N(string id, string br, string parent, string n, int max, double gold, double g, Func<int, string> eff, double gem = 0, bool core = false, bool sub = false, string skill = null, string icon = null, string col = null, int tier = 1, bool needMax = false, string req = null)
         {
-            var node = new Node { id = id, br = br, parent = parent, nKo = n, max = max, costGold = gold, costGem = gem, g = g, eff = eff, core = core, sub = sub, skill = skill, icon = icon, col = col, gem = gem > 0, tier = tier, needMax = needMax };
+            var node = new Node { id = id, br = br, parent = parent, nKo = n, max = max, costGold = gold, costGem = gem, g = g, eff = eff, core = core, sub = sub, skill = skill, icon = icon, col = col, gem = gem > 0, tier = tier, req = req ?? (needMax ? parent : null) };
             NODES.Add(node);
             return node;
         }
@@ -164,14 +167,50 @@ namespace MoreMush
             ["magnet"] = "burst", ["clone"] = "burst", ["split"] = "sharpen", ["clear"] = "sharpen",
             ["bolt"] = "magnet", ["shock"] = "clone", ["tornado"] = "split", ["fest"] = "shock", ["pierce"] = "accel",
             // 전투 기획서 Ver05 · 슬라이드 바 기능: 버프(공격력·스킬 발동률), 유도, 분신 바
-            ["power"] = "md_bar", ["homing"] = "pierce", ["barclone"] = "split",
+            ["power"] = null, ["homing"] = "pierce", ["barclone"] = "split",   // 기운 북돋기 = 트리의 시작 노드
         };
+        public const string ROOT_NODE = "power";
+        public const int SKILL_MAX = 4;
+        const double ROOT_PRICE = 20;   // 시작 노드 1레벨 (예전 코어 노드 값)
+
+        // 스킬 노드 레벨별 가격: 예전 가격표(해금 · 발동률 · 위력 노드)를 이어 붙인다. 표에 없으면 기본가 × 2^레벨
+        static double[] SkillCosts(Node n)
+        {
+            double[] T(string k) => PRICE_TABLE.TryGetValue(k, out var v) ? v : null;
+            var u = T(n.id); double b0 = u != null ? u[0] : n.costGold;
+            if (n.id == ROOT_NODE) return new[] { ROOT_PRICE, 240, 720, 2160 };
+            if (n.id == "bl")
+            {
+                double[] r = T("bl_range"), sp = T("bl_spd"), pw = T("bl_pow");
+                if (r != null && sp != null && pw != null) { double l2 = r[0] + sp[0]; return new[] { b0, l2, Math.Max(pw[0], l2), r[1] + sp[1] + pw[1] }; }
+            }
+            else if (SKILLS[n.skill].noRate)
+            {
+                var p = T(n.id + "_pow");
+                if (p != null) return new[] { b0, p[0], p[1], p[1] * 3 };
+            }
+            else
+            {
+                double[] a = T(n.id + "_rate"), b = T(n.id + "_pow");
+                if (a != null && b != null) return new[] { b0, a[0], b[0], a[1] + b[1] };
+            }
+            // 표에 없으면 예전 하위 노드 기본가(해금가 ×2, 레벨당 ×3)에 맞춘다
+            return new[] { b0, b0 * 2, b0 * 2, b0 * 12 };
+        }
+
+        // 스킬 노드 레벨 → 발동률 단계(S)·위력 단계(P). 1레벨 = 해금(기본), 2 발동률, 3 위력, 4 둘 다 (예전 발동률·위력 노드 2레벨씩과 같은 최대치)
+        // 발동률이 없는 스킬은 2~4레벨이 모두 위력 (4레벨 위력 3단계: 예전 위력 노드 최대 2단계보다 한 단계 더)
+        public static (int S, int P) SkillSP(Skill s, int L)
+        {
+            if (L <= 1) return (0, 0);
+            if (s.noRate) return (0, L - 1);
+            return (L >= 4 ? 2 : 1, L >= 4 ? 2 : L >= 3 ? 1 : 0);
+        }
+        // 회전 칼날 레벨 → 범위·속도·위력 단계. 2 범위+속도, 3 위력, 4 모두 2단계
+        public static (int range, int spd, int pow) BladeLv(int L) => L <= 1 ? (0, 0, 0) : L == 2 ? (1, 1, 0) : L == 3 ? (1, 1, 1) : (2, 2, 2);
 
         static readonly Dictionary<string, string> NODE_DESC = new Dictionary<string, string>
         {
-            ["core_ed"] = "💰 돈·수확 쪽 강화 가지예요. 점수, 정산 골드, 군락지 수·재생, 수확량, 황금 변종, 거대·특수 버섯 등장을 올릴 수 있어요.",
-            ["core_md"] = "🎯 바·스킬·시간·필드 쪽 강화 가지예요. 필드 넓히기, 바 넓이, 콤보, 꼬마 수확기, 스킬 15종(가속·포자 폭발·충격파…), 버프 지속, 요리 효과를 올릴 수 있어요.",
-            ["core_ps"] = "⚔️ 전투 쪽 강화 가지예요. 공격력, 수확기 크기·속도, 제한시간, 치명타, 핀볼 수, 회전 칼날, 단단한 버섯 피해, 포자 저항을 올릴 수 있어요.",
             ["ed_score"] = "버섯을 칠 때마다 얻는 점수에 고정값을 더해요. 점수는 라운드가 끝나면 골드로 바뀌어요. 끝까지 올리면 타격 점수 I+가 열려요.",
             ["ed_score1p"] = "타격 점수를 1 단위로 한 번 더 더해요. 끝까지 올리면 타격 점수 II가 열려요.",
             ["ed_score2"] = "타격 점수를 10 단위로 더해요. 끝까지 올리면 타격 점수 II+가 열려요.",
@@ -242,9 +281,6 @@ namespace MoreMush
             ["ps_crit"] = "버섯을 칠 때 치명타가 날 확률이에요. 치명타는 피해와 점수가 ×3이에요(치명타 피해 노드로 더 커져요).",
             ["ps_ball"] = "라운드를 시작할 때 함께 발사하는 영구 핀볼을 하나 늘려요. 바 버프는 영구 핀볼만 받아요. 공격력 II·III 아래에서 더 늘릴 수 있어요.",
             ["bl"] = "수확기 둘레에 회전 칼날이 생겨서, 범위 안의 버섯에 주기적으로 피해를 줘요.",
-            ["bl_pow"] = "회전 칼날이 한 번 벨 때 주는 피해예요.",
-            ["bl_range"] = "회전 칼날이 닿는 범위(수확기 둘레 반지름)예요.",
-            ["bl_spd"] = "회전 칼날이 베는 간격이에요. 짧을수록 자주 베요.",
             ["accel"] = "영구 핀볼이 바에 맞을 때 확률로 3초 동안 빨라져요.",
             ["sharpen"] = "영구 핀볼이 바에 맞을 때 확률로 다음 3번의 타격 피해가 커져요.",
             ["split"] = "영구 핀볼이 바에 맞을 때 확률로 임시 핀볼이 갈라져 나와요.",
@@ -315,16 +351,12 @@ namespace MoreMush
                 ["split"] = 3, ["clone"] = 3, ["shock"] = 3, ["bolt"] = 3, ["tornado"] = 3, ["fest"] = 3,
             };
 
-            // 핵심 코어 (1레벨 고정)
-            N("core_ed", "ed", null, "식용 균사", 1, 10, 1, L => L > 0 ? Loc.T("열림 · 정산 골드 +10%") : Loc.T("사면 식용 가지가 열리고 정산 골드 +10%"), core: true);
-            N("core_md", "md", null, "약용 균사", 1, 10, 1, L => L > 0 ? Loc.T("열림 · 바 길이 +10%") : Loc.T("사면 약용 가지가 열리고 바 길이 +10%"), core: true);
-            N("core_ps", "ps", null, "독 균사", 1, 10, 1, L => L > 0 ? Loc.T("열림 · 공격력 +10%") : Loc.T("사면 독 가지가 열리고 공격력 +10%"), core: true);
             // 퍼센트 효과는 "기본 대비 +%"로 보여 준다 (다른 보너스와도 더해진다)
             string Plus(double mul) => $"+{U.JsRound((mul - 1) * 100)}%";
             string Num(double v) => U.Fmt(v);
             // ── 식용 (돈·수확) ──
             // 초반
-            N("ed_score", "ed", "core_ed", "타격 점수 I", 3, 15, 2.2, L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score(L))));
+            N("ed_score", "ed", ROOT_NODE, "타격 점수 I", 3, 15, 2.2, L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score(L))));
             N("ed_cols", "ed", "ed_score", "군락지 수", 3, 30, 2.2, L => Loc.F("최대 {0}개", ColCount(L)));
             N("ed_regen", "ed", "ed_score", "군락 재생 속도", 3, 50, 2.2, L => Loc.F("사라진 군락지가 {0}초 뒤 다시 돋아남", F(NF.ed_regen(L))));
             N("ed_price", "ed", "ed_score", "정산 보너스", 3, 60, 2.2, L => Loc.F("정산 골드 {0}", Plus(NF.ed_price(L))));
@@ -351,8 +383,8 @@ namespace MoreMush
             N("ed_special", "ed", "ed_gold", "꼬마 손님", 2, 10000000, 2.2, L => Loc.F("특수 버섯 등장 {0} · 잡을 시간 {1}초", U.Pct(SPECIAL_P + NF.ed_special(L)), NF.ed_special_life(L)), tier: 3);
             N("ed_multi", "ed", "ed_bonus", "배수 획득", 2, 5000000, 2.2, L => L > 0 ? Loc.F("수확할 때 {0} 확률로 버섯 ×3", U.Pct(MultiRate(L))) : Loc.T("없음"), tier: 3);
             // ── 약용 (바·스킬·필드) ──
-            N("md_map", "md", "core_md", "필드 넓히기", 4, 40, 2.2, L => Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / MAP_ZOOM[L]), U.JsRound(H / MAP_ZOOM[L]), F(MAP_ZOOM[L])));
-            N("md_bar", "md", "core_md", "바 넓이", 3, 15, 2.2, L => $"{U.JsRound(150 * NF.md_bar(L))}px");
+            N("md_map", "md", "md_bar", "필드 넓히기", 4, 40, 2.2, L => Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / MAP_ZOOM[L]), U.JsRound(H / MAP_ZOOM[L]), F(MAP_ZOOM[L])));
+            N("md_bar", "md", ROOT_NODE, "바 넓이", 3, 15, 2.2, L => $"{U.JsRound(150 * NF.md_bar(L))}px");
             N("md_combo", "md", "md_bar", "콤보 계수", 3, 60, 2.2, L => Loc.F("콤보당 +{0}배", F(NF.md_combo(L), 3)));
             // 숲 장치: 바 넓이 바로 다음에 골드로 해금. 해금하면 라운드마다 반드시 1개씩 놓인다
             N("dev_stump", "md", "md_bar", "그루터기", 1, 200, 1, L => L > 0 ? Loc.F("라운드마다 1개 · 부딪히면 {0}초 공격력 ×{1}", STUMP_ATK_DUR, STUMP_ATK_MUL) : Loc.T("해금하면 라운드마다 놓여요"), icon: "s_device");
@@ -366,29 +398,38 @@ namespace MoreMush
             foreach (var id in SKILL_IDS)
             {
                 var s = SKILLS[id]; int tr = SKILL_TIER[id];
-                N(id, "md", SKILL_TREE[id], s.nKo, 1, s.costGold, 1,
-                    L => L > 0 ? Loc.F("사용 중 · {0}{1}", (s.noRate ? "" : Loc.T("발동률 10% · ")), s.eff(0)) : Loc.F("해금하면 {0}사용 시작", (s.noRate ? "" : Loc.T("발동률 10%로 "))), skill: id, icon: s.icon, col: s.col, tier: tr);
-                if (!s.noRate) NameWith(N(id + "_rate", "md", id, s.nKo + " 발동률", 2, s.costGold * 2, 3, L => Loc.F("발동률 {0}", U.Pct(SkillRate(L))), sub: true, tier: tr), "{0} 발동률", s.nKo);
-                if (!s.noPow) NameWith(N(id + "_pow", "md", id, s.nKo + " 위력", 2, s.costGold * 2, 3, L => s.eff(L), sub: true, tier: tr), "{0} 위력", s.nKo);
+                // 스킬 하나 = 노드 하나 (4레벨). 1레벨 해금, 2~4레벨에 발동률·위력이 번갈아 오른다 (SkillSP)
+                N(id, "md", SKILL_TREE[id], s.nKo, SKILL_MAX, s.costGold, 2, L =>
+                {
+                    if (L == 0) return Loc.F("해금하면 {0}사용 시작", s.noRate ? "" : Loc.T("발동률 10%로 "));
+                    var (S, P) = SkillSP(s, L);
+                    return (s.noRate ? "" : Loc.F("발동률 {0} · ", U.Pct(SkillRate(S)))) + s.eff(P);
+                }, skill: id, icon: s.icon, col: s.col, tier: tr);
             }
-            N("md_fixbar", "md", "power", "설치형 바", 3, 8000, 3.5, L => Loc.F("필드에 작은 바 {0}개가 고정으로 놓여요 (군락은 통과)", L), tier: 2);
+            N("md_fixbar", "md", "md_bar", "설치형 바", 3, 8000, 3.5, L => Loc.F("필드에 작은 바 {0}개가 고정으로 놓여요 (군락은 통과)", L), tier: 2);
             N("md_buffdur", "md", "accel", "버프 지속", 2, 30000, 2.2, L => Loc.F("가속·맑은 포자막 지속 {0}, 날 갈기 {1}타", Plus(NF.md_buffdur(L)), Math.Ceiling(3 * NF.md_buffdur(L))), tier: 2);
             // ── 독 (전투) ──
             // 초반
-            N("ps_atk", "ps", "core_ps", "공격력 I", 4, 15, 2.2, L => Loc.F("공격력 +{0}", Num(NF.ps_atk(L))));
+            N("ps_atk", "ps", ROOT_NODE, "공격력 I", 4, 15, 2.2, L => Loc.F("공격력 +{0}", Num(NF.ps_atk(L))));
             N("ps_size", "ps", "ps_atk", "수확기 크기", 3, 40, 2.2, L => Loc.F("반지름 {0}", F(TUNE.ball0 * BALL_SCALE * NF.ps_size(L), 1)));
             N("ps_spd", "ps", "ps_atk", "공속", 3, 50, 2.2, L => Loc.F("이동 속도 {0}", Plus(NF.ps_spd(L))));
             N("ps_dur", "ps", "ps_atk", "지속시간", 3, 80, 2.2, L => Loc.F("라운드 시간 +{0}초", NF.ps_dur(L)));
             N("ps_ball", "ps", "ps_atk", "핀볼 +1", 1, 500, 1, L => Loc.F("영구 핀볼 +{0}개", L));
             // 중반
-            N("ps_atk2", "ps", "ps_atk", "공격력 II", 4, 2000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk2(L))), tier: 2, needMax: true);
+            N("ps_atk2", "ps", "ps_spd", "공격력 II", 4, 2000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk2(L))), tier: 2, req: "ps_atk");
             N("ps_ball2", "ps", "ps_atk2", "핀볼 +1 (II)", 1, 50000, 1, L => Loc.F("영구 핀볼 +{0}개", L), tier: 2);
-            N("ps_atk2p", "ps", "ps_atk2", "공격력 II+", 3, 60000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk2p(L))), tier: 2, needMax: true);
+            N("ps_atk2p", "ps", "ps_resist", "공격력 II+", 3, 60000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk2p(L))), tier: 2, req: "ps_atk2");
             N("ps_dur2", "ps", "ps_dur", "지속시간 II", 2, 15000, 3, L => Loc.F("라운드 시간 +{0}초 더", NF.ps_dur2(L)), tier: 2, needMax: true);
             N("ps_crit", "ps", "ps_size", "치명타", 3, 6000, 2.2, L => L > 0 ? Loc.F("{0} (피해·점수 ×3)", U.Pct(NF.ps_crit(L))) : "0%", tier: 2);
-            N("ps_resist", "ps", "ps_spd", "포자 저항", 2, 10000, 2.2, L => Loc.F("느림·약화 디버프 지속 -{0}%", U.JsRound((1 - NF.ps_resist(L)) * 100)), tier: 2);
+            N("ps_resist", "ps", "ps_atk2", "포자 저항", 2, 10000, 2.2, L => Loc.F("느림·약화 디버프 지속 -{0}%", U.JsRound((1 - NF.ps_resist(L)) * 100)), tier: 2);
             N("ps_rush", "ps", "ps_dur", "선제 공격", 2, 25000, 2.2, L => Loc.F("라운드 시작 후 3초 동안 공격력 ×{0}", F(NF.ps_rush(L))), tier: 2);
-            N("bl", "ps", "ps_size", "회전 칼날", 1, 60000, 1, L => L > 0 ? Loc.T("사용 중 · 범위 안 버섯에 주기적 피해") : Loc.T("해금하면 칼날 사용 시작"), icon: "s_blade", col: "#e6e6f0", tier: 2);
+            // 회전 칼날도 스킬처럼 노드 하나 (4레벨): 2 범위·속도, 3 위력, 4 모두 한 단계 더 (BladeLv)
+            N("bl", "ps", "ps_size", "회전 칼날", SKILL_MAX, 60000, 2, L =>
+            {
+                if (L == 0) return Loc.T("해금하면 칼날 사용 시작");
+                var (rg, sp, pw) = BladeLv(L);
+                return Loc.F("반지름 +{0}px · {1}초마다 · 피해 공격력×{2}", U.JsRound(NF.bl_range(rg)), F(NF.bl_spd(sp)), F(NF.bl_pow(pw)));
+            }, icon: "s_blade", col: "#e6e6f0", tier: 2);
             // 슬라이드 바 수치 강화 (보라 가지). 가격은 가안
             N("ps_bar", "ps", "ps_size", "바 넓이 II", 3, 5000, 2.5, L => Loc.F("바 길이 +{0}px (필드 폭 1/3까지)", U.JsRound(150 * NF.ps_bar(L))), tier: 2);
             N("ps_barspd", "ps", "ps_spd", "바 반사 속도", 3, 8000, 2.5, L => Loc.F("바에 튕길 때 속도 {0}", Plus(NF.ps_barspd(L))), tier: 2);
@@ -396,15 +437,12 @@ namespace MoreMush
             N("ps_barrate", "ps", "ps_bardur", "바 스킬 발동률", 3, 400000, 2.5, L => Loc.F("바 스킬 발동률 +{0}%p", U.JsRound(NF.ps_barrate(L) * 100)), tier: 3);
             N("ps_power", "ps", "ps_barrate", "북돋기 강화", 3, 2000000, 2.5, L => Loc.F("기운 북돋기 공격력 +{0}%p · 발동률 +{1}%p", U.JsRound(NF.ps_power(L) * 100), U.JsRound(NF.ps_power(L) * 100 * POWER_SKILL / POWER_ATK)), tier: 3);
             // 후반
-            N("ps_atk3", "ps", "ps_atk2p", "공격력 III", 4, 1000000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk3(L))), tier: 3, needMax: true);
-            N("ps_atk3p", "ps", "ps_atk3", "공격력 III+", 3, 20000000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk3p(L))), tier: 3, needMax: true);
-            N("ps_atk4", "ps", "ps_atk3p", "공격력 IV", 3, 200000000, 3, L => Loc.F("공격력 +{0}", Num(NF.ps_atk4(L))), tier: 3, needMax: true);
+            N("ps_atk3", "ps", "ps_heavy", "공격력 III", 4, 1000000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk3(L))), tier: 3, req: "ps_atk2p");
+            N("ps_atk3p", "ps", "ps_crit2", "공격력 III+", 3, 20000000, 2.5, L => Loc.F("공격력 +{0}", Num(NF.ps_atk3p(L))), tier: 3, req: "ps_atk3");
+            N("ps_atk4", "ps", "ps_power", "공격력 IV", 3, 200000000, 3, L => Loc.F("공격력 +{0}", Num(NF.ps_atk4(L))), tier: 3, req: "ps_atk3p");
             N("ps_ball3", "ps", "ps_atk3", "핀볼 +2 (III)", 2, 50000000, 5, L => Loc.F("영구 핀볼 +{0}개", L), tier: 3);
-            N("ps_crit2", "ps", "ps_crit", "치명타 피해", 2, 20000000, 3, L => Loc.F("치명타 피해·점수 ×{0}", NF.ps_crit2(L)), tier: 3, needMax: true);
-            N("ps_heavy", "ps", "ps_crit", "무더기 파쇄", 2, 4000000, 2.2, L => Loc.F("군락 무더기·거대 버섯 피해 ×{0}", F(NF.ps_heavy(L))), tier: 3);
-            N("bl_pow", "ps", "bl", "칼날 위력", 2, 3000000, 3, L => Loc.F("피해 공격력×{0}", F(NF.bl_pow(L))), sub: true, tier: 3);
-            N("bl_range", "ps", "bl", "칼날 범위", 2, 2000000, 3, L => Loc.F("수확기 반지름 + {0}px", U.JsRound(NF.bl_range(L))), sub: true, tier: 3);
-            N("bl_spd", "ps", "bl", "칼날 속도", 2, 2500000, 3, L => Loc.F("공격 간격 {0}초", F(NF.bl_spd(L))), sub: true, tier: 3);
+            N("ps_crit2", "ps", "ps_atk3", "치명타 피해", 2, 20000000, 3, L => Loc.F("치명타 피해·점수 ×{0}", NF.ps_crit2(L)), tier: 3, req: "ps_crit");
+            N("ps_heavy", "ps", "ps_atk2p", "무더기 파쇄", 2, 4000000, 2.2, L => Loc.F("군락 무더기·거대 버섯 피해 ×{0}", F(NF.ps_heavy(L))), tier: 3);
             // 균사석 노드 (후반): 여기서부터 곱셈 효과가 들어온다
             N("gm_harvest", "ed", "ed_bonus", "균사 공명", 3, 3000, 2, L => Loc.F("모든 버섯 획득량 ×{0}", F(NF.gm_harvest(L))), gem: 10, tier: 3);
             N("gm_spore", "ed", "ed_multi", "균사 감응", 3, 2000, 2, L => Loc.F("세계수 버섯을 딸 때 {0} 확률로 균사석 +2", U.Pct(NF.gm_spore(L))), gem: 8, tier: 3);
@@ -428,11 +466,15 @@ namespace MoreMush
 
             foreach (var n in NODES)
             {
-                var parentSkill = SKILLS.TryGetValue(n.parent ?? "", out var ps) ? ps : null;
-                if (n.id.EndsWith("_rate")) n.dFn = () => Loc.F("{0} 발동할 확률을 높여요.", U.Iga(parentSkill.n));
-                else if (n.id.EndsWith("_pow") && parentSkill != null) n.dFn = () => Loc.F("{0}의 효과(피해·범위·개수·시간)를 키워요.", parentSkill.n);
-                else n.d = NODE_DESC[n.id];
-                if (PRICE_TABLE.TryGetValue(n.id, out var pc) && pc.Length == n.max) n.costs = pc;
+                n.d = NODE_DESC[n.id];
+                if (n.skill != null || n.id == "bl")
+                {
+                    string dKo = n.dKo; int kind = n.id == "bl" ? 0 : SKILLS[n.skill].noRate ? 1 : 2;
+                    n.dFn = () => Loc.T(dKo) + "\n<size=85%><color=#8a6a4a>"
+                        + (kind == 0 ? Loc.T("2레벨 범위·속도 · 3레벨 위력 · 4레벨 모두 한 단계 더") : kind == 1 ? Loc.T("2~4레벨 위력") : Loc.T("2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력")) + "</color></size>";
+                    n.costs = SkillCosts(n);
+                }
+                else if (PRICE_TABLE.TryGetValue(n.id, out var pc) && pc.Length == n.max) n.costs = pc;
                 NODE[n.id] = n;
             }
 
