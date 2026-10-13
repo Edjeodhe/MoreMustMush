@@ -34,7 +34,7 @@ namespace MoreMush
         Pool<ShroomView> shrooms; Pool<BallView> balls; Pool<DeviceView> devices; Pool<CloudView> clouds;
         Pool<SpriteRenderer> parts, flyers; Pool<LineRenderer> lines;
         Pool<LineRenderer> aimLines;
-        Pool<SpriteRenderer> extraBars;         // 설치형·분신 바 (씬의 바를 템플릿으로 복제)            // 조준 화살표 전용 (화살촉의 뾰족한 굵기 곡선이 공용 선 풀에 남지 않게)
+        Pool<SpriteRenderer> extraBars;         // 분신 바 (씬의 바를 템플릿으로 복제)            // 조준 화살표 전용 (화살촉의 뾰족한 굵기 곡선이 공용 선 풀에 남지 않게)
         string bgTheme;
 
         static readonly AnimationCurve Taper = AnimationCurve.Linear(0, 1, 1, 0);
@@ -230,13 +230,13 @@ namespace MoreMush
             }
             else bar.color = Color.white;
             Art.SetFx(bar, 0, 0, R.barFx > 0 ? 0.6f : 0);
-            // 설치형 바는 군락 아래에, 분신 바는 반투명 하늘색
+            // 분신 바: 반투명 하늘색
             for (int i = 0; i < R.extraBars.Count; i++)
             {
                 var s = R.extraBars[i]; var sr = extraBars.Get(i);
                 sr.transform.localPosition = Art.P(s.x, s.y);
                 sr.size = new Vector2(s.len / Art.PPU, (BAR_T + 10) / Art.PPU);
-                sr.sortingOrder = s.fixedBar ? 900 : bar.sortingOrder;
+                sr.sortingOrder = bar.sortingOrder;
                 float blink = s.clone && s.life < 1 ? 0.4f + 0.4f * Mathf.Abs(Mathf.Sin(now * 12)) : 0.8f;
                 sr.color = s.clone ? new Color(0.65f, 0.85f, 1, blink) : new Color(0.9f, 0.8f, 0.65f, 1);
                 Art.SetFx(sr);

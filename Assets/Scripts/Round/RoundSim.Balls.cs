@@ -158,7 +158,7 @@ namespace MoreMush
             else if (b.x + b.r > FX1) { b.x = FX1 - b.r; b.dx = -Mathf.Abs(b.dx); FixDir(b); WallHit(b, "r"); }
             if (b.y - b.r < FY0) { b.y = FY0 + b.r; b.dy = Mathf.Abs(b.dy); FixDir(b); WallHit(b, "t"); }
             else if (b.y + b.r > FY1) { b.y = FY1 - b.r; b.dy = -Mathf.Abs(b.dy); FixDir(b); b.combo = 0; WallHit(b, "b"); }
-            // 슬라이드 바·설치형 바·분신 바 (RoundSim.Bar)
+            // 슬라이드 바·분신 바 (RoundSim.Bar)
             BarCollide(b, py);
             // 버섯
             bool inJ = false; List<Shroom> jl = null;

@@ -14,7 +14,7 @@ namespace MoreMush
         public Dictionary<string, double> ab;
         public List<string> hvs; public Dictionary<string, int> hvStar;
         public double atk, spdMul, launch, minSpd, ballR, barLen, duration, crit, comboK, scoreMul;
-        public int maxCol, colMax, permBalls, fixBars;
+        public int maxCol, colMax, permBalls;
         public List<string> devTypes;   // 해금한 숲 장치 (라운드마다 하나씩)
         public double regen, rareMul, stageMul, harvestMul, multiP, priceMul, sparkP, zoom, golden;
         public bool fire, blade;
@@ -239,7 +239,6 @@ namespace MoreMush
             st.maxCol = Math.Max(4, (int)U.JsRound(st.maxCol * area));
             st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"]) * (wId == "moon" ? 3 : 1);
             st.devTypes = DEVICE_TYPES.Where(d => Lv("dev_" + d) > 0).ToList();
-            st.fixBars = Lv("md_fixbar");
             st.permBalls = st.hvs.Count;
             st.comboWin = COMBO_WINDOW;
             st.meteor = Lv("gm_meteor") > 0 ? NF.gm_meteor(Lv("gm_meteor")) : (NF.Meteor?)null;

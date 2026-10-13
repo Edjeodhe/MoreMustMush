@@ -4,32 +4,14 @@ using static MoreMush.Defs;
 
 namespace MoreMush
 {
-    // 슬라이드 바 (전투 기획서 Ver05 · 01. 슬라이드 바). 바·설치형 바·분신 바는 같은 규칙을 따른다:
+    // 슬라이드 바 (전투 기획서 Ver05 · 01. 슬라이드 바). 바·분신 바는 같은 규칙을 따른다 (설치형 바는 2026-10-13 삭제: 숲 장치 기획에 없는 설치물):
     // 위에서 내려오는 수확기만 위로 튕기고(가운데 90°, 왼끝 150°, 오른끝 30°, 사이는 선형), 아래에서 올라오면 통과하되 바 버프는 준다.
-    public class BarSeg { public float x, y, len, life; public bool fixedBar, clone; }
+    public class BarSeg { public float x, y, len, life; public bool clone; }
 
     public partial class RoundSim
     {
-        public readonly List<BarSeg> extraBars = new List<BarSeg>();   // 설치형(고정) + 분신 바
+        public readonly List<BarSeg> extraBars = new List<BarSeg>();   // 분신 바
         public const float BAR_MAX_ANGLE = 60;   // 바 끝에서 수직으로부터 기우는 각도
-
-        // 설치형 바: 필드 안쪽 아래 절반에 겹치지 않게 놓는다 (군락은 통과하므로 군락 자리는 보지 않는다)
-        void PlaceFixBars(int n)
-        {
-            for (int i = 0; i < n; i++)
-            {
-                for (int a = 0; a < 40; a++)
-                {
-                    float x = U.Rand(FX0 + FIX_BAR_LEN, FX1 - FIX_BAR_LEN), y = U.Rand(NO_SPAWN_Y * 0.5f, NO_SPAWN_Y - 30);
-                    bool clash = false;
-                    foreach (var o in extraBars) if (Mathf.Abs(o.x - x) < FIX_BAR_LEN * 1.5f && Mathf.Abs(o.y - y) < 80) { clash = true; break; }
-                    if (Mathf.Abs(LAUNCH.x - x) < FIX_BAR_LEN && Mathf.Abs(LAUNCH.y - y) < 120) clash = true;
-                    if (clash) continue;
-                    extraBars.Add(new BarSeg { x = x, y = y, len = FIX_BAR_LEN, life = -1, fixedBar = true });
-                    break;
-                }
-            }
-        }
 
         // 분신 바: 필드 가운데·왼쪽·오른쪽 중 본 바에서 가장 먼 빈자리
         void SpawnCloneBar(int P)

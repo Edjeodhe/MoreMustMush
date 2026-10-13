@@ -115,6 +115,7 @@ namespace MoreMush
                 bossSplits++;
                 var p = PhantomSpot(m);
                 var c = MakeBossBody(st.boss, p.x, p.y, m.hp, true);
+                bosses.Add(c);   // 분신도 보스 목록에 넣는다: 본체·분신이 모두 쓰러져야 클리어 (BossDown), 이름·체력 글자도 붙는다
                 AddLabel(Loc.T("분신 소환!"), c.x, c.y - c.r - 30, st.boss.col, 30);
                 for (int i = 0; i < 24; i++) AddPart(c.x, c.y, U.Rand(-220, 220), U.Rand(-260, -40), 0.6f, U.Hex(i % 2 == 0 ? st.boss.col : "#ffffff"), 6);
                 shake = Mathf.Max(shake, 0.4f); Snd.Rare();
@@ -161,12 +162,21 @@ namespace MoreMush
 
         void BossDown(Shroom m, Ball b)
         {
+            if (m.dead) return;
             m.dead = true; m.hp = 0;
             var col = U.Hex(st.boss.col);
             for (int i = 0; i < 50; i++) { float a = U.Rand(0, U.TAU), s = U.Rand(80, 600); AddPart(m.x, m.y, Mathf.Cos(a) * s, Mathf.Sin(a) * s - 60, U.Rand(0.3f, 0.8f), i % 3 != 0 ? col : Color.white, 7); }
             rings.Add(new Ring { x = m.x, y = m.y, r = m.r * 2.4f, dur = 0.45f, col = st.boss.col });
             ComboHit();
-            foreach (var x in bosses) if (!x.dead) { Snd.Rare(); AddLabel(Loc.T("분신이 남았어요!"), m.x, m.y - m.r - 30, "#ffffff", 28); return; }
+            if (bossCleared) return;   // 이미 클리어한 뒤에 남은 몸을 쓰러뜨려도 다시 클리어하지 않는다
+            int left = 0; bool mainLeft = false;
+            foreach (var x in bosses) if (!x.dead) { left++; if (!x.bossClone) mainLeft = true; }
+            if (left > 0)
+            {
+                Snd.Rare();
+                AddLabel(mainLeft ? Loc.F("본체가 남았어요! (남은 {0})", left) : Loc.F("분신이 {0}마리 남았어요!", left), m.x, m.y - m.r - 30, "#ffffff", 28);
+                return;
+            }
             bossCleared = true; bossClearT = runT;
             hitstop = 0.35f; hitstopCd = 0.8f; flash = 0.9f; shake = 1;
             AddLabel(Loc.F("보스 {0} 처치!", st.boss.n), WW / 2, WH * 0.3f, "#fff7c2", 54);
