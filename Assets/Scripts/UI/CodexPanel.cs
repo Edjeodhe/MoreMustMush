@@ -76,10 +76,10 @@ namespace MoreMush
                 var k = SPC[selected.Substring(3)]; bool own = HasSpecial(k.id);
                 UIUtil.SetImage(detailIcon, SpriteDB.Get($"Characters/Critters/{k.id}_ref"), own ? 0 : 1);
                 detailName.text = Loc.F("{0} <size=50%><mark=#b07bff>  특수 버섯  </mark></size>", own ? k.n : "???");
-                detailDesc.text = own ? Loc.T("숲을 깡총깡총 뛰어다니던 캐릭터 버섯. 지금은 세계수에서 뛰어놀고 있어요.") : Loc.F("라운드 중 가끔({0}%) 나타나요. {1}초 안에 잡지 못하면 숲으로 도망쳐요.", Mathf.RoundToInt(SPECIAL_P * 100), SPECIAL_LIFE);
+                detailDesc.text = own ? Loc.T("숲을 깡총깡총 뛰어다니던 캐릭터 버섯. 지금은 세계수에서 뛰어놀고 있어요.") : (JoinLv(k.id) > 0 ? Loc.F("세계수 나무 Lv.{0}이 되면 세계수에 합류해요.", JoinLv(k.id)) : Loc.T("2차 업데이트에서 만날 수 있어요."));
                 detailStars.gameObject.SetActive(false); detailAb.gameObject.SetActive(false); detailWarn.gameObject.SetActive(false);
-                detailTrait.text = own ? Loc.F("보유 중 · 보유 효과: {0}", FxText(k.id)) : Loc.T("잡으면 세계수에 들어와 일을 도와요");
-                detailRec.text = Loc.T("이미 잡은 특수 버섯을 또 잡으면 보너스 골드 (스테이지가 오를수록 커져요)");
+                detailTrait.text = own ? Loc.F("보유 중 · 보유 효과: {0}", FxText(k.id)) : Loc.T("합류하면 세계수에서 일을 도와요");
+                detailRec.text = Loc.T("세계수 나무 레벨이 오를 때마다 꼬마가 한 마리씩 합류해요");
                 return;
             }
             var sp = SP[selected]; G.codex.TryGetValue(sp.id, out var e);

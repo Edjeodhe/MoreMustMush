@@ -331,13 +331,19 @@ namespace MoreMush
                 // ===== 세계수 나무 =====
                 case "treepanel": Snd.Ui(); farmScreen.treeOpen = arg == "open" || !farmScreen.treeOpen; farmScreen.Render(); break;
                 case "treeup":
-                    if (!TreeUp()) { Snd.Err(); ShowToast(CanTreeUp() == TreeUpFail.Exp ? Loc.T("세계수 경험치가 모자라요 (의뢰로 모아요)") : Loc.T("골드가 부족해요")); break; }
+                {
+                    if (!TreeUp(out var joined)) { Snd.Err(); ShowToast(CanTreeUp() == TreeUpFail.Exp ? Loc.T("세계수 경험치가 모자라요 (의뢰로 모아요)") : Loc.T("골드가 부족해요")); break; }
                     Snd.Record(); farm.TreeLeveled();
-                    ShowToast(Loc.F("세계수 나무 Lv.{0}! 버섯 자리 {1}개 · 수확량 ×{2}", TreeLv(), TREE.Slots(TreeLv()), U.FmtN(TreeYieldMul()))); farmScreen.Render(); break;
+                    string msg = Loc.F("세계수 나무 Lv.{0}! 버섯 자리 {1}개 · 수확량 ×{2}", TreeLv(), TREE.Slots(TreeLv()), U.FmtN(TreeYieldMul()));
+                    foreach (var k in joined) msg += "\n" + Loc.F("{0} 합류! 세계수에 새 꼬마가 들어와요", k.n);
+                    ShowToast(msg);
+                    if (joined.Count > 0) { farm.Sync(false); farm.dirty = true; }
+                    farmScreen.Render(); break;
+                }
                 case "pickall":
                 {
                     int n = farm.PickAll();
-                    if (n == 0) { Snd.Err(); ShowToast(farm.Workers == 0 && farm.crits.Count > 0 ? Loc.T("꼬마들이 모두 건물을 짓고 있어요") : farm.crits.Count == 0 ? Loc.T("특수 버섯(꼬마)을 잡으면 버섯을 따 줘요") : Loc.T("다 자란 버섯이 없어요")); break; }
+                    if (n == 0) { Snd.Err(); ShowToast(farm.Workers == 0 && farm.crits.Count > 0 ? Loc.T("꼬마들이 모두 건물을 짓고 있어요") : farm.crits.Count == 0 ? Loc.T("세계수 나무 레벨이 오르면 꼬마가 합류해 버섯을 따 줘요") : Loc.T("다 자란 버섯이 없어요")); break; }
                     Snd.Ui(); ShowToast(Loc.F("꼬마들이 버섯 {0}개를 따러 가요!", n)); farmScreen.Render();
                     break;
                 }

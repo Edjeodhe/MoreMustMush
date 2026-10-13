@@ -43,7 +43,7 @@ namespace MoreMush
             else if (!has)
             {
                 action.act = "none"; button.interactable = false;
-                buttonText.text = ch ? Loc.T("꼬마를 잡으면 입혀요") : Loc.T("수확기를 얻으면 써요");
+                buttonText.text = ch ? Loc.T("꼬마가 합류하면 입혀요") : Loc.T("수확기를 얻으면 써요");
                 buttonImage.color = Color.white;
             }
             else

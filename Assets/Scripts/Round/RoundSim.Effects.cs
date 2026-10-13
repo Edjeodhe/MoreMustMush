@@ -84,76 +84,6 @@ namespace MoreMush
             Snd.Skill(520);
         }
 
-        // ===== 특수 버섯 =====
-        public void SpawnSpecial()
-        {
-            var pool = SPECIALS.Where(s => !HasSpecial(s.id)).ToList();
-            var kind = U.Pick(pool.Count > 0 ? pool : SPECIALS.ToList());
-            Vector2? p = null;
-            for (int a = 0; a < 40 && p == null; a++)
-            {
-                float x = U.Rand(FX0 + 90, FX1 - 90), y = U.Rand(FY0 + 90, NO_SPAWN_Y - 70);
-                if (AreaFree(Shape.C(x, y, 50))) p = new Vector2(x, y);
-            }
-            var pos = p ?? new Vector2(U.Rand(FX0 + 100, FX1 - 100), U.Rand(FY0 + 100, NO_SPAWN_Y - 100));
-            double hp = st.atk * 2;   // 수확기로 직접 2번 맞히면 잡힌다
-            float life = (float)st.specialLife;
-            special = new SpecialMush { kind = kind, x = pos.x, y = pos.y, r = 50, hp = hp, maxHp = hp, t = life, max = life, hopT = 0.4f };
-            AddLabel(Loc.F("{0} 등장! {1}초 안에 잡아요!", kind.n, life), pos.x, pos.y - 80, kind.c2, 34);
-            shake = Mathf.Max(shake, 0.3f); Snd.Rare();
-            for (int i = 0; i < 20; i++) AddPart(pos.x, pos.y, U.Rand(-200, 200), U.Rand(-260, -40), 0.6f, i % 2 == 1 ? U.Hex(kind.c1) : Color.white, 5);
-        }
-
-        void HitSpecial(SpecialMush sm, double amt, Ball b)
-        {
-            sm.hp -= amt; sm.squish = 1;
-            AddScore(TIERS[2].score * ScoreMulFor(null, b), sm.x, sm.y - sm.r, 2, false, false);
-            for (int i = 0; i < 6; i++) AddPart(sm.x, sm.y, U.Rand(-150, 150), U.Rand(-200, -40), 0.4f, U.Hex(sm.kind.c1), 4);
-            if (sm.hp <= 0) CatchSpecial(sm);
-        }
-
-        void CatchSpecial(SpecialMush sm)
-        {
-            special = null;
-            var k = sm.kind;
-            if (!HasSpecial(k.id))
-            {
-                G.specials[k.id] = true; specialGot = k.id; SaveGame();
-                AddLabel(Loc.F("{0} 포획! 영구 능력 획득", k.n), sm.x, sm.y - 70, "#fff7c2", 38);
-                AddLabel(Loc.F("{0} · 세계수에 들어와요!", k.n), sm.x, sm.y - 20, k.c2, 24);
-            }
-            else
-            {
-                double bonus = Math.Ceiling(StageGold(StageNow()) * 0.3);
-                bonusGold += bonus;
-                AddLabel(Loc.F("{0} 포획! 보너스 +{1}골드", k.n, U.Fmt(bonus)), sm.x, sm.y - 70, "#ffe36e", 34);
-            }
-            flash = Mathf.Max(flash, 0.6f); shake = Mathf.Max(shake, 0.6f);
-            hitstop = Mathf.Max(hitstop, 0.15f); hitstopCd = 0.6f;
-            rings.Add(new Ring { x = sm.x, y = sm.y, r = 160, dur = 0.5f, col = k.c1 });
-            for (int i = 0; i < 50; i++) { float a = U.Rand(0, U.TAU), s = U.Rand(80, 500); AddPart(sm.x, sm.y, Mathf.Cos(a) * s, Mathf.Sin(a) * s - 80, U.Rand(0.4f, 0.9f), U.Hex(i % 3 != 0 ? k.c1 : k.c2), 6); }
-            Snd.Record();
-        }
-
-        void UpdateSpecial(float h)
-        {
-            if (specialAt >= 0 && runT >= specialAt && special == null) { specialAt = -1; SpawnSpecial(); }
-            var sm = special;
-            if (sm == null) return;
-            sm.t -= h; sm.hitCd -= h; sm.appear = Mathf.Min(1, sm.appear + h * 3); sm.squish = Mathf.Max(0, sm.squish - h * 5);
-            sm.hopT -= h;
-            if (sm.hopT <= 0) { sm.hopT = U.Rand(0.6f, 1.1f); float a = U.Rand(0, U.TAU); sm.vx = Mathf.Cos(a) * 70; sm.vy = Mathf.Sin(a) * 70; }
-            sm.x += sm.vx * h; sm.y += sm.vy * h;
-            if (sm.x < FX0 + sm.r || sm.x > FX1 - sm.r) { sm.vx = -sm.vx; sm.x = U.Clamp(sm.x, FX0 + sm.r, FX1 - sm.r); }
-            if (sm.y < FY0 + sm.r || sm.y > NO_SPAWN_Y - sm.r) { sm.vy = -sm.vy; sm.y = U.Clamp(sm.y, FY0 + sm.r, NO_SPAWN_Y - sm.r); }
-            if (sm.t <= 0)
-            {
-                special = null;
-                AddLabel(Loc.F("{0} 숲으로 도망쳤어요…", U.Iga(sm.kind.n)), sm.x, sm.y - 50, "#e8dcc4", 28);
-                for (int i = 0; i < 16; i++) AddPart(sm.x, sm.y, U.Rand(-80, 80), U.Rand(-120, -20), 0.6f, new Color(230 / 255f, 230 / 255f, 220 / 255f, 0.9f), 8);
-            }
-        }
-
         Vector2 FindGiantSpot()
         {
             for (int rad = 0; rad < 800; rad += 40)
@@ -172,12 +102,15 @@ namespace MoreMush
         void UpdateEffects(float h)
         {
             runT += h;
-            // 군락지 재생
-            for (int i = 0; i < regen.Count; i++) regen[i] -= h;
-            for (int i = regen.Count - 1; i >= 0; i--)
-                if (regen[i] <= 0) { if (SpawnColony(false)) regen.RemoveAt(i); else regen[i] = 0.5f; }
-            int missing = st.maxCol - colonies.Count - regen.Count;
-            for (int i = 0; i < missing; i++) regen.Add((float)st.regen);
+            // 군락지 재생 (보스 라운드에는 없음)
+            if (!BossRound)
+            {
+                for (int i = 0; i < regen.Count; i++) regen[i] -= h;
+                for (int i = regen.Count - 1; i >= 0; i--)
+                    if (regen[i] <= 0) { if (SpawnColony(false)) regen.RemoveAt(i); else regen[i] = 0.5f; }
+                int missing = st.maxCol - colonies.Count - regen.Count;
+                for (int i = 0; i < missing; i++) regen.Add((float)st.regen);
+            }
             // 포자 구름
             foreach (var c in clouds) c.t -= h;
             clouds.RemoveAll(c => c.t <= 0);
@@ -320,7 +253,6 @@ namespace MoreMush
                 balls.RemoveAll(b => b.dead);
                 if (balls.Count > maxBalls) maxBalls = balls.Count;
                 UpdateEffects(h);
-                UpdateSpecial(h);
                 UpdateBoss(h);
                 UpdateBars(h);
                 if (st.meteor.HasValue)
@@ -393,7 +325,7 @@ namespace MoreMush
             public Dictionary<string, double> gains;
             public List<string> newSpecies, newGolden, unlocks;
             public List<(string id, int s)> newStars;
-            public string specialGot, newTheme;
+            public string newTheme;
             public List<(string k, double old, double v)> recs = new List<(string, double, double)>();
             public bool goldHv;
             public int harvests;
@@ -433,7 +365,7 @@ namespace MoreMush
             if (newTheme != null) G.theme = newTheme.id;
             s.unlocks = CheckUnlocks();
             SaveGame();
-            s.newSpecies = newSpecies.ToList(); s.newGolden = newGolden.ToList(); s.newStars = newStars.ToList(); s.specialGot = specialGot; s.newTheme = newTheme?.id;
+            s.newSpecies = newSpecies.ToList(); s.newGolden = newGolden.ToList(); s.newStars = newStars.ToList(); s.newTheme = newTheme?.id;
             R = null;
             return s;
         }

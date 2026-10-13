@@ -158,7 +158,7 @@ namespace MoreMush
             else if (b.x + b.r > FX1) { b.x = FX1 - b.r; b.dx = -Mathf.Abs(b.dx); FixDir(b); WallHit(b, "r"); }
             if (b.y - b.r < FY0) { b.y = FY0 + b.r; b.dy = Mathf.Abs(b.dy); FixDir(b); WallHit(b, "t"); }
             else if (b.y + b.r > FY1) { b.y = FY1 - b.r; b.dy = -Mathf.Abs(b.dy); FixDir(b); b.combo = 0; WallHit(b, "b"); }
-            // 슬라이드 바·설치형 바·분신 바 (RoundSim.Bar)
+            // 슬라이드 바·분신 바 (RoundSim.Bar)
             BarCollide(b, py);
             // 버섯
             bool inJ = false; List<Shroom> jl = null;
@@ -201,20 +201,6 @@ namespace MoreMush
             {
                 b.inJelly = false;
                 if (b.jf < 1) b.jf = Mathf.Min(1, b.jf + (1 - (float)st.jellySlow) * h);
-            }
-            // 특수 버섯 (튕기면서 맞는다)
-            var sm = special;
-            if (sm != null && sm.appear >= 0.5f)
-            {
-                float ddx = b.x - sm.x, ddy = b.y - sm.y, rr = b.r + sm.r, dd = ddx * ddx + ddy * ddy;
-                if (dd < rr * rr)
-                {
-                    float dl = Mathf.Sqrt(dd); if (dl == 0) dl = 0.01f;
-                    float nx = ddx / dl, ny = ddy / dl, dot = b.dx * nx + b.dy * ny;
-                    if (dot < 0) { b.dx -= 2 * dot * nx; b.dy -= 2 * dot * ny; FixDir(b); }
-                    b.x = sm.x + nx * (rr + 0.5f); b.y = sm.y + ny * (rr + 0.5f);
-                    if (sm.hitCd <= 0) { sm.hitCd = 0.05f; HitSpecial(sm, st.atk * Wk(b) * (st.fire ? 1.3 : 1) * (b.sharpen > 0 ? b.sharpMul : 1), b); }
-                }
             }
             // 숲 장치
             foreach (var d in devices)

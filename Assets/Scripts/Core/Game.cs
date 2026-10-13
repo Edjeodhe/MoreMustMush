@@ -14,13 +14,13 @@ namespace MoreMush
         public Dictionary<string, double> ab;
         public List<string> hvs; public Dictionary<string, int> hvStar;
         public double atk, spdMul, launch, minSpd, ballR, barLen, duration, crit, comboK, scoreMul;
-        public int maxCol, colMax, permBalls, fixBars;
+        public int maxCol, colMax, permBalls;
         public List<string> devTypes;   // 해금한 숲 장치 (라운드마다 하나씩)
         public double regen, rareMul, stageMul, harvestMul, multiP, priceMul, sparkP, zoom, golden;
         public bool fire, blade;
         public NF.Meteor? meteor;
         public double comboWin, wanderP, wanderMul, poisonMul, jellySlow, skillDmg, sporeP, debuffDur;
-        public double goldBonus, goldMul, giantP, specialP, specialLife;
+        public double goldBonus, goldMul, giantP;
         public double bladeR, bladeInt, bladeDmg, kidP, buffMul, tempLife, devMul, heavyMul, rushMul;
         public double barSpd = 1, barDur, barRate, powAtk, powSkill, bossMul = 1, bossGemAdd;   // 슬라이드 바 수치 강화(독 가지)·균사석 노드
         public Dictionary<string, SkillInfo> sk = new Dictionary<string, SkillInfo>();
@@ -239,7 +239,6 @@ namespace MoreMush
             st.maxCol = Math.Max(4, (int)U.JsRound(st.maxCol * area));
             st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"]) * (wId == "moon" ? 3 : 1);
             st.devTypes = DEVICE_TYPES.Where(d => Lv("dev_" + d) > 0).ToList();
-            st.fixBars = Lv("md_fixbar");
             st.permBalls = st.hvs.Count;
             st.comboWin = COMBO_WINDOW;
             st.meteor = Lv("gm_meteor") > 0 ? NF.gm_meteor(Lv("gm_meteor")) : (NF.Meteor?)null;
@@ -254,8 +253,6 @@ namespace MoreMush
             st.harvestMul *= INCOME_MUL;
             st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab)) * NF.gm_score(Lv("gm_score"));
             st.giantP = NF.ed_giant(Lv("ed_giant"));
-            st.specialP = SPECIAL_P + NF.ed_special(Lv("ed_special"));
-            st.specialLife = NF.ed_special_life(Lv("ed_special"));
             st.blade = Lv("bl") > 0;
             var (bRange, bSpd, bPow) = BladeLv(Lv("bl"));
             st.bladeR = st.ballR + NF.bl_range(bRange);

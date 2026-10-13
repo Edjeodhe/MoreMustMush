@@ -282,11 +282,18 @@ namespace MoreMush
         }
 
         // 경험치를 다 채우고 골드를 내면 레벨이 오른다. 쓰고 남은 경험치는 다음 레벨로 넘어간다
-        public static bool TreeUp()
+        public static bool TreeUp() => TreeUp(out _);
+
+        // joined: 이번 레벨 업으로 합류한 꼬마
+        public static bool TreeUp(out List<Special> joined)
         {
+            joined = null;
             if (CanTreeUp() != TreeUpFail.None) return false;
             G.gold -= TreeUpCost(); G.farm.tree.exp -= TreeExpNeed(); G.farm.tree.lv++;
-            TreeEnsure(); SaveGame();
+            TreeEnsure();
+            joined = FarmJoin();
+            FarmEnsure();   // 새 꼬마의 첫 부탁 시각
+            SaveGame();
             return true;
         }
 
@@ -323,7 +330,23 @@ namespace MoreMush
         public static string TimeText(double s) => s >= 3600 ? Loc.F("{0}시간 {1}분", (int)(s / 3600), U.JsRound(s % 3600 / 60)) : s >= 60 ? Loc.F("{0}분", U.JsRound(s / 60)) : Loc.F("{0}초", Math.Ceiling(s));
 
         // ===== 자동 수확 보상 =====
-        public static void AutoEnsure() { if (G.autoT <= 0) G.autoT = Now(); FixClock(); }
+        public static void AutoEnsure() { if (G.autoT <= 0) G.autoT = Now(); FixClock(); FarmJoin(); }
+
+        // 세계수 레벨까지 합류할 꼬마를 모두 합류시키고, 이번에 새로 들어온 꼬마를 돌려준다 (새 게임은 Lv.1 새싹 꼬마).
+        // 예전에 라운드에서 잡아 둔 꼬마는 그대로 둔다 (레벨보다 앞선 꼬마도 빼지 않음)
+        public static List<Special> FarmJoin()
+        {
+            var joined = new List<Special>();
+            if (G == null) return joined;
+            int lv = TreeLv();
+            for (int i = 0; i < CRITTER_JOIN.Length && i < lv; i++)
+            {
+                string id = CRITTER_JOIN[i];
+                if (HasSpecial(id)) continue;
+                G.specials[id] = true; joined.Add(SPC[id]);
+            }
+            return joined;
+        }
 
         // 기기 시계가 앞서 있다가 뒤로 맞춰지면 미래 시각에 멈춘 타이머를 지금 기준으로 당긴다 (남은 시간은 그대로). 정상 시계면 아무것도 안 함
         public static void FixClock()

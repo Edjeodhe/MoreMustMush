@@ -40,7 +40,6 @@ namespace MoreMush
         public static double BarSkillDur(int P) => 3 + P;
         public const double POWER_ATK = 0.2, POWER_SKILL = 0.05;
         public const float BAR_CLONE_DUR = 5; public const int BAR_CLONE_MAX = 2;
-        public const float FIX_BAR_LEN = 120;
         public static double SkillPow(int P) => 1 + 0.75 * P;   // 스킬 위력 배율 (피해·시간·속도)
         public static double KidRate(int L) => 0.12 * L;
         public static double MultiRate(int L) => 0.10 * L;
@@ -81,8 +80,6 @@ namespace MoreMush
             public static double ed_gold(int L) => 0.01 + 0.02 * L;
             public static double ed_trade(int L) => 1 + 0.3 * L;
             public static double ed_giant(int L) => 0.08 + 0.1 * L;
-            public static double ed_special(int L) => 0.1 * L;
-            public static double ed_special_life(int L) => SPECIAL_LIFE + 2 * L;
             public static int ed_size(int L) => 5 + 2 * L;   // 군락지당 최대 버섯 수
             public static double md_bar(int L) => 1 + 0.25 * L;
             // 슬라이드 바 수치 강화 (독 가지): 바 길이 +20%p씩(기본 150 기준) · 바 반사 속도 · 바 스킬 지속 +초 · 바 스킬 발동률 +%p · 기운 북돋기 공격력 +%p (발동률은 1/4)
@@ -244,7 +241,6 @@ namespace MoreMush
             ["ed_size"] = "군락지 하나에서 가운데 무더기 둘레에 나는 개별 버섯 수의 최대치를 늘려요.",
             ["ed_trade"] = "라운드가 끝날 때 점수로 받는 골드를 더 늘려요.",
             ["ed_giant"] = "라운드 중에 거대 버섯이 나타날 확률이에요. 거대 버섯은 점수 ×3, 수확량 ×30이에요.",
-            ["ed_special"] = "캐릭터 모양 특수 버섯이 나타날 확률과, 도망가기 전까지 잡을 수 있는 시간을 늘려요.",
             ["md_chef"] = "세계수에서 꼬마가 건물을 짓는 시간을 줄여요.",
             ["md_stump"] = "숲 장치 효과를 키워요: 그루터기 점수·공격력 증가, 도토리 점수 ×2 지속시간, 이끼 길 가속.",
             ["md_templife"] = "분열·분신·꼬마 수확기로 생기는 임시 핀볼이 더 오래 남아요.",
@@ -266,7 +262,6 @@ namespace MoreMush
             ["gm_bossgem"] = "균사석으로 여는 특수 노드. 보스를 쓰러뜨릴 때 균사석을 더 받아요.",
             ["gm_skill"] = "균사석으로 여는 특수 노드. 모든 스킬이 터질 확률에 곱해져요.",
             ["gm_bar"] = "균사석으로 여는 특수 노드. 슬라이드 바 길이에 곱해져요(필드 폭 1/3까지).",
-            ["md_fixbar"] = "필드 안쪽에 작은 슬라이드 바를 고정으로 놓아요. 버섯 군락은 통과하고, 위에서 떨어지는 수확기는 위로 튕겨 주며 바 버프도 줘요.",
             ["power"] = "영구 핀볼이 바에 맞을 때마다 잠시 공격력과 스킬 발동률이 올라가요. 조작하는 만큼 강해지는 초반 핵심 버프예요.",
             ["homing"] = "영구 핀볼이 바에 맞을 때 확률로, 잠시 동안 바에 튕길 때마다 가장 가까운 버섯 군락(보스 스테이지에서는 보스) 쪽으로 곧게 날아가요. 숲 장치·바는 노리지 않아요.",
             ["barclone"] = "영구 핀볼이 바에 맞을 때 확률로 필드 가운데나 양옆에 분신 슬라이드 바가 잠시 생겨요. 분신 바도 위로 튕겨 주고 바 버프를 줘요.",
@@ -380,7 +375,6 @@ namespace MoreMush
             N("ed_trade", "ed", "ed_price", "단골 손님", 2, 3000000, 2.2, L => Loc.F("정산 골드 {0}", Plus(NF.ed_trade(L))), tier: 3);
             N("ed_gold", "ed", "ed_rare", "황금 변종", 2, 3000000, 2.2, L => Loc.F("버섯마다 {0}", U.Pct(NF.ed_gold(L))), tier: 3);
             N("ed_giant", "ed", "ed_rare", "거대 버섯", 2, 2000000, 2.2, L => Loc.F("라운드마다 {0} 확률로 거대 버섯", U.Pct(NF.ed_giant(L))), tier: 3);
-            N("ed_special", "ed", "ed_gold", "꼬마 손님", 2, 10000000, 2.2, L => Loc.F("특수 버섯 등장 {0} · 잡을 시간 {1}초", U.Pct(SPECIAL_P + NF.ed_special(L)), NF.ed_special_life(L)), tier: 3);
             N("ed_multi", "ed", "ed_bonus", "배수 획득", 2, 5000000, 2.2, L => L > 0 ? Loc.F("수확할 때 {0} 확률로 버섯 ×3", U.Pct(MultiRate(L))) : Loc.T("없음"), tier: 3);
             // ── 약용 (바·스킬·필드) ──
             N("md_map", "md", "md_bar", "필드 넓히기", 4, 40, 2.2, L => Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / MAP_ZOOM[L]), U.JsRound(H / MAP_ZOOM[L]), F(MAP_ZOOM[L])));
@@ -406,7 +400,6 @@ namespace MoreMush
                     return (s.noRate ? "" : Loc.F("발동률 {0} · ", U.Pct(SkillRate(S)))) + s.eff(P);
                 }, skill: id, icon: s.icon, col: s.col, tier: tr);
             }
-            N("md_fixbar", "md", "md_bar", "설치형 바", 3, 8000, 3.5, L => Loc.F("필드에 작은 바 {0}개가 고정으로 놓여요 (군락은 통과)", L), tier: 2);
             N("md_buffdur", "md", "accel", "버프 지속", 2, 30000, 2.2, L => Loc.F("가속·맑은 포자막 지속 {0}, 날 갈기 {1}타", Plus(NF.md_buffdur(L)), Math.Ceiling(3 * NF.md_buffdur(L))), tier: 2);
             // ── 독 (전투) ──
             // 초반
@@ -460,7 +453,7 @@ namespace MoreMush
             N("gm_atk", "ps", "ps_atk3p", "균사 투지", 3, 3000, 2, L => Loc.F("공격력 ×{0}", F(NF.gm_atk(L))), gem: 12, tier: 3);
             N("gm_boss", "ps", "ps_heavy", "보스 파쇄", 3, 3000, 2, L => Loc.F("보스에게 주는 피해 ×{0}", F(NF.gm_boss(L))), gem: 15, tier: 3);
             N("gm_score", "ed", "ed_score3p", "균사 정산", 3, 3000, 2, L => Loc.F("정산 골드 ×{0}", F(NF.gm_score(L))), gem: 12, tier: 3);
-            N("gm_bossgem", "md", "md_fixbar", "보스의 전리품", 3, 2500, 2, L => Loc.F("보스를 쓰러뜨릴 때 균사석 +{0}", NF.gm_bossgem(L)), gem: 10, tier: 3);
+            N("gm_bossgem", "md", "md_bar", "보스의 전리품", 3, 2500, 2, L => Loc.F("보스를 쓰러뜨릴 때 균사석 +{0}", NF.gm_bossgem(L)), gem: 10, tier: 3);
             N("gm_skill", "md", "md_buffdur", "균사 술법", 3, 3000, 2, L => Loc.F("모든 스킬 발동률 ×{0}", F(NF.gm_skill(L))), gem: 12, tier: 3);
             N("gm_bar", "md", "md_templife", "균사 바", 3, 2500, 2, L => Loc.F("바 길이 ×{0} (필드 폭 1/3까지)", F(NF.gm_bar(L))), gem: 8, tier: 3);
 

@@ -72,7 +72,7 @@ namespace MoreMush
 
             bool none = farm.crits.Count == 0;
             UIUtil.Show(centerMsg, none);
-            if (none) { centerTitle.text = Loc.T("아직 세계수에 아무도 없어요"); centerSub.text = Loc.T("수확 중에 나타나는 특수 버섯(꼬마)을 잡으면 이곳에 들어와 버섯 따기와 건설을 도와요!"); }
+            if (none) { centerTitle.text = Loc.T("아직 세계수에 아무도 없어요"); centerSub.text = Loc.T("세계수 나무 레벨이 오르면 꼬마가 합류해 버섯 따기와 건설을 도와요!"); }
 
             bool placing = farm.Placing;
             UIUtil.Show(bottom, !placing);

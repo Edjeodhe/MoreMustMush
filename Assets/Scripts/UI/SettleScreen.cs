@@ -38,7 +38,7 @@ namespace MoreMush
             for (int i = 0; i < 3; i++) gainTexts[i].text = Loc.F("+{0}개", U.Fmt(s.gains[CAT_KEYS[i]]));
             scoreLabel.text = Loc.F("얻은 점수 → 골드 <size=70%><color=#8a6a4a>(×{0})</color></size>", U.FmtN(s.goldMul));
             bonusRow.SetActive(s.bonusGold > 0);
-            bonusLabel.text = Loc.F("보너스 골드 <size=70%><color=#8a6a4a>(엽전 수확기 {0} · 특수 버섯 {1})</color></size>", U.Fmt(s.coinGold), U.Fmt(s.bonusGold - s.coinGold));
+            bonusLabel.text = Loc.T("보너스 골드 <size=70%><color=#8a6a4a>(엽전 수확기)</color></size>");
             bonusValue.text = "+" + U.Fmt(s.bonusGold);
             meta.text = Loc.F("수확 {0}번", U.Fmt(s.harvests));
             themeBox.SetActive(s.newTheme != null);
@@ -47,7 +47,6 @@ namespace MoreMush
             Clear(unlockList); Clear(newsList);
             foreach (var id in s.unlocks) Card(unlockCards, unlockList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("해금"), "unlock");
             unlockBox.SetActive(unlockList.Count > 0);
-            if (s.specialGot != null) Card(newsCards, newsList, SpriteDB.Get("Characters/Critters/" + s.specialGot + "_ref"), 0, SPC[s.specialGot].n, "NEW", "special");
             foreach (var id in s.newSpecies) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "");
             foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, Loc.F("황금 {0}", SP[id].n), "NEW", "gold");
             foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "star");

@@ -98,7 +98,6 @@ namespace MoreMush
     public class Label { public string text; public float x, y, size, t; public string col; }
     public class Flyer { public float x, y, sx, sy, tx, ty, t, dur; public Species sp; public bool golden, clock, done; public string cat; }
     public class Ember { public float x, y, vx, vy, t, life, s; }
-    public class SpecialMush { public Special kind; public float x, y, r, t, max, hitCd, squish, vx, vy, hopT, appear; public double hp, maxHp; }
     public class GiantWarn { public float x, y, t; }
     public class FeverMsg { public string text, sub; public float t; public int lv; public int pal = -1; public bool noIcon; }
     class Queued { public float t; public Action f; }
