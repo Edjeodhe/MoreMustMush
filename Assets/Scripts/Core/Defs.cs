@@ -267,7 +267,7 @@ namespace MoreMush
 
         public static readonly int[] STAR_N = { 10, 50, 200, 800, 3000 };
 
-        // ===== 특수 버섯 (꼬마): 라운드에서 잡으면 세계수에 들어온다. 능력은 농장(아웃게임)에만 있다 · Defs.CRITTER_FX =====
+        // ===== 특수 버섯 (꼬마): 세계수 레벨이 오를 때 합류한다 (CRITTER_JOIN). 능력은 세계수(아웃게임)에만 있다 · Defs.CRITTER_FX =====
         public class Special
         {
             public string id, c1, c2;
@@ -297,7 +297,10 @@ namespace MoreMush
             ["chest"] = new[] { "꿀밤 버섯", "꿀밤 대왕버섯" },
         };
         public static readonly Dictionary<string, Special> SPC = SPECIALS.ToDictionary(s => s.id);
-        public const float SPECIAL_P = 0.3f, SPECIAL_LIFE = 10;
+        // 세계수 레벨마다 합류하는 꼬마 (신규콘텐츠 기획서 Ver03 "세계수 성장 단계": 1 새싹 · 2 이슬 · 3 바람 · 4 불씨 · 5 조약돌 · 6 찌릿 · 7 달빛 · 8 별똥).
+        // 지금은 세계수 Lv = 기획서 단계로 맞춘다 (Lv.9~10은 합류 없음). 동전·꿀밤 꼬마는 2차 추가 예정이라 아직 얻을 수 없다.
+        public static readonly string[] CRITTER_JOIN = { "leaf", "dew", "wind", "fire", "rock", "spark", "moon", "star" };
+        public static int JoinLv(string id) { int i = System.Array.IndexOf(CRITTER_JOIN, id); return i < 0 ? 0 : i + 1; }   // 0 = 아직 합류할 수 없음 (2차)
 
         // ===== 보스 (규칙은 Defs.Boss.cs) =====
         public const string BOSS_ICON = "trophy";   // 임시 아이콘. 보스 전용 리소스가 생기면 바꾼다

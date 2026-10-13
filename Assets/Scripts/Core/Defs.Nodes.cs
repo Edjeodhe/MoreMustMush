@@ -79,8 +79,6 @@ namespace MoreMush
             public static double ed_gold(int L) => 0.01 + 0.02 * L;
             public static double ed_trade(int L) => 1 + 0.3 * L;
             public static double ed_giant(int L) => 0.08 + 0.1 * L;
-            public static double ed_special(int L) => 0.1 * L;
-            public static double ed_special_life(int L) => SPECIAL_LIFE + 2 * L;
             public static int ed_size(int L) => 5 + 2 * L;   // 군락지당 최대 버섯 수
             public static double md_bar(int L) => 1 + 0.25 * L;
             // 슬라이드 바 수치 강화 (독 가지): 바 길이 +20%p씩(기본 150 기준) · 바 반사 속도 · 바 스킬 지속 +초 · 바 스킬 발동률 +%p · 기운 북돋기 공격력 +%p (발동률은 1/4)
@@ -205,7 +203,6 @@ namespace MoreMush
             ["ed_size"] = "군락지 하나에서 가운데 무더기 둘레에 나는 개별 버섯 수의 최대치를 늘려요.",
             ["ed_trade"] = "라운드가 끝날 때 점수로 받는 골드를 더 늘려요.",
             ["ed_giant"] = "라운드 중에 거대 버섯이 나타날 확률이에요. 거대 버섯은 점수 ×3, 수확량 ×30이에요.",
-            ["ed_special"] = "캐릭터 모양 특수 버섯이 나타날 확률과, 도망가기 전까지 잡을 수 있는 시간을 늘려요.",
             ["md_chef"] = "세계수에서 꼬마가 건물을 짓는 시간을 줄여요.",
             ["md_stump"] = "숲 장치 효과를 키워요: 그루터기 점수·공격력 증가, 도토리 점수 ×2 지속시간, 이끼 길 가속.",
             ["md_templife"] = "분열·분신·꼬마 수확기로 생기는 임시 핀볼이 더 오래 남아요.",
@@ -348,7 +345,6 @@ namespace MoreMush
             N("ed_trade", "ed", "ed_price", "단골 손님", 2, 3000000, 2.2, L => Loc.F("정산 골드 {0}", Plus(NF.ed_trade(L))), tier: 3);
             N("ed_gold", "ed", "ed_rare", "황금 변종", 2, 3000000, 2.2, L => Loc.F("버섯마다 {0}", U.Pct(NF.ed_gold(L))), tier: 3);
             N("ed_giant", "ed", "ed_rare", "거대 버섯", 2, 2000000, 2.2, L => Loc.F("라운드마다 {0} 확률로 거대 버섯", U.Pct(NF.ed_giant(L))), tier: 3);
-            N("ed_special", "ed", "ed_gold", "꼬마 손님", 2, 10000000, 2.2, L => Loc.F("특수 버섯 등장 {0} · 잡을 시간 {1}초", U.Pct(SPECIAL_P + NF.ed_special(L)), NF.ed_special_life(L)), tier: 3);
             N("ed_multi", "ed", "ed_bonus", "배수 획득", 2, 5000000, 2.2, L => L > 0 ? Loc.F("수확할 때 {0} 확률로 버섯 ×3", U.Pct(MultiRate(L))) : Loc.T("없음"), tier: 3);
             // ── 약용 (바·스킬·필드) ──
             N("md_map", "md", "core_md", "필드 넓히기", 4, 40, 2.2, L => Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / MAP_ZOOM[L]), U.JsRound(H / MAP_ZOOM[L]), F(MAP_ZOOM[L])));

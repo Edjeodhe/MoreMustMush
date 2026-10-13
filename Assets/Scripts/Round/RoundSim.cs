@@ -77,9 +77,6 @@ namespace MoreMush
         public Dictionary<string, double> bag = new Dictionary<string, double>();
         public readonly Dictionary<string, int> picks = new Dictionary<string, int>();   // 버섯별 수확 횟수 (의뢰 진행도)
         public double bonusGold, coinGold;
-        public SpecialMush special;
-        public float specialAt;
-        public string specialGot;
         public float? meteorT;
         public string themeId;
 
@@ -98,7 +95,6 @@ namespace MoreMush
             r.timeLeft = r.timeMax = (float)st.duration;
             r.giantState = U.Chance((float)st.giantP) ? "pending" : "none";
             r.barX = WW / 2; r.barLen = (float)st.barLen;
-            r.specialAt = U.Chance((float)st.specialP) ? U.Rand(3, Mathf.Max(4, (float)(st.duration - st.specialLife - 1))) : -1;
             if (st.boss != null) r.SpawnBoss(st.boss);   // 군락지·장치보다 먼저 자리를 잡는다
             foreach (var d in st.devTypes) r.PlaceDevice(d, null);
             r.barLen = Mathf.Min(r.barLen, WW / 3);   // 슬라이드 바 최대 길이: 화면의 1/3

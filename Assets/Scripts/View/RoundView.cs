@@ -18,11 +18,6 @@ namespace MoreMush
         public LineRenderer acornFrame;
         public WeatherOverlay weather;
 
-        [Header("Special critter")]
-        public CritterRig special;
-        public LineRenderer specialRingBack, specialRing;
-        public SpriteRenderer specialHpBack, specialHpFill, specialShadow;
-
         [Header("Prefabs")]
         [AssetPath("Assets/Prefabs/Round/ShroomView.prefab")] public ShroomView shroomPrefab;
         [AssetPath("Assets/Prefabs/Round/BallView.prefab")] public BallView ballPrefab;
@@ -110,8 +105,6 @@ namespace MoreMush
                 shrooms.Get(i).Show(m, now, night, 1000 + Mathf.RoundToInt(m.y));
             }
             shrooms.Trim(R.shrooms.Count);
-
-            DrawSpecial(R, now);
 
             // 포자 구름
             for (int i = 0; i < R.clouds.Count; i++) clouds.Get(i).Show(R.clouds[i], now);
@@ -294,31 +287,6 @@ namespace MoreMush
 
         static readonly AnimationCurve Flat = AnimationCurve.Constant(0, 1, 1);
 
-        void DrawSpecial(RoundSim R, float now)
-        {
-            var sm = R.special;
-            bool on = sm != null;
-            special.gameObject.SetActive(on);
-            specialRingBack.enabled = specialRing.enabled = specialHpBack.enabled = specialHpFill.enabled = specialShadow.enabled = on;
-            if (!on) return;
-            float k = U.Clamp(sm.t / sm.max, 0, 1), hop = Mathf.Abs(Mathf.Sin(now * 8)) * 8;
-            specialShadow.transform.localPosition = Art.P(sm.x, sm.y + sm.r * 0.95f);
-            specialShadow.transform.localScale = new Vector3(sm.r * 1.6f / Art.PPU, sm.r * 0.5f / Art.PPU, 1);
-            float rr = sm.r + 22;
-            Arc(specialRingBack, sm.x, sm.y, rr, 1, 7); specialRingBack.startColor = specialRingBack.endColor = new Color(0, 0, 0, 0.35f);
-            Arc(specialRing, sm.x, sm.y, rr, k, 5);
-            var rc = k < 0.3f ? (Mathf.Sin(now * 14) > 0 ? U.Hex("#ff5a4a") : U.Hex("#ffd23a")) : U.Hex(sm.kind.c1);
-            specialRing.startColor = specialRing.endColor = rc;
-            special.transform.localPosition = Art.P(sm.x, sm.y - hop);
-            special.SetKind(sm.kind.id);
-            special.Squash(sm.appear * (1 + sm.squish * 0.2f), sm.appear * (1 - sm.squish * 0.2f), sm.r);
-            float w = 80, y = sm.y - rr - 14;
-            specialHpBack.transform.localPosition = Art.P(sm.x, y + 3); specialHpBack.transform.localScale = new Vector3((w + 2) / Art.PPU, 8 / Art.PPU, 1);
-            float hk = Mathf.Max(0, (float)(sm.hp / sm.maxHp));
-            specialHpFill.transform.localPosition = Art.P(sm.x - w / 2 + w * hk / 2, y + 3); specialHpFill.transform.localScale = new Vector3(w * hk / Art.PPU, 6 / Art.PPU, 1);
-            specialHpFill.color = U.Hex(sm.kind.c1);
-        }
-
         static Vector3[] ArcBuf = new Vector3[49];
         static void Arc(LineRenderer l, float x, float y, float r, float k, float width)
         {
@@ -344,7 +312,6 @@ namespace MoreMush
         readonly Dictionary<object, TextSlot> slotOf = new Dictionary<object, TextSlot>();
         readonly Dictionary<int, string> comboStr = new Dictionary<int, string>();
         int textFrame;
-        string specialStr, specialLang; int specialTenths = -1; Special specialKind;
         readonly Dictionary<Shroom, (int pct, string lang, string s)> bossStr = new Dictionary<Shroom, (int, string, string)>();   // 보스 글자 (체력 %가 바뀔 때만 다시 만든다)
 
         void DrawTexts(RoundSim R, float z)
@@ -375,13 +342,6 @@ namespace MoreMush
                 if (!bossStr.TryGetValue(bm, out var bs) || bs.pct != pct || bs.lang != Loc.Lang)
                     bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + $"  {pct}%");
                 Text(bm, bs.s, bm.x, bm.y + bm.r * 1.2f + 30, bm.bossClone ? 20 : 26, 1, R.Boss.col, 1, z);
-            }
-            if (R.special != null)
-            {
-                var sm = R.special; float rr = sm.r + 22;
-                int tenths = Mathf.RoundToInt(sm.t * 10);   // F1 표시가 바뀔 때만 다시 만든다
-                if (tenths != specialTenths || sm.kind != specialKind || specialLang != Loc.Lang) { specialTenths = tenths; specialKind = sm.kind; specialLang = Loc.Lang; specialStr = Loc.F("{0} {1:F1}초", sm.kind.n, sm.t); }
-                Text(sm, specialStr, sm.x, sm.y - rr - 14 - 16, 18, 1, "#ffffff", 1, z);
             }
             ReleaseTexts(false);
         }

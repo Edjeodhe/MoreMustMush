@@ -349,7 +349,7 @@ namespace MoreMush
             if (!FruitRipe(sl[slot])) return false;
             if (Workers == 0)
             {
-                if (!quiet) { Snd.Err(); GameFlow.I.ShowToast(crits.Count == 0 ? Loc.T("특수 버섯(꼬마)을 잡으면 버섯을 따 줘요") : Loc.T("꼬마들이 모두 건물을 짓고 있어요")); }
+                if (!quiet) { Snd.Err(); GameFlow.I.ShowToast(crits.Count == 0 ? Loc.T("세계수 나무 레벨이 오르면 꼬마가 합류해 버섯을 따 줘요") : Loc.T("꼬마들이 모두 건물을 짓고 있어요")); }
                 return false;
             }
             jobs.Add(slot); busy.Add(slot);

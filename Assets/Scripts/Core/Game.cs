@@ -20,7 +20,7 @@ namespace MoreMush
         public bool fire, blade;
         public NF.Meteor? meteor;
         public double comboWin, wanderP, wanderMul, poisonMul, jellySlow, skillDmg, sporeP, debuffDur;
-        public double goldBonus, goldMul, giantP, specialP, specialLife;
+        public double goldBonus, goldMul, giantP;
         public double bladeR, bladeInt, bladeDmg, kidP, buffMul, tempLife, devMul, heavyMul, rushMul;
         public double barSpd = 1, barDur, barRate, powAtk, powSkill, bossMul = 1, bossGemAdd;   // 슬라이드 바 수치 강화(독 가지)·균사석 노드
         public Dictionary<string, SkillInfo> sk = new Dictionary<string, SkillInfo>();
@@ -254,8 +254,6 @@ namespace MoreMush
             st.harvestMul *= INCOME_MUL;
             st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab)) * NF.gm_score(Lv("gm_score"));
             st.giantP = NF.ed_giant(Lv("ed_giant"));
-            st.specialP = SPECIAL_P + NF.ed_special(Lv("ed_special"));
-            st.specialLife = NF.ed_special_life(Lv("ed_special"));
             st.blade = Lv("bl") > 0;
             st.bladeR = st.ballR + NF.bl_range(Lv("bl_range"));
             st.bladeInt = NF.bl_spd(Lv("bl_spd"));

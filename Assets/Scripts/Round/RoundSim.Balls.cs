@@ -202,20 +202,6 @@ namespace MoreMush
                 b.inJelly = false;
                 if (b.jf < 1) b.jf = Mathf.Min(1, b.jf + (1 - (float)st.jellySlow) * h);
             }
-            // 특수 버섯 (튕기면서 맞는다)
-            var sm = special;
-            if (sm != null && sm.appear >= 0.5f)
-            {
-                float ddx = b.x - sm.x, ddy = b.y - sm.y, rr = b.r + sm.r, dd = ddx * ddx + ddy * ddy;
-                if (dd < rr * rr)
-                {
-                    float dl = Mathf.Sqrt(dd); if (dl == 0) dl = 0.01f;
-                    float nx = ddx / dl, ny = ddy / dl, dot = b.dx * nx + b.dy * ny;
-                    if (dot < 0) { b.dx -= 2 * dot * nx; b.dy -= 2 * dot * ny; FixDir(b); }
-                    b.x = sm.x + nx * (rr + 0.5f); b.y = sm.y + ny * (rr + 0.5f);
-                    if (sm.hitCd <= 0) { sm.hitCd = 0.05f; HitSpecial(sm, st.atk * Wk(b) * (st.fire ? 1.3 : 1) * (b.sharpen > 0 ? b.sharpMul : 1), b); }
-                }
-            }
             // 숲 장치
             foreach (var d in devices)
             {
