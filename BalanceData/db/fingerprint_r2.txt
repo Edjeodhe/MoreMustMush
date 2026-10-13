@@ -1,0 +1,571 @@
+N ed_score br=ed p=power req= max=3 tier=1 sub=False skill= icon= col= gem=False name=타격 점수 I
+  d=버섯을 칠 때마다 얻는 점수에 고정값을 더해요. 점수는 라운드가 끝나면 골드로 바뀌어요. 끝까지 올리면 타격 점수 I+가 열려요.
+  L0 gold=390 gem=0 eff=버섯을 칠 때 점수 +0
+  L1 gold=1500 gem=0 eff=버섯을 칠 때 점수 +1
+  L2 gold=5800 gem=0 eff=버섯을 칠 때 점수 +2
+  L3 gold=0 gem=0 eff=버섯을 칠 때 점수 +3
+N ed_cols br=ed p=ed_score req= max=3 tier=1 sub=False skill= icon= col= gem=False name=군락지 수
+  d=필드에 동시에 있을 수 있는 버섯 군락지의 최대 개수를 늘려요.
+  L0 gold=65 gem=0 eff=최대 3개
+  L1 gold=120 gem=0 eff=최대 6개
+  L2 gold=320 gem=0 eff=최대 9개
+  L3 gold=0 gem=0 eff=최대 12개
+N ed_regen br=ed p=ed_score req= max=3 tier=1 sub=False skill= icon= col= gem=False name=군락 재생 속도
+  d=군락지를 다 수확해서 사라진 뒤, 새 군락지가 다시 돋아날 때까지 걸리는 시간이에요. 숫자가 작을수록 빨리 돋아나요.
+  L0 gold=120 gem=0 eff=사라진 군락지가 4초 뒤 다시 돋아남
+  L1 gold=330 gem=0 eff=사라진 군락지가 3.2초 뒤 다시 돋아남
+  L2 gold=1000 gem=0 eff=사라진 군락지가 2.4초 뒤 다시 돋아남
+  L3 gold=0 gem=0 eff=사라진 군락지가 1.6초 뒤 다시 돋아남
+N ed_price br=ed p=ed_score req= max=3 tier=1 sub=False skill= icon= col= gem=False name=정산 보너스
+  d=라운드가 끝날 때 점수로 받는 골드를 늘려요.
+  L0 gold=140 gem=0 eff=정산 골드 +0%
+  L1 gold=390 gem=0 eff=정산 골드 +30%
+  L2 gold=1200 gem=0 eff=정산 골드 +60%
+  L3 gold=0 gem=0 eff=정산 골드 +90%
+N ed_bonus br=ed p=ed_regen req= max=3 tier=1 sub=False skill= icon= col= gem=False name=수확량 I
+  d=버섯 하나를 수확할 때 얻는 개수를 늘려요. 끝까지 올리면 수확량 I+가 열려요.
+  L0 gold=890 gem=0 eff=버섯 하나당 수확 +0개
+  L1 gold=3400 gem=0 eff=버섯 하나당 수확 +1개
+  L2 gold=13000 gem=0 eff=버섯 하나당 수확 +2개
+  L3 gold=0 gem=0 eff=버섯 하나당 수확 +3개
+N ed_score1p br=ed p=ed_score req=ed_score max=3 tier=1 sub=False skill= icon= col= gem=False name=타격 점수 I+
+  d=타격 점수를 1 단위로 한 번 더 더해요. 끝까지 올리면 타격 점수 II가 열려요.
+  L0 gold=22000 gem=0 eff=버섯을 칠 때 점수 +0
+  L1 gold=84000 gem=0 eff=버섯을 칠 때 점수 +1
+  L2 gold=320000 gem=0 eff=버섯을 칠 때 점수 +2
+  L3 gold=0 gem=0 eff=버섯을 칠 때 점수 +3
+N ed_bonus1p br=ed p=ed_bonus req=ed_bonus max=3 tier=1 sub=False skill= icon= col= gem=False name=수확량 I+
+  d=수확 개수를 1 단위로 한 번 더 더해요. 끝까지 올리면 수확량 II가 열려요.
+  L0 gold=48000 gem=0 eff=버섯 하나당 수확 +0개
+  L1 gold=160000 gem=0 eff=버섯 하나당 수확 +1개
+  L2 gold=550000 gem=0 eff=버섯 하나당 수확 +2개
+  L3 gold=0 gem=0 eff=버섯 하나당 수확 +3개
+N ed_score2 br=ed p=ed_score1p req=ed_score1p max=3 tier=2 sub=False skill= icon= col= gem=False name=타격 점수 II
+  d=타격 점수를 10 단위로 더해요. 끝까지 올리면 타격 점수 II+가 열려요.
+  L0 gold=2000000 gem=0 eff=버섯을 칠 때 점수 +0
+  L1 gold=7600000 gem=0 eff=버섯을 칠 때 점수 +10
+  L2 gold=29000000 gem=0 eff=버섯을 칠 때 점수 +20
+  L3 gold=0 gem=0 eff=버섯을 칠 때 점수 +30
+N ed_bonus2 br=ed p=ed_bonus1p req=ed_bonus1p max=3 tier=2 sub=False skill= icon= col= gem=False name=수확량 II
+  d=버섯 하나를 수확할 때 얻는 개수를 10 단위로 더해요. 끝까지 올리면 수확량 II+가 열려요.
+  L0 gold=3400000 gem=0 eff=버섯 하나당 수확 +0개
+  L1 gold=13000000 gem=0 eff=버섯 하나당 수확 +10개
+  L2 gold=48000000 gem=0 eff=버섯 하나당 수확 +20개
+  L3 gold=0 gem=0 eff=버섯 하나당 수확 +30개
+N ed_score2p br=ed p=ed_score2 req=ed_score2 max=3 tier=2 sub=False skill= icon= col= gem=False name=타격 점수 II+
+  d=타격 점수를 10 단위로 한 번 더 더해요. 끝까지 올리면 타격 점수 III이 열려요.
+  L0 gold=110000000 gem=0 eff=버섯을 칠 때 점수 +0
+  L1 gold=390000000 gem=0 eff=버섯을 칠 때 점수 +10
+  L2 gold=1200000000 gem=0 eff=버섯을 칠 때 점수 +20
+  L3 gold=0 gem=0 eff=버섯을 칠 때 점수 +30
+N ed_bonus2p br=ed p=ed_bonus2 req=ed_bonus2 max=3 tier=2 sub=False skill= icon= col= gem=False name=수확량 II+
+  d=수확 개수를 10 단위로 한 번 더 더해요. 끝까지 올리면 수확량 III이 열려요.
+  L0 gold=180000000 gem=0 eff=버섯 하나당 수확 +0개
+  L1 gold=680000000 gem=0 eff=버섯 하나당 수확 +10개
+  L2 gold=2600000000 gem=0 eff=버섯 하나당 수확 +20개
+  L3 gold=0 gem=0 eff=버섯 하나당 수확 +30개
+N ed_cols2 br=ed p=ed_cols req=ed_cols max=2 tier=2 sub=False skill= icon= col= gem=False name=군락지 수 II
+  d=군락지 수를 끝까지 올린 뒤 군락지를 더 늘려요.
+  L0 gold=1900000 gem=0 eff=군락지 +0개
+  L1 gold=7100000 gem=0 eff=군락지 +4개
+  L2 gold=0 gem=0 eff=군락지 +8개
+N ed_price2 br=ed p=ed_price req=ed_price max=2 tier=2 sub=False skill= icon= col= gem=False name=정산 보너스 II
+  d=정산 보너스를 끝까지 올린 뒤 라운드가 끝날 때 받는 골드를 더 올려요.
+  L0 gold=6100000 gem=0 eff=정산 골드 +0%
+  L1 gold=23000000 gem=0 eff=정산 골드 +50%
+  L2 gold=0 gem=0 eff=정산 골드 +100%
+N ed_rare br=ed p=ed_cols req= max=3 tier=2 sub=False skill= icon= col= gem=False name=변종 출현율
+  d=새로 돋는 군락지가 에픽·유니크·레전드리 버섯일 확률을 높여요.
+  L0 gold=320000 gem=0 eff=에픽 이상 가중치 +0%
+  L1 gold=1200000 gem=0 eff=에픽 이상 가중치 +50%
+  L2 gold=4400000 gem=0 eff=에픽 이상 가중치 +100%
+  L3 gold=0 gem=0 eff=에픽 이상 가중치 +150%
+N ed_size br=ed p=ed_regen req= max=3 tier=2 sub=False skill= icon= col= gem=False name=군락지 버섯 수
+  d=군락지 하나에서 가운데 무더기 둘레에 나는 개별 버섯 수의 최대치를 늘려요.
+  L0 gold=180000 gem=0 eff=군락지당 3~5개
+  L1 gold=610000 gem=0 eff=군락지당 3~7개
+  L2 gold=2300000 gem=0 eff=군락지당 3~9개
+  L3 gold=0 gem=0 eff=군락지당 3~11개
+N ed_score3 br=ed p=ed_score2p req=ed_score2p max=3 tier=3 sub=False skill= icon= col= gem=False name=타격 점수 III
+  d=타격 점수를 100 단위로 더해요. 끝까지 올리면 타격 점수 III+가 열려요.
+  L0 gold=6400000000 gem=0 eff=버섯을 칠 때 점수 +0
+  L1 gold=24000000000 gem=0 eff=버섯을 칠 때 점수 +100
+  L2 gold=93000000000 gem=0 eff=버섯을 칠 때 점수 +200
+  L3 gold=0 gem=0 eff=버섯을 칠 때 점수 +300
+N ed_bonus3 br=ed p=ed_bonus2p req=ed_bonus2p max=3 tier=3 sub=False skill= icon= col= gem=False name=수확량 III
+  d=버섯 하나를 수확할 때 얻는 개수를 100 단위로 더해요. 끝까지 올리면 수확량 III+가 열려요.
+  L0 gold=13000000000 gem=0 eff=버섯 하나당 수확 +0개
+  L1 gold=50000000000 gem=0 eff=버섯 하나당 수확 +100개
+  L2 gold=120000000000 gem=0 eff=버섯 하나당 수확 +200개
+  L3 gold=0 gem=0 eff=버섯 하나당 수확 +300개
+N ed_score3p br=ed p=ed_score3 req=ed_score3 max=3 tier=3 sub=False skill= icon= col= gem=False name=타격 점수 III+
+  d=타격 점수를 100 단위로 한 번 더 더해요.
+  L0 gold=120000000000 gem=0 eff=버섯을 칠 때 점수 +0
+  L1 gold=160000000000 gem=0 eff=버섯을 칠 때 점수 +100
+  L2 gold=190000000000 gem=0 eff=버섯을 칠 때 점수 +200
+  L3 gold=0 gem=0 eff=버섯을 칠 때 점수 +300
+N ed_bonus3p br=ed p=ed_bonus3 req=ed_bonus3 max=3 tier=3 sub=False skill= icon= col= gem=False name=수확량 III+
+  d=수확 개수를 100 단위로 한 번 더 더해요.
+  L0 gold=140000000000 gem=0 eff=버섯 하나당 수확 +0개
+  L1 gold=190000000000 gem=0 eff=버섯 하나당 수확 +100개
+  L2 gold=220000000000 gem=0 eff=버섯 하나당 수확 +200개
+  L3 gold=0 gem=0 eff=버섯 하나당 수확 +300개
+N ed_trade br=ed p=ed_price req= max=2 tier=3 sub=False skill= icon= col= gem=False name=단골 손님
+  d=라운드가 끝날 때 점수로 받는 골드를 더 늘려요.
+  L0 gold=18000000000 gem=0 eff=정산 골드 +0%
+  L1 gold=69000000000 gem=0 eff=정산 골드 +30%
+  L2 gold=0 gem=0 eff=정산 골드 +60%
+N ed_gold br=ed p=ed_rare req= max=2 tier=3 sub=False skill= icon= col= gem=False name=황금 변종
+  d=버섯이 황금 변종으로 나올 확률이에요. 황금 버섯은 점수 ×10, 수확량 ×5이고 도감에 황금으로 기록돼요.
+  L0 gold=18000000000 gem=0 eff=버섯마다 1%
+  L1 gold=69000000000 gem=0 eff=버섯마다 3%
+  L2 gold=0 gem=0 eff=버섯마다 5%
+N ed_giant br=ed p=ed_rare req= max=2 tier=3 sub=False skill= icon= col= gem=False name=거대 버섯
+  d=라운드 중에 거대 버섯이 나타날 확률이에요. 거대 버섯은 점수 ×3, 수확량 ×30이에요.
+  L0 gold=4700000000 gem=0 eff=라운드마다 8% 확률로 거대 버섯
+  L1 gold=18000000000 gem=0 eff=라운드마다 18% 확률로 거대 버섯
+  L2 gold=0 gem=0 eff=라운드마다 28% 확률로 거대 버섯
+N ed_multi br=ed p=ed_bonus req= max=2 tier=3 sub=False skill= icon= col= gem=False name=배수 획득
+  d=버섯을 수확할 때 일정 확률로 수확량이 3배가 돼요.
+  L0 gold=60000000000 gem=0 eff=없음
+  L1 gold=99000000000 gem=0 eff=수확할 때 10% 확률로 버섯 ×3
+  L2 gold=0 gem=0 eff=수확할 때 20% 확률로 버섯 ×3
+N md_map br=md p=md_bar req= max=4 tier=1 sub=False skill= icon= col= gem=False name=필드 넓히기
+  d=버섯 밭(필드)을 넓혀요. 처음엔 필드가 좁아 화면이 확대되어 수확기·버섯이 크게 보이고, 넓힐수록 군락지와 숲 장치가 더 많이 들어가요(수입 증가). 4레벨이면 원래 크기예요.
+  L0 gold=340 gem=0 eff=필드 1280×720 · 화면 확대 ×1.5
+  L1 gold=970 gem=0 eff=필드 1422×800 · 화면 확대 ×1.35
+  L2 gold=3000 gem=0 eff=필드 1600×900 · 화면 확대 ×1.2
+  L3 gold=8300 gem=0 eff=필드 1745×982 · 화면 확대 ×1.1
+  L4 gold=0 gem=0 eff=필드 1920×1080 · 화면 확대 ×1
+N md_bar br=md p=power req= max=3 tier=1 sub=False skill= icon= col= gem=False name=바 넓이
+  d=화면 아래 슬라이드 바(통나무)의 길이예요. 길수록 수확기를 받아치기 쉬워요. 최대 길이는 필드 폭의 1/3이에요.
+  L0 gold=46 gem=0 eff=150px
+  L1 gold=87 gem=0 eff=188px
+  L2 gold=180 gem=0 eff=225px
+  L3 gold=0 gem=0 eff=263px
+N md_combo br=md p=md_bar req= max=3 tier=1 sub=False skill= icon= col= gem=False name=콤보 계수
+  d=수확기가 바에 맞을 때마다 콤보가 쌓이고, 콤보마다 점수 배율이 올라요. 그 배율이 오르는 폭을 키워요. 바닥 벽에 닿으면 콤보가 끊겨요.
+  L0 gold=160 gem=0 eff=콤보당 +0.1배
+  L1 gold=420 gem=0 eff=콤보당 +0.15배
+  L2 gold=1300 gem=0 eff=콤보당 +0.2배
+  L3 gold=0 gem=0 eff=콤보당 +0.25배
+N dev_stump br=md p=md_bar req= max=1 tier=1 sub=False skill= icon=s_device col= gem=False name=그루터기
+  d=숲 장치 그루터기를 해금해요. 라운드마다 하나가 놓이고, 부딪힌 수확기는 잠시 공격력이 올라가요(다시 부딪히면 시간이 처음으로).
+  L0 gold=200 gem=0 eff=해금하면 라운드마다 놓여요
+  L1 gold=0 gem=0 eff=라운드마다 1개 · 부딪히면 5초 공격력 ×1.5
+N dev_moss br=md p=md_bar req= max=1 tier=1 sub=False skill= icon=s_device col= gem=False name=이끼 길
+  d=숲 장치 이끼 길을 해금해요. 라운드마다 하나가 놓이고, 지나간 수확기가 잠시 빨라져요.
+  L0 gold=600 gem=0 eff=해금하면 라운드마다 놓여요
+  L1 gold=0 gem=0 eff=라운드마다 1개 · 지나가면 2초 가속
+N dev_acorn br=md p=md_bar req= max=1 tier=1 sub=False skill= icon=s_device col= gem=False name=도토리 스위치
+  d=숲 장치 도토리 스위치를 해금해요. 라운드마다 하나가 놓이고, 도토리 셋을 모두 켜면 5초 동안 점수 ×2 (한 판에 한 번).
+  L0 gold=1500 gem=0 eff=해금하면 라운드마다 놓여요
+  L1 gold=0 gem=0 eff=라운드마다 1개 · 셋 다 켜면 5초 점수 ×2 (한 번)
+N md_kid br=md p=md_bar req= max=3 tier=1 sub=False skill= icon=s_kid col=#9fd8ff gem=False name=꼬마 수확기
+  d=영구 수확기가 바에 맞을 때 확률로 작은 임시 수확기가 하나 튀어나와요.
+  L0 gold=6300 gem=0 eff=없음
+  L1 gold=17000 gem=0 eff=영구 수확기가 바에 맞을 때 12% 확률로 작은 임시 수확기 1개 (8초)
+  L2 gold=34000 gem=0 eff=영구 수확기가 바에 맞을 때 24% 확률로 작은 임시 수확기 1개 (8초)
+  L3 gold=0 gem=0 eff=영구 수확기가 바에 맞을 때 36% 확률로 작은 임시 수확기 1개 (8초)
+N md_combo2 br=md p=md_combo req=md_combo max=2 tier=2 sub=False skill= icon= col= gem=False name=콤보 계수 II
+  d=콤보 계수를 끝까지 올린 뒤 콤보당 배율을 더 키워요.
+  L0 gold=1100000 gem=0 eff=콤보당 +0배 더
+  L1 gold=4100000 gem=0 eff=콤보당 +0.1배 더
+  L2 gold=0 gem=0 eff=콤보당 +0.2배 더
+N md_templife br=md p=md_kid req= max=2 tier=2 sub=False skill= icon= col= gem=False name=임시 수확기 수명
+  d=분열·분신·꼬마 수확기로 생기는 임시 수확기가 더 오래 남아요.
+  L0 gold=6000000 gem=0 eff=임시 수확기 지속시간 +0%
+  L1 gold=23000000 gem=0 eff=임시 수확기 지속시간 +40%
+  L2 gold=0 gem=0 eff=임시 수확기 지속시간 +80%
+N md_chef br=md p=md_combo req= max=2 tier=3 sub=False skill= icon= col= gem=False name=꼬마 건축가
+  d=세계수에서 꼬마가 건물을 짓는 시간을 줄여요.
+  L0 gold=6800000000 gem=0 eff=건설 시간 ×1
+  L1 gold=26000000000 gem=0 eff=건설 시간 ×0.92
+  L2 gold=0 gem=0 eff=건설 시간 ×0.85
+N md_stump br=md p=md_combo req= max=2 tier=3 sub=False skill= icon= col= gem=False name=숲 장치 강화
+  d=숲 장치 효과를 키워요: 그루터기 점수·공격력 증가, 도토리 점수 ×2 지속시간, 이끼 길 가속.
+  L0 gold=9400000000 gem=0 eff=숲 장치 효과 +0%
+  L1 gold=36000000000 gem=0 eff=숲 장치 효과 +80%
+  L2 gold=0 gem=0 eff=숲 장치 효과 +160%
+N accel br=md p=md_bar req= max=4 tier=1 sub=False skill=accel icon=s_accel col=#6fd3ff gem=False name=가속
+  d=영구 수확기가 바에 맞을 때 확률로 3초 동안 빨라져요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=450 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=8900 gem=0 eff=발동률 10% · 3초간 속도 ×1.15
+  L2 gold=8900 gem=0 eff=발동률 20% · 3초간 속도 ×1.15
+  L3 gold=68000 gem=0 eff=발동률 20% · 3초간 속도 ×1.26
+  L4 gold=0 gem=0 eff=발동률 30% · 3초간 속도 ×1.38
+N sharpen br=md p=accel req= max=4 tier=2 sub=False skill=sharpen icon=s_sharpen col=#dfe6ee gem=False name=날 갈기
+  d=영구 수확기가 바에 맞을 때 확률로 다음 3번의 타격 피해가 커져요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=190000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=1900000 gem=0 eff=발동률 10% · 다음 3타 피해 ×2
+  L2 gold=1900000 gem=0 eff=발동률 20% · 다음 3타 피해 ×2
+  L3 gold=14200000 gem=0 eff=발동률 20% · 다음 3타 피해 ×3.5
+  L4 gold=0 gem=0 eff=발동률 30% · 다음 3타 피해 ×5
+N split br=md p=sharpen req= max=4 tier=3 sub=False skill=split icon=s_split col=#ffe36e gem=False name=분열
+  d=영구 수확기가 바에 맞을 때 확률로 임시 수확기가 갈라져 나와요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=1500000000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=26000000000 gem=0 eff=발동률 10% · 임시 수확기 1개 (6초)
+  L2 gold=26000000000 gem=0 eff=발동률 20% · 임시 수확기 1개 (6초)
+  L3 gold=200000000000 gem=0 eff=발동률 20% · 임시 수확기 2개 (6초)
+  L4 gold=0 gem=0 eff=발동률 30% · 임시 수확기 3개 (6초)
+N clear br=md p=sharpen req= max=4 tier=2 sub=False skill=clear icon=s_clear col=#bff6ff gem=False name=맑은 포자막
+  d=영구 수확기가 바에 맞을 때마다 포자 구름의 디버프를 지우고 잠시 막아 줘요.
+<size=85%><color=#8a6a4a>2~4레벨 위력</color></size>
+  L0 gold=1200000 gem=0 eff=해금하면 사용 시작
+  L1 gold=14000000 gem=0 eff=바에 맞을 때마다 디버프 해제 · 3초 보호
+  L2 gold=52000000 gem=0 eff=바에 맞을 때마다 디버프 해제 · 4초 보호
+  L3 gold=156000000 gem=0 eff=바에 맞을 때마다 디버프 해제 · 5초 보호
+  L4 gold=0 gem=0 eff=바에 맞을 때마다 디버프 해제 · 6초 보호
+N burst br=md p=accel req= max=4 tier=1 sub=False skill=burst icon=s_burst col=#ffb347 gem=False name=포자 폭발
+  d=버섯을 칠 때 확률로 그 자리에 포자 폭발이 일어나 주변 버섯에 범위 피해를 줘요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=7000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=25000 gem=0 eff=발동률 10% · 반경 80, 피해 공격력×2
+  L2 gold=25000 gem=0 eff=발동률 20% · 반경 80, 피해 공격력×2
+  L3 gold=190000 gem=0 eff=발동률 20% · 반경 105, 피해 공격력×3.5
+  L4 gold=0 gem=0 eff=발동률 30% · 반경 130, 피해 공격력×5
+N clone br=md p=burst req= max=4 tier=3 sub=False skill=clone icon=s_clone col=#c9d6ff gem=False name=분신 수확기
+  d=버섯을 수확할 때 확률로 작은 분신 수확기가 생겨요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=60000000000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=95000000000 gem=0 eff=발동률 10% · 작은 임시 수확기 1개, 4초
+  L2 gold=95000000000 gem=0 eff=발동률 20% · 작은 임시 수확기 1개, 4초
+  L3 gold=280000000000 gem=0 eff=발동률 20% · 작은 임시 수확기 2개, 4초
+  L4 gold=0 gem=0 eff=발동률 30% · 작은 임시 수확기 3개, 4초
+N magnet br=md p=burst req= max=4 tier=2 sub=False skill=magnet icon=s_magnet col=#ff6b8b gem=False name=버섯 자석
+  d=버섯을 칠 때 확률로 1초 동안 가까운 버섯 쪽으로 휘어 날아가요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=1200000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=14000000 gem=0 eff=발동률 10% · 1초간 가까운 버섯 쪽으로 초당 20°
+  L2 gold=16000000 gem=0 eff=발동률 20% · 1초간 가까운 버섯 쪽으로 초당 20°
+  L3 gold=113000000 gem=0 eff=발동률 20% · 1초간 가까운 버섯 쪽으로 초당 35°
+  L4 gold=0 gem=0 eff=발동률 30% · 1초간 가까운 버섯 쪽으로 초당 50°
+N bolt br=md p=magnet req= max=4 tier=3 sub=False skill=bolt icon=s_bolt col=#fff36b gem=False name=연쇄 번개
+  d=버섯을 칠 때 확률로 주변 버섯들로 번개가 튀며 연속으로 피해를 줘요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=120000000000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=140000000000 gem=0 eff=발동률 10% · 주변 2개, 피해 공격력×1
+  L2 gold=140000000000 gem=0 eff=발동률 20% · 주변 2개, 피해 공격력×1
+  L3 gold=380000000000 gem=0 eff=발동률 20% · 주변 3개, 피해 공격력×1.8
+  L4 gold=0 gem=0 eff=발동률 30% · 주변 4개, 피해 공격력×2.5
+N tornado br=md p=split req= max=4 tier=3 sub=False skill=tornado icon=s_tornado col=#b8f0e0 gem=False name=회오리
+  d=벽에 튕길 때 확률로 회오리가 가로로 필드를 쓸고 지나가요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=140000000000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=160000000000 gem=0 eff=발동률 10% · 띠 높이 50, 피해 공격력×2
+  L2 gold=160000000000 gem=0 eff=발동률 20% · 띠 높이 50, 피해 공격력×2
+  L3 gold=390000000000 gem=0 eff=발동률 20% · 띠 높이 72, 피해 공격력×3.5
+  L4 gold=0 gem=0 eff=발동률 30% · 띠 높이 94, 피해 공격력×5
+N shock br=md p=clone req= max=4 tier=3 sub=False skill=shock icon=s_shock col=#ffd0a0 gem=False name=충격파
+  d=버섯을 수확할 때 확률로 충격파가 퍼지고, 충격파로 수확한 버섯이 또 충격파를 일으켜요(최대 8단계).
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=95000000000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=120000000000 gem=0 eff=발동률 10% · 반경 100, 피해 공격력×1, 연쇄 최대 8단계
+  L2 gold=120000000000 gem=0 eff=발동률 20% · 반경 100, 피해 공격력×1, 연쇄 최대 8단계
+  L3 gold=320000000000 gem=0 eff=발동률 20% · 반경 130, 피해 공격력×1.8, 연쇄 최대 8단계
+  L4 gold=0 gem=0 eff=발동률 30% · 반경 160, 피해 공격력×2.5, 연쇄 최대 8단계
+N pierce br=md p=accel req= max=4 tier=1 sub=False skill=pierce icon=s_pierce col=#ffd6d6 gem=False name=관통
+  d=영구 수확기가 바에 맞을 때 확률로, 잠시 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해를 줘요(보스는 뚫지 못해요).
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=2500 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=14000 gem=0 eff=발동률 10% · 3초 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해
+  L2 gold=16000 gem=0 eff=발동률 20% · 3초 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해
+  L3 gold=68000 gem=0 eff=발동률 20% · 4초 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해
+  L4 gold=0 gem=0 eff=발동률 30% · 5초 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해
+N homing br=md p=pierce req= max=4 tier=2 sub=False skill=homing icon=s_magnet col=#ffa8e0 gem=False name=유도
+  d=영구 수확기가 바에 맞을 때 확률로, 잠시 동안 바에 튕길 때마다 가장 가까운 버섯 군락(보스 스테이지에서는 보스) 쪽으로 곧게 날아가요. 숲 장치·바는 노리지 않아요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=12000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=24000 gem=0 eff=발동률 10% · 3초 동안 바에 튕길 때마다 가장 가까운 군락(보스 스테이지는 보스)으로 날아감
+  L2 gold=24000 gem=0 eff=발동률 20% · 3초 동안 바에 튕길 때마다 가장 가까운 군락(보스 스테이지는 보스)으로 날아감
+  L3 gold=144000 gem=0 eff=발동률 20% · 4초 동안 바에 튕길 때마다 가장 가까운 군락(보스 스테이지는 보스)으로 날아감
+  L4 gold=0 gem=0 eff=발동률 30% · 5초 동안 바에 튕길 때마다 가장 가까운 군락(보스 스테이지는 보스)으로 날아감
+N power br=md p= req= max=4 tier=1 sub=False skill=power icon=s_sharpen col=#ff9a5a gem=False name=기운 북돋기
+  d=영구 수확기가 바에 맞을 때마다 잠시 공격력과 스킬 발동률이 올라가요. 조작하는 만큼 강해지는 초반 핵심 버프예요.
+<size=85%><color=#8a6a4a>2~4레벨 위력</color></size>
+  L0 gold=20 gem=0 eff=해금하면 사용 시작
+  L1 gold=240 gem=0 eff=바에 맞을 때마다 3초 동안 공격력 +20% · 스킬 발동률 +5%p
+  L2 gold=720 gem=0 eff=바에 맞을 때마다 4초 동안 공격력 +40% · 스킬 발동률 +10%p
+  L3 gold=2160 gem=0 eff=바에 맞을 때마다 5초 동안 공격력 +60% · 스킬 발동률 +15%p
+  L4 gold=0 gem=0 eff=바에 맞을 때마다 6초 동안 공격력 +80% · 스킬 발동률 +20%p
+N barclone br=md p=split req= max=4 tier=3 sub=False skill=barclone icon=s_split col=#a8d8ff gem=False name=분신 바
+  d=영구 수확기가 바에 맞을 때 확률로 필드 가운데나 양옆에 분신 슬라이드 바가 잠시 생겨요. 분신 바도 위로 튕겨 주고 바 버프를 줘요.
+<size=85%><color=#8a6a4a>2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력</color></size>
+  L0 gold=3000000 gem=0 eff=해금하면 발동률 10%로 사용 시작
+  L1 gold=6000000 gem=0 eff=발동률 10% · 5초 동안 필드 가운데나 양옆에 분신 슬라이드 바 (최대 2개)
+  L2 gold=6000000 gem=0 eff=발동률 20% · 5초 동안 필드 가운데나 양옆에 분신 슬라이드 바 (최대 2개)
+  L3 gold=36000000 gem=0 eff=발동률 20% · 6초 동안 필드 가운데나 양옆에 분신 슬라이드 바 (최대 2개)
+  L4 gold=0 gem=0 eff=발동률 30% · 7초 동안 필드 가운데나 양옆에 분신 슬라이드 바 (최대 2개)
+N fest br=md p=shock req= max=4 tier=3 sub=False skill=fest icon=s_fest col=#ffd84a gem=False name=풍년
+  d=라운드 마지막 5초 동안 점수와 수확량이 몇 배가 돼요.
+<size=85%><color=#8a6a4a>2~4레벨 위력</color></size>
+  L0 gold=190000000000 gem=0 eff=해금하면 사용 시작
+  L1 gold=200000000000 gem=0 eff=라운드 마지막 5초 모든 점수·수확량 ×2
+  L2 gold=220000000000 gem=0 eff=라운드 마지막 5초 모든 점수·수확량 ×3.5
+  L3 gold=660000000000 gem=0 eff=라운드 마지막 5초 모든 점수·수확량 ×5
+  L4 gold=0 gem=0 eff=라운드 마지막 5초 모든 점수·수확량 ×6.5
+N md_buffdur br=md p=accel req= max=2 tier=2 sub=False skill= icon= col= gem=False name=버프 지속
+  d=바 버프 중 가속·맑은 포자막의 지속시간과 날 갈기의 강화 타수를 늘려요.
+  L0 gold=15000000 gem=0 eff=가속·맑은 포자막 지속 +0%, 날 갈기 3타
+  L1 gold=47000000 gem=0 eff=가속·맑은 포자막 지속 +40%, 날 갈기 5타
+  L2 gold=0 gem=0 eff=가속·맑은 포자막 지속 +80%, 날 갈기 6타
+N ps_atk br=ps p=power req= max=4 tier=1 sub=False skill= icon= col= gem=False name=공격력 I
+  d=수확기가 버섯에 부딪힐 때 주는 피해에 고정값을 더해요. 대부분의 스킬 피해도 공격력에 비례해요. 끝까지 올리면 공격력 II가 열려요.
+  L0 gold=1800 gem=0 eff=공격력 +0
+  L1 gold=6800 gem=0 eff=공격력 +1
+  L2 gold=26000 gem=0 eff=공격력 +2
+  L3 gold=100000 gem=0 eff=공격력 +3
+  L4 gold=0 gem=0 eff=공격력 +4
+N ps_size br=ps p=ps_atk req= max=3 tier=1 sub=False skill= icon= col= gem=False name=수확기 크기
+  d=수확기의 크기예요. 클수록 버섯에 잘 맞아요.
+  L0 gold=120 gem=0 eff=반지름 21
+  L1 gold=300 gem=0 eff=반지름 24.2
+  L2 gold=920 gem=0 eff=반지름 27.3
+  L3 gold=0 gem=0 eff=반지름 30.5
+N ps_spd br=ps p=ps_atk req= max=3 tier=1 sub=False skill= icon= col= gem=False name=공속
+  d=수확기가 날아가는 속도예요.
+  L0 gold=130 gem=0 eff=이동 속도 +0%
+  L1 gold=350 gem=0 eff=이동 속도 +12%
+  L2 gold=1100 gem=0 eff=이동 속도 +24%
+  L3 gold=0 gem=0 eff=이동 속도 +36%
+N ps_dur br=ps p=ps_atk req= max=3 tier=1 sub=False skill= icon= col= gem=False name=지속시간
+  d=한 라운드의 제한시간을 늘려요. 라운드는 15초에서 시작해 스테이지마다 0.5초씩(최대 +10초) 길어지고, 여기에 더해져요.
+  L0 gold=580 gem=0 eff=라운드 시간 +0초
+  L1 gold=1600 gem=0 eff=라운드 시간 +2초
+  L2 gold=4300 gem=0 eff=라운드 시간 +4초
+  L3 gold=0 gem=0 eff=라운드 시간 +6초
+N ps_ball br=ps p=ps_atk req= max=1 tier=1 sub=False skill= icon= col= gem=False name=수확기 +1
+  d=라운드를 시작할 때 함께 발사하는 영구 수확기를 하나 늘려요. 바 버프는 영구 수확기만 받아요. 공격력 II·III 아래에서 더 늘릴 수 있어요.
+  L0 gold=12000 gem=0 eff=영구 수확기 +0개
+  L1 gold=0 gem=0 eff=영구 수확기 +1개
+N ps_atk2 br=ps p=ps_spd req=ps_atk max=4 tier=2 sub=False skill= icon= col= gem=False name=공격력 II
+  d=공격력을 10 단위로 더해요. 지역이 바뀌면 버섯 체력이 10배가 되니, 다음 지역에 가기 전에 올려 두세요. 끝까지 올리면 공격력 II+가 열려요.
+  L0 gold=630000 gem=0 eff=공격력 +0
+  L1 gold=2400000 gem=0 eff=공격력 +7
+  L2 gold=9000000 gem=0 eff=공격력 +15
+  L3 gold=34000000 gem=0 eff=공격력 +22
+  L4 gold=0 gem=0 eff=공격력 +30
+N ps_ball2 br=ps p=ps_atk2 req= max=1 tier=2 sub=False skill= icon= col= gem=False name=수확기 +1 (II)
+  d=영구 수확기를 하나 더 늘려요.
+  L0 gold=27000000 gem=0 eff=영구 수확기 +0개
+  L1 gold=0 gem=0 eff=영구 수확기 +1개
+N ps_atk2p br=ps p=ps_resist req=ps_atk2 max=3 tier=2 sub=False skill= icon= col= gem=False name=공격력 II+
+  d=공격력을 10 단위로 한 번 더 더해요. 끝까지 올리면 공격력 III이 열려요.
+  L0 gold=120000000 gem=0 eff=공격력 +0
+  L1 gold=310000000 gem=0 eff=공격력 +7
+  L2 gold=1100000000 gem=0 eff=공격력 +15
+  L3 gold=0 gem=0 eff=공격력 +22
+N ps_dur2 br=ps p=ps_dur req=ps_dur max=2 tier=2 sub=False skill= icon= col= gem=False name=지속시간 II
+  d=지속시간을 끝까지 올린 뒤 라운드 시간을 더 늘려요.
+  L0 gold=6300000 gem=0 eff=라운드 시간 +0초 더
+  L1 gold=24000000 gem=0 eff=라운드 시간 +3초 더
+  L2 gold=0 gem=0 eff=라운드 시간 +6초 더
+N ps_crit br=ps p=ps_size req= max=3 tier=2 sub=False skill= icon= col= gem=False name=치명타
+  d=버섯을 칠 때 치명타가 날 확률이에요. 치명타는 피해와 점수가 ×3이에요(치명타 피해 노드로 더 커져요).
+  L0 gold=480000 gem=0 eff=0%
+  L1 gold=1800000 gem=0 eff=5% (피해·점수 ×3)
+  L2 gold=6800000 gem=0 eff=10% (피해·점수 ×3)
+  L3 gold=0 gem=0 eff=15% (피해·점수 ×3)
+N ps_resist br=ps p=ps_atk2 req= max=2 tier=2 sub=False skill= icon= col= gem=False name=포자 저항
+  d=포자 구름에 닿았을 때 걸리는 느림·약화 디버프가 짧아져요.
+  L0 gold=1100000 gem=0 eff=느림·약화 디버프 지속 -0%
+  L1 gold=4000000 gem=0 eff=느림·약화 디버프 지속 -15%
+  L2 gold=0 gem=0 eff=느림·약화 디버프 지속 -30%
+N ps_rush br=ps p=ps_dur req= max=2 tier=2 sub=False skill= icon= col= gem=False name=선제 공격
+  d=라운드를 시작하고 3초 동안 공격력이 올라가요. 처음 쏜 수확기로 크게 터뜨리기 좋아요.
+  L0 gold=7400000 gem=0 eff=라운드 시작 후 3초 동안 공격력 ×1
+  L1 gold=28000000 gem=0 eff=라운드 시작 후 3초 동안 공격력 ×1.75
+  L2 gold=0 gem=0 eff=라운드 시작 후 3초 동안 공격력 ×2.5
+N bl br=ps p=ps_size req= max=4 tier=2 sub=False skill= icon=s_blade col=#e6e6f0 gem=False name=회전 칼날
+  d=수확기 둘레에 회전 칼날이 생겨서, 범위 안의 버섯에 주기적으로 피해를 줘요.
+<size=85%><color=#8a6a4a>2레벨 범위·속도 · 3레벨 위력 · 4레벨 모두 한 단계 더</color></size>
+  L0 gold=43000000 gem=0 eff=해금하면 칼날 사용 시작
+  L1 gold=36000000000 gem=0 eff=반지름 +20px · 0.6초마다 · 피해 공격력×0.4
+  L2 gold=36000000000 gem=0 eff=반지름 +45px · 0.48초마다 · 피해 공격력×0.4
+  L3 gold=228000000000 gem=0 eff=반지름 +45px · 0.48초마다 · 피해 공격력×0.7
+  L4 gold=0 gem=0 eff=반지름 +70px · 0.36초마다 · 피해 공격력×1
+N ps_bar br=ps p=ps_size req= max=3 tier=2 sub=False skill= icon= col= gem=False name=바 넓이 II
+  d=슬라이드 바 길이를 더 늘려요. 바 넓이 노드와 더해지며, 최대 길이는 필드 폭의 1/3이에요.
+  L0 gold=5000 gem=0 eff=바 길이 +0px (필드 폭 1/3까지)
+  L1 gold=12500 gem=0 eff=바 길이 +30px (필드 폭 1/3까지)
+  L2 gold=31250 gem=0 eff=바 길이 +60px (필드 폭 1/3까지)
+  L3 gold=0 gem=0 eff=바 길이 +90px (필드 폭 1/3까지)
+N ps_barspd br=ps p=ps_spd req= max=3 tier=2 sub=False skill= icon= col= gem=False name=바 반사 속도
+  d=수확기가 슬라이드 바에 튕길 때 더 빠르게 날아가요.
+  L0 gold=8000 gem=0 eff=바에 튕길 때 속도 +0%
+  L1 gold=20000 gem=0 eff=바에 튕길 때 속도 +8%
+  L2 gold=50000 gem=0 eff=바에 튕길 때 속도 +16%
+  L3 gold=0 gem=0 eff=바에 튕길 때 속도 +24%
+N ps_bardur br=ps p=ps_dur req= max=3 tier=2 sub=False skill= icon= col= gem=False name=바 스킬 지속
+  d=바에 맞을 때 생기는 스킬(기운 북돋기·맑은 포자막·관통·유도·분신 바)의 지속시간이 길어져요.
+  L0 gold=12000 gem=0 eff=바 스킬 지속시간 +0초
+  L1 gold=30000 gem=0 eff=바 스킬 지속시간 +0.5초
+  L2 gold=75000 gem=0 eff=바 스킬 지속시간 +1초
+  L3 gold=0 gem=0 eff=바 스킬 지속시간 +1.5초
+N ps_barrate br=ps p=ps_bardur req= max=3 tier=3 sub=False skill= icon= col= gem=False name=바 스킬 발동률
+  d=바 스킬(가속·날 갈기·관통·유도·분열·분신 바)이 터질 확률이 올라가요.
+  L0 gold=400000 gem=0 eff=바 스킬 발동률 +0%p
+  L1 gold=1000000 gem=0 eff=바 스킬 발동률 +4%p
+  L2 gold=2500000 gem=0 eff=바 스킬 발동률 +8%p
+  L3 gold=0 gem=0 eff=바 스킬 발동률 +12%p
+N ps_power br=ps p=ps_barrate req= max=3 tier=3 sub=False skill= icon= col= gem=False name=북돋기 강화
+  d=기운 북돋기 버프의 공격력 증가와 스킬 발동률 증가를 더 키워요.
+  L0 gold=2000000 gem=0 eff=기운 북돋기 공격력 +0%p · 발동률 +0%p
+  L1 gold=5000000 gem=0 eff=기운 북돋기 공격력 +10%p · 발동률 +3%p
+  L2 gold=12500000 gem=0 eff=기운 북돋기 공격력 +20%p · 발동률 +5%p
+  L3 gold=0 gem=0 eff=기운 북돋기 공격력 +30%p · 발동률 +8%p
+N ps_atk3 br=ps p=ps_heavy req=ps_atk2p max=4 tier=3 sub=False skill= icon= col= gem=False name=공격력 III
+  d=공격력을 100 단위로 더해요. 끝까지 올리면 공격력 III+가 열려요.
+  L0 gold=4500000000 gem=0 eff=공격력 +0
+  L1 gold=17000000000 gem=0 eff=공격력 +75
+  L2 gold=64000000000 gem=0 eff=공격력 +150
+  L3 gold=120000000000 gem=0 eff=공격력 +225
+  L4 gold=0 gem=0 eff=공격력 +300
+N ps_atk3p br=ps p=ps_crit2 req=ps_atk3 max=3 tier=3 sub=False skill= icon= col= gem=False name=공격력 III+
+  d=공격력을 100 단위로 한 번 더 더해요. 끝까지 올리면 공격력 IV가 열려요.
+  L0 gold=120000000000 gem=0 eff=공격력 +0
+  L1 gold=140000000000 gem=0 eff=공격력 +75
+  L2 gold=190000000000 gem=0 eff=공격력 +150
+  L3 gold=0 gem=0 eff=공격력 +225
+N ps_atk4 br=ps p=ps_power req=ps_atk3p max=3 tier=3 sub=False skill= icon= col= gem=False name=공격력 IV
+  d=공격력을 1000 단위로 더해요.
+  L0 gold=220000000000 gem=0 eff=공격력 +0
+  L1 gold=220000000000 gem=0 eff=공격력 +750
+  L2 gold=220000000000 gem=0 eff=공격력 +1,500
+  L3 gold=0 gem=0 eff=공격력 +2,250
+N ps_ball3 br=ps p=ps_atk3 req= max=2 tier=3 sub=False skill= icon= col= gem=False name=수확기 +2 (III)
+  d=영구 수확기를 두 개까지 더 늘려요.
+  L0 gold=160000000000 gem=0 eff=영구 수확기 +0개
+  L1 gold=220000000000 gem=0 eff=영구 수확기 +1개
+  L2 gold=0 gem=0 eff=영구 수확기 +2개
+N ps_crit2 br=ps p=ps_atk3 req=ps_crit max=2 tier=3 sub=False skill= icon= col= gem=False name=치명타 피해
+  d=치명타가 났을 때 피해와 점수 배율을 키워요.
+  L0 gold=120000000000 gem=0 eff=치명타 피해·점수 ×3
+  L1 gold=160000000000 gem=0 eff=치명타 피해·점수 ×4
+  L2 gold=0 gem=0 eff=치명타 피해·점수 ×5
+N ps_heavy br=ps p=ps_atk2p req= max=2 tier=3 sub=False skill= icon= col= gem=False name=무더기 파쇄
+  d=군락 가운데 버섯 무더기와 거대 버섯처럼 단단한 버섯에 주는 피해를 늘려요.
+  L0 gold=20000000000 gem=0 eff=군락 무더기·거대 버섯 피해 ×1
+  L1 gold=75000000000 gem=0 eff=군락 무더기·거대 버섯 피해 ×1.5
+  L2 gold=0 gem=0 eff=군락 무더기·거대 버섯 피해 ×2
+N gm_harvest br=ed p=ed_bonus req= max=3 tier=3 sub=False skill= icon= col= gem=True name=균사 공명
+  d=균사석으로 여는 특수 노드. 라운드에서 수확하는 모든 버섯 개수를 늘려요.
+  L0 gold=3000 gem=10 eff=모든 버섯 획득량 ×1
+  L1 gold=6000 gem=20 eff=모든 버섯 획득량 ×1.25
+  L2 gold=12000 gem=40 eff=모든 버섯 획득량 ×1.56
+  L3 gold=0 gem=0 eff=모든 버섯 획득량 ×1.95
+N gm_spore br=ed p=ed_multi req= max=3 tier=3 sub=False skill= icon= col= gem=True name=균사 감응
+  d=균사석으로 여는 특수 노드. 세계수 나무에서 버섯을 딸 때 균사석을 더 얻을 확률이 생겨요.
+  L0 gold=2000 gem=8 eff=세계수 버섯을 딸 때 0% 확률로 균사석 +2
+  L1 gold=4000 gem=16 eff=세계수 버섯을 딸 때 25% 확률로 균사석 +2
+  L2 gold=8000 gem=32 eff=세계수 버섯을 딸 때 50% 확률로 균사석 +2
+  L3 gold=0 gem=0 eff=세계수 버섯을 딸 때 75% 확률로 균사석 +2
+N gm_gourmet br=ed p=ed_trade req= max=3 tier=3 sub=False skill= icon= col= gem=True name=풍요의 손길
+  d=균사석으로 여는 특수 노드. 세계수 나무에서 버섯을 딸 때 균사석을 더 얻어요.
+  L0 gold=2500 gem=10 eff=세계수 버섯 균사석 ×1
+  L1 gold=5000 gem=20 eff=세계수 버섯 균사석 ×1.1
+  L2 gold=10000 gem=40 eff=세계수 버섯 균사석 ×1.2
+  L3 gold=0 gem=0 eff=세계수 버섯 균사석 ×1.3
+N gm_herb br=md p=md_chef req= max=3 tier=3 sub=False skill= icon= col= gem=True name=자동 수확 확장
+  d=균사석으로 여는 특수 노드. 자동 수확 보상이 늘어나요.
+  L0 gold=2500 gem=10 eff=자동 수확 보상 ×1
+  L1 gold=5000 gem=20 eff=자동 수확 보상 ×1.2
+  L2 gold=10000 gem=40 eff=자동 수확 보상 ×1.4
+  L3 gold=0 gem=0 eff=자동 수확 보상 ×1.6
+N gm_farm br=md p=md_stump req= max=3 tier=3 sub=False skill= icon= col= gem=True name=대지의 축복
+  d=균사석으로 여는 특수 노드. 세계수 나무의 버섯이 더 빨리 자라요.
+  L0 gold=1500 gem=6 eff=세계수 버섯 성장 시간 ×1
+  L1 gold=3000 gem=12 eff=세계수 버섯 성장 시간 ×0.8
+  L2 gold=6000 gem=24 eff=세계수 버섯 성장 시간 ×0.64
+  L3 gold=0 gem=0 eff=세계수 버섯 성장 시간 ×0.51
+N gm_meteor br=md p=md_combo req= max=3 tier=3 sub=False skill= icon= col=#8ff0c8 gem=True name=균사석 낙하
+  d=균사석 특수 스킬. 라운드 중 일정 시간마다 하늘에서 균사석이 떨어져, 떨어진 자리 둘레의 버섯에 큰 피해를 줘요. 발동률 없이 늘 일어나요.
+  L0 gold=5000 gem=25 eff=없음
+  L1 gold=10000 gem=50 eff=3.5초마다 균사석이 떨어져 반경 130 피해 공격력×3
+  L2 gold=20000 gem=100 eff=2.8초마다 균사석이 떨어져 반경 150 피해 공격력×6
+  L3 gold=0 gem=0 eff=2.24초마다 균사석이 떨어져 반경 170 피해 공격력×12
+N gm_toxin br=ps p=ps_resist req= max=3 tier=3 sub=False skill= icon= col= gem=True name=독성 내성
+  d=균사석으로 여는 특수 노드. 독버섯이 뿜는 포자 구름이 줄고, 느림·약화 디버프가 짧아져요.
+  L0 gold=2000 gem=8 eff=포자 디버프 지속 ×1 · 독버섯 포자 구름 ×1
+  L1 gold=4000 gem=16 eff=포자 디버프 지속 ×0.75 · 독버섯 포자 구름 ×0.75
+  L2 gold=8000 gem=32 eff=포자 디버프 지속 ×0.56 · 독버섯 포자 구름 ×0.56
+  L3 gold=0 gem=0 eff=포자 디버프 지속 ×0.42 · 독버섯 포자 구름 ×0.42
+N gm_atk br=ps p=ps_atk3p req= max=3 tier=3 sub=False skill= icon= col= gem=True name=균사 투지
+  d=균사석으로 여는 특수 노드. 공격력에 곱해져요.
+  L0 gold=3000 gem=12 eff=공격력 ×1
+  L1 gold=6000 gem=24 eff=공격력 ×1.1
+  L2 gold=12000 gem=48 eff=공격력 ×1.2
+  L3 gold=0 gem=0 eff=공격력 ×1.3
+N gm_boss br=ps p=ps_heavy req= max=3 tier=3 sub=False skill= icon= col= gem=True name=보스 파쇄
+  d=균사석으로 여는 특수 노드. 보스에게 주는 피해가 늘어요.
+  L0 gold=3000 gem=15 eff=보스에게 주는 피해 ×1
+  L1 gold=6000 gem=30 eff=보스에게 주는 피해 ×1.15
+  L2 gold=12000 gem=60 eff=보스에게 주는 피해 ×1.3
+  L3 gold=0 gem=0 eff=보스에게 주는 피해 ×1.45
+N gm_score br=ed p=ed_score3p req= max=3 tier=3 sub=False skill= icon= col= gem=True name=균사 정산
+  d=균사석으로 여는 특수 노드. 정산 골드에 곱해져요.
+  L0 gold=3000 gem=12 eff=정산 골드 ×1
+  L1 gold=6000 gem=24 eff=정산 골드 ×1.1
+  L2 gold=12000 gem=48 eff=정산 골드 ×1.2
+  L3 gold=0 gem=0 eff=정산 골드 ×1.3
+N gm_bossgem br=md p=md_bar req= max=3 tier=3 sub=False skill= icon= col= gem=True name=보스의 전리품
+  d=균사석으로 여는 특수 노드. 보스를 쓰러뜨릴 때 균사석을 더 받아요.
+  L0 gold=2500 gem=10 eff=보스를 쓰러뜨릴 때 균사석 +0
+  L1 gold=5000 gem=20 eff=보스를 쓰러뜨릴 때 균사석 +2
+  L2 gold=10000 gem=40 eff=보스를 쓰러뜨릴 때 균사석 +4
+  L3 gold=0 gem=0 eff=보스를 쓰러뜨릴 때 균사석 +6
+N gm_skill br=md p=md_buffdur req= max=3 tier=3 sub=False skill= icon= col= gem=True name=균사 술법
+  d=균사석으로 여는 특수 노드. 모든 스킬이 터질 확률에 곱해져요.
+  L0 gold=3000 gem=12 eff=모든 스킬 발동률 ×1
+  L1 gold=6000 gem=24 eff=모든 스킬 발동률 ×1.1
+  L2 gold=12000 gem=48 eff=모든 스킬 발동률 ×1.2
+  L3 gold=0 gem=0 eff=모든 스킬 발동률 ×1.3
+N gm_bar br=md p=md_templife req= max=3 tier=3 sub=False skill= icon= col= gem=True name=균사 바
+  d=균사석으로 여는 특수 노드. 슬라이드 바 길이에 곱해져요(필드 폭 1/3까지).
+  L0 gold=2500 gem=8 eff=바 길이 ×1 (필드 폭 1/3까지)
+  L1 gold=5000 gem=16 eff=바 길이 ×1.1 (필드 폭 1/3까지)
+  L2 gold=10000 gem=32 eff=바 길이 ×1.2 (필드 폭 1/3까지)
+  L3 gold=0 gem=0 eff=바 길이 ×1.3 (필드 폭 1/3까지)
+S accel 가속 kind=bar col=#6fd3ff icon=s_accel noRate=False eff0=3초간 속도 ×1.15 eff3=3초간 속도 ×1.49
+S sharpen 날 갈기 kind=bar col=#dfe6ee icon=s_sharpen noRate=False eff0=다음 3타 피해 ×2 eff3=다음 3타 피해 ×6.5
+S split 분열 kind=bar col=#ffe36e icon=s_split noRate=False eff0=임시 수확기 1개 (6초) eff3=임시 수확기 4개 (6초)
+S clear 맑은 포자막 kind=bar col=#bff6ff icon=s_clear noRate=True eff0=바에 맞을 때마다 디버프 해제 · 3초 보호 eff3=바에 맞을 때마다 디버프 해제 · 6초 보호
+S burst 포자 폭발 kind=hit col=#ffb347 icon=s_burst noRate=False eff0=반경 80, 피해 공격력×2 eff3=반경 155, 피해 공격력×6.5
+S clone 분신 수확기 kind=harvest col=#c9d6ff icon=s_clone noRate=False eff0=작은 임시 수확기 1개, 4초 eff3=작은 임시 수확기 4개, 4초
+S magnet 버섯 자석 kind=hit col=#ff6b8b icon=s_magnet noRate=False eff0=1초간 가까운 버섯 쪽으로 초당 20° eff3=1초간 가까운 버섯 쪽으로 초당 65°
+S bolt 연쇄 번개 kind=hit col=#fff36b icon=s_bolt noRate=False eff0=주변 2개, 피해 공격력×1 eff3=주변 5개, 피해 공격력×3.3
+S tornado 회오리 kind=wall col=#b8f0e0 icon=s_tornado noRate=False eff0=띠 높이 50, 피해 공격력×2 eff3=띠 높이 116, 피해 공격력×6.5
+S shock 충격파 kind=harvest col=#ffd0a0 icon=s_shock noRate=False eff0=반경 100, 피해 공격력×1, 연쇄 최대 8단계 eff3=반경 190, 피해 공격력×3.3, 연쇄 최대 8단계
+S pierce 관통 kind=bar col=#ffd6d6 icon=s_pierce noRate=False eff0=3초 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해 eff3=6초 동안 버섯 군락을 튕기지 않고 뚫고 지나가며 피해
+S homing 유도 kind=bar col=#ffa8e0 icon=s_magnet noRate=False eff0=3초 동안 바에 튕길 때마다 가장 가까운 군락(보스 스테이지는 보스)으로 날아감 eff3=6초 동안 바에 튕길 때마다 가장 가까운 군락(보스 스테이지는 보스)으로 날아감
+S power 기운 북돋기 kind=bar col=#ff9a5a icon=s_sharpen noRate=True eff0=바에 맞을 때마다 3초 동안 공격력 +20% · 스킬 발동률 +5%p eff3=바에 맞을 때마다 6초 동안 공격력 +80% · 스킬 발동률 +20%p
+S barclone 분신 바 kind=bar col=#a8d8ff icon=s_split noRate=False eff0=5초 동안 필드 가운데나 양옆에 분신 슬라이드 바 (최대 2개) eff3=8초 동안 필드 가운데나 양옆에 분신 슬라이드 바 (최대 2개)
+S fest 풍년 kind=fest col=#ffd84a icon=s_fest noRate=True eff0=라운드 마지막 5초 모든 점수·수확량 ×2 eff3=라운드 마지막 5초 모든 점수·수확량 ×6.5
+H sam 오래된 낫 기본형 unlock=0 lv=1500 atk=1.1 spd=1 size=1 crit=0 text1=휘두르기: 버섯을 수확할 때 15% 확률로 가까운 버섯 하나를 함께 벤다 (공격력×2)
+H saw 절삭 수리검 속도형 unlock=3000 lv=0 atk=1 spd=1.2 size=0.85 crit=0 text1=튕겨 베기: 벽·바에 튕길 때마다 다음 타격 피해 +25% (최대 3번 쌓임, 맞히면 사라짐)
+H hoe 약초 괭이 치명타형 unlock=3500 lv=0 atk=1 spd=0.95 size=0.9 crit=0.15 text1=급소 찌르기: 에픽 이상 버섯을 맞히면 20% 확률로 확정 치명타 (피해·점수 ×3)
+H mill 회전칼날 수확기 범위형 unlock=5000 lv=0 atk=1 spd=1 size=1.3 crit=0 text1=갈아내기: 늘 작은 회전 칼날(범위 42px)을 두르고, 칼날이 벨 때 10% 확률로 버섯 조각(추가 수확) 획득
+H spore 분열 수확기 분열형 unlock=4000 lv=0 atk=1 spd=1 size=1 crit=0 text1=세포 분열: 버섯을 맞히면 8% 확률로 능력치 50%인 작은 수확기를 소환 (2번 부딪히면 사라짐)
+H bell 방울 수확기 울림형 unlock=8000 lv=0 atk=1 spd=1 size=1 crit=0 text1=딸랑 울림: 버섯을 맞힐 때마다 작은 충격파 (반경 52, 피해 공격력×0.55)
+H coin 엽전 수확기 재물형 unlock=2500 lv=0 atk=1 spd=1 size=1 crit=0 text1=짤랑짤랑: 버섯에 닿을 때마다 골드 획득 (그 버섯 값어치의 30%)
+H gold 황금 수확기 보상 unlock=-1 lv=15000 atk=1 spd=1 size=1 crit=0 text1=황금 손길: 맞힌 버섯이 3% 확률로 황금 변종으로 변한다
+W clear 맑음 good=True icon=w_clear d=변화 없음 fav=
+W rain 보슬비 good=True icon=w_rain d=군락 재생 속도 ×2, 군락지 +20% fav=먹물버섯,이끼꽃버섯,목이버섯,흰목이
+W moon 보름달 밤 good=True icon=w_moon d=필드가 어두워지고 발광 버섯이 빛남, 황금 변종 ×3 fav=화경버섯,독우산광대버섯,송이버섯,송로버섯,갈색고리갓버섯
+W storm 폭우 good=False icon=w_storm d=수확기 속도 ×0.8, 군락 재생이 2배 느려짐 fav=
+W wind 포자 바람 good=False icon=w_wind d=버섯이 포자를 2배 자주 뿜고, 느림·약화 디버프가 2배 오래 간다 fav=말불버섯,목도리방귀버섯,광대버섯,뱀껍질광대버섯,알광대버섯,개나리광대버섯,독우산광대버섯,마귀광대버섯
+W cold 한파 good=False icon=w_cold d=바 길이 ×0.75, 제한시간 −3초 fav=
+B king 대왕송이 cat=ed look=송이버섯 col=#c9a27a hp=1.6 g=다른 보스보다 체력이 훨씬 높아요
+B cleaner 숲 속의 청소부 cat=md look=선녀낙엽버섯 col=#7ad07a hp=1 g=3초마다 최대 체력의 5%를 회복해요
+B angel 죽음의 천사 cat=ps look=독우산광대버섯 col=#b48cff hp=1 g=2초마다 필드의 임시 수확기를 모두 없애요
+B phantom 환상 버섯 cat=ps look=광대버섯 col=#ff6b6b hp=0.6 g=체력 66%·33%에서 분신을 불러요. 분신까지 모두 쓰러뜨려야 해요
+B mover 움직이는 버섯 cat=md look=동충하초 col=#f2a64a hp=1 g=쉴 새 없이 좌우로 움직여요
+R clear atk=4050.475 ballR=30.45 barDur=1.5 barLen=477.75 barRate=0.12 barSpd=1.24 blade=True bladeDmg=4050.475 bladeInt=0.36 bladeR=100.45 bossGemAdd=6 bossHp=0 bossMul=1.45 buffMul=1.8 burstR=130 colMax=11 comboK=0.45 comboWin=1.5 crit=0.15 critMul=5 debuffDur=0.8859375 devMul=2.6 duration=37 festMul=6.5 fire=False giantP=0.28 goldBonus=1 golden=0.05 goldMul=4.68 harvestMul=63639.1606495515 heavyMul=2 jellySlow=0.55 kidP=0.36 launch=1224 maxCol=20 minSpd=435.2 multiP=0.2 permBalls=5 poisonMul=1 powAtk=0.3 powSkill=0.075 priceMul=3.6 rareMul=2.5 regen=1.6 rushMul=2.5 scoreFlat=666 scoreMul=16.2834833845929 shroomHp=16.2834833845929 skillDmg=1 sparkP=0 spdMul=1.36 sporeP=0.10546875 stage=50 stageMul=2.47 tempLife=1.8 wanderMul=1.5 wanderP=0.08 wId=clear zoneMul=16.2834833845929 zoom=1 sk.accel=0.39/2.5 sk.sharpen=0.39/2.5 sk.split=0.39/2.5 sk.clear=0.13/3.25 sk.burst=0.39/2.5 sk.clone=0.39/2.5 sk.magnet=0.39/2.5 sk.bolt=0.39/2.5 sk.tornado=0.39/2.5 sk.shock=0.39/2.5 sk.pierce=0.39/2.5 sk.homing=0.39/2.5 sk.power=0.13/3.25 sk.barclone=0.39/2.5 sk.fest=0.13/3.25
+R rain atk=4050.475 ballR=30.45 barDur=1.5 barLen=477.75 barRate=0.12 barSpd=1.24 blade=True bladeDmg=4050.475 bladeInt=0.36 bladeR=100.45 bossGemAdd=6 bossHp=0 bossMul=1.45 buffMul=1.8 burstR=130 colMax=11 comboK=0.45 comboWin=1.5 crit=0.15 critMul=5 debuffDur=0.8859375 devMul=2.6 duration=37 festMul=6.5 fire=False giantP=0.28 goldBonus=1 golden=0.05 goldMul=4.68 harvestMul=63639.1606495515 heavyMul=2 jellySlow=0.55 kidP=0.36 launch=1224 maxCol=24 minSpd=435.2 multiP=0.2 permBalls=5 poisonMul=1 powAtk=0.3 powSkill=0.075 priceMul=3.6 rareMul=2.5 regen=0.8 rushMul=2.5 scoreFlat=666 scoreMul=16.2834833845929 shroomHp=16.2834833845929 skillDmg=1 sparkP=0 spdMul=1.36 sporeP=0.10546875 stage=50 stageMul=2.47 tempLife=1.8 wanderMul=1.5 wanderP=0.08 wId=rain zoneMul=16.2834833845929 zoom=1 sk.accel=0.39/2.5 sk.sharpen=0.39/2.5 sk.split=0.39/2.5 sk.clear=0.13/3.25 sk.burst=0.39/2.5 sk.clone=0.39/2.5 sk.magnet=0.39/2.5 sk.bolt=0.39/2.5 sk.tornado=0.39/2.5 sk.shock=0.39/2.5 sk.pierce=0.39/2.5 sk.homing=0.39/2.5 sk.power=0.13/3.25 sk.barclone=0.39/2.5 sk.fest=0.13/3.25
+R moon atk=4050.475 ballR=30.45 barDur=1.5 barLen=477.75 barRate=0.12 barSpd=1.24 blade=True bladeDmg=4050.475 bladeInt=0.36 bladeR=100.45 bossGemAdd=6 bossHp=0 bossMul=1.45 buffMul=1.8 burstR=130 colMax=11 comboK=0.45 comboWin=1.5 crit=0.15 critMul=5 debuffDur=0.8859375 devMul=2.6 duration=37 festMul=6.5 fire=False giantP=0.28 goldBonus=1 golden=0.15 goldMul=4.68 harvestMul=63639.1606495515 heavyMul=2 jellySlow=0.55 kidP=0.36 launch=1224 maxCol=20 minSpd=435.2 multiP=0.2 permBalls=5 poisonMul=1 powAtk=0.3 powSkill=0.075 priceMul=3.6 rareMul=2.5 regen=1.6 rushMul=2.5 scoreFlat=666 scoreMul=16.2834833845929 shroomHp=16.2834833845929 skillDmg=1 sparkP=0 spdMul=1.36 sporeP=0.10546875 stage=50 stageMul=2.47 tempLife=1.8 wanderMul=1.5 wanderP=0.08 wId=moon zoneMul=16.2834833845929 zoom=1 sk.accel=0.39/2.5 sk.sharpen=0.39/2.5 sk.split=0.39/2.5 sk.clear=0.13/3.25 sk.burst=0.39/2.5 sk.clone=0.39/2.5 sk.magnet=0.39/2.5 sk.bolt=0.39/2.5 sk.tornado=0.39/2.5 sk.shock=0.39/2.5 sk.pierce=0.39/2.5 sk.homing=0.39/2.5 sk.power=0.13/3.25 sk.barclone=0.39/2.5 sk.fest=0.13/3.25
+R storm atk=4050.475 ballR=30.45 barDur=1.5 barLen=477.75 barRate=0.12 barSpd=1.24 blade=True bladeDmg=4050.475 bladeInt=0.36 bladeR=100.45 bossGemAdd=6 bossHp=0 bossMul=1.45 buffMul=1.8 burstR=130 colMax=11 comboK=0.45 comboWin=1.5 crit=0.15 critMul=5 debuffDur=0.8859375 devMul=2.6 duration=37 festMul=6.5 fire=False giantP=0.28 goldBonus=1 golden=0.05 goldMul=4.68 harvestMul=63639.1606495515 heavyMul=2 jellySlow=0.55 kidP=0.36 launch=979.2 maxCol=20 minSpd=348.16 multiP=0.2 permBalls=5 poisonMul=1 powAtk=0.3 powSkill=0.075 priceMul=3.6 rareMul=2.5 regen=3.2 rushMul=2.5 scoreFlat=666 scoreMul=16.2834833845929 shroomHp=16.2834833845929 skillDmg=1 sparkP=0 spdMul=1.088 sporeP=0.10546875 stage=50 stageMul=2.47 tempLife=1.8 wanderMul=1.5 wanderP=0.08 wId=storm zoneMul=16.2834833845929 zoom=1 sk.accel=0.39/2.5 sk.sharpen=0.39/2.5 sk.split=0.39/2.5 sk.clear=0.13/3.25 sk.burst=0.39/2.5 sk.clone=0.39/2.5 sk.magnet=0.39/2.5 sk.bolt=0.39/2.5 sk.tornado=0.39/2.5 sk.shock=0.39/2.5 sk.pierce=0.39/2.5 sk.homing=0.39/2.5 sk.power=0.13/3.25 sk.barclone=0.39/2.5 sk.fest=0.13/3.25
+R wind atk=4050.475 ballR=30.45 barDur=1.5 barLen=477.75 barRate=0.12 barSpd=1.24 blade=True bladeDmg=4050.475 bladeInt=0.36 bladeR=100.45 bossGemAdd=6 bossHp=0 bossMul=1.45 buffMul=1.8 burstR=130 colMax=11 comboK=0.45 comboWin=1.5 crit=0.15 critMul=5 debuffDur=1.771875 devMul=2.6 duration=37 festMul=6.5 fire=False giantP=0.28 goldBonus=1 golden=0.05 goldMul=4.68 harvestMul=63639.1606495515 heavyMul=2 jellySlow=0.55 kidP=0.36 launch=1224 maxCol=20 minSpd=435.2 multiP=0.2 permBalls=5 poisonMul=1 powAtk=0.3 powSkill=0.075 priceMul=3.6 rareMul=2.5 regen=1.6 rushMul=2.5 scoreFlat=666 scoreMul=16.2834833845929 shroomHp=16.2834833845929 skillDmg=1 sparkP=0 spdMul=1.36 sporeP=0.2109375 stage=50 stageMul=2.47 tempLife=1.8 wanderMul=1.5 wanderP=0.08 wId=wind zoneMul=16.2834833845929 zoom=1 sk.accel=0.39/2.5 sk.sharpen=0.39/2.5 sk.split=0.39/2.5 sk.clear=0.13/3.25 sk.burst=0.39/2.5 sk.clone=0.39/2.5 sk.magnet=0.39/2.5 sk.bolt=0.39/2.5 sk.tornado=0.39/2.5 sk.shock=0.39/2.5 sk.pierce=0.39/2.5 sk.homing=0.39/2.5 sk.power=0.13/3.25 sk.barclone=0.39/2.5 sk.fest=0.13/3.25
+R cold atk=4050.475 ballR=30.45 barDur=1.5 barLen=358.3125 barRate=0.12 barSpd=1.24 blade=True bladeDmg=4050.475 bladeInt=0.36 bladeR=100.45 bossGemAdd=6 bossHp=39080.3601230229 bossMul=1.45 buffMul=1.8 burstR=130 colMax=11 comboK=0.45 comboWin=1.5 crit=0.15 critMul=5 debuffDur=0.8859375 devMul=2.6 duration=34 festMul=6.5 fire=False giantP=0.28 goldBonus=1 golden=0.05 goldMul=4.68 harvestMul=63639.1606495515 heavyMul=2 jellySlow=0.55 kidP=0.36 launch=1224 maxCol=20 minSpd=435.2 multiP=0.2 permBalls=5 poisonMul=1 powAtk=0.3 powSkill=0.075 priceMul=3.6 rareMul=2.5 regen=1.6 rushMul=2.5 scoreFlat=666 scoreMul=16.2834833845929 shroomHp=16.2834833845929 skillDmg=1 sparkP=0 spdMul=1.36 sporeP=0.10546875 stage=50 stageMul=2.47 tempLife=1.8 wanderMul=1.5 wanderP=0.08 wId=cold zoneMul=16.2834833845929 zoom=1 sk.accel=0.39/2.5 sk.sharpen=0.39/2.5 sk.split=0.39/2.5 sk.clear=0.13/3.25 sk.burst=0.39/2.5 sk.clone=0.39/2.5 sk.magnet=0.39/2.5 sk.bolt=0.39/2.5 sk.tornado=0.39/2.5 sk.shock=0.39/2.5 sk.pierce=0.39/2.5 sk.homing=0.39/2.5 sk.power=0.13/3.25 sk.barclone=0.39/2.5 sk.fest=0.13/3.25

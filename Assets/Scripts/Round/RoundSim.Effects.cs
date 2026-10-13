@@ -346,12 +346,14 @@ namespace MoreMush
             double bonus = Math.Floor(bonusGold);
             // 보스에게 지면 이번 판 골드 ×BOSS_FAIL_GOLD
             double penalty = BossFailed ? Math.Ceiling((scoreGold + bonus) * (1 - BOSS_FAIL_GOLD)) : 0;
-            // 보스를 쓰러뜨리면 이번 판 골드·버섯의 BOSS_REWARD_MUL배를 더 받고 균사석도 받는다
-            double bossGold = BossRound && bossCleared ? Math.Floor((scoreGold + bonus) * BOSS_REWARD_MUL) : 0;
+            // 보스를 쓰러뜨리면 "이번 판 골드와 직전 일반 판 골드 중 큰 쪽"의 BOSS_REWARD_MUL배를 더 받고 균사석도 받는다
+            // (보스 타격 골드는 BOSS_SCORE_MUL로 줄었고, 처치하면 판이 바로 끝나므로 직전 일반 판이 기준)
+            double bossGold = BossRound && bossCleared ? Math.Floor(Math.Max(scoreGold + bonus, G.lastNormalGold) * BOSS_REWARD_MUL) : 0;
             int bossGem = BossRound && bossCleared ? BossGem(G.stage) + (int)st.bossGemAdd : 0;
             int bossShrooms = BossRound && bossCleared ? BossShroomReward() : 0;
             G.gold += scoreGold + bonus - penalty + bossGold;
             G.gem += bossGem;
+            if (!BossRound) G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
             var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage };
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;

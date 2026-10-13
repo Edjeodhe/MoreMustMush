@@ -121,3 +121,7 @@ CLAUDE.local.md
 
 # 엑셀 DB 자동 백업 (BalanceData/db/db_write.py)
 BalanceData/db_backup/auto/
+
+# 엑셀이 DB를 열어 둘 때 생기는 잠금 파일
+~$*
+~$*.meta

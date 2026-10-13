@@ -14,7 +14,7 @@ namespace MoreMush
         public static readonly double BOSS_FAIL_GOLD = Db.C("BOSS_FAIL_GOLD");
         public const float BOSS_R = 110;   // 일반 버섯(반지름 20~33)보다 훨씬 크게. 군락이 아닌 단일 버섯으로 그린다
 
-        // 처치 보상 (보상 설계: 일반 사이클 보상의 최소 2배). 이번 판에 번 골드·딴 버섯의 BOSS_REWARD_MUL배를 더 준다 → 합계 ×(1+MUL).
+        // 처치 보상 (보상 설계: 일반 사이클 보상의 최소 2배). 골드는 max(이번 판, 직전 일반 판)의, 버섯은 이번 판에 딴 것의 BOSS_REWARD_MUL배를 더 준다.
         // 균사석은 세계수에서만 얻던 희귀 재화를 보스 동기부여로 준다. [임시값: 테스트 뒤 밸런스]
         public static readonly double BOSS_REWARD_MUL = Db.C("BOSS_REWARD_MUL");
         static readonly int BOSS_GEM_BASE = Db.CInt("BOSS_GEM_BASE", 0), BOSS_GEM_STEP = Db.CInt("BOSS_GEM_STEP", 0);
@@ -47,7 +47,15 @@ namespace MoreMush
         // 보스 체력 = 레전드리 버섯 체력 × BOSS_HP_K × 지역·스테이지 배율 × 보스별 배율. [임시값: 밸런스 팀이 시뮬로 맞춘다]
         // tuned 기준 스테이지 10 대왕송이 ≈ 105 (공격력 5.5로 보스만 노려 맞히면 약 16초). 봇(바 오차 ±60%)은 첫 보스에서 여러 번 진다
         public static double BOSS_HP_K = Db.CPos("BOSS_HP_K");
-        public static double BossHp(BossDef b, string themeId, int stage) => TIERS[3].hp * BOSS_HP_K * ZoneMul(themeId, stage) * b.hpMul;
+        // 보스가 한 바퀴 돈 뒤(스테이지 60~)는 마지막 보스의 체력 배율을 쓴다 (첫 보스로 돌아가도 쉬워지지 않게, 커지는 건 ZoneMul이 맡는다)
+        public static double BossHp(BossDef b, string themeId, int stage)
+        {
+            double mul = stage / BOSS_EVERY > BOSSES.Count ? BOSSES[BOSSES.Count - 1].hpMul : b.hpMul;
+            return TIERS[3].hp * BOSS_HP_K * ZoneMul(themeId, stage) * mul;
+        }
+
+        // 보스 타격 점수 배율 (2회차, 엑셀 DB Const). 1보다 작으면 보스를 못 잡은 판이 일반 판보다 손해
+        public static readonly double BOSS_SCORE_MUL = Db.C("BOSS_SCORE_MUL");
 
         static void InitBoss()
         {

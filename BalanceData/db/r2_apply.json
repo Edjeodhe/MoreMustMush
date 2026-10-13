@@ -1,0 +1,17 @@
+{
+  "Const": {
+    "BOSS_HP_K": { "Value": 1.0 },
+    "BOSS_REWARD_MUL": { "Desc": "보스 처치 보상: 골드는 max(이번 판, 직전 일반 판 골드)의, 버섯은 이번 판에 딴 것의 이 배수만큼 더 줌" },
+    "BOSS_SCORE_MUL": { "Value": 0.05, "Desc": "보스 타격 골드 배율(점수·동전 수확기). 보스를 못 잡은 판은 보스 전 일반 판보다 손해 — 일반 스테이지에서 성장하고 오라는 허들" },
+    "BOSS_SCORE_TIER": null,
+    "BOSS_REWARD_ROUNDS": null,
+    "BOSS_HP_LOOP": null
+  },
+  "Boss": {
+    "king": { "Hp_Mul": 0.21 },
+    "cleaner": { "Hp_Mul": 0.184 },
+    "angel": { "Hp_Mul": 1.89 },
+    "phantom": { "Hp_Mul": 7.24 },
+    "mover": { "Hp_Mul": 99.6 }
+  }
+}

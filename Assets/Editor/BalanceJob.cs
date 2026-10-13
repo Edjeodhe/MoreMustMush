@@ -15,7 +15,10 @@ namespace MoreMush.EditorTools
     {
         // finish: 기간(R104)의 몇 % 지점에서 다 사게 할지 (2시간 ≈ R104)
         // finish 0.85 ≈ R88: 판매 전부 가정이라 덜 파는 플레이어 몫으로 널널하게(사용자 2026-10-08)
-        public class Plan { public int a = 1, b = 104, maxIters = 20; public double finish = 0.85, damp = 0.5; }
+        // tierEnds(2회차, 보스 관문 모드): 단계(초반·중반·후반)별 다 사는 판 {_, 20, 88, 172}. 넣으면 스테이지가 아니라 판 단위로 맞춘다(b = tierEnds[3])
+        public class Plan { public int a = 1, b = 104, maxIters = 20; public double finish = 0.85, damp = 0.5; public int[] tierEnds; }
+        // 판 단위 모드의 단계별 허용: 가장 빠른 시드가 목표 × FINISH_MIN 이후, 가장 느린 시드가 목표 × TIER_LATE 이내에 다 산다
+        public const double TIER_LATE = 1.1;
 
         // 수렴 조건: 기간 판의 BUY_FRAC 이상에서 무언가를 사고, 기간 끝에 골드 노드를 DONE_FRAC 이상 샀다
         public const double BUY_FRAC = 0.6, DONE_FRAC = 0.95;
@@ -61,15 +64,31 @@ namespace MoreMush.EditorTools
             catch (Exception e) { Log("오류: " + e); Stop(); }
         }
 
-        // 시드마다 새 게임부터 R b까지 (한 판 = 한 단계)
+        // 시드마다 새 게임부터 R b까지 (스테이지 모드: 스테이지 b에서 멈춤 · 판 단위 모드: b판)
         static IEnumerator RunAll(Plan p, int seeds)
         {
             for (int sd = 1; sd <= seeds; sd++)
                 for (int st = 1; st <= p.b; st++)
                 {
-                    BalanceSim.Progression(1, st > 1, sd, BalanceSim.SKILL, 1e9, 1, p.b);
+                    BalanceSim.Progression(1, st > 1, sd, BalanceSim.SKILL, 1e9, 1, p.tierEnds != null ? 0 : p.b);
                     yield return null;
                 }
+        }
+
+        // 판 단위 모드의 판정: (수렴, 너무 쌈, 너무 비쌈, 로그 한 줄)
+        static (bool ok, bool cheap, bool dear, string log) JudgeTiers(Plan p, int seeds)
+        {
+            var (buy, done, fast, slow) = BalanceSim.PriceStatsR(p.b, seeds);
+            var (step, nodeStep, cOk, cTotal) = BalanceSim.PriceCheck();
+            bool cheap = false, dear = done < DONE_FRAC;
+            for (int t = 1; t <= 3; t++)
+            {
+                cheap |= fast[t] < p.tierEnds[t] * FINISH_MIN;
+                dear |= slow[t] > p.tierEnds[t] * TIER_LATE;
+            }
+            bool ok = !cheap && !dear && buy >= BUY_FRAC && step <= STEP_LIMIT && (!BalanceSim.ENFORCE_TIER_RULES || (nodeStep <= BalanceSim.NODE_STEP_MAX * 1.05 && cOk == cTotal));
+            string ends = string.Join(" · ", Enumerable.Range(1, 3).Select(t => $"{t}단계 R{fast[t]}~{(slow[t] == BalanceSim.NOT_DONE ? "미완료" : "R" + slow[t])}(목표 R{p.tierEnds[t]})"));
+            return (ok, cheap, dear, $"산 판 {buy:P0} · R{p.b} 구매율 {done:P0} · {ends} · 최대 가격 뜀 ×{step:F2} · 노드 안 ×{nodeStep:F2} · 효율 넘김 {cOk}/{cTotal}");
         }
 
         static IEnumerator Run(Plan p, int seeds)
@@ -84,15 +103,28 @@ namespace MoreMush.EditorTools
             {
                 var run = RunAll(p, seeds);
                 while (run.MoveNext()) yield return null;
-                var (buy, done, fin) = BalanceSim.PriceStats(p.a, p.b, seeds);
-                var (step, nodeStep, cOk, cTotal) = BalanceSim.PriceCheck();
-                // 가격 곡선도 조건: 한 번에 STEP_LIMIT배 넘게 뛰지 않고, 단계 노드는 효율이 다 넘어가야 한다
-                bool ok = buy >= BUY_FRAC && done >= DONE_FRAC && fin >= p.b * FINISH_MIN && step <= STEP_LIMIT && (!BalanceSim.ENFORCE_TIER_RULES || (nodeStep <= BalanceSim.NODE_STEP_MAX * 1.05 && cOk == cTotal));
-                Log($"반복 {it}: 산 판 {buy:P0} · R{p.b} 구매율 {done:P0} · 가장 빠른 완료 R{fin} · 최대 가격 뜀 ×{step:F2} · 노드 안 ×{nodeStep:F2} · 효율 넘김 {cOk}/{cTotal}{(ok ? " → 수렴" : "")}");
+                bool ok, tooCheap, tooDear;
+                double step = BalanceSim.PriceCheck().maxStep;
+                if (p.tierEnds != null)
+                {
+                    string line;
+                    (ok, tooCheap, tooDear, line) = JudgeTiers(p, seeds);
+                    Log($"반복 {it}: {line}{(ok ? " → 수렴" : "")}");
+                }
+                else
+                {
+                    var (buy, done, fin) = BalanceSim.PriceStats(p.a, p.b, seeds);
+                    var (_, nodeStep, cOk, cTotal) = BalanceSim.PriceCheck();
+                    // 가격 곡선도 조건: 한 번에 STEP_LIMIT배 넘게 뛰지 않고, 단계 노드는 효율이 다 넘어가야 한다
+                    ok = buy >= BUY_FRAC && done >= DONE_FRAC && fin >= p.b * FINISH_MIN && step <= STEP_LIMIT && (!BalanceSim.ENFORCE_TIER_RULES || (nodeStep <= BalanceSim.NODE_STEP_MAX * 1.05 && cOk == cTotal));
+                    Log($"반복 {it}: 산 판 {buy:P0} · R{p.b} 구매율 {done:P0} · 가장 빠른 완료 R{fin} · 최대 가격 뜀 ×{step:F2} · 노드 안 ×{nodeStep:F2} · 효율 넘김 {cOk}/{cTotal}{(ok ? " → 수렴" : "")}");
+                    tooCheap = fin < p.b * FINISH_MIN; tooDear = done < DONE_FRAC || fin > p.b;
+                }
                 if (ok) { converged = true; break; }
-                bool tooCheap = fin < p.b * FINISH_MIN, tooDear = done < DONE_FRAC || fin > p.b;
                 if (!tooCheap && !tooDear && step < bestStep) { bestStep = step; best = BalanceSim.SnapshotPrices(); }
                 if (it > p.maxIters) break;
+                // 판 단위 모드는 단계마다 따로 판정해 "초반은 쌈 + 후반은 비쌈"이 함께 나올 수 있다. 전체 기하평균 이분으로는 못 고치므로 단계별 다시 매기기만 쓴다
+                if (p.tierEnds != null && (tooCheap || tooDear)) { Log("   " + BalanceSim.TunePricesTiers(p.tierEnds, p.damp, seeds)); yield return null; continue; }
                 if (tooCheap) cheap = BalanceSim.SnapshotPrices();
                 else if (tooDear) dear = BalanceSim.SnapshotPrices();
                 if (!tooCheap && !tooDear)

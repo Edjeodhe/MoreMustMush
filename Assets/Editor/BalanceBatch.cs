@@ -19,8 +19,17 @@ namespace MoreMush.EditorTools
         // 가격 맞추기: R1~R104 전체. 끝나면 BalanceData/db/tuned_prices.json을 쓴다 (엑셀 반영은 db_write.py prices)
         public static void Run() => Batch(() =>
         {
-            // 노드에 지역 잠금이 없으므로 R1~R104 전체를 가격 곡선 하나로 맞춘다
-            BalanceJob.RunBlocking(new BalanceJob.Plan(), 3);
+            // 노드에 지역 잠금이 없으므로 R1~R104 전체를 가격 곡선 하나로 맞춘다.
+            // -tiers 20,88,172: 단계별 다 사는 판 목표로 판 단위 맞추기 (2회차, -boss gate와 함께)
+            var plan = new BalanceJob.Plan();
+            if (Arg("-tiers") is string tiers)
+            {
+                var e = tiers.Split(',').Select(int.Parse).ToArray();
+                if (e.Length != 3 || e[0] <= 0 || e[1] <= e[0] || e[2] <= e[1]) throw new ArgumentException("-tiers는 커지는 판 수 3개 (예: 20,88,172)");
+                plan.tierEnds = new[] { 0, e[0], e[1], e[2] };
+                plan.b = e[2];
+            }
+            BalanceJob.RunBlocking(plan, 3);
             Reports();
         });
 
@@ -65,6 +74,8 @@ namespace MoreMush.EditorTools
             // 에디터가 꺼진 채 엑셀만 저장했을 수 있으니, 게임 표(Defs)를 만들기 전에 엑셀 DB를 먼저 다시 가져온다
             File.AppendAllText(BalanceJob.LogPath, DbImport.Import() + "\n");
             Defs.ApplyPreset(PresetArg(), false);
+            if (Arg("-boss") == "gate") BalanceSim.BOSS_GATE = true;   // 보스 관문 모드 (2회차)
+            if (Arg("-gateH") is string gh) BalanceSim.GATE_H = double.Parse(gh, System.Globalization.CultureInfo.InvariantCulture);
             if (Arg("-ramp") is string ramp) Defs.ZONE_RAMP = int.Parse(ramp);   // 구조안 S1 실험
             if (Environment.GetCommandLineArgs().Contains("-nosell")) BalanceSim.SELL = false;
             if (Environment.GetCommandLineArgs().Contains("-pickzone")) BalanceSim.GAME_ZONE = false;

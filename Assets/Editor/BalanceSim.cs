@@ -22,7 +22,35 @@ namespace MoreMush.EditorTools
             public int[] madeT, killT;   // 티어별 생긴 수·수확한 수
             public string zone; public double atk;
             public string boss; public bool bossCleared; public double bossHpLeft;   // 보스 라운드 결과 (남은 체력 비율)
+            public double net;           // 실제로 받은 골드 = 점수골드 + 보너스 − 보스 패배 감액 + 보스 처치 보상
+            public double gateT = -1;    // 보스 관문 모드: 예상 처치 시간(초). -1 = 관문 안 씀
         }
+
+        // ===== 보스 관문 (2회차 사용자 결정: 봇 조준 대신 사람 기준 처치 시간으로 판정) =====
+        // theory 공식 (이론.md 2회차, 현황/theory.md 14:43 · verify E1~E7 반영):
+        //   A = 공격력 × 무더기 파쇄 × 보스 피해 배율 × 치명타 기댓값,  H = H0 × 속도 배율 × (1 + KB(영구 수확기 − 1)) × (움직이는 버섯 MOVER_H) × (임시 수확기 원천이 있으면 1 + TAU, 죽음의 천사 제외)
+        //   처치 시간 t = HP / (A·H)  (청소부: HP / (A·H − 회복률·HP), 회복이 이기면 불가 · 환상: 분신 몫 ×PHANTOM_K)
+        //   첫 발사·첫 타격까지 T0초 → 관문 예상 시각 = T0 + t.  처치 = T0 + t ≤ 판 시간
+        // 끄면(BOSS_GATE = false) 예전처럼 봇이 실제로 보스를 맞힌다. 배치: -boss gate (-gateH 로 H0)
+        public static bool BOSS_GATE = false;
+        public static double GATE_H = 0.9, GATE_KB = 0.5, GATE_MOVER_H = 0.6, GATE_TAU = 0.2, GATE_T0 = 2, GATE_PHANTOM_K = 1.99;
+        public static Func<RoundSim, double> BossGateTime = R =>
+        {
+            var st = R.st; var b = st.boss;
+            double hp = st.bossHp;
+            double A = st.atk * st.heavyMul * st.bossMul * (1 + Math.Min(1, st.crit) * (st.critMul - 1));
+            bool temp = st.kidP > 0 || st.sk["split"].on || st.sk["clone"].on || Lv("barclone") > 0;
+            double H = GATE_H * st.spdMul * (1 + GATE_KB * (st.permBalls - 1)) * (b.id == "mover" ? GATE_MOVER_H : 1) * (b.id != "angel" && temp ? 1 + GATE_TAU : 1);
+            double dps = Math.Max(1e-9, A * H);
+            double t;
+            if (b.id == "cleaner")
+            {
+                double heal = CLEANER_HEAL / CLEANER_INT * hp;
+                t = dps <= heal ? 1e9 : hp / (dps - heal);
+            }
+            else t = (b.id == "phantom" ? GATE_PHANTOM_K : 1) * hp / dps;
+            return GATE_T0 + t;
+        };
 
         // MCP 호출이 시간 초과로 끊겨도 결과가 남도록 줄마다 파일에도 쓴다 (프로젝트 Temp 폴더)
         public static readonly string LogPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp/balance.log"));
@@ -66,6 +94,8 @@ namespace MoreMush.EditorTools
             string w = RollWeather(boss != null);
             var R = RoundSim.Start(w, G.theme, boss);
             var res = new RoundResult { stage = StageNow(), weather = w, duration = R.st.duration, cols = R.st.maxCol, zone = G.theme, atk = R.st.atk, balls = R.st.permBalls, boss = boss?.id };
+            if (boss != null && BOSS_GATE) res.gateT = BossGateTime(R);
+            bool gateHit = false;
             // 보스 라운드는 사람처럼 보스를 겨눠 쏜다
             if (boss != null) { var bm = R.BossMain; R.Launch(Mathf.Atan2(bm.y - RoundSim.LAUNCH.y, bm.x - RoundSim.LAUNCH.x) + (float)(rnd.NextDouble() * 0.2 - 0.1)); }
             else R.Launch(Mathf.Atan2(-1f, (float)(rnd.NextDouble() * 0.8 - 0.4)));
@@ -80,7 +110,11 @@ namespace MoreMush.EditorTools
                 tx = Mathf.Clamp(tx, RoundSim.FX0 + R.barLen / 2, RoundSim.FX1 - R.barLen / 2);
                 R.barX = Mathf.Lerp(R.barX, tx, 1 - Mathf.Exp(-18 * h));
                 R.SimFrame(h); sim += h;
+                // 관문: 예상 처치 시각이 판 안에 오면 그때 처치로 끝낸다 (게임도 처치하면 판을 바로 끝낸다)
+                if (res.gateT >= 0 && !gateHit && R.phase == "run" && R.runT >= res.gateT) { gateHit = true; R.bossCleared = true; R.phase = "end"; R.endT = 1.5f; }
             }
+            // 관문 판정이 기준: 예상 처치 시간이 판 제한 시간 안이면 처치. 봇이 그보다 먼저 실제로 쓰러뜨려 판이 끝난 경우도 같은 기준으로 본다
+            if (res.gateT >= 0) R.bossCleared = gateHit || res.gateT <= R.timeMax;
             res.maxCombo = R.maxCombo;
             if (boss != null)
             {
@@ -89,6 +123,7 @@ namespace MoreMush.EditorTools
                 res.bossHpLeft = max > 0 ? left / max : 0;
             }
             var s = R.Finish();
+            res.net = s.net;
             res.score = s.score; res.scoreGold = s.scoreGold; res.bonus = s.bonusGold; res.value = s.value; res.harvests = s.harvests; res.spawned = R.shroomsMade; res.madeT = (int[])R.madeT.Clone(); res.killT = (int[])R.killT.Clone();
             return res;
         }
@@ -108,6 +143,15 @@ namespace MoreMush.EditorTools
             public List<double> kill = new List<double>();  // 스테이지별 처치율 = 수확한 버섯 ÷ 그 판에 생긴 버섯
             public List<string> zone = new List<string>();  // 스테이지별 지역
             public List<int[]> madeT = new List<int[]>(), killT = new List<int[]>();   // 스테이지별 티어별 생긴 수·수확한 수 (처치율 P13)
+            // 판 단위 기록 (2회차): 보스 재도전으로 같은 스테이지를 여러 판 돌아도 판마다 한 칸
+            public List<double> incR = new List<double>();   // 판 수입 (정산 net: 보스 보상·감액 포함)
+            public List<int> stageR = new List<int>();       // 그 판의 스테이지
+            public List<int> bossR = new List<int>();        // 0 일반 판 · 1 보스 처치 · -1 보스 패배 · 2 보스 스테이지 파밍(보스 끔)
+            public List<double> playR = new List<double>();  // 판이 끝난 때 누적 플레이 시간(초, G.play)
+            public List<double> atkR = new List<double>();   // 그 판 공격력
+            public List<int> buysR = new List<int>();        // 그 판 뒤 산 레벨 수
+            public List<double> gateR = new List<double>();  // 보스 관문 예상 처치 시간(초), 관문 안 쓰면 -1
+            public int[] doneR = new int[4];                 // 단계별 다 산 판 (판 수, 스테이지가 아님)
             public void Set(int stage, double income, int bought, double value = 0, double killRate = 0, string zoneId = "")
             {
                 while (inc.Count < stage) { inc.Add(0); buys.Add(0); }
@@ -135,6 +179,9 @@ namespace MoreMush.EditorTools
 
         // every: 몇 판마다 한 줄씩 남길지. 트리를 다 산 판은 항상 남긴다
         static int botFarm; static bool botBoughtSinceFail;
+        // 보스 처치에 쓰이는 노드 레벨 합 (관문 모드 재도전 규칙: 이것이 올라야 다시 도전)
+        static readonly string[] ATK_KEYS = { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4", "ps_crit", "ps_crit2", "ps_heavy", "gm_atk", "gm_boss", "ps_spd", "ps_ball", "ps_ball2", "ps_ball3", "ps_dur", "ps_dur2" };
+        static int AtkLevels() => ATK_KEYS.Where(NODE.ContainsKey).Sum(Lv);
 
         public static string Progression(int rounds, bool resume = false, int seed = 1, float skill = SKILL, double maxWallSec = 20, int every = 1, int stopStage = 0)
         {
@@ -146,31 +193,37 @@ namespace MoreMush.EditorTools
                 var sb = new StringBuilder();
                 var sw = System.Diagnostics.Stopwatch.StartNew();
                 if (!resume) { botFarm = 0; botBoughtSinceFail = false; }
+                if (!resume) Log(sb, $"조건: 시드 {seed} · 바 오차 {skill} · 보스 {(BOSS_GATE ? $"관문 H0={GATE_H} KB={GATE_KB} MOVER_H={GATE_MOVER_H} TAU={GATE_TAU} T0={GATE_T0} 환상×{GATE_PHANTOM_K}" : "실제 판(봇 조준)")} · 프리셋 {TUNE.id} · DB {Db.Data._source}");
                 if (!resume) Log(sb, "판 | 누적 | 지역 | 시간 | 핀볼 | 공격력 | 점수골드 | 수확 | 보유골드 | 산 레벨 | 초반/중반/후반");
                 for (int i = 0; i < rounds; i++)
                 {
                     if (sw.Elapsed.TotalSeconds > maxWallSec || (stopStage > 0 && StageNow() > stopStage)) break;
                     var rnd = new System.Random(seed * 1000 + G.rounds); UnityEngine.Random.InitState(seed * 1000 + G.rounds);
                     // 봇의 보스 재도전: 지고 나면 파밍하다가, 무언가 사고 나서 또는 3판마다 다시 켠다
-                    if (IsBossStage(StageNow()) && !G.bossOn && (botBoughtSinceFail || ++botFarm >= 3)) { G.bossOn = true; botFarm = 0; botBoughtSinceFail = false; }
+                    // 관문 모드는 결정적이라(공격력이 그대로면 또 진다) 공격 관련 노드를 산 다음 판 또는 5판마다 (theory 재도전 규칙)
+                    if (IsBossStage(StageNow()) && !G.bossOn && (botBoughtSinceFail || ++botFarm >= (BOSS_GATE ? 5 : 3))) { G.bossOn = true; botFarm = 0; botBoughtSinceFail = false; }
                     var r = PlayRound(rnd, skill, !GAME_ZONE);
                     // 버섯 판매·마을 의뢰는 v3에서 없어졌다. 판 수입은 정산 골드뿐이다 (SELL 설정은 이제 효과 없음)
                     double sold = 0;
-                    int before = GoldLevels();
+                    int before = GoldLevels(), atkBefore = AtkLevels();
                     BulkBuy(new[] { "ed", "md", "ps" }, 0, false);
-                    G.play += r.duration + OVERHEAD_SEC;   // 추정 플레이 시간(초)
+                    // 추정 플레이 시간(초). 관문 처치 판은 처치 시각 + 끝 연출 1.5초에 끝난다
+                    G.play += (r.gateT >= 0 && r.bossCleared ? Math.Min(r.duration, r.gateT + 1.5) : r.duration) + OVERHEAD_SEC;
                     int bought = GoldLevels() - before;
-                    if (bought > 0) botBoughtSinceFail = true;
+                    if (BOSS_GATE ? AtkLevels() > atkBefore : bought > 0) botBoughtSinceFail = true;
                     if (r.boss != null && !r.bossCleared) botBoughtSinceFail = false;   // 패배 뒤에 산 것만 센다
-                    if (r.boss != null) Log(sb,$"  보스 R{r.stage} {BOSS[r.boss].nKo}: {(r.bossCleared ? "처치" : $"실패 (남은 체력 {r.bossHpLeft:P0})")}");
+                    if (r.boss != null) Log(sb,$"  보스 R{r.stage} {BOSS[r.boss].nKo}: {(r.bossCleared ? "처치" : r.gateT >= 0 ? "실패" : $"실패 (남은 체력 {r.bossHpLeft:P0})")}{(r.gateT >= 0 ? $" · 관문 예상 {r.gateT:F1}s / 판 {r.duration:F0}s" : "")}");
                     ph.rounds++; if (bought > 0) ph.buyRounds++;
-                    ph.Set(r.stage, r.scoreGold + r.bonus + sold, bought, r.value, r.spawned > 0 ? (double)r.harvests / r.spawned : 0, r.zone);
+                    // 스테이지 수입도 정산 net(보스 처치 보상·패배 감액 포함). 2회차부터 — 1회차 기록(scoreGold + bonus)과 비교할 때 주의
+                    ph.Set(r.stage, r.net + sold, bought, r.value, r.spawned > 0 ? (double)r.harvests / r.spawned : 0, r.zone);
+                    ph.incR.Add(r.net); ph.stageR.Add(r.stage); ph.playR.Add(G.play); ph.atkR.Add(r.atk); ph.buysR.Add(bought); ph.gateR.Add(r.gateT);
+                    ph.bossR.Add(r.boss != null ? (r.bossCleared ? 1 : -1) : IsBossStage(r.stage) ? 2 : 0);
                     ph.SetTiers(r.stage, r.madeT, r.killT);
                     string marks = "";
                     for (int t = 1; t <= 3; t++)
                     {
                         if (ph.first[t] == 0 && GoldLevels(t) > 0) { ph.first[t] = r.stage; ph.firstMin[t] = G.play / 60; ph.firstInc[t] = r.scoreGold; marks += $" ← {TIER_NAMES[t]} 시작"; }
-                        if (ph.done[t] == 0 && GoldLevels(t) == GoldLevelsMax(t)) { ph.done[t] = r.stage; ph.doneMin[t] = G.play / 60; ph.doneInc[t] = r.scoreGold; marks += $" ← {TIER_NAMES[t]} 완료"; }
+                        if (ph.done[t] == 0 && GoldLevels(t) == GoldLevelsMax(t)) { ph.done[t] = r.stage; ph.doneR[t] = ph.rounds; ph.doneMin[t] = G.play / 60; ph.doneInc[t] = r.scoreGold; marks += $" ← {TIER_NAMES[t]} 완료"; }
                     }
                     if (r.stage % every == 0 || r.stage <= 10 || marks != "")
                         Log(sb, $"R{r.stage} | {G.play / 60:F0}분 | {THEME[r.zone].nKo} | {r.duration:F0}s | {r.balls} | {U.Fmt(r.atk)} | {U.Fmt(r.scoreGold)} | {r.harvests} | {U.Fmt(G.gold)} | +{bought} | {GoldLevels(1)}/{GoldLevelsMax(1)} {GoldLevels(2)}/{GoldLevelsMax(2)} {GoldLevels(3)}/{GoldLevelsMax(3)} | 도감 {CodexCount()} 별 {SPECIES.Sum(sp => StarOf(sp.id))} 최고등급 {SPECIES.Where(IsUnlockedSp).Max(sp => sp.t)} 황금 {GoldenCount()}{marks}");
@@ -304,6 +357,71 @@ namespace MoreMush.EditorTools
 
             double buyRounds = logs.Average(l => Enumerable.Range(a, L).Count(st => st - 1 < l.buys.Count && l.buys[st - 1] > 0));
             return $"R{a}~R{b}: 직전 실행에서 산 판 {buyRounds:F1}/{L} · 기간 수입 {U.Fmt(cum[L])} · 레벨 {N}개 · 새 가격 {U.Fmt(p[0])} ~ {U.Fmt(p[N - 1])} (합 {U.Fmt(p.Sum())})";
+        }
+
+        // 판 단위 가격 맞추기 (2회차, 보스 관문 모드): 보스 재도전으로 스테이지와 판이 어긋나므로 판별 수입(incR)을 쓴다.
+        // ends[t] = 단계 t(초반·중반·후반)의 마지막 레벨을 사는 판 (theory R2: 20 · 88 · 172). 단계 t의 레벨은 (ends[t-1], ends[t]] 판 수입에 고르게 나눈다
+        public static string TunePricesTiers(int[] ends, double damp = 0.5, int seeds = 1)
+        {
+            LoadPriceTable();
+            var logs = Enumerable.Range(1, seeds).Select(sd => JsonConvert.DeserializeObject<PhaseLog>(File.ReadAllText(PhasePath(sd)))).ToList();
+            int L = ends[3];
+            // 판까지 누적 수입의 시드별 최솟값 (가장 느린 플레이어). 판별 수입의 최솟값을 쓰면 시드마다 다른 판에 오는 보스 처치·패배가 골라 빠진다
+            var cum = new double[L + 1];
+            foreach (var l in logs)
+            {
+                double s = 0;
+                for (int i = 1; i <= L; i++) { s += i - 1 < l.incR.Count ? l.incR[i - 1] : 0; cum[i] = l == logs[0] ? s : Math.Min(cum[i], s); }
+            }
+            for (int i = 1; i <= L; i++) cum[i] = Math.Max(cum[i], cum[i - 1]);
+            double C(double x) { x = Math.Max(0, Math.Min(L, x)); int i = (int)Math.Floor(x); return i >= L ? cum[L] : cum[i] + (cum[i + 1] - cum[i]) * (x - i); }
+
+            var levels = new List<(Node n, int lv)>();
+            var target = new List<double>();
+            double prev = 0;
+            for (int t = 1; t <= 3; t++)
+            {
+                var lv = OrderedLevels().Where(x => x.n.tier == t).ToList();
+                double x0 = t == 1 ? 0 : ends[t - 1], x1 = ends[t];
+                for (int k = 0; k < lv.Count; k++)
+                {
+                    levels.Add(lv[k]);
+                    target.Add(prev = Math.Max(prev, C(x0 + (x1 - x0) * (k + 1) / lv.Count) - C(x0 + (x1 - x0) * k / lv.Count)));
+                }
+            }
+            int N = levels.Count;
+            var p = new double[N];
+            for (int k = 0; k < N; k++)
+                p[k] = Math.Exp(damp * Math.Log(Math.Max(1, target[k])) + (1 - damp) * Math.Log(Math.Max(1, NodeCost(levels[k].n, levels[k].lv).gold)));
+            for (int k = 1; k < N; k++) p[k] = Math.Min(Math.Max(p[k], p[k - 1]), p[k - 1] * PRICE_STEP_MAX);
+            for (int k = 0; k < N; k++) levels[k].n.costs[levels[k].lv] = Nice(p[k]);
+            SavePriceTable();
+            EnforceShape();
+            return $"판 R1~R{L} (단계 끝 {ends[1]}·{ends[2]}·{ends[3]}): 기간 수입 {U.Fmt(cum[L])} · 레벨 {N}개 · 새 가격 {U.Fmt(p[0])} ~ {U.Fmt(p[N - 1])}";
+        }
+
+        // 판 단위 수렴 판정: (가장 느린 시드에서 무언가 산 판 비율, 끝 구매율 최솟값, 단계별 다 산 판의 [가장 빠른 시드, 가장 느린 시드])
+        // 못 끝냈으면 가장 빠른 쪽은 b + 1, 가장 느린 쪽은 NOT_DONE (b + 1은 목표 × 1.1보다 작을 수 있어 "너무 비쌈"을 놓친다)
+        public const int NOT_DONE = int.MaxValue;
+        public static (double buy, double done, int[] fast, int[] slow) PriceStatsR(int b, int seeds)
+        {
+            double buy = 1, done = 1;
+            int[] fast = { 0, int.MaxValue, int.MaxValue, int.MaxValue }, slow = new int[4];
+            var nodes = NODES.Where(n => !n.gem).ToList();
+            int maxLv = nodes.Sum(n => n.max);
+            for (int sd = 1; sd <= seeds; sd++)
+            {
+                var ph = JsonConvert.DeserializeObject<PhaseLog>(File.ReadAllText(PhasePath(sd)));
+                buy = Math.Min(buy, Enumerable.Range(0, Math.Min(b, ph.buysR.Count)).Count(i => ph.buysR[i] > 0) / (double)b);
+                var g = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(StatePath(sd)));
+                done = Math.Min(done, nodes.Sum(n => g.nodes.TryGetValue(n.id, out var L) ? Math.Min(L, n.max) : 0) / (double)maxLv);
+                for (int t = 1; t <= 3; t++)
+                {
+                    fast[t] = Math.Min(fast[t], ph.doneR[t] > 0 ? ph.doneR[t] : b + 1);
+                    slow[t] = Math.Max(slow[t], ph.doneR[t] > 0 ? ph.doneR[t] : NOT_DONE);
+                }
+            }
+            return (buy, done, fast, slow);
         }
 
         // 가격 모양 조건을 올리기만으로 맞춘다 (낮추면 단계 노드 줄 전체가 싸져서 트리를 너무 빨리 끝냈다: R79 · 82분).
@@ -457,7 +575,7 @@ namespace MoreMush.EditorTools
             sb.AppendLine("단계 | 첫 구매 | 완료 | 걸린 판·시간 | 판당 점수골드 (시작 → 완료)");
             for (int t = 1; t <= 3; t++)
             {
-                string done = ph.done[t] > 0 ? $"R{ph.done[t]} ({ph.doneMin[t]:F0}분)" : "미완료";
+                string done = ph.done[t] > 0 ? $"R{ph.done[t]}{(ph.doneR[t] > 0 && ph.doneR[t] != ph.done[t] ? $" · {ph.doneR[t]}판째" : "")} ({ph.doneMin[t]:F0}분)" : "미완료";   // 보스 재도전이 있으면 스테이지와 판 수가 다르다
                 string span = ph.done[t] > 0 ? $"{ph.done[t] - ph.first[t]}판 · {ph.doneMin[t] - ph.firstMin[t]:F0}분" : "-";
                 sb.AppendLine($"{TIER_NAMES[t]} | R{ph.first[t]} ({ph.firstMin[t]:F0}분) | {done} | {span} | {U.Fmt(ph.firstInc[t])} → {(ph.done[t] > 0 ? U.Fmt(ph.doneInc[t]) : "-")}");
             }

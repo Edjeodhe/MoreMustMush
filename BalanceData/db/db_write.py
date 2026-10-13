@@ -5,7 +5,11 @@
   python BalanceData/db/db_write.py strings <xlsx> <json>   # String 시트 맨 아래에 새 문구 추가 (Unity 메뉴 MoreMush/다국어/3 번역표 갱신)
   python BalanceData/db/db_write.py prices  <xlsx> <json>   # Upgrade_Cost의 골드 가격을 바꿈 (BalanceSim.WritePriceFile 결과)
 
+  python BalanceData/db/db_write.py set     <xlsx> <json>   # 아무 시트의 칸 값을 바꿈 (밸런스 수치안: Const·Boss·Upgrade 효과값 등)
+
 strings json = ["한국어 문구", ...]  ·  prices json = {"노드 키": [1레벨 가격, 2레벨 가격, ...]}
+set json = {"Const": {"BOSS_HP_K": {"Value": 2}}, "Boss": {"king": {"Hp_Mul": 1.4}}}  (행은 그 시트의 *_Key 열로 찾음)
+  Const 시트에 없는 키는 맨 아래에 새 줄로 더하고, 값이 null인 키는 그 행을 지운다.
 파일이 다른 Excel에서 열려 있으면 아무것도 안 하고 중단한다(종료 코드 2). 중간에 오류가 나면 저장하지 않는다.
 저장하면 Unity가 Assets/Resources/DB/db.json을 다시 만든다.
 """
@@ -106,8 +110,53 @@ def set_prices(wb, prices):
     return "Upgrade_Cost %d개 노드 가격 갱신" % n
 
 
+def set_cells(wb, data):
+    """{"시트": {"행 키": {"열 키": 값}}} — 행 키는 그 시트의 *_Key 열(Upg_Key·Boss_Key·Const_Key …)로 찾는다."""
+    n, missing = 0, []
+    for sheet, rows in data.items():
+        ws = wb.Worksheets(sheet)
+        c = header_cols(ws)
+        key_col = next((col for name, col in sorted(c.items(), key=lambda x: x[1]) if name.endswith("_Key")), None)
+        if key_col is None:
+            abort("%s 시트에 *_Key 열이 없다" % sheet)
+        where = {}
+        for r in range(DATA_ROW, last_row(ws) + 1):
+            k = ws.Cells(r, key_col).Value
+            if k is not None:
+                where[str(k)] = r
+        drop = []
+        for key, cells in rows.items():
+            if cells is None:                              # null = 그 행을 지운다 (아래에서 한꺼번에, 행 번호가 밀리지 않게 뒤에서부터)
+                if key in where:
+                    drop.append(where[key])
+                else:
+                    missing.append("%s:%s" % (sheet, key))
+                continue
+            if key not in where and sheet == "Const":     # 새 상수는 맨 아래에 줄을 더한다
+                r = last_row(ws) + 1
+                ws.Cells(r, key_col).Value = key
+                where[key] = r
+            if key not in where:
+                missing.append("%s:%s" % (sheet, key))
+                continue
+            for col, v in cells.items():
+                if col not in c:
+                    missing.append("%s:%s.%s" % (sheet, key, col))
+                    continue
+                ws.Cells(where[key], c[col]).Value = v
+                n += 1
+        if missing:
+            break
+        for r in sorted(drop, reverse=True):
+            ws.Rows(r).Delete()
+            n += 1
+    if missing:
+        abort("DB에 없는 칸: %s (저장 안 함)" % ", ".join(missing))
+    return "칸 %d개 갱신" % n
+
+
 def main():
-    if len(sys.argv) != 4 or sys.argv[1] not in ("strings", "prices"):
+    if len(sys.argv) != 4 or sys.argv[1] not in ("strings", "prices", "set"):
         sys.exit(__doc__)
     cmd, target, src = sys.argv[1], os.path.abspath(sys.argv[2]), os.path.abspath(sys.argv[3])
     if not os.path.exists(target):
@@ -128,7 +177,7 @@ def main():
     wb = None
     try:
         wb = retry(lambda: excel.Workbooks.Open(target))
-        msg = add_strings(wb, data) if cmd == "strings" else set_prices(wb, data)
+        msg = add_strings(wb, data) if cmd == "strings" else set_prices(wb, data) if cmd == "prices" else set_cells(wb, data)
         wb.Save()
         print("%s · 저장: %s" % (msg, target))
     finally:

@@ -295,7 +295,8 @@ namespace MoreMush
             bool crit = forceCrit || U.Chance((float)(st.crit + (b != null ? HV[b.hv].crit : 0)));
             m.hp -= amt * (crit ? st.critMul : 1);
             m.squish = 1;
-            double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF;
+            // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
+            double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
             AddScore(sc, m.x, m.y - m.r, m.giant || m.boss ? 3 : m.sp.t, crit, m.golden);
             if (m.boss)
             {
@@ -321,7 +322,7 @@ namespace MoreMush
             }
             if (hv == "coin")
             {
-                double g = TIERS[m.sp.t].drop * SELL_PRICE * st.priceMul * a["k"] * st.zoneMul;
+                double g = TIERS[m.sp.t].drop * SELL_PRICE * st.priceMul * a["k"] * st.zoneMul * (m.boss ? BOSS_SCORE_MUL : 1);   // 보스를 때려 얻는 골드도 같이 줄인다
                 bonusGold += g; coinGold += g;
                 if (texts.Count < 20) texts.Add(new FloatText { x = m.x + U.Rand(-10, 10), y = m.y - m.r - 18, v = g, coin = true });
                 Snd.Tone(1200, 0.05f, Snd.Wave.Triangle, 0.25f, 1.3f, "coin", 0.05f);

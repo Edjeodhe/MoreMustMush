@@ -31,6 +31,7 @@ namespace MoreMush
         public int stage = 1;                      // 지금 스테이지. 보스 스테이지(10의 배수)는 보스를 쓰러뜨려야 넘어간다
         public bool bossOn = true;                 // 보스 도전 (끄면 보스 스테이지에서 파밍만 한다. 보스에게 지면 꺼진다)
         public double play;
+        public double lastNormalGold;              // 보스가 안 나온 마지막 판의 정산 골드 (보스 처치 보상 기준)
         public bool ending;
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
@@ -132,6 +133,7 @@ namespace MoreMush
             if (!IsFinite(g.gold)) g.gold = 0;
             if (!IsFinite(g.gem)) g.gem = 0;
             if (!IsFinite(g.legacyDia) || g.legacyDia < 0) g.legacyDia = 0;
+            if (!IsFinite(g.lastNormalGold) || g.lastNormalGold < 0) g.lastNormalGold = 0;
 
             // prototype loadSave() migrations that still apply
             foreach (var id in g.hv.Keys) if (!g.hvOn.ContainsKey(id)) g.hvOn[id] = true;

@@ -1,5 +1,5 @@
 {
-  "_source": "MMM_DB_Ver.04.xlsx",
+  "_source": "MMM_DB_Ver.05.xlsx",
   "Upgrade": [
     {
       "Upg_ID": 13002,
@@ -3366,6 +3366,26 @@
       "Const_Key": "COMBO_WINDOW",
       "Value": 1.5,
       "Desc": "콤보가 이어지는 시간(초)"
+    },
+    {
+      "Const_Key": "BOSS_SCORE_MUL",
+      "Value": 1.0,
+      "Desc": "보스 타격 점수 배율. 1보다 작으면 보스를 못 잡은 판이 일반 판보다 손해 (일반 스테이지에서 성장하고 오라는 허들)"
+    },
+    {
+      "Const_Key": "BOSS_SCORE_TIER",
+      "Value": -1.0,
+      "Desc": "보스 타격 점수 기준 등급 (0 일반 · 1 에픽 · 2 유니크 · 3 레전드리). -1이면 보스 그림 버섯의 등급"
+    },
+    {
+      "Const_Key": "BOSS_REWARD_ROUNDS",
+      "Value": 0.0,
+      "Desc": "보스 처치 보상 최소값 = 직전 일반 판 골드 × 이 값 (0이면 안 씀)"
+    },
+    {
+      "Const_Key": "BOSS_HP_LOOP",
+      "Value": 0.0,
+      "Desc": "보스 한 바퀴(스테이지 60~) 뒤 체력: 마지막 보스 배율 × 이 값^(바퀴 수). 0이면 보스마다 자기 배율"
     }
   ],
   "String": [

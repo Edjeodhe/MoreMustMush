@@ -1,0 +1,324 @@
+{
+ "기준": {
+  "min": 173,
+  "rounds": 164,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   75,
+   164
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "H0×0.7": {
+  "min": 186,
+  "rounds": 176,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   6,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   47,
+   86,
+   176
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "H0×1.3": {
+  "min": 170,
+  "rounds": 162,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   73,
+   162
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "MOVER_H 0.4": {
+  "min": 174,
+  "rounds": 165,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   75,
+   165
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "MOVER_H 0.8": {
+  "min": 173,
+  "rounds": 164,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   75,
+   164
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "TAU 0": {
+  "min": 174,
+  "rounds": 165,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   75,
+   165
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "H0×0.7+MOVER_H 0.4": {
+  "min": 187,
+  "rounds": 177,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   6,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   47,
+   86,
+   177
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "H0×0.7+MOVER_H 0.4+TAU 0": {
+  "min": 239,
+  "rounds": 223,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   6,
+   15,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   47,
+   130,
+   223
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "TAU 0.4": {
+  "min": 171,
+  "rounds": 162,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   73,
+   162
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "수입×0.5": {
+  "min": 318,
+  "rounds": 299,
+  "stage": 51,
+  "tries": [
+   1,
+   2,
+   6,
+   11,
+   28
+  ],
+  "kill_r": [
+   10,
+   22,
+   60,
+   128,
+   299
+  ],
+  "first_try": [
+   true,
+   false
+  ]
+ },
+ "수입×2": {
+  "min": 103,
+  "rounds": 99,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   3,
+   9
+  ],
+  "kill_r": [
+   10,
+   20,
+   32,
+   50,
+   99
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "균사석→gm_boss·gm_atk": {
+  "min": 170,
+  "rounds": 162,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   3,
+   6,
+   15
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   73,
+   162
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "재도전 3판": {
+  "min": 178,
+  "rounds": 169,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   4,
+   8,
+   22
+  ],
+  "kill_r": [
+   10,
+   20,
+   40,
+   76,
+   169
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ },
+ "재도전 8판": {
+  "min": 168,
+  "rounds": 159,
+  "stage": 51,
+  "tries": [
+   1,
+   1,
+   2,
+   4,
+   10
+  ],
+  "kill_r": [
+   10,
+   20,
+   39,
+   73,
+   159
+  ],
+  "first_try": [
+   true,
+   true
+  ]
+ }
+}

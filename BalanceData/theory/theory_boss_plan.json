@@ -1,0 +1,148 @@
+{
+ "cfg": {
+  "hp": {
+   "10": 9.878400000000001,
+   "20": 88.68245912695977,
+   "30": 1006.497954,
+   "40": 4267.574412060302,
+   "50": 648759.0485376002
+  },
+  "reward_rounds": 2.0,
+  "look_tier": null,
+  "fail_rounds": 0.5
+ },
+ "bosses": [
+  {
+   "stage": 10,
+   "boss": "king",
+   "hp": 10,
+   "first_r": 10,
+   "first_min": 7.0,
+   "tries": 1,
+   "kill_r": 10,
+   "kill_min": 7.8,
+   "farm": 0,
+   "atk": 1.1,
+   "t": 12.2,
+   "T": 17.5
+  },
+  {
+   "stage": 20,
+   "boss": "cleaner",
+   "hp": 89,
+   "first_r": 20,
+   "first_min": 16.3,
+   "tries": 1,
+   "kill_r": 20,
+   "kill_min": 17.0,
+   "farm": 0,
+   "atk": 6.2,
+   "t": 7.3,
+   "T": 28.5
+  },
+  {
+   "stage": 30,
+   "boss": "angel",
+   "hp": 1006,
+   "first_r": 30,
+   "first_min": 26.2,
+   "tries": 3,
+   "kill_r": 40,
+   "kill_min": 37.2,
+   "farm": 8,
+   "atk": 22.2,
+   "t": 22.4,
+   "T": 29.0
+  },
+  {
+   "stage": 40,
+   "boss": "phantom",
+   "hp": 4268,
+   "first_r": 50,
+   "first_min": 46.4,
+   "tries": 6,
+   "kill_r": 75,
+   "kill_min": 73.8,
+   "farm": 20,
+   "atk": 77.1,
+   "t": 28.8,
+   "T": 35.0
+  },
+  {
+   "stage": 50,
+   "boss": "mover",
+   "hp": 648759,
+   "first_r": 85,
+   "first_min": 83.8,
+   "tries": 15,
+   "kill_r": 164,
+   "kill_min": 172.9,
+   "farm": 65,
+   "atk": 2944.8,
+   "t": 31.2,
+   "T": 35.0
+  }
+ ],
+ "table": [
+  {
+   "stage": 10,
+   "boss": "king",
+   "zone": 0,
+   "hp": 105.0,
+   "dur": 25.5,
+   "need_A": 3.65
+  },
+  {
+   "stage": 20,
+   "boss": "cleaner",
+   "zone": 1,
+   "hp": 724.9,
+   "dur": 30.5,
+   "need_A": 30.65
+  },
+  {
+   "stage": 30,
+   "boss": "angel",
+   "zone": 1,
+   "hp": 800.7,
+   "dur": 31,
+   "need_A": 22.56
+  },
+  {
+   "stage": 40,
+   "boss": "phantom",
+   "zone": 1,
+   "hp": 530.7,
+   "dur": 31,
+   "need_A": 29.75
+  },
+  {
+   "stage": 50,
+   "boss": "mover",
+   "zone": 2,
+   "hp": 9770.1,
+   "dur": 31,
+   "need_A": 458.74
+  }
+ ],
+ "rounds": 164,
+ "minutes": 172.9,
+ "tiers": {
+  "1": [
+   67,
+   67
+  ],
+  "2": [
+   74,
+   74
+  ],
+  "3": [
+   68,
+   74
+  ]
+ },
+ "gm": {
+  "gm_boss": 0,
+  "gm_atk": 0
+ }
+}
