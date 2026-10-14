@@ -16,19 +16,19 @@ namespace MoreMush
             Snd.Tone(140, 0.3f, Snd.Wave.Sine, 0.3f, 0.6f, "puff", 0.1f);
         }
 
-        void BurstAt(float x, float y, float rad, double dmg, Ball b, string col, bool quiet)
+        void BurstAt(float x, float y, float rad, double dmg, Ball b, string col, bool quiet, string src)
         {
             rings.Add(new Ring { x = x, y = y, r = rad, dur = quiet ? 0.2f : 0.35f, col = col, quiet = quiet });
             var q = QueryCircle(x, y, rad + 30);
             foreach (var m in q)
             {
                 float reach = rad + m.r * 0.5f;
-                if (U.D2(x, y, m.x, m.y) < reach * reach) Damage(m, dmg, b, "skill");
+                if (U.D2(x, y, m.x, m.y) < reach * reach) Damage(m, dmg, b, "skill", src: src);
             }
             FreeQuery(q);
         }
 
-        void ChainBolt(Shroom m0, Ball b)
+        void ChainBolt(Shroom m0, Ball b, string src)
         {
             int P = st.sk["bolt"].P, n = 2 + P;
             double dmg = st.atk * st.sk["bolt"].pm * st.skillDmg * Wk(b);
@@ -44,7 +44,7 @@ namespace MoreMush
                 if (best == null) break;
                 hit.Add(best); pts.Add(new Vector2(best.x, best.y));
                 float tx = best.x, ty = best.y;
-                Damage(best, dmg, b, "skill");
+                Damage(best, dmg, b, "skill", src: src);
                 cx = tx; cy = ty;
             }
             bolts.Add(new Bolt { pts = pts, t = 0.3f });
@@ -79,7 +79,7 @@ namespace MoreMush
             if (bolts.Count < 40) bolts.Add(new Bolt { pts = new List<Vector2> { new Vector2(m.x + 60, m.y - 420), new Vector2(m.x + 30, m.y - 200), new Vector2(m.x, m.y) }, t = 0.18f, big = true, col = "#8ff0c8" });
             if (parts.Count < 200)
                 for (int i = 0; i < 14; i++) { float a = U.Rand(0, U.TAU), v = U.Rand(80, 320); AddPart(m.x, m.y, Mathf.Cos(a) * v, Mathf.Sin(a) * v - 60, U.Rand(0.3f, 0.6f), U.Hex(i % 2 == 1 ? "#8ff0c8" : "#b8a8e0"), 5); }
-            BurstAt(m.x, m.y, (float)M.r, st.atk * M.dmg * st.skillDmg, b, "#8ff0c8", false);
+            BurstAt(m.x, m.y, (float)M.r, st.atk * M.dmg * st.skillDmg, b, "#8ff0c8", false, "meteor");
             SkillFx("gm_meteor", m.x, m.y);
             Snd.Skill(520);
         }
@@ -125,7 +125,7 @@ namespace MoreMush
                 {
                     if (w.hit.Contains(m)) continue;
                     float reach = w.r + m.r * 0.5f;
-                    if (U.D2(w.x, w.y, m.x, m.y) < reach * reach) { w.hit.Add(m); Damage(m, w.dmg, w.b, "shock", 1, w); }
+                    if (U.D2(w.x, w.y, m.x, m.y) < reach * reach) { w.hit.Add(m); Damage(m, w.dmg, w.b, "shock", 1, w, src: "shock"); }
                 }
                 FreeQuery(q);
             }
@@ -139,7 +139,7 @@ namespace MoreMush
                 {
                     var m = shrooms[mi];
                     if (m.dead || tn.hit.Contains(m)) continue;
-                    if (Mathf.Abs(m.y - tn.y) < tn.h / 2 + m.r && Mathf.Abs(m.x - tn.x) < 40 + m.r) { tn.hit.Add(m); Damage(m, tn.dmg, tn.b, "skill"); }
+                    if (Mathf.Abs(m.y - tn.y) < tn.h / 2 + m.r && Mathf.Abs(m.x - tn.x) < 40 + m.r) { tn.hit.Add(m); Damage(m, tn.dmg, tn.b, "skill", src: "tornado"); }
                 }
             }
             tornados.RemoveAll(tn => !(tn.x > FX0 - 60 && tn.x < FX1 + 60));
@@ -335,12 +335,14 @@ namespace MoreMush
             public double bossGold; public int bossGem, bossShrooms;   // 보스 처치 보상 (골드·균사석·더 받은 버섯 수)
             public int stage, nextStage;
             public bool aborted;                // "라운드 끝내고 정산하기"로 중간에 끝냄 → 스테이지를 올리지 않는다 (번 골드는 받는다)
+            public Dictionary<string, DmgStat> dmgBySrc, dmgByHv;   // 데미지 통계 (RoundSim.Stats)
         }
 
         // 지금까지 모은 점수·보너스로 받을 정산 골드 (라운드 중 HUD가 보여 준다)
         public double GoldSoFar => Math.Floor(score * st.goldMul) + Math.Floor(bonusGold);
 
         // 점수 → 골드 (prototype finishRound). 수확한 버섯은 도감·의뢰 진행에만 쓰이고 창고에 쌓이지 않는다
+        public static Summary LastSummary;   // 마지막 정산 (밸런스 시뮬이 데미지 통계를 읽는다)
         public Summary Finish()
         {
             double scoreGold = Math.Floor(score * st.goldMul);
@@ -357,7 +359,8 @@ namespace MoreMush
             // 중간에 끝낸 판: 스테이지를 완료하지 않는다. 보스 처치 보상 기준(직전 일반 판 골드)도 짧은 판으로 덮지 않는다
             bool aborted = earlyExitSec >= 0 && !(BossRound && bossCleared);
             if (!BossRound && !aborted) G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
-            var s = new Summary { aborted = aborted, score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage };
+            var s = new Summary { aborted = aborted, score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage, dmgBySrc = Copy(dmgBySrc), dmgByHv = Copy(dmgByHv) };
+            LogDamage(G.stage); LastSummary = s;
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
             // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍)

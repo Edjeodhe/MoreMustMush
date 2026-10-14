@@ -641,7 +641,7 @@ namespace MoreMush.EditorTools
                 var rnd = new System.Random(seed); UnityEngine.Random.InitState(seed);
                 for (int i = 0; i < n; i++)
                 {
-                    G = new SaveData { rounds = stage - 1 };
+                    G = new SaveData { rounds = stage - 1, stage = stage };
                     G.nodes = nodes != null ? new Dictionary<string, int>(nodes) : NODES.Where(x => !x.gem).ToDictionary(x => x.id, x => x.max);
                     var r = PlayRound(rnd);
                     acc.score += r.score / n; acc.scoreGold += r.scoreGold / n; acc.value += r.value / n;

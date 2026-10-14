@@ -300,19 +300,22 @@ namespace MoreMush
             return true;
         }
 
-        // ===== 균사석 가속 =====
-        // 나무: 아직 자라는 버섯을 모두 지금 다 자라게 (남은 시간 합 TREE.accelSec초마다 균사석 1개)
-        public static int TreeAccelCost()
+        // ===== 가속 =====
+        // 나무: 아직 자라는 버섯을 모두 지금 다 자라게. 골드로 낸다 — 남은 시간 합 TREE.accelSec초마다 일반 판 한 판 정산 골드.
+        // 남은 시간이 길수록, 판 수입이 오를수록 비싸진다 (균사석으로 내면 딴 균사석이 더 많아 무한 복사가 됐다)
+        public static double TreeAccelCost()
         {
             double now = Now(), left = 0;
             foreach (var f in G.farm.tree.slots) left += Math.Max(0, f.at - now) / 1000;
-            return left <= 0 ? 0 : Math.Max(1, (int)Math.Ceiling(left / TREE.accelSec));
+            if (left <= 0) return 0;
+            double roundGold = Math.Max(G.lastNormalGold, TREE.accelMinRoundGold);
+            return Math.Max(1, Math.Ceiling(roundGold * left / TREE.accelSec));
         }
         public static bool TreeAccel()
         {
-            int c = TreeAccelCost();
-            if (c <= 0 || G.gem < c) return false;
-            G.gem -= c; double now = Now();
+            double c = TreeAccelCost();
+            if (c <= 0 || G.gold < c) return false;
+            G.gold -= c; double now = Now();
             foreach (var f in G.farm.tree.slots) if (f.at > now) f.at = now;
             SaveGame();
             return true;

@@ -9777,7 +9777,7 @@
       "Str_ID": 900572,
       "Str_Group_ID": 90572,
       "Str_Name": "ui",
-      "Str_KR": "세계수 나무에서 자라고 있는 버섯이 모두 지금 다 자라요. <color=#8a6a4a>(남은 시간 합 {0}분마다 균사석 1개)</color>",
+      "Str_KR": "세계수 나무에서 자라고 있는 버섯이 모두 지금 다 자라요. <color=#8a6a4a>(남은 시간 합 {0}분마다 한 판 수입만큼 골드)</color>",
       "Str_EN": "",
       "Str_JA": ""
     },
@@ -12498,6 +12498,198 @@
       "Str_Group_ID": 90908,
       "Str_Name": "ui",
       "Str_KR": "수확이 도중에 중단되어 스테이지가 완료되지 않습니다.",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900909,
+      "Str_Group_ID": 90909,
+      "Str_Name": "ui",
+      "Str_KR": "장착 칸이 다 찼어요 ({0}/{1}). 다른 수확기를 먼저 꺼 주세요",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900910,
+      "Str_Group_ID": 90910,
+      "Str_Name": "ui",
+      "Str_KR": "칸 없음",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900911,
+      "Str_Group_ID": 90911,
+      "Str_Name": "ui",
+      "Str_KR": "장착 {0}",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900912,
+      "Str_Group_ID": 90912,
+      "Str_Name": "ui",
+      "Str_KR": "엔딩",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900913,
+      "Str_Group_ID": 90913,
+      "Str_Name": "ui",
+      "Str_KR": "버섯 도감 {0}종 완성!",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900914,
+      "Str_Group_ID": 90914,
+      "Str_Name": "ui",
+      "Str_KR": "화면을 누르면 계속해요",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900915,
+      "Str_Group_ID": 90915,
+      "Str_Name": "ui",
+      "Str_KR": "직접 타격",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900916,
+      "Str_Group_ID": 90916,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 칼날",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900917,
+      "Str_Group_ID": 90917,
+      "Str_Name": "ui",
+      "Str_KR": "젤리 버섯 안",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900918,
+      "Str_Group_ID": 90918,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 베기",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900919,
+      "Str_Group_ID": 90919,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 울림",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900920,
+      "Str_Group_ID": 90920,
+      "Str_Name": "ui",
+      "Str_KR": "불꽃",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900921,
+      "Str_Group_ID": 90921,
+      "Str_Name": "ui",
+      "Str_KR": "분열로 생긴 소형 수확기",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900922,
+      "Str_Group_ID": 90922,
+      "Str_Name": "ui",
+      "Str_KR": "분신 수확기 (스킬)",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900923,
+      "Str_Group_ID": 90923,
+      "Str_Name": "ui",
+      "Str_KR": "기타",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900924,
+      "Str_Group_ID": 90924,
+      "Str_Name": "ui",
+      "Str_KR": "데미지 통계",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900925,
+      "Str_Group_ID": 90925,
+      "Str_Name": "ui",
+      "Str_KR": "총 피해 {0}",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900926,
+      "Str_Group_ID": 90926,
+      "Str_Name": "ui",
+      "Str_KR": "피해 비율",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900927,
+      "Str_Group_ID": 90927,
+      "Str_Name": "ui",
+      "Str_KR": "피해",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900928,
+      "Str_Group_ID": 90928,
+      "Str_Name": "ui",
+      "Str_KR": "타격",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900929,
+      "Str_Group_ID": 90929,
+      "Str_Name": "ui",
+      "Str_KR": "처치",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900930,
+      "Str_Group_ID": 90930,
+      "Str_Name": "ui",
+      "Str_KR": "스킬·능력별",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900931,
+      "Str_Group_ID": 90931,
+      "Str_Name": "ui",
+      "Str_KR": "수확기별",
+      "Str_EN": "",
+      "Str_JA": ""
+    },
+    {
+      "Str_ID": 900932,
+      "Str_Group_ID": 90932,
+      "Str_Name": "ui",
+      "Str_KR": "화면을 누르면 닫혀요",
       "Str_EN": "",
       "Str_JA": ""
     }

@@ -49,7 +49,10 @@ namespace MoreMush
             UIUtil.Show(level, S > 0);
             if (S > 0)
             {
-                toggleText.text = on ? Loc.T("켜짐") : Loc.T("꺼짐");
+                // 장착 칸이 다 찼으면 꺼진 수확기는 켤 수 없다 (켜진 것은 언제든 끌 수 있다)
+                bool canOn = on || HvCanTurnOn();
+                toggle.interactable = canOn;
+                toggleText.text = on ? Loc.T("켜짐") : canOn ? Loc.T("꺼짐") : Loc.T("칸 없음");
                 toggleImage.color = on ? U.Hex("#9fd2ff") : new Color(1, 1, 1, 0.75f);
                 var lc = HvLevelCost(h);
                 level.interactable = lc != null && CanAfford(lc.Value);

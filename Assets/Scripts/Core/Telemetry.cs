@@ -112,6 +112,7 @@ namespace MoreMush
         // 스테이지 시작: 서버로는 보내지 않는다. 비정상 종료 때 보낼 마지막 스테이지만 남긴다
         public static void StageStart(SaveData g)
         {
+            if (SaveIO.Suspended) return;   // 밸런스 시뮬은 Init()(DontDestroyOnLoad)을 거치지 않게
             if (!inited) Init();
             PlayerPrefs.SetInt(K_LAST, g.stage);
             PlayerPrefs.Save();
@@ -123,6 +124,7 @@ namespace MoreMush
         // 스테이지 종료. result: clear / fail / early_exit. sec는 일반·보스 중도 이탈 때만, bossHp(0~100)는 보스 fail·early_exit 때만 싣는다
         public static void StageEnd(SaveData g, int stage, string result, bool boss, double score, double gained, double sec, double bossHpPct, List<string> newCodex)
         {
+            if (SaveIO.Suspended) return;
             if (!inited) Init();
             var snap = LoadSnap() ?? new Snap();   // 기준이 없으면(첫 판·로그 도입 전 세이브) 0레벨부터 센다
             var ups = new List<object[]>();

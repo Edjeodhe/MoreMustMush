@@ -61,10 +61,26 @@ namespace MoreMush
             grandpa.transform.localPosition = Art.P(-14, 82 + Mathf.Sin(now * 2) * 2);
 
             HandleInput();
+            ClampCam();
             foreach (var nv in nodes) nv.Draw(ParentPos(nv.Node), now, hover == nv, camZ, dt);
         }
 
         bool trunksOff;
+
+        // 카메라가 트리 밖으로 나가지 않게: 화면 가운데가 보이는 노드(숨김 제외)와 가운데 할아버지를 감싼 영역 + 여유 안에 머문다
+        const float CAM_PAD = 200;
+        void ClampCam()
+        {
+            float x0 = 0, x1 = 0, y0 = 0, y1 = 0;
+            foreach (var nv in nodes)
+            {
+                if (NodeState(nv.Node) == "hidden") continue;
+                var p = nv.TreePos;
+                x0 = Mathf.Min(x0, p.x); x1 = Mathf.Max(x1, p.x); y0 = Mathf.Min(y0, p.y); y1 = Mathf.Max(y1, p.y);
+            }
+            camX = Mathf.Clamp(camX, x0 - CAM_PAD, x1 + CAM_PAD);
+            camY = Mathf.Clamp(camY, y0 - CAM_PAD, y1 + CAM_PAD);
+        }
 
         TreeNodeView Hit(Vector2 s)
         {

@@ -120,7 +120,7 @@ namespace MoreMush
                         float reach = rr + m.r * 0.6f;
                         if (U.D2(b.x, b.y, m.x, m.y) < reach * reach)
                         {
-                            Damage(m, dmg, b, "blade", 0.5);
+                            Damage(m, dmg, b, "blade", 0.5, src: st.blade ? "blade" : "mill");
                             any = true;
                             if (mill != null && U.Chance((float)mill["p"])) MillChip(m);
                         }
@@ -172,8 +172,9 @@ namespace MoreMush
                 if (m.jelly) { inJ = true; if (jl == null) { jl = jellyBuf; jl.Clear(); } jl.Add(m); continue; }
                 if (b.inside.Contains(m)) { inside.Add(m); continue; }
                 if (!m.solid) { inside.Add(m); DirectHit(m, b, 1); continue; }
-                // 관통 (바 스킬): 지속 중엔 군락을 튕기지 않고 뚫고 지나간다. 보스는 뚫지 못한다
-                if (b.pierceT > 0 && !m.boss) { inside.Add(m); DirectHit(m, b, 1); continue; }
+                // 관통 (바 스킬): 지속 중엔 군락을 튕기지 않고 뚫고 지나간다. 보스는 뚫지 못한다.
+                // 관통 타격은 직접 피해만 준다: 군락을 지나며 버섯마다 폭발·번개 등이 연달아 터져 틱마다 피해가 들어가는 것처럼 폭증했다
+                if (b.pierceT > 0 && !m.boss) { inside.Add(m); DirectHit(m, b, 1, false); continue; }
                 float dl = Mathf.Sqrt(dd); if (dl == 0) dl = 0.01f;
                 float nx = ddx / dl, ny = ddy / dl;
                 float dot = b.dx * nx + b.dy * ny;
@@ -193,7 +194,7 @@ namespace MoreMush
                 if (b.jTick >= 0.15f)
                 {
                     b.jTick -= 0.15f;
-                    foreach (var m in jl) Damage(m, st.atk * 0.5 * Wk(b), b, "jelly", 0.5);
+                    foreach (var m in jl) Damage(m, st.atk * 0.5 * Wk(b), b, "jelly", 0.5, src: "jelly");
                 }
             }
             else
@@ -288,13 +289,16 @@ namespace MoreMush
             return x;
         }
 
-        void Damage(Shroom m, double amt, Ball b, string kind, double scoreF = 1, Wave wave = null, bool forceCrit = false)
+        // src: 데미지 통계 출처 (direct·burst·bolt… DmgSrcName). 비우면 kind
+        void Damage(Shroom m, double amt, Ball b, string kind, double scoreF = 1, Wave wave = null, bool forceCrit = false, string src = null)
         {
             if (m.dead) return;
             if (m.cluster || m.giant || m.boss) amt *= st.heavyMul;
             if (m.boss) amt *= st.bossMul;
             bool crit = forceCrit || U.Chance((float)(st.crit + (b != null ? HV[b.hv].crit : 0)));
+            double hpBefore = m.hp;
             m.hp -= amt * (crit ? st.critMul : 1);
+            RecordDamage(src ?? kind, b, Math.Min(hpBefore, hpBefore - m.hp), m.hp <= 0);
             m.squish = 1;
             // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
             double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
@@ -308,7 +312,8 @@ namespace MoreMush
             if (m.hp <= 0) Harvest(m, b, kind, wave);
         }
 
-        void DirectHit(Shroom m, Ball b, double mul)
+        // procs: 타격 때 발동하는 수확기 능력·스킬(종·분열·스파크·폭발·자석·번개)을 굴릴지 (관통 타격은 안 굴린다)
+        void DirectHit(Shroom m, Ball b, double mul, bool procs = true)
         {
             double amt = st.atk * Wk(b) * mul * (st.fire ? 1.3 : 1) * (runT < 3 ? st.rushMul : 1);
             if (b.sharpen > 0) { amt *= b.sharpMul; b.sharpen--; }
@@ -328,19 +333,20 @@ namespace MoreMush
                 if (texts.Count < 20) texts.Add(new FloatText { x = m.x + U.Rand(-10, 10), y = m.y - m.r - 18, v = g, coin = true });
                 Snd.Tone(1200, 0.05f, Snd.Wave.Triangle, 0.25f, 1.3f, "coin", 0.05f);
             }
-            Damage(m, amt, b, "direct", 1, null, hv == "hoe" && (m.sp.t >= 1 || m.boss) && U.Chance((float)a["p"]));
+            Damage(m, amt, b, "direct", 1, null, hv == "hoe" && (m.sp.t >= 1 || m.boss) && U.Chance((float)a["p"]), "direct");
             Snd.Hit();
-            if (hv == "bell") BurstAt(m.x, m.y, (float)a["r"], st.atk * a["dmg"] * Wk(b), b, "#e8c08a", true);
-            // 분열로 생긴 핀볼은 다시 분열하지 않는다 (연쇄 폭주 방지)
-            if (hv == "spore" && !b.noSplit && U.Chance((float)a["p"])) SporeSplit(b, (int)a["hits"]);
             // 분열로 나온 소형 수확기는 정해진 횟수만큼 부딪히면 사라진다
             if (b.hitsLeft > 0 && --b.hitsLeft == 0) { b.dead = true; for (int i = 0; i < 6; i++) AddPart(b.x, b.y, U.Rand(-60, 60), U.Rand(-60, 60), 0.4f, U.Hex("#dfe8f0"), 3); }
-            if (st.sparkP > 0 && Skillful(b) && U.Chance((float)st.sparkP)) { ChainBolt(m, b); SkillFx("spark", b.x, b.y); }
+            if (!procs) return;
+            if (hv == "bell") BurstAt(m.x, m.y, (float)a["r"], st.atk * a["dmg"] * Wk(b), b, "#e8c08a", true, "bell");
+            // 분열로 생긴 핀볼은 다시 분열하지 않는다 (연쇄 폭주 방지)
+            if (hv == "spore" && !b.noSplit && U.Chance((float)a["p"])) SporeSplit(b, (int)a["hits"]);
+            if (st.sparkP > 0 && Skillful(b) && U.Chance((float)st.sparkP)) { ChainBolt(m, b, "spark"); SkillFx("spark", b.x, b.y); }
             if (m.spore != null && m.sporeCd <= 0 && U.Chance((float)st.sporeP)) { m.sporeCd = 2; SpawnCloud(m.x, m.y, m.spore); }
             var sk = st.sk;
-            if (sk["burst"].on && Skillful(b) && U.Chance((float)SkP("burst", b))) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
+            if (sk["burst"].on && Skillful(b) && U.Chance((float)SkP("burst", b))) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false, "burst"); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
             if (sk["magnet"].on && Skillful(b) && U.Chance((float)SkP("magnet", b))) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
-            if (sk["bolt"].on && Skillful(b) && U.Chance((float)SkP("bolt", b))) { ChainBolt(m, b); SkillFx("bolt", b.x, b.y); }
+            if (sk["bolt"].on && Skillful(b) && U.Chance((float)SkP("bolt", b))) { ChainBolt(m, b, "bolt"); SkillFx("bolt", b.x, b.y); }
         }
 
         // 분열형: 능력치 50%인 작은 같은 수확기 (다시 분열하지 않음)
@@ -388,7 +394,7 @@ namespace MoreMush
             FreeQuery(q);
             if (best == null) return;
             bolts.Add(new Bolt { pts = new List<Vector2> { new Vector2(m0.x, m0.y), new Vector2(best.x, best.y) }, t = 0.2f, slash = true });
-            Damage(best, st.atk * 2 * Wk(b), b, "skill");
+            Damage(best, st.atk * 2 * Wk(b), b, "skill", src: "cleave");
         }
 
         void Harvest(Shroom m, Ball b, string kind, Wave wave)

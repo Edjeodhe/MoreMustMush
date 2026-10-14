@@ -26,12 +26,29 @@ namespace MoreMush
         const float SCREEN_MARGIN = 24;            // 정산 카드 위아래 여백
 
         RoundSim.Summary sum;
+        public RoundSim.Summary Sum => sum;
         readonly List<NewCard> unlockList = new List<NewCard>(), newsList = new List<NewCard>();
         float t0;
         bool rolledSound, animating;
         float animationEnd;
         readonly List<(RectTransform rt, float delay, float y)> drops = new List<(RectTransform, float, float)>();
 
+
+        // "데미지 통계" 버튼: 균사 트리로 버튼을 복제해 그 옆에 둔다 (액션 dmgstats → RuntimeOverlays.ShowDamageStats)
+        GameObject statsButton;
+        void EnsureStatsButton()
+        {
+            if (statsButton != null) return;
+            var toTree = toTreeText.GetComponentInParent<UIAction>();
+            if (toTree == null) return;
+            statsButton = Instantiate(toTree.gameObject, toTree.transform.parent);
+            statsButton.name = "DmgStats";
+            statsButton.transform.SetSiblingIndex(toTree.transform.GetSiblingIndex());   // 균사 트리로 버튼 왼쪽
+            statsButton.GetComponent<UIAction>().act = "dmgstats";
+            var t = statsButton.GetComponentInChildren<TMP_Text>();
+            var lt = t.GetComponent<LocText>(); if (lt != null) lt.key = "데미지 통계";
+            t.text = Loc.T("데미지 통계");
+        }
 
         public void Show(RoundSim.Summary s)
         {
@@ -62,6 +79,7 @@ namespace MoreMush
             recsBox.SetActive(recs.Count > 0);
             recsText.text = string.Join("\n", recs);
             toTreeText.text = Loc.T("균사 트리로 ▶");
+            EnsureStatsButton();
             SpawnBasket(s);
             animationEnd = Mathf.Max(1.9f, drops.Count == 0 ? 0 : drops[drops.Count - 1].delay + 0.6f);
             FitCards();

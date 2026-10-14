@@ -116,9 +116,9 @@ namespace MoreMush
             int ripe = G.farm.tree.slots.Where((f, i) => FruitRipe(f) && !farm.busy.Contains(i)).Count();
             pickAll.interactable = ripe > 0;
             pickAllText.text = Loc.F("모두 따기 ({0})", ripe) + (farm.Picking > 0 ? " <size=70%>· " + Loc.F("따는 중 {0}", farm.Picking) + "</size>" : "");
-            int ac = TreeAccelCost();
+            double ac = TreeAccelCost();
             growFast.interactable = ac > 0;
-            growFastText.text = ac > 0 ? Loc.F("빨리 자라게  <size=80%>{0}{1}</size>", UIUtil.Ic("gem"), ac) : Loc.T("모두 다 자랐어요");
+            growFastText.text = ac > 0 ? Loc.F("빨리 자라게  <size=80%>{0}{1}</size>", UIUtil.Ic("gold"), U.Fmt(ac)) : Loc.T("모두 다 자랐어요");
         }
 
         // 배치 바: 배치 중에는 매 프레임 불리므로, 건물·옮기기 여부·놓을 수 있는지가 바뀔 때(또는 1초마다)만 글자를 다시 만든다

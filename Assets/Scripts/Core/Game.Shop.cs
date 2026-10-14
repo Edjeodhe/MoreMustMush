@@ -38,12 +38,16 @@ namespace MoreMush
             return true;
         }
 
-        // 켜고 끄기. 다 꺼도 빈 칸은 기본 수확기가 채운다. 장착 칸을 넘겨 켤 수는 있지만 라운드 시작이 막힌다 (HvOver)
-        public static void HvToggle(string id)
+        // 켜고 끄기. 다 꺼도 빈 칸은 기본 수확기가 채운다. 장착 칸이 다 찼으면 더 켤 수 없다 (넘기면 라운드 시작이 막히니까)
+        public static bool HvCanTurnOn() => OnHvs().Count < HvSlots();
+        public static bool HvToggle(string id)
         {
-            if (HvStar(id) == 0) return;
-            G.hvOn[id] = !HvOn(id);
+            if (HvStar(id) == 0) return false;
+            bool on = HvOn(id);
+            if (!on && !HvCanTurnOn()) return false;
+            G.hvOn[id] = !on;
             SaveGame();
+            return true;
         }
 
         // 같은 쪽(일반 채집 = 좋은 날씨 · 보스 채집 = 나쁜 날씨) 안에서의 확률

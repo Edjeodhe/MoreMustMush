@@ -36,7 +36,9 @@ namespace MoreMush
             goldText.text = U.Fmt(G.gold);
             gemText.text = U.Fmt(G.gem);
             codexButtonText.text = Loc.F("{0} 도감 ({1}/{2})", UIUtil.Ic("book"), CodexCount(), SP_TOTAL);
-            workshopButtonText.text = Loc.T("공방");
+            int hvOn = OnHvs().Count, hvSlots = HvSlots();
+            string hvCount = hvOn > hvSlots ? $"<color=#d04a3a>{hvOn}/{hvSlots}</color>" : $"{hvOn}/{hvSlots}";
+            workshopButtonText.text = Loc.T("공방") + $" <size=75%>({Loc.F("장착 {0}", hvCount)})</size>";
             RefreshFarmBadge();
         }
 

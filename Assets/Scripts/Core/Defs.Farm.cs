@@ -145,7 +145,8 @@ namespace MoreMush
                 new[] { 0f, 0.66f, 0.40f, 0.24f }, new[] { 0f, 0.72f, 0.40f, 0.26f },
             };
             public const float pick = 0.6f;                       // 버섯 하나 따는 시간 (초) ÷ 속도
-            public const float accelSec = 600;                    // 균사석 1개로 줄이는 성장 시간 (초)
+            public const float accelSec = 300;                    // 골드 가속: 남은 성장 시간 이 초마다 일반 판 한 판 정산 골드 (균사석 가속은 딴 균사석보다 싸서 무한 복사가 됐다)
+            public const double accelMinRoundGold = 100;          // 아직 일반 판 기록이 없을 때 한 판 골드로 칠 값
             public const float zoneX0 = 740, zoneX1 = 1180, zoneY0 = 260, zoneY1 = 540;   // 건물을 놓을 수 없는 나무 밑동 둘레 (Tools/art/make_build_grid.py도 같이)
             public const int order = 880;                         // 나무는 꼬마·건물과 그 그림자(899~)보다 항상 뒤에 그린다 (그림자 −1 · 버섯 +1·+2 · 팻말 +3·+4)
         }

@@ -229,8 +229,10 @@ namespace MoreMush
 
         public void AfterSettle()
         {
-            if (CodexCount() >= SP_TOTAL && !G.ending) { G.ending = true; SaveGame(); Telemetry.GameClear(G); ShowToast(Loc.F("버섯 도감 {0}종 완성! (엔딩 컷신은 3단계에서 추가돼요)", SP_TOTAL)); }
+            bool ending = CodexCount() >= SP_TOTAL && !G.ending;
+            if (ending) { G.ending = true; SaveGame(); Telemetry.GameClear(G); }
             EnterTree();
+            if (ending) RuntimeOverlays.ShowEnding(SP_TOTAL);   // 엔딩 가안: 글자만 (트리 화면 위에 덮는다)
         }
 
         // ===== actions (prototype onAction) =====
@@ -302,6 +304,7 @@ namespace MoreMush
                 case "pause": OpenPause(); break;
                 case "speed": RoundController.NextSpeed(); Snd.Ui(); break;
                 case "totree": Snd.Ui(); AfterSettle(); break;
+                case "dmgstats": Snd.Ui(); RuntimeOverlays.ShowDamageStats(settle.Sum); break;
                 case "workshop": Snd.Ui(); OpenModal(workshop, () => tree.Refresh()); workshop.Render(); break;
                 case "hvunlock":
                     if (!HvUnlock(arg)) { Snd.Err(); break; }
@@ -310,7 +313,7 @@ namespace MoreMush
                     if (!HvLevel(arg)) { Snd.Err(); break; }
                     Snd.Buy(); ShowToast(HvStar(arg) >= 5 ? Loc.F("{0} {1} 최대! 날이 늘었어요", HV[arg].n, U.Stars(HvStar(arg))) : $"{HV[arg].n} {U.Stars(HvStar(arg))}"); workshop.Render(); break;
                 case "hvtoggle":
-                    HvToggle(arg);
+                    if (!HvToggle(arg)) { Snd.Err(); ShowToast(Loc.F("장착 칸이 다 찼어요 ({0}/{1}). 다른 수확기를 먼저 꺼 주세요", OnHvs().Count, HvSlots())); break; }
                     Snd.Ui(); workshop.Render();
                     if (HvOver()) ShowToast(Loc.T(HV_OVER_MSG));
                     break;
@@ -369,7 +372,7 @@ namespace MoreMush
                 case "accelok":
                 {
                     bool ok = accel.kind == "build" ? BuildAccel(accel.uid) : TreeAccel();
-                    if (!ok) { Snd.Err(); ShowToast(Loc.T("균사석이 부족해요")); break; }
+                    if (!ok) { Snd.Err(); ShowToast(accel.kind == "build" ? Loc.T("균사석이 부족해요") : Loc.T("골드가 부족해요")); break; }
                     Snd.Record(); ShowToast(accel.kind == "build" ? Loc.T("건설 완료!") : Loc.T("버섯이 모두 다 자랐어요!"));
                     CloseModal(); farmScreen.Render();
                     break;
