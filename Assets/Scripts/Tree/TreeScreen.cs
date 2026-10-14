@@ -15,8 +15,8 @@ namespace MoreMush
         public TMP_Text goldText, gemText;
         public TMP_Text codexButtonText, workshopButtonText;
         public GameObject workshopButton;
-        public GameObject farmBadge; public TMP_Text farmBadgeText;   // 꼬마 부탁 + 다 자란 작물
-        public TMP_Text autoText; public GameObject autoBadge;        // 자동 수확 보상: 쌓인 시간, 가득 차면 알림
+        public GameObject farmBadge; public TMP_Text farmBadgeText;   // 세계수 알림: 보따리 가득 · 부탁 · 완성된 장식 · 주간 상자
+        public TMP_Text autoText; public GameObject autoBadge;        // 수확 보따리: 쌓인 시간, 가득 차면 알림 (버튼 액션 wtbag)
         public Image bossButtonFrame; public TMP_Text bossButtonText;  // 보스 도전 켜고 끄기 (UIAction bosstoggle)
         public RectTransform sparkLayer;
         public Spark sparkTemplate;     // hidden template slot under sparkLayer, cloned per spark
@@ -60,9 +60,10 @@ namespace MoreMush
             farmN = FarmReadyCount();
             UIUtil.Show(farmBadge, farmN > 0);
             farmBadgeText.text = farmN.ToString();
-            double h = AutoHours();
-            autoText.text = Loc.F("{0} 자동 수확 <size=75%>{1}:{2:00}</size>", UIUtil.Ic("auto_harvest"), (int)h, (int)(h * 60 % 60));
-            UIUtil.Show(autoBadge, h >= Defs.AUTO.maxHours || h >= 1);
+            BagSettle();
+            double h = G.farm.bag.sec / 3600;
+            autoText.text = Loc.F("{0} 수확 보따리 <size=75%>{1}:{2:00}</size>", UIUtil.Ic("auto_harvest"), (int)h, (int)(h * 60 % 60));
+            UIUtil.Show(autoBadge, BagFull());
         }
 
         void Update()

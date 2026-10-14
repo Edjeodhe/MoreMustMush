@@ -3,43 +3,278 @@ using System.Linq;
 
 namespace MoreMush
 {
-    // Mushroom farm (one screen: ranch with the mushroom tree inside), buildings, critter grades, idle harvest reward and skins.
-    // Screen coordinates are the 1920×1080 stage pixels. Every number here is a design value meant to be tuned.
+    // 꼬마버섯 세계수 (신규콘텐츠 기획서 Ver03 "농장 개편"): 성장 8단계 × 나이테, 나무버섯 4종 · 구역 4곳, 꼬마 8종의 자동 수확·성장·각성·호감도·부탁,
+    // 꼬마 공방(장식 제작) · 장식 24종 · 세트 · 강화 · 아름다움 점수, 세계수의 가호. 수치는 기획서 임시안, 기획서에 없는 값은 기획서/세계수_구현설계.md.
+    // 화면 좌표는 1920×1080 스테이지 픽셀.
     public static partial class Defs
     {
-        // ===== 세계수: 꼬마 부탁·호감도·진화 =====
-        public static class FARM
+        // ===== 세계수 성장 (단계 1~8 · 나이테 Lv.1~10) =====
+        public static class WT
         {
-            public static readonly float[] wait = { 240, 600 };   // 다음 부탁까지 (초, 무작위) × 진화 배율
-            public const float first = 60;                        // 처음 들어온 꼬마의 첫 부탁 (초)
-            public const int hearts = 5;                          // 호감도 칸 수 (다 채우면 진화 가능)
-            public static readonly int[] per = { 3, 5, 8 };       // 호감도 한 칸에 필요한 부탁 수 (진화 단계별)
-            public const int evoMax = 2;
-            public const float bonusP = 0.1f;                     // 채운 호감도 칸마다 부탁 때 균사석 보너스 확률
-            public static readonly float[] evoGem = { 1, 1.5f, 2 };
-            public static readonly float[] evoWait = { 1, 0.85f, 0.7f };
-            public static readonly float[] evoSpd = { 1, 1.2f, 1.4f };
-            public const float x0 = 260, y0 = 300, x1 = 1660, y1 = 860;   // 꼬마가 돌아다니는 울타리 안
-            public const float extraGemP = 0.25f;                  // 부탁 들어줄 때 균사석 +1 확률 (예전 다이아몬드 자리)
-            public const int gemHeart = 2;                         // 호감도 한 칸을 새로 채우면 균사석
+            public const int stages = 8, ringMax = 10;
+            static readonly string[] STAGE_KO = { "새싹", "묘목", "어린 나무", "버섯 나무", "이끼 고목", "룬 신목", "고대수", "아르카나 세계수" };
+            public static string StageName(int s) => Loc.T(STAGE_KO[System.Math.Max(1, System.Math.Min(stages, s)) - 1]);
+            // 그 단계로 진화하는 데 드는 경험치·골드·균사석 (index = 단계 − 1, 1단계는 시작 단계)
+            public static readonly double[] exp = { 0, 300, 1000, 3000, 8000, 20000, 50000, 120000 };
+            public static readonly double[] evoGold = { 0, 2000, 6000, 15000, 40000, 100000, 250000, 600000 };
+            public static readonly int[] evoGem = { 0, 0, 10, 30, 80, 200, 500, 1200 };
+            public static readonly int[] mushSlots = { 4, 6, 8, 10, 13, 16, 20, 24 };   // 나무버섯 슬롯
+            public static readonly int[] decoSlots = { 1, 2, 3, 4, 6, 8, 10, 12 };      // 장식 슬롯
+            public const double ringK = 1.35, ringDiv = 20, lastRingMul = 2.4;
+            // 나이테 Lv.L → L+1 골드: 다음 진화 골드 ÷ 20 × 1.35^(L−1) (마지막 단계는 7→8 진화 골드 × 2.4 기준)
+            public static double RingCost(int stage, int lv) => (stage < stages ? evoGold[stage] : evoGold[stages - 1] * lastRingMul) / ringDiv * System.Math.Pow(ringK, lv - 1);
+            public const double ringGrow = 0.03;                  // 나이테 레벨마다 나무버섯 성장 속도 +3%
+            public static int Picture(int stage) => new[] { 0, 1, 1, 2, 2, 3, 3, 4 }[System.Math.Max(1, System.Math.Min(stages, stage)) - 1];   // tree_0~4 (단계별 새 그림 전까지)
+            public static readonly float[] width = { 260, 360, 480, 600, 680 };   // 그림별 나무 너비 (px)
+            public const float x = 640, y = 930;                  // 나무 밑동 (화면 좌표): 오른쪽 패널을 피해 왼쪽 가운데
+            public const int order = 880;
+            public const int craftBase = 2;                       // 동시 제작 슬롯 (4·6·8단계에 +1)
+            public static int CraftSlots(int stage) => craftBase + (stage >= 4 ? 1 : 0) + (stage >= 6 ? 1 : 0) + (stage >= 8 ? 1 : 0);
+            public const float rushSec = 600;                     // 즉시 완료: 남은 시간 10분마다 균사석 1
+            public const int rushPerDay = 5;                      // 즉시 완료 하루 횟수
+            public const int codexForCraft = 10;                  // 도감 10종을 모으면 꼬마 공방이 열린다 (도감 기획서 Ver03 진행 보상)
         }
 
-        public class FarmKind
+        // 세계수의 가호: 진화한 단계까지 모두 쌓이는 라운드 버프. 8단계는 앞의 가호를 모두 ×1.5
+        // key: harvest 버섯 획득량 · gold 라운드 골드 · colsN 군락지 수(개) · dur 제한시간(초) · skill 스킬 발동률 · goldenMul 황금 변종 확률 배율
+        public class Blessing { public string key; public double v; public string textKo; public string text => Loc.T(textKo); }
+        public static readonly Blessing[] BLESS =
         {
-            public string id, icon; public float w; public int gem;
+            new Blessing { key = "harvest", v = 0.03, textKo = "버섯 획득량 +3%" },
+            new Blessing { key = "gold", v = 0.05, textKo = "라운드 골드 +5%" },
+            new Blessing { key = "colsN", v = 1, textKo = "군락지 수 +1" },
+            new Blessing { key = "harvest", v = 0.06, textKo = "버섯 획득량 +6%" },
+            new Blessing { key = "dur", v = 2, textKo = "제한시간 +2초" },
+            new Blessing { key = "skill", v = 0.05, textKo = "스킬 발동률 +5%" },
+            new Blessing { key = "goldenMul", v = 1.3, textKo = "황금 변종 확률 ×1.3" },
+            new Blessing { key = "all", v = 1.5, textKo = "모든 가호 효과 ×1.5" },
+        };
+
+        // 단계마다 나무가 원하는 버섯 3종 (공물 가치 ×2). 지역·해금 순서를 따라 고른다
+        public static readonly string[][] WT_PREFER =
+        {
+            new[] { "양송이", "느타리", "무당버섯" }, new[] { "구름버섯", "치마버섯", "노란다발" }, new[] { "표고", "간버섯", "노란각시버섯" },
+            new[] { "표고", "영지버섯", "화경버섯" }, new[] { "큰갓버섯", "말굽버섯", "광대버섯" }, new[] { "상황버섯", "노루궁뎅이", "달걀버섯" },
+            new[] { "송이버섯", "동충하초", "독우산광대버섯" }, new[] { "송로버섯", "눈꽃동충하초", "갈색고리갓버섯" },
+        };
+        public const double TRIBUTE_PREFER = 2, GIFT_FAV = 3;
+        public static readonly double[] TIER_VALUE = { 1, 3, 10, 40 };   // 공물·선물 가치 = 등급 판매 기본가
+
+        // ===== 나무버섯 · 구역 =====
+        // time 자라는 시간(초) · gold·gem 수확 1개 · from 등장 단계 · icon 그림(Farm/Tree/fruit_*) · tint 색
+        public class TreeMush
+        {
+            public string id, icon, tint; public int tier, from, gem; public double gold; public float time;
             public string nKo;
             public string n { get => Loc.T(nKo); set => nKo = value; }
         }
-        public static readonly FarmKind[] FARM_KINDS =
+        public static readonly TreeMush[] TREE_MUSH =
         {
-            new FarmKind { id = "water", icon = "req_water", n = "목이 말라요", w = 34, gem = 1 },
-            new FarmKind { id = "pet", icon = "req_pet", n = "쓰다듬어 줘요", w = 30, gem = 1 },
-            new FarmKind { id = "song", icon = "req_song", n = "노래 불러 줘요", w = 20, gem = 2 },
-            new FarmKind { id = "snack", icon = "req_snack", n = "간식 주세요", w = 11, gem = 3 },
-            new FarmKind { id = "gift", icon = "req_gift", n = "선물이 있어요!", w = 5, gem = 6 },
+            new TreeMush { id = "shelf", n = "선반 나무버섯", tier = 0, time = 60, gold = 50, from = 1, icon = "fruit_ed", tint = "#ffffff" },
+            new TreeMush { id = "bundle", n = "다발 나무버섯", tier = 1, time = 300, gold = 200, from = 2, icon = "fruit_md", tint = "#ffffff" },
+            new TreeMush { id = "glow", n = "발광 나무버섯", tier = 2, time = 1800, gold = 300, gem = 1, from = 4, icon = "fruit_ps", tint = "#b8f0ff" },
+            new TreeMush { id = "golden", n = "황금 나무버섯", tier = 3, time = 10800, gold = 1000, gem = 5, from = 6, icon = "fruit_ed", tint = "#ffd23a" },
         };
-        public static readonly Dictionary<string, FarmKind> FARM_KIND = FARM_KINDS.ToDictionary(k => k.id);
+        public static readonly Dictionary<string, TreeMush> TMUSH = TREE_MUSH.ToDictionary(m => m.id);
+        public const double GOLDEN_IN_CROWN = 0.05;              // 수관 발광 자리에 황금 나무버섯이 돋을 확률
 
+        // 구역: open 열리는 단계 · weight 나무버섯 슬롯을 나누는 비율 · mush 돋는 버섯(번갈아) · high 높은 구역(바람 꼬마)
+        // 화면: cx 나무 가운데 기준 x 폭 비율, cy 밑동에서 위로 (나무 높이 비율) — 구역 안에 슬롯을 늘어놓는다
+        public class Zone
+        {
+            public string id; public int open, weight; public string[] mush; public bool high; public float cx, cy, rx, ry;
+            public string nKo, featKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+            public string feat { get => Loc.T(featKo); set => featKo = value; }
+        }
+        public static readonly Zone[] ZONES =
+        {
+            new Zone { id = "root", n = "뿌리", open = 1, weight = 4, mush = new[] { "shelf" }, cx = 0, cy = 0.02f, rx = 0.62f, ry = 0.05f, feat = "선반 슬롯이 많고 이동 거리가 짧아요" },
+            new Zone { id = "trunk", n = "줄기", open = 2, weight = 3, mush = new[] { "shelf", "bundle" }, cx = 0, cy = 0.28f, rx = 0.12f, ry = 0.16f, feat = "선반·다발이 고루 나는 균형형 구역" },
+            new Zone { id = "branch", n = "가지", open = 4, weight = 3, mush = new[] { "bundle", "glow" }, high = true, cx = 0, cy = 0.6f, rx = 0.42f, ry = 0.12f, feat = "이동 시간이 길지만 가치가 높아요" },
+            new Zone { id = "crown", n = "수관", open = 6, weight = 2, mush = new[] { "glow" }, high = true, cx = 0, cy = 0.86f, rx = 0.3f, ry = 0.08f, feat = "가장 귀한 버섯이 나는 최고 가치 구역" },
+        };
+        public static readonly Dictionary<string, Zone> ZONE = ZONES.ToDictionary(z => z.id);
+
+        // ===== 꼬마 자동 수확 =====
+        public static class HARV
+        {
+            public const float sec = 4;                           // 수확 1회 = 이동 + 수확 (초)
+            public const double prefer = 0.5;                     // 선호 구역에 배치하면 수확량 +50%
+            public const double perLv = 0.08;                     // 꼬마 레벨마다 수확량 +8%
+            public static int ZoneCap(int stage) => stage >= 6 ? 3 : 2;   // 구역당 꼬마 수
+            public const float bagHours = 8;                      // 수확 보따리 최대 보관 (시간)
+            public const float bagMinClaim = 1;                   // 받을 수 있는 최소 금액(골드) — 빈 보따리는 받지 않는다
+            public const float x0 = 120, x1 = 1180, y0 = 880, y1 = 1010;   // 쉬는 꼬마가 돌아다니는 땅 (오른쪽 패널 왼쪽)
+            public const float returnMin = 600;                   // 이만큼(초) 자리를 비웠다 돌아오면 보따리 창
+        }
+
+        // ===== 꼬마 8종 (동전·꿀밤은 2차) =====
+        // zone 선호 구역 · trait 수확 특성 · bonus 라운드 특별 보너스(각성 ★·세트마다 한 단계) · fav 좋아하는 버섯
+        // trait: speed 수확 속도+ · regen 이 꼬마가 있는 구역 재생+ · wind 이동 ×2·높은 구역 +50% · gem 균사석+ · carry 운반·보관+
+        //        chain 연쇄 수확 · glow 발광 수확 ×2·균사석+ · aura 모든 꼬마 수확량+
+        // bonus: cols 군락지 수% · dur 제한시간(초) · spd 핀볼 속도% · atk 공격력% · bar 슬라이드 바% · spark 연쇄 번개 %p · golden 황금 변종 확률 배율+ · skill 스킬 발동률%
+        public class Kid
+        {
+            public string id, zone, trait, bonus; public double tv, tv2, bv; public string[] fav;
+            public string traitKo, favWhereKo;
+            public string traitText => Loc.T(traitKo);
+            public string favWhere => Loc.T(favWhereKo);
+        }
+        public static readonly Kid[] KIDS =
+        {
+            new Kid { id = "leaf", zone = "root", trait = "speed", tv = 0.10, traitKo = "나무버섯 수확 속도 +10%", bonus = "cols", bv = 0.05, fav = new[] { "느타리", "표고" }, favWhereKo = "숲" },
+            new Kid { id = "dew", zone = "trunk", trait = "regen", tv = 0.20, traitKo = "있는 구역의 버섯 재생 속도 +20%", bonus = "dur", bv = 1, fav = new[] { "목이버섯", "흰목이" }, favWhereKo = "바다 · 보슬비" },
+            new Kid { id = "wind", zone = "crown", trait = "wind", tv = 2, tv2 = 0.5, traitKo = "이동 속도 ×2 · 높은 구역 수확 +50%", bonus = "spd", bv = 0.04, fav = new[] { "큰갓버섯", "말불버섯" }, favWhereKo = "들판" },
+            new Kid { id = "fire", zone = "trunk", trait = "gem", tv = 0.20, traitKo = "수확할 때 균사석 +20%", bonus = "atk", bv = 0.05, fav = new[] { "영지버섯", "상황버섯" }, favWhereKo = "천둥번개 · 버섯 폐허 도시" },
+            new Kid { id = "rock", zone = "root", trait = "carry", tv = 2, tv2 = 4, traitKo = "2개씩 운반 · 보따리 보관 +4시간", bonus = "bar", bv = 0.04, fav = new[] { "말굽버섯", "잔나비걸상버섯" }, favWhereKo = "숲 · 버섯 폐허 도시" },
+            new Kid { id = "spark", zone = "branch", trait = "chain", tv = 2, traitKo = "수확할 때 주변 버섯 2개 연쇄 수확", bonus = "spark", bv = 0.02, fav = new[] { "차가버섯", "붉은사슴뿔버섯" }, favWhereKo = "천둥번개" },
+            new Kid { id = "moon", zone = "branch", trait = "glow", tv = 2, tv2 = 0.30, traitKo = "발광 버섯 수확 ×2 · 균사석 +30%", bonus = "golden", bv = 0.2, fav = new[] { "화경버섯", "송이버섯" }, favWhereKo = "달빛 밤 · 보름달 밤" },
+            new Kid { id = "star", zone = "crown", trait = "aura", tv = 0.15, traitKo = "오라: 모든 꼬마 수확량 +15%", bonus = "skill", bv = 0.05, fav = new[] { "송로버섯", "동충하초" }, favWhereKo = "달빛 밤 · 버섯 폐허 도시" },
+        };
+        public static readonly Dictionary<string, Kid> KID = KIDS.ToDictionary(k => k.id);
+        public static string KidBonusText(Kid k, int step)
+        {
+            double v = k.bv * step;
+            switch (k.bonus)
+            {
+                case "cols": return Loc.F("라운드 군락지 수 +{0}", U.Pct(v));
+                case "dur": return Loc.F("라운드 제한시간 +{0}초", U.FmtN(v));
+                case "spd": return Loc.F("라운드 핀볼 속도 +{0}", U.Pct(v));
+                case "atk": return Loc.F("라운드 공격력 +{0}", U.Pct(v));
+                case "bar": return Loc.F("라운드 슬라이드 바 길이 +{0}", U.Pct(v));
+                case "spark": return Loc.F("라운드 연쇄 번개 확률 +{0}p", U.Pct(v));
+                case "golden": return Loc.F("라운드 황금 변종 확률 ×{0}", U.FmtN(1 + v));
+                default: return Loc.F("라운드 모든 스킬 발동률 +{0}", U.Pct(v));
+            }
+        }
+
+        // 꼬마 레벨·각성
+        public static class KLV
+        {
+            public const int max = 30;
+            public static double Cost(int lv) => System.Math.Ceiling(100 * System.Math.Pow(1.25, lv - 1));   // Lv → Lv+1 골드
+            public static int Cap(int awaken) => System.Math.Min(max, 10 * (awaken + 1));                      // 각성 전 Lv.10에서 멈춘다
+            public static readonly double[] awakenMul = { 1, 1.3, 1.7, 2.2 };
+            public static readonly double[] awakenGold = { 10000, 50000, 200000 };   // ★n → ★n+1
+            public static readonly int[] awakenGem = { 20, 80, 250 };
+            public const int awakenMax = 3;
+            public static readonly int[] sumAt = { 50, 100, 150, 200, 240 };   // 꼬마 Lv 합계 보상: 장식 슬롯 +1 (100·200은 구역 정원 +1, 240은 칭호)
+        }
+
+        // 호감도 (창고 버섯 선물)
+        public static class AFF
+        {
+            public const int max = 10;
+            public static double Need(int lv) => 30 * lv;          // Lv → Lv+1
+            public const double greatPerLv = 0.01;                // 수확 대성공(2배) 확률 +1%/Lv
+            public const double placeGift = 30;                   // 그 꼬마의 장식을 처음 놓으면 호감도
+        }
+
+        // 일일 부탁 · 주간 상자
+        public static class REQ
+        {
+            public const int perDay = 3, weekGoal = 7, weekGem = 30;
+            public static readonly int[] count = { 20, 10, 5, 2 };   // 등급별 요구 개수
+            public const double goldMul = 3, aff = 20;            // 보상: 골드 = 지금 단계 나이테 Lv.1 비용 × 3 · 호감도 +20
+        }
+
+        // ===== 꼬마 공방 · 장식 =====
+        public class DecoGrade { public double gold; public int gem; public float hours; public double beauty; public string nKo; public string n => Loc.T(nKo); }
+        public static readonly DecoGrade[] DECO_GRADES =
+        {
+            new DecoGrade { nKo = "일반", gold = 1000, gem = 2, hours = 1, beauty = 15 },
+            new DecoGrade { nKo = "고급", gold = 5000, gem = 10, hours = 2, beauty = 30 },
+            new DecoGrade { nKo = "희귀", gold = 20000, gem = 30, hours = 4, beauty = 60 },
+        };
+        public static readonly double[] DECO_STAR_MUL = { 1, 1.25, 1.5, 1.8, 2.2 };   // 강화 ★1~5 효과·아름다움 배율
+        public const int DECO_STAR_MAX = 5;
+
+        // fx: grow 나무버섯 성장 속도 · shelf 선반 수확량 · bagH 보따리 보관(시간) · self 주인 꼬마 수확량 · treeGold 세계수 골드 · dur 라운드 제한시간(초)
+        //     move 꼬마 이동 속도 · spd 라운드 핀볼 속도 · pick 꼬마 수확 시간 − · atk 라운드 공격력 · crit 라운드 치명타 %p · carryRoot 뿌리 운반량 +
+        //     bar 라운드 슬라이드 바 · gem 균사석 획득 · spark 라운드 연쇄 번개 %p · glowUp 발광 나무버섯 + · lucky 수확 2배 확률 · bagEff 보따리 수확 효율
+        //     golden 라운드 황금 변종 %p · allKid 모든 꼬마 수확량 · beautyMul 아름다움 점수 배율 · skill 라운드 스킬 발동률
+        // hang 걸이형(가지·수관 슬롯) / 설치형(뿌리 주변 슬롯) · art 임시 그림(Farm/Props)
+        public class Deco
+        {
+            public string id, of, fx, art; public int grade; public bool hang; public double v;
+            public string nKo;
+            public string n { get => Loc.T(nKo); set => nKo = value; }
+        }
+        public static readonly Deco[] DECOS =
+        {
+            new Deco { id = "leaf_lamp", of = "leaf", n = "잎사귀 등불", grade = 0, hang = true, fx = "grow", v = 0.05, art = "dc_lamp" },
+            new Deco { id = "leaf_crown", of = "leaf", n = "꽃 화관", grade = 1, hang = true, fx = "shelf", v = 0.15, art = "dc_bed" },
+            new Deco { id = "leaf_house", of = "leaf", n = "나무 새집", grade = 2, hang = true, fx = "bagH", v = 1, art = "dc_house" },
+            new Deco { id = "dew_chime", of = "dew", n = "물방울 풍경", grade = 0, hang = true, fx = "self", v = 0.10, art = "dc_lamp" },
+            new Deco { id = "dew_spring", of = "dew", n = "이끼 샘물", grade = 1, hang = false, fx = "treeGold", v = 0.08, art = "dc_well" },
+            new Deco { id = "dew_pond", of = "dew", n = "수련 연못", grade = 2, hang = false, fx = "dur", v = 1, art = "dc_well" },
+            new Deco { id = "wind_catcher", of = "wind", n = "깃털 드림캐처", grade = 0, hang = true, fx = "move", v = 0.10, art = "dc_lamp" },
+            new Deco { id = "wind_mill", of = "wind", n = "바람개비", grade = 1, hang = false, fx = "spd", v = 0.03, art = "dc_statue" },
+            new Deco { id = "wind_swing", of = "wind", n = "덩굴 그네", grade = 2, hang = true, fx = "pick", v = 0.10, art = "dc_swing" },
+            new Deco { id = "fire_brazier", of = "fire", n = "돌 화로", grade = 0, hang = false, fx = "self", v = 0.10, art = "dc_fire" },
+            new Deco { id = "fire_lantern", of = "fire", n = "불꽃 등롱", grade = 1, hang = true, fx = "atk", v = 0.05, art = "dc_lamp" },
+            new Deco { id = "fire_candle", of = "fire", n = "버섯 촛불", grade = 2, hang = false, fx = "crit", v = 0.02, art = "dc_fire" },
+            new Deco { id = "rock_table", of = "rock", n = "버섯 돌탁자", grade = 0, hang = false, fx = "carryRoot", v = 1, art = "dc_table" },
+            new Deco { id = "rock_moss", of = "rock", n = "이끼 바위", grade = 1, hang = false, fx = "bar", v = 0.03, art = "dc_statue" },
+            new Deco { id = "rock_geode", of = "rock", n = "자수정 정동", grade = 2, hang = false, fx = "gem", v = 0.10, art = "dc_statue" },
+            new Deco { id = "spark_orb", of = "spark", n = "피뢰침 오브", grade = 0, hang = false, fx = "spark", v = 0.02, art = "dc_statue" },
+            new Deco { id = "spark_lamp", of = "spark", n = "황금 수정등", grade = 1, hang = false, fx = "glowUp", v = 0.10, art = "dc_lamp" },
+            new Deco { id = "spark_bell", of = "spark", n = "놋쇠 종", grade = 2, hang = true, fx = "lucky", v = 0.05, art = "dc_lamp" },
+            new Deco { id = "moon_crescent", of = "moon", n = "초승달 장식", grade = 0, hang = true, fx = "self", v = 0.10, art = "dc_lamp" },
+            new Deco { id = "moon_garland", of = "moon", n = "별빛 가랜드", grade = 1, hang = true, fx = "bagEff", v = 0.10, art = "dc_bed" },
+            new Deco { id = "moon_owl", of = "moon", n = "부엉이 목각", grade = 2, hang = false, fx = "golden", v = 0.005, art = "dc_statue" },
+            new Deco { id = "star_rune", of = "star", n = "룬 비석", grade = 0, hang = false, fx = "allKid", v = 0.05, art = "dc_statue" },
+            new Deco { id = "star_crown", of = "star", n = "꼬마 왕관", grade = 1, hang = true, fx = "beautyMul", v = 0.10, art = "dc_house" },
+            new Deco { id = "star_orb", of = "star", n = "빛의 구슬", grade = 2, hang = true, fx = "skill", v = 0.03, art = "dc_lamp" },
+        };
+        public static readonly Dictionary<string, Deco> DECO = DECOS.ToDictionary(d => d.id);
+        public const double DECO_SET_YIELD = 0.30;               // 세트(같은 꼬마 장식 3종 배치): 그 꼬마 수확량 +30% · 특별 보너스 +1단계
+        public const int DECO_FIRST_GEM = 5;                      // 처음 배치하면 균사석
+
+        public static string DecoFxText(Deco d, double mul = 1)
+        {
+            double v = d.v * mul;
+            string kid = KID.TryGetValue(d.of, out _) && SPC.TryGetValue(d.of, out var sp) ? sp.n : "";
+            switch (d.fx)
+            {
+                case "grow": return Loc.F("나무버섯 성장 속도 +{0}", U.Pct(v));
+                case "shelf": return Loc.F("선반 나무버섯 수확량 +{0}", U.Pct(v));
+                case "bagH": return Loc.F("보따리 보관 시간 +{0}시간", U.FmtN(v));
+                case "self": return Loc.F("{0} 수확량 +{1}", kid, U.Pct(v));
+                case "treeGold": return Loc.F("세계수 골드 획득 +{0}", U.Pct(v));
+                case "dur": return Loc.F("라운드 제한시간 +{0}초", U.FmtN(v));
+                case "move": return Loc.F("꼬마 이동 속도 +{0}", U.Pct(v));
+                case "spd": return Loc.F("라운드 핀볼 속도 +{0}", U.Pct(v));
+                case "pick": return Loc.F("꼬마 수확 시간 −{0}", U.Pct(v));
+                case "atk": return Loc.F("라운드 공격력 +{0}", U.Pct(v));
+                case "crit": return Loc.F("라운드 치명타 확률 +{0}p", U.Pct(v));
+                case "carryRoot": return Loc.F("뿌리 구역 꼬마 운반량 +{0}", U.FmtN(v));
+                case "bar": return Loc.F("라운드 슬라이드 바 길이 +{0}", U.Pct(v));
+                case "gem": return Loc.F("균사석 획득 +{0}", U.Pct(v));
+                case "spark": return Loc.F("라운드 연쇄 번개 확률 +{0}p", U.Pct(v));
+                case "glowUp": return Loc.F("발광 나무버섯 수확 +{0}", U.Pct(v));
+                case "lucky": return Loc.F("수확할 때 {0} 확률로 2배", U.Pct(v));
+                case "bagEff": return Loc.F("보따리 수확 효율 +{0}", U.Pct(v));
+                case "golden": return Loc.F("라운드 황금 변종 확률 +{0}p", U.Pct(v));
+                case "allKid": return Loc.F("모든 꼬마 수확량 +{0}", U.Pct(v));
+                case "beautyMul": return Loc.F("아름다움 점수 ×{0}", U.FmtN(1 + v));
+                default: return Loc.F("라운드 모든 스킬 발동률 +{0}", U.Pct(v));
+            }
+        }
+
+        // 아름다움 점수 (가진 장식 전체 합) 보상
+        public class BeautyStep { public double at; public string key; public double v; public string textKo; public string text => Loc.T(textKo); }
+        public static readonly BeautyStep[] BEAUTY =
+        {
+            new BeautyStep { at = 100, key = "gold", v = 0.05, textKo = "라운드 골드 +5%" },
+            new BeautyStep { at = 300, key = "slots", v = 2, textKo = "나무버섯 슬롯 +2" },
+            new BeautyStep { at = 700, key = "allKid", v = 0.10, textKo = "모든 꼬마 수확량 +10%" },
+            new BeautyStep { at = 1200, key = "title", v = 0, textKo = "칭호 '숲의 장인'" },
+            new BeautyStep { at = 2000, key = "decoMul", v = 1.1, textKo = "모든 장식 효과 ×1.1" },
+        };
+
+        // ===== 꼬마 대사 =====
         static readonly Dictionary<string, string[]> FARM_LINES_KO = new Dictionary<string, string[]>
         {
             ["fire"] = new[] { "앗 뜨거! 아니, 내가 뜨거운 거구나!", "불멍 할래? 내가 불이야!", "모닥불 옆이 제일 좋아~" },
@@ -54,134 +289,12 @@ namespace MoreMush
             ["chest"] = new[] { "꿀밤 맞을래? 농담이야!", "다람쥐가 자꾸 날 쫓아와!", "달콤한 냄새 나지?" },
             ["all"] = new[] { "할아버지, 오늘도 수확 잘했어요?", "여기 세계수 진짜 좋아!", "심심해~ 놀아 줘!", "포자 날린다~", "배고파... 버섯 수프 없나?", "헤헤, 간지러워!", "같이 산책할래?" },
             ["thanks"] = new[] { "고마워! 이거 받아!", "헤헤, 최고야!", "역시 할아버지야!", "기분 좋아~ 선물이야!" },
-            ["field"] = new[] { "영차영차! 밭일은 맡겨 줘!", "흙냄새 좋다~", "포자 쏙쏙 심어 줄게!", "다 자라면 균사석이 나와!", "허수아비 아저씨 안녕!" },
-            ["build"] = new[] { "뚝딱뚝딱! 금방 지을게!", "망치질은 자신 있어!", "조금만 기다려 줘~", "튼튼하게 짓는 중이야!" },
+            ["field"] = new[] { "영차영차! 수확은 맡겨 줘!", "나무버섯 냄새 좋다~", "보따리에 담아 둘게!", "다 자라면 바로 따 줄게!" },
+            ["idle"] = new[] { "일하고 싶어! 구역에 보내 줘!", "어디로 가면 돼?", "나도 버섯 딸 수 있어!" },
         };
         public static readonly LocLines FARM_LINES = new LocLines(FARM_LINES_KO);
         public static readonly Dictionary<string, float> FARM_ANIMS = new Dictionary<string, float>
         { ["jump"] = 0.9f, ["spin"] = 0.8f, ["dance"] = 1.6f, ["heart"] = 1.4f, ["sleep"] = 2.6f, ["surprise"] = 0.9f };
-
-        // ===== 꼬마 별 등급 (골드 + 균사석으로 강화, 아웃게임 능력치만) =====
-        public static class CSTAR
-        {
-            public const int max = 5;
-            public static readonly double[] gold = { 10000, 100000, 1000000, 10000000, 100000000 };   // n성 → n+1성
-            public static readonly int[] gem = { 5, 10, 20, 40, 80 };
-            public const float build = 0.08f, work = 0.08f;       // 별마다 이 꼬마의 건설 속도 · 버섯 따기 속도
-        }
-
-        // 꼬마 보유 효과: 잡으면 생기고, 별 등급마다 커진다 (값 = v0 + vs × 별)
-        // key: fieldGemSelf 이 꼬마가 딴 세계수 버섯 균사석 · build 모든 건설 속도 · grow 세계수 버섯 성장 시간 · autoGold 자동 수확 골드
-        //      serveGem 부탁 균사석 +1 확률 · pickGem 버섯 딸 때 균사석 +1 확률 · autoGem 자동 수확 균사석 · work 모든 꼬마 버섯 따기 속도
-        //      buildSelf 이 꼬마의 건설 시간 · fieldGem 세계수 버섯 균사석
-        public class CritterFx
-        {
-            public string key; public float v0, vs;
-            public string fmtKo;
-            public string fmt { get => Loc.T(fmtKo); set => fmtKo = value; }
-        }
-        public static readonly Dictionary<string, CritterFx> CRITTER_FX = new Dictionary<string, CritterFx>
-        {
-            ["fire"] = new CritterFx { key = "fieldGemSelf", v0 = 0.20f, vs = 0.10f, fmt = "불씨 꼬마가 버섯을 따면 균사석 +{0}" },
-            ["spark"] = new CritterFx { key = "build", v0 = 0.10f, vs = 0.05f, fmt = "모든 건물 건설 속도 +{0}" },
-            ["dew"] = new CritterFx { key = "grow", v0 = 0.05f, vs = 0.02f, fmt = "세계수 버섯 성장 시간 −{0}" },
-            ["coin"] = new CritterFx { key = "autoGold", v0 = 0.10f, vs = 0.05f, fmt = "자동 수확 골드 +{0}" },
-            ["star"] = new CritterFx { key = "serveGem", v0 = 0.05f, vs = 0.02f, fmt = "부탁을 들어줄 때 균사석 +1 확률 +{0}p" },
-            ["leaf"] = new CritterFx { key = "pickGem", v0 = 0.20f, vs = 0.10f, fmt = "버섯 딸 때 균사석 +1 확률 +{0}p" },
-            ["moon"] = new CritterFx { key = "autoGem", v0 = 0.10f, vs = 0.05f, fmt = "자동 수확 균사석 +{0}" },
-            ["wind"] = new CritterFx { key = "work", v0 = 0.10f, vs = 0.05f, fmt = "모든 꼬마 버섯 따기 속도 +{0}" },
-            ["rock"] = new CritterFx { key = "buildSelf", v0 = 0.20f, vs = 0.10f, fmt = "조약돌 꼬마가 지으면 건설 시간 −{0}" },
-            ["chest"] = new CritterFx { key = "fieldGem", v0 = 0.05f, vs = 0.03f, fmt = "세계수 버섯 균사석 +{0}" },
-        };
-
-        // ===== 건축 (균사석으로 짓는 건물. 규격(칸)과 최대 개수는 정해져 있다) =====
-        // 배치 격자: 칸 40px, (x0, y0)부터 cols × rows. 칸 가운데가 울타리 타원 안이고, 나무 둘레·다른 건물과 겹치지 않아야 놓을 수 있다
-        public static class GRID
-        {
-            public const float cell = 40, x0 = 120, y0 = 260;
-            public const int cols = 42, rows = 16;
-            public const float ecx = 960, ecy = 565, erx = 840, ery = 285;   // 울타리 안 타원 (Tools/art/make_build_grid.py도 같이)
-        }
-        // stat: grow 세계수 버섯 성장 시간 − · pickGem 버섯 딸 때 균사석 +1 확률 + · wait 꼬마 부탁 간격 − · build 건설 시간 −
-        //       serveGem 부탁 균사석 +1 확률 + · fieldGem 세계수 버섯 균사석 + · auto 자동 수확 보상 + · harvest 라운드 버섯 수확량 +
-        public class Building
-        {
-            public string id, stat; public float val, px; public int price, max, w, h; public float time;
-            public string nKo, dKo, statFmtKo;
-            public string n { get => Loc.T(nKo); set => nKo = value; }
-            public string d { get => Loc.T(dKo); set => dKo = value; }
-            public string statFmt { get => Loc.T(statFmtKo); set => statFmtKo = value; }
-        }
-        public static readonly Building[] BUILDINGS =
-        {
-            new Building { id = "dc_table", n = "버섯 탁자", d = "커다란 버섯 탁자와 버섯 의자.", price = 20, time = 600, max = 2, w = 6, h = 3, px = 240, stat = "grow", val = 0.02f, statFmt = "세계수 버섯 성장 시간 −{0}" },
-            new Building { id = "dc_lamp", n = "포자 등불", d = "은은한 버섯 등불 한 쌍.", price = 15, time = 300, max = 3, w = 6, h = 2, px = 230, stat = "pickGem", val = 0.03f, statFmt = "버섯 딸 때 균사석 +1 확률 +{0}p" },
-            new Building { id = "dc_bed", n = "꽃 화단", d = "알록달록 꽃이 핀 나무 화단.", price = 15, time = 300, max = 3, w = 5, h = 2, px = 190, stat = "wait", val = 0.02f, statFmt = "꼬마 부탁 간격 −{0}" },
-            new Building { id = "dc_fire", n = "버섯 화로", d = "버섯 갓 모양 화로에 포근한 불이 타올라요.", price = 25, time = 900, max = 1, w = 4, h = 3, px = 140, stat = "build", val = 0.03f, statFmt = "건물 건설 시간 −{0}" },
-            new Building { id = "dc_swing", n = "꼬마 그네", d = "버섯 나무 두 그루에 매단 그네.", price = 30, time = 1200, max = 1, w = 6, h = 3, px = 240, stat = "serveGem", val = 0.02f, statFmt = "부탁을 들어줄 때 균사석 +1 확률 +{0}p" },
-            new Building { id = "dc_well", n = "버섯 분수", d = "버섯 갓에서 물이 퐁퐁 솟는 작은 분수.", price = 40, time = 1800, max = 2, w = 5, h = 3, px = 180, stat = "fieldGem", val = 0.02f, statFmt = "세계수 버섯 균사석 +{0}" },
-            new Building { id = "dc_house", n = "버섯 오두막", d = "창문이 달린 빨간 버섯 집.", price = 50, time = 3600, max = 2, w = 6, h = 4, px = 230, stat = "auto", val = 0.03f, statFmt = "자동 수확 보상 +{0}" },
-            new Building { id = "dc_statue", n = "균사석 조각상", d = "균사석을 깎아 만든 조각상.", price = 80, time = 7200, max = 1, w = 3, h = 3, px = 120, stat = "harvest", val = 0.02f, statFmt = "라운드 버섯 수확량 +{0}" },
-        };
-        public static readonly Dictionary<string, Building> BUILDING = BUILDINGS.ToDictionary(b => b.id);
-        public const int BUILD_SLOTS = 15;   // 지을 수 있는 건물 총수 (최대 개수 합)
-
-        // ===== 세계수 나무 (밭 대신 한 그루. 가지에 버섯이 저절로 열리고, 꼬마가 따 온다) =====
-        public static class TREE
-        {
-            public const int maxLv = 10;
-            public const float x = 960, y = 480;                  // 나무 밑동 (화면 좌표): 목장 가운데 뒤쪽, 랜드마크 자리
-            public static int Slots(int lv) => 3 + lv;            // 버섯이 열리는 자리 수
-            public static double Cost(int lv) => 3000 * System.Math.Pow(3, lv - 1);   // lv → lv+1 골드
-            public static double ExpNeed(int lv) => 20 + 10 * lv;  // lv → lv+1 의뢰 경험치 (다 채워야 업그레이드 버튼이 켜진다)
-            public const float speedPerLv = 0.9f;                 // 성장 시간 × 0.9^(lv-1)
-            public const float yieldPerLv = 0.15f;                // 수확량 × (1 + 0.15 × (lv-1))
-            public static int Stage(int lv) => System.Math.Min(4, (lv - 1) / 2);   // 나무 그림 단계 (tree_0 ~ tree_4)
-            public static readonly float[] width = { 180, 240, 300, 360, 420 };   // 단계별 나무 너비 (px). 5단계 우듬지가 화면 위에 걸리지 않게
-            // 단계별 버섯이 열리는 타원 (나무 그림 너비 대비: 가운데 x, 밑동에서 위로 y, 반지름 rx·ry) — Farm/Tree/tree_N 그림에서 잰 값
-            public static readonly float[][] canopy =
-            {
-                new[] { 0f, 0.80f, 0.30f, 0.20f }, new[] { 0f, 1.00f, 0.34f, 0.26f }, new[] { 0f, 0.80f, 0.38f, 0.26f },
-                new[] { 0f, 0.66f, 0.40f, 0.24f }, new[] { 0f, 0.72f, 0.40f, 0.26f },
-            };
-            public const float pick = 0.6f;                       // 버섯 하나 따는 시간 (초) ÷ 속도
-            public const float accelSec = 300;                    // 골드 가속: 남은 성장 시간 이 초마다 일반 판 한 판 정산 골드 (균사석 가속은 딴 균사석보다 싸서 무한 복사가 됐다)
-            public const double accelMinRoundGold = 100;          // 아직 일반 판 기록이 없을 때 한 판 골드로 칠 값
-            public const float zoneX0 = 740, zoneX1 = 1180, zoneY0 = 260, zoneY1 = 540;   // 건물을 놓을 수 없는 나무 밑동 둘레 (Tools/art/make_build_grid.py도 같이)
-            public const int order = 880;                         // 나무는 꼬마·건물과 그 그림자(899~)보다 항상 뒤에 그린다 (그림자 −1 · 버섯 +1·+2 · 팻말 +3·+4)
-        }
-        // 나무에 열리는 버섯: w 열릴 확률 가중치 · time 자라는 시간(초) · gem 딸 때 균사석
-        public class Fruit
-        {
-            public int gem; public float w, time;
-            public string nKo;
-            public string n { get => Loc.T(nKo); set => nKo = value; }
-        }
-        public static readonly Dictionary<string, Fruit> FRUITS = new Dictionary<string, Fruit>
-        {
-            ["ed"] = new Fruit { n = "식용 버섯", w = 60, time = 180, gem = 2 },
-            ["md"] = new Fruit { n = "약용 버섯", w = 30, time = 420, gem = 5 },
-            ["ps"] = new Fruit { n = "독버섯", w = 10, time = 900, gem = 12 },
-        };
-        public const float BUILD_ACCEL_SEC = 300;                 // 균사석 1개로 줄이는 건설 시간 (초)
-        public const float BUILD_HOLD = 0.35f, BUILD_DRAG = 18;   // 건물을 이만큼(초) 꾹 누르거나 이만큼(px) 끌면 옮기기 시작
-
-        // 건설하는 꼬마 그림 (Characters/Critters/Build/build_<id>_0 들어 올림 · _1 내려침)
-        public static class BUILDER
-        {
-            public const float w = 2.6f;                          // 그림 너비 = 꼬마 반지름 × w
-            public const float beat = 0.6f, strike = 0.2f;        // 망치질 한 번 (초) · 그중 내려친 프레임
-        }
-
-        // ===== 자동 수확 보상 (마지막으로 받은 뒤 쌓인다, 최대 8시간) =====
-        public static class AUTO
-        {
-            public const float maxHours = 8;
-            public const double goldStageK = 0.25, goldMin = 200;   // 골드/시간 = max(goldMin, StageGold(지금 스테이지) × goldStageK)
-            public const double gemH = 1;                          // 균사석/시간
-            public const float minClaim = 60;                      // 받을 수 있는 최소 시간 (초)
-            public const float returnMin = 600;                    // 이만큼(초) 자리를 비웠다 돌아오면 복귀 팝업
-        }
 
         // ===== 스킨 (균사석으로 산다) =====
         // 꼬마 스킨: 꼬마마다 1개. 갓을 스킨 갓(Critters/skin_<of>)으로 바꾸고 액세서리(Critters/Acc/<acc>)를 단다.

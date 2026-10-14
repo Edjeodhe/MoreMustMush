@@ -6,7 +6,7 @@ namespace MoreMush
     // 세이브 버전 올리기. SaveIO.Load가 Sanitize 끝에서 부르며, 한 버전씩 차례로 올린다.
     public static class SaveMigration
     {
-        public const int CURRENT = 5;
+        public const int CURRENT = 6;
 
         // 이번 로드에서 플레이어에게 알릴 문장 (GameFlow가 토스트로 띄우고 비운다)
         public static string Notice;
@@ -29,6 +29,7 @@ namespace MoreMush
             if (g.v < 3) ToV3(g);
             if (g.v < 4) ToV4(g);
             if (g.v < 5) ToV5(g);
+            if (g.v < 6) ToV6(g);
             g.v = Math.Max(g.v, CURRENT);
         }
 
@@ -93,6 +94,45 @@ namespace MoreMush
             bool any = false; foreach (var kv in g.nodes) if (kv.Value > 0) { any = true; break; }
             if (any && Get(Defs.ROOT_NODE) <= 0) g.nodes[Defs.ROOT_NODE] = 1;
             if (g.nodes.Count > 0) AddNotice(Loc.T("균사 트리가 바뀌었어요. 스킬 강화는 스킬 노드의 레벨로 합쳤어요"));
+        }
+
+        // v6: 꼬마버섯 세계수 (농장 개편). 나무 Lv → 성장 단계(최대 8, 나이테 Lv.1), 경험치는 그대로.
+        // 건물·꼬마 별 등급·부탁·호감도 하트·진화는 없어졌다 → 건물에 쓴 균사석과 꼬마 별에 쓴 골드·균사석을 돌려준다
+        static readonly Dictionary<string, int> RETIRED_BUILDING_GEM = new Dictionary<string, int>
+        {
+            ["dc_table"] = 20, ["dc_lamp"] = 15, ["dc_bed"] = 15, ["dc_fire"] = 25, ["dc_swing"] = 30, ["dc_well"] = 40, ["dc_house"] = 50, ["dc_statue"] = 80,
+        };
+        static readonly double[] RETIRED_CSTAR_GOLD = { 10000, 100000, 1000000, 10000000, 100000000 };
+        static readonly int[] RETIRED_CSTAR_GEM = { 5, 10, 20, 40, 80 };
+
+        static void ToV6(SaveData g)
+        {
+            var f = g.farm;
+            if (f.legacyTree != null)
+            {
+                f.stage = Math.Max(1, Math.Min(Defs.WT.stages, f.legacyTree.lv));
+                f.ring = 1;
+                if (f.legacyTree.exp > 0 && !double.IsInfinity(f.legacyTree.exp)) f.exp = f.legacyTree.exp;
+            }
+            double gem = 0, gold = 0;
+            if (f.legacyBlds != null)
+                foreach (var b in f.legacyBlds) if (b?.id != null && RETIRED_BUILDING_GEM.TryGetValue(b.id, out var p)) gem += p;
+            if (f.legacyStar != null)
+                foreach (var kv in f.legacyStar)
+                    for (int i = 0; i < Math.Min(kv.Value, RETIRED_CSTAR_GOLD.Length); i++) { gold += RETIRED_CSTAR_GOLD[i]; gem += RETIRED_CSTAR_GEM[i]; }
+            g.gem += gem; g.gold += gold;
+            // 이미 있던 꼬마는 선호 구역(열렸고 자리가 있으면)으로 보낸다
+            foreach (var k in Defs.KIDS)
+            {
+                if (!g.specials.TryGetValue(k.id, out var has) || !has || f.zone.ContainsKey(k.id) || f.stage < Defs.ZONE[k.zone].open) continue;
+                int inZone = 0; foreach (var z in f.zone.Values) if (z == k.zone) inZone++;
+                if (inZone < Defs.HARV.ZoneCap(f.stage)) f.zone[k.id] = k.zone;
+            }
+            if (g.legacyAutoT > 0 && g.legacyAutoT < Game.Now()) f.bag.t = g.legacyAutoT;  // 예전 자동 수확 시계부터 보따리가 쌓인 것으로 (꼬마는 FarmEnsure가 합류·배치)
+            f.legacyTree = null; f.legacyBlds = null; f.legacyStar = null; g.legacyAutoT = 0;
+            if (g.rounds > 0 || gem > 0 || gold > 0)
+                AddNotice(Loc.T("농장이 꼬마버섯 세계수로 바뀌었어요! 꼬마를 구역에 보내 나무버섯을 모아 보세요")
+                    + (gem > 0 || gold > 0 ? "\n" + Loc.F("건물·꼬마 별에 쓴 균사석 {0}·골드 {1}을 돌려받았어요", U.Fmt(gem), U.Fmt(gold)) : ""));
         }
 
         static double Refund(SaveData g, Dictionary<string, double[]> retired)

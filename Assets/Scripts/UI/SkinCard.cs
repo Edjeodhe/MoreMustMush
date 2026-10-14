@@ -32,7 +32,7 @@ namespace MoreMush
                 var a = U.Hex(sk.aura); a.a = 0.45f; hvAura.color = a;
             }
             title.text = sk.n;
-            who.text = ch ? (has ? EvoName(SPC[sk.of]) : Loc.T("아직 못 잡은 꼬마")) : (has ? HV[sk.of].n : Loc.T("아직 없는 수확기"));
+            who.text = ch ? (has ? SPC[sk.of].n : Loc.T("아직 합류하지 않은 꼬마")) : (has ? HV[sk.of].n : Loc.T("아직 없는 수확기"));
 
             if (!own)
             {

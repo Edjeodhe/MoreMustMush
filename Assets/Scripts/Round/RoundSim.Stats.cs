@@ -41,7 +41,7 @@ namespace MoreMush
                 case "jelly": return Loc.T("젤리 버섯 안");
                 case "cleave": return Loc.F("{0} 베기", HV["sam"].n);
                 case "bell": return Loc.F("{0} 울림", HV["bell"].n);
-                case "spark": return Loc.T("불꽃");
+                case "spark": return Loc.T("연쇄 번개");
                 case "meteor": return Loc.T("균사석 낙하");
             }
             return SKILLS.TryGetValue(src, out var sk) ? sk.n : src;

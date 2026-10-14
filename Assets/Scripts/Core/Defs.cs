@@ -267,7 +267,7 @@ namespace MoreMush
 
         public static readonly int[] STAR_N = { 10, 50, 200, 800, 3000 };
 
-        // ===== 특수 버섯 (꼬마): 세계수 레벨이 오를 때 합류한다 (CRITTER_JOIN). 능력은 세계수(아웃게임)에만 있다 · Defs.CRITTER_FX =====
+        // ===== 특수 버섯 (꼬마): 세계수가 진화할 때 합류한다 (CRITTER_JOIN). 능력은 세계수 수확 특성(Defs.KIDS)과 라운드 특별 보너스 =====
         public class Special
         {
             public string id, c1, c2;
@@ -277,28 +277,20 @@ namespace MoreMush
         }
         public static readonly Special[] SPECIALS =
         {
-            new Special { id = "fire", n = "불씨 꼬마", c1 = "#ff7a2a", c2 = "#ffd34a", perk = "보유 효과: 불씨 꼬마가 버섯을 따면 균사석 +20%" },
-            new Special { id = "spark", n = "찌릿 꼬마", c1 = "#ffe03a", c2 = "#fff7b0", perk = "보유 효과: 모든 건물 건설 속도 +10%" },
-            new Special { id = "dew", n = "이슬 꼬마", c1 = "#5fc8ff", c2 = "#d8f4ff", perk = "보유 효과: 세계수 버섯 성장 시간 −5%" },
-            new Special { id = "coin", n = "동전 꼬마", c1 = "#f5c518", c2 = "#fff2a8", perk = "보유 효과: 자동 수확 골드 +10%" },
-            new Special { id = "star", n = "별똥 꼬마", c1 = "#b07bff", c2 = "#f2e2ff", perk = "보유 효과: 부탁을 들어줄 때 균사석 +1 확률 +5%p" },
-            new Special { id = "leaf", n = "새싹 꼬마", c1 = "#5fc85a", c2 = "#d8f8c0", perk = "보유 효과: 버섯 딸 때 균사석 +1 확률 +20%p" },
-            new Special { id = "moon", n = "달빛 꼬마", c1 = "#3a4a8a", c2 = "#f6f0b0", perk = "보유 효과: 자동 수확 균사석 +10%" },
-            new Special { id = "wind", n = "바람 꼬마", c1 = "#5fd8c0", c2 = "#e8fff8", perk = "보유 효과: 모든 꼬마 버섯 따기 속도 +10%" },
-            new Special { id = "rock", n = "조약돌 꼬마", c1 = "#8a8a86", c2 = "#c8c6bc", perk = "보유 효과: 조약돌 꼬마가 지으면 건설 시간 −20%" },
-            new Special { id = "chest", n = "꿀밤 꼬마", c1 = "#a0602a", c2 = "#f0c890", perk = "보유 효과: 세계수 버섯 균사석 +5%" },
-        };
-        // 진화한 꼬마 이름 (1단계 · 2단계). 번역표 키가 되도록 원문을 그대로 적어 둔다
-        public static readonly Dictionary<string, string[]> SPECIAL_EVO = new Dictionary<string, string[]>
-        {
-            ["fire"] = new[] { "불씨 버섯", "불씨 대왕버섯" }, ["spark"] = new[] { "찌릿 버섯", "찌릿 대왕버섯" }, ["dew"] = new[] { "이슬 버섯", "이슬 대왕버섯" },
-            ["coin"] = new[] { "동전 버섯", "동전 대왕버섯" }, ["star"] = new[] { "별똥 버섯", "별똥 대왕버섯" }, ["leaf"] = new[] { "새싹 버섯", "새싹 대왕버섯" },
-            ["moon"] = new[] { "달빛 버섯", "달빛 대왕버섯" }, ["wind"] = new[] { "바람 버섯", "바람 대왕버섯" }, ["rock"] = new[] { "조약돌 버섯", "조약돌 대왕버섯" },
-            ["chest"] = new[] { "꿀밤 버섯", "꿀밤 대왕버섯" },
+            new Special { id = "fire", n = "불씨 꼬마", c1 = "#ff7a2a", c2 = "#ffd34a", perk = "수확할 때 균사석 +20%" },
+            new Special { id = "spark", n = "찌릿 꼬마", c1 = "#ffe03a", c2 = "#fff7b0", perk = "수확할 때 주변 버섯 2개 연쇄 수확" },
+            new Special { id = "dew", n = "이슬 꼬마", c1 = "#5fc8ff", c2 = "#d8f4ff", perk = "있는 구역의 버섯 재생 속도 +20%" },
+            new Special { id = "coin", n = "동전 꼬마", c1 = "#f5c518", c2 = "#fff2a8", perk = "2차 업데이트 꼬마" },
+            new Special { id = "star", n = "별똥 꼬마", c1 = "#b07bff", c2 = "#f2e2ff", perk = "오라: 모든 꼬마 수확량 +15%" },
+            new Special { id = "leaf", n = "새싹 꼬마", c1 = "#5fc85a", c2 = "#d8f8c0", perk = "나무버섯 수확 속도 +10%" },
+            new Special { id = "moon", n = "달빛 꼬마", c1 = "#3a4a8a", c2 = "#f6f0b0", perk = "발광 버섯 수확 ×2 · 균사석 +30%" },
+            new Special { id = "wind", n = "바람 꼬마", c1 = "#5fd8c0", c2 = "#e8fff8", perk = "이동 속도 ×2 · 높은 구역 수확 +50%" },
+            new Special { id = "rock", n = "조약돌 꼬마", c1 = "#8a8a86", c2 = "#c8c6bc", perk = "2개씩 운반 · 보따리 보관 +4시간" },
+            new Special { id = "chest", n = "꿀밤 꼬마", c1 = "#a0602a", c2 = "#f0c890", perk = "2차 업데이트 꼬마" },
         };
         public static readonly Dictionary<string, Special> SPC = SPECIALS.ToDictionary(s => s.id);
-        // 세계수 레벨마다 합류하는 꼬마 (신규콘텐츠 기획서 Ver03 "세계수 성장 단계": 1 새싹 · 2 이슬 · 3 바람 · 4 불씨 · 5 조약돌 · 6 찌릿 · 7 달빛 · 8 별똥).
-        // 지금은 세계수 Lv = 기획서 단계로 맞춘다 (Lv.9~10은 합류 없음). 동전·꿀밤 꼬마는 2차 추가 예정이라 아직 얻을 수 없다.
+        // 세계수 단계마다 합류하는 꼬마 (신규콘텐츠 기획서 Ver03 "세계수 성장 단계": 1 새싹 · 2 이슬 · 3 바람 · 4 불씨 · 5 조약돌 · 6 찌릿 · 7 달빛 · 8 별똥).
+        // 동전·꿀밤 꼬마는 2차 추가 예정이라 아직 얻을 수 없다.
         public static readonly string[] CRITTER_JOIN = { "leaf", "dew", "wind", "fire", "rock", "spark", "moon", "star" };
         public static int JoinLv(string id) { int i = System.Array.IndexOf(CRITTER_JOIN, id); return i < 0 ? 0 : i + 1; }   // 0 = 아직 합류할 수 없음 (2차)
 

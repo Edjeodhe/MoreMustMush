@@ -19,7 +19,7 @@ namespace MoreMush
         public SettleScreen settle;
         public GameObject titleBackdrop;        // world-space town + grandpa behind title/settle
         public FarmScreen farmScreen;
-        public FarmView farm;                   // world-space farm (ranch with the field inside)
+        public FarmView farm;                   // world-space world tree (꼬마버섯 세계수)
 
         [Header("Modal")]
         public ModalHost modal;
@@ -31,10 +31,6 @@ namespace MoreMush
         public BulkPanel bulk;
         public WorkshopPanel workshop;
         public SkinPanel skins;
-        public BuildPanel build;
-        public AutoPanel auto;
-        public AccelPanel accel;
-        public PetCardPanel petCard;
         public GameObject resetPanel;
         public DebugPanel debug;
         public Toast toast;
@@ -85,7 +81,7 @@ namespace MoreMush
             if (kb.backquoteKey.wasPressedThisFrame && debug != null) debug.Toggle();   // 디버그 모드: 개발·테스트 빌드 전용 (DevOnly.cs)
 #endif
             if (kb.mKey.wasPressedThisFrame) { Snd.muted = !Snd.muted; ShowToast(Snd.muted ? Loc.T("소리 끔") : Loc.T("소리 켬")); }
-            if (Screen != "round" && kb.escapeKey.wasPressedThisFrame) { if (ModalOpen) CloseModal(); else if (Screen == "farm" && farm.Placing) { farm.CancelPlace(); farmScreen.Render(); } }
+            if (Screen != "round" && kb.escapeKey.wasPressedThisFrame && ModalOpen) CloseModal();
         }
 
         void OnApplicationPause(bool paused) { if (paused && G != null && Screen != "title") SaveGame(); Away(paused); }
@@ -105,26 +101,21 @@ namespace MoreMush
             CheckReturn(away);
         }
 
-        // 오래 자리를 비웠다 돌아오면 자동 수확 보상 창을 띄운다 (트리·농장 화면에서, 다른 창이 없을 때만).
+        // 오래 자리를 비웠다 돌아오면 수확 보따리를 알린다 (트리·세계수 화면에서, 다른 창이 없을 때만)
         void CheckReturn(double awayMs)
         {
-            if (G == null || awayMs < AUTO.returnMin * 1000 || !AutoReady()) return;
-            if ((Screen != "tree" && Screen != "farm") || ModalOpen || (Screen == "farm" && farm.Placing)) return;
-            OpenAuto(awayMs);
-        }
-
-        void OpenAuto(double awayMs)
-        {
-            AutoEnsure();
-            auto.away = awayMs;
-            OpenModal(auto, () => { auto.away = 0; if (Screen == "tree") tree.Refresh(); else if (Screen == "farm") farmScreen.Render(); });
-            auto.Render();
+            if (G == null || awayMs < HARV.returnMin * 1000) return;
+            BagSettle();
+            if (!BagReady() || (Screen != "tree" && Screen != "farm") || ModalOpen) return;
+            var b = G.farm.bag;
+            ShowToast(Loc.F("꼬마들이 수확 보따리를 채워 뒀어요! {0}{1}", UIUtil.Ic("gold"), U.Fmt(System.Math.Floor(b.gold))) + (b.gem >= 1 ? $" {UIUtil.Ic("gem")}{U.Fmt(System.Math.Floor(b.gem))}" : "") + "\n" + Loc.T("세계수에서 받아요"));
+            if (Screen == "tree") tree.Refresh(); else farmScreen.Render();
         }
 
         // ===== screens =====
         public void SetScreen(string s)
         {
-            if (Screen == "farm" && s != "farm") farm.Flush();   // 밭일 대기열은 떠날 때 바로 끝낸다 (건설은 실제 시간으로 계속)
+            if (Screen == "farm" && s != "farm") farm.Flush();   // 떠날 때까지의 수확을 보따리에 넣고 저장
             Screen = s;
             UIUtil.Show(title, s == "title");
             UIUtil.Show(tree, s == "tree");
@@ -155,30 +146,11 @@ namespace MoreMush
             farmScreen.Render();
         }
 
-        void OpenPetCard(string id)
+        // 세계수 화면을 열고 탭을 고른다
+        public void EnterWorldTree(string tab)
         {
-            petCard.id = id;
-            OpenModal(petCard, () => { if (Screen == "farm") farmScreen.Render(); });
-            petCard.Render();
-        }
-
-        void FarmEvolve(string id)
-        {
-            if (!SPC.TryGetValue(id ?? "", out var k)) return;
-            string before = EvoName(k);
-            if (!Game.FarmEvolve(id)) { Snd.Err(); ShowToast(Loc.F("호감도 {0}칸을 모두 채우면 진화할 수 있어요", FARM.hearts)); return; }
-            Snd.Record();
-            farm.Evolved(id);
-            ShowToast(Loc.F("{0} {1}(으)로 진화했어요! 부탁 보상 ×{2}", U.Iga(before), EvoName(k), U.FmtN(FARM.evoGem[EvoOf(id)])));
-            CloseModal(); farmScreen.Render();
-        }
-
-        public void OpenAccel(string kind, int uid)
-        {
-            accel.kind = kind; accel.uid = uid;
-            Snd.Ui();
-            OpenModal(accel, () => { if (Screen == "farm") farmScreen.Render(); });
-            accel.Render();
+            EnterFarm(null);
+            if (tab != null) farmScreen.SetTab(tab);
         }
 
         public void ShowToast(string msg) { if (toast != null) toast.Show(msg); }
@@ -238,10 +210,12 @@ namespace MoreMush
         // ===== actions (prototype onAction) =====
         public void OnAction(string act, string arg, Component src)
         {
+            // 꼬마 액션은 인자가 세계수 꼬마 id여야 한다
+            if ((act == "wtkidlv" || act == "wtawaken" || act == "wtzone" || act == "wtgift") && (arg == null || !KID.ContainsKey(arg) || !HasSpecial(arg))) return;
             switch (act)
             {
                 case "close": Snd.Ui(); CloseModal(); break;
-                case "newgame": Telemetry.Ftue(Telemetry.FTUE_TITLE_START); Telemetry.ResetSnap(); G = new SaveData(); AutoEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast(Loc.T("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!")); break;
+                case "newgame": Telemetry.Ftue(Telemetry.FTUE_TITLE_START); Telemetry.ResetSnap(); G = new SaveData(); FarmEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast(Loc.T("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!")); break;
                 case "continue":
                 {
                     G = SaveIO.Load();
@@ -251,7 +225,7 @@ namespace MoreMush
                         if (SaveIO.LastLoadFailed) ShowToast(Loc.T("세이브를 읽지 못해 새로 시작해요 (이전 세이브는 따로 보관했어요)"));
                     }
                     double away = G.seenT > 0 ? Now() - G.seenT : 0;
-                    AutoEnsure(); Snd.Ui(); EnterTree();
+                    FarmEnsure(); Snd.Ui(); EnterTree();
                     CheckReturn(away);
                     if (!string.IsNullOrEmpty(SaveMigration.Notice)) { ShowToast(SaveMigration.Notice); SaveMigration.Notice = null; SaveGame(); }
                     break;
@@ -265,7 +239,7 @@ namespace MoreMush
                 {
                     var exp = QuestClaim(arg);
                     if (exp == null) { Snd.Err(); break; }
-                    Snd.Record(); ShowToast(TreeExpFull() && TreeLv() < TREE.maxLv ? Loc.F("세계수 경험치 +{0}! 세계수 나무를 키울 수 있어요", exp) : Loc.F("세계수 경험치 +{0}", exp));
+                    Snd.Record(); ShowToast(Loc.F("세계수 경험치 +{0}", exp) + (CanEvolve() == GrowFail.None ? " " + Loc.T("세계수가 진화할 수 있어요!") : ""));
                     quests.Render();
                     break;
                 }
@@ -326,102 +300,149 @@ namespace MoreMush
                 {
                     var p = arg.Split('|');
                     WearSkin(p[0]); Snd.Ui();
-                    if (p.Length > 1) petCard.Render(); else skins.Render();
+                    skins.Render();
                     break;
                 }
                 // ===== 세계수 =====
                 case "farm": Snd.Ui(); EnterFarm(null); break;
                 case "totree2": Snd.Ui(); EnterTree(); break;
-                case "farmall":
+                case "worldtree": Snd.Ui(); AfterSettle(); EnterWorldTree("grow"); break;   // 정산 화면 "세계수에 바치기" (엔딩 처리는 AfterSettle이 먼저)
+                case "wtbag":
                 {
-                    var r = farm.CareAll();
-                    if (r.n == 0) { Snd.Err(); ShowToast(Loc.T("지금 부탁하는 꼬마가 없어요")); break; }
-                    Snd.Record(); ShowToast(Loc.F("꼬마 {0}마리를 돌봤어요! 균사석 +{1}", r.n, U.Fmt(r.gem)) + (r.bonus > 0 ? " " + Loc.F("(호감도 보너스 +{0})", r.bonus) : "") + (r.extra > 0 ? " · " + Loc.F("추가 +{0}", r.extra) : "")); farmScreen.Render();
-                    break;
-                }
-                case "farmcard": Snd.Ui(); OpenPetCard(arg); break;
-                // 꼬마 카드의 진화·별 버튼은 씬에 arg가 없다 → 지금 열린 카드의 꼬마
-                case "evolve": FarmEvolve(string.IsNullOrEmpty(arg) ? petCard.id : arg); break;
-                case "starup":
-                {
-                    string id = string.IsNullOrEmpty(arg) ? petCard.id : arg;
-                    if (!SPC.ContainsKey(id ?? "")) break;
-                    if (!StarUp(id)) { Snd.Err(); ShowToast(Loc.T("골드나 균사석이 부족해요")); break; }
-                    Snd.Record(); farm.StarredUp(id); ShowToast($"{EvoName(SPC[id])} ★{CStarOf(id)}! {FxText(id)}"); petCard.Render(); break;
-                }
-                // ===== 세계수 나무 =====
-                case "treepanel": Snd.Ui(); farmScreen.treeOpen = arg == "open" || !farmScreen.treeOpen; farmScreen.Render(); break;
-                case "treeup":
-                {
-                    if (!TreeUp(out var joined)) { Snd.Err(); ShowToast(CanTreeUp() == TreeUpFail.Exp ? Loc.T("세계수 경험치가 모자라요 (의뢰로 모아요)") : Loc.T("골드가 부족해요")); break; }
-                    Snd.Record(); farm.TreeLeveled();
-                    string msg = Loc.F("세계수 나무 Lv.{0}! 버섯 자리 {1}개 · 수확량 ×{2}", TreeLv(), TREE.Slots(TreeLv()), U.FmtN(TreeYieldMul()));
-                    foreach (var k in joined) msg += "\n" + Loc.F("{0} 합류! 세계수에 새 꼬마가 들어와요", k.n);
-                    ShowToast(msg);
-                    if (joined.Count > 0) { farm.Sync(false); farm.dirty = true; }
+                    if (Screen != "farm") { Snd.Ui(); EnterFarm(null); }
+                    var r = BagClaim();
+                    if (r == null) { Snd.Err(); ShowToast(Loc.T("보따리가 비어 있어요. 꼬마를 구역에 보내 나무버섯을 따게 해요")); break; }
+                    Snd.Record(); farm.BagBurst(r.Value.gold, r.Value.gem);
+                    ShowToast(Loc.F("수확 보따리! 나무버섯 {0}개 · {1}+{2}", r.Value.n, UIUtil.Ic("gold"), U.Fmt(r.Value.gold)) + (r.Value.gem > 0 ? $" {UIUtil.Ic("gem")}+{r.Value.gem}" : ""));
                     farmScreen.Render(); break;
                 }
-                case "pickall":
+                case "wttab": Snd.Ui(); if (Screen != "farm") EnterFarm(null); farmScreen.SetTab(arg); break;
+                case "wtring":
+                    if (!RingUp()) { Snd.Err(); ShowToast(Loc.T("골드가 부족해요")); break; }
+                    Snd.Buy(); ShowToast(Loc.F("나이테 Lv.{0}! 나무버섯이 더 빨리 자라요", Ring())); farmScreen.Render(); break;
+                case "wtevolve":
                 {
-                    int n = farm.PickAll();
-                    if (n == 0) { Snd.Err(); ShowToast(farm.Workers == 0 && farm.crits.Count > 0 ? Loc.T("꼬마들이 모두 건물을 짓고 있어요") : farm.crits.Count == 0 ? Loc.T("세계수 나무 레벨이 오르면 꼬마가 합류해 버섯을 따 줘요") : Loc.T("다 자란 버섯이 없어요")); break; }
-                    Snd.Ui(); ShowToast(Loc.F("꼬마들이 버섯 {0}개를 따러 가요!", n)); farmScreen.Render();
-                    break;
-                }
-                case "treeaccel": OpenAccel("tree", 0); break;
-                case "accelok":
-                {
-                    bool ok = accel.kind == "build" ? BuildAccel(accel.uid) : TreeAccel();
-                    if (!ok) { Snd.Err(); ShowToast(accel.kind == "build" ? Loc.T("균사석이 부족해요") : Loc.T("골드가 부족해요")); break; }
-                    Snd.Record(); ShowToast(accel.kind == "build" ? Loc.T("건설 완료!") : Loc.T("버섯이 모두 다 자랐어요!"));
-                    CloseModal(); farmScreen.Render();
-                    break;
-                }
-                // ===== 건축 =====
-                case "buildshop":
-                    Snd.Ui();
-                    if (Screen != "farm") { EnterFarm(null); }
-                    OpenModal(build, () => farmScreen.Render()); build.Render(); break;
-                case "build":
-                {
-                    var fail = CanBuild(arg);
-                    if (fail != BuildFail.None)
+                    var why = CanEvolve();
+                    if (!Evolve(out var joined))
                     {
                         Snd.Err();
-                        ShowToast(fail == BuildFail.Max ? Loc.T("더 지을 수 없어요 (최대 개수)") : fail == BuildFail.Gem ? Loc.T("균사석이 부족해요") : Loc.T("쉬고 있는 꼬마가 없어요 (모두 건설 중)"));
+                        ShowToast(why == GrowFail.Ring ? Loc.F("나이테를 Lv.{0}까지 키워야 해요", WT.ringMax) : why == GrowFail.Exp ? Loc.T("경험치가 모자라요 (창고 버섯을 바치거나 의뢰를 해요)") : why == GrowFail.Gem ? Loc.T("균사석이 부족해요") : Loc.T("골드가 부족해요"));
                         break;
                     }
-                    if (!farm.BeginPlace(arg)) { Snd.Err(); ShowToast(Loc.T("목장에 놓을 자리가 없어요")); break; }
-                    Snd.Ui(); CloseModal(); farmScreen.Render();
-                    break;
+                    Snd.Record(); farm.TreeGrew(Loc.F("{0}단계 {1}!", Stage(), WT.StageName(Stage())));
+                    string msg = Loc.F("세계수가 {0}단계 {1}(으)로 진화했어요! 가호: {2}", Stage(), WT.StageName(Stage()), BLESS[Stage() - 1].text);
+                    foreach (var k in joined) msg += "\n" + Loc.F("{0} 합류! 장식 레시피 3종이 열렸어요", k.n);
+                    ShowToast(msg);
+                    if (joined.Count > 0) farm.Sync(false);
+                    farmScreen.Render(); break;
                 }
-                case "placeok":
+                case "wttribute":
                 {
-                    if (farm.Moving)
+                    double exp = TributeAll();
+                    if (exp <= 0) { Snd.Err(); ShowToast(Loc.T("바칠 창고 버섯이 없어요 (라운드에서 버섯을 따 와요)")); break; }
+                    Snd.Record(); farm.TreeGrew(Loc.F("경험치 +{0}", U.Fmt(System.Math.Floor(exp))));
+                    ShowToast(Loc.F("세계수에 버섯을 바쳤어요! 경험치 +{0}", U.Fmt(System.Math.Floor(exp))) + (CanEvolve() == GrowFail.None ? "\n" + Loc.T("세계수가 진화할 수 있어요!") : ""));
+                    farmScreen.Render(); break;
+                }
+                case "wtkidlv":
+                    if (!KidLvUp(arg)) { Snd.Err(); ShowToast(CanKidLvUp(arg) == KidFail.Cap ? Loc.T("각성해야 더 키울 수 있어요") : Loc.T("골드가 부족해요")); break; }
+                    Snd.Buy(); farmScreen.selKid = arg; farm.Cheer(arg, Loc.T("힘이 솟아나!"), $"Lv.{KLv(arg)}"); farmScreen.Render(); break;
+                case "wtawaken":
+                {
+                    var why = CanAwaken(arg);
+                    if (!KidAwaken(arg)) { Snd.Err(); ShowToast(why == KidFail.Lv ? Loc.F("Lv.{0}이 되면 각성할 수 있어요", 10 * (Awaken(arg) + 1)) : why == KidFail.Gem ? Loc.T("균사석이 부족해요") : Loc.T("골드가 부족해요")); break; }
+                    Snd.Record(); farmScreen.selKid = arg; farm.Cheer(arg, Loc.T("반짝반짝… 각성했어!"), new string('★', Awaken(arg)));
+                    ShowToast(Loc.F("{0} 각성 ★{1}! {2}", SPC[arg].n, Awaken(arg), KidBonusText(KID[arg], KidStep(arg)))); farmScreen.Render(); break;
+                }
+                case "wtzone":
+                {
+                    // 쉼 → 열린 구역(자리 있는 곳) 차례로 → 쉼
+                    string cur = ZoneOf(arg);
+                    var order = new System.Collections.Generic.List<string> { null };
+                    foreach (var z in ZONES) if (ZoneOpen(z.id)) order.Add(z.id);
+                    int i0 = order.IndexOf(cur);
+                    for (int step = 1; step <= order.Count; step++)
                     {
-                        if (!farm.ConfirmMove()) { Snd.Err(); ShowToast(Loc.T("여기에는 설치할 수 없어요")); break; }
-                        Snd.Buy(); farmScreen.Render();
-                        break;
+                        string next = order[(i0 + step) % order.Count];
+                        if (next == null || next == cur || ZoneRoom(next)) { Assign(arg, next); break; }
                     }
-                    var b = farm.ConfirmPlace();
-                    if (b == null) { Snd.Err(); ShowToast(farm.Placing && !farm.PlaceOk ? Loc.T("여기에는 설치할 수 없어요") : Loc.T("지을 수 없어요")); break; }
-                    Snd.Record();
-                    ShowToast(Loc.F("{0} {1}을(를) 짓기 시작했어요! ({2})", U.Iga(EvoName(SPC[b.critter])), BUILDING[b.id].n, BuildLeftText(b)));
-                    farmScreen.Render();
-                    break;
+                    Snd.Ui(); farmScreen.selKid = arg;
+                    farm.Cheer(arg, ZoneOf(arg) != null ? Loc.F("{0}(으)로 갈게!", ZONE[ZoneOf(arg)].n) : Loc.T("잠깐 쉴게~"), null);
+                    farmScreen.Render(); break;
                 }
-                case "placecancel": Snd.Ui(); farm.CancelPlace(); farmScreen.Render(); break;
-                // ===== 자동 수확 보상 =====
-                case "autoharvest": Snd.Ui(); OpenAuto(0); break;
-                case "claimauto":
+                case "wtgift":
                 {
-                    var r = ClaimAuto();
+                    // 좋아하는 버섯을 모두, 없으면 창고에 가장 많은 버섯 10개
+                    var k = KID[arg]; string sp = null; int n = 0;
+                    foreach (var name in k.fav) { var id = SP_BY_NAME[name].id; if (StoreOf(id) > n) { sp = id; n = StoreOf(id); } }
+                    if (sp == null) { foreach (var kv in G.farm.store) if (kv.Value > n) { sp = kv.Key; n = kv.Value; } n = System.Math.Min(n, 10); }
+                    int up = sp == null ? -1 : Gift(arg, sp, n);
+                    if (up < 0) { Snd.Err(); ShowToast(Loc.T("줄 수 있는 창고 버섯이 없어요")); break; }
+                    Snd.Buy(); farmScreen.selKid = arg;
+                    farm.Cheer(arg, IsFav(arg, sp) ? Loc.T("이거 제일 좋아해! 고마워!") : U.Pick(FARM_LINES["thanks"]), up > 0 ? Loc.F("호감도 Lv.{0}!", AffLv(arg)) : null);
+                    ShowToast(Loc.F("{0}에게 {1} {2}개를 선물했어요", SPC[arg].n, SP[sp].n, n) + (up > 0 ? " · " + Loc.F("호감도 Lv.{0}!", AffLv(arg)) : ""));
+                    farmScreen.Render(); break;
+                }
+                case "wtreq":
+                {
+                    int.TryParse(arg, out int i);
+                    var gold = ReqDo(i);
+                    if (gold == null) { Snd.Err(); ShowToast(Loc.T("창고 버섯이 모자라요")); break; }
+                    Snd.Record(); farm.Cheer(G.farm.reqs[i].kid, U.Pick(FARM_LINES["thanks"]), null);
+                    ShowToast(Loc.F("부탁을 들어줬어요! {0}+{1}", UIUtil.Ic("gold"), U.Fmt(gold.Value))); farmScreen.Render(); break;
+                }
+                case "wtweek":
+                    if (!WeekClaim()) { Snd.Err(); break; }
+                    Snd.Record(); ShowToast(Loc.F("꼬마의 상자! {0}+{1}", UIUtil.Ic("gem"), REQ.weekGem)); farmScreen.Render(); break;
+                case "wtcraft":
+                {
+                    var why = CanCraft(arg);
+                    if (!CraftStart(arg)) { Snd.Err(); ShowToast(why == CraftFail.Slots ? Loc.T("제작 슬롯이 다 찼어요") : why == CraftFail.Gem ? Loc.T("균사석이 부족해요") : why == CraftFail.Closed ? Loc.T("도감을 더 모으면 공방이 열려요") : Loc.T("골드가 부족해요")); break; }
+                    Snd.Buy(); ShowToast(Loc.F("{0} 제작을 시작했어요 ({1})", DECO[arg].n, TimeText(CraftSeconds(DECO[arg])))); farmScreen.Render(); break;
+                }
+                case "wtclaim":
+                {
+                    int.TryParse(arg, out int i);
+                    var r = CraftClaim(i);
                     if (r == null) { Snd.Err(); break; }
                     Snd.Record();
-                    ShowToast(Loc.F("자동 수확 보상! {0}+{1} {2}+{3}", UIUtil.Ic("gold"), U.Fmt(r.Value.gold), UIUtil.Ic("gem"), r.Value.gem));
-                    if (auto.away > 0) CloseModal(); else auto.Render();   // 복귀 팝업은 받으면 닫는다
-                    break;
+                    ShowToast(r.Value.isNew ? Loc.F("{0} 완성! 꾸미기에서 세계수에 놓아요", r.Value.d.n) : Loc.F("{0} 완성! 강화 재료가 됐어요", r.Value.d.n));
+                    farmScreen.Render(); break;
                 }
+                case "wtrush":
+                {
+                    int.TryParse(arg, out int i);
+                    if (!CraftRush(i))
+                    {
+                        Snd.Err();
+                        bool done = i >= 0 && i < G.farm.crafts.Count && RushCost(G.farm.crafts[i]) <= 0;
+                        ShowToast(done ? Loc.T("이미 완성됐어요") : RushLeftToday() <= 0 ? Loc.T("오늘은 즉시 완료를 더 할 수 없어요") : Loc.T("균사석이 부족해요"));
+                        farmScreen.Render(); break;
+                    }
+                    Snd.Buy(); farmScreen.Render(); break;
+                }
+                case "wtplace":
+                case "wtunplace":
+                {
+                    if (!int.TryParse(arg, out int slot) || slot < 0 || slot >= G.farm.decoSlots.Count) break;
+                    string cur = G.farm.decoSlots[slot], next = null;
+                    if (act == "wtplace")
+                    {
+                        // 이 슬롯에 맞는 가진 장식을 차례로 (다른 슬롯에 있던 것은 옮겨 온다)
+                        var cand = new System.Collections.Generic.List<string>();
+                        foreach (var d in DECOS) if (d.hang == DecoSlotHang(slot) && DecoOwned(d.id)) cand.Add(d.id);
+                        if (cand.Count == 0) { Snd.Err(); break; }
+                        next = cand[(cand.IndexOf(cur) + 1) % cand.Count];
+                    }
+                    if (!PlaceDeco(slot, next, out bool first)) { Snd.Err(); break; }
+                    Snd.Ui(); farmScreen.selDeco = slot;
+                    if (first) { Snd.Record(); ShowToast(Loc.F("{0}을(를) 처음 놓았어요! {1}+{2} · {3} 호감도 +{4}", DECO[next].n, UIUtil.Ic("gem"), DECO_FIRST_GEM, SPC[DECO[next].of].n, AFF.placeGift)); }
+                    if (next != null && KidSetDone(DECO[next].of)) ShowToast(Loc.F("{0} 장식 세트 완성! 수확량 +{1} · 특별 보너스 +1단계", SPC[DECO[next].of].n, U.Pct(DECO_SET_YIELD)));
+                    farmScreen.Render(); break;
+                }
+                case "wtenh":
+                    if (!Enhance(arg)) { Snd.Err(); ShowToast(CanEnhance(arg) == EnhFail.Dup ? Loc.T("같은 장식을 하나 더 만들어야 해요") : Loc.T("재화가 부족해요")); break; }
+                    Snd.Record(); ShowToast(Loc.F("{0} ★{1}! {2}", DECO[arg].n, DecoStar(arg), DecoFxText(DECO[arg], DecoMul(arg)))); farmScreen.Render(); break;
                 default:
 #if MOREMUSH_DEV
                     if (act != null && act.StartsWith("dbg-")) { if (debug != null) debug.Do(act, arg); }

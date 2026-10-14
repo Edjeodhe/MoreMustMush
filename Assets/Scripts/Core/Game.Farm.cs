@@ -1,394 +1,366 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using static MoreMush.Defs;
 
 namespace MoreMush
 {
-    // Mushroom farm rules: critter requests (hearts · evolution · diamonds), critter star grades and owned effects,
-    // buildings (fixed footprints on a tile grid, built by a free critter over real time), the mushroom tree, idle harvest
-    // reward, and 균사석 speed-ups.
-    // Times are real-time epoch milliseconds like Date.now(). Screen state (critters walking, job queue) is FarmView.
+    // 꼬마버섯 세계수 규칙 1: 성장(나이테·공물·진화), 꼬마(합류·레벨·각성·구역 배치·호감도), 나무버섯 자동 수확과 수확 보따리.
+    // 공방·장식·부탁·라운드 보너스는 Game.Farm.Deco.cs. 시각은 실제 시간 ms(Date.now()와 같음).
+    // 수확량을 바꾸는 일(레벨 업·배치·장식 등)은 바꾸기 전에 BagSettle()로 그때까지의 수확을 보따리에 넣는다.
     public static partial class Game
     {
         public static double Now() => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         public static string Mmss(long s) => s >= 3600 ? $"{s / 3600}:{s % 3600 / 60:00}:{s % 60:00}" : $"{s / 60}:{s % 60:00}";
-
-        // ===== 꼬마 =====
-        public static List<Special> FarmOwned() => SPECIALS.Where(k => HasSpecial(k.id)).ToList();
-
-        // 잡은 꼬마는 부탁 시각이 없으면 만들어 준다 (자동 입주). 세계수 버섯 자리도 채운다
-        public static void FarmEnsure()
-        {
-            foreach (var k in FarmOwned())
-                if (!G.farm.next.ContainsKey(k.id)) { G.farm.next[k.id] = Now() + FARM.first * 1000; G.farm.kind[k.id] = "water"; }
-            TreeEnsure();
-        }
-
-        public static bool FarmReady(string id) => G.farm.next.TryGetValue(id, out var t) && Now() >= t;
-        public static int FarmPetCount() => G?.farm == null ? 0 : FarmOwned().Count(k => FarmReady(k.id));
-        public static int FarmReadyCount() => FarmPetCount() + TreeRipeCount();   // 균사 트리 버튼 알림: 꼬마 부탁 + 다 자란 세계수 버섯
-
-        // 호감도·진화
-        public static int EvoOf(string id) => Math.Min(FARM.evoMax, G.farm.evo.TryGetValue(id, out var e) ? e : 0);
-        public static int HeartPer(string id) => FARM.per[EvoOf(id)];
-        static int Love(string id) => G.farm.love.TryGetValue(id, out var l) ? l : 0;
-        public static int HeartsOf(string id) => Math.Min(FARM.hearts, Love(id) / HeartPer(id));
-        public static float HeartFrac(string id) => HeartsOf(id) >= FARM.hearts ? 0 : (float)(Love(id) % HeartPer(id)) / HeartPer(id);
-        public static int HeartLeft(string id) => HeartsOf(id) >= FARM.hearts ? 0 : HeartPer(id) - Love(id) % HeartPer(id);
-        public static bool CanEvolve(string id) => HeartsOf(id) >= FARM.hearts && EvoOf(id) < FARM.evoMax;
-        public static string EvoName(Special k, int e = -1)
-        {
-            if (e < 0) e = EvoOf(k.id);
-            return e == 0 || !SPECIAL_EVO.TryGetValue(k.id, out var evo) ? k.n : Loc.T(evo[Math.Min(e, evo.Length) - 1]);
-        }
-        public static string HeartStr(string id) => new string('♥', HeartsOf(id)) + new string('♡', FARM.hearts - HeartsOf(id));
-
-        public static void FarmSchedule(string id)
-        {
-            G.farm.next[id] = Now() + U.Rand(FARM.wait[0], FARM.wait[1]) * FARM.evoWait[EvoOf(id)] * (1 - BStat("wait")) * 1000;
-            G.farm.kind[id] = U.PickWeighted(FARM_KINDS, k => k.w).id;
-        }
-
-        public static FarmKind FarmKindOf(string id) => G.farm.kind.TryGetValue(id, out var k) && FARM_KIND.TryGetValue(k ?? "", out var fk) ? fk : FARM_KIND["water"];
-        public static int FarmReward(string id) => Math.Max(1, (int)U.JsRound(FarmKindOf(id).gem * FARM.evoGem[EvoOf(id)]));
-
-        public static string FarmLeftText(string id)
-        {
-            if (FarmReady(id)) return Loc.T("부탁 있음!");
-            long s = Math.Max(0, (long)Math.Ceiling(((G.farm.next.TryGetValue(id, out var t) ? t : Now()) - Now()) / 1000));
-            return Mmss(s);
-        }
-
-        // 부탁 들어주기 → gem 균사석, bonus 호감도 보너스, extra 확률·새 호감도 칸 보너스 균사석, heart 새 칸을 채움, full 5칸 다 참
-        public struct Serve { public int gem, bonus, extra; public bool heart, full; }
-        public static Serve? FarmServe(string id)
-        {
-            if (!FarmReady(id)) return null;
-            int h0 = HeartsOf(id), gem = FarmReward(id);
-            int bonus = U.Chance(FARM.bonusP * h0) ? U.RandI(1, 2 + EvoOf(id)) : 0;
-            if (h0 < FARM.hearts) G.farm.love[id] = Love(id) + 1;
-            FarmSchedule(id);
-            int h1 = HeartsOf(id);
-            bool heart = h1 > h0;
-            int extra = (U.Chance(FARM.extraGemP + BStat("serveGem") + Fx("serveGem")) ? 1 : 0) + (heart ? FARM.gemHeart : 0);
-            G.gem += gem + bonus + extra;
-            return new Serve { gem = gem, bonus = bonus, extra = extra, heart = heart, full = h1 >= FARM.hearts && h0 < FARM.hearts };
-        }
-
-        public static bool FarmEvolve(string id)
-        {
-            if (!HasSpecial(id) || !CanEvolve(id)) return false;
-            G.farm.evo[id] = EvoOf(id) + 1; G.farm.love[id] = 0;
-            SaveGame();
-            return true;
-        }
-
-        // ===== 꼬마 별 등급 · 보유 효과 =====
-        public static int CStarOf(string id) => G?.farm?.star != null && G.farm.star.TryGetValue(id, out var s) ? Math.Min(CSTAR.max, s) : 0;
-        public static (double gold, int gem)? StarCost(string id) { int s = CStarOf(id); return s >= CSTAR.max ? ((double, int)?)null : (CSTAR.gold[s], CSTAR.gem[s]); }
-        public static bool StarUp(string id)
-        {
-            var c = StarCost(id);
-            if (!HasSpecial(id) || c == null || G.gold < c.Value.gold || G.gem < c.Value.gem) return false;
-            G.gold -= c.Value.gold; G.gem -= c.Value.gem; G.farm.star[id] = CStarOf(id) + 1;
-            SaveGame();
-            return true;
-        }
-
-        // 꼬마 한 마리의 보유 효과 값 (안 잡았으면 0)
-        public static float FxOf(string critter, int star = -1)
-        {
-            if (!CRITTER_FX.TryGetValue(critter, out var f)) return 0;
-            if (star < 0) { if (G == null || !HasSpecial(critter)) return 0; star = CStarOf(critter); }
-            return f.v0 + f.vs * star;
-        }
-        // 보유 효과 합 (key가 같은 꼬마 모두; "...Self" 효과는 그 꼬마가 일할 때만 FxOf로 따로 본다)
-        public static float Fx(string key) { float v = 0; foreach (var kv in CRITTER_FX) if (kv.Value.key == key) v += FxOf(kv.Key); return v; }
-        public static string FxText(string critter, int star = -1) => string.Format(CRITTER_FX[critter].fmt, U.Pct(FxOf(critter, star < 0 ? CStarOf(critter) : star)));
-
-        // 별 등급 공통 능력치: 이 꼬마의 건설 속도 · 밭일 속도
-        public static float BuildSpeed(string critter) => 1 + CSTAR.build * CStarOf(critter) + Fx("build");
-        public static float WorkSpeed(string critter) => FARM.evoSpd[EvoOf(critter)] * (1 + CSTAR.work * CStarOf(critter) + Fx("work"));
-
-        // ===== 건축 =====
-        public static int BuiltCount(string id) => G.farm.blds.Count(b => b.id == id);          // 짓는 중 포함
-        public static bool IsBuilding(string critter) { double now = Now(); return G.farm.blds.Any(b => !b.done && now < b.at && b.critter == critter); }
-        public static List<Special> FreeCritters() => FarmOwned().Where(k => !IsBuilding(k.id)).ToList();
-        // 완성된 건물 능력치 합. 농장 밖에 있는 동안 완성 시각이 지난 건물도 친다 (done 표시는 농장 화면의 BuildTick이 함)
-        public static float BStat(string stat)
-        {
-            if (G?.farm?.blds == null) return 0;
-            float v = 0; double now = -1;
-            foreach (var b in G.farm.blds)
-            {
-                if (!b.done) { if (now < 0) now = Now(); if (now < b.at) continue; }
-                if (BUILDING[b.id].stat == stat) v += BUILDING[b.id].val;
-            }
-            return v;
-        }
-
-        public static double BuildSeconds(Building b, string critter)
-        {
-            double t = b.time * (1 - BStat("build")) * NF.md_chef(Lv("md_chef"));
-            if (critter != null && CRITTER_FX[critter].key == "buildSelf") t *= Math.Max(0.2, 1 - FxOf(critter));
-            return t / (critter != null ? BuildSpeed(critter) : 1 + Fx("build"));
-        }
-
-        // 건물이 차지하는 화면 영역 (픽셀, 왼쪽 위 x·y와 너비·높이)
-        public static Rect BuildRect(Building b, int gx, int gy) => new Rect(GRID.x0 + gx * GRID.cell, GRID.y0 + gy * GRID.cell, b.w * GRID.cell, b.h * GRID.cell);
-
-        static bool InFence(float x, float y) { float dx = (x - GRID.ecx) / GRID.erx, dy = (y - GRID.ecy) / GRID.ery; return dx * dx + dy * dy <= 1; }
-
-        // 격자 한 칸을 쓸 수 있나: 칸 가운데가 울타리 안 · 나무 둘레 밖 · 다른 건물이 없음 (skipUid = 옮기는 중인 자기 자신)
-        public static bool TileOk(int gx, int gy, int skipUid = 0)
-        {
-            if (gx < 0 || gy < 0 || gx >= GRID.cols || gy >= GRID.rows) return false;
-            float cx = GRID.x0 + (gx + 0.5f) * GRID.cell, cy = GRID.y0 + (gy + 0.5f) * GRID.cell;
-            if (!InFence(cx, cy)) return false;
-            if (cx > TREE.zoneX0 && cx < TREE.zoneX1 && cy > TREE.zoneY0 && cy < TREE.zoneY1) return false;
-            foreach (var o in G.farm.blds)
-                if (o.uid != skipUid && gx >= o.gx && gx < o.gx + BUILDING[o.id].w && gy >= o.gy && gy < o.gy + BUILDING[o.id].h) return false;
-            return true;
-        }
-
-        // 그 자리에 놓을 수 있나: 건물이 덮는 칸이 모두 쓸 수 있어야 한다
-        public static bool CanPlace(Building b, int gx, int gy, int skipUid = 0)
-        {
-            if (gx < 0 || gy < 0 || gx + b.w > GRID.cols || gy + b.h > GRID.rows) return false;
-            for (int y = gy; y < gy + b.h; y++) for (int x = gx; x < gx + b.w; x++) if (!TileOk(x, y, skipUid)) return false;
-            return true;
-        }
-
-        // 놓을 만한 첫 자리 (가운데에 가까운 순)
-        public static Vector2Int? FirstSpot(Building b)
-        {
-            Vector2Int? best = null; float bd = float.MaxValue;
-            for (int gy = 0; gy <= GRID.rows - b.h; gy++)
-                for (int gx = 0; gx <= GRID.cols - b.w; gx++)
-                {
-                    if (!CanPlace(b, gx, gy)) continue;
-                    var c = BuildRect(b, gx, gy).center;
-                    float d = (c - new Vector2(TREE.x, 700)).sqrMagnitude;
-                    if (d < bd) { bd = d; best = new Vector2Int(gx, gy); }
-                }
-            return best;
-        }
-
-        public enum BuildFail { None, Max, Gem, NoCritter, Spot }
-        public static BuildFail CanBuild(string id)
-        {
-            var b = BUILDING[id];
-            if (BuiltCount(id) >= b.max) return BuildFail.Max;
-            if (G.gem < b.price) return BuildFail.Gem;
-            if (FreeCritters().Count == 0) return BuildFail.NoCritter;
-            return BuildFail.None;
-        }
-
-        // 건설 시작: 쉬고 있는 꼬마 중 무작위 한 마리가 맡는다. 맡은 꼬마의 id를 돌려준다
-        public static SaveData.Bld BuildStart(string id, int gx, int gy, IList<string> prefer = null)
-        {
-            var b = BUILDING[id];
-            if (CanBuild(id) != BuildFail.None || !CanPlace(b, gx, gy)) return null;
-            var free = FreeCritters().Select(k => k.id).ToList();
-            string critter = U.Pick(prefer != null && prefer.Any(free.Contains) ? prefer.Where(free.Contains).ToList() : free);
-            double now = Now();
-            G.gem -= b.price;
-            Telemetry.TreeBuild(id, 0, b.price);
-            var bld = new SaveData.Bld { uid = G.farm.nextUid++, id = id, gx = gx, gy = gy, critter = critter, t0 = now, at = now + BuildSeconds(b, critter) * 1000 };
-            G.farm.blds.Add(bld);
-            SaveGame();
-            return bld;
-        }
-
-        // 지은(짓는 중인) 건물 옮기기: 자기 자리는 빈 칸으로 본다. 비용·시간은 들지 않는다
-        public static bool BuildMove(int uid, int gx, int gy)
-        {
-            var b = G.farm.blds.FirstOrDefault(x => x.uid == uid);
-            if (b == null || !CanPlace(BUILDING[b.id], gx, gy, uid)) return false;
-            b.gx = gx; b.gy = gy;
-            SaveGame();
-            return true;
-        }
-
-        // 다 지은 건물을 완성 처리하고 돌려준다 (꼬마는 다시 쉰다)
-        public static List<SaveData.Bld> BuildTick()
-        {
-            var done = new List<SaveData.Bld>();
-            if (G?.farm?.blds == null) return done;
-            double now = Now();
-            foreach (var b in G.farm.blds) if (!b.done && now >= b.at) { b.done = true; done.Add(b); }
-            if (done.Count > 0) SaveGame();
-            return done;
-        }
-
-        public static string BuildLeftText(SaveData.Bld b) => Mmss(Math.Max(0, (long)Math.Ceiling((b.at - Now()) / 1000)));
-
-        // ===== 세계수 나무 =====
-        public static int TreeLv() => G?.farm?.tree == null ? 1 : G.farm.tree.lv;
-        public static double FruitSeconds(string kind) => FRUITS[kind].time * Math.Pow(TREE.speedPerLv, TreeLv() - 1) * NF.gm_farm(Lv("gm_farm"))
-            * (1 - BStat("grow")) * Math.Max(0.2, 1 - Fx("grow"));
-        public static SaveData.Fruit NewFruit()
-        {
-            string kind = U.PickWeighted(FRUITS.Keys.ToList(), k => FRUITS[k].w);
-            double now = Now();
-            return new SaveData.Fruit { kind = kind, t0 = now, at = now + FruitSeconds(kind) * 1000 };
-        }
-        // 나무 레벨에 맞게 버섯 자리를 채운다 (새 자리는 바로 자라기 시작)
-        public static void TreeEnsure()
-        {
-            var sl = G.farm.tree.slots; int n = TREE.Slots(TreeLv());
-            while (sl.Count < n) sl.Add(NewFruit());
-            if (sl.Count > n) sl.RemoveRange(n, sl.Count - n);
-        }
-        public static bool FruitRipe(SaveData.Fruit f) => f != null && Now() >= f.at;
-        public static int TreeRipeCount() => G?.farm?.tree?.slots == null ? 0 : G.farm.tree.slots.Count(FruitRipe);
-        public static double TreeYieldMul() => 1 + TREE.yieldPerLv * (TreeLv() - 1);
-
-        // 버섯 따기: 균사석 (나무 레벨·보유 효과·건물·노드, 소수점은 확률로) + 확률 보너스 균사석
-        public static int PickYield(string kind, string critter)
-        {
-            double mul = TreeYieldMul() * (1 + BStat("fieldGem") + Fx("fieldGem") + (NF.gm_gourmet(Lv("gm_gourmet")) - 1)
-                         + (critter != null && CRITTER_FX[critter].key == "fieldGemSelf" ? FxOf(critter) : 0));
-            double g = FRUITS[kind].gem * mul;
-            int gem = (int)Math.Floor(g) + (U.Chance((float)(g - Math.Floor(g))) ? 1 : 0);
-            gem += (U.Chance((float)NF.gm_spore(Lv("gm_spore"))) ? 2 : 0) + (U.Chance(BStat("pickGem") + Fx("pickGem")) ? 1 : 0);
-            return gem;
-        }
-
-        // 딴 자리에는 새 버섯이 바로 자라기 시작한다
-        public static int? PickFruit(int slot, string critter)
-        {
-            var sl = G.farm.tree.slots;
-            if (slot < 0 || slot >= sl.Count || !FruitRipe(sl[slot])) return null;
-            int gem = PickYield(sl[slot].kind, critter);
-            G.gem += gem;
-            sl[slot] = NewFruit();
-            return gem;
-        }
-
-        public static double TreeUpCost() => TreeLv() >= TREE.maxLv ? 0 : TREE.Cost(TreeLv());
-        public static double TreeExp() => G?.farm?.tree == null ? 0 : G.farm.tree.exp;
-        public static double TreeExpNeed() => TREE.ExpNeed(TreeLv());
-        public static bool TreeExpFull() => TreeExp() >= TreeExpNeed();
-
-        public enum TreeUpFail { None, Max, Exp, Gold }
-        public static TreeUpFail CanTreeUp()
-        {
-            double c = TreeUpCost();
-            if (c <= 0) return TreeUpFail.Max;
-            if (!TreeExpFull()) return TreeUpFail.Exp;
-            return G.gold < c ? TreeUpFail.Gold : TreeUpFail.None;
-        }
-
-        // 경험치를 다 채우고 골드를 내면 레벨이 오른다. 쓰고 남은 경험치는 다음 레벨로 넘어간다
-        public static bool TreeUp() => TreeUp(out _);
-
-        // joined: 이번 레벨 업으로 합류한 꼬마
-        public static bool TreeUp(out List<Special> joined)
-        {
-            joined = null;
-            if (CanTreeUp() != TreeUpFail.None) return false;
-            double cost = TreeUpCost();
-            G.gold -= cost; G.farm.tree.exp -= TreeExpNeed(); G.farm.tree.lv++;
-            Telemetry.TreeUp("tree", G.farm.tree.lv, cost, 0);
-            TreeEnsure();
-            joined = FarmJoin();
-            FarmEnsure();   // 새 꼬마의 첫 부탁 시각
-            SaveGame();
-            return true;
-        }
-
-        // ===== 가속 =====
-        // 나무: 아직 자라는 버섯을 모두 지금 다 자라게. 골드로 낸다 — 남은 시간 합 TREE.accelSec초마다 일반 판 한 판 정산 골드.
-        // 남은 시간이 길수록, 판 수입이 오를수록 비싸진다 (균사석으로 내면 딴 균사석이 더 많아 무한 복사가 됐다)
-        public static double TreeAccelCost()
-        {
-            double now = Now(), left = 0;
-            foreach (var f in G.farm.tree.slots) left += Math.Max(0, f.at - now) / 1000;
-            if (left <= 0) return 0;
-            double roundGold = Math.Max(G.lastNormalGold, TREE.accelMinRoundGold);
-            return Math.Max(1, Math.Ceiling(roundGold * left / TREE.accelSec));
-        }
-        public static bool TreeAccel()
-        {
-            double c = TreeAccelCost();
-            if (c <= 0 || G.gold < c) return false;
-            G.gold -= c; double now = Now();
-            foreach (var f in G.farm.tree.slots) if (f.at > now) f.at = now;
-            SaveGame();
-            return true;
-        }
-        // 건물: 지금 바로 완성 (남은 시간 BUILD_ACCEL_SEC초마다 균사석 1개)
-        public static int BuildAccelCost(SaveData.Bld b) { double left = Math.Max(0, (b.at - Now()) / 1000); return b.done || left <= 0 ? 0 : Math.Max(1, (int)Math.Ceiling(left / BUILD_ACCEL_SEC)); }
-        public static bool BuildAccel(int uid)
-        {
-            var b = G.farm.blds.FirstOrDefault(x => x.uid == uid);
-            if (b == null) return false;
-            int c = BuildAccelCost(b);
-            if (c <= 0 || G.gem < c) return false;
-            G.gem -= c; b.at = Now();
-            SaveGame();
-            return true;
-        }
-
         public static string TimeText(double s) => s >= 3600 ? Loc.F("{0}시간 {1}분", (int)(s / 3600), U.JsRound(s % 3600 / 60)) : s >= 60 ? Loc.F("{0}분", U.JsRound(s / 60)) : Loc.F("{0}초", Math.Ceiling(s));
 
-        // ===== 자동 수확 보상 =====
-        public static void AutoEnsure() { if (G.autoT <= 0) G.autoT = Now(); FixClock(); FarmJoin(); }
+        static SaveData.Farm F => G.farm;
 
-        // 세계수 레벨까지 합류할 꼬마를 모두 합류시키고, 이번에 새로 들어온 꼬마를 돌려준다 (새 게임은 Lv.1 새싹 꼬마).
-        // 예전에 라운드에서 잡아 둔 꼬마는 그대로 둔다 (레벨보다 앞선 꼬마도 빼지 않음)
+        // ===== 성장 =====
+        public static int Stage() => G?.farm == null ? 1 : F.stage;
+        public static int Ring() => G?.farm == null ? 1 : F.ring;
+        public static bool StageMax() => Stage() >= WT.stages;
+        public static double TreeExp() => G?.farm == null ? 0 : F.exp;
+        public static double TreeExpNeed() => StageMax() ? 0 : WT.exp[Stage()];
+        public static double RingCost() => Ring() >= WT.ringMax ? 0 : Math.Ceiling(WT.RingCost(Stage(), Ring()));
+
+        public enum GrowFail { None, Max, Gold, Ring, Exp, Gem }
+        public static GrowFail CanRingUp() => Ring() >= WT.ringMax ? GrowFail.Max : G.gold < RingCost() ? GrowFail.Gold : GrowFail.None;
+        public static bool RingUp()
+        {
+            if (CanRingUp() != GrowFail.None) return false;
+            BagSettle();
+            double c = RingCost();
+            G.gold -= c; F.ring++;
+            Telemetry.TreeUp("ring", F.stage * 100 + F.ring, c, 0);
+            SaveGame();
+            return true;
+        }
+
+        public static GrowFail CanEvolve()
+        {
+            if (StageMax()) return GrowFail.Max;
+            if (Ring() < WT.ringMax) return GrowFail.Ring;
+            if (TreeExp() < TreeExpNeed()) return GrowFail.Exp;
+            if (G.gold < WT.evoGold[Stage()]) return GrowFail.Gold;
+            return G.gem < WT.evoGem[Stage()] ? GrowFail.Gem : GrowFail.None;
+        }
+
+        // 진화: 경험치·골드·균사석을 내고 다음 단계로 (나이테 Lv.1). joined = 이번에 합류한 꼬마
+        public static bool Evolve(out List<Special> joined)
+        {
+            joined = null;
+            if (CanEvolve() != GrowFail.None) return false;
+            BagSettle();
+            int s = Stage();
+            G.gold -= WT.evoGold[s]; G.gem -= WT.evoGem[s]; F.exp -= WT.exp[s];
+            F.stage++; F.ring = 1;
+            Telemetry.TreeUp("stage", F.stage, WT.evoGold[s], WT.evoGem[s]);
+            joined = FarmJoin();
+            // 이번 단계에 열린 구역: 그곳이 선호 구역인 쉬는 꼬마를 보낸다 (합류할 때는 아직 닫혀 있던 꼬마)
+            foreach (var k in KidsOwned())
+                if (ZoneOf(k.id) == null && ZONE[k.zone].open == F.stage && ZoneRoom(k.zone)) F.zone[k.id] = k.zone;
+            DecoSlotsEnsure();
+            SaveGame();
+            return true;
+        }
+
+        // 공물: 창고 버섯을 바쳐 경험치 (그 단계가 원하는 버섯은 ×2). 마지막 단계에서는 바칠 수 없다
+        public static bool IsPrefer(string sp, int stage = 0) { if (stage <= 0) stage = Stage(); return Array.IndexOf(WT_PREFER[stage - 1], SP[sp].nKo) >= 0; }
+        public static double TributeValue(string sp) => TIER_VALUE[SP[sp].t] * (IsPrefer(sp) ? TRIBUTE_PREFER : 1);
+        public static int StoreOf(string sp) => G?.farm?.store != null && F.store.TryGetValue(sp, out var n) ? n : 0;
+        public static int StoreTotal() => G?.farm?.store == null ? 0 : F.store.Values.Sum();
+        public static double TributeAllValue() => StageMax() ? 0 : F.store.Sum(kv => TributeValue(kv.Key) * kv.Value);
+
+        // 창고 버섯을 모두 바친다 → 얻은 경험치 (0 = 바칠 것 없음)
+        public static double TributeAll()
+        {
+            double exp = TributeAllValue();
+            if (exp <= 0) return 0;
+            F.store.Clear(); F.exp += exp;
+            SaveGame();
+            return exp;
+        }
+
+        // 라운드에서 딴 버섯을 창고에 (도감 수확 수와 같은 단위: 버섯 1개)
+        public static void StoreAdd(IReadOnlyDictionary<string, int> picks)
+        {
+            if (G?.farm == null || picks == null) return;
+            foreach (var kv in picks) if (kv.Value > 0 && SP.ContainsKey(kv.Key)) F.store[kv.Key] = StoreOf(kv.Key) + kv.Value;
+        }
+        static bool StoreTake(string sp, int n)
+        {
+            if (n <= 0 || StoreOf(sp) < n) return false;
+            int left = StoreOf(sp) - n;
+            if (left > 0) F.store[sp] = left; else F.store.Remove(sp);
+            return true;
+        }
+
+        // ===== 꼬마 =====
+        public static List<Special> FarmOwned() => SPECIALS.Where(k => KID.ContainsKey(k.id) && HasSpecial(k.id)).ToList();
+        public static List<Kid> KidsOwned() => KIDS.Where(k => HasSpecial(k.id)).ToList();
+
+        // 세계수 단계까지 합류할 꼬마를 모두 합류시키고, 이번에 새로 들어온 꼬마를 돌려준다 (새 게임은 1단계 새싹 꼬마).
+        // 예전에 라운드에서 잡아 둔 꼬마는 그대로 둔다. 새로 온 꼬마는 선호 구역이 열려 있고 자리가 있으면 거기로 간다
         public static List<Special> FarmJoin()
         {
             var joined = new List<Special>();
             if (G == null) return joined;
-            int lv = TreeLv();
-            for (int i = 0; i < CRITTER_JOIN.Length && i < lv; i++)
+            for (int i = 0; i < CRITTER_JOIN.Length && i < Stage(); i++)
             {
                 string id = CRITTER_JOIN[i];
                 if (HasSpecial(id)) continue;
                 G.specials[id] = true; joined.Add(SPC[id]);
+                if (KID.TryGetValue(id, out var k) && ZoneOpen(k.zone) && ZoneRoom(k.zone)) F.zone[id] = k.zone;
             }
             return joined;
         }
 
-        // 기기 시계가 앞서 있다가 뒤로 맞춰지면 미래 시각에 멈춘 타이머를 지금 기준으로 당긴다 (남은 시간은 그대로). 정상 시계면 아무것도 안 함
+        public static int KLv(string kid) => G?.farm?.klv != null && F.klv.TryGetValue(kid, out var l) ? l : 1;
+        public static int Awaken(string kid) => G?.farm?.awaken != null && F.awaken.TryGetValue(kid, out var a) ? a : 0;
+        public static int KLvSum() => KidsOwned().Sum(k => KLv(k.id));
+        public static int KLvSteps() => KLV.sumAt.Count(a => KLvSum() >= a);
+
+        public enum KidFail { None, NotOwned, Max, Cap, Gold, Gem, Lv }
+        public static double KLvCost(string kid) => KLv(kid) >= KLV.max ? 0 : KLV.Cost(KLv(kid));
+        public static KidFail CanKidLvUp(string kid)
+        {
+            if (!HasSpecial(kid)) return KidFail.NotOwned;
+            if (KLv(kid) >= KLV.max) return KidFail.Max;
+            if (KLv(kid) >= KLV.Cap(Awaken(kid))) return KidFail.Cap;
+            return G.gold < KLvCost(kid) ? KidFail.Gold : KidFail.None;
+        }
+        public static bool KidLvUp(string kid)
+        {
+            if (CanKidLvUp(kid) != KidFail.None) return false;
+            BagSettle();
+            double c = KLvCost(kid);
+            G.gold -= c; F.klv[kid] = KLv(kid) + 1;
+            DecoSlotsEnsure();   // Lv 합계 보상 (장식 슬롯)
+            SaveGame();
+            return true;
+        }
+
+        // 각성: Lv.10·20·30에서 멈춘 성장을 풀고 특별 보너스 단계를 올린다
+        public static KidFail CanAwaken(string kid)
+        {
+            if (!HasSpecial(kid)) return KidFail.NotOwned;
+            int a = Awaken(kid);
+            if (a >= KLV.awakenMax) return KidFail.Max;
+            if (KLv(kid) < 10 * (a + 1)) return KidFail.Lv;
+            if (G.gold < KLV.awakenGold[a]) return KidFail.Gold;
+            return G.gem < KLV.awakenGem[a] ? KidFail.Gem : KidFail.None;
+        }
+        public static bool KidAwaken(string kid)
+        {
+            if (CanAwaken(kid) != KidFail.None) return false;
+            BagSettle();
+            int a = Awaken(kid);
+            G.gold -= KLV.awakenGold[a]; G.gem -= KLV.awakenGem[a]; F.awaken[kid] = a + 1;
+            Telemetry.TreeUp("awaken_" + kid, a + 1, KLV.awakenGold[a], KLV.awakenGem[a]);
+            SaveGame();
+            return true;
+        }
+
+        // 호감도: 점수를 쌓아 Lv.1~10
+        public static double AffPts(string kid) => G?.farm?.aff != null && F.aff.TryGetValue(kid, out var p) ? p : 0;
+        public static (int lv, double cur, double need) AffOf(string kid)
+        {
+            double p = AffPts(kid); int lv = 1;
+            while (lv < AFF.max && p >= AFF.Need(lv)) { p -= AFF.Need(lv); lv++; }
+            return (lv, p, lv >= AFF.max ? 0 : AFF.Need(lv));
+        }
+        public static int AffLv(string kid) => AffOf(kid).lv;
+        static void AffAdd(string kid, double pts) { BagSettle(); F.aff[kid] = AffPts(kid) + pts; }
+        public static bool IsFav(string kid, string sp) => KID.TryGetValue(kid, out var k) && Array.IndexOf(k.fav, SP[sp].nKo) >= 0;
+        public static double GiftValue(string kid, string sp) => TIER_VALUE[SP[sp].t] * (IsFav(kid, sp) ? GIFT_FAV : 1);
+
+        // 선물: 창고 버섯 n개 → 호감도. 오른 호감도 Lv를 돌려준다 (못 주면 -1)
+        public static int Gift(string kid, string sp, int n)
+        {
+            if (!HasSpecial(kid) || !KID.ContainsKey(kid) || !SP.ContainsKey(sp ?? "") || !StoreTake(sp, n)) return -1;
+            int lv0 = AffLv(kid);
+            AffAdd(kid, GiftValue(kid, sp) * n);
+            SaveGame();
+            return AffLv(kid) - lv0;
+        }
+
+        // ===== 구역 배치 =====
+        public static bool ZoneOpen(string zone) => ZONE.TryGetValue(zone ?? "", out var z) && Stage() >= z.open;
+        public static string ZoneOf(string kid) => G?.farm?.zone != null && F.zone.TryGetValue(kid, out var z) && ZoneOpen(z) ? z : null;
+        public static List<string> KidsIn(string zone) => KidsOwned().Where(k => ZoneOf(k.id) == zone).Select(k => k.id).ToList();
+        public static int ZoneCapacity() => HARV.ZoneCap(Stage()) + (KLvSum() >= KLV.sumAt[1] ? 1 : 0) + (KLvSum() >= KLV.sumAt[3] ? 1 : 0);
+        public static bool ZoneRoom(string zone) => KidsIn(zone).Count < ZoneCapacity();
+
+        // 꼬마를 구역에 보낸다 (zone = null이면 쉬게 한다)
+        public static bool Assign(string kid, string zone)
+        {
+            if (!HasSpecial(kid) || !KID.ContainsKey(kid)) return false;
+            if (zone != null && (!ZoneOpen(zone) || (ZoneOf(kid) != zone && !ZoneRoom(zone)))) return false;
+            BagSettle();
+            if (zone == null) F.zone.Remove(kid); else F.zone[kid] = zone;
+            SaveGame();
+            return true;
+        }
+
+        // ===== 나무버섯 슬롯 =====
+        public static int MushSlotCount() => WT.mushSlots[Stage() - 1] + (int)BeautyValue("slots");
+
+        // 열린 구역마다 나무버섯 슬롯 수 (비율 뿌리 4·줄기 3·가지 3·수관 2, 남는 자리는 비율 큰 순서)
+        public static Dictionary<string, int> ZoneSlots()
+        {
+            var open = ZONES.Where(z => ZoneOpen(z.id)).ToList();
+            int total = MushSlotCount(), wsum = open.Sum(z => z.weight);
+            var o = open.ToDictionary(z => z.id, z => total * z.weight / wsum);
+            int left = total - o.Values.Sum();
+            foreach (var z in open.OrderByDescending(z => total * z.weight % wsum).ThenBy(z => Array.IndexOf(ZONES, z))) { if (left <= 0) break; o[z.id]++; left--; }
+            foreach (var z in ZONES) if (!o.ContainsKey(z.id)) o[z.id] = 0;
+            return o;
+        }
+
+        // 구역 슬롯 i에 돋는 버섯 (구역의 버섯을 번갈아, 아직 등장 단계가 아닌 버섯은 앞의 것으로)
+        public static TreeMush SlotMush(string zone, int i)
+        {
+            var avail = ZONE[zone].mush.Select(id => TMUSH[id]).Where(m => Stage() >= m.from).ToList();
+            if (avail.Count == 0) avail.Add(TMUSH["shelf"]);
+            return avail[i % avail.Count];
+        }
+
+        // ===== 수확량 =====
+        // 나무버섯 성장 속도 (구역마다): 나이테 · 장식 · 이슬 꼬마 · 균사 트리 노드
+        public static double GrowMul(string zone)
+        {
+            double m = 1 + WT.ringGrow * (Ring() - 1) + DecoSum("grow") + (KidsIn(zone).Contains("dew") ? KID["dew"].tv : 0);
+            return m / NF.gm_farm(Lv("gm_farm"));
+        }
+
+        // 꼬마 하나의 처리 속도 (수확 횟수/초): 4초에 1번 × 속도 × 운반 × 연쇄
+        public static double KidPickRate(string kid, string zone)
+        {
+            var k = KID[kid];
+            double speed = (1 + (k.trait == "speed" ? k.tv : 0)) * (k.trait == "wind" ? k.tv : 1) * (1 + DecoSum("move")) / Math.Max(0.2, 1 - DecoSum("pick"));
+            double carry = (k.trait == "carry" ? k.tv : 1) + (zone == "root" ? DecoSum("carryRoot") : 0);
+            double chain = k.trait == "chain" ? 1 + k.tv : 1;
+            return speed * carry * chain / HARV.sec;
+        }
+
+        // 꼬마 하나의 수확량 배율 (기획서 분당 수확량 공식): 레벨 · 각성 · 선호 구역 · 장식·세트 보너스 합 · 호감도 대성공 · 행운
+        public static double KidMul(string kid, string zone)
+        {
+            var k = KID[kid];
+            double add = DecoSum("self", kid) + (KidSetDone(kid) ? DECO_SET_YIELD : 0) + DecoSum("allKid") + BeautyValue("allKid")
+                         + (KidsAssigned().Contains("star") ? KID["star"].tv : 0) + (k.trait == "wind" && ZONE[zone].high ? k.tv2 : 0);
+            return (1 + HARV.perLv * (KLv(kid) - 1)) * KLV.awakenMul[Awaken(kid)] * (1 + (k.zone == zone ? HARV.prefer : 0)) * (1 + add)
+                   * (1 + AFF.greatPerLv * AffLv(kid)) * (1 + DecoSum("lucky"));
+        }
+        static List<string> KidsAssigned() => KidsOwned().Where(k => ZoneOf(k.id) != null).Select(k => k.id).ToList();
+
+        public struct Rate { public double gold, gem, n; }
+
+        // 구역 하나의 초당 수확: 슬롯마다 (자라는 시간 + 따는 시간)에 한 번. 꼬마 처리량이 모자라면 그만큼만.
+        // 수관 발광 자리는 6단계부터 5% 확률로 황금 나무버섯이 돋는다 (기댓값으로 계산)
+        public static Rate ZoneRate(string zone, int slots)
+        {
+            var kids = KidsIn(zone);
+            if (kids.Count == 0 || slots <= 0) return default;
+            double cap = kids.Sum(k => KidPickRate(k, zone)), grow = GrowMul(zone), pick = HARV.sec * kids.Count / cap;   // 평균 따는 시간
+            double supply = 0, gold = 0, gem = 0;
+            var share = kids.ToDictionary(k => k, k => KidPickRate(k, zone) / cap);
+            for (int i = 0; i < slots; i++)
+            {
+                var m = SlotMush(zone, i);
+                var parts = new List<(TreeMush m, double p)> { (m, 1) };
+                if (zone == "crown" && Stage() >= TMUSH["golden"].from) parts = new List<(TreeMush, double)> { (m, 1 - GOLDEN_IN_CROWN), (TMUSH["golden"], GOLDEN_IN_CROWN) };
+                double cycle = parts.Sum(x => x.p * (x.m.time / grow + pick));
+                supply += 1 / cycle;
+                foreach (var (mm, p) in parts)
+                    foreach (var k in kids)
+                    {
+                        double w = p / cycle * share[k] * KidMul(k, zone);
+                        double typeMul = (mm.id == "shelf" ? 1 + DecoSum("shelf") : 1) * (mm.id == "glow" ? 1 + DecoSum("glowUp") : 1)
+                                         * (mm.id == "glow" && KID[k].trait == "glow" ? KID[k].tv : 1);
+                        gold += w * typeMul * mm.gold;
+                        gem += w * typeMul * mm.gem * (1 + (KID[k].trait == "gem" ? KID[k].tv : 0) + (KID[k].trait == "glow" ? KID[k].tv2 : 0));
+                    }
+            }
+            double eff = Math.Min(1, cap / supply);
+            double n = supply * eff;
+            gem += n * NF.gm_spore(Lv("gm_spore")) * 2;   // 균사 트리 노드: 딸 때 확률로 균사석 +2
+            return new Rate { gold = gold * eff, gem = gem * eff, n = n };
+        }
+
+        // 세계수 전체의 초당 수확 (보따리에 쌓이는 양)
+        public static Rate BagRate()
+        {
+            var r = new Rate();
+            if (G?.farm == null) return r;
+            bool began = MemoBegin();
+            try
+            {
+                foreach (var kv in ZoneSlots())
+                {
+                    var z = ZoneRate(kv.Key, kv.Value);
+                    r.gold += z.gold; r.gem += z.gem; r.n += z.n;
+                }
+                double all = (1 + DecoSum("bagEff")) * NF.gm_herb(Lv("gm_herb"));
+                r.gold *= all * (1 + DecoSum("treeGold"));
+                r.gem *= all * (1 + DecoSum("gem")) * NF.gm_gourmet(Lv("gm_gourmet"));
+                r.n *= all;
+            }
+            finally { MemoEnd(began); }
+            return r;
+        }
+
+        // ===== 수확 보따리 =====
+        public static double BagCapSec() => (HARV.bagHours + (HasSpecial("rock") ? KID["rock"].tv2 : 0) + DecoSum("bagH")) * 3600;
+
+        // 지금까지의 수확을 보따리에 넣는다 (보관 시간이 다 차면 더 쌓이지 않는다)
+        public static void BagSettle()
+        {
+            if (G?.farm == null) return;
+            var b = F.bag; double now = Now();
+            if (b.t <= 0 || b.t > now) { b.t = now; return; }
+            double dt = (now - b.t) / 1000, use = Math.Max(0, Math.Min(dt, BagCapSec() - b.sec));
+            b.t = now;
+            if (use <= 0) return;
+            var r = BagRate();
+            b.gold += r.gold * use; b.gem += r.gem * use; b.n += r.n * use; b.sec += use;
+        }
+        public static bool BagFull() => G?.farm != null && F.bag.sec >= BagCapSec() - 1;
+        public static bool BagReady() => G?.farm != null && (Math.Floor(F.bag.gold) >= HARV.bagMinClaim || Math.Floor(F.bag.gem) >= 1);
+
+        // 보따리 받기 → (골드, 균사석, 나무버섯 개수). 소수점 아래는 보따리에 남는다
+        public static (double gold, int gem, int n)? BagClaim()
+        {
+            BagSettle();
+            if (!BagReady()) return null;
+            var b = F.bag;
+            double gold = Math.Floor(b.gold); int gem = (int)Math.Floor(b.gem), n = (int)Math.Floor(b.n);
+            G.gold += gold; G.gem += gem;
+            b.gold -= gold; b.gem -= gem; b.n -= n; b.sec = 0;
+            SaveGame();
+            return (gold, gem, n);
+        }
+
+        // ===== 시작·시계 =====
+        // 새 게임·이어하기·복귀 때: 꼬마 합류 · 보따리 시계 · 장식 슬롯 · 부탁
+        public static void FarmEnsure()
+        {
+            if (G?.farm == null) return;
+            FixClock();
+            FarmJoin();
+            BagSettle();
+            DecoSlotsEnsure();
+            ReqEnsure();
+        }
+
+        // 기기 시계가 앞서 있다가 뒤로 맞춰지면 미래 시각에 멈춘 타이머를 지금 기준으로 당긴다 (남은 시간은 그대로)
         public static void FixClock()
         {
             if (G?.farm == null) return;
             double now = Now();
-            if (G.autoT > now) G.autoT = now;
-            if (G.farm.tree?.slots != null)
-                foreach (var f in G.farm.tree.slots) if (f.t0 > now) { f.at = now + (f.at - f.t0); f.t0 = now; }
-            foreach (var b in G.farm.blds) if (!b.done && b.t0 > now) { b.at = now + (b.at - b.t0); b.t0 = now; }
-            double maxWait = now + Math.Max(FARM.first, FARM.wait[1]) * 1000;   // 부탁 대기는 이보다 길 수 없다
-            foreach (var id in new List<string>(G.farm.next.Keys)) if (G.farm.next[id] > maxWait) G.farm.next[id] = maxWait;
-        }
-        public static double AutoHours() => G == null || G.autoT <= 0 ? 0 : Math.Min(AUTO.maxHours, Math.Max(0, (Now() - G.autoT) / 3600000.0));
-        public static double AutoMul() => (1 + BStat("auto")) * NF.gm_herb(Lv("gm_herb"));
-        // 시간당 보상
-        public static (double gold, double gem) AutoRates()
-        {
-            double m = AutoMul();
-            double gold = Math.Max(AUTO.goldMin, StageGold(StageNow()) * AUTO.goldStageK) * (1 + Fx("autoGold")) * m;
-            return (gold, AUTO.gemH * (1 + Fx("autoGem")) * m);
-        }
-        public static (double gold, int gem) AutoReward()
-        {
-            var r = AutoRates(); double h = AutoHours();
-            return (Math.Floor(r.gold * h), (int)Math.Floor(r.gem * h));
-        }
-        public static bool AutoReady() => AutoHours() * 3600 >= AUTO.minClaim;
-
-        public static (double gold, int gem)? ClaimAuto()
-        {
-            if (!AutoReady()) return null;
-            var r = AutoReward();
-            G.gold += r.gold; G.gem += r.gem; G.autoT = Now();
-            SaveGame();
-            return (r.gold, r.gem);
+            if (F.bag.t > now) F.bag.t = now;
+            foreach (var c in F.crafts) if (c.t0 > now) { c.at = now + (c.at - c.t0); c.t0 = now; }
         }
     }
 }

@@ -76,10 +76,10 @@ namespace MoreMush
                 var k = SPC[selected.Substring(3)]; bool own = HasSpecial(k.id);
                 UIUtil.SetImage(detailIcon, SpriteDB.Get($"Characters/Critters/{k.id}_ref"), own ? 0 : 1);
                 detailName.text = Loc.F("{0} <size=50%><mark=#b07bff>  특수 버섯  </mark></size>", own ? k.n : "???");
-                detailDesc.text = own ? Loc.T("숲을 깡총깡총 뛰어다니던 캐릭터 버섯. 지금은 세계수에서 뛰어놀고 있어요.") : (JoinLv(k.id) > 0 ? Loc.F("세계수 나무 Lv.{0}이 되면 세계수에 합류해요.", JoinLv(k.id)) : Loc.T("2차 업데이트에서 만날 수 있어요."));
+                detailDesc.text = own ? Loc.T("숲을 깡총깡총 뛰어다니던 캐릭터 버섯. 지금은 세계수에서 나무버섯을 따고 있어요.") : (JoinLv(k.id) > 0 ? Loc.F("세계수가 {0}단계가 되면 합류해요.", JoinLv(k.id)) : Loc.T("2차 업데이트에서 만날 수 있어요."));
                 detailStars.gameObject.SetActive(false); detailAb.gameObject.SetActive(false); detailWarn.gameObject.SetActive(false);
-                detailTrait.text = own ? Loc.F("보유 중 · 보유 효과: {0}", FxText(k.id)) : Loc.T("합류하면 세계수에서 일을 도와요");
-                detailRec.text = Loc.T("세계수 나무 레벨이 오를 때마다 꼬마가 한 마리씩 합류해요");
+                detailTrait.text = KID.TryGetValue(k.id, out var kd) ? (own ? Loc.F("보유 중 · Lv.{0} ★{1} · 특성: {2}", KLv(k.id), Awaken(k.id), kd.traitText) : Loc.F("특성: {0}", kd.traitText)) : Loc.T("2차 업데이트 꼬마");
+                detailRec.text = Loc.T("세계수가 진화할 때마다 꼬마가 한 마리씩 합류해요");
                 return;
             }
             var sp = SP[selected]; G.codex.TryGetValue(sp.id, out var e);
@@ -100,7 +100,7 @@ namespace MoreMush
                 detailTrait.text = trait; UIUtil.Show(detailTrait, trait != "");
                 UIUtil.Show(detailWarn, sp.c == "ps");
                 detailRec.text = Loc.F("{0} · HP {1} · 수확량 {2} (무더기: HP ×5, 수확 ×7~10)", UnlockText(sp), TIERS[sp.t].hp, TIERS[sp.t].drop) +
-                    (h ? " · " + Loc.F("처음 딴 라운드 {0} · 누적 수확 {1}개 · 황금 {2} · 거대 {3}", e.first, U.Fmt(e.n), e.gold ? "○" : "×", e.giant ? "○" : "×") : "");
+                    (h ? " · " + Loc.F("처음 딴 라운드 {0} · 누적 수확 {1}개 · 창고 {2}개 · 황금 {3} · 거대 {4}", e.first, U.Fmt(e.n), U.Fmt(StoreOf(sp.id)), e.gold ? "○" : "×", e.giant ? "○" : "×") : "");
             }
             else
             {

@@ -80,7 +80,7 @@ namespace MoreMush
             if (list == null || i < 0 || i >= list.Count || !QuestClaimable(list[i])) return null;
             var p = list[i]; int exp = QuestDefOf(p).exp;
             p.claimed = true;
-            G.farm.tree.exp += exp;
+            G.farm.exp += exp;
             Telemetry.QuestClear(p.id, slot[0] == 'd' ? "daily" : "weekly", exp);
             if (slot[0] == 'd')
                 foreach (var w in G.quest.weekly)

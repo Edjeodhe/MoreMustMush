@@ -6,8 +6,8 @@ using static MoreMush.Game;
 
 namespace MoreMush
 {
-    // One farm critter (prototype drawCritter + drawSay + request bubble): the critter rig on a feet pivot,
-    // shadow, evolution glow and orbiting stars, held tool, hover label, speech bubble and request bubble.
+    // One world-tree critter (prototype drawCritter + drawSay): the critter rig on a feet pivot,
+    // shadow, awakening glow and orbiting stars, held tool, hover label (name · ★ · Lv) and speech bubble. (요청 말풍선 Req는 쓰지 않는다)
     // The object sits at the critter's feet; children are laid out in the template slot (FarmView.critterTemplate).
     public class FarmCritter : MonoBehaviour
     {
@@ -15,7 +15,7 @@ namespace MoreMush
         public CritterRig rig;
         public SortingGroup rigGroup;
         public SpriteRenderer shadow, glow, surprise, tool;
-        public SpriteRenderer builder;          // child of body: hammering builder picture shown instead of the rig while building
+        public SpriteRenderer builder;          // child of body: (예전 건설 그림, 쓰지 않는다)
         public SpriteRenderer[] stars = new SpriteRenderer[3];
         [Header("Hover label")]
         public GameObject label; public SpriteRenderer labelBack; public TMP_Text labelText;
@@ -32,10 +32,10 @@ namespace MoreMush
         [System.NonSerialized] public Rect sayRect;
         float sayFeetX, sayFeetY;
 
-        public void Draw(FarmView.Critter p, float now, string hat, bool hovered, FarmKind request)
+        public void Draw(FarmView.Critter p, float now, string hat, bool hovered)
         {
-            int e = EvoOf(p.id);
-            float R0 = 44 * (1 + 0.15f * e);
+            int e = Awaken(p.id);   // 각성 ★: 1 발밑 빛 · 2~3 둘레를 도는 별
+            float R0 = 40 * (1 + 0.1f * e);
             float ox = 0, oy = 0, rot = 0, sx = 1, sy = 1;
             float at = p.animT, ad = p.anim != null ? FARM_ANIMS[p.anim] : 1, u = at / ad;
             if (p.anim == null)
@@ -54,11 +54,6 @@ namespace MoreMush
                 case "surprise": oy = -Mathf.Min(1, u * 6) * 26 * (1 - u); ox = Mathf.Sin(at * 50) * 4 * (1 - u); break;
             }
 
-            // 건설 중: 리그 대신 망치질 그림 (내려치는 프레임에서 살짝 찌그러진다)
-            var bsp = p.bframe >= 0 ? SpriteDB.Get(SpriteDB.Key("Characters/Critters/Build/build_", p.id), p.bframe == 0 ? "_0" : "_1") : null;
-            bool hammering = bsp != null;
-            if (hammering && p.bframe == 1) { sy = 0.94f; sx = 1.06f; }
-
             transform.localPosition = Art.P(p.x, p.y);
             int order = 1000 + Mathf.RoundToInt(p.y);
             body.localPosition = new Vector3(ox / P, -oy / P, 0);
@@ -67,16 +62,8 @@ namespace MoreMush
             body.localScale = new Vector3(sx * p.face * k, sy * k, 1);
             rig.SetLook(p.id, CharSkinOn(p.id)?.id, hat);
             rigGroup.sortingOrder = order;
-            if (rig.gameObject.activeSelf == hammering) rig.gameObject.SetActive(!hammering);
-            builder.enabled = hammering;
-            if (hammering)
-            {
-                if (builder.sprite != bsp) builder.sprite = bsp;
-                float s = BUILDER.w * rig.baseRadius / P / bsp.bounds.size.x;   // body space: rig.baseRadius units
-                builder.transform.localScale = new Vector3(s, s, 1);
-                builder.transform.localPosition = new Vector3(0, bsp.bounds.size.y * s / 2, 0);
-                builder.sortingOrder = order;
-            }
+            if (!rig.gameObject.activeSelf) rig.gameObject.SetActive(true);
+            builder.enabled = false;
 
             shadow.transform.localPosition = new Vector3(ox / P, -2 / P, 0);
             shadow.transform.localScale = new Vector3(R0 * 1.5f * (1 + oy / 200) / P, R0 * 0.44f / P, 1);
@@ -105,10 +92,10 @@ namespace MoreMush
             if (work)
             {
                 float sw = Mathf.Sin(now * 14 + p.x) * 0.6f;
-                tool.sprite = SpriteDB.Get(p.tool == "till" ? "Farm/Field/tool_0" : p.tool == "hammer" ? "Icons/hammer" : p.tool == "seed" ? "Icons/spore" : "UI/basket");
+                tool.sprite = SpriteDB.Get("UI/basket");
                 tool.transform.localPosition = new Vector3(p.face * R0 * 0.75f / P, -(-R0 * 0.55f + oy) / P, 0);
                 tool.transform.localRotation = Quaternion.Euler(0, 0, -sw * p.face * Mathf.Rad2Deg);
-                Art.FitPx(tool, R0 * (p.tool == "till" ? 1.3f : p.tool == "hammer" ? 0.95f : 0.75f));
+                Art.FitPx(tool, R0 * 0.75f);
                 var ts = tool.transform.localScale; ts.x = Mathf.Abs(ts.x) * p.face; tool.transform.localScale = ts;
                 tool.sortingOrder = order + 2;
             }
@@ -117,7 +104,7 @@ namespace MoreMush
             UIUtil.Show(label, hovered);
             if (hovered)
             {
-                string s = $"{EvoName(p.kind)} {HeartStr(p.id)}";
+                string s = Loc.F("{0} {1} Lv.{2}", p.kind.n, new string('★', Awaken(p.id)), KLv(p.id));
                 if (shownLabel != s) { shownLabel = s; labelText.text = s; labelText.ForceMeshUpdate(); }
                 Art.SlicedPx(labelBack, labelText.preferredWidth * P + 20, 30);
             }
@@ -137,16 +124,7 @@ namespace MoreMush
                 SetA(sayBack, a); SetA(sayTail, a); sayText.alpha = a;
             }
 
-            // 부탁 말풍선 (목장)
-            bool ask = request != null && !talking;
-            UIUtil.Show(req, ask);
-            if (ask)
-            {
-                float by = -R0 * 2 - 74 + Mathf.Sin(now * 5 + p.x) * 5;
-                req.transform.localPosition = new Vector3(0, -(by + 31) / P, 0);
-                var icon = SpriteDB.Get("Farm/Icons/", request.icon);
-                if (reqIcon.sprite != icon) { reqIcon.sprite = icon; Art.FitPx(reqIcon, 44); }
-            }
+            UIUtil.Show(req, false);
         }
 
         // 말풍선을 lift(px)만큼 위로 올리고, slot번째 그리기 순서를 준다 (겹쳐도 한 말풍선이 다른 것을 통째로 덮게).

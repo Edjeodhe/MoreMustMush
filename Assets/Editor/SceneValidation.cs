@@ -80,11 +80,8 @@ namespace MoreMush.EditorTools
                 }
                 switch (mb)
                 {
-                    case BuildPanel p: Slots(nameof(p.cards), p.cards, Defs.BUILDINGS.Length); break;
-                    case FarmScreen p: Slots(nameof(p.chipList), p.chipList, Defs.SPECIALS.Length); break;
-                    case PetCardPanel p: Slots(nameof(p.hearts), p.hearts, Defs.FARM.hearts); Slots(nameof(p.heartFills), p.heartFills, Defs.FARM.hearts); break;
                     case SkinPanel p: Slots(nameof(p.cards), p.cards, Math.Max(Defs.CHAR_SKINS.Length, Defs.HV_SKINS.Length)); break;
-                    case FarmTreeView p: Slots(nameof(p.fruits), p.fruits, Defs.TREE.Slots(Defs.TREE.maxLv)); Slots(nameof(p.glows), p.glows, Defs.TREE.Slots(Defs.TREE.maxLv)); break;
+                    case FarmTreeView p: Slots(nameof(p.fruits), p.fruits, 1); Slots(nameof(p.glows), p.glows, 1); break;   // 모자라면 첫 칸을 복제해 늘린다
                     case RoundHUD p:
                         Slots(nameof(p.slotIcons), p.slotIcons, Defs.CAT_KEYS.Length);
                         Slots(nameof(p.slotTexts), p.slotTexts, Defs.CAT_KEYS.Length);

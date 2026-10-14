@@ -40,7 +40,7 @@ namespace MoreMush
                 claims[i].interactable = QuestClaimable(p);
                 claimTexts[i].text = p.claimed ? Loc.T("완료") : Loc.F("+{0} 경험치", d.exp);
             }
-            Set(8, Loc.T("세계수 나무 경험치"), TreeLv() >= TREE.maxLv ? Loc.T("최대 레벨") : $"{U.Fmt(TreeExp())}/{U.Fmt(TreeExpNeed())}");
+            Set(8, Loc.T("세계수 경험치"), StageMax() ? Loc.T("최대 단계") : $"{U.Fmt(System.Math.Floor(TreeExp()))}/{U.Fmt(TreeExpNeed())}");
         }
 
         void Set(int row, string label, string value) { rowLabels[row].text = label; rowValues[row].text = value; }

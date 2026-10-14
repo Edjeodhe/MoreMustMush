@@ -92,7 +92,7 @@ namespace MoreMush
             public static double ps_barrate(int L) => V("ps_barrate", L);
             public static double ps_power(int L) => V("ps_power", L);
             public static double md_combo(int L) => V("md_combo", L);
-            public static double md_chef(int L) => V("md_chef", L);        // 건설 시간 배율 (농장)
+            public static double md_chef(int L) => V("md_chef", L);        // 꼬마 공방 제작 시간 배율 (세계수)
             public static double md_buffdur(int L) => V("md_buffdur", L);
             public static double md_templife(int L) => V("md_templife", L);
             public static double md_stump(int L) => V("md_stump", L);
@@ -115,8 +115,8 @@ namespace MoreMush
             public static double gm_harvest(int L) => V("gm_harvest", L);
             public static double gm_spore(int L) => V("gm_spore", L);
             public static double gm_toxin(int L) => V("gm_toxin", L);
-            public static double gm_herb(int L) => V("gm_herb", L);              // 자동 수확 보상 배율
-            public static double gm_gourmet(int L) => V("gm_gourmet", L);           // 밭 수확 균사석 배율
+            public static double gm_herb(int L) => V("gm_herb", L);              // 수확 보따리 배율
+            public static double gm_gourmet(int L) => V("gm_gourmet", L);           // 나무버섯 균사석 배율
             public static double gm_atk(int L) => V("gm_atk", L);               // 공격력 배율
             // 싱크 노드 (최대 레벨 없음, DB Efx_MaxLv = 0): 레벨마다 Efx_Lv1배씩 곱한다. V()는 쓰지 않는다 (efx 표가 레벨 4까지뿐)
             public static double inf_atk(int L) => Inf("inf_atk", L);             // 공격력 ×1.05^L (끝없는 투지)
@@ -370,7 +370,7 @@ namespace MoreMush
             E["md_kid"] = L => L > 0 ? Loc.F("영구 수확기가 바에 맞을 때 {0} 확률로 작은 임시 수확기 1개 (8초)", U.Pct(KidRate(L))) : Loc.T("없음");
             E["md_combo2"] = L => Loc.F("콤보당 +{0}배 더", F(NF.md_combo2(L), 2));
             E["md_templife"] = L => Loc.F("임시 수확기 지속시간 {0}", Plus(NF.md_templife(L)));
-            E["md_chef"] = L => Loc.F("건설 시간 ×{0}", F(NF.md_chef(L)));
+            E["md_chef"] = L => Loc.F("꼬마 공방 제작 시간 ×{0}", F(NF.md_chef(L)));
             E["md_stump"] = L => Loc.F("숲 장치 효과 {0}", Plus(NF.md_stump(L)));
             E["md_buffdur"] = L => Loc.F("가속·맑은 포자막 지속 {0}, 날 갈기 {1}타", Plus(NF.md_buffdur(L)), Math.Ceiling(3 * NF.md_buffdur(L)));
             // ── 독 (전투) ──
@@ -410,10 +410,10 @@ namespace MoreMush
             E["ps_heavy"] = L => Loc.F("군락 무더기·거대 버섯 피해 ×{0}", F(NF.ps_heavy(L)));
             // 균사석 노드 (후반): 여기서부터 곱셈 효과가 들어온다
             E["gm_harvest"] = L => Loc.F("모든 버섯 획득량 ×{0}", F(NF.gm_harvest(L)));
-            E["gm_spore"] = L => Loc.F("세계수 버섯을 딸 때 {0} 확률로 균사석 +2", U.Pct(NF.gm_spore(L)));
-            E["gm_gourmet"] = L => Loc.F("세계수 버섯 균사석 ×{0}", F(NF.gm_gourmet(L)));
-            E["gm_herb"] = L => Loc.F("자동 수확 보상 ×{0}", F(NF.gm_herb(L)));
-            E["gm_farm"] = L => Loc.F("세계수 버섯 성장 시간 ×{0}", F(NF.gm_farm(L)));
+            E["gm_spore"] = L => Loc.F("나무버섯을 딸 때 {0} 확률로 균사석 +2", U.Pct(NF.gm_spore(L)));
+            E["gm_gourmet"] = L => Loc.F("나무버섯 균사석 ×{0}", F(NF.gm_gourmet(L)));
+            E["gm_herb"] = L => Loc.F("수확 보따리 ×{0}", F(NF.gm_herb(L)));
+            E["gm_farm"] = L => Loc.F("나무버섯 성장 시간 ×{0}", F(NF.gm_farm(L)));
             E["gm_meteor"] = L =>
             {
                 if (L == 0) return Loc.T("없음");

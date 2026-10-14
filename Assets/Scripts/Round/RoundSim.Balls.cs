@@ -268,7 +268,7 @@ namespace MoreMush
             string n = null, col = "#ffffff";
             if (SKILLS.TryGetValue(id, out var s)) { n = s.n; col = s.col; }
             else if (NODE.TryGetValue(id, out var nd)) { n = nd.n; col = nd.col ?? "#ffffff"; }
-            else if (id == "spark") { n = Loc.T("찌릿 번개"); col = "#ffe03a"; }
+            else if (id == "spark") { n = Loc.T("연쇄 번개"); col = "#ffe03a"; }
             else if (id == "hv_split") { n = Loc.T("세포 분열"); col = "#ff8a80"; }
             if (n != null) AddLabel(n + "!", x, y - 30, col, 20);
         }

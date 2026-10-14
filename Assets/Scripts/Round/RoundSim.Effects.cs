@@ -329,7 +329,8 @@ namespace MoreMush
             public List<(string k, double old, double v)> recs = new List<(string, double, double)>();
             public bool goldHv;
             public int harvests;
-            public string bossId;               // 보스 라운드였다면 그 보스
+            public int stored;                  // 세계수 창고에 넣은 버섯 수
+            public string bossId;              // 보스 라운드였다면 그 보스
             public bool bossCleared;
             public double bossPenalty;          // 보스 실패로 깎인 골드
             public double bossGold; public int bossGem, bossShrooms;   // 보스 처치 보상 (골드·균사석·더 받은 버섯 수)
@@ -341,7 +342,24 @@ namespace MoreMush
         // 지금까지 모은 점수·보너스로 받을 정산 골드 (라운드 중 HUD가 보여 준다)
         public double GoldSoFar => Math.Floor(score * st.goldMul) + Math.Floor(bonusGold);
 
-        // 점수 → 골드 (prototype finishRound). 수확한 버섯은 도감·의뢰 진행에만 쓰이고 창고에 쌓이지 않는다
+        // 딴 버섯을 세계수 창고에 (도감 수확 수와 같은 단위). 보스 처치 보상 버섯도 같은 식으로 더하고, 세계수 버섯 획득량 보너스를 곱한다.
+        // 난수를 쓰지 않는다 (봇 시뮬의 난수 순서가 그대로) → 넣은 개수
+        int StoreRound(bool bossReward)
+        {
+            var add = new Dictionary<string, int>();
+            int total = 0;
+            foreach (var kv in picks)
+            {
+                double n = kv.Value + (bossReward ? (int)(kv.Value * BOSS_REWARD_MUL) : 0);
+                int v = (int)U.JsRound(n * (1 + st.tree.harvest));
+                if (v <= 0) continue;
+                add[kv.Key] = v; total += v;
+            }
+            StoreAdd(add);
+            return total;
+        }
+
+        // 점수 → 골드 (prototype finishRound). 딴 버섯은 도감·의뢰 진행과 세계수 창고(StoreRound)에 쓰인다
         public static Summary LastSummary;   // 마지막 정산 (밸런스 시뮬이 데미지 통계를 읽는다)
         public Summary Finish()
         {
@@ -368,6 +386,7 @@ namespace MoreMush
             else if (!aborted && (!IsBossStage(G.stage) || BossRound)) G.stage++;
             s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);
+            s.stored = StoreRound(bossShrooms > 0);
             if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hvOn["gold"] = OnHvs().Count < HvSlots(); G.hv["gold"] = 1; s.goldHv = true; }
             var newTheme = s.nextStage > s.stage ? THEMES.FirstOrDefault(th => th.from > 1 && th.from == StageNow()) : null;
             if (newTheme != null) G.theme = newTheme.id;
