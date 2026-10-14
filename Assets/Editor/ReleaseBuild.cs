@@ -65,6 +65,11 @@ namespace MoreMush.EditorTools
                 PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
                 PlayerSettings.WebGL.decompressionFallback = true;
                 PlayerSettings.WebGL.nameFilesAsHashes = false;
+                // 전용 템플릿(Assets/WebGLTemplates/MoreMush): 캔버스가 창·전체화면 크기를 채운다(기본 템플릿은 960×600 고정이라 itch 전체화면에서도 안 커졌다).
+                // 기본 크기는 게임 화면 비율 16:9 — itch Embed Viewport도 960×540
+                PlayerSettings.WebGL.template = "PROJECT:MoreMush";
+                PlayerSettings.defaultWebScreenWidth = 960;
+                PlayerSettings.defaultWebScreenHeight = 540;
                 sb.AppendLine($"템플릿={PlayerSettings.WebGL.template} 기본해상도={PlayerSettings.defaultWebScreenWidth}x{PlayerSettings.defaultWebScreenHeight} 예외지원={PlayerSettings.WebGL.exceptionSupport} 압축={PlayerSettings.WebGL.compressionFormat} fallback={PlayerSettings.WebGL.decompressionFallback}");
 
                 string dir = Out("Builds/WebGL");
