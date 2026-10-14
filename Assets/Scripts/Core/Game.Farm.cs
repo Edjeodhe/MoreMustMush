@@ -195,6 +195,7 @@ namespace MoreMush
             string critter = U.Pick(prefer != null && prefer.Any(free.Contains) ? prefer.Where(free.Contains).ToList() : free);
             double now = Now();
             G.gem -= b.price;
+            Telemetry.TreeBuild(id, 0, b.price);
             var bld = new SaveData.Bld { uid = G.farm.nextUid++, id = id, gx = gx, gy = gy, critter = critter, t0 = now, at = now + BuildSeconds(b, critter) * 1000 };
             G.farm.blds.Add(bld);
             SaveGame();
@@ -289,7 +290,9 @@ namespace MoreMush
         {
             joined = null;
             if (CanTreeUp() != TreeUpFail.None) return false;
-            G.gold -= TreeUpCost(); G.farm.tree.exp -= TreeExpNeed(); G.farm.tree.lv++;
+            double cost = TreeUpCost();
+            G.gold -= cost; G.farm.tree.exp -= TreeExpNeed(); G.farm.tree.lv++;
+            Telemetry.TreeUp("tree", G.farm.tree.lv, cost, 0);
             TreeEnsure();
             joined = FarmJoin();
             FarmEnsure();   // 새 꼬마의 첫 부탁 시각

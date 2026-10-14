@@ -28,6 +28,14 @@ namespace MoreMush.EditorTools
                 if (e.Length != 3 || e[0] <= 0 || e[1] <= e[0] || e[2] <= e[1]) throw new ArgumentException("-tiers는 커지는 판 수 3개 (예: 20,88,172)");
                 plan.tierEnds = new[] { 0, e[0], e[1], e[2] };
                 plan.b = e[2];
+                // 기본은 단계별 이분. -damped: 예전 감쇠 다시 매기기 · -mul 0.41,0.44,3.8: 단계별 DB 가격 배율 시작값
+                plan.bisect = !Environment.GetCommandLineArgs().Contains("-damped");
+                if (Arg("-mul") is string mul)
+                {
+                    var m = mul.Split(',').Select(x => double.Parse(x, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+                    if (m.Length != 3 || m.Any(x => x <= 0)) throw new ArgumentException("-mul은 양수 3개 (예: 0.41,0.44,3.8)");
+                    plan.startMul = new[] { 1, m[0], m[1], m[2] };
+                }
             }
             BalanceJob.RunBlocking(plan, 3);
             Reports();
@@ -40,8 +48,10 @@ namespace MoreMush.EditorTools
             var seeds = (Arg("-seeds") ?? "1,2,3").Split(',').Select(int.Parse).ToArray();
             float skill = Arg("-skill") is string k ? float.Parse(k, System.Globalization.CultureInfo.InvariantCulture) : BalanceSim.SKILL;
             File.WriteAllText(BalanceJob.LogPath, $"프리셋: {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")} · 지역 이동 {(BalanceSim.GAME_ZONE ? "게임(해금 즉시)" : "봇(공격력 기준)")} · 시드 {string.Join(",", seeds)} · 바 오차 {skill}\n");
-            foreach (int sd in seeds) BalanceSim.Progression(104, false, sd, skill, 1e9, 1);   // 판마다 한 줄(공격력·지역·별) — verify#3
-            if (seeds.SequenceEqual(new[] { 1, 2, 3 }))
+            // -rounds 260: 판 단위로 그만큼 (보스 관문 모드, 재도전으로 스테이지와 판이 어긋남). 없으면 예전대로 104
+            if (Arg("-rounds") is string rs) { int n = int.Parse(rs); foreach (int sd in seeds) for (int r = 1; r <= n; r++) BalanceSim.Progression(1, r > 1, sd, skill, 1e9, 1, 0); }
+            else foreach (int sd in seeds) BalanceSim.Progression(104, false, sd, skill, 1e9, 1);   // 판마다 한 줄(공격력·지역·별) — verify#3
+            if (Arg("-rounds") == null && seeds.SequenceEqual(new[] { 1, 2, 3 }))   // PriceStats는 스테이지 1~104 기준이라 판 단위(-rounds)에는 안 맞는다
             {
                 var (buy, done, fin) = BalanceSim.PriceStats(1, 104, 3);
                 File.AppendAllText(BalanceJob.LogPath, $"R1~R104: 산 판 {buy:P0} · R104 구매율 {done:P0} · 가장 빠른 완료 R{fin}\n");

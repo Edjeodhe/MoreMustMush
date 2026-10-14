@@ -20,21 +20,22 @@ namespace MoreMush
         {
             if (n == null || NodeState(n) == "hidden") { Hide(); return; }
             int L = Lv(n.id); string s = NodeState(n);
-            var cc = L < n.max ? NodeCost(n, L) : default;
+            bool more = !AtMax(n, L);
+            var cc = more ? NodeCost(n, L) : default;
             bool poorGold = G.gold + 1e-9 < cc.gold, poorGem = G.gem + 1e-9 < cc.gem;
             if (n.id == shownId && L == shownL && s == shownS && poorGold == shownPoorGold && poorGem == shownPoorGem) { Place(at); return; }
             shownId = n.id; shownL = L; shownS = s; shownPoorGold = poorGold; shownPoorGem = poorGem;
             title.text = (n.gem ? UIUtil.Ic("gem") + " " : "") + n.n;
             title.color = U.Hex(n.gem ? "#2a9a74" : CATS[n.br].color);
-            lv.text = $"LVL {L} / {n.max}";
+            lv.text = n.inf ? $"LVL {L} / ∞" : $"LVL {L} / {n.max}";
             desc.text = Iconize(n.d);
             string costTxt = "", noteTxt = "";
             if (s == "locked")
                 eff.text = n.req != null && Lv(n.req) < NODE[n.req].max ? Loc.F("선행: {0} 최대 레벨 ({1}/{2})", NODE[n.req].n, Lv(n.req), NODE[n.req].max) : Loc.F("선행: {0}", NODE[n.parent].n);
             else
             {
-                eff.text = n.eff(L) + (L < n.max ? $"\n<b>→</b> {n.eff(L + 1)}" : "");
-                if (L < n.max)
+                eff.text = n.eff(L) + (more ? $"\n<b>→</b> {n.eff(L + 1)}" : "");
+                if (more)
                 {
                     var c = NodeCost(n, L);
                     costTxt = $"{UIUtil.Ic("gold")} {(G.gold + 1e-9 < c.gold ? "<color=#d23a2a>" : "")}{U.Fmt(c.gold)}{(G.gold + 1e-9 < c.gold ? "</color>" : "")}"
@@ -48,8 +49,9 @@ namespace MoreMush
                 noteTxt = k == "bar" ? Loc.T("바 버프 · 영구 수확기가 바에 맞을 때 발동") : k == "hit" ? Loc.T("스킬 · 버섯을 칠 때 발동률로 자동 발동") : k == "harvest" ? Loc.T("스킬 · 버섯을 딸 때 발동률로 자동 발동") : k == "wall" ? Loc.T("스킬 · 벽에 튕길 때 발동률로 자동 발동") : k == "pierce" ? Loc.T("스킬 · 단단한 버섯에 부딪힐 때 발동률로 관통") : Loc.T("스킬 · 라운드 마지막 5초 자동");
             }
             if (n.id == "md_kid") noteTxt = Loc.T("임시 수확기는 바 버프를 받지 않아요");
-            if (s != "locked" && L < n.max)
-                noteTxt += (noteTxt != "" ? "\n" : "") + (RoundController.IsTouch ? (n.max > 1 ? Loc.T("한 번 더 누르면 강화 · 길게 누르면 재화가 되는 만큼 한 번에") : Loc.T("한 번 더 누르면 강화")) : n.max > 1 ? Loc.T("Shift+클릭 · 우클릭: 골드가 되는 만큼 한 번에 강화") : "");
+            bool multi = n.inf || n.max > 1;
+            if (s != "locked" && more)
+                noteTxt += (noteTxt != "" ? "\n" : "") + (RoundController.IsTouch ? (multi ? Loc.T("한 번 더 누르면 강화 · 길게 누르면 재화가 되는 만큼 한 번에") : Loc.T("한 번 더 누르면 강화")) : multi ? Loc.T("Shift+클릭 · 우클릭: 골드가 되는 만큼 한 번에 강화") : "");
             cost.text = costTxt; UIUtil.Show(cost, costTxt != "");
             note.text = noteTxt; UIUtil.Show(note, noteTxt != "");
             Place(at);

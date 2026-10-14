@@ -137,7 +137,11 @@ namespace MoreMush
 
             // prototype loadSave() migrations that still apply
             foreach (var id in g.hv.Keys) if (!g.hvOn.ContainsKey(id)) g.hvOn[id] = true;
-            foreach (var n in Defs.NODES) if (g.nodes.TryGetValue(n.id, out var L) && (L > n.max || L < 0)) g.nodes[n.id] = Math.Max(0, Math.Min(n.max, L));
+            foreach (var n in Defs.NODES)
+            {
+                int hi = n.inf ? n.infCap : n.max;   // 싱크 노드는 레벨 상한이 없다 (가격이 넘치기 직전 레벨까지)
+                if (g.nodes.TryGetValue(n.id, out var L) && (L > hi || L < 0)) g.nodes[n.id] = Math.Max(0, Math.Min(hi, L));
+            }
             foreach (var id in new List<string>(g.hv.Keys)) g.hv[id] = Math.Max(1, Math.Min(5, g.hv[id]));
             if (!Defs.THEME.ContainsKey(g.theme ?? "")) g.theme = "forest";
             g.farm ??= new SaveData.Farm();

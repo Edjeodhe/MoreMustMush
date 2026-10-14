@@ -23,7 +23,11 @@ namespace MoreMush
             UIUtil.Show(resetButton, hasSave);
             howto.text = RoundController.IsTouch
                 ? Loc.T("수확기를 손가락으로 잡고 뒤로 끌었다 놓아 발사 · 화면을 좌우로 밀어 슬라이드 바 이동 · 오른쪽 위 배속 칸 누르기(×1·×2·×4) · 일시정지 · 균사 트리는 두 손가락으로 확대·축소")
+#if MOREMUSH_DEV
                 : Loc.T("수확기를 잡고 뒤로 끌었다 놓아 발사 · 마우스 좌우로 슬라이드 바 이동 · F/우클릭 배속(×1·×2·×4) · Esc 일시정지 · ` 디버그");
+#else
+                : Loc.T("수확기를 잡고 뒤로 끌었다 놓아 발사 · 마우스 좌우로 슬라이드 바 이동 · F/우클릭 배속(×1·×2·×4) · Esc 일시정지");   // 디버그 모드는 개발 빌드 전용
+#endif
         }
 
         void Update()

@@ -60,6 +60,7 @@ namespace MoreMush
             }
             phase = "run";
             Snd.Launch();
+            if (G.rounds == 0) Telemetry.Ftue(Telemetry.FTUE_FIRST_LAUNCH);
         }
 
         // 수확기 한 개의 공격력 배율: 약화 구름 ×0.5, 분신 ×statMul, 그루터기 버프

@@ -1,0 +1,4 @@
+{
+  "Boss": { "mover": { "Hp_Mul": 15 } },
+  "Const": { "BOSS_LOOP_HP_MUL": { "Value": 5.5, "Desc": "보스가 한 바퀴 돈 뒤(스테이지 60~) 보스 체력 배율 (움직이는 버섯 Hp_Mul과 분리)" } }
+}

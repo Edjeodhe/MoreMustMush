@@ -33,6 +33,7 @@ namespace MoreMush
         public RoundStats st;
         public string phase = "aim";   // aim · run · end
         public float t, runT, timeLeft, timeMax;
+        public float earlyExitSec = -1;   // "지금 끝내기"로 나간 시점(판 시작 후 초). -1 = 끝까지 함 (서버 로그 stage_end의 early_exit)
         public List<Ball> balls = new List<Ball>();
         public List<Colony> colonies = new List<Colony>();
         public List<Shroom> shrooms = new List<Shroom>();

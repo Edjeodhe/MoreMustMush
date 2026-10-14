@@ -368,6 +368,11 @@ namespace MoreMush
             s.unlocks = CheckUnlocks();
             SaveGame();
             s.newSpecies = newSpecies.ToList(); s.newGolden = newGolden.ToList(); s.newStars = newStars.ToList(); s.newTheme = newTheme?.id;
+            // 서버 로그 stage_end: 결과(보스: 처치 clear / 시간 초과 fail, 둘 다 "지금 끝내기"면 early_exit), 보스 남은 체력 % (분신 포함 합)
+            string result = earlyExitSec >= 0 && !(BossRound && bossCleared) ? "early_exit" : BossRound && !bossCleared ? "fail" : "clear";
+            double bossMax = bosses.Sum(b => b.maxHp), bossHpPct = bossMax > 0 ? 100 * bosses.Sum(b => Math.Max(0, b.hp)) / bossMax : 0;
+            Telemetry.StageEnd(G, s.stage, result, BossRound, score, s.net, earlyExitSec, bossHpPct, s.newSpecies);
+            if (G.rounds == 1) Telemetry.Ftue(Telemetry.FTUE_FIRST_ROUND_END);
             R = null;
             return s;
         }

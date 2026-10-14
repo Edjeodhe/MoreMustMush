@@ -118,6 +118,10 @@ namespace MoreMush
             public static double gm_herb(int L) => V("gm_herb", L);              // 자동 수확 보상 배율
             public static double gm_gourmet(int L) => V("gm_gourmet", L);           // 밭 수확 균사석 배율
             public static double gm_atk(int L) => V("gm_atk", L);               // 공격력 배율
+            // 싱크 노드 (최대 레벨 없음, DB Efx_MaxLv = 0): 레벨마다 Efx_Lv1배씩 곱한다. V()는 쓰지 않는다 (efx 표가 레벨 4까지뿐)
+            public static double inf_atk(int L) => Inf("inf_atk", L);             // 공격력 ×1.05^L (끝없는 투지)
+            public static double inf_gold(int L) => Inf("inf_gold", L);           // 정산 골드 ×1.025^L (끝없는 풍년, 점수→골드에만)
+            static double Inf(string id, int L) => L <= 0 || !NODE.TryGetValue(id, out var n) ? 1 : Math.Pow(n.infMul, Math.Min(L, n.infCap));
             public static double gm_score(int L) => V("gm_score", L);             // 정산 골드 배율
             public static double gm_boss(int L) => V("gm_boss", L);             // 보스에게 주는 피해 배율
             public static int gm_bossgem(int L) => (int)Math.Round(V("gm_bossgem", L));                    // 보스 처치 균사석 +
@@ -142,7 +146,12 @@ namespace MoreMush
             public string req;     // 이 노드를 최대 레벨까지 올려야 열린다 (단계 노드 I → II → III). 부모와 다를 수 있다(공격력 I → 공속 → 공격력 II)
             public bool needMax => req != null;
             public int tier = 1;   // 성장 단계: 1 초반 · 2 중반 · 3 후반
-            public int max;
+            public int max;          // 싱크 노드는 0 (상한 비교는 Game.AtMax로)
+            // 싱크 노드 (DB Efx_MaxLv = 0, 2026-10-13 밸런스 2회차): 레벨 상한 없이 계속 산다.
+            // 가격 = infCost0 × infCostK^L (Cost_Lv1, Cost_Lv2/Cost_Lv1), 효과 = infMul^L (Efx_Lv1). infCap = 가격이 double을 넘기 직전 레벨
+            public bool inf;
+            public double infCost0, infCostK, infMul;
+            public int infCap;
             public double[] costs;   // 레벨별 골드 가격 (길이 = max). DB Upgrade_Cost.Cost_Lv1~4
             public double[] gems;    // 레벨별 균사석 가격. DB Upgrade_Cost.Gem_Lv1~4
             public double[] efx;     // 레벨별 효과 값 0~4. DB Upgrade.Efx_Lv0~4
@@ -217,7 +226,8 @@ namespace MoreMush
             foreach (var u in db.Upgrade)
             {
                 string key = u.Upg_Key, skill = NullIfEmpty(u.Skill);
-                if (u.Efx_MaxLv < 1 || u.Efx_MaxLv > 4) throw new InvalidOperationException($"[DB] Upgrade {key}: Efx_MaxLv는 1~4 ({u.Efx_MaxLv})");
+                bool inf = u.Efx_MaxLv == 0;   // 싱크 노드: 최대 레벨 없음
+                if (u.Efx_MaxLv < 0 || u.Efx_MaxLv > 4) throw new InvalidOperationException($"[DB] Upgrade {key}: Efx_MaxLv는 0(싱크)·1~4 ({u.Efx_MaxLv})");
                 if (!costOf.TryGetValue(u.Cost_ID, out var c)) throw new InvalidOperationException($"[DB] Upgrade {key}: Upgrade_Cost에 Cost_ID {u.Cost_ID}가 없어요");
                 Func<int, string> eff;
                 if (skill != null)
@@ -227,6 +237,14 @@ namespace MoreMush
                     eff = SkillNodeEffect(s);
                 }
                 else if (!nodeEff.TryGetValue(key, out eff)) throw new InvalidOperationException($"[DB] Upgrade {key}: 코드에 효과가 없는 노드예요 (새 효과는 코드가 필요해요)");
+                if (inf)
+                {
+                    if (skill != null) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크(Efx_MaxLv 0)는 스킬 노드일 수 없어요");
+                    if (c.Gem.Any(g => g > 0)) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크는 골드로만 사요 (Gem_Lv1~4 = 0)");
+                    if (!(c.Gold[0] > 0 && c.Gold[1] > c.Gold[0])) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크 가격은 Cost_Lv1 > 0, Cost_Lv2 > Cost_Lv1 (증가율 = Lv2/Lv1)");
+                    if (!(u.Efx[1] > 1)) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크 효과 배율 Efx_Lv1은 1보다 커야 해요");
+                    if (u.Upg_Req == 0) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크는 Upg_Req(최대 레벨로 열 노드)가 있어야 해요");
+                }
                 var gems = c.Gem.Take(u.Efx_MaxLv).ToArray();
                 var n = new Node
                 {
@@ -234,6 +252,12 @@ namespace MoreMush
                     max = u.Efx_MaxLv, tier = u.Tier, sub = u.Sub != 0, skill = skill, icon = NullIfEmpty(u.Icon), col = NullIfEmpty(u.Color),
                     costs = c.Gold.Take(u.Efx_MaxLv).ToArray(), gems = gems, gem = gems.Any(g => g > 0), efx = u.Efx, eff = eff,
                 };
+                if (inf)
+                {
+                    n.inf = true; n.infCost0 = c.Gold[0]; n.infCostK = c.Gold[1] / c.Gold[0]; n.infMul = u.Efx[1];
+                    // 가격이 double.MaxValue/4를 넘기 전 레벨에서 멈춘다 (c0 3.6e12 · ×1.076이면 약 9,290레벨). 그때 효과 1.05^L도 유한하다
+                    n.infCap = (int)Math.Floor(Math.Log(double.MaxValue / 4 / (n.infCost0 * COST_MUL)) / Math.Log(n.infCostK));
+                }
                 if (skill != null || key == "bl")
                 {
                     string dKo = n.dKo; int kind = key == "bl" ? 0 : SKILLS[skill].noRate ? 1 : 2;
@@ -262,6 +286,8 @@ namespace MoreMush
                     if (++steps > NODES.Count) throw new InvalidOperationException($"[DB] Upgrade {n.id}: 부모를 따라가면 빙글빙글 돌아요 (Upg_Pre 순환)");
                 }
             }
+            foreach (var n in NODES)
+                if (n.req != null && NODE[n.req].inf) throw new InvalidOperationException($"[DB] Upgrade {n.id}: Upg_Req가 싱크 노드 {n.req}예요 (싱크는 최대 레벨이 없어 '최대 레벨로 열기'가 안 돼요)");
             var lost = codeKeys.Concat(SKILL_IDS).Where(k => !NODE.ContainsKey(k)).ToList();
             if (lost.Count > 0) throw new InvalidOperationException("[DB] Upgrade에서 빠진 노드 (코드가 씀): " + string.Join(", ", lost));
         }
@@ -397,6 +423,8 @@ namespace MoreMush
             E["gm_toxin"] = L => Loc.F("포자 디버프 지속 ×{0} · 독버섯 포자 구름 ×{1}", F(NF.gm_toxin(L)), F(NF.gm_toxin(L)));
             // 균사석 노드 추가 (가안): 공격력·정산 골드·보스·스킬·바·보스 균사석
             E["gm_atk"] = L => Loc.F("공격력 ×{0}", F(NF.gm_atk(L)));
+            E["inf_atk"] = L => Loc.F("공격력 ×{0}", F(NF.inf_atk(L)));      // 끝없는 투지 (싱크)
+            E["inf_gold"] = L => Loc.F("정산 골드 ×{0}", F(NF.inf_gold(L)));  // 끝없는 풍년 (싱크, 점수→골드에만)
             E["gm_boss"] = L => Loc.F("보스에게 주는 피해 ×{0}", F(NF.gm_boss(L)));
             E["gm_score"] = L => Loc.F("정산 골드 ×{0}", F(NF.gm_score(L)));
             E["gm_bossgem"] = L => Loc.F("보스를 쓰러뜨릴 때 균사석 +{0}", NF.gm_bossgem(L));

@@ -106,13 +106,18 @@ namespace MoreMush
 
         // ===== 비용 =====
         public struct Cost { public double gold, gem; }
-        public static Cost NodeCost(Node n, int L) => new Cost
+        // 더 살 수 없는 레벨인가. 싱크 노드는 가격이 넘치기 직전(infCap)까지 산다
+        public static bool AtMax(Node n, int L) => n.inf ? L >= n.infCap : L >= n.max;
+
+        public static Cost NodeCost(Node n, int L) => n.inf
+            ? new Cost { gold = Math.Ceiling(n.infCost0 * Math.Pow(n.infCostK, L) * COST_MUL), gem = 0 }   // 싱크: 레벨마다 ×infCostK
+            : new Cost
         {
             // 레벨별 가격 (엑셀 DB Upgrade_Cost: Cost_Lv = 골드, Gem_Lv = 균사석)
             gold = L < n.costs.Length ? Math.Ceiling(n.costs[L] * COST_MUL) : 0,
             gem = L < n.gems.Length && n.gems[L] > 0 ? Math.Ceiling(n.gems[L] * COST_MUL) : 0,
         };
-        public static bool CanAfford(Cost c) => G.gold + 1e-9 >= c.gold && G.gem + 1e-9 >= c.gem;
+        public static bool CanAfford(Cost c) => !double.IsInfinity(c.gold) && !double.IsNaN(c.gold) && G.gold + 1e-9 >= c.gold && G.gem + 1e-9 >= c.gem;
         static void Pay(Cost c) { G.gold -= c.gold; G.gem -= c.gem; }
 
         // 부모 조건: 보통은 1레벨 이상, 단계 노드(II·III·IV)는 부모가 최대 레벨이어야 한다
@@ -121,7 +126,7 @@ namespace MoreMush
         public static string NodeState(Node n)
         {
             int L = Lv(n.id);
-            if (L >= n.max) return "max";
+            if (AtMax(n, L)) return "max";
             if (L > 0) return "owned";
             if (ParentOk(n)) return "avail";
             // 부모를 이미 샀으면(단계 노드가 최대 레벨을 기다리는 중 포함) 잠긴 채로 보여 준다
@@ -133,17 +138,18 @@ namespace MoreMush
         public static bool BuyNode(Node n, bool save = true)
         {
             int L = Lv(n.id);
-            if (L >= n.max) return false;
+            if (AtMax(n, L)) return false;
             if (!ParentOk(n)) return false;
             var c = NodeCost(n, L);
             if (!CanAfford(c)) return false;
             Pay(c); G.nodes[n.id] = L + 1;
+            Telemetry.Ftue(Telemetry.FTUE_FIRST_UPGRADE);
             if (save) SaveGame();
             return true;
         }
 
         // 여러 레벨을 한 번에 사도 저장(JSON 직렬화 + PlayerPrefs 쓰기)은 한 번만 한다
-        public static int BuyMax(Node n) { int k = 0; while (BuyNode(n, false)) k++; if (k > 0) SaveGame(); return k; }
+        public static int BuyMax(Node n) { int k = 0; while (k < 10000 && BuyNode(n, false)) k++; if (k > 0) SaveGame(); return k; }   // 싱크는 상한이 없어 반복 상한을 둔다
 
         // 가장 싼 강화부터 산다. dry = true면 결과만 계산하고 되돌린다.
         public static (int levels, double spent) BulkBuy(ICollection<string> brs, double reserve, bool dry)
@@ -163,7 +169,7 @@ namespace MoreMush
                 if (best == null || G.gold - bc < reserve) break;
                 G.gold -= bc; G.nodes[best.id] = Lv(best.id) + 1; levels++; spent += bc;
             }
-            if (dry) { G.nodes = saveNodes; G.gold = saveGold; } else SaveGame();
+            if (dry) { G.nodes = saveNodes; G.gold = saveGold; } else { SaveGame(); if (levels > 0) Telemetry.Ftue(Telemetry.FTUE_FIRST_UPGRADE); }
             return (levels, spent);
         }
 
@@ -215,7 +221,7 @@ namespace MoreMush
             st.zoneMul = ZoneMul(st.theme.id, st.stage);
             // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
             double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
-            st.atk = atkFlat * (1 + 0.1 + ab["atk"]) * NF.gm_atk(Lv("gm_atk"));
+            st.atk = atkFlat * (1 + 0.1 + ab["atk"]) * NF.gm_atk(Lv("gm_atk")) * NF.inf_atk(Lv("inf_atk"));
             double spd = (NF.ps_spd(Lv("ps_spd")) + ab["spd"]) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
             st.launch = TUNE.launch * spd;
@@ -256,7 +262,7 @@ namespace MoreMush
             st.debuffDur = 3 * (wId == "wind" ? 2 : 1) * NF.ps_resist(Lv("ps_resist")) * NF.gm_toxin(Lv("gm_toxin"));
             st.goldBonus = 1 + GoldenSetBonus();
             st.harvestMul *= INCOME_MUL;
-            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab)) * NF.gm_score(Lv("gm_score"));
+            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab)) * NF.gm_score(Lv("gm_score")) * NF.inf_gold(Lv("inf_gold"));   // 끝없는 풍년은 점수→골드에만 (사용자 결정 2026-10-13)
             st.giantP = NF.ed_giant(Lv("ed_giant"));
             st.blade = Lv("bl") > 0;
             var (bRange, bSpd, bPow) = BladeLv(Lv("bl"));

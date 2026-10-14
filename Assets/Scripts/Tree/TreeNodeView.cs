@@ -53,8 +53,9 @@ namespace MoreMush
             if (shownHidden != hidden) { shownHidden = hidden; foreach (Transform c in transform) c.gameObject.SetActive(!hidden); shownS = null; }
             if (hidden) return;
             int L = Lv(n.id);
-            var cost = L < n.max ? NodeCost(n, L) : default;
-            bool afford = L < n.max && CanAfford(cost);
+            bool more = !AtMax(n, L);
+            var cost = more ? NodeCost(n, L) : default;
+            bool afford = more && CanAfford(cost);
             string st = s == "locked" ? "locked" : s == "max" ? "max" : afford ? "buy" : "poor";
             Color col = st == "buy" ? BUY : st == "poor" ? POOR : MAX;
             var brc = U.Hex(CATS[n.br].color);
@@ -173,9 +174,9 @@ namespace MoreMush
                     label.fontSize = (n.sub ? 15 : 18) / 10f;
                     label.color = n.gem ? U.Hex("#a8f5d4") : st == "poor" ? U.Hex("#cbbfa8") : U.Hex("#fff6e0");
                     label.transform.localPosition = Art.P(0, r + 14);
-                    string lvTxt = n.max > 1 ? $"Lv {L}/{n.max}" : "";
+                    string lvTxt = n.inf ? $"Lv {L}" : n.max > 1 ? $"Lv {L}/{n.max}" : "";   // 싱크: 레벨 칸 없이 'Lv N' (사용자 결정 2026-10-13)
                     string costTxt = cost.gold > 0 && cost.gem > 0 ? Loc.F("{0}G + 균사석 {1}", U.Fmt(cost.gold), U.Fmt(cost.gem)) : cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : cost.gem > 0 ? Loc.F("균사석 {0}", U.Fmt(cost.gem)) : "";
-                    line2.text = st == "max" ? (n.max > 1 ? $"MAX {L}/{n.max}" : "MAX") : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
+                    line2.text = st == "max" ? (n.inf ? $"MAX {L}" : n.max > 1 ? $"MAX {L}/{n.max}" : "MAX") : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
                     line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : MAX;
                     line2.transform.localPosition = Art.P(0, r + 32);
                 }

@@ -128,8 +128,11 @@ namespace MoreMush.EditorTools
             return res;
         }
 
-        public static int GoldLevels(int tier = 0) => NODES.Where(n => !n.gem && (tier == 0 || n.tier == tier)).Sum(n => Lv(n.id));
-        public static int GoldLevelsMax(int tier = 0) => NODES.Where(n => !n.gem && (tier == 0 || n.tier == tier)).Sum(n => n.max);
+        // 가격을 맞추고 단계 진행을 세는 노드: 골드로 사는 일반 노드 (균사석 노드·싱크 노드 빼고)
+        static bool Priced(Node n) => !n.gem && !n.inf;
+        public static int GoldLevels(int tier = 0) => NODES.Where(n => Priced(n) && (tier == 0 || n.tier == tier)).Sum(n => Lv(n.id));
+        public static int GoldLevelsMax(int tier = 0) => NODES.Where(n => Priced(n) && (tier == 0 || n.tier == tier)).Sum(n => n.max);
+        public static int InfLevels() => NODES.Where(n => n.inf).Sum(n => Lv(n.id));
 
         // 단계별 기록: 처음 산 판 · 다 산 판 · 그때의 판당 수입. 이어 돌려도 남도록 파일에 둔다
         public class PhaseLog
@@ -180,7 +183,7 @@ namespace MoreMush.EditorTools
         // every: 몇 판마다 한 줄씩 남길지. 트리를 다 산 판은 항상 남긴다
         static int botFarm; static bool botBoughtSinceFail;
         // 보스 처치에 쓰이는 노드 레벨 합 (관문 모드 재도전 규칙: 이것이 올라야 다시 도전)
-        static readonly string[] ATK_KEYS = { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4", "ps_crit", "ps_crit2", "ps_heavy", "gm_atk", "gm_boss", "ps_spd", "ps_ball", "ps_ball2", "ps_ball3", "ps_dur", "ps_dur2" };
+        static readonly string[] ATK_KEYS = { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4", "inf_atk", "ps_crit", "ps_crit2", "ps_heavy", "gm_atk", "gm_boss", "ps_spd", "ps_ball", "ps_ball2", "ps_ball3", "ps_dur", "ps_dur2" };
         static int AtkLevels() => ATK_KEYS.Where(NODE.ContainsKey).Sum(Lv);
 
         public static string Progression(int rounds, bool resume = false, int seed = 1, float skill = SKILL, double maxWallSec = 20, int every = 1, int stopStage = 0)
@@ -258,7 +261,7 @@ namespace MoreMush.EditorTools
         public static Dictionary<string, double[]> SnapshotPrices()
         {
             LoadPriceTable();
-            return NODES.Where(n => !n.gem).ToDictionary(n => n.id, n => (double[])n.costs.Clone());
+            return NODES.Where(Priced).ToDictionary(n => n.id, n => (double[])n.costs.Clone());
         }
 
         // 두 가격표의 레벨별 기하평균을 새 가격표로 쓴다. 두 쪽이 노드 안 배율·효율 넘김 조건을 지키면 평균도 지킨다
@@ -293,11 +296,12 @@ namespace MoreMush.EditorTools
 
         // 단계 노드 줄과 단계별 효과 크기. 다음 단계 첫 레벨의 "효과 +1당 골드"를 앞 단계 마지막 레벨의 CROSS배 이하로 둔다.
         // 앞 단계를 다 올렸을 때 다음 단계가 확실히 더 효율적이어야 효율 구간이 단계적으로 넘어간다(레퍼런스의 "효율 구간").
-        public static readonly (string[] ids, double[] per)[] TIER_LINES =
+        // cross: 그 줄의 효율 넘김 기준. 공격력 줄은 2026-10-13 단계적 성장(레벨당 1·2.5·6·15, theory R2-12)으로 바뀌어 단계 사이가 ×2.4~2.5뿐이라 0.66이면 % 기준 효율 비가 ×1.5에 못 미친다 → verify R2-12 판정의 0.53
+        public static readonly (string[] ids, double[] per, double cross)[] TIER_LINES =
         {
-            (new[] { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4" }, new[] { 1.0, 10, 10, 100, 100, 1000 }),
-            (new[] { "ed_score", "ed_score1p", "ed_score2", "ed_score2p", "ed_score3", "ed_score3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }),
-            (new[] { "ed_bonus", "ed_bonus1p", "ed_bonus2", "ed_bonus2p", "ed_bonus3", "ed_bonus3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }),
+            (new[] { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4" }, new[] { 1.0, 2.5, 2.5, 6, 6, 15 }, 0.53),
+            (new[] { "ed_score", "ed_score1p", "ed_score2", "ed_score2p", "ed_score3", "ed_score3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
+            (new[] { "ed_bonus", "ed_bonus1p", "ed_bonus2", "ed_bonus2p", "ed_bonus3", "ed_bonus3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
         };
         public const double CROSS = 0.66;   // 조사 원칙 P7(다음 단계 효율 ≥ ×1.5) + 반올림 여유. 0.7(×1.43)은 I→II 세 곳이 ×1.5에 못 미쳤다(검증 2026-10-08)
         // 같은 노드 안에서 다음 레벨은 앞 레벨의 NODE_STEP_MAX배를 넘지 않는다 (한 노드 가격이 한 번에 크게 뛰지 않게)
@@ -400,6 +404,24 @@ namespace MoreMush.EditorTools
             return $"판 R1~R{L} (단계 끝 {ends[1]}·{ends[2]}·{ends[3]}): 기간 수입 {U.Fmt(cum[L])} · 레벨 {N}개 · 새 가격 {U.Fmt(p[0])} ~ {U.Fmt(p[N - 1])}";
         }
 
+        // 단계별 이분(2회차 verify 제안 a·e): DB 가격(DbOrder)에 단계 t 배율 m[t]를 곱한 가격표를 놓고 EnforceShape까지 적용한다.
+        // 단계 안 모양은 DB 가격을 그대로 따르므로 PRICE_STEP_MAX 체인이 단계 경계를 넘어 다음 단계를 누르지 않는다
+        public static void ApplyTierMuls(double[] m)
+        {
+            foreach (var n in NODES.Where(Priced))
+                n.costs = DbOrder[n.id].Select(v => Nice(Math.Max(1, v * (n.tier >= 1 && n.tier <= 3 ? m[n.tier] : 1)))).ToArray();
+            SavePriceTable();
+            EnforceShape();
+        }
+
+        // 단계 t를 다 산 판의 시드 중앙값과 가장 느린 시드 (못 끝냈으면 NOT_DONE)
+        public static (int med, int slow) TierDone(int t, int seeds)
+        {
+            var d = Enumerable.Range(1, seeds).Select(sd => JsonConvert.DeserializeObject<PhaseLog>(File.ReadAllText(PhasePath(sd))).doneR[t])
+                .Select(r => r > 0 ? r : NOT_DONE).OrderBy(r => r).ToList();
+            return (d[(d.Count - 1) / 2], d[d.Count - 1]);
+        }
+
         // 판 단위 수렴 판정: (가장 느린 시드에서 무언가 산 판 비율, 끝 구매율 최솟값, 단계별 다 산 판의 [가장 빠른 시드, 가장 느린 시드])
         // 못 끝냈으면 가장 빠른 쪽은 b + 1, 가장 느린 쪽은 NOT_DONE (b + 1은 목표 × 1.1보다 작을 수 있어 "너무 비쌈"을 놓친다)
         public const int NOT_DONE = int.MaxValue;
@@ -407,7 +429,7 @@ namespace MoreMush.EditorTools
         {
             double buy = 1, done = 1;
             int[] fast = { 0, int.MaxValue, int.MaxValue, int.MaxValue }, slow = new int[4];
-            var nodes = NODES.Where(n => !n.gem).ToList();
+            var nodes = NODES.Where(Priced).ToList();
             int maxLv = nodes.Sum(n => n.max);
             for (int sd = 1; sd <= seeds; sd++)
             {
@@ -430,10 +452,13 @@ namespace MoreMush.EditorTools
         // 3) 효율 넘김: 다음 단계 첫 레벨의 효과 +1당 골드가 앞 단계 마지막 레벨의 CROSS배 이하가 되게 앞 단계를 올린다
         // 한 조건을 맞추면 다른 조건이 조금 깨질 수 있어 몇 번 되풀이한다
         public const double STEP_FIX = 1.8;
+        // 줄 상한 모드(theory R2-13 안 d, verify R2-13 조건부 통과): 3)을 "앞을 올림" 대신 "뒤를 내림"으로. 올림 모드는 공격력 줄(단계 사이 효과 ×2.4)에서
+        // 3단계 가격이 1단계 줄 끝에 바닥을 만들어 1단계를 R20에 못 끝냈다(round2_fit2·fit3). 단계별 이분(BalanceJob.RunBisect)이 켠다
+        public static bool LINE_CAP = false;
         public static void EnforceShape()
         {
             LoadPriceTable();
-            var price = NODES.Where(n => !n.gem).ToDictionary(n => n.id, n => n.costs);
+            var price = NODES.Where(Priced).ToDictionary(n => n.id, n => n.costs);
             void RaiseNode(double[] v)
             {
                 for (int i = 1; i < v.Length; i++) v[i] = Math.Max(v[i], v[i - 1]);
@@ -448,17 +473,41 @@ namespace MoreMush.EditorTools
                     price[id][i] = Math.Max(price[id][i], Nice(price[id1][i1] / STEP_FIX * 1.03));
                 }
                 foreach (var kv in price) RaiseNode(kv.Value);
-                if (ENFORCE_TIER_RULES) foreach (var (ids, per) in TIER_LINES)
+                if (ENFORCE_TIER_RULES && LINE_CAP) CapLines(price);
+                else if (ENFORCE_TIER_RULES) foreach (var (ids, per, cross) in TIER_LINES)
                     for (int t = ids.Length - 1; t >= 1; t--)
                     {
                         var pa = price[ids[t - 1]]; var pb = price[ids[t]];
                         // 같은 단계 형제(I → I+)는 한 노드가 이어지는 것처럼 NODE_STEP_MAX배, 단계가 오를 때(I+ → II)는 효율 넘김
-                        double need = per[t] == per[t - 1] ? pb[0] / NODE_STEP_MAX : pb[0] / per[t] * per[t - 1] / CROSS;
+                        double need = per[t] == per[t - 1] ? pb[0] / NODE_STEP_MAX : pb[0] / per[t] * per[t - 1] / cross;
                         if (pa[pa.Length - 1] < need) pa[pa.Length - 1] = Nice(need * 1.06);
                         RaiseNode(pa);
                     }
             }
+            if (ENFORCE_TIER_RULES && LINE_CAP) CapLines(price);
             SavePriceTable();
+        }
+
+        // 줄을 앞에서 뒤로: 다음 노드 첫 레벨 ≤ 앞 끝 × (형제 NODE_STEP_MAX · 단계 경계 per비 × cross), 노드 안 다음 레벨 ≤ 앞 × NODE_STEP_MAX.
+        // 내리기만 하되 앞 끝·앞 레벨 아래로는 안 내린다(verify R2-13 하한: 없으면 m2/m1이 작을 때 줄이 거꾸로 내려갔다)
+        static void CapLines(Dictionary<string, double[]> price)
+        {
+            foreach (var (ids, per, cross) in TIER_LINES)
+                for (int t = 1; t < ids.Length; t++)
+                {
+                    var pa = price[ids[t - 1]]; var pb = price[ids[t]];
+                    double last = pa[pa.Length - 1];
+                    double cap = per[t] == per[t - 1] ? last * NODE_STEP_MAX : last * per[t] / per[t - 1] * cross;
+                    pb[0] = Math.Max(last, Math.Min(pb[0], NiceDown(cap / 1.06)));
+                    for (int i = 1; i < pb.Length; i++) pb[i] = Math.Max(pb[i - 1], Math.Min(pb[i], NiceDown(pb[i - 1] * NODE_STEP_MAX / 1.05)));
+                }
+        }
+
+        static double NiceDown(double v)
+        {
+            if (v < 10) return Math.Max(1, Math.Floor(v));
+            double e = Math.Pow(10, Math.Floor(Math.Log10(v)) - 1);
+            return Math.Floor(v / e + 1e-9) * e;   // 유효숫자 2자리, 내림
         }
 
         public static void RestorePrices(Dictionary<string, double[]> snap)
@@ -473,7 +522,7 @@ namespace MoreMush.EditorTools
         public static List<(Node n, int lv)> OrderedLevels()
         {
             var levels = new List<(Node n, int lv, double order)>();
-            foreach (var n in NODES.Where(n => !n.gem))
+            foreach (var n in NODES.Where(Priced))
                 for (int lv = 0; lv < n.max; lv++) levels.Add((n, lv, DbOrder[n.id][lv]));
             return levels.OrderBy(x => x.order).Select(x => (x.n, x.lv)).ToList();
         }
@@ -485,7 +534,7 @@ namespace MoreMush.EditorTools
             int finish = int.MaxValue;
             // 구매 판 비율은 기간 수입이 가장 적은(가장 느린) 시드로 본다
             double buy = 0, done = 1, slowInc = double.MaxValue;
-            var nodes = NODES.Where(n => !n.gem).ToList();
+            var nodes = NODES.Where(Priced).ToList();
             int maxLv = nodes.Sum(n => n.max);
             for (int sd = 1; sd <= seeds; sd++)
             {
@@ -508,16 +557,16 @@ namespace MoreMush.EditorTools
             var ps = OrderedLevels().Select(x => NodeCost(x.n, x.lv).gold).OrderBy(v => v).ToList();
             double maxStep = 1, nodeStep = 1;
             for (int k = 1; k < ps.Count; k++) maxStep = Math.Max(maxStep, ps[k] / Math.Max(1, ps[k - 1]));
-            foreach (var n in NODES.Where(n => !n.gem))
+            foreach (var n in NODES.Where(Priced))
                 for (int l = 1; l < n.max; l++) nodeStep = Math.Max(nodeStep, NodeCost(n, l).gold / Math.Max(1, NodeCost(n, l - 1).gold));
             int ok = 0, total = 0;
-            foreach (var (ids, per) in TIER_LINES)
+            foreach (var (ids, per, cross) in TIER_LINES)
                 for (int t = 1; t < ids.Length; t++)
                 {
                     var a = NODE[ids[t - 1]]; var b = NODE[ids[t]];
                     if (per[t] == per[t - 1]) { nodeStep = Math.Max(nodeStep, NodeCost(b, 0).gold / Math.Max(1, NodeCost(a, a.max - 1).gold)); continue; }
                     total++;
-                    if (NodeCost(b, 0).gold / per[t] <= NodeCost(a, a.max - 1).gold / per[t - 1] * CROSS * 1.001) ok++;   // 반올림 오차만 허용 (1.05였을 때 0.66이 실제 0.693 기준이 됐다, 검증 2026-10-08)
+                    if (NodeCost(b, 0).gold / per[t] <= NodeCost(a, a.max - 1).gold / per[t - 1] * cross * 1.001) ok++;   // 반올림 오차만 허용 (1.05였을 때 0.66이 실제 0.693 기준이 됐다, 검증 2026-10-08)
                 }
             return (maxStep, nodeStep, ok, total);
         }
@@ -528,7 +577,7 @@ namespace MoreMush.EditorTools
             var sb = new StringBuilder();
             var (maxStep, nodeStep, cOk, cTotal) = PriceCheck();
             sb.AppendLine($"가격 곡선: 바로 앞 가격 대비 최대 ×{maxStep:F2} (기준 ×{PRICE_STEP_MAX}) · 노드 안 다음 레벨 최대 ×{nodeStep:F2} (기준 ×{NODE_STEP_MAX}) · 효율 넘김 {cOk}/{cTotal}");
-            foreach (var (ids, per) in TIER_LINES)
+            foreach (var (ids, per, cross) in TIER_LINES)
             {
                 var parts = new List<string>(); int ok = 0, total = 0; double lastPer = 0;
                 for (int t = 0; t < ids.Length; t++)
@@ -550,7 +599,7 @@ namespace MoreMush.EditorTools
         public static string WritePriceFile()
         {
             LoadPriceTable();
-            var t = NODES.Where(n => !n.gem).ToDictionary(n => n.id, n => n.costs);
+            var t = NODES.Where(Priced).ToDictionary(n => n.id, n => n.costs);
             string path = Path.GetFullPath(Path.Combine(Application.dataPath, "../BalanceData/db/tuned_prices.json"));
             File.WriteAllText(path, JsonConvert.SerializeObject(t, Formatting.Indented));
             return $"{path} (노드 {t.Count}개) → python BalanceData/db/db_write.py prices {DbImport.LatestDb()} BalanceData/db/tuned_prices.json";

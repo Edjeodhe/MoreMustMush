@@ -46,6 +46,7 @@ namespace MoreMush
         {
             I = this;
             Loc.Changed += OnLangChanged;
+            Telemetry.Init();   // 서버 로그: 개인 ID·session_start (지난 실행이 비정상 종료였으면 crash 먼저)
 #if !UNITY_WEBGL || UNITY_EDITOR
             Application.targetFrameRate = 60;   // WebGL은 브라우저 requestAnimationFrame에 맡긴다 (값을 주면 타이머 루프로 바뀌어 덜 부드럽다)
 #endif
@@ -80,7 +81,9 @@ namespace MoreMush
             if (G != null && Screen != "title") { G.play += Time.unscaledDeltaTime; if (Application.isFocused) G.seenT = Now(); }
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb == null) return;
-            if (kb.backquoteKey.wasPressedThisFrame && debug != null) debug.Toggle();
+#if MOREMUSH_DEV
+            if (kb.backquoteKey.wasPressedThisFrame && debug != null) debug.Toggle();   // 디버그 모드: 개발·테스트 빌드 전용 (DevOnly.cs)
+#endif
             if (kb.mKey.wasPressedThisFrame) { Snd.muted = !Snd.muted; ShowToast(Snd.muted ? Loc.T("소리 끔") : Loc.T("소리 켬")); }
             if (Screen != "round" && kb.escapeKey.wasPressedThisFrame) { if (ModalOpen) CloseModal(); else if (Screen == "farm" && farm.Placing) { farm.CancelPlace(); farmScreen.Render(); } }
         }
@@ -145,6 +148,7 @@ namespace MoreMush
 
         public void EnterFarm(string view)
         {
+            Telemetry.Ftue(Telemetry.FTUE_FIRST_TREE);
             CloseModal();
             SetScreen("farm");
             farm.Enter();
@@ -213,6 +217,7 @@ namespace MoreMush
             SetScreen("round");
             round.Begin(w, G.theme, boss);
             SaveGame();
+            Telemetry.StageStart(G);
         }
 
         public void FinishRound()
@@ -224,7 +229,7 @@ namespace MoreMush
 
         public void AfterSettle()
         {
-            if (CodexCount() >= SP_TOTAL && !G.ending) { G.ending = true; SaveGame(); ShowToast(Loc.F("버섯 도감 {0}종 완성! (엔딩 컷신은 3단계에서 추가돼요)", SP_TOTAL)); }
+            if (CodexCount() >= SP_TOTAL && !G.ending) { G.ending = true; SaveGame(); Telemetry.GameClear(G); ShowToast(Loc.F("버섯 도감 {0}종 완성! (엔딩 컷신은 3단계에서 추가돼요)", SP_TOTAL)); }
             EnterTree();
         }
 
@@ -234,7 +239,7 @@ namespace MoreMush
             switch (act)
             {
                 case "close": Snd.Ui(); CloseModal(); break;
-                case "newgame": G = new SaveData(); AutoEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast(Loc.T("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!")); break;
+                case "newgame": Telemetry.Ftue(Telemetry.FTUE_TITLE_START); Telemetry.ResetSnap(); G = new SaveData(); AutoEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast(Loc.T("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!")); break;
                 case "continue":
                 {
                     G = SaveIO.Load();
@@ -267,9 +272,22 @@ namespace MoreMush
                     if (Screen == "round" && RoundSim.R != null) RoundSim.R.paused = true;
                     break;
                 case "codexsel": Snd.Ui(); codex.Select(arg); break;
+#if MOREMUSH_DEV
+                // 일괄 강화: 개발·테스트 빌드 전용. 버튼(TreeScreen/Buttons/Right/Bulk)은 DevOnly로 숨긴다
                 case "bulk": Snd.Ui(); OpenModal(bulk, () => tree.Refresh()); bulk.Render(); break;
                 case "bulktab": Snd.Ui(); bulk.SetBranch(arg); break;
                 case "bulkgo": bulk.Go(); break;
+#endif
+                // 게임 종료 (타이틀·옵션). 웹은 탭을 닫을 수 없어 버튼을 HideOnWeb으로 숨긴다
+                case "quit":
+                    Snd.Ui();
+                    if (G != null && Screen != "title") SaveGame();
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#else
+                    Application.Quit();
+#endif
+                    break;
                 case "go": Snd.Ui(); BeginRound(); break;
                 case "bosstoggle":
                     G.bossOn = !G.bossOn; SaveGame(); Snd.Ui();
@@ -277,7 +295,7 @@ namespace MoreMush
                     if (Screen == "tree") tree.Refresh();
                     break;
                 case "resume": CloseModal(); break;
-                case "endnow": if (RoundSim.R != null) { var R = RoundSim.R; R.timeLeft = 0; R.phase = "end"; R.endT = 0.01f; } CloseModal(); break;   // 먼저 끝내야 옵션→일시정지로 되돌아가지 않는다
+                case "endnow": if (RoundSim.R != null) { var R = RoundSim.R; R.earlyExitSec = R.timeMax - R.timeLeft; R.timeLeft = 0; R.phase = "end"; R.endT = 0.01f; } CloseModal(); break;   // 먼저 끝내야 옵션→일시정지로 되돌아가지 않는다
                 case "mute": Snd.muted = !Snd.muted; if (options != null && options.gameObject.activeInHierarchy) options.Render(); break;
                 case "options": Snd.Ui(); OpenOptions(); break;
                 case "lang": Snd.Ui(); Loc.SetLang(arg); break;
@@ -402,8 +420,11 @@ namespace MoreMush
                     break;
                 }
                 default:
+#if MOREMUSH_DEV
                     if (act != null && act.StartsWith("dbg-")) { if (debug != null) debug.Do(act, arg); }
-                    else if (act != "none") Debug.LogWarning($"[GameFlow] 처리하지 않는 버튼 액션: '{act}' (arg '{arg}', {(src != null ? src.name : "코드")})");   // 오타·지운 case를 바로 알 수 있게
+                    else
+#endif
+                    if (act != "none") Debug.LogWarning($"[GameFlow] 처리하지 않는 버튼 액션: '{act}' (arg '{arg}', {(src != null ? src.name : "코드")})");   // 오타·지운 case를 바로 알 수 있게
                     break;
             }
         }

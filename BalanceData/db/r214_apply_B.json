@@ -1,0 +1,6 @@
+{
+  "_note": "적용안 B: Defs.Boss.cs BossHp 코드 변경(60~ 배율을 새 Const로)과 함께 넣을 때만. r214_apply.json과 같이 쓴다",
+  "Const": {
+    "BOSS_LOOP_HP_MUL": { "Value": 5.5, "Desc": "보스가 한 바퀴 돈 뒤(스테이지 60~) 보스 체력 배율 (움직이는 버섯 Hp_Mul과 분리)" }
+  }
+}

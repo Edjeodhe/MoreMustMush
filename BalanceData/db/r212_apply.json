@@ -1,0 +1,14 @@
+{
+  "Upgrade": {
+    "ps_atk2":  { "Efx_Lv1": 2.5, "Efx_Lv2": 5,  "Efx_Lv3": 7.5, "Efx_Lv4": 10 },
+    "ps_atk2p": { "Efx_Lv1": 2.5, "Efx_Lv2": 5,  "Efx_Lv3": 7.5, "Efx_Lv4": 0 },
+    "ps_atk3":  { "Efx_Lv1": 6,   "Efx_Lv2": 12, "Efx_Lv3": 18,  "Efx_Lv4": 24 },
+    "ps_atk3p": { "Efx_Lv1": 6,   "Efx_Lv2": 12, "Efx_Lv3": 18,  "Efx_Lv4": 0 },
+    "ps_atk4":  { "Efx_Lv1": 15,  "Efx_Lv2": 30, "Efx_Lv3": 45,  "Efx_Lv4": 0 }
+  },
+  "Boss": {
+    "angel":   { "Hp_Mul": 1.13 },
+    "phantom": { "Hp_Mul": 2.83 },
+    "mover":   { "Hp_Mul": 5.5 }
+  }
+}

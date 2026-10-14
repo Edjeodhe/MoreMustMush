@@ -1,0 +1,829 @@
+{
+ "curve": "B",
+ "per_level": [
+  1.0,
+  3.0,
+  6.0,
+  10.0
+ ],
+ "atk": [
+  {
+   "key": "ps_atk",
+   "max": 4,
+   "per_lv": 1.0,
+   "efx": [
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0
+   ],
+   "cum_after": 5.0
+  },
+  {
+   "key": "ps_atk2",
+   "max": 4,
+   "per_lv": 3.0,
+   "efx": [
+    0.0,
+    3.0,
+    6.0,
+    9.0,
+    12.0
+   ],
+   "cum_after": 17.0
+  },
+  {
+   "key": "ps_atk2p",
+   "max": 3,
+   "per_lv": 3.0,
+   "efx": [
+    0.0,
+    3.0,
+    6.0,
+    9.0
+   ],
+   "cum_after": 26.0
+  },
+  {
+   "key": "ps_atk3",
+   "max": 4,
+   "per_lv": 6.0,
+   "efx": [
+    0.0,
+    6.0,
+    12.0,
+    18.0,
+    24.0
+   ],
+   "cum_after": 50.0
+  },
+  {
+   "key": "ps_atk3p",
+   "max": 3,
+   "per_lv": 6.0,
+   "efx": [
+    0.0,
+    6.0,
+    12.0,
+    18.0
+   ],
+   "cum_after": 68.0
+  },
+  {
+   "key": "ps_atk4",
+   "max": 3,
+   "per_lv": 10.0,
+   "efx": [
+    0.0,
+    10.0,
+    20.0,
+    30.0
+   ],
+   "cum_after": 98.0
+  }
+ ],
+ "margin_last": 0.5782,
+ "kill50": 161,
+ "margins": {
+  "first": 0.65,
+  "wall": 0.7,
+  "by": {
+   "40": 0.5
+  },
+  "last": 0.5782
+ },
+ "bosses": [
+  {
+   "stage": 10,
+   "boss": "king",
+   "hp": 9.173,
+   "hp_mul": 0.2097,
+   "first_r": 10,
+   "first_min": 7.0,
+   "tries": 1,
+   "kill_r": 10,
+   "kill_min": 7.8,
+   "W": 0,
+   "atk_first": 1.1,
+   "atk_kill": 1.1,
+   "r1": {
+    "x0.7": 0.74,
+    "x1.0": 0.52,
+    "x1.3": 0.4
+   },
+   "r1_worst_weather_x0_7": 0.93
+  },
+  {
+   "stage": 20,
+   "boss": "cleaner",
+   "hp": 82.35,
+   "hp_mul": 0.1704,
+   "first_r": 20,
+   "first_min": 16.3,
+   "tries": 1,
+   "kill_r": 20,
+   "kill_min": 17.0,
+   "W": 0,
+   "atk_first": 6.2,
+   "atk_kill": 6.2,
+   "r1": {
+    "x0.7": 0.34,
+    "x1.0": 0.24,
+    "x1.3": 0.18
+   },
+   "r1_worst_weather_x0_7": 0.43
+  },
+  {
+   "stage": 30,
+   "boss": "angel",
+   "hp": 644.2,
+   "hp_mul": 1.2067,
+   "first_r": 30,
+   "first_min": 26.2,
+   "tries": 3,
+   "kill_r": 41,
+   "kill_min": 38.2,
+   "W": 11,
+   "atk_first": 6.8,
+   "atk_kill": 14.6,
+   "r1": {
+    "x0.7": 2.54,
+    "x1.0": 1.78,
+    "x1.3": 1.37
+   },
+   "r1_worst_weather_x0_7": 3.18
+  },
+  {
+   "stage": 40,
+   "boss": "phantom",
+   "hp": 1930.0,
+   "hp_mul": 3.2726,
+   "first_r": 51,
+   "first_min": 47.4,
+   "tries": 6,
+   "kill_r": 75,
+   "kill_min": 73.6,
+   "W": 24,
+   "atk_first": 22.5,
+   "atk_kill": 30.8,
+   "r1": {
+    "x0.7": 3.18,
+    "x1.0": 2.23,
+    "x1.3": 1.71
+   },
+   "r1_worst_weather_x0_7": 3.97
+  },
+  {
+   "stage": 50,
+   "boss": "mover",
+   "hp": 37080.0,
+   "hp_mul": 5.6933,
+   "first_r": 85,
+   "first_min": 83.7,
+   "tries": 15,
+   "kill_r": 161,
+   "kill_min": 169.4,
+   "W": 76,
+   "atk_first": 50.8,
+   "atk_kill": 150.3,
+   "r1": {
+    "x0.7": 13.0,
+    "x1.0": 9.1,
+    "x1.3": 7.0
+   },
+   "r1_worst_weather_x0_7": 16.24
+  }
+ ],
+ "minutes": 169.4,
+ "rounds": 161,
+ "tier_done": {
+  "1": 21,
+  "2": 90,
+  "3": 176
+ },
+ "shape": {
+  "max_jump": 82.68,
+  "max_in_node": 84.41
+ },
+ "tier_scale": {
+  "1": {
+   "now": 1880000.0,
+   "plan": 765000.0,
+   "ratio": 0.407
+  },
+  "2": {
+   "now": 308000000000.0,
+   "plan": 134000000000.0,
+   "ratio": 0.436
+  },
+  "3": {
+   "now": 8170000000000.0,
+   "plan": 34000000000000.0,
+   "ratio": 4.156
+  }
+ },
+ "pct_per_level": [
+  {
+   "key": "ps_atk",
+   "lv": 1,
+   "add": 1.0,
+   "pct": 100.0
+  },
+  {
+   "key": "ps_atk",
+   "lv": 2,
+   "add": 1.0,
+   "pct": 50.0
+  },
+  {
+   "key": "ps_atk",
+   "lv": 3,
+   "add": 1.0,
+   "pct": 33.3
+  },
+  {
+   "key": "ps_atk",
+   "lv": 4,
+   "add": 1.0,
+   "pct": 25.0
+  },
+  {
+   "key": "ps_atk2",
+   "lv": 1,
+   "add": 3.0,
+   "pct": 60.0
+  },
+  {
+   "key": "ps_atk2",
+   "lv": 2,
+   "add": 3.0,
+   "pct": 37.5
+  },
+  {
+   "key": "ps_atk2",
+   "lv": 3,
+   "add": 3.0,
+   "pct": 27.3
+  },
+  {
+   "key": "ps_atk2",
+   "lv": 4,
+   "add": 3.0,
+   "pct": 21.4
+  },
+  {
+   "key": "ps_atk2p",
+   "lv": 1,
+   "add": 3.0,
+   "pct": 17.6
+  },
+  {
+   "key": "ps_atk2p",
+   "lv": 2,
+   "add": 3.0,
+   "pct": 15.0
+  },
+  {
+   "key": "ps_atk2p",
+   "lv": 3,
+   "add": 3.0,
+   "pct": 13.0
+  },
+  {
+   "key": "ps_atk3",
+   "lv": 1,
+   "add": 6.0,
+   "pct": 23.1
+  },
+  {
+   "key": "ps_atk3",
+   "lv": 2,
+   "add": 6.0,
+   "pct": 18.8
+  },
+  {
+   "key": "ps_atk3",
+   "lv": 3,
+   "add": 6.0,
+   "pct": 15.8
+  },
+  {
+   "key": "ps_atk3",
+   "lv": 4,
+   "add": 6.0,
+   "pct": 13.6
+  },
+  {
+   "key": "ps_atk3p",
+   "lv": 1,
+   "add": 6.0,
+   "pct": 12.0
+  },
+  {
+   "key": "ps_atk3p",
+   "lv": 2,
+   "add": 6.0,
+   "pct": 10.7
+  },
+  {
+   "key": "ps_atk3p",
+   "lv": 3,
+   "add": 6.0,
+   "pct": 9.7
+  },
+  {
+   "key": "ps_atk4",
+   "lv": 1,
+   "add": 10.0,
+   "pct": 14.7
+  },
+  {
+   "key": "ps_atk4",
+   "lv": 2,
+   "add": 10.0,
+   "pct": 12.8
+  },
+  {
+   "key": "ps_atk4",
+   "lv": 3,
+   "add": 10.0,
+   "pct": 11.4
+  }
+ ],
+ "hits": [
+  {
+   "stage": 5,
+   "r": 4,
+   "atk": 1.1,
+   "common": 0.94,
+   "legend": 37.6
+  },
+  {
+   "stage": 15,
+   "r": 14,
+   "atk": 3.4,
+   "common": 0.34,
+   "legend": 13.7
+  },
+  {
+   "stage": 25,
+   "r": 24,
+   "atk": 6.5,
+   "common": 1.96,
+   "legend": 78.4
+  },
+  {
+   "stage": 44,
+   "r": 78,
+   "atk": 37.5,
+   "common": 0.41,
+   "legend": 16.4
+  },
+  {
+   "stage": 50,
+   "r": 84,
+   "atk": 50.8,
+   "common": 3.2,
+   "legend": 128.1
+  }
+ ],
+ "sink_c0": 3630000000000.0,
+ "sens": {
+  "기준": {
+   "kill50": 161,
+   "min": 169,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    15
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "H0×0.7": {
+   "kill50": 185,
+   "min": 196,
+   "tries": [
+    1,
+    1,
+    6,
+    6,
+    18
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "H0×1.3": {
+   "kill50": 152,
+   "min": 159,
+   "tries": [
+    1,
+    1,
+    3,
+    5,
+    13
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "MOVER_H 0.4": {
+   "kill50": 178,
+   "min": 188,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    18
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "TAU 0": {
+   "kill50": 176,
+   "min": 186,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    18
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "H0×0.7+MOVER_H 0.4": {
+   "kill50": null,
+   "min": 658,
+   "tries": [
+    1,
+    1,
+    6,
+    6,
+    85
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "H0×0.7+MOVER_H 0.4+TAU 0": {
+   "kill50": null,
+   "min": 658,
+   "tries": [
+    1,
+    1,
+    6,
+    15,
+    77
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "수입×0.5": {
+   "kill50": 296,
+   "min": 314,
+   "tries": [
+    1,
+    2,
+    7,
+    13,
+    27
+   ],
+   "first_try_10_20": [
+    true,
+    false
+   ],
+   "sink": null
+  },
+  "수입×2": {
+   "kill50": 99,
+   "min": 103,
+   "tries": [
+    1,
+    1,
+    3,
+    3,
+    9
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "재도전 3판": {
+   "kill50": 173,
+   "min": 182,
+   "tries": [
+    1,
+    1,
+    4,
+    8,
+    24
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "재도전 8판": {
+   "kill50": 155,
+   "min": 163,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    9
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": null
+  },
+  "싱크 기준": {
+   "kill50": 161,
+   "min": 169,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    15
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 H0×0.7": {
+   "kill50": 185,
+   "min": 196,
+   "tries": [
+    1,
+    1,
+    6,
+    6,
+    18
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 H0×1.3": {
+   "kill50": 152,
+   "min": 159,
+   "tries": [
+    1,
+    1,
+    3,
+    5,
+    13
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 MOVER_H 0.4": {
+   "kill50": 178,
+   "min": 188,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    18
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 TAU 0": {
+   "kill50": 176,
+   "min": 186,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    18
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 H0×0.7+MOVER_H 0.4": {
+   "kill50": 211,
+   "min": 225,
+   "tries": [
+    1,
+    1,
+    6,
+    6,
+    21
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    5,
+    4
+   ]
+  },
+  "싱크 H0×0.7+MOVER_H 0.4+TAU 0": {
+   "kill50": 280,
+   "min": 302,
+   "tries": [
+    1,
+    1,
+    6,
+    15,
+    24
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    9,
+    8
+   ]
+  },
+  "싱크 수입×0.5": {
+   "kill50": 296,
+   "min": 314,
+   "tries": [
+    1,
+    2,
+    7,
+    13,
+    27
+   ],
+   "first_try_10_20": [
+    true,
+    false
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 수입×2": {
+   "kill50": 99,
+   "min": 103,
+   "tries": [
+    1,
+    1,
+    3,
+    3,
+    9
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 재도전 3판": {
+   "kill50": 173,
+   "min": 182,
+   "tries": [
+    1,
+    1,
+    4,
+    8,
+    24
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  },
+  "싱크 재도전 8판": {
+   "kill50": 155,
+   "min": 163,
+   "tries": [
+    1,
+    1,
+    3,
+    6,
+    9
+   ],
+   "first_try_10_20": [
+    true,
+    true
+   ],
+   "sink": [
+    0,
+    0
+   ]
+  }
+ },
+ "hist": [
+  {
+   "it": 9,
+   "kills": {
+    "10": 10,
+    "20": 20,
+    "30": 41,
+    "40": 75,
+    "50": 158,
+    "60": null
+   },
+   "done": {
+    "1": 21,
+    "2": 90,
+    "3": 170
+   }
+  },
+  {
+   "it": 10,
+   "kills": {
+    "10": 10,
+    "20": 20,
+    "30": 41,
+    "40": 75,
+    "50": 161,
+    "60": null
+   },
+   "done": {
+    "1": 21,
+    "2": 90,
+    "3": 174
+   }
+  },
+  {
+   "it": 11,
+   "kills": {
+    "10": 10,
+    "20": 20,
+    "30": 41,
+    "40": 75,
+    "50": 161,
+    "60": null
+   },
+   "done": {
+    "1": 21,
+    "2": 90,
+    "3": 174
+   }
+  }
+ ]
+}

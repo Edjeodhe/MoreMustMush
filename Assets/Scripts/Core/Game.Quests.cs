@@ -81,6 +81,7 @@ namespace MoreMush
             var p = list[i]; int exp = QuestDefOf(p).exp;
             p.claimed = true;
             G.farm.tree.exp += exp;
+            Telemetry.QuestClear(p.id, slot[0] == 'd' ? "daily" : "weekly", exp);
             if (slot[0] == 'd')
                 foreach (var w in G.quest.weekly)
                     if (!w.claimed && QuestDefOf(w)?.kind == "daily") w.prog = Math.Min(QuestDefOf(w).target, w.prog + 1);

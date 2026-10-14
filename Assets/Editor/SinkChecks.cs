@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+using static MoreMush.Defs;
+using static MoreMush.Game;
+
+namespace MoreMush.EditorTools
+{
+    // 싱크 노드(Efx_MaxLv = 0: 끝없는 투지·끝없는 풍년) 회귀 검사. 실제 세이브(Game.G·PlayerPrefs)는 건드리지 않는다.
+    // 메뉴 MoreMush/Validate Sink Nodes · 배치 -executeMethod MoreMush.EditorTools.SinkChecks.Batch (결과 BalanceData/sink_checks.txt)
+    public static class SinkChecks
+    {
+        [MenuItem("MoreMush/Validate Sink Nodes")]
+        public static void Menu() => Debug.Log(Run());
+
+        public static void Batch()
+        {
+            int code = 0; string text;
+            try { text = Run(); }
+            catch (Exception e) { text = "실패: " + e; code = 1; }
+            File.WriteAllText(Path.GetFullPath(Path.Combine(Application.dataPath, "../BalanceData/sink_checks.txt")), text);
+            EditorApplication.Exit(code);
+        }
+
+        public static string Run()
+        {
+            var lines = new List<string>();
+            void Check(bool ok, string name) { if (!ok) throw new InvalidOperationException("FAIL: " + name); lines.Add("PASS: " + name); }
+
+            var atk = NODE["inf_atk"]; var gold = NODE["inf_gold"];
+            Check(atk.inf && gold.inf && atk.max == 0 && gold.max == 0, "싱크 2개가 inf·max 0으로 만들어짐");
+            Check(atk.req == "ps_atk4" && gold.req == "ed_score3p", "열림 조건 = ps_atk4·ed_score3p 최대");
+            Check(Math.Abs(atk.infCostK - 1.076) < 1e-9 && Math.Abs(atk.infMul - 1.05) < 1e-12 && Math.Abs(gold.infMul - 1.025) < 1e-12, "가격 ×1.076 · 효과 ×1.05 / ×1.025");
+            Check(NodeCost(atk, 0).gold == Math.Ceiling(atk.infCost0 * COST_MUL) && NodeCost(atk, 0).gem == 0, "1레벨 가격 = Cost_Lv1");
+            var capCost = NodeCost(atk, atk.infCap).gold;
+            Check(atk.infCap > 1000 && !double.IsInfinity(capCost) && !double.IsNaN(capCost), $"상한 {atk.infCap}레벨 가격이 유한함 ({capCost:E2})");
+            Check(!double.IsInfinity(NF.inf_atk(atk.infCap)) && NF.inf_atk(0) == 1 && NF.inf_gold(0) == 1, "효과: 0레벨 ×1, 상한에서도 유한");
+            Check(!NODES.Any(n => n.req != null && NODE[n.req].inf), "싱크를 '최대 레벨로 열기' 선행으로 쓰는 노드 없음");
+
+            var prevG = G; bool prevS = SaveIO.Suspended; SaveIO.Suspended = true;
+            try
+            {
+                G = new SaveData();
+                Check(NodeState(atk) != "avail", "ps_atk4 최대 전에는 끝없는 투지가 열리지 않음");
+                foreach (var n in NODES) if (!n.inf && !n.gem) G.nodes[n.id] = n.max;   // 골드 트리 전부 최대
+                Check(NodeState(atk) == "avail" && NodeState(gold) == "avail", "트리 최대 뒤 싱크 2개 열림");
+                double atk0 = ComputeStats("clear", THEMES[0].id).atk, gm0 = ComputeStats("clear", THEMES[0].id).goldMul;
+                G.gold = 1e20;
+                int k = BuyMax(atk);
+                int L = Lv("inf_atk");
+                Check(k == L && k > 50 && k < 10000, $"BuyMax(1e20 골드) → {k}레벨");
+                double ratio = ComputeStats("clear", THEMES[0].id).atk / atk0;
+                Check(Math.Abs(ratio / Math.Pow(1.05, L) - 1) < 1e-9, $"공격력 ×1.05^{L} 반영");
+                G.nodes["inf_gold"] = 40;
+                double gr = ComputeStats("clear", THEMES[0].id).goldMul / gm0;
+                Check(Math.Abs(gr / Math.Pow(1.025, 40) - 1) < 1e-9, "점수→골드 ×1.025^40 반영");
+                Check(NodeState(atk) != "max", "상한 전에는 MAX가 아님");
+
+                // 세이브 정리: 싱크 레벨은 상한까지 남고, 넘으면 상한으로 잘린다
+                var json = Newtonsoft.Json.JsonConvert.SerializeObject(new SaveData { nodes = new Dictionary<string, int> { ["inf_atk"] = 500, ["inf_gold"] = 99999 } });
+                string key = SaveIO.SAVE_KEY; bool had = PlayerPrefs.HasKey(key); string orig = PlayerPrefs.GetString(key, "");
+                try
+                {
+                    PlayerPrefs.SetString(key, json);
+                    var g2 = SaveIO.Load();
+                    Check(g2 != null && g2.nodes["inf_atk"] == 500 && g2.nodes["inf_gold"] == gold.infCap, "세이브 정리: 500 유지 · 99999 → 상한");
+                }
+                finally { if (had) PlayerPrefs.SetString(key, orig); else PlayerPrefs.DeleteKey(key); PlayerPrefs.Save(); }
+            }
+            finally { G = prevG; SaveIO.Suspended = prevS; }
+            return string.Join("\n", lines);
+        }
+    }
+}

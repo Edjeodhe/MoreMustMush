@@ -1,0 +1,85 @@
+== 1. 지금 규칙(올림) 재현 ==
+m = (6.249e-05, 0.44, 3.8) 1단계 합 9.63e+06 (DB×m1: 117 )
+    ps_atk [8.4e+04, 3.2e+05, 1.2e+06, 4.6e+06] | ps_atk2 [5.8e+06, 2.2e+07, 8.4e+07, 3.2e+08] | ed_score1p [6.3e+04, 2.4e+05, 9.3e+05] | ed_bonus1p [1.1e+05, 4.2e+05, 1.6e+06]
+    ed_score1p L3 / DB: 2.91 ed_bonus1p L3 / DB: 2.91 ps_atk L4 / m3: 1.21e+06 check {'max_step': 2.0, 'step_fix_viol': 1, 'node_step': 4.5, 'sib': 3.793103448275862, 'cross': '7/7', 'mono_bad': 0}
+m = (0.41, 0.44, 3.8) 1단계 합 9.86e+06 (DB×m1: 7.71e+05 )
+    ps_atk [8.4e+04, 3.2e+05, 1.2e+06, 4.6e+06] | ps_atk2 [5.8e+06, 2.2e+07, 8.4e+07, 3.2e+08] | ed_score1p [6.3e+04, 2.4e+05, 9.3e+05] | ed_bonus1p [1.1e+05, 4.2e+05, 1.6e+06]
+    ed_score1p L3 / DB: 2.91 ed_bonus1p L3 / DB: 2.91 ps_atk L4 / m3: 1.21e+06 check {'max_step': 1.7777777777777777, 'step_fix_viol': 0, 'node_step': 3.9, 'sib': 3.793103448275862, 'cross': '7/7', 'mono_bad': 0}
+m = (6.249e-05, 0.44, 6.582) 1단계 합 1.52e+07 (DB×m1: 117 )
+    ps_atk [1.2e+05, 4.7e+05, 1.8e+06, 6.7e+06] | ps_atk2 [8.4e+06, 3.2e+07, 1.2e+08, 4.5e+08] | ed_score1p [1.1e+05, 4.2e+05, 1.6e+06] | ed_bonus1p [2e+05, 7.6e+05, 2.9e+06]
+    ed_score1p L3 / DB: 5 ed_bonus1p L3 / DB: 5.27 ps_atk L4 / m3: 1.02e+06 check {'max_step': 2.0, 'step_fix_viol': 3, 'node_step': 5.0, 'sib': 3.793103448275862, 'cross': '7/7', 'mono_bad': 0}
+Temp/price_table.json 대조(m 6.249e-5·0.44·6.582): 다른 레벨 61 / 215 [('ed_cols2', 0, 1300000.0, 840000), ('ed_cols2', 1, 4700000.0, 3100000), ('ed_price2', 0, 4000000.0, 2700000), ('ed_price2', 1, 15000000.0, 10000000), ('ed_rare', 0, 210000.0, 140000), ('ed_rare', 1, 790000.0, 530000), ('ed_rare', 2, 2900000.0, 1900000), ('ed_size', 0, 120000.0, 79000)]
+
+1단계 합 vs m1 (지금 규칙, m2 0.44, m3 3.8): 바닥 확인
+  m1 0.41    1단계 합 9.86e+06  ps_atk L4 4.6e+06
+  m1 0.1     1단계 합 9.69e+06  ps_atk L4 4.6e+06
+  m1 0.01    1단계 합 9.63e+06  ps_atk L4 4.6e+06
+  m1 0.001   1단계 합 9.63e+06  ps_atk L4 4.6e+06
+  m1 0.0001  1단계 합 9.63e+06  ps_atk L4 4.6e+06
+
+== 2. 안 (d) 상한 모드 (이론.md 적용안 #1 그대로) ==
+[none] m 0.3·0.44·3.8  1단계 합 5.69e+05  2단계 합 1.66e+11  3단계 합 3.12e+13 {'max_step': 1.7692307692307692, 'step_fix_viol': 0, 'node_step': 3.9, 'sib': 30.0, 'cross': '2/7', 'mono_bad': 0}
+    ps_atk [550, 2.1e+03, 7.9e+03, 3e+04] | ps_atk2 [2.9e+05, 1.1e+06, 4e+06, 1.5e+07] | ps_atk2p [1.2e+08, 4.6e+08, 1.7e+09] | ps_atk3 [1.7e+10, 6.5e+10, 2.4e+11, 4.6e+11] | ps_atk3p [4.6e+11, 5.3e+11, 7.2e+11] | ps_atk4 [8.4e+11, 8.4e+11, 8.4e+11]
+    ed_score [120, 450, 1.7e+03] | ed_score1p [6.6e+03, 2.5e+04, 9.6e+04] | ed_score2 [8.9e+05, 3.4e+06, 1.3e+07] | ed_score2p [2.6e+08, 9.7e+08, 3e+09] | ed_score3 [2.4e+10, 9.2e+10, 3.5e+11] | ed_score3p [4.6e+11, 6.1e+11, 7.2e+11]
+    ed_bonus [270, 1e+03, 3.9e+03] | ed_bonus1p [1.4e+04, 4.8e+04, 1.6e+05] | ed_bonus2 [1.5e+06, 5.7e+06, 2.1e+07] | ed_bonus2p [6.3e+08, 2.4e+09, 9.2e+09] | ed_bonus3 [5e+10, 1.9e+11, 4.6e+11] | ed_bonus3p [5.3e+11, 7.2e+11, 8.4e+11]
+[d] m 0.3·0.44·3.8  1단계 합 5.63e+05  2단계 합 1.48e+11  3단계 합 2.69e+13 {'max_step': 2.361111111111111, 'step_fix_viol': 2, 'node_step': 3.9, 'sib': 3.764705882352941, 'cross': '7/7', 'mono_bad': 0}
+    ps_atk [550, 2.1e+03, 7.9e+03, 3e+04] | ps_atk2 [3.7e+04, 1.4e+05, 5.3e+05, 2e+06] | ps_atk2p [7.5e+06, 2.8e+07, 1e+08] | ps_atk3 [1.2e+08, 4.5e+08, 1.7e+09, 6.4e+09] | ps_atk3p [2.4e+10, 9.1e+10, 3.4e+11] | ps_atk4 [4.2e+11, 8.4e+11, 8.4e+11]
+    ed_score [120, 450, 1.7e+03] | ed_score1p [6.4e+03, 2.4e+04, 9.1e+04] | ed_score2 [5.6e+05, 2.1e+06, 8e+06] | ed_score2p [3e+07, 1.1e+08, 4.1e+08] | ed_score3 [2.5e+09, 9.5e+09, 3.6e+10] | ed_score3p [1.3e+11, 4.9e+11, 7.2e+11]
+    ed_bonus [270, 1e+03, 3.9e+03] | ed_bonus1p [1.4e+04, 4.8e+04, 1.6e+05] | ed_bonus2 [9.9e+05, 3.7e+06, 1.4e+07] | ed_bonus2p [5.2e+07, 1.9e+08, 7.2e+08] | ed_bonus3 [4.4e+09, 1.6e+10, 6e+10] | ed_bonus3p [2.2e+11, 7.2e+11, 8.4e+11]
+[d2] m 0.3·0.44·3.8  1단계 합 5.63e+05  2단계 합 1.48e+11  3단계 합 2.69e+13 {'max_step': 2.361111111111111, 'step_fix_viol': 2, 'node_step': 3.9, 'sib': 3.764705882352941, 'cross': '7/7', 'mono_bad': 0}
+    ps_atk [550, 2.1e+03, 7.9e+03, 3e+04] | ps_atk2 [3.7e+04, 1.4e+05, 5.3e+05, 2e+06] | ps_atk2p [7.5e+06, 2.8e+07, 1e+08] | ps_atk3 [1.2e+08, 4.5e+08, 1.7e+09, 6.4e+09] | ps_atk3p [2.4e+10, 9.1e+10, 3.4e+11] | ps_atk4 [4.2e+11, 8.4e+11, 8.4e+11]
+    ed_score [120, 450, 1.7e+03] | ed_score1p [6.4e+03, 2.4e+04, 9.1e+04] | ed_score2 [5.6e+05, 2.1e+06, 8e+06] | ed_score2p [3e+07, 1.1e+08, 4.1e+08] | ed_score3 [2.5e+09, 9.5e+09, 3.6e+10] | ed_score3p [1.3e+11, 4.9e+11, 7.2e+11]
+    ed_bonus [270, 1e+03, 3.9e+03] | ed_bonus1p [1.4e+04, 4.8e+04, 1.6e+05] | ed_bonus2 [9.9e+05, 3.7e+06, 1.4e+07] | ed_bonus2p [5.2e+07, 1.9e+08, 7.2e+08] | ed_bonus3 [4.4e+09, 1.6e+10, 6e+10] | ed_bonus3p [2.2e+11, 7.2e+11, 8.4e+11]
+
+(d) 1단계 합 vs m1 (m2 0.44, m3 3.8) / DB×m1 대비
+  m1 0.3    1단계 합 5.63e+05 (×1.00)  ps_atk ['550', '2.1e+03', '7.9e+03', '3e+04']  STEP_FIX로 오른 1단계 레벨 9
+  m1 0.1    1단계 합 1.89e+05 (×1.01)  ps_atk ['180', '680', '2.6e+03', '1e+04']  STEP_FIX로 오른 1단계 레벨 6
+  m1 0.03   1단계 합 5.63e+04 (×1.00)  ps_atk ['55', '210', '790', '3e+03']  STEP_FIX로 오른 1단계 레벨 9
+  m1 0.01   1단계 합 1.89e+04 (×1.01)  ps_atk ['18', '68', '260', '1e+03']  STEP_FIX로 오른 1단계 레벨 5
+  m1 0.001  1단계 합 2.43e+03 (×1.29)  ps_atk ['3', '10', '37', '140']  STEP_FIX로 오른 1단계 레벨 15
+
+(d) 뒤 단계 배율이 앞 단계 가격을 바꾸는지 (m1 0.3 고정)
+  m2 0.2  m3 3.8 : 1단계 합 5.63e+05 (기준 5.63e+05), 바뀐 1단계 레벨 0 | 2단계 합 6.86e+10 | 3단계 합 2.65e+13 | 공격력 줄 II·III 첫 3.7e+04 1.2e+08
+  m2 1    m3 3.8 : 1단계 합 5.63e+05 (기준 5.63e+05), 바뀐 1단계 레벨 0 | 2단계 합 3.38e+11 | 3단계 합 2.69e+13 | 공격력 줄 II·III 첫 3.7e+04 1.2e+08
+  m2 0.44 m3 1   : 1단계 합 5.63e+05 (기준 5.63e+05), 바뀐 1단계 레벨 0 | 2단계 합 1.48e+11 | 3단계 합 7.68e+12 | 공격력 줄 II·III 첫 3.7e+04 1.2e+08
+  m2 0.44 m3 11.4: 1단계 합 5.63e+05 (기준 5.63e+05), 바뀐 1단계 레벨 0 | 2단계 합 1.48e+11 | 3단계 합 7.45e+13 | 공격력 줄 II·III 첫 3.7e+04 1.2e+08
+  m2 2    m3 11.4: 1단계 합 5.73e+05 (기준 5.63e+05), 바뀐 1단계 레벨 1 | 2단계 합 6.74e+11 | 3단계 합 7.45e+13 | 공격력 줄 II·III 첫 3.7e+04 1.2e+08
+
+(d) 단계 배율에 대한 단계 합의 단조성 (다른 둘 고정 0.3·0.44·3.8)
+  m1 (0.1, 0.2, 0.3, 0.5, 1) → 단계 합 ['1.89e+05', '3.85e+05', '5.63e+05', '9.39e+05', '1.89e+06']  단조 True
+  m2 (0.1, 0.2, 0.44, 1, 2) → 단계 합 ['3.42e+10', '6.86e+10', '1.48e+11', '3.38e+11', '6.74e+11']  단조 True
+  m3 (1, 2, 3.8, 6.6, 11.4) → 단계 합 ['7.68e+12', '1.49e+13', '2.69e+13', '4.55e+13', '7.45e+13']  단조 True
+
+(d) 공격력 줄 레벨 중 DB×m보다 내려간(상한이 묶인) 비율, m 0.3·0.44·3.8
+   ps_atk ×1.02/1.05/1.01/1, ps_atk2 ×0.132/0.127/0.133/0.133, ps_atk2p ×0.142/0.2/0.208, ps_atk3 ×0.00706/0.00692/0.00708/0.0139, ps_atk3p ×0.0522/0.172/0.472, ps_atk4 ×0.5/1/1
+   ed_score ×1/1/1, ed_score1p ×0.97/0.96/0.948, ed_score2 ×0.636/0.636/0.615, ed_score2p ×0.625/0.647/0.774, ed_score3 ×0.104/0.104/0.103, ed_score3p ×0.283/0.803/1
+   ed_bonus ×1/1/1, ed_bonus1p ×1/1/1, ed_bonus2 ×0.66/0.649/0.667, ed_bonus2p ×0.658/0.633/0.655, ed_bonus3 ×0.0898/0.0842/0.13, ed_bonus3p ×0.415/1/1
+
+(d) pass 수에 따른 결과 차이 (m 0.3·0.44·3.8)
+   passes  1: 4 pass 결과와 다른 레벨 0, check {'max_step': 2.361111111111111, 'step_fix_viol': 2, 'node_step': 3.9, 'sib': 3.764705882352941, 'cross': '7/7', 'mono_bad': 0}
+   passes  2: 4 pass 결과와 다른 레벨 0, check {'max_step': 2.361111111111111, 'step_fix_viol': 2, 'node_step': 3.9, 'sib': 3.764705882352941, 'cross': '7/7', 'mono_bad': 0}
+   passes  4: 4 pass 결과와 다른 레벨 0, check {'max_step': 2.361111111111111, 'step_fix_viol': 2, 'node_step': 3.9, 'sib': 3.764705882352941, 'cross': '7/7', 'mono_bad': 0}
+   passes  8: 4 pass 결과와 다른 레벨 0, check {'max_step': 2.361111111111111, 'step_fix_viol': 2, 'node_step': 3.9, 'sib': 3.764705882352941, 'cross': '7/7', 'mono_bad': 0}
+   passes 16: 4 pass 결과와 다른 레벨 0, check {'max_step': 2.361111111111111, 'step_fix_viol': 2, 'node_step': 3.9, 'sib': 3.764705882352941, 'cross': '7/7', 'mono_bad': 0}
+   줄 밖 레벨 중 '줄 규칙 없음'과 값이 다른 것: 2 [('barclone', 2, '2.7e+07', '2.3e+07'), ('bl', 1, '5.3e+09', '4.2e+09')]
+   pass 사이 STEP_FIX·RaiseNode가 다시 올린 줄 레벨 수(누적): 0
+
+== 3. 줄 노드의 부모·선행(ParentOk: parent Lv≥1, req 최대) 가격, (d) m 0.3·0.44·3.8 ==
+  ps_atk      줄 첫 550      끝 3e+04    | parent power       L1 19       | req None       
+  ps_atk2     줄 첫 3.7e+04  끝 2e+06    | parent ps_spd      L1 39       | req ps_atk     
+  ps_atk2p    줄 첫 7.5e+06  끝 1e+08    | parent ps_resist   L1 4.8e+05  | req ps_atk2    
+  ps_atk3     줄 첫 1.2e+08  끝 6.4e+09  | parent ps_heavy    L1 7.6e+10  | req ps_atk2p   
+  ps_atk3p    줄 첫 2.4e+10  끝 3.4e+11  | parent ps_crit2    L1 4.6e+11  | req ps_atk3    
+  ps_atk4     줄 첫 4.2e+11  끝 8.4e+11  | parent ps_power    L1 7.6e+06  | req ps_atk3p   
+  ed_score    줄 첫 120      끝 1.7e+03  | parent power       L1 19       | req None       
+  ed_score1p  줄 첫 6.4e+03  끝 9.1e+04  | parent ed_score    L1 120      | req ed_score   
+  ed_score2   줄 첫 5.6e+05  끝 8e+06    | parent ed_score1p  L1 6.4e+03  | req ed_score1p 
+  ed_score2p  줄 첫 3e+07    끝 4.1e+08  | parent ed_score2   L1 5.6e+05  | req ed_score2  
+  ed_score3   줄 첫 2.5e+09  끝 3.6e+10  | parent ed_score2p  L1 3e+07    | req ed_score2p 
+  ed_score3p  줄 첫 1.3e+11  끝 7.2e+11  | parent ed_score3   L1 2.5e+09  | req ed_score3  
+  ed_bonus    줄 첫 270      끝 3.9e+03  | parent ed_regen    L1 36       | req None       
+  ed_bonus1p  줄 첫 1.4e+04  끝 1.6e+05  | parent ed_bonus    L1 270      | req ed_bonus   
+  ed_bonus2   줄 첫 9.9e+05  끝 1.4e+07  | parent ed_bonus1p  L1 1.4e+04  | req ed_bonus1p 
+  ed_bonus2p  줄 첫 5.2e+07  끝 7.2e+08  | parent ed_bonus2   L1 9.9e+05  | req ed_bonus2  
+  ed_bonus3   줄 첫 4.4e+09  끝 6e+10    | parent ed_bonus2p  L1 5.2e+07  | req ed_bonus2p 
+  ed_bonus3p  줄 첫 2.2e+11  끝 8.4e+11  | parent ed_bonus3   L1 4.4e+09  | req ed_bonus3  

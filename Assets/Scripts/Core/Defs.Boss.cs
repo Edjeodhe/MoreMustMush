@@ -47,10 +47,12 @@ namespace MoreMush
         // 보스 체력 = 레전드리 버섯 체력 × BOSS_HP_K × 지역·스테이지 배율 × 보스별 배율. [임시값: 밸런스 팀이 시뮬로 맞춘다]
         // tuned 기준 스테이지 10 대왕송이 ≈ 105 (공격력 5.5로 보스만 노려 맞히면 약 16초). 봇(바 오차 ±60%)은 첫 보스에서 여러 번 진다
         public static double BOSS_HP_K = Db.CPos("BOSS_HP_K");
-        // 보스가 한 바퀴 돈 뒤(스테이지 60~)는 마지막 보스의 체력 배율을 쓴다 (첫 보스로 돌아가도 쉬워지지 않게, 커지는 건 ZoneMul이 맡는다)
+        // 보스가 한 바퀴 돈 뒤(스테이지 60~)는 BOSS_LOOP_HP_MUL을 쓴다 (첫 보스로 돌아가도 쉬워지지 않게, 커지는 건 ZoneMul이 맡는다).
+        // 2026-10-14 마지막 보스(움직이는 버섯) 배율과 분리: 50을 3시간 벽으로 올려도 60~가 같이 단단해지지 않게(theory R2-14 안 B)
+        public static double BOSS_LOOP_HP_MUL = Db.CPos("BOSS_LOOP_HP_MUL");
         public static double BossHp(BossDef b, string themeId, int stage)
         {
-            double mul = stage / BOSS_EVERY > BOSSES.Count ? BOSSES[BOSSES.Count - 1].hpMul : b.hpMul;
+            double mul = stage / BOSS_EVERY > BOSSES.Count ? BOSS_LOOP_HP_MUL : b.hpMul;
             return TIERS[3].hp * BOSS_HP_K * ZoneMul(themeId, stage) * mul;
         }
 

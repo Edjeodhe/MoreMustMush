@@ -6,10 +6,13 @@
   python BalanceData/db/db_write.py prices  <xlsx> <json>   # Upgrade_Cost의 골드 가격을 바꿈 (BalanceSim.WritePriceFile 결과)
 
   python BalanceData/db/db_write.py set     <xlsx> <json>   # 아무 시트의 칸 값을 바꿈 (밸런스 수치안: Const·Boss·Upgrade 효과값 등)
+  python BalanceData/db/db_write.py rows    <xlsx> <json>   # 시트 맨 아래에 새 행을 더함 (새 노드: Upgrade·Upgrade_Cost·String)
 
 strings json = ["한국어 문구", ...]  ·  prices json = {"노드 키": [1레벨 가격, 2레벨 가격, ...]}
-set json = {"Const": {"BOSS_HP_K": {"Value": 2}}, "Boss": {"king": {"Hp_Mul": 1.4}}}  (행은 그 시트의 *_Key 열로 찾음)
+set json = {"Const": {"BOSS_HP_K": {"Value": 2}}, "Boss": {"king": {"Hp_Mul": 1.4}}}  (행은 그 시트의 *_Key 열로 찾음, 없으면 첫 열 ID — String: {"String": {"201015": {"Str_KR": "…"}}})
   Const 시트에 없는 키는 맨 아래에 새 줄로 더하고, 값이 null인 키는 그 행을 지운다.
+rows json = {"Upgrade": [{"Upg_ID": 11032, "Upg_Key": "inf_atk", ...}], "Upgrade_Cost": [...], "String": [...]}
+  열은 2행 머리글 이름으로 찾는다. 첫 열(ID)이나 *_Key 값이 이미 있으면 중단한다. 바로 위 행에서 수식인 칸은(값을 주지 않았으면) 그 수식을 이어 쓴다.
 파일이 다른 Excel에서 열려 있으면 아무것도 안 하고 중단한다(종료 코드 2). 중간에 오류가 나면 저장하지 않는다.
 저장하면 Unity가 Assets/Resources/DB/db.json을 다시 만든다.
 """
@@ -110,6 +113,48 @@ def set_prices(wb, prices):
     return "Upgrade_Cost %d개 노드 가격 갱신" % n
 
 
+def append_rows(wb, data):
+    """{"시트": [{"열": 값}, ...]} — 시트 맨 아래에 행을 더한다. ID·키가 겹치거나 없는 열이면 저장하지 않는다."""
+    n, bad = 0, []
+    for sheet, rows in data.items():
+        ws = wb.Worksheets(sheet)
+        c = header_cols(ws)
+        key_cols = [col for name, col in c.items() if name.endswith("_Key")]
+        end = last_row(ws)
+        def norm(v):   # 11032 · 11032.0 · "11032"를 같은 값으로
+            if isinstance(v, float) and v.is_integer():
+                v = int(v)
+            return str(v)
+        uniq = list(dict.fromkeys([1] + key_cols))  # 첫 열(ID)과 *_Key 열은 겹치면 안 된다 (첫 열이 *_Key면 한 번만)
+        have = {col: set(norm(ws.Cells(r, col).Value) for r in range(DATA_ROW, end + 1) if ws.Cells(r, col).Value is not None) for col in uniq}
+        name_of = {v: k for k, v in c.items()}
+        for row in rows:
+            for name in row:
+                if name not in c:
+                    bad.append("%s.%s(없는 열)" % (sheet, name))
+            for col in uniq:
+                v = row.get(name_of[col])
+                if v is not None and norm(v) in have[col]:
+                    bad.append("%s.%s=%s(이미 있음)" % (sheet, name_of[col], v))
+                elif v is not None:
+                    have[col].add(norm(v))
+        if bad:
+            break
+        for row in rows:
+            end += 1
+            for name, col in c.items():
+                prev = ws.Cells(end - 1, col)
+                if name in row:
+                    v = row[name]
+                    ws.Cells(end, col).Value = safe_text(v) if isinstance(v, str) else v
+                elif end - 1 >= DATA_ROW and prev.HasFormula:
+                    ws.Cells(end, col).FormulaR1C1 = prev.FormulaR1C1      # 위 행의 수식을 이어 쓴다 (이름 칸 등)
+            n += 1
+    if bad:
+        abort("행을 더하지 않음: %s (저장 안 함)" % ", ".join(bad))
+    return "행 %d개 추가" % n
+
+
 def set_cells(wb, data):
     """{"시트": {"행 키": {"열 키": 값}}} — 행 키는 그 시트의 *_Key 열(Upg_Key·Boss_Key·Const_Key …)로 찾는다."""
     n, missing = 0, []
@@ -117,11 +162,13 @@ def set_cells(wb, data):
         ws = wb.Worksheets(sheet)
         c = header_cols(ws)
         key_col = next((col for name, col in sorted(c.items(), key=lambda x: x[1]) if name.endswith("_Key")), None)
-        if key_col is None:
-            abort("%s 시트에 *_Key 열이 없다" % sheet)
+        if key_col is None:                                # *_Key 열이 없는 시트(String)는 첫 열(ID)로 찾는다
+            key_col = 1
         where = {}
         for r in range(DATA_ROW, last_row(ws) + 1):
             k = ws.Cells(r, key_col).Value
+            if isinstance(k, float) and k.is_integer():    # 201015.0 → "201015"
+                k = int(k)
             if k is not None:
                 where[str(k)] = r
         drop = []
@@ -156,7 +203,7 @@ def set_cells(wb, data):
 
 
 def main():
-    if len(sys.argv) != 4 or sys.argv[1] not in ("strings", "prices", "set"):
+    if len(sys.argv) != 4 or sys.argv[1] not in ("strings", "prices", "set", "rows"):
         sys.exit(__doc__)
     cmd, target, src = sys.argv[1], os.path.abspath(sys.argv[2]), os.path.abspath(sys.argv[3])
     if not os.path.exists(target):
@@ -177,7 +224,7 @@ def main():
     wb = None
     try:
         wb = retry(lambda: excel.Workbooks.Open(target))
-        msg = add_strings(wb, data) if cmd == "strings" else set_prices(wb, data) if cmd == "prices" else set_cells(wb, data)
+        msg = add_strings(wb, data) if cmd == "strings" else set_prices(wb, data) if cmd == "prices" else append_rows(wb, data) if cmd == "rows" else set_cells(wb, data)
         wb.Save()
         print("%s · 저장: %s" % (msg, target))
     finally:

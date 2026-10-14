@@ -1,0 +1,1 @@
+return MoreMush.Defs.NODE["ps_atk2"].efx.Length+" skill="+MoreMush.EditorTools.BalanceSim.SKILL+" H="+MoreMush.EditorTools.BalanceSim.GATE_H+" gate="+MoreMush.EditorTools.BalanceSim.BOSS_GATE+" preset="+MoreMush.Defs.TUNE.id+" ps_atk2="+string.Join(",",MoreMush.Defs.NODE["ps_atk2"].efx)+" ps_atk4="+string.Join(",",MoreMush.Defs.NODE["ps_atk4"].efx);

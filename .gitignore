@@ -125,3 +125,6 @@ BalanceData/db_backup/auto/
 # 엑셀이 DB를 열어 둘 때 생기는 잠금 파일
 ~$*
 ~$*.meta
+
+# 출시 빌드 산출물
+Builds/
