@@ -14,6 +14,7 @@ namespace MoreMush
         public RectTransform basket;
         public Image basketShroomPrefab;
         public TMP_Text[] gainTexts = new TMP_Text[3];
+        public TMP_Text title;   // 비어 있으면 Card/Title을 찾아 쓴다
         public TMP_Text saleValue, scoreLabel, scoreValue, bonusLabel, bonusValue, goldValue, meta, themeText, recsText, toTreeText;
         public GameObject bonusRow, themeBox, unlockBox, newsBox, recsBox;
         public RectTransform unlockCards, newsCards;
@@ -35,6 +36,9 @@ namespace MoreMush
         public void Show(RoundSim.Summary s)
         {
             sum = s; t0 = Time.unscaledTime; rolledSound = false; animating = true;
+            // 제목: 끝까지 했으면 "수확 완료!", "라운드 끝내고 정산하기"로 중간에 끝냈으면 "수확 중단" (씬 Card/Title)
+            if (title == null) title = transform.Find("Card/Title")?.GetComponent<TMP_Text>();
+            if (title != null) title.text = s.aborted ? Loc.T("수확 중단") : Loc.T("수확 완료!");
             for (int i = 0; i < 3; i++) gainTexts[i].text = Loc.F("+{0}개", U.Fmt(s.gains[CAT_KEYS[i]]));
             scoreLabel.text = Loc.F("얻은 점수 → 골드 <size=70%><color=#8a6a4a>(×{0})</color></size>", U.FmtN(s.goldMul));
             bonusRow.SetActive(s.bonusGold > 0);
@@ -75,6 +79,7 @@ namespace MoreMush
                     : $"<color=#d04a3a>{Loc.F("보스 {0}에게 졌어요… 골드 −{1} (−{2}%)", b.n, U.Fmt(s.bossPenalty), Mathf.RoundToInt((float)(1 - BOSS_FAIL_GOLD) * 100))}</color>\n<size=80%>" +
                       Loc.T("보스 도전이 꺼졌어요. 이 스테이지에서 파밍하다가 균사 트리의 보스 도전 버튼으로 다시 도전하세요") + "</size>";
             }
+            if (s.aborted) return Loc.T("수확이 도중에 중단되어 스테이지가 완료되지 않습니다.");
             if (IsBossStage(s.stage)) return Loc.F("스테이지 {0} 보스가 기다려요 (보스 도전 꺼짐 · 파밍 중)", s.stage);
             return s.nextStage > s.stage ? Loc.F("스테이지 {0} 완료 → 스테이지 {1}", s.stage, s.nextStage) : null;
         }

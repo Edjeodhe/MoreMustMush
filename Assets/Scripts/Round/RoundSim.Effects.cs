@@ -334,6 +334,7 @@ namespace MoreMush
             public double bossPenalty;          // 보스 실패로 깎인 골드
             public double bossGold; public int bossGem, bossShrooms;   // 보스 처치 보상 (골드·균사석·더 받은 버섯 수)
             public int stage, nextStage;
+            public bool aborted;                // "라운드 끝내고 정산하기"로 중간에 끝냄 → 스테이지를 올리지 않는다 (번 골드는 받는다)
         }
 
         // 지금까지 모은 점수·보너스로 받을 정산 골드 (라운드 중 HUD가 보여 준다)
@@ -353,13 +354,15 @@ namespace MoreMush
             int bossShrooms = BossRound && bossCleared ? BossShroomReward() : 0;
             G.gold += scoreGold + bonus - penalty + bossGold;
             G.gem += bossGem;
-            if (!BossRound) G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
-            var s = new Summary { score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage };
+            // 중간에 끝낸 판: 스테이지를 완료하지 않는다. 보스 처치 보상 기준(직전 일반 판 골드)도 짧은 판으로 덮지 않는다
+            bool aborted = earlyExitSec >= 0 && !(BossRound && bossCleared);
+            if (!BossRound && !aborted) G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
+            var s = new Summary { aborted = aborted, score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage };
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
             // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍)
-            if (!IsBossStage(G.stage) || (BossRound && bossCleared)) G.stage++;
-            else if (BossRound) G.bossOn = false;
+            if (BossRound && !bossCleared) G.bossOn = false;
+            else if (!aborted && (!IsBossStage(G.stage) || BossRound)) G.stage++;
             s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);
             if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hvOn["gold"] = OnHvs().Count < HvSlots(); G.hv["gold"] = 1; s.goldHv = true; }
@@ -369,7 +372,7 @@ namespace MoreMush
             SaveGame();
             s.newSpecies = newSpecies.ToList(); s.newGolden = newGolden.ToList(); s.newStars = newStars.ToList(); s.newTheme = newTheme?.id;
             // 서버 로그 stage_end: 결과(보스: 처치 clear / 시간 초과 fail, 둘 다 "지금 끝내기"면 early_exit), 보스 남은 체력 % (분신 포함 합)
-            string result = earlyExitSec >= 0 && !(BossRound && bossCleared) ? "early_exit" : BossRound && !bossCleared ? "fail" : "clear";
+            string result = aborted ? "early_exit" : BossRound && !bossCleared ? "fail" : "clear";
             double bossMax = bosses.Sum(b => b.maxHp), bossHpPct = bossMax > 0 ? 100 * bosses.Sum(b => Math.Max(0, b.hp)) / bossMax : 0;
             Telemetry.StageEnd(G, s.stage, result, BossRound, score, s.net, earlyExitSec, bossHpPct, s.newSpecies);
             if (G.rounds == 1) Telemetry.Ftue(Telemetry.FTUE_FIRST_ROUND_END);
