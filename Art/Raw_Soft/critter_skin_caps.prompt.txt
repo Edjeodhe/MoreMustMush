@@ -1,0 +1,16 @@
+Sprite sheet: a 2x5 grid holding 10 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Recolored skin versions of the mushroom caps in the attached critter parts sheet. Exactly the same cap shape, size and line style as the caps there, only the colors and pattern change, and NO decoration on top.
+
+Assets in reading order (left to right, top to bottom):
+1. lava cap: dark red (#b8261a) with glowing orange (#ffb02a) cracks and spots
+2. neon cap: hot pink (#ff4fd8) with cyan (#7dfcff) spots
+3. snowflake cap: icy white (#eef6ff) with pale blue (#a8d8ff) snowflake spots
+4. rich cap: deep green (#2a6a3a) with gold (#ffd84a) spots
+5. galaxy cap: midnight blue (#1e1e52) with pale yellow (#fff07a) star spots
+6. cherry-blossom cap: pink (#ffb0c8) with white petal spots
+7. sun cap: bright orange (#ffa62a) with pale yellow (#fff4b0) spots
+8. cloud cap: white with light blue (#cfe6ff) spots
+9. gem cap: aqua crystal (#6ad0e0) with faceted shine
+10. strawberry-chocolate cap: chocolate brown (#5a3420) with pink (#ff8ab0) spots

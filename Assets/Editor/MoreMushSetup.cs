@@ -11,7 +11,25 @@ namespace MoreMush.EditorTools
     // One-time project setup for generated art and fonts. Menu: MoreMush/...
     public static class MoreMushSetup
     {
-        const string GenRoot = "Assets/Art/Generated";
+        // Art sets, later ones win: a sprite in Soft (watercolor set) replaces the Generated sprite with the same key.
+        public static readonly string[] ArtRoots = { "Assets/Art/Generated", "Assets/Art/Soft" };
+
+        // key ("Icons/gold") → asset path of the sprite the game uses for it
+        public static SortedDictionary<string, string> ResolvedArt()
+        {
+            var map = new SortedDictionary<string, string>(System.StringComparer.Ordinal);
+            foreach (var root in ArtRoots)
+            {
+                if (!AssetDatabase.IsValidFolder(root)) continue;
+                foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { root }))
+                {
+                    string p = AssetDatabase.GUIDToAssetPath(guid);
+                    string key = p.Substring(root.Length + 1);
+                    map[key.Substring(0, key.Length - Path.GetExtension(key).Length)] = p;
+                }
+            }
+            return map;
+        }
         const string DbPath = "Assets/Resources/SpriteDB.asset";
 
         [MenuItem("MoreMush/Setup All")]
@@ -40,11 +58,11 @@ namespace MoreMush.EditorTools
                 ["UI/bar_log"] = (w, h) => new Vector4(Mathf.Min(w * 0.2f, h * 1.6f), 0, Mathf.Min(w * 0.2f, h * 1.6f), 0),
                 ["Props/moss"] = (w, h) => Uniform(w, h, 0.3f),
             };
+            var art = ResolvedArt();
             foreach (var kv in rules)
             {
-                string path = $"{GenRoot}/{kv.Key}.png";
-                var imp = AssetImporter.GetAtPath(path) as TextureImporter;
-                if (imp == null) { Debug.LogWarning("missing " + path); continue; }
+                var imp = art.TryGetValue(kv.Key, out var path) ? AssetImporter.GetAtPath(path) as TextureImporter : null;
+                if (imp == null) { Debug.LogWarning("missing " + kv.Key); continue; }
                 imp.GetSourceTextureWidthAndHeight(out int w, out int h);
                 imp.spriteBorder = kv.Value(w, h);
                 // sliced SpriteRenderers (world-space frames, bubbles) need a full-rect mesh to 9-slice correctly
@@ -64,14 +82,11 @@ namespace MoreMush.EditorTools
             var db = AssetDatabase.LoadAssetAtPath<SpriteDB>(DbPath);
             if (db == null) { db = ScriptableObject.CreateInstance<SpriteDB>(); AssetDatabase.CreateAsset(db, DbPath); }
             db.entries.Clear();
-            foreach (var guid in AssetDatabase.FindAssets("t:Sprite", new[] { GenRoot }))
+            foreach (var kv in ResolvedArt())
             {
-                string p = AssetDatabase.GUIDToAssetPath(guid);
-                var sp = AssetDatabase.LoadAssetAtPath<Sprite>(p);
-                if (sp == null || p.EndsWith("/grandpa_ref.png")) continue;
-                string key = p.Substring(GenRoot.Length + 1);
-                key = key.Substring(0, key.Length - Path.GetExtension(key).Length);
-                db.entries.Add(new SpriteDB.Entry { key = key, sprite = sp });
+                var sp = AssetDatabase.LoadAssetAtPath<Sprite>(kv.Value);
+                if (sp == null || kv.Value.EndsWith("/grandpa_ref.png")) continue;
+                db.entries.Add(new SpriteDB.Entry { key = kv.Key, sprite = sp });
             }
             db.entries.Sort((a, b) => string.CompareOrdinal(a.key, b.key));
             EditorUtility.SetDirty(db);
@@ -92,7 +107,8 @@ namespace MoreMush.EditorTools
         public static void BuildIconSpriteAsset()
         {
             const int cell = 128;
-            var paths = AssetDatabase.FindAssets("t:Texture2D", new[] { GenRoot + "/Icons", GenRoot + "/Farm/Icons", GenRoot + "/Farm/Field", GenRoot + "/Farm/Tree" }).Select(AssetDatabase.GUIDToAssetPath).OrderBy(p => p).ToList();
+            var iconDirs = new[] { "Icons/", "Farm/Icons/", "Farm/Field/", "Farm/Tree/" };
+            var paths = ResolvedArt().Where(kv => iconDirs.Any(d => kv.Key.StartsWith(d))).Select(kv => kv.Value).ToList();
             int cols = 8, rows = Mathf.CeilToInt(paths.Count / (float)cols);
             var atlas = new Texture2D(cols * cell, rows * cell, TextureFormat.RGBA32, false);
             atlas.SetPixels32(new Color32[atlas.width * atlas.height]);

@@ -1,13 +1,13 @@
 using UnityEditor;
 
-// Images dropped into Assets/Art/Generated (e.g. by Tools/codex-image.mjs) import as ready-to-use 2D sprites.
+// Images dropped into Assets/Art/Generated or Assets/Art/Soft (Tools/art/build-art.mjs) import as ready-to-use 2D sprites.
 public class GeneratedArtPostprocessor : AssetPostprocessor
 {
-    private const string k_GeneratedFolder = "Assets/Art/Generated/";
+    private static readonly string[] k_ArtFolders = { "Assets/Art/Generated/", "Assets/Art/Soft/" };
 
     private void OnPreprocessTexture()
     {
-        if (!assetPath.StartsWith(k_GeneratedFolder)) return;
+        if (!System.Array.Exists(k_ArtFolders, f => assetPath.StartsWith(f))) return;
         var importer = (TextureImporter)assetImporter;
 
         // FX shapes (circle, soft, ring, square) are exactly one world unit wide so code can scale them by size

@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Decorations for a cozy mushroom world-tree garden: 24 small ornaments to hang on branches or set around the roots, front view, same scale, plus one large reward illustration in the last cell.
+
+Assets in reading order (left to right, top to bottom):
+1. a lantern made of curled green leaves glowing warm yellow, hanging from a short vine loop
+2. a round flower wreath crown of small pink and white flowers and leaves
+3. a small wooden birdhouse with a leaf roof and a round hole
+4. a wind chime of hanging clear blue water-drop crystals under a leaf
+5. a small mossy stone spring with clear water bubbling up
+6. a small round pond with two pink water lilies and lily pads
+7. a dream catcher: a willow hoop with a web and hanging white feathers
+8. a cute paper pinwheel on a stick, mint and white
+9. a little wooden seat swing hanging on two green vines with leaves
+10. a round stone brazier with a cozy orange fire
+11. a red paper lantern with a warm flame glow, hanging from a hook
+12. a fat candle shaped like a mushroom with a small flame on top
+13. a flat stone table with a mushroom-cap top and two pebble stools
+14. a round grey boulder covered with soft green moss and a tiny sprout
+15. a split-open geode rock full of purple amethyst crystals
+16. a little brass lightning-rod post holding a glowing yellow orb with a tiny spark
+17. a golden crystal lamp on a short stand, glowing yellow
+18. a shiny brass bell hanging from a ribbon
+19. a hanging crescent moon ornament, pale yellow, with a tiny star on a string
+20. a garland string of little glowing stars and moons
+21. a cute carved wooden owl figure on a small stump
+22. a small rounded standing stone with a glowing violet star rune carved in it
+23. a little golden crown with violet gems, hanging from a ribbon
+24. a glowing pastel violet orb of light in a small leafy holder, hanging
+25. a big open wooden treasure chest overflowing with gold coins, glowing orange mushrooms, teal mycelium crystals and sparkling pink-violet diamonds, with coins spilling onto the ground

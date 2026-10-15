@@ -19,6 +19,8 @@ CORE_ALPHA = 200    # alpha at or above this is solid body (used to tell items a
 ROW_GAP = 6         # empty pixel rows that separate two rows of items
 MIN_BLOB = 40       # blobs smaller than this many pixels are noise
 PAD = 6
+SOLID_MIN = 400    # solid bodies smaller than this are specks, not items
+HALO_ALPHA = 60    # semi-transparent pixels below this are halo noise
 
 
 def opaque_mask(img):
@@ -47,6 +49,13 @@ def main():
     # Label only solid pixels: soft glows and halos are semi-transparent and would bridge neighbouring items.
     alpha = np.asarray(img)[:, :, 3]
     core = mask & (alpha >= CORE_ALPHA)
+    # Drop the faint halo specks the generator leaves around items: keep only pixels near a sizeable solid body.
+    solid_lab, solid_n = ndimage.label(core)
+    if solid_n:
+        sizes = ndimage.sum(core, solid_lab, range(1, solid_n + 1))
+        solid = np.isin(solid_lab, 1 + np.nonzero(sizes > SOLID_MIN)[0])
+        mask &= ndimage.binary_dilation(solid, iterations=6) & (alpha >= HALO_ALPHA)
+        core &= mask
 
     # The generator sometimes swaps the grid (e.g. 5x4 instead of 4x5). Find the real row bands from empty
     # horizontal gaps; when they disagree with the requested rows, re-derive rows/cols from the item count.
@@ -127,7 +136,9 @@ def main():
         ph, pw = (-crop.shape[0]) % 4, (-crop.shape[1]) % 4
         if ph or pw:
             crop = np.pad(crop, ((0, ph), (0, pw), (0, 0)), mode="constant")
-        Image.fromarray(crop).save(os.path.join(out_dir, f"{name}.png"))
+        dest = os.path.join(out_dir, f"{name}.png")   # a name may hold a sub path (mixed-folder sheets)
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        Image.fromarray(crop).save(dest)
         items[name] = {"w": int(crop.shape[1]), "h": int(crop.shape[0]), "blobs": len(blobs), "x": int(x0), "y": int(y0)}
     print(json.dumps({"items": items, "warnings": warnings}, ensure_ascii=False))
 

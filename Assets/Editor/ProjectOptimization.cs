@@ -16,14 +16,14 @@ namespace MoreMush.EditorTools
 {
     public static class ProjectOptimization
     {
-        const string ArtRoot = "Assets/Art/Generated";
+        static string[] ArtRoots => MoreMushSetup.ArtRoots.Where(AssetDatabase.IsValidFolder).ToArray();
         public const string AtlasRoot = "Assets/Art/Atlases";
 
         public static int TextureLimit(string path)
         {
             if (path.Contains("/Icons/") || path.Contains("/Mushrooms/") || path.Contains("/Harvesters/")) return 256;
             if (path.Contains("/Characters/Critters/")) return 256;
-            if (path.Contains("/Characters/NPC/") || path.Contains("/Farm/Props/") || path.Contains("/Farm/Tree/")) return 512;
+            if (path.Contains("/Characters/NPC/") || path.Contains("/Farm/Props/") || path.Contains("/Farm/Tree/") || path.Contains("/Bosses/")) return 512;
             return 2048; // Preserve backgrounds, UI borders, and the assembled grandpa rig.
         }
 
@@ -34,7 +34,7 @@ namespace MoreMush.EditorTools
             try
             {
                 AssetDatabase.StartAssetEditing();
-                foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { ArtRoot }))
+                foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", ArtRoots))
                 {
                     string path = AssetDatabase.GUIDToAssetPath(guid);
                     var importer = AssetImporter.GetAtPath(path) as TextureImporter;
@@ -58,10 +58,11 @@ namespace MoreMush.EditorTools
         {
             Directory.CreateDirectory(AtlasRoot);
             var groups = new Dictionary<string, List<Object>>();
-            foreach (var guid in AssetDatabase.FindAssets("t:Sprite", new[] { ArtRoot }))
+            // Only the sprite each key resolves to (Soft over Generated) is packed; replaced sprites stay out of the build.
+            foreach (var kv in MoreMushSetup.ResolvedArt())
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                string relative = path.Substring(ArtRoot.Length + 1);
+                string path = kv.Value;
+                string relative = kv.Key + Path.GetExtension(path);
                 // WeatherMask and procedural FX use 0..1 UVs; never atlas these textures.
                 if (relative.StartsWith("FX/") || relative.EndsWith("grandpa_ref.png")) continue;
                 string group = relative.Split('/')[0];
@@ -162,7 +163,7 @@ namespace MoreMush.EditorTools
         {
             var sb = new StringBuilder();
             var textures = new HashSet<Texture>();
-            foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { ArtRoot }))
+            foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", ArtRoots))
             {
                 var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GUIDToAssetPath(guid));
                 if (texture != null) textures.Add(texture);

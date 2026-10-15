@@ -5,6 +5,7 @@
 //   node Tools/art/build-art.mjs <id> ...     # only these sheets
 //   node Tools/art/build-art.mjs --force <id> # regenerate these sheets with Codex
 //   node Tools/art/build-art.mjs --slice-only # never call Codex, just re-slice existing raw sheets
+//   node Tools/art/build-art.mjs --set soft   # the soft watercolor set (sheets-soft.mjs → Art/Raw_Soft, Assets/Art/Soft)
 //
 // Raw sheets and their prompts live in Art/Raw/ (committed), so a build never pays for an image twice.
 
@@ -12,14 +13,21 @@ import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { SHEETS } from "./sheets.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const rawDir = path.join(repoRoot, "Art", "Raw");
-const genRoot = path.join(repoRoot, "Assets", "Art", "Generated");
-const CONCURRENCY = 2;
-
 const argv = process.argv.slice(2);
+const setIdx = argv.indexOf("--set");
+const SET = setIdx >= 0 ? argv.splice(setIdx, 2)[1] : "default";
+const SETS = {
+  default: { module: "./sheets.mjs", raw: "Art/Raw", gen: "Assets/Art/Generated", style: "Tools/art-style.md" },
+  soft: { module: "./sheets-soft.mjs", raw: "Art/Raw_Soft", gen: "Assets/Art/Soft", style: "Tools/art-style-soft.md" },
+};
+if (!SETS[SET]) { console.error(`unknown set: ${SET}`); process.exit(1); }
+const { SHEETS } = await import(SETS[SET].module);
+const rawDir = path.join(repoRoot, SETS[SET].raw);
+const genRoot = path.join(repoRoot, SETS[SET].gen);
+const CONCURRENCY = Number(process.env.ART_CONCURRENCY || 2);
+
 const force = argv.includes("--force");
 const sliceOnly = argv.includes("--slice-only");
 const wanted = argv.filter((a) => !a.startsWith("--"));
@@ -55,11 +63,12 @@ function sheetPrompt(s) {
 async function buildSheet(s) {
   const raw = path.join(rawDir, `${s.id}.png`);
   const single = s.kind === "image";   // one full image (e.g. a background): copied as is, never sliced
+  if (s.copyOf && !fs.existsSync(raw)) fs.copyFileSync(path.join(repoRoot, s.copyOf), raw);
   if (!sliceOnly && (force || !fs.existsSync(raw))) {
     const prompt = single ? s.prompt : sheetPrompt(s);
     fs.mkdirSync(rawDir, { recursive: true });
     fs.writeFileSync(path.join(rawDir, `${s.id}.prompt.txt`), prompt);
-    const args = ["Tools/codex-image.mjs", "--prompt", prompt, "--out", path.relative(repoRoot, raw), "--style", "Tools/art-style.md", "--timeout", "600"];
+    const args = ["Tools/codex-image.mjs", "--prompt", prompt, "--out", path.relative(repoRoot, raw), "--style", SETS[SET].style, "--timeout", "600"];
     if (!single) args.push("--transparent");
     if (s.search) args.push("--search");
     for (const r of s.refs || []) args.push("--ref", r);
@@ -84,12 +93,26 @@ async function buildSheet(s) {
   return res.warnings.length === 0;
 }
 
-// Sheets that use another sheet as a reference (e.g. character parts drawn from the full character) run last.
+// A sheet that uses another sheet of this run as a reference (e.g. character parts drawn from the full
+// character) starts only after that sheet is done.
 let ok = true;
-for (const batch of [sheets.filter((s) => !s.refs), sheets.filter((s) => s.refs)]) {
-  const queue = [...batch];
-  await Promise.all(Array.from({ length: Math.min(CONCURRENCY, queue.length) }, async () => {
-    while (queue.length) ok = (await buildSheet(queue.shift())) && ok;
-  }));
-}
+const rawOf = (s) => path.relative(repoRoot, path.join(rawDir, `${s.id}.png`)).replaceAll("\\", "/");
+// Sheets that others wait on go first so long reference chains (full → parts → skins) start early.
+const isRef = (s) => sheets.some((o) => (o.refs || []).includes(rawOf(s)));
+const pending = new Map([...sheets].sort((x, y) => isRef(y) - isRef(x)).map((s) => [rawOf(s), s]));
+const done = new Set();
+const waitsOn = (s) => (s.refs || []).filter((r) => pending.has(r) && !done.has(r) && r !== rawOf(s));
+const running = new Set();
+await new Promise((resolve) => {
+  const pump = () => {
+    for (const [key, s] of pending) {
+      if (running.size >= CONCURRENCY) break;
+      if (running.has(key) || done.has(key) || waitsOn(s).length) continue;
+      running.add(key);
+      buildSheet(s).then((r) => { ok = r && ok; running.delete(key); done.add(key); pump(); });
+    }
+    if (done.size === pending.size) resolve();
+  };
+  pump();
+});
 process.exitCode = ok ? 0 : 1;

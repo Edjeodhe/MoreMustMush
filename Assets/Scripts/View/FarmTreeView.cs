@@ -73,7 +73,7 @@ namespace MoreMush
         public IEnumerable<int> SlotsIn(string zone) { Layout(); for (int i = 0; i < slots.Count; i++) if (slots[i].zone == zone) yield return i; }
         public Vector2 DecoPos(int i) { Layout(); return i >= 0 && i < decoPos.Count ? decoPos[i] : new Vector2(WT.x, WT.y); }
 
-        float FruitPx => 34 + 5 * WT.Picture(Stage());
+        float FruitPx => 34 + 20f * WT.Picture(Stage()) / (WT.stages - 1);
 
         // 자라는 정도 0~1 (1 = 다 자라 빛난다). 일하는 꼬마가 있는 구역은 다 자라면 바로 따여 다시 자란다
         public float Growth(int i, double now)
