@@ -7,6 +7,7 @@
 
   python BalanceData/db/db_write.py set     <xlsx> <json>   # 아무 시트의 칸 값을 바꿈 (밸런스 수치안: Const·Boss·Upgrade 효과값 등)
   python BalanceData/db/db_write.py rows    <xlsx> <json>   # 시트 맨 아래에 새 행을 더함 (새 노드: Upgrade·Upgrade_Cost·String)
+  python BalanceData/db/db_write.py addcols <xlsx> <json>   # 시트 오른쪽 끝에 새 열을 더함 (새 언어: String의 Str_RU·Str_UK)
 
 strings json = ["한국어 문구", ...]  ·  prices json = {"노드 키": [1레벨 가격, 2레벨 가격, ...]}
 set json = {"Const": {"BOSS_HP_K": {"Value": 2}}, "Boss": {"king": {"Hp_Mul": 1.4}}}  (행은 그 시트의 *_Key 열로 찾음, 없으면 첫 열 ID — String: {"String": {"201015": {"Str_KR": "…"}}})
@@ -80,6 +81,9 @@ def add_strings(wb, items):
         row[c["Str_KR"] - 1] = safe_text(s)
         row[c["Str_EN"] - 1] = ""
         row[c["Str_JA"] - 1] = ""
+        for extra in ("Str_RU", "Str_UK"):
+            if extra in c:
+                row[c[extra] - 1] = ""
         rows.append(row)
     if rows:
         block(ws, end + 1, 1, rows)
@@ -202,8 +206,30 @@ def set_cells(wb, data):
     return "칸 %d개 갱신" % n
 
 
+def add_columns(wb, data):
+    """{"시트": [["열 키", "1행 머리글", "자료형"], ...]} — 2행 키가 이미 있으면 건너뛴다. 서식은 그 시트 마지막 열을 따른다."""
+    n = 0
+    for sheet, cols in data.items():
+        ws = wb.Worksheets(sheet)
+        have = header_cols(ws)
+        last = max(have.values())
+        for key, title, kind in cols:
+            if key in have:
+                continue
+            last += 1
+            ws.Columns(last - 1).Copy()
+            ws.Columns(last).PasteSpecial(-4122)       # xlPasteFormats
+            ws.Cells(1, last).Value = title
+            ws.Cells(2, last).Value = key
+            ws.Cells(3, last).Value = kind
+            ws.Columns(last).ColumnWidth = ws.Columns(last - 1).ColumnWidth
+            n += 1
+        ws.Application.CutCopyMode = False
+    return "열 %d개 추가" % n
+
+
 def main():
-    if len(sys.argv) != 4 or sys.argv[1] not in ("strings", "prices", "set", "rows"):
+    if len(sys.argv) != 4 or sys.argv[1] not in ("strings", "prices", "set", "rows", "addcols"):
         sys.exit(__doc__)
     cmd, target, src = sys.argv[1], os.path.abspath(sys.argv[2]), os.path.abspath(sys.argv[3])
     if not os.path.exists(target):
@@ -224,7 +250,7 @@ def main():
     wb = None
     try:
         wb = retry(lambda: excel.Workbooks.Open(target))
-        msg = add_strings(wb, data) if cmd == "strings" else set_prices(wb, data) if cmd == "prices" else append_rows(wb, data) if cmd == "rows" else set_cells(wb, data)
+        msg = add_strings(wb, data) if cmd == "strings" else set_prices(wb, data) if cmd == "prices" else append_rows(wb, data) if cmd == "rows" else add_columns(wb, data) if cmd == "addcols" else set_cells(wb, data)
         wb.Save()
         print("%s · 저장: %s" % (msg, target))
     finally:

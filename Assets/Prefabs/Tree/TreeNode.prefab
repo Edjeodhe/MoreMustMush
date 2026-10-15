@@ -1384,6 +1384,7 @@ MonoBehaviour:
   role: 0
   preset: 0
   key: 
+  authored: 
 --- !u!1 &5250679308009116720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1861,6 +1862,7 @@ MonoBehaviour:
   role: 0
   preset: 0
   key: 
+  authored: 
 --- !u!1 &6026079463842335563
 GameObject:
   m_ObjectHideFlags: 0
@@ -1968,7 +1970,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uB178\uB4DC"
+  m_text: Node
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
@@ -2058,6 +2060,7 @@ MonoBehaviour:
   role: 0
   preset: 0
   key: "\uB178\uB4DC"
+  authored: Node
 --- !u!1 &6143272113781911192
 GameObject:
   m_ObjectHideFlags: 0
@@ -2255,3 +2258,4 @@ MonoBehaviour:
   role: 0
   preset: 0
   key: 
+  authored: 

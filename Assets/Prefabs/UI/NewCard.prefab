@@ -153,6 +153,7 @@ MonoBehaviour:
   role: 0
   preset: -1
   key: 
+  authored: 
 --- !u!1 &6020263831010177747
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,7 +222,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC591\uC1A1\uC774"
+  m_text: Button Mushroom
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
   m_sharedMaterial: {fileID: 1883410513914278816, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
@@ -342,6 +343,7 @@ MonoBehaviour:
   role: 0
   preset: -1
   key: "\uC591\uC1A1\uC774"
+  authored: Button Mushroom
 --- !u!1 &6680306048607872902
 GameObject:
   m_ObjectHideFlags: 0

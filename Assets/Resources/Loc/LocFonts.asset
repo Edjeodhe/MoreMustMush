@@ -52,3 +52,29 @@ MonoBehaviour:
       - {fileID: 2100000, guid: 7c16977420e34744d9bec6cb4a3b2131, type: 2}
       - {fileID: 2100000, guid: 73ee07c683edafb419c9c23d7f585f7a, type: 2}
       - {fileID: 2100000, guid: 070e088714b3347409e1094e422eb4d3, type: 2}
+  - lang: ru
+    title:
+      font: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+      presets:
+      - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
+      - {fileID: 2100000, guid: 3c422943476e89043bfc8c0e64c730d8, type: 2}
+      - {fileID: 2100000, guid: 5d68d0ce7b59d9d4e9564ae91649c1b6, type: 2}
+    body:
+      font: {fileID: 11400000, guid: 1858953a4d8fee74188f368f8ca7c645, type: 2}
+      presets:
+      - {fileID: 2100000, guid: a7e0ac25b3963ad46a197c1cbb07779f, type: 2}
+      - {fileID: 2100000, guid: 3c0d1515c1363634e8e7ac85e3c0e6dc, type: 2}
+      - {fileID: 2100000, guid: f39e657e95cd72441b6cf2d2663fbc3e, type: 2}
+  - lang: uk
+    title:
+      font: {fileID: 11400000, guid: 02b1d91fa9f603040adb9296f68d4ef8, type: 2}
+      presets:
+      - {fileID: 2100000, guid: 3ac88cf8cba689844b1884102db500e8, type: 2}
+      - {fileID: 2100000, guid: 053f22f46c3233a48978b4d9a3085ee7, type: 2}
+      - {fileID: 2100000, guid: 8686c919557ff7f4bba45d68686dd275, type: 2}
+    body:
+      font: {fileID: 11400000, guid: 4078fe70134c88242b38298b1c55d77d, type: 2}
+      presets:
+      - {fileID: 2100000, guid: 7c16977420e34744d9bec6cb4a3b2131, type: 2}
+      - {fileID: 2100000, guid: 73ee07c683edafb419c9c23d7f585f7a, type: 2}
+      - {fileID: 2100000, guid: 070e088714b3347409e1094e422eb4d3, type: 2}

@@ -5,20 +5,22 @@ using UnityEngine;
 
 namespace MoreMush
 {
-    // 다국어. 번역표 = 엑셀 DB의 String 시트 (Str_KR 한국어 원문 · Str_EN · Str_JA, 빈 칸 = 번역 전). Db.cs가 db.json으로 읽는다.
+    // 다국어. 번역표 = 엑셀 DB의 String 시트 (Str_KR 한국어 원문 · Str_EN · Str_JA · Str_RU · Str_UK, 빈 칸 = 번역 전). Db.cs가 db.json으로 읽는다.
     // 키는 한국어 원문 그대로다. 코드는 Loc.T("원문"), 자리 표시가 있으면 Loc.F("버섯 {0}개", n).
     // 새 문구는 Unity 메뉴 MoreMush/다국어/3 번역표 갱신이 String 시트 맨 아래에 추가한다.
     // 언어를 늘리려면 LANGS에 코드를 더하고 String 시트에 Str_<코드> 열(Db.cs도), LocFonts에 폰트 세트를 더한다.
     public static class Loc
     {
-        public static readonly string[] LANGS = { "ko", "en", "ja" };
+        public static readonly string[] LANGS = { "en", "ko", "ja", "ru", "uk" };
         public static readonly Dictionary<string, string> LANG_NAME = new Dictionary<string, string>
         {
-            ["ko"] = "한국어", ["en"] = "English", ["ja"] = "日本語",
+            ["ko"] = "한국어", ["en"] = "English", ["ja"] = "日本語", ["ru"] = "Русский", ["uk"] = "Українська",
         };
         const string PrefKey = "mmm_lang";
+        // 처음 실행(저장된 언어 없음)의 언어. 기기 언어와 상관없이 영어
+        public const string DefaultLang = "en";
 
-        public static string Lang { get; private set; } = "ko";
+        public static string Lang { get; private set; } = DefaultLang;
         public static bool IsKo => Lang == "ko";
         public static event Action Changed;
 
@@ -31,17 +33,9 @@ namespace MoreMush
             if (loaded) return;
             loaded = true;
             string saved = PlayerPrefs.GetString(PrefKey, "");
-            Lang = Array.IndexOf(LANGS, saved) >= 0 ? saved : SystemLang();
+            Lang = Array.IndexOf(LANGS, saved) >= 0 ? saved : DefaultLang;
             table = LoadTable(Lang);
         }
-
-        // 처음 실행: 기기 언어가 지원 언어면 그것, 아니면 영어 (한국어 기기는 한국어)
-        static string SystemLang() => Application.systemLanguage switch
-        {
-            SystemLanguage.Korean => "ko",
-            SystemLanguage.Japanese => "ja",
-            _ => "en",
-        };
 
         public static void SetLang(string lang)
         {

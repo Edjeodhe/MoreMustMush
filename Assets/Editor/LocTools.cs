@@ -25,6 +25,8 @@ namespace MoreMush.EditorTools
             ("ko", "ONEMobilePOP", "ONEMobileRegular"),
             ("en", "ONEMobilePOP", "LINESeedSans_Rg"),
             ("ja", "LINESeedJP_Eb", "LINESeedJP_Rg"),
+            ("ru", "ONEMobilePOP", "ONEMobileRegular"),   // 키릴 문자 있음 (우크라이나 글자 ІЇЄҐ는 없음)
+            ("uk", "LINESeedJP_Eb", "LINESeedJP_Rg"),     // 키릴 + ІЇЄҐ 모두 있음
         };
         // 어느 폰트에도 없는 글자가 나오면 이 폰트로 넘긴다 (한글·가나·한자·기호를 모두 가진 폰트)
         const string UniversalFallback = "ONEMobileRegular";
@@ -167,7 +169,7 @@ namespace MoreMush.EditorTools
                 string mat = t.fontSharedMaterial != null ? t.fontSharedMaterial.name : "";
                 lt.preset = Array.FindIndex(LocFonts.PRESETS, pr => mat.EndsWith(pr));
             }
-            string key = ContainsHangul(t.text) ? t.text : "";
+            string key = ContainsHangul(t.text) ? t.text : (!string.IsNullOrEmpty(lt.authored) && lt.authored == t.text ? lt.key : "");
             bool changed = added || lt.key != key;
             lt.key = key;
             var face = lf.FaceFor("ko", lt.role);
@@ -178,6 +180,47 @@ namespace MoreMush.EditorTools
             }
             if (changed) { EditorUtility.SetDirty(t); EditorUtility.SetDirty(lt); }
             return changed;
+        }
+
+        // ===== 2-1. 씬·프리팹 글자를 영어로 =====
+        // 에디터에서 보이는 글자를 DB의 영어(Str_EN)로 적는다. key(한국어 원문)는 그대로 둬서 실행 중 언어 전환은 그대로 된다.
+        [MenuItem("MoreMush/다국어/2-1 씬 글자 영어로")]
+        public static string WriteEnglishAll()
+        {
+            Db.Reload();
+            var en = Db.LangTable("en");
+            int n = 0;
+            var scene = EditorSceneManager.GetActiveScene();
+            foreach (var root in scene.GetRootGameObjects()) n += WriteEnglish(root, en);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+            int p = 0;
+            foreach (var guid in AssetDatabase.FindAssets("t:Prefab", new[] { "Assets/Prefabs" }))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var root = PrefabUtility.LoadPrefabContents(path);
+                int c = WriteEnglish(root, en);
+                if (c > 0) { PrefabUtility.SaveAsPrefabAsset(root, path); p++; n += c; }
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+            AssetDatabase.SaveAssets();
+            return $"글자 {n}개를 영어로 바꿈 (프리팹 {p}개)";
+        }
+
+        static int WriteEnglish(GameObject root, Dictionary<string, string> en)
+        {
+            int n = 0;
+            foreach (var lt in root.GetComponentsInChildren<LocText>(true))
+            {
+                if (string.IsNullOrEmpty(lt.key) || !en.TryGetValue(lt.key, out var english) || string.IsNullOrEmpty(english)) continue;
+                var t = lt.GetComponent<TMP_Text>();
+                if (t.text != lt.key && t.text != lt.authored) continue;   // 코드가 채우는 글자는 건드리지 않는다
+                if (t.text == english && lt.authored == english) continue;
+                t.text = english; lt.authored = english;
+                EditorUtility.SetDirty(t); EditorUtility.SetDirty(lt);
+                n++;
+            }
+            return n;
         }
 
         static LocFonts.Role RoleOfNewFont(string fontName, LocFonts lf)
@@ -218,8 +261,8 @@ namespace MoreMush.EditorTools
             var have = new HashSet<string>(db.String.Select(r => r.Str_KR));
             var missing = keys.Where(k => !have.Contains(k)).ToList();
             int unused = db.String.Count(r => r.Str_Name == "ui" && !seen.Contains(r.Str_KR));
-            int filled = db.String.Sum(r => (string.IsNullOrEmpty(r.Str_EN) ? 0 : 1) + (string.IsNullOrEmpty(r.Str_JA) ? 0 : 1));
-            string msg = $"문구 {keys.Count}개 · DB String {db.String.Count}줄 (번역 칸 {filled}/{db.String.Count * 2}) · 안 쓰는 UI 줄 {unused}";
+            int filled = db.String.Sum(r => new[] { r.Str_EN, r.Str_JA, r.Str_RU, r.Str_UK }.Count(t => !string.IsNullOrEmpty(t)));
+            string msg = $"문구 {keys.Count}개 · DB String {db.String.Count}줄 (번역 칸 {filled}/{db.String.Count * (Loc.LANGS.Length - 1)}) · 안 쓰는 UI 줄 {unused}";
             string xlsx = DbImport.LatestDb();
             if (missing.Count > 0 && xlsx == null) msg += $"\n새 문구 {missing.Count}개가 있지만 Assets/DB에 엑셀 DB가 없어요";
             else if (missing.Count > 0)
@@ -319,6 +362,8 @@ namespace MoreMush.EditorTools
                 langChars["ko"].UnionWith(r.Str_KR ?? "");
                 langChars["en"].UnionWith(r.Str_EN ?? "");
                 langChars["ja"].UnionWith(r.Str_JA ?? "");
+                langChars["ru"].UnionWith(r.Str_RU ?? "");
+                langChars["uk"].UnionWith(r.Str_UK ?? "");
             }
             var basic = new HashSet<char>(Enumerable.Range(32, 95).Select(i => (char)i));
             basic.UnionWith(SYMBOLS);

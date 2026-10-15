@@ -6,10 +6,10 @@ using UnityEngine.UI;
 namespace MoreMush
 {
     // 옵션: 언어 · 소리 · (라운드 중) 끝내고 정산 · (라운드 밖) 타이틀로.
-    // 언어 버튼은 Loc.LANGS 순서대로 langFirst를 복제해 만든다 — 언어를 더하면 버튼도 따라 늘어난다.
+    // 언어 버튼은 Loc.LANGS 순서대로 langFirst를 복제해 만든다 — 언어를 더하면 버튼도, 줄도 따라 늘어난다.
     public class OptionsPanel : MonoBehaviour
     {
-        public UIAction langFirst;             // LangRow 안의 첫 버튼 (ko). 나머지 언어는 이것을 복제한다
+        public UIAction langFirst;             // LangRow 안의 첫 버튼 (LANGS[0]). 나머지 언어는 이것을 복제한다
         public TMP_Text muteText;
         public GameObject endNow, toTitle;
 
@@ -32,6 +32,17 @@ namespace MoreMush
                 if (t != null) t.text = Loc.LANG_NAME.TryGetValue(Loc.LANGS[i], out var n) ? n : Loc.LANGS[i];
                 langs.Add(b);
             }
+            FitRowHeight(row);
+        }
+
+        // 언어가 늘면 줄이 늘어난다 (LangRow = GridLayoutGroup). 패널은 내용 높이에 맞춰 자란다
+        void FitRowHeight(Transform row)
+        {
+            var grid = row.GetComponent<GridLayoutGroup>();
+            var le = row.GetComponent<LayoutElement>();
+            if (grid == null || le == null) return;
+            int rows = Mathf.CeilToInt(langs.Count / (float)Mathf.Max(1, grid.constraintCount));
+            le.preferredHeight = rows * grid.cellSize.y + (rows - 1) * grid.spacing.y + grid.padding.vertical;
         }
 
         public void Render()
