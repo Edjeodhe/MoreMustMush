@@ -30,7 +30,7 @@ namespace MoreMush
             return t;
         }
 
-        // ===== 버전 번호 (Player Settings > Version) — 모든 화면 왼쪽 아래 =====
+        // ===== 버전 번호 — 모든 화면 왼쪽 아래. 글자는 Player Settings > Version(ProjectSettings bundleVersion)을 그대로 쓴다 =====
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void ShowVersion()
         {
@@ -42,6 +42,7 @@ namespace MoreMush
             var rt = t.rectTransform;
             rt.anchorMin = rt.anchorMax = rt.pivot = Vector2.zero;
             rt.anchoredPosition = new Vector2(12, 8); rt.sizeDelta = new Vector2(400, 40);
+            t.gameObject.AddComponent<VersionLabel>();   // 창 비율이 16:9가 아니어도 게임 화면 안 왼쪽 아래에
         }
 
         // ===== 데미지 통계 (정산 화면 버튼) — 출처(직접 타격·스킬·능력)별 · 수확기별. 아무 데나 누르면 닫힌다 =====

@@ -14,7 +14,20 @@ namespace MoreMush
         Camera cam;
         int lastW, lastH;
 
-        void OnEnable() { cam = GetComponent<Camera>(); lastW = 0; }
+        void OnEnable() { cam = GetComponent<Camera>(); lastW = 0; if (Application.isPlaying) EnsureBars(); }
+
+        // 16:9 밖 여백(검은 띠)을 매 프레임 지우는 카메라. 게임 카메라는 자기 영역만 지워서, 없으면 여백에 지난 프레임이 남는다
+        // (창 크기를 바꾸거나 화면 밖에 걸친 오버레이 글자 — 예: 버전 표시 — 의 잔상이 겹쳐 보였다)
+        static Camera bars;
+        void EnsureBars()
+        {
+            if (bars != null) return;
+            var go = new GameObject("LetterboxBars");
+            DontDestroyOnLoad(go);
+            bars = go.AddComponent<Camera>();
+            bars.clearFlags = CameraClearFlags.SolidColor; bars.backgroundColor = Color.black;
+            bars.cullingMask = 0; bars.rect = new Rect(0, 0, 1, 1); bars.depth = cam.depth - 10;
+        }
 
         void Update()
         {
