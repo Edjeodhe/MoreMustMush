@@ -86,7 +86,7 @@ namespace MoreMush
             return null;
         }
 
-        // another script of that type on the same object (e.g. RoundController.view on the Round object)
+        // another script of that type on the same object (e.g. StageController.view on the Round object)
         static UnityEngine.Object Own(MonoBehaviour mb, Type ft)
         {
             if (!typeof(MonoBehaviour).IsAssignableFrom(ft)) return null;

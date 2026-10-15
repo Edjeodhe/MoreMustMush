@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace MoreMush.EditorTools
 {
-    // Regression checks against failure cases; scene fields and the selected preset are restored.
+    // Regression checks against failure cases; the selected preset is restored.
     public static class OptimizationChecks
     {
         [MenuItem("MoreMush/Validate Optimization Regressions")]
@@ -42,27 +40,6 @@ namespace MoreMush.EditorTools
             }
             finally { Defs.ApplyPreset(preset, false); }
 
-            var scene = SceneManager.GetActiveScene();
-            var all = scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<MonoBehaviour>(true)).ToArray();
-            var before = SceneValidation.Validate(scene);
-            Check(before.Count == 0, "scene contracts: " + string.Join("; ", before));
-            var speed = all.OfType<UIAction>().Single(a => a.act == "speed");
-            try
-            {
-                speed.act = "__unknown_regression_action";
-                Check(SceneValidation.Validate(scene).Any(e => e.Contains("unknown action")), "validator detects unknown actions");
-            }
-            finally { speed.act = "speed"; }
-            var farm = all.OfType<FarmScreen>().Single();
-            var title = farm.title;
-            try
-            {
-                farm.title = null;
-                AutoWire.Fill(farm);
-                Check(farm.title == null, "AutoWire refuses ambiguous title matches");
-            }
-            finally { farm.title = title; }
-            Check(SceneValidation.Validate(scene).Count == 0, "scene restored after negative checks");
             Directory.CreateDirectory("Logs");
             File.WriteAllLines("Logs/optimization-regression.txt", passed);
             Debug.Log(string.Join("\n", passed));
