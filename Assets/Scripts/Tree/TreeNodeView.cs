@@ -22,8 +22,9 @@ namespace MoreMush
         public Node Node => NODE[nodeId];
         public Vector2 TreePos => new Vector2(transform.localPosition.x * Art.PPU, -transform.localPosition.y * Art.PPU);
 
-        static readonly Color BUY = U.Hex("#4fb4ff"), POOR = U.Hex("#ff5a4a"), MAX = U.Hex("#ffd23a");
-        static readonly Color TXT_BUY = U.Hex("#9fd6ff"), TXT_POOR = U.Hex("#ff9a8a");
+        // 밝은 바탕(두들 4차) 위 배지: 강화 가능 = 하늘색 · 재화 부족 = 산호 · 최대 = 새싹 초록
+        static readonly Color BUY = U.Hex("#5aa8e0"), POOR = U.Hex("#e8806e"), MAX = U.Hex("#7cc46a");
+        static readonly Color TXT_BUY = U.Hex("#2f78b0"), TXT_POOR = U.Hex("#b85a48"), TXT_MAX = U.Hex("#4a8a3a"), INK = U.Hex("#4a3a2a");
 
         public static float Radius(Node n) => n.core ? 26 : n.sub ? 16 : 24;
 
@@ -34,6 +35,23 @@ namespace MoreMush
         static readonly Vector3[] linkBuf = new Vector3[21], arcBuf = new Vector3[11];   // SetPositions가 복사하므로 노드끼리 같이 써도 된다
 
         static void Show(Component c, bool on) => UIUtil.Show(c, on);
+
+        // 밝은 바탕용 이름표 재질: 짙은 글자 + 크림색 얇은 테두리 (폰트마다 하나를 만들어 모든 노드가 같이 쓴다)
+        static readonly System.Collections.Generic.Dictionary<TMP_FontAsset, Material> lightMats = new System.Collections.Generic.Dictionary<TMP_FontAsset, Material>();
+        static Material LightMat(TMP_FontAsset f)
+        {
+            if (f == null) return null;
+            if (!lightMats.TryGetValue(f, out var m))
+            {
+                m = new Material(f.material);
+                m.EnableKeyword(ShaderUtilities.Keyword_Outline);
+                m.SetFloat(ShaderUtilities.ID_OutlineWidth, 0.24f);
+                m.SetColor(ShaderUtilities.ID_OutlineColor, new Color(1, 0.98f, 0.92f, 1));
+                m.SetFloat(ShaderUtilities.ID_FaceDilate, 0.1f);
+                lightMats[f] = m;
+            }
+            return m;
+        }
 
         void Awake()
         {
@@ -89,7 +107,7 @@ namespace MoreMush
                 link.SetPositions(linkBuf);
                 int depth = Mathf.Max(1, Mathf.RoundToInt(me.magnitude / 150));
                 link.widthMultiplier = Mathf.Max(2, 9 - depth * 1.2f) / Art.PPU;
-                var lc = owned ? U.Hex("#f2e6c8") : s == "avail" ? new Color(240 / 255f, 225 / 255f, 195 / 255f, 0.55f) : new Color(240 / 255f, 225 / 255f, 195 / 255f, 0.22f);
+                var lc = owned ? new Color(1, 0.99f, 0.94f, 0.95f) : s == "avail" ? new Color(1, 0.98f, 0.9f, 0.6f) : new Color(1, 0.98f, 0.9f, 0.28f);
                 link.startColor = link.endColor = lc;
                 link.textureMode = owned ? LineTextureMode.Stretch : LineTextureMode.Tile;
             }
@@ -105,8 +123,8 @@ namespace MoreMush
             border.transform.localScale = Vector3.one * ((r * 2 + 4) / Art.PPU) * sc;
             if (locked)
             {
-                body.color = new Color(30 / 255f, 20 / 255f, 12 / 255f, 0.8f);
-                border.color = new Color(220 / 255f, 210 / 255f, 190 / 255f, 0.5f);
+                body.color = new Color(0.86f, 0.84f, 0.79f, 0.85f);
+                border.color = new Color(0.7f, 0.66f, 0.58f, 0.7f);
                 glow.enabled = pulse.enabled = false;
                 qmark.fontSize = r * 0.9f / 10f;
                 foreach (var a in levelArcs) if (a != null) Show(a, false);
@@ -117,13 +135,13 @@ namespace MoreMush
             if (glow.enabled)
             {
                 float k = st == "buy" ? 0.55f + 0.35f * Mathf.Sin(now * 4 + me.x * 0.01f) : 0.45f;
-                Color gc = n.gem ? new Color(125 / 255f, 1, 200 / 255f, 0.3f + 0.15f * Mathf.Sin(now * 3 + me.x)) : st == "buy" ? new Color(79 / 255f, 180 / 255f, 1, k * 0.55f) : new Color(1, 210 / 255f, 58 / 255f, k * 0.5f);
+                Color gc = n.gem ? new Color(125 / 255f, 1, 200 / 255f, 0.25f + 0.1f * Mathf.Sin(now * 3 + me.x)) : st == "buy" ? new Color(120 / 255f, 190 / 255f, 1, k * 0.4f) : new Color(170 / 255f, 230 / 255f, 140 / 255f, k * 0.35f);
                 glow.color = gc;
                 glow.transform.localScale = Vector3.one * ((r + (n.gem ? 22 : 16)) * 2 / Art.PPU) * sc;
             }
             pulse.enabled = st == "buy";
             if (pulse.enabled) { pulse.color = new Color(col.r, col.g, col.b, 0.35f + 0.35f * Mathf.Sin(now * 4 + me.x * 0.01f)); pulse.transform.localScale = Vector3.one * ((r + 11) * 2 / Art.PPU) * sc; }
-            body.color = n.gem ? U.Hex("#1e2a2a") : st == "max" ? U.Hex("#3a2a18") : U.Hex("#2e2016");
+            body.color = n.gem ? U.Hex("#e2f6ee") : st == "max" ? U.Hex("#f4f9e8") : U.Hex("#fdf6e6");
             border.color = col;
             if (!dirty) return;   // 아래(레벨 칸·속 그림·배지·이름표)는 상태가 바뀔 때만
 
@@ -140,7 +158,7 @@ namespace MoreMush
                 a.positionCount = K + 1;
                 for (int j = 0; j <= K; j++) { float ang = Mathf.Lerp(a0, a1, j / (float)K); arcBuf[j] = Art.P(Mathf.Cos(ang) * (r + 6) * sc, Mathf.Sin(ang) * (r + 6) * sc); }
                 a.SetPositions(arcBuf);
-                a.startColor = a.endColor = i < L ? (st == "max" ? MAX : U.Hex("#f2e6c8")) : new Color(242 / 255f, 230 / 255f, 200 / 255f, 0.18f);
+                a.startColor = a.endColor = i < L ? MAX : new Color(0.55f, 0.48f, 0.38f, 0.25f);
             }
 
             // 속 그림
@@ -157,27 +175,29 @@ namespace MoreMush
             badge.transform.localScale = Vector3.one * (bR * 2 / Art.PPU);
             badge.color = col;
             badgeText.text = st == "buy" ? "▲" : st == "poor" ? "!" : "★";
-            badgeText.color = st == "max" ? U.Hex("#5a3a00") : Color.white;
+            badgeText.color = Color.white;
 
             // 이름표 두 줄
             if (labelOn)
             {
+                var lm = LightMat(label.font);
+                if (lm != null && label.fontSharedMaterial != lm) { label.fontSharedMaterial = lm; line2.fontSharedMaterial = LightMat(line2.font); }
                 if (n.core)
                 {
                     label.text = ""; line2.text = st == "max" ? Loc.T("열림") : $"{U.Fmt(cost.gold)}G";
-                    line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : MAX;
+                    line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : TXT_MAX;
                     line2.transform.localPosition = Art.P(0, r + 14);
                 }
                 else
                 {
                     label.text = n.sub ? n.subLabel : n.n;
                     label.fontSize = (n.sub ? 15 : 18) / 10f;
-                    label.color = n.gem ? U.Hex("#a8f5d4") : st == "poor" ? U.Hex("#cbbfa8") : U.Hex("#fff6e0");
+                    label.color = n.gem ? U.Hex("#2f8a6a") : st == "poor" ? U.Hex("#8a7a66") : INK;
                     label.transform.localPosition = Art.P(0, r + 14);
                     string lvTxt = n.inf ? $"Lv {L}" : n.max > 1 ? $"Lv {L}/{n.max}" : "";   // 싱크: 레벨 칸 없이 'Lv N' (사용자 결정 2026-10-13)
                     string costTxt = cost.gold > 0 && cost.gem > 0 ? Loc.F("{0}G + 균사석 {1}", U.Fmt(cost.gold), U.Fmt(cost.gem)) : cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : cost.gem > 0 ? Loc.F("균사석 {0}", U.Fmt(cost.gem)) : "";
                     line2.text = st == "max" ? (n.inf ? $"MAX {L}" : n.max > 1 ? $"MAX {L}/{n.max}" : "MAX") : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
-                    line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : MAX;
+                    line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : TXT_MAX;
                     line2.transform.localPosition = Art.P(0, r + 32);
                 }
             }

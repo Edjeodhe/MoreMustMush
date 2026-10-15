@@ -26,7 +26,7 @@ namespace MoreMush
             public const double ringGrow = 0.03;                  // 나이테 레벨마다 나무버섯 성장 속도 +3%
             public static int Picture(int stage) => System.Math.Max(1, System.Math.Min(stages, stage)) - 1;   // tree_0~7 (단계마다 그림 하나)
             public static readonly float[] width = { 220, 300, 370, 440, 510, 580, 640, 700 };   // 그림(단계)별 나무 너비 (px)
-            public const float x = 640, y = 930;                  // 나무 밑동 (화면 좌표): 오른쪽 패널을 피해 왼쪽 가운데
+            public const float x = 800, y = 930;                  // 나무 밑동 (화면 좌표): PC 배치의 왼쪽 메뉴 줄과 오른쪽 창 사이 가운데
             public const int order = 880;
             public const int craftBase = 2;                       // 동시 제작 슬롯 (4·6·8단계에 +1)
             public static int CraftSlots(int stage) => craftBase + (stage >= 4 ? 1 : 0) + (stage >= 6 ? 1 : 0) + (stage >= 8 ? 1 : 0);
@@ -105,7 +105,7 @@ namespace MoreMush
             public static int ZoneCap(int stage) => stage >= 6 ? 3 : 2;   // 구역당 꼬마 수
             public const float bagHours = 8;                      // 수확 보따리 최대 보관 (시간)
             public const float bagMinClaim = 1;                   // 받을 수 있는 최소 금액(골드) — 빈 보따리는 받지 않는다
-            public const float x0 = 120, x1 = 1180, y0 = 880, y1 = 1010;   // 쉬는 꼬마가 돌아다니는 땅 (오른쪽 패널 왼쪽)
+            public const float x0 = 300, x1 = 1300, y0 = 880, y1 = 1010;   // 쉬는 꼬마가 돌아다니는 땅 (왼쪽 메뉴 줄과 오른쪽 창 사이)
             public const float returnMin = 600;                   // 이만큼(초) 자리를 비웠다 돌아오면 보따리 창
         }
 

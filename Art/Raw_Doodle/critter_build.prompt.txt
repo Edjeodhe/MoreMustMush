@@ -1,0 +1,26 @@
+Sprite sheet: a 4x5 grid holding 20 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Two-frame hammering animation for the ten mushroom critters in the attached reference, working as tiny builders. Keep each critter's body, face, cap shape, cap colors, spots and cap decoration exactly as in the reference, at the same scale for all. Every critter: three-quarter side view facing RIGHT, standing on its two little feet, two tiny stubby cream nub arms, a small yellow hard hat worn tilted on the back of the cap. Rows 1-2 (frame A): a wooden-handled hammer held RAISED HIGH above and behind the head. Rows 3-4 (frame B): the SAME critter in the same cell position and size, hammer just SWUNG DOWN to the right, head of the hammer at foot level in front of the feet. Nothing else: no ground, no planks, no effects.
+
+Assets in reading order (left to right, top to bottom):
+1. orange-red cap (#ff7a2a) with yellow (#ffd34a) spots, a little flame on top
+2. yellow cap (#ffe03a) with pale yellow spots, a small lightning bolt on top
+3. sky-blue cap (#5fc8ff) with pale blue spots, a water droplet on top
+4. gold cap (#f5c518) with cream spots, a shiny coin on top
+5. violet cap (#b07bff) with pale lilac spots, a little star on top
+6. green cap (#5fc85a) with pale green spots, two sprout leaves on top
+7. deep navy cap (#3a4a8a) with pale yellow spots, a crescent moon on top
+8. mint cap (#5fd8c0) with white spots, two white wind swirls on top
+9. grey cap (#8a8a86) with light grey spots, a smooth pebble on top
+10. chestnut-brown cap (#a0602a) with beige spots, a small acorn on top
+11. fire critter again (orange-red cap (#ff7a2a) with yellow (#ffd34a) spots, a little flame on top), hammer swung down
+12. spark critter again (yellow cap (#ffe03a) with pale yellow spots, a small lightning bolt on top), hammer swung down
+13. dew critter again (sky-blue cap (#5fc8ff) with pale blue spots, a water droplet on top), hammer swung down
+14. coin critter again (gold cap (#f5c518) with cream spots, a shiny coin on top), hammer swung down
+15. star critter again (violet cap (#b07bff) with pale lilac spots, a little star on top), hammer swung down
+16. leaf critter again (green cap (#5fc85a) with pale green spots, two sprout leaves on top), hammer swung down
+17. moon critter again (deep navy cap (#3a4a8a) with pale yellow spots, a crescent moon on top), hammer swung down
+18. wind critter again (mint cap (#5fd8c0) with white spots, two white wind swirls on top), hammer swung down
+19. rock critter again (grey cap (#8a8a86) with light grey spots, a smooth pebble on top), hammer swung down
+20. chest critter again (chestnut-brown cap (#a0602a) with beige spots, a small acorn on top), hammer swung down

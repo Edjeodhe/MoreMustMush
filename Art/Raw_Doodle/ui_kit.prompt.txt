@@ -1,0 +1,15 @@
+Sprite sheet: a 3x3 grid holding 9 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A UI kit of EMPTY interface frames and buttons (no icons, no symbols, no text inside them) for a PC desktop game, matching the attached mockup, drawn flat and front-facing. Every piece has even, uniform rounded borders on all four sides so it can be 9-sliced, nothing sticking out on one side. Base panels are low-saturation pastel beige; buttons are clearly more saturated.
+
+Assets in reading order (left to right, top to bottom):
+1. a window panel: a thin warm beige-brown rounded border (soft dark edge) around a light pastel oatmeal-beige fill, slight inner top highlight
+2. a flat card: light pastel cream-beige fill with a thin soft sand-colored rounded border
+3. a neutral button: light beige fill, thin warm brown outline, a darker beige bottom lip (pressed look)
+4. a primary button: vivid saturated leaf-green fill, thin dark green outline, a darker green bottom lip, small top highlight
+5. a danger button: vivid saturated coral-red fill, thin dark red outline, a darker red bottom lip, small top highlight
+6. a round badge: beige ring with a thin brown outline around a light cream center
+7. a long thin horizontal rounded wooden paddle with a small green leaf at each end (very wide and short), bold outline
+8. a rounded wooden arrow sign pointing right, bold outline
+9. a round woven harvest basket seen from the front, open top, bold outline

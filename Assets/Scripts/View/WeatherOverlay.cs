@@ -62,7 +62,7 @@ namespace MoreMush
                 mask.GetPropertyBlock(mpb);
                 mpb.SetVectorArray(HolesId, holes);
                 mpb.SetInt(CountId, n);
-                mpb.SetColor(ColorId, w == "moon" ? U.Rgba(10, 15, 45, 0.62f) : U.Rgba(10, 15, 45, 0.42f));
+                mpb.SetColor(ColorId, w == "moon" ? U.Rgba(20, 40, 70, 0.5f) : U.Rgba(20, 40, 70, 0.28f));   // 밝은 연초록 바닥 위라 어둠을 옅게
                 mask.SetPropertyBlock(mpb);
             }
             moonIcon.enabled = w == "moon" || night;

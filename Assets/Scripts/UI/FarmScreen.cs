@@ -43,7 +43,9 @@ namespace MoreMush
         float tickT;
         string shownSig;
 
-        const float PANEL_X = 1246, PANEL_Y = 84, PANEL_W = 650, PANEL_H = 880, HEAD_H = 64;
+        const float HEAD_H = 56;
+        float panelW;                                       // 오른쪽 창 너비 (창 크기·위치는 씬에 둔다)
+        Sprite tabOff, tabOn;                               // 왼쪽 메뉴 줄 탭 바탕 (꺼짐 · 켜짐)
 
         void OnEnable() { tickT = 0; shownSig = null; }
 
@@ -51,23 +53,24 @@ namespace MoreMush
         {
             if (built) return;
             built = true;
-            // 패널: 예전 나무 패널 틀을 키우고 안을 비운다
+            // 패널: 씬에 놓인 오른쪽 창 틀 안을 비우고 제목 줄 + 목록을 채운다
             var prt = (RectTransform)treePanel.transform;
             foreach (Transform c in prt) Destroy(c.gameObject);
-            UIKit.Place(prt, PANEL_X, PANEL_Y, PANEL_W, PANEL_H);
+            panelW = prt.rect.width; float panelH = prt.rect.height;
             head = UIKit.Text(prt, status, "Head");
-            head.alignment = TextAlignmentOptions.MidlineLeft; head.fontSize = 26; head.enableWordWrapping = false;
-            UIKit.Place(head.rectTransform, 18, 8, PANEL_W - 36, HEAD_H - 12);
-            var area = UIKit.Place(UIKit.Rect("List", prt), 10, HEAD_H, PANEL_W - 20, PANEL_H - HEAD_H - 10);
+            head.alignment = TextAlignmentOptions.MidlineLeft; head.fontSize = 24; head.enableWordWrapping = false;
+            UIKit.Place(head.rectTransform, 20, 6, panelW - 40, HEAD_H - 8);
+            var area = UIKit.Place(UIKit.Rect("List", prt), 10, HEAD_H, panelW - 20, panelH - HEAD_H - 10);
             list = UIKit.Scroll(area);
             rowBack = SpriteDB.Get("UI/panel_paper");
-            // 탭 줄: 예전 꼬마 칩 자리
+            // 탭: 왼쪽 메뉴 줄(chips) 안에 세로로
             var crt = (RectTransform)chips.transform;
             foreach (Transform c in crt) Destroy(c.gameObject);
+            tabOff = SpriteDB.Get("UI/rail_item"); tabOn = SpriteDB.Get("UI/rail_active");
             for (int i = 0; i < TABS.Length; i++)
             {
                 var b = UIKit.Button(crt, skin, "Tab" + i);
-                UIKit.Place((RectTransform)b.transform, 8 + i * 276, 8, 268, 60);
+                UIKit.Place((RectTransform)b.transform, 0, i * 58, crt.rect.width, 50);
                 tabButtons.Add(b);
             }
             farm.onPick = OnWorldPick;
@@ -100,11 +103,11 @@ namespace MoreMush
             if (G?.farm == null) return;
             Build();
             int s = Stage();
-            title.text = Loc.F("{0} 세계수 {1}단계 {2} <size=60%><color=#f0d8a8>나이테 Lv.{3}/{4}</color></size>", UIUtil.Ic("ed"), s, WT.StageName(s), Ring(), WT.ringMax);
+            title.text = Loc.F("{0} 세계수 {1}단계 {2} <size=60%><color=#8a6a48>나이테 Lv.{3}/{4}</color></size>", UIUtil.Ic("ed"), s, WT.StageName(s), Ring(), WT.ringMax);
             var b = G.farm.bag; double cap = BagCapSec();
             var r = BagRate();
             status.text = Loc.F("보관 {0} / {1}", Mmss((long)b.sec), Mmss((long)cap)) + (BagFull() ? " <color=#ff8a7a>" + Loc.T("가득!") + "</color>" : "")
-                + $" <size=85%><color=#f0d8a8>· {UIUtil.Ic("gold")}{U.Fmt(r.gold * 3600)}{Loc.T("/시간")}</color></size>";
+                + $" <size=85%><color=#8a6a48>· {UIUtil.Ic("gold")}{U.Fmt(r.gold * 3600)}{Loc.T("/시간")}</color></size>";
             goldText.text = $"{UIUtil.Ic("gold")}{U.Fmt(G.gold)}";
             gemText.text = $"{UIUtil.Ic("gem")}{U.Fmt(G.gem)}";
             UIUtil.Show(centerMsg, false);
@@ -119,7 +122,9 @@ namespace MoreMush
             for (int i = 0; i < tabButtons.Count; i++)
             {
                 bool on = TABS[i] == tab;
-                SetLabel(tabButtons[i], (on ? "<color=#2a9a74>▶ " : "") + names[i] + (on ? "</color>" : "") + (badge[i] > 0 ? $" <color=#e8453c>({badge[i]})</color>" : ""), "wttab", TABS[i], true);
+                SetLabel(tabButtons[i], $"<size=80%>{i + 1}</size>  " + names[i] + (badge[i] > 0 ? $" <color={(on ? "#fff3a0" : "#e8453c")}>({badge[i]})</color>" : ""), "wttab", TABS[i], true);
+                if (tabOn != null && tabOff != null) tabButtons[i].image.sprite = on ? tabOn : tabOff;
+                var lt = tabButtons[i].GetComponentInChildren<TMP_Text>(true); if (lt != null) lt.color = on ? Color.white : U.Hex("#4a3a2a");
             }
             RenderTab();
         }
@@ -139,7 +144,7 @@ namespace MoreMush
         {
             if (used >= rows.Count) rows.Add(UIRow.Make(list, status, skin, rowBack));
             var row = rows[used++];
-            y += row.Set(y, PANEL_W - 20, text, icon, U.Hex(back), btns) + 8;
+            y += row.Set(y, panelW - 20, text, icon, U.Hex(back), btns) + 8;
         }
         void EndList()
         {

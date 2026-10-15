@@ -9,7 +9,7 @@ Same part names and rig.json layout as build_grandpa_rig.py, so GrandpaRig and i
   eyes_closed.png  blink patch over both eyes
   rig.json         each part's top-left in reference pixels + joint positions
 
-Usage: python Tools/art/build_grandpa_rig_soft.py [--debug <dir>]
+Usage: python Tools/art/build_grandpa_rig_soft.py [--set soft|doodle] [--debug <dir>]
 """
 import json, os, sys
 import numpy as np
@@ -17,22 +17,28 @@ from PIL import Image, ImageDraw
 from scipy import ndimage
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC = os.path.join(ROOT, "Assets/Art/Soft/Characters/Grandpa/grandpa_ref.png")
-OUT = os.path.join(ROOT, "Assets/Art/Soft/Characters/Grandpa/Rig")
-
-FEET = (505, 1200)          # rig root (bottom centre between the boots)
-WRIST = (235, 690)          # scythe joint (inside the fist)
-# Handle centre line from the butt end through the fist and behind the head up to the blade collar.
-HANDLE = [(25, 985), (235, 690), (575, 215), (705, 20)]
-HANDLE_HALF = 34            # half width of the handle band (px), outline included
-# Parts of the handle band that are really visible scythe (outside them the band is hand / hair / hat).
-LOWER = (0, 1)              # segment index range: butt end .. fist
-LOWER_STOP = 0.86           # stop before the fist along segment 0
-UPPER_START = (2, 0.06)     # from just above the hat crown along segment 2
-# Blade and leaf charm: everything opaque inside these polygons belongs to the scythe.
-BLADE_POLY = [(640, 0), (1084, 0), (1084, 560), (1000, 560), (760, 170), (700, 175), (640, 120)]
-CHARM_POLY = [(120, 840), (210, 840), (210, 1010), (120, 1010)]
-EYES = [(458, 518, 22, 30), (606, 497, 22, 30)]   # (cx, cy, rx, ry) dark eye ovals to close
+# Cut points per art set (reference pixels of that set's grandpa_ref.png). --set soft (default) | doodle
+SETS = {
+    "soft": dict(
+        root="Assets/Art/Soft", FEET=(505, 1200), WRIST=(235, 690),
+        HANDLE=[(25, 985), (235, 690), (575, 215), (705, 20)], HANDLE_HALF=34, LOWER_STOP=0.86, UPPER_START=0.06,
+        BLADE_POLY=[(640, 0), (1084, 0), (1084, 560), (1000, 560), (760, 170), (700, 175), (640, 120)],
+        CHARM_POLY=[(120, 840), (210, 840), (210, 1010), (120, 1010)],
+        EYES=[(458, 518, 22, 30), (606, 497, 22, 30)]),
+    "doodle": dict(
+        root="Assets/Art/Doodle", FEET=(520, 1150), WRIST=(200, 700),
+        HANDLE=[(30, 850), (200, 700), (640, 190), (770, 20)], HANDLE_HALF=34, LOWER_STOP=0.62, UPPER_START=0.10,
+        BLADE_POLY=[(690, 0), (1104, 0), (1104, 560), (1030, 560), (820, 130), (760, 145), (690, 95)],
+        CHARM_POLY=[(0, 0), (1, 0), (1, 1)],
+        EYES=[(380, 465, 20, 28), (507, 477, 20, 28)]),
+}
+_set = sys.argv[sys.argv.index("--set") + 1] if "--set" in sys.argv else "soft"
+_c = SETS[_set]
+SRC = os.path.join(ROOT, _c["root"], "Characters/Grandpa/grandpa_ref.png")
+OUT = os.path.join(ROOT, _c["root"], "Characters/Grandpa/Rig")
+FEET, WRIST, HANDLE, HANDLE_HALF = _c["FEET"], _c["WRIST"], _c["HANDLE"], _c["HANDLE_HALF"]
+LOWER_STOP, UPPER_START = _c["LOWER_STOP"], (2, _c["UPPER_START"])
+BLADE_POLY, CHARM_POLY, EYES = _c["BLADE_POLY"], _c["CHARM_POLY"], _c["EYES"]
 
 
 def seg_band(shape, a, b, half):

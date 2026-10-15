@@ -21,6 +21,7 @@ const SET = setIdx >= 0 ? argv.splice(setIdx, 2)[1] : "default";
 const SETS = {
   default: { module: "./sheets.mjs", raw: "Art/Raw", gen: "Assets/Art/Generated", style: "Tools/art-style.md" },
   soft: { module: "./sheets-soft.mjs", raw: "Art/Raw_Soft", gen: "Assets/Art/Soft", style: "Tools/art-style-soft.md" },
+  doodle: { module: "./sheets-doodle.mjs", raw: "Art/Raw_Doodle", gen: "Assets/Art/Doodle", style: "Tools/art-style-doodle.md", imageStyle: "Tools/art-style-story.md" },
 };
 if (!SETS[SET]) { console.error(`unknown set: ${SET}`); process.exit(1); }
 const { SHEETS } = await import(SETS[SET].module);
@@ -68,7 +69,7 @@ async function buildSheet(s) {
     const prompt = single ? s.prompt : sheetPrompt(s);
     fs.mkdirSync(rawDir, { recursive: true });
     fs.writeFileSync(path.join(rawDir, `${s.id}.prompt.txt`), prompt);
-    const args = ["Tools/codex-image.mjs", "--prompt", prompt, "--out", path.relative(repoRoot, raw), "--style", SETS[SET].style, "--timeout", "600"];
+    const args = ["Tools/codex-image.mjs", "--prompt", prompt, "--out", path.relative(repoRoot, raw), "--style", (single && SETS[SET].imageStyle) || SETS[SET].style, "--timeout", "600"];
     if (!single) args.push("--transparent");
     if (s.search) args.push("--search");
     for (const r of s.refs || []) args.push("--ref", r);

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>More Must Mush itch preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  /* itch.io 테마와 같은 값 (README.md의 테마 설정). 레이아웃: 1280 열 = 설명 873 + 스크린샷 347 */
+  :root { --bg: #5D9E3A; --bg2: rgba(255,255,255,0.92); --text: #263A2C; --link: #E0457B; --head: #2E8B4E; --border: #D6E9C4; --btn: #EC4C8A; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Lato, sans-serif; color: var(--text); background: var(--bg) url(background.jpg) no-repeat 50% 0; }
+  .header { text-align: center; padding: 30px 16px 6px; }
+  .header img { max-width: min(800px, 100%); }
+  .column { max-width: 1280px; margin: 0 auto 60px; background: var(--bg2); border: 1px solid var(--border); }
+  .embed { position: relative; aspect-ratio: 16/9; background: #000 url(shot1_harvest.jpg) center/cover; }
+  .cols { display: flex; gap: 20px; padding: 24px 20px; }
+  .left { flex: 0 1 873px; min-width: 0; }
+  .right { flex: 0 0 347px; display: flex; flex-direction: column; gap: 10px; }
+  .right img { width: 100%; border-radius: 3px; display: block; }
+  .desc img { max-width: 100%; vertical-align: top; }
+  .desc h2 { color: var(--head); font-weight: 900; font-size: 24px; margin: 28px 0 12px; }
+  .desc ul { padding-left: 22px; line-height: 1.7; }
+  .desc hr { border: 0; height: 1px; background: var(--border); margin: 26px 0; }
+  .desc a { color: var(--link); }
+  .btn { display: inline-block; background: var(--btn); color: #fff; font-weight: 700; padding: 10px 18px; border-radius: 3px; margin-bottom: 14px; }
+  @media (max-width: 900px) { .cols { flex-direction: column; } .right { flex-direction: row; flex-wrap: wrap; } .right img { width: calc(50% - 5px); } }
+</style>
+</head>
+<body>
+  <div class="header"><img src="banner.png" alt="More Must Mush"></div>
+  <div class="column">
+    <div class="embed" title="Automatically starts on page load"></div>
+    <div class="cols">
+      <div class="left desc" id="desc"></div>
+      <div class="right">
+        <img src="shot1_harvest.jpg" alt=""><img src="shot2_fever.jpg" alt=""><img src="shot3_tree.jpg" alt=""><img src="shot4_worldtree.jpg" alt="">
+      </div>
+    </div>
+  </div>
+<script>
+  // description.html을 그대로 불러와 [[파일]] 자리를 이미지로 바꿔 보여 준다 (itch에 붙일 본문과 같은 내용)
+  fetch('description.html').then(r => r.text()).then(t => {
+    document.getElementById('desc').innerHTML = t.replace(/\[\[([^\]]+)\]\]/g, '<img src="$1" alt="">');
+  });
+</script>
+</body>
+</html>

@@ -129,7 +129,7 @@ namespace MoreMush
             }
             shownTut = G.tut;
             // tut 0(1스테이지를 마치지 못하고 돌아옴) · tut 2(첫 노드를 산 뒤): "수확하러 가기"만 밝힌다
-            var go = fl.tree.transform.Find("Buttons/Right/Go") as RectTransform;
+            var go = (fl.tree.transform.Find("Go") ?? fl.tree.transform.Find("Buttons/Right/Go")) as RectTransform;   // PC 배치: 수확하러 가기는 화면 오른쪽 아래(TreeScreen/Go)
             if (go == null || zoomFrom > 0) return zoomFrom > 0 && G.tut == 2 ? DimOnly() : false;
             var b = StageRect(go);
             Hole(new Rect(b.x - 14, b.y - 14, b.width + 28, b.height + 28));

@@ -84,14 +84,14 @@ namespace MoreMush
             weatherBannerIcon.sprite = SpriteDB.Icon(w.icon);
             // 보스 라운드: 배너 제목은 보스, 설명에 기믹과 날씨
             UIUtil.SetText(weatherBannerTitle, st.boss != null ? Loc.F("보스 스테이지: {0}", st.boss.n) : Loc.F("오늘의 날씨: {0}", w.n));
-            weatherBannerTitle.color = U.Hex(st.boss != null ? st.boss.col : wcol);
+            weatherBannerTitle.color = U.Hex(st.boss != null ? st.boss.col : w.good ? "#2f78b0" : "#c0503a");
             UIUtil.SetText(weatherBannerDesc, st.boss != null
                 ? Loc.F("제한 시간 안에 쓰러뜨리세요! {0}", st.boss.gimmick) + "\n" + Loc.F("날씨: {0} · {1}", w.n, w.d)
                 : (w.good ? Loc.T("좋은 날씨") : Loc.T("나쁜 날씨")) + " · " + w.d);
-            weatherBannerDesc.color = U.Hex(w.good ? "#cfe8ff" : "#ffd0c8");
+            weatherBannerDesc.color = U.Hex(w.good ? "#4a6a7a" : "#9a4a3a");   // 밝은 노랑 배너 위 글자
             cornerWeatherIcon.sprite = SpriteDB.Icon(w.icon);
             UIUtil.SetText(cornerWeather, w.n);
-            cornerWeather.color = U.Hex(wcol);
+            cornerWeather.color = U.Hex(w.good ? "#2f78b0" : "#c0503a");
             UIUtil.SetText(cornerRegion, Loc.F("{0} {1} · 스테이지 {2}", UIUtil.Ic(st.theme.icon), st.theme.n, st.stage) + (st.boss != null ? " · " + Loc.T("보스") : IsBossStage(st.stage) ? " · " + Loc.T("파밍") : ""));
             shownBalls = -1;   // 능력치 줄은 새 라운드 값으로 다시
         }
@@ -148,7 +148,7 @@ namespace MoreMush
             {
                 shownSpd = spd;
                 UIUtil.SetText(cornerSpeed, spd > 1 ? $"▶▶ ×{spd}" : "▶ ×1");
-                cornerSpeed.color = spd > 1 ? U.Hex("#ffd23a") : U.Hex("#bbbbbb");
+                cornerSpeed.color = spd > 1 ? U.Hex("#e0761a") : U.Hex("#8a7a66");
             }
             UIUtil.SetText(cornerHint, touch ? Loc.T("눌러서 배속") : Loc.T("누르기·F·우클릭 배속"));
 

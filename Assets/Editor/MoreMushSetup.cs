@@ -11,8 +11,8 @@ namespace MoreMush.EditorTools
     // One-time project setup for generated art and fonts. Menu: MoreMush/...
     public static class MoreMushSetup
     {
-        // Art sets, later ones win: a sprite in Soft (watercolor set) replaces the Generated sprite with the same key.
-        public static readonly string[] ArtRoots = { "Assets/Art/Generated", "Assets/Art/Soft" };
+        // Art sets, later ones win: Doodle (outlined cel set) > Soft (watercolor) > Generated for the same key.
+        public static readonly string[] ArtRoots = { "Assets/Art/Generated", "Assets/Art/Soft", "Assets/Art/Doodle" };
 
         // key ("Icons/gold") → asset path of the sprite the game uses for it
         public static SortedDictionary<string, string> ResolvedArt()
@@ -55,6 +55,20 @@ namespace MoreMush.EditorTools
                 ["UI/btn_wood"] = (w, h) => Uniform(w, h, 0.42f),
                 ["UI/btn_go"] = (w, h) => Uniform(w, h, 0.42f),
                 ["UI/btn_danger"] = (w, h) => Uniform(w, h, 0.42f),
+                // doodle 4th-pass kit (beige pastel base + accent buttons/panels)
+                ["UI/btn_orange"] = (w, h) => Uniform(w, h, 0.42f),
+                ["UI/btn_blue"] = (w, h) => Uniform(w, h, 0.42f),
+                ["UI/btn_round"] = (w, h) => Uniform(w, h, 0.45f),
+                ["UI/panel_accent"] = (w, h) => Uniform(w, h, 0.22f),
+                ["UI/panel_mint"] = (w, h) => Uniform(w, h, 0.22f),
+                ["UI/window_title"] = (w, h) => Uniform(w, h, 0.4f),
+                ["UI/bar_top"] = (w, h) => Uniform(w, h, 0.4f),
+                ["UI/rail_item"] = (w, h) => Uniform(w, h, 0.4f),
+                ["UI/rail_active"] = (w, h) => Uniform(w, h, 0.4f),
+                ["UI/chip"] = (w, h) => Uniform(w, h, 0.45f),
+                ["UI/tooltip"] = (w, h) => Uniform(w, h, 0.25f),
+                ["UI/progress_back"] = (w, h) => Uniform(w, h, 0.45f),
+                ["UI/progress_fill"] = (w, h) => Uniform(w, h, 0.45f),
                 ["UI/bar_log"] = (w, h) => new Vector4(Mathf.Min(w * 0.2f, h * 1.6f), 0, Mathf.Min(w * 0.2f, h * 1.6f), 0),
                 ["Props/moss"] = (w, h) => Uniform(w, h, 0.3f),
             };

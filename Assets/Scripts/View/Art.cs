@@ -46,5 +46,15 @@ namespace MoreMush
             mpb.SetFloat(GoldId, gold); mpb.SetFloat(DarkId, dark); mpb.SetFloat(FlashId, flash);
             r.SetPropertyBlock(mpb);
         }
+
+        static readonly int BendId = Shader.PropertyToID("_Bend"), BendBaseId = Shader.PropertyToID("_BendBase"), BendHId = Shader.PropertyToID("_BendH");
+        // Soft-body lean for a sprite on MoreMush/Sprite: lean = top offset as a fraction of the sprite width.
+        public static void SetBend(SpriteRenderer r, float lean)
+        {
+            var b = r.sprite != null ? r.sprite.bounds : new Bounds(Vector3.zero, Vector3.one);
+            r.GetPropertyBlock(mpb);
+            mpb.SetFloat(BendId, lean * b.size.x); mpb.SetFloat(BendBaseId, b.min.y); mpb.SetFloat(BendHId, b.size.y);
+            r.SetPropertyBlock(mpb);
+        }
     }
 }

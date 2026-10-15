@@ -61,6 +61,7 @@ namespace MoreMush
             float k = R0 / rig.baseRadius;
             body.localScale = new Vector3(sx * p.face * k, sy * k, 1);
             rig.SetLook(p.id, CharSkinOn(p.id)?.id, hat);
+            rig.motion = p.anim ?? p.state;
             rigGroup.sortingOrder = order;
             if (!rig.gameObject.activeSelf) rig.gameObject.SetActive(true);
             builder.enabled = false;

@@ -1,5 +1,7 @@
 // Unlit sprite shader for SpriteRenderer / LineRenderer with the prototype's per-object effects:
-// _Gold (golden variant tint), _Dark (silhouette), _Flash (white flash on hit).
+// _Gold (golden variant tint), _Dark (silhouette), _Flash (white flash on hit),
+// _Bend: soft-body sway for mushrooms (base stays put, the top leans by _Bend local units, quadratic in height;
+// _BendBase/_BendH = the sprite's bottom and height in local units, set per renderer by Art.SetBend).
 Shader "MoreMush/Sprite"
 {
     Properties
@@ -9,6 +11,9 @@ Shader "MoreMush/Sprite"
         _Dark ("Dark", Range(0,1)) = 0
         _DarkColor ("Dark Color", Color) = (0.23,0.2,0.18,1)
         _Flash ("Flash", Range(0,1)) = 0
+        _Bend ("Bend", Float) = 0
+        _BendBase ("Bend Base", Float) = 0
+        _BendH ("Bend Height", Float) = 1
         [HideInInspector] _SrcBlend ("Src", Float) = 1
         [HideInInspector] _DstBlend ("Dst", Float) = 10
     }
@@ -24,11 +29,18 @@ Shader "MoreMush/Sprite"
             #pragma fragment frag
             #include "UnityCG.cginc"
             sampler2D _MainTex;
-            float _Gold, _Dark, _Flash;
+            float _Gold, _Dark, _Flash, _Bend, _BendBase, _BendH;
             float4 _DarkColor;
             struct a2v { float4 vertex : POSITION; float4 color : COLOR; float2 uv : TEXCOORD0; };
             struct v2f { float4 pos : SV_POSITION; float4 color : COLOR; float2 uv : TEXCOORD0; };
-            v2f vert (a2v v) { v2f o; o.pos = UnityObjectToClipPos(v.vertex); o.uv = v.uv; o.color = v.color; return o; }
+            v2f vert (a2v v)
+            {
+                v2f o;
+                float t = saturate((v.vertex.y - _BendBase) / max(_BendH, 1e-4));
+                v.vertex.x += _Bend * t * t;
+                v.vertex.y -= abs(_Bend) * 0.25 * t * t;   // leaning shortens a little, like a bending stalk
+                o.pos = UnityObjectToClipPos(v.vertex); o.uv = v.uv; o.color = v.color; return o;
+            }
             float4 frag (v2f i) : SV_Target
             {
                 float4 c = tex2D(_MainTex, i.uv) * i.color;

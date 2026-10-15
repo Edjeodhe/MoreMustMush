@@ -25,6 +25,11 @@ namespace MoreMush
             // 보스는 맞을 때 하얗게 번쩍, 환상 버섯 분신은 반투명
             Art.SetFx(body, m.golden ? 1 : 0, 0, m.boss ? m.squish * 0.5f : 0);
             body.color = m.bossClone ? new Color(1, 1, 1, 0.7f + 0.15f * Mathf.Sin(now * 6)) : Color.white;
+            // 말랑한 몸: 밑동은 고정, 갓이 천천히 흔들리고 맞으면 출렁인다 (셰이더 휨, 버섯마다 위상이 다름)
+            float phase = m.x * 0.013f + m.y * 0.021f;
+            float lean = Mathf.Sin(now * (big ? 1.1f : 1.7f) + phase) * (heap ? 0.02f : 0.035f)
+                       + m.squish * Mathf.Sin((1 - m.squish) * 19f) * (big ? 0.08f : 0.16f);
+            Art.SetBend(body, lean);
 
             float gs = m.grow < 1 ? 1 - Mathf.Pow(1 - m.grow, 3) : 1;
             float sq = m.squish;
@@ -77,9 +82,10 @@ namespace MoreMush
             glow.enabled = night && sp.glow;
             if (glow.enabled)
             {
-                glow.color = sp.c == "ps" && sp.sh == "fan" ? new Color(140 / 255f, 1, 160 / 255f, 0.5f) : new Color(1, 250 / 255f, 200 / 255f, 0.45f);
+                // 선화 버섯이 가려지지 않게 작고 옅은 빛
+                glow.color = sp.c == "ps" && sp.sh == "fan" ? new Color(140 / 255f, 1, 160 / 255f, 0.3f) : new Color(1, 250 / 255f, 200 / 255f, 0.26f);
                 glow.transform.localPosition = Art.P(0, -m.r * 0.3f);
-                glow.transform.localScale = Vector3.one * (m.r * 6 / Art.PPU);
+                glow.transform.localScale = Vector3.one * (m.r * 3.6f / Art.PPU);
             }
         }
     }

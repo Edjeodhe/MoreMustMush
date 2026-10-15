@@ -11,6 +11,7 @@ namespace MoreMush
         [Header("Field (world)")]
         public Transform field;                 // field root: scaled by ZOOM, shaken
         public SpriteRenderer background;
+        [ScenePath("World/Round/Field/Decor")] public Transform decor;   // 지역별 테두리 장식 묶음 (자식 이름 = 지역 id, 없으면 forest)
         public Transform deviceRoot, shroomRoot, fxRoot, ballRoot, flyerRoot;
         public SpriteRenderer bar;
         public SpriteRenderer giantWarn;
@@ -78,6 +79,11 @@ namespace MoreMush
             {
                 bgTheme = R.themeId;
                 background.sprite = SpriteDB.Get("Backgrounds/bg_" + bgTheme) ?? SpriteDB.Get("Backgrounds/bg_forest");
+                if (decor != null)
+                {
+                    bool any = decor.Find(bgTheme) != null;
+                    foreach (Transform g in decor) g.gameObject.SetActive(g.name == (any ? bgTheme : "forest"));
+                }
             }
             background.transform.localPosition = Art.P(RoundSim.WW / 2, RoundSim.WH / 2);
             Art.SizePx(background.transform, background.sprite, RoundSim.WW, RoundSim.WH);
