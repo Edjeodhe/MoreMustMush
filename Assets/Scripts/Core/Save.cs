@@ -35,6 +35,10 @@ namespace MoreMush
         public double play;
         public double lastNormalGold;              // 보스가 안 나온 마지막 판의 정산 골드 (보스 처치 보상 기준)
         public bool ending;
+        // 튜토리얼 (기획서 Ver.01): 0 첫 판(1스테이지) 전 · 1 1스테이지 클리어, 첫 노드 사기 · 2 첫 노드 산 뒤 "수확하러 가기" 유도 · 3 끝
+        public int tut;
+        public Dictionary<string, bool> feat = new Dictionary<string, bool>();   // 열린 기능 (Unlock). 한 번 열리면 남는다
+        public bool bossFailed;                    // 보스에게 한 번이라도 졌다 (보스 도전 버튼 해금)
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
         // 꼬마버섯 세계수 (Defs.WT·Game.Farm). stage 성장 단계 1~8 · ring 나이테 Lv.1~10 · exp 경험치(공물·의뢰)
@@ -171,6 +175,8 @@ namespace MoreMush
             if (!Defs.THEME.ContainsKey(g.theme ?? "")) g.theme = "forest";
             SanitizeFarm(g.farm ??= new SaveData.Farm());
             g.quest ??= new SaveData.Quests();
+            g.feat ??= new Dictionary<string, bool>();
+            g.tut = Math.Max(0, Math.Min(3, g.tut));
             g.quest.daily = g.quest.daily?.FindAll(QuestOk) ?? new List<SaveData.QuestProg>();
             g.quest.weekly = g.quest.weekly?.FindAll(QuestOk) ?? new List<SaveData.QuestProg>();
             SaveMigration.Run(g);

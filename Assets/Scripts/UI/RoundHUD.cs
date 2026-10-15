@@ -140,7 +140,7 @@ namespace MoreMush
             statBar.anchoredPosition = statOrigin + new Vector2(0, R.festOn ? -festOffset : 0);
 
             // 날씨 배너
-            bool banner = R.phase == "aim" || R.runT < 3.5f;   // 배너 글자·색은 RoundChanged에서 한 번 채운다
+            bool banner = (R.phase == "aim" || R.runT < 3.5f) && (R.BossRound || Unlock.On(Unlock.WEATHER));   // 배너 글자·색은 RoundChanged에서 한 번 채운다. 날씨가 열리기 전(5스테이지까지)은 안 띄운다
             UIUtil.Show(weatherBanner, banner);
             if (banner) weatherBanner.alpha = R.phase == "aim" ? 1 : Mathf.Clamp01((3.5f - R.runT) / 0.5f);
             int spd = speed * Game.DBG.speed;
@@ -154,6 +154,7 @@ namespace MoreMush
 
             float sh = R.codexShake > 0 ? Mathf.Sin(now * 40) * 6 * R.codexShake : 0;
             codexButton.anchoredPosition = codexOrigin + new Vector2(sh, 0);
+            UIUtil.Show(codexButton, Unlock.On(Unlock.CODEX));   // 도감은 3스테이지 클리어 뒤
             int codex = Game.CodexCount();
             if (codex != shownCodex) { shownCodex = codex; UIUtil.SetText(codexText, Loc.F("{0} 도감 {1}/{2}", UIUtil.Ic("book"), codex, SP_TOTAL)); }
 

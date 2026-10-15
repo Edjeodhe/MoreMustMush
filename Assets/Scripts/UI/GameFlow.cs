@@ -42,6 +42,7 @@ namespace MoreMush
         {
             I = this;
             Loc.Changed += OnLangChanged;
+            gameObject.AddComponent<Tutorial>();   // 튜토리얼 오버레이 (코드로 만든다)
             Telemetry.Init();   // 서버 로그: 개인 ID·session_start (지난 실행이 비정상 종료였으면 crash 먼저)
 #if !UNITY_WEBGL || UNITY_EDITOR
             Application.targetFrameRate = 60;   // WebGL은 브라우저 requestAnimationFrame에 맡긴다 (값을 주면 타이머 루프로 바뀌어 덜 부드럽다)
@@ -106,7 +107,7 @@ namespace MoreMush
         {
             if (G == null || awayMs < HARV.returnMin * 1000) return;
             BagSettle();
-            if (!BagReady() || (Screen != "tree" && Screen != "farm") || ModalOpen) return;
+            if (!BagReady() || (Screen != "tree" && Screen != "farm") || ModalOpen || !Unlock.On(Unlock.WORLDTREE)) return;   // 세계수가 열리기 전엔 알리지 않는다
             var b = G.farm.bag;
             ShowToast(Loc.F("꼬마들이 수확 보따리를 채워 뒀어요! {0}{1}", UIUtil.Ic("gold"), U.Fmt(System.Math.Floor(b.gold))) + (b.gem >= 1 ? $" {UIUtil.Ic("gem")}{U.Fmt(System.Math.Floor(b.gem))}" : "") + "\n" + Loc.T("세계수에서 받아요"));
             if (Screen == "tree") tree.Refresh(); else farmScreen.Render();
@@ -134,7 +135,23 @@ namespace MoreMush
         {
             SetScreen("tree");
             CloseModal();
+            TutorialStep();
             tree.Refresh();
+        }
+
+        // 튜토리얼 단계 넘기기와 새로 열린 기능 알림 (트리 화면에 들어올 때마다)
+        void TutorialStep()
+        {
+            if (G == null) return;
+            if (G.tut == 0 && G.stage > 1)
+            {
+                // 1스테이지 클리어 → 첫 노드(시작 노드)만 살 수 있는 골드를 보장한다 (기획서: "첫 노드만 해금 가능한 재화")
+                G.tut = 1;
+                G.gold = System.Math.Max(G.gold, NodeCost(NODE[ROOT_NODE], Lv(ROOT_NODE)).gold);
+            }
+            var opened = Unlock.Newly().Where(k => k != Unlock.UPGRADE).ToList();   // 강화는 튜토리얼이 직접 안내한다
+            if (opened.Count > 0) ShowToast(Loc.F("새 기능이 열렸어요: {0}", string.Join(" · ", opened.Select(Unlock.Name))));
+            SaveGame();
         }
 
         public void EnterFarm(string view)
@@ -183,7 +200,9 @@ namespace MoreMush
         {
             if (BlockedByHarvesters()) return;
             var boss = BossRoundNext() ? BossAt(StageNow()) : null;
-            string w = RollWeather(boss != null);
+            // 날씨는 5스테이지 클리어 뒤부터 (그전엔 맑음). 보스 판은 늘 나쁜 날씨
+            string w = boss != null || Unlock.On(Unlock.WEATHER) ? RollWeather(boss != null) : "clear";
+            if (G.tut == 2) G.tut = 3;   // 튜토리얼 마지막 단계: "수확하러 가기"를 눌렀다
             G.theme = LatestTheme().id;   // 지역은 고르지 않는다: 스테이지가 열어 준 가장 새 지역
             CloseModal();
             SetScreen("round");
@@ -215,7 +234,7 @@ namespace MoreMush
             switch (act)
             {
                 case "close": Snd.Ui(); CloseModal(); break;
-                case "newgame": Telemetry.Ftue(Telemetry.FTUE_TITLE_START); Telemetry.ResetSnap(); G = new SaveData(); FarmEnsure(); SaveGame(); Snd.Ui(); EnterTree(); ShowToast(Loc.T("균사 트리에서 강화를 사거나 바로 수확하러 가 보세요!")); break;
+                case "newgame": Telemetry.Ftue(Telemetry.FTUE_TITLE_START); Telemetry.ResetSnap(); G = new SaveData(); FarmEnsure(); SaveGame(); Snd.Ui(); BeginRound(); break;   // 새 게임은 바로 1스테이지(튜토리얼)로
                 case "continue":
                 {
                     G = SaveIO.Load();

@@ -108,7 +108,7 @@ namespace MoreMush
                 for (int i = 0; i < regen.Count; i++) regen[i] -= h;
                 for (int i = regen.Count - 1; i >= 0; i--)
                     if (regen[i] <= 0) { if (SpawnColony(false)) regen.RemoveAt(i); else regen[i] = 0.5f; }
-                int missing = st.maxCol - colonies.Count - regen.Count;
+                int missing = MaxCol - colonies.Count - regen.Count;
                 for (int i = 0; i < missing; i++) regen.Add((float)st.regen);
             }
             // 포자 구름
@@ -382,7 +382,7 @@ namespace MoreMush
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
             // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍)
-            if (BossRound && !bossCleared) G.bossOn = false;
+            if (BossRound && !bossCleared) { G.bossOn = false; G.bossFailed = true; }   // 처음 지면 보스 도전 버튼이 열린다 (Unlock.BOSS)
             else if (!aborted && (!IsBossStage(G.stage) || BossRound)) G.stage++;
             s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);

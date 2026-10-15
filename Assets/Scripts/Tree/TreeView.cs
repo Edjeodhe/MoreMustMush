@@ -74,7 +74,7 @@ namespace MoreMush
             float x0 = 0, x1 = 0, y0 = 0, y1 = 0;
             foreach (var nv in nodes)
             {
-                if (NodeState(nv.Node) == "hidden") continue;
+                if (NodeState(nv.Node) == "hidden" || Tutorial.HidesNode(nv.Node)) continue;
                 var p = nv.TreePos;
                 x0 = Mathf.Min(x0, p.x); x1 = Mathf.Max(x1, p.x); y0 = Mathf.Min(y0, p.y); y1 = Mathf.Max(y1, p.y);
             }
@@ -88,7 +88,7 @@ namespace MoreMush
             TreeNodeView best = null; float bd = 1e9f;
             foreach (var nv in nodes)
             {
-                if (NodeState(nv.Node) == "hidden") continue;
+                if (NodeState(nv.Node) == "hidden" || Tutorial.HidesNode(nv.Node)) continue;
                 float dd = (p - nv.TreePos).sqrMagnitude, r = TreeNodeView.Radius(nv.Node) + 8;
                 if (dd < r * r && dd < bd) { bd = dd; best = nv; }
             }
@@ -194,6 +194,7 @@ namespace MoreMush
             }
         }
 
+        public TreeNodeView Find(string id) => byId.TryGetValue(id, out var nv) ? nv : null;   // 튜토리얼이 노드 위치를 찾는다
         public void MarkGrown(IEnumerable<string> ids) { foreach (var id in ids) if (byId.TryGetValue(id, out var nv)) nv.growAnim = 0; }
     }
 }

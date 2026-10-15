@@ -1,0 +1,12 @@
+{
+  "String": {
+    "901196": { "Str_EN": "Mycelium Tree Upgrades", "Str_JA": "菌糸ツリー強化" },
+    "901197": { "Str_EN": "Weather", "Str_JA": "天気" },
+    "901198": { "Str_EN": "Boss Challenge Button", "Str_JA": "ボス挑戦ボタン" },
+    "901199": { "Str_EN": "New feature unlocked: {0}", "Str_JA": "新しい機能が解放されました:{0}" },
+    "901200": { "Str_EN": "Grab the Harvester, pull it down, and let go to send it flying at the mushroom!", "Str_JA": "収穫機をつかんで下に引いて離すと、キノコに向かって飛んでいくよ!" },
+    "901201": { "Str_EN": "Buy your first upgrade! Tap the glowing node", "Str_JA": "はじめての強化を買ってみよう!光っているノードを押してね" },
+    "901202": { "Str_EN": "You got stronger! Ready to go harvest again?", "Str_JA": "強くなったね!もう一度収穫に行こうか?" },
+    "901203": { "Str_EN": "Go harvest and clear the first stage!", "Str_JA": "収穫に行って、最初のステージをクリアしよう!" }
+  }
+}

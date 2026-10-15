@@ -331,7 +331,7 @@ namespace MoreMush
                         case "init": s.init = true; break;
                         case "after": s.after = v; break;
                         case "cnt": s.cnt = int.Parse(v); break;
-                        case "boss": s.boss = int.Parse(v); break;
+                        case "boss": s.boss = BossStageOf(int.Parse(v)); break;   // 첫 보스가 14스테이지로 옮겨 10 → 14
                         case "theme": s.theme = v; break;
                         case "spore": s.spore = v; break;
                         case "jelly": s.jelly = true; break;

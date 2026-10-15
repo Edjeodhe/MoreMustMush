@@ -37,6 +37,7 @@ namespace MoreMush
         public float x, y, R, vx, vy, turn;
         public Shape shape;
         public bool wall, wander;
+        public int slot = -1;          // 초반 스테이지(RoundSim.lone)의 군락 자리. 같은 자리는 늘 같은 종으로 다시 생긴다
         public string side;
         public List<Shroom> members = new List<Shroom>();
         public int alive;

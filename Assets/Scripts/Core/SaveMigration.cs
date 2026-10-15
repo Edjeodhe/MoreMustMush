@@ -6,7 +6,7 @@ namespace MoreMush
     // 세이브 버전 올리기. SaveIO.Load가 Sanitize 끝에서 부르며, 한 버전씩 차례로 올린다.
     public static class SaveMigration
     {
-        public const int CURRENT = 6;
+        public const int CURRENT = 7;
 
         // 이번 로드에서 플레이어에게 알릴 문장 (GameFlow가 토스트로 띄우고 비운다)
         public static string Notice;
@@ -30,6 +30,7 @@ namespace MoreMush
             if (g.v < 4) ToV4(g);
             if (g.v < 5) ToV5(g);
             if (g.v < 6) ToV6(g);
+            if (g.v < 7) ToV7(g);
             g.v = Math.Max(g.v, CURRENT);
         }
 
@@ -104,6 +105,14 @@ namespace MoreMush
         };
         static readonly double[] RETIRED_CSTAR_GOLD = { 10000, 100000, 1000000, 10000000, 100000000 };
         static readonly int[] RETIRED_CSTAR_GEM = { 5, 10, 20, 40, 80 };
+
+        // v7: 튜토리얼·단계별 기능 해금. 이미 하던 세이브는 튜토리얼을 건너뛰고 기능을 모두 연다
+        static void ToV7(SaveData g)
+        {
+            if (g.rounds <= 0) return;
+            g.tut = 3;
+            Unlock.OpenAll(g);
+        }
 
         static void ToV6(SaveData g)
         {

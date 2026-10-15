@@ -48,7 +48,7 @@ namespace MoreMush
         {
             var n = Node;
             string s = NodeState(n);
-            bool hidden = s == "hidden";
+            bool hidden = s == "hidden" || Tutorial.HidesNode(n);
             // 숨김이 바뀔 때만 자식을 모두 켜고 끈다 (예전엔 매 프레임 켰다가 아래에서 다시 꺼서 TMP가 등록·해제를 반복했다)
             if (shownHidden != hidden) { shownHidden = hidden; foreach (Transform c in transform) c.gameObject.SetActive(!hidden); shownS = null; }
             if (hidden) return;

@@ -17634,6 +17634,86 @@
       "Str_JA": "菌糸石でちびと収穫機の見た目を変えます。買ったスキンはいつでも着たり脱いだりできます。ちびスキンは牧場・畑・食堂に、収穫機スキンはラウンドのピンボールに表示されます。(能力は変わりません)",
       "Str_RU": "За камни мицелия меняй облик малышей и сборщиков. Купленные скины можно надевать и снимать в любой момент. Скины малышей видны на ферме · в полях · в столовой, скины сборщиков — на пинболе в раунде. (Характеристики не меняются)",
       "Str_UK": "Камені міцелію змінюють вигляд малюків і збирачів. Куплені скіни можна вдягати й знімати будь-коли. Скіни малюків видно на ранчо, полях і в закусочній; скіни збирачів видно на пінболі в раунді. (Характеристики не змінюються)"
+    },
+    {
+      "Str_ID": 901196,
+      "Str_Group_ID": 91196,
+      "Str_Name": "ui",
+      "Str_KR": "균사 트리 강화",
+      "Str_EN": "Mycelium Tree Upgrades",
+      "Str_JA": "菌糸ツリー強化",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901197,
+      "Str_Group_ID": 91197,
+      "Str_Name": "ui",
+      "Str_KR": "날씨",
+      "Str_EN": "Weather",
+      "Str_JA": "天気",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901198,
+      "Str_Group_ID": 91198,
+      "Str_Name": "ui",
+      "Str_KR": "보스 도전 버튼",
+      "Str_EN": "Boss Challenge Button",
+      "Str_JA": "ボス挑戦ボタン",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901199,
+      "Str_Group_ID": 91199,
+      "Str_Name": "ui",
+      "Str_KR": "새 기능이 열렸어요: {0}",
+      "Str_EN": "New feature unlocked: {0}",
+      "Str_JA": "新しい機能が解放されました:{0}",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901200,
+      "Str_Group_ID": 91200,
+      "Str_Name": "ui",
+      "Str_KR": "수확기를 잡고 아래로 당겼다 놓으면 버섯을 향해 날아가요!",
+      "Str_EN": "Grab the Harvester, pull it down, and let go to send it flying at the mushroom!",
+      "Str_JA": "収穫機をつかんで下に引いて離すと、キノコに向かって飛んでいくよ!",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901201,
+      "Str_Group_ID": 91201,
+      "Str_Name": "ui",
+      "Str_KR": "첫 강화를 사 보세요! 밝게 빛나는 노드를 누르세요",
+      "Str_EN": "Buy your first upgrade! Tap the glowing node",
+      "Str_JA": "はじめての強化を買ってみよう!光っているノードを押してね",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901202,
+      "Str_Group_ID": 91202,
+      "Str_Name": "ui",
+      "Str_KR": "강해졌어요! 다시 수확하러 가 볼까요?",
+      "Str_EN": "You got stronger! Ready to go harvest again?",
+      "Str_JA": "強くなったね!もう一度収穫に行こうか?",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901203,
+      "Str_Group_ID": 91203,
+      "Str_Name": "ui",
+      "Str_KR": "수확하러 가서 첫 스테이지를 마쳐 보세요!",
+      "Str_EN": "Go harvest and clear the first stage!",
+      "Str_JA": "収穫に行って、最初のステージをクリアしよう!",
+      "Str_RU": "",
+      "Str_UK": ""
     }
   ]
 }

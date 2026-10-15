@@ -27,6 +27,7 @@ namespace MoreMush
         public void Refresh()
         {
             if (G == null) return;
+            ApplyUnlocks();
             var th = THEME.TryGetValue(G.theme, out var tt) ? tt : LatestTheme();
             Theme nextT = null; foreach (var x in THEMES) if (x.from > StageNow()) { nextT = x; break; }
             stageIcon.sprite = SpriteDB.Icon(th.icon);
@@ -64,6 +65,27 @@ namespace MoreMush
             double h = G.farm.bag.sec / 3600;
             autoText.text = Loc.F("{0} 수확 보따리 <size=75%>{1}:{2:00}</size>", UIUtil.Ic("auto_harvest"), (int)h, (int)(h * 60 % 60));
             UIUtil.Show(autoBadge, BagFull());
+        }
+
+        // 단계별 기능 해금 (Unlock): 열리기 전에는 버튼을 숨긴다. 버튼 줄은 레이아웃 그룹이라 남은 버튼이 다시 정렬된다.
+        // 타이틀·옵션·공방·수확하러 가기는 늘 보인다. 일괄 강화는 개발 빌드 전용(DevOnly)
+        static readonly (string path, string feat)[] GATED =
+        {
+            ("Buttons/Left/Records", Unlock.RECORDS), ("Buttons/Left/AutoHarvest", Unlock.WORLDTREE),
+            ("Buttons/Right/Farm", Unlock.WORLDTREE), ("Buttons/Right/Quests", Unlock.QUEST), ("Buttons/Right/Skin", Unlock.SKIN),
+            ("Buttons/Right/Codex", Unlock.CODEX), ("BossButton", Unlock.BOSS), ("Buttons/Right/Bulk", null),
+        };
+        GameObject[] gated;
+
+        void ApplyUnlocks()
+        {
+            if (gated == null)
+            {
+                gated = new GameObject[GATED.Length];
+                for (int i = 0; i < GATED.Length; i++) { var t = transform.Find(GATED[i].path); gated[i] = t != null ? t.gameObject : null; if (t == null) Debug.LogWarning("[TreeScreen] 해금 버튼 없음: " + GATED[i].path); }
+            }
+            for (int i = 0; i < GATED.Length; i++)
+                UIUtil.Show(gated[i], GATED[i].feat == null ? DevOnly.ON : Unlock.On(GATED[i].feat));
         }
 
         void Update()

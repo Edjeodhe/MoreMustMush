@@ -93,14 +93,17 @@ namespace MoreMush
             SetWorld((float)st.zoom);
             var r = new RoundSim { st = st, themeId = st.theme.id };
             R = r;
+            r.lone = st.boss == null ? LoneCount(st.stage) : 0;
+            r.tutorial = r.lone > 0 && st.stage == 1 && G != null && G.tut == 0;
+            if (r.lone > 0) st.duration = EARLY_SEC;   // 초반 스테이지(튜토리얼 포함 1~4)는 10초만
             r.timeLeft = r.timeMax = (float)st.duration;
             // 보스 라운드에는 보스 말고 다른 버섯이 나오지 않는다 (군락지·재생·거대 버섯 없음). 확률은 그대로 굴려 난수 순서를 지킨다
-            r.giantState = U.Chance((float)st.giantP) && st.boss == null ? "pending" : "none";
+            r.giantState = U.Chance((float)st.giantP) && st.boss == null && r.lone == 0 ? "pending" : "none";
             r.barX = WW / 2; r.barLen = (float)st.barLen;
             if (st.boss != null) r.SpawnBoss(st.boss);   // 군락지·장치보다 먼저 자리를 잡는다
             foreach (var d in st.devTypes) r.PlaceDevice(d, null);
             r.barLen = Mathf.Min(r.barLen, WW / 3);   // 슬라이드 바 최대 길이: 화면의 1/3
-            if (st.boss == null) for (int i = 0; i < st.maxCol; i++) r.SpawnColony(true);
+            if (st.boss == null) for (int i = 0; i < r.MaxCol; i++) r.SpawnColony(true);
             for (int i = 0; i < st.permBalls; i++) r.balls.Add(r.MakeBall(LAUNCH.x, LAUNCH.y, true, st.hvs[i % st.hvs.Count]));
             r.RebuildGrid();
             return r;
@@ -205,9 +208,19 @@ namespace MoreMush
             return new Cand { x = xx, y = yy, R = half, offs = offs, wall = true, side = side, shape = Shape.Rect(xx - rc, yy - half, xx + rc, yy + half) };
         }
 
+        // 초반 스테이지 (튜토리얼 기획서 "스테이지 흐름도"): 1~2스테이지는 버섯 군락 1개, 3~4스테이지는 2개만 나오고(거대 버섯 없음) 10초만 한다. 0 = 보통
+        public static int LoneCount(int stage) => stage <= 2 ? 1 : stage <= 4 ? 2 : 0;
+        public const float EARLY_SEC = 10;
+        public int lone;
+        public bool tutorial;                  // 1스테이지 튜토리얼 판: 첫 군락을 수확기 바로 위에 움직이지 않게 둔다 (Tutorial이 길을 밝혀 준다)
+        public Colony TutorialColony;
+        readonly List<Species> loneSp = new List<Species>();   // 자리별 종 (처음 고른 종을 기억해, 다 수확하면 같은 종으로 다시 만든다)
+        int MaxCol => lone > 0 ? lone : st.maxCol;
+
         bool SpawnColony(bool instant)
         {
-            if (colonies.Count >= st.maxCol) return true;
+            if (colonies.Count >= MaxCol) return true;
+            if (lone > 0) return SpawnLone(instant);
             bool wall = U.Chance(0.3f);
             var sp = PickSpecies(wall);
             if (sp == null) return false;
@@ -225,12 +238,48 @@ namespace MoreMush
             }
         }
 
-        void CreateColony(Species sp, float r, Cand cand, bool instant)
+        // 초반 스테이지 군락: 빈 자리 하나를 그 자리의 종으로 채운다. 첫 판 튜토리얼의 첫 군락은 발사 지점 바로 위에
+        bool SpawnLone(bool instant)
+        {
+            int slot = -1;
+            for (int i = 0; i < lone && slot < 0; i++) if (!colonies.Any(c => c.slot == i)) slot = i;
+            if (slot < 0) return true;
+            Species sp;
+            if (slot < loneSp.Count) sp = loneSp[slot];
+            else
+            {
+                sp = PickSpecies(false);
+                for (int k = 0; k < 8 && sp != null && loneSp.Contains(sp); k++) sp = PickSpecies(false);   // 두 자리는 되도록 다른 종
+                if (sp == null) return false;
+                loneSp.Add(sp);
+            }
+            float r = TIERS[sp.t].r;
+            int n = U.RandI(3, st.colMax);
+            bool first = tutorial && TutorialColony == null && slot == 0;
+            for (int a = 0; a < 30; a++)
+            {
+                var cand = FloorCandidate(n, r);
+                if (cand == null) break;
+                if (first)
+                {
+                    cand.x = LAUNCH.x; cand.y = FY0 + (NO_SPAWN_Y - FY0) * 0.35f; cand.shape = Shape.C(cand.x, cand.y, cand.R);
+                }
+                else if (!AreaFree(cand.shape)) continue;
+                CreateColony(sp, r, cand, instant, first);
+                var col = colonies[colonies.Count - 1];
+                col.slot = slot;
+                if (first) TutorialColony = col;
+                return true;
+            }
+            return false;
+        }
+
+        void CreateColony(Species sp, float r, Cand cand, bool instant, bool still = false)
         {
             var col = new Colony
             {
                 id = colId++, sp = sp, x = cand.x, y = cand.y, R = cand.R, shape = cand.shape, wall = cand.wall, side = cand.side,
-                wander = !cand.wall && (sp.wander || U.Chance((float)st.wanderP)), alive = cand.offs.Count, turn = U.Rand(3, 6),
+                wander = !still && !cand.wall && (sp.wander || U.Chance((float)st.wanderP)), alive = cand.offs.Count, turn = U.Rand(3, 6),
             };
             if (col.wander) { float a = U.Rand(0, U.TAU); col.vx = Mathf.Cos(a) * 40; col.vy = Mathf.Sin(a) * 40; }
             var T = TIERS[sp.t];
