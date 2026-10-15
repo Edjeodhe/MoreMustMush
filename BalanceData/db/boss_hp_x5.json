@@ -1,0 +1,4 @@
+{
+  "Const": { "BOSS_HP_K": { "Value": 5 } },
+  "Boss": { "king": { "Hp_Mul": 0.63 } }
+}
