@@ -166,6 +166,12 @@ export const SHEETS = [
     id, kind: "image", out: `Backgrounds/${id}.png`, refs: ["Art/Raw_Soft/pilot_bg.png"],
     prompt: `Wide landscape 16:9 game background, top-down view: ${look}. A thin border (about 4% of the width) frames all four edges. The middle is calm and fairly plain so small game objects read clearly. Same art style, framing and level of detail as the attached forest background. No characters, no text, no UI.`,
   })),
+  // Mycelium tree screen backdrop (TreeWorld/Soil, screen-fixed, nodes pan over it). White node text with a
+  // dark outline sits on top, so it stays mid-dark everywhere.
+  {
+    id: "tree_soil", kind: "image", out: "FX/tree_soil.png", refs: ["Art/Raw_Soft/pilot_bg.png", "Art/Raw_Soft/bg_night.png"],
+    prompt: "Wide landscape 16:9 game background, top-down view: a mossy forest floor at night, seen up close. Deep olive and dark teal-green moss and soil in soft watercolor washes, a gentle darker vignette toward all four edges and a slightly lighter (but still dark, mid-low brightness) calm area in the middle. Many tiny softly glowing spores float everywhere like a starry night sky: small pale-yellow and mint-green dots with faint halos, a few slightly larger ones, denser near the edges and sparse in the middle. Very faint thin pale mycelium threads wander through the soil, barely visible. A few small dark rounded moss tufts and tiny glowing mushrooms only in the corners. No big objects, no frame of bushes or stones, no bright areas: white text with a dark outline must stay easy to read anywhere on it. Same soft rounded watercolor flat style and line as the attached backgrounds, colors like the attached night forest. No characters, no text, no UI.",
+  },
   {
     id: "bg_title", kind: "image", out: "Backgrounds/bg_title.png", refs: [BG_REF],
     prompt: "Wide landscape 16:9 game title background: a sunny valley like the attached reference, with rolling green hills, puffy white clouds and a blue sky, and a cozy little village in the distance overrun by giant cute mushrooms (a red one with white dots, a pink one, an orange one, a lilac one) towering over the houses, spores drifting in the air. Keep the lower-left corner and the center fairly open for a character and a title logo. No text, no characters.",
