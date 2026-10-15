@@ -99,12 +99,16 @@ namespace MoreMush
         }
     }
 
+    // 세이브: persistentDataPath/save.dat 에 암호화해 둔다 (SecureStore: AES + HMAC, 직전 정상본 .bak).
+    // 웹은 persistentDataPath가 브라우저 IndexedDB라 템플릿의 autoSyncPersistentDataPath로 바로 반영된다.
+    // 예전 세이브(PlayerPrefs 평문 JSON, SAVE_KEY)는 읽을 수 있으면 읽고, 다음 저장 때 파일로 옮긴 뒤 지운다
     public static class SaveIO
     {
-        public const string SAVE_KEY = "mushroomPinball_save_v2";
-        public const string BAD_KEY = SAVE_KEY + "_bad";   // 읽지 못한 세이브 원문 (새 게임이 덮어쓰기 전에 남겨 둠)
+        public const string SAVE_KEY = "mushroomPinball_save_v2";   // 예전 평문 세이브 (옮기기 전)
+        public const string BAD_KEY = SAVE_KEY + "_bad";            // 읽지 못한 예전 세이브 원문
+        public static string SavePath => System.IO.Path.Combine(Application.persistentDataPath, "save.dat");
 
-        // true면 저장하지 않는다. 밸런스 봇(BalanceSim)이 돌 때 실제 세이브 키를 건드리지 않게 한다.
+        // true면 저장하지 않는다. 밸런스 봇(BalanceSim)이 돌 때 실제 세이브를 건드리지 않게 한다.
         public static bool Suspended;
         // 마지막 Load()가 세이브를 읽지 못해 null을 돌려줬는지 (세이브가 아예 없을 때는 false)
         public static bool LastLoadFailed { get; private set; }
@@ -114,36 +118,67 @@ namespace MoreMush
             if (g == null || Suspended) return;
             try
             {
-                PlayerPrefs.SetString(SAVE_KEY, JsonConvert.SerializeObject(g));
-                PlayerPrefs.Save();
+                SecureStore.Save(SavePath, DeviceId.Get(), JsonConvert.SerializeObject(g));
+                if (PlayerPrefs.HasKey(SAVE_KEY)) { PlayerPrefs.DeleteKey(SAVE_KEY); PlayerPrefs.Save(); }   // 예전 평문 세이브는 옮겼으니 지운다
             }
             catch (Exception e) { Debug.LogError("Save failed: " + e); }   // 저장 실패가 라운드·버튼 처리 중간을 끊지 않게
         }
 
-        public static bool HasSave() => PlayerPrefs.HasKey(SAVE_KEY);
+        public static bool HasSave() => SecureStore.Exists(SavePath) || PlayerPrefs.HasKey(SAVE_KEY);
 
-        public static void Wipe() { PlayerPrefs.DeleteKey(SAVE_KEY); PlayerPrefs.Save(); }
+        public static void Wipe()
+        {
+            try { SecureStore.Delete(SavePath); } catch (Exception e) { Debug.LogError("Save wipe failed: " + e); }
+            PlayerPrefs.DeleteKey(SAVE_KEY); PlayerPrefs.Save();
+        }
 
         public static SaveData Load()
         {
             LastLoadFailed = false;
-            string s = PlayerPrefs.GetString(SAVE_KEY, null);
+            if (SecureStore.Exists(SavePath))
+            {
+                if (SecureStore.Load(SavePath, DeviceId.Get(), out _, out var json) && FromJson(json) is SaveData g) return g;
+                // 셋(.tmp·본·.bak) 다 못 읽음: 다음 저장이 덮기 전에 본 파일을 .bad로 남긴다 (처음 실패한 것만)
+                LastLoadFailed = true;
+                try { var bad = SavePath + ".bad"; if (!System.IO.File.Exists(bad) && System.IO.File.Exists(SavePath)) System.IO.File.Copy(SavePath, bad); }
+                catch (Exception e) { Debug.LogError("Save backup failed: " + e); }
+                return null;
+            }
+            string s = PlayerPrefs.GetString(SAVE_KEY, null);   // 예전 평문 세이브
             if (string.IsNullOrEmpty(s)) return null;
+            var old = FromJson(s);
+            if (old == null)
+            {
+                LastLoadFailed = true;
+                try { if (!PlayerPrefs.HasKey(BAD_KEY)) { PlayerPrefs.SetString(BAD_KEY, s); PlayerPrefs.Save(); } }
+                catch (Exception e) { Debug.LogError("Save backup failed: " + e); }
+            }
+            return old;
+        }
+
+        // 세이브를 불러오지 않고 골드 잔액만 읽는다 (접속 로그 session_start의 bal). 없거나 못 읽으면 null
+        public static double? PeekGold()
+        {
             try
             {
-                var g = JsonConvert.DeserializeObject<SaveData>(s) ?? throw new JsonSerializationException("save root is null");
+                string j = null;
+                if (SecureStore.Exists(SavePath)) { if (!SecureStore.Load(SavePath, DeviceId.Get(), out _, out j)) return null; }
+                else j = PlayerPrefs.GetString(SAVE_KEY, null);
+                return string.IsNullOrEmpty(j) ? null : (double?)Newtonsoft.Json.Linq.JObject.Parse(j)["gold"];
+            }
+            catch { return null; }
+        }
+
+        // JSON → 세이브 (정리·버전 올리기까지). 못 읽으면 null
+        public static SaveData FromJson(string json)
+        {
+            try
+            {
+                var g = JsonConvert.DeserializeObject<SaveData>(json) ?? throw new JsonSerializationException("save root is null");
                 Sanitize(g);
                 return g;
             }
-            catch (Exception e)
-            {
-                Debug.LogError("Save load failed: " + e);
-                LastLoadFailed = true;
-                // 다음 저장이 원래 세이브를 덮어쓰기 전에 원문을 따로 남긴다 (처음 실패한 것만)
-                try { if (!PlayerPrefs.HasKey(BAD_KEY)) { PlayerPrefs.SetString(BAD_KEY, s); PlayerPrefs.Save(); } }
-                catch (Exception e2) { Debug.LogError("Save backup failed: " + e2); }
-                return null;
-            }
+            catch (Exception e) { Debug.LogError("Save load failed: " + e); return null; }
         }
 
         // 빈 칸·범위 밖 값을 채우고 자른다. 올바른 세이브에는 아무것도 바꾸지 않는다.

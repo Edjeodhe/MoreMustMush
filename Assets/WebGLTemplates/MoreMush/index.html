@@ -48,6 +48,7 @@
           companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
           productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
           productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+          autoSyncPersistentDataPath: true,   // 세이브(save.dat)·로그 큐(logq.dat) 파일을 바로 브라우저 저장소(IndexedDB)에 반영
           showBanner: unityShowBanner,
         }, function (p) {
           document.querySelector("#bar-full").style.width = (100 * p) + "%";

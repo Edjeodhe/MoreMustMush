@@ -128,3 +128,7 @@ BalanceData/db_backup/auto/
 
 # 출시 빌드 산출물
 Builds/
+
+# 로그 서버 주소·키 (빌드에는 들어가지만 저장소에는 올리지 않는다. 형식은 Server/LogConfig.example.json)
+Assets/Resources/LogConfig.json
+Assets/Resources/LogConfig.json.meta

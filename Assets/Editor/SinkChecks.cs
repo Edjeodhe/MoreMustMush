@@ -61,14 +61,8 @@ namespace MoreMush.EditorTools
 
                 // 세이브 정리: 싱크 레벨은 상한까지 남고, 넘으면 상한으로 잘린다
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(new SaveData { nodes = new Dictionary<string, int> { ["inf_atk"] = 500, ["inf_gold"] = 99999 } });
-                string key = SaveIO.SAVE_KEY; bool had = PlayerPrefs.HasKey(key); string orig = PlayerPrefs.GetString(key, "");
-                try
-                {
-                    PlayerPrefs.SetString(key, json);
-                    var g2 = SaveIO.Load();
-                    Check(g2 != null && g2.nodes["inf_atk"] == 500 && g2.nodes["inf_gold"] == gold.infCap, "세이브 정리: 500 유지 · 99999 → 상한");
-                }
-                finally { if (had) PlayerPrefs.SetString(key, orig); else PlayerPrefs.DeleteKey(key); PlayerPrefs.Save(); }
+                var g2 = SaveIO.FromJson(json);   // 실제 세이브 파일은 건드리지 않고 읽기·정리 단계만 시험한다
+                Check(g2 != null && g2.nodes["inf_atk"] == 500 && g2.nodes["inf_gold"] == gold.infCap, "세이브 정리: 500 유지 · 99999 → 상한");
             }
             finally { G = prevG; SaveIO.Suspended = prevS; }
             return string.Join("\n", lines);
