@@ -11,7 +11,7 @@ namespace MoreMush
     //   Gold_UI_BG/Gold_Img·Ston_Img 안의 글자 = 골드·균사석
     //   Button_Option · Button_Lang · Button_StageStart · Stage_Text
     //   Button_MushTree(세계수 씬) · Button_MushDex(도감 팝업) · Button_Harvesters(공방 팝업)
-    //   팝업: Harvesters · MushDex (각 팝업 안의 Exit = 닫기) · 옵션 팝업 OptionPanel(있으면)
+    //   팝업: Harvesters(공방, HarvesterShop) · MushDex(도감, MushDexPopup) (각 팝업 안의 Exit = 닫기) · 옵션 팝업 OptionPanel(있으면)
     // 팝업이 떠 있어도 아래쪽 이동 버튼(MushTree·MushDex·Harvesters)은 눌린다. 다른 곳으로 가면 열린 팝업은 닫힌다.
     public class MainGameController : MonoBehaviour
     {
@@ -22,7 +22,8 @@ namespace MoreMush
 
         CurrencyBar currency;
         HarvesterShop shop;
-        GameObject dex, option, current;   // current = 지금 열린 팝업
+        MushDexPopup dex;
+        GameObject option, current;   // current = 지금 열린 팝업
         GameObject[] popups = new GameObject[0];
         TMP_Text stageText;
         string stageFormat;
@@ -39,16 +40,17 @@ namespace MoreMush
 
             SceneUI.Bind(scene, "Button_StageStart", StartRound);
             SceneUI.Bind(scene, "Button_MushTree", ToOutGame);
-            SceneUI.Bind(scene, "Button_MushDex", () => Toggle(dex));
+            SceneUI.Bind(scene, "Button_MushDex", () => Toggle(dex != null ? dex.root : null));
             SceneUI.Bind(scene, "Button_Harvesters", () => Toggle(shop != null ? shop.root : null));
             SceneUI.Bind(scene, "Button_Option", () => Toggle(option));
             SceneUI.Bind(scene, "Button_Lang", () => { Snd.Ui(); Loc.NextLang(); });
 
             var shopRoot = SceneUI.Need(scene, "Harvesters");
             if (shopRoot != null) shop = new HarvesterShop(shopRoot, () => currency.Tick());
-            dex = SceneUI.Need(scene, "MushDex");
+            var dexRoot = SceneUI.Need(scene, "MushDex");
+            if (dexRoot != null) dex = new MushDexPopup(dexRoot);
             option = SceneUI.Find(scene, "OptionPanel")?.gameObject;   // 아직 배치 전일 수 있다
-            popups = new[] { shopRoot, dex, option };
+            popups = new[] { shopRoot, dexRoot, option };
             foreach (var p in popups) BindExit(p);
 
             foreach (var n in NAV) LiftAbovePopups(SceneUI.Find(scene, n));
@@ -66,11 +68,12 @@ namespace MoreMush
         void OnEnable() => Loc.Changed += OnLang;
         void OnDisable() { Loc.Changed -= OnLang; if (current != null) CloseAll(); }   // 열린 팝업의 모달 카운트를 남기지 않는다
 
-        void OnLang() { RenderStage(); shop?.Render(); }
+        void OnLang() { RenderStage(); shop?.Render(); dex?.LangChanged(); }
 
         void Update()
         {
             if (currency.Tick() && shop != null && shop.IsOpen) shop.Render();   // 열린 상점의 살 수 있음/없음을 재화에 맞춘다
+            dex?.Tick();
             var kb = Keyboard.current;
             if (kb != null && kb.escapeKey.wasPressedThisFrame && current != null) CloseAll();
         }
@@ -95,6 +98,7 @@ namespace MoreMush
             current = popup;
             App.ModalPush();
             if (shop != null && popup == shop.root) shop.Render();
+            if (dex != null && popup == dex.root) dex.Open();
         }
 
         void CloseAll()
