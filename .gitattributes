@@ -1,3 +1,13 @@
 
 # Static TMP atlas assets contain binary texture data.
 "*SDF.asset" merge=binary
+
+# Unity가 저장하는 YAML 에셋은 늘 LF로 쓴다. 저장소(i/lf)와 작업 폴더를 LF로 맞춰
+# 내용이 같은데 줄바꿈만 달라 "수정됨"으로 뜨는 일(빌드·설정 저장 뒤 URP 설정 등)을 막는다
+*.asset text eol=lf
+*.unity text eol=lf
+*.prefab text eol=lf
+*.mat text eol=lf
+*.anim text eol=lf
+*.controller text eol=lf
+*.meta text eol=lf
