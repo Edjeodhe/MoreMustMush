@@ -23,7 +23,7 @@ namespace MoreMush.EditorTools
         {
             if (path.Contains("/Icons/") || path.Contains("/Mushrooms/") || path.Contains("/Harvesters/")) return 256;
             if (path.Contains("/Characters/Critters/")) return 256;
-            if (path.Contains("/Characters/NPC/") || path.Contains("/Farm/Props/") || path.Contains("/Farm/Tree/")) return 512;
+            if (path.Contains("/Characters/NPC/") || path.Contains("/Farm/Props/") || path.Contains("/Farm/Tree/") || path.Contains("/Bosses/")) return 512;
             return 2048; // Preserve backgrounds, UI borders, and the assembled grandpa rig.
         }
 
