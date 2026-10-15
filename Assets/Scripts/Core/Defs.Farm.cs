@@ -24,8 +24,8 @@ namespace MoreMush
             // 나이테 Lv.L → L+1 골드: 다음 진화 골드 ÷ 20 × 1.35^(L−1) (마지막 단계는 7→8 진화 골드 × 2.4 기준)
             public static double RingCost(int stage, int lv) => (stage < stages ? evoGold[stage] : evoGold[stages - 1] * lastRingMul) / ringDiv * System.Math.Pow(ringK, lv - 1);
             public const double ringGrow = 0.03;                  // 나이테 레벨마다 나무버섯 성장 속도 +3%
-            public static int Picture(int stage) => new[] { 0, 1, 1, 2, 2, 3, 3, 4 }[System.Math.Max(1, System.Math.Min(stages, stage)) - 1];   // tree_0~4 (단계별 새 그림 전까지)
-            public static readonly float[] width = { 260, 360, 480, 600, 680 };   // 그림별 나무 너비 (px)
+            public static int Picture(int stage) => System.Math.Max(1, System.Math.Min(stages, stage)) - 1;   // tree_0~7 (단계마다 그림 하나)
+            public static readonly float[] width = { 220, 300, 370, 440, 510, 580, 640, 700 };   // 그림(단계)별 나무 너비 (px)
             public const float x = 640, y = 930;                  // 나무 밑동 (화면 좌표): 오른쪽 패널을 피해 왼쪽 가운데
             public const int order = 880;
             public const int craftBase = 2;                       // 동시 제작 슬롯 (4·6·8단계에 +1)
@@ -194,7 +194,7 @@ namespace MoreMush
         //     move 꼬마 이동 속도 · spd 라운드 핀볼 속도 · pick 꼬마 수확 시간 − · atk 라운드 공격력 · crit 라운드 치명타 %p · carryRoot 뿌리 운반량 +
         //     bar 라운드 슬라이드 바 · gem 균사석 획득 · spark 라운드 연쇄 번개 %p · glowUp 발광 나무버섯 + · lucky 수확 2배 확률 · bagEff 보따리 수확 효율
         //     golden 라운드 황금 변종 %p · allKid 모든 꼬마 수확량 · beautyMul 아름다움 점수 배율 · skill 라운드 스킬 발동률
-        // hang 걸이형(가지·수관 슬롯) / 설치형(뿌리 주변 슬롯) · art 임시 그림(Farm/Props)
+        // hang 걸이형(가지·수관 슬롯) / 설치형(뿌리 주변 슬롯) · art 그림 키(Farm/Props/<art>)
         public class Deco
         {
             public string id, of, fx, art; public int grade; public bool hang; public double v;
@@ -203,30 +203,30 @@ namespace MoreMush
         }
         public static readonly Deco[] DECOS =
         {
-            new Deco { id = "leaf_lamp", of = "leaf", n = "잎사귀 등불", grade = 0, hang = true, fx = "grow", v = 0.05, art = "dc_lamp" },
-            new Deco { id = "leaf_crown", of = "leaf", n = "꽃 화관", grade = 1, hang = true, fx = "shelf", v = 0.15, art = "dc_bed" },
-            new Deco { id = "leaf_house", of = "leaf", n = "나무 새집", grade = 2, hang = true, fx = "bagH", v = 1, art = "dc_house" },
-            new Deco { id = "dew_chime", of = "dew", n = "물방울 풍경", grade = 0, hang = true, fx = "self", v = 0.10, art = "dc_lamp" },
-            new Deco { id = "dew_spring", of = "dew", n = "이끼 샘물", grade = 1, hang = false, fx = "treeGold", v = 0.08, art = "dc_well" },
-            new Deco { id = "dew_pond", of = "dew", n = "수련 연못", grade = 2, hang = false, fx = "dur", v = 1, art = "dc_well" },
-            new Deco { id = "wind_catcher", of = "wind", n = "깃털 드림캐처", grade = 0, hang = true, fx = "move", v = 0.10, art = "dc_lamp" },
-            new Deco { id = "wind_mill", of = "wind", n = "바람개비", grade = 1, hang = false, fx = "spd", v = 0.03, art = "dc_statue" },
-            new Deco { id = "wind_swing", of = "wind", n = "덩굴 그네", grade = 2, hang = true, fx = "pick", v = 0.10, art = "dc_swing" },
-            new Deco { id = "fire_brazier", of = "fire", n = "돌 화로", grade = 0, hang = false, fx = "self", v = 0.10, art = "dc_fire" },
-            new Deco { id = "fire_lantern", of = "fire", n = "불꽃 등롱", grade = 1, hang = true, fx = "atk", v = 0.05, art = "dc_lamp" },
-            new Deco { id = "fire_candle", of = "fire", n = "버섯 촛불", grade = 2, hang = false, fx = "crit", v = 0.02, art = "dc_fire" },
-            new Deco { id = "rock_table", of = "rock", n = "버섯 돌탁자", grade = 0, hang = false, fx = "carryRoot", v = 1, art = "dc_table" },
-            new Deco { id = "rock_moss", of = "rock", n = "이끼 바위", grade = 1, hang = false, fx = "bar", v = 0.03, art = "dc_statue" },
-            new Deco { id = "rock_geode", of = "rock", n = "자수정 정동", grade = 2, hang = false, fx = "gem", v = 0.10, art = "dc_statue" },
-            new Deco { id = "spark_orb", of = "spark", n = "피뢰침 오브", grade = 0, hang = false, fx = "spark", v = 0.02, art = "dc_statue" },
-            new Deco { id = "spark_lamp", of = "spark", n = "황금 수정등", grade = 1, hang = false, fx = "glowUp", v = 0.10, art = "dc_lamp" },
-            new Deco { id = "spark_bell", of = "spark", n = "놋쇠 종", grade = 2, hang = true, fx = "lucky", v = 0.05, art = "dc_lamp" },
-            new Deco { id = "moon_crescent", of = "moon", n = "초승달 장식", grade = 0, hang = true, fx = "self", v = 0.10, art = "dc_lamp" },
-            new Deco { id = "moon_garland", of = "moon", n = "별빛 가랜드", grade = 1, hang = true, fx = "bagEff", v = 0.10, art = "dc_bed" },
-            new Deco { id = "moon_owl", of = "moon", n = "부엉이 목각", grade = 2, hang = false, fx = "golden", v = 0.005, art = "dc_statue" },
-            new Deco { id = "star_rune", of = "star", n = "룬 비석", grade = 0, hang = false, fx = "allKid", v = 0.05, art = "dc_statue" },
-            new Deco { id = "star_crown", of = "star", n = "꼬마 왕관", grade = 1, hang = true, fx = "beautyMul", v = 0.10, art = "dc_house" },
-            new Deco { id = "star_orb", of = "star", n = "빛의 구슬", grade = 2, hang = true, fx = "skill", v = 0.03, art = "dc_lamp" },
+            new Deco { id = "leaf_lamp", of = "leaf", n = "잎사귀 등불", grade = 0, hang = true, fx = "grow", v = 0.05, art = "leaf_lamp" },
+            new Deco { id = "leaf_crown", of = "leaf", n = "꽃 화관", grade = 1, hang = true, fx = "shelf", v = 0.15, art = "leaf_crown" },
+            new Deco { id = "leaf_house", of = "leaf", n = "나무 새집", grade = 2, hang = true, fx = "bagH", v = 1, art = "leaf_house" },
+            new Deco { id = "dew_chime", of = "dew", n = "물방울 풍경", grade = 0, hang = true, fx = "self", v = 0.10, art = "dew_chime" },
+            new Deco { id = "dew_spring", of = "dew", n = "이끼 샘물", grade = 1, hang = false, fx = "treeGold", v = 0.08, art = "dew_spring" },
+            new Deco { id = "dew_pond", of = "dew", n = "수련 연못", grade = 2, hang = false, fx = "dur", v = 1, art = "dew_pond" },
+            new Deco { id = "wind_catcher", of = "wind", n = "깃털 드림캐처", grade = 0, hang = true, fx = "move", v = 0.10, art = "wind_catcher" },
+            new Deco { id = "wind_mill", of = "wind", n = "바람개비", grade = 1, hang = false, fx = "spd", v = 0.03, art = "wind_mill" },
+            new Deco { id = "wind_swing", of = "wind", n = "덩굴 그네", grade = 2, hang = true, fx = "pick", v = 0.10, art = "wind_swing" },
+            new Deco { id = "fire_brazier", of = "fire", n = "돌 화로", grade = 0, hang = false, fx = "self", v = 0.10, art = "fire_brazier" },
+            new Deco { id = "fire_lantern", of = "fire", n = "불꽃 등롱", grade = 1, hang = true, fx = "atk", v = 0.05, art = "fire_lantern" },
+            new Deco { id = "fire_candle", of = "fire", n = "버섯 촛불", grade = 2, hang = false, fx = "crit", v = 0.02, art = "fire_candle" },
+            new Deco { id = "rock_table", of = "rock", n = "버섯 돌탁자", grade = 0, hang = false, fx = "carryRoot", v = 1, art = "rock_table" },
+            new Deco { id = "rock_moss", of = "rock", n = "이끼 바위", grade = 1, hang = false, fx = "bar", v = 0.03, art = "rock_moss" },
+            new Deco { id = "rock_geode", of = "rock", n = "자수정 정동", grade = 2, hang = false, fx = "gem", v = 0.10, art = "rock_geode" },
+            new Deco { id = "spark_orb", of = "spark", n = "피뢰침 오브", grade = 0, hang = false, fx = "spark", v = 0.02, art = "spark_orb" },
+            new Deco { id = "spark_lamp", of = "spark", n = "황금 수정등", grade = 1, hang = false, fx = "glowUp", v = 0.10, art = "spark_lamp" },
+            new Deco { id = "spark_bell", of = "spark", n = "놋쇠 종", grade = 2, hang = true, fx = "lucky", v = 0.05, art = "spark_bell" },
+            new Deco { id = "moon_crescent", of = "moon", n = "초승달 장식", grade = 0, hang = true, fx = "self", v = 0.10, art = "moon_crescent" },
+            new Deco { id = "moon_garland", of = "moon", n = "별빛 가랜드", grade = 1, hang = true, fx = "bagEff", v = 0.10, art = "moon_garland" },
+            new Deco { id = "moon_owl", of = "moon", n = "부엉이 목각", grade = 2, hang = false, fx = "golden", v = 0.005, art = "moon_owl" },
+            new Deco { id = "star_rune", of = "star", n = "룬 비석", grade = 0, hang = false, fx = "allKid", v = 0.05, art = "star_rune" },
+            new Deco { id = "star_crown", of = "star", n = "꼬마 왕관", grade = 1, hang = true, fx = "beautyMul", v = 0.10, art = "star_crown" },
+            new Deco { id = "star_orb", of = "star", n = "빛의 구슬", grade = 2, hang = true, fx = "skill", v = 0.03, art = "star_orb" },
         };
         public static readonly Dictionary<string, Deco> DECO = DECOS.ToDictionary(d => d.id);
         public const double DECO_SET_YIELD = 0.30;               // 세트(같은 꼬마 장식 3종 배치): 그 꼬마 수확량 +30% · 특별 보너스 +1단계
@@ -334,11 +334,11 @@ namespace MoreMush
         public struct AccPlace { public float x, y, w; public bool back; public AccPlace(float x, float y, float w, bool back = false) { this.x = x; this.y = y; this.w = w; this.back = back; } }
         public static readonly Dictionary<string, AccPlace> ACC_PLACE = new Dictionary<string, AccPlace>
         {
-            ["bandana"] = new AccPlace(0, 0.1f, 0.66f), ["headphones"] = new AccPlace(0, 0.14f, 0.76f), ["scarf"] = new AccPlace(0, -0.3f, 0.56f),
-            ["tophat"] = new AccPlace(0.02f, 0.52f, 0.36f), ["halo"] = new AccPlace(0, 0.62f, 0.46f, true), ["flower"] = new AccPlace(0.22f, 0.3f, 0.24f),
-            ["sunglasses"] = new AccPlace(0, -0.115f, 0.42f), ["cloud"] = new AccPlace(0, 0.54f, 0.46f), ["crown"] = new AccPlace(0, 0.52f, 0.32f),
-            ["bow"] = new AccPlace(-0.22f, 0.32f, 0.27f), ["chef"] = new AccPlace(0, 0.54f, 0.4f), ["straw"] = new AccPlace(0, 0.4f, 0.72f),
-            ["hardhat"] = new AccPlace(0, 0.46f, 0.5f),
+            ["bandana"] = new AccPlace(0, 0.12f, 0.9f), ["headphones"] = new AccPlace(0, 0.12f, 1f), ["scarf"] = new AccPlace(0, -0.29f, 0.46f),
+            ["tophat"] = new AccPlace(0.03f, 0.34f, 0.42f), ["halo"] = new AccPlace(0, 0.48f, 0.6f, true), ["flower"] = new AccPlace(0.3f, 0.26f, 0.26f),
+            ["sunglasses"] = new AccPlace(0, -0.2f, 0.36f), ["cloud"] = new AccPlace(0.03f, 0.37f, 0.5f), ["crown"] = new AccPlace(0.03f, 0.34f, 0.36f),
+            ["bow"] = new AccPlace(-0.3f, 0.24f, 0.32f), ["chef"] = new AccPlace(0.03f, 0.37f, 0.46f), ["straw"] = new AccPlace(0, 0.25f, 1.05f),
+            ["hardhat"] = new AccPlace(0.03f, 0.35f, 0.5f),
         };
     }
 }
