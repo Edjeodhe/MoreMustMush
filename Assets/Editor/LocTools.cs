@@ -22,11 +22,12 @@ namespace MoreMush.EditorTools
         // 언어, 제목 TTF, 본문 TTF (확장자 없는 파일 이름)
         static readonly (string lang, string title, string body)[] FONT_SETS =
         {
-            ("ko", "ONEMobilePOP", "ONEMobileRegular"),
-            ("en", "ONEMobilePOP", "LINESeedSans_Rg"),
-            ("ja", "LINESeedJP_Eb", "LINESeedJP_Rg"),
-            ("ru", "ONEMobilePOP", "ONEMobileRegular"),   // 키릴 문자 있음 (우크라이나 글자 ІЇЄҐ는 없음)
-            ("uk", "LINESeedJP_Eb", "LINESeedJP_Rg"),     // 키릴 + ІЇЄҐ 모두 있음
+            // 2026-10-15 수채화 화풍에 맞춘 둥근 세트 (모두 OFL): Jua · Gowun Dodum · Nunito · M PLUS Rounded 1c
+            ("ko", "Jua-Regular", "GowunDodum-Regular"),
+            ("en", "Nunito-Black", "Nunito-SemiBold"),
+            ("ja", "MPLUSRounded1c-ExtraBold", "MPLUSRounded1c-Medium"),
+            ("ru", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 문자 있음
+            ("uk", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 + ІЇЄҐ 모두 있음
         };
         // 어느 폰트에도 없는 글자가 나오면 이 폰트로 넘긴다 (한글·가나·한자·기호를 모두 가진 폰트)
         const string UniversalFallback = "ONEMobileRegular";
@@ -46,7 +47,7 @@ namespace MoreMush.EditorTools
 
         static string FontAssetPath(string ttf) => $"{FontDir}/{ttf} SDF.asset";
         static string PresetPath(string ttf, int i) => $"{FontDir}/{ttf} {LocFonts.PRESETS[i]}.mat";
-        static IEnumerable<string> AllTtfs() => FONT_SETS.SelectMany(s => new[] { s.title, s.body }).Distinct();
+        static IEnumerable<string> AllTtfs() => FONT_SETS.SelectMany(s => new[] { s.title, s.body }).Append(UniversalFallback).Distinct();
 
         // ===== 1. 폰트 에셋 =====
         [MenuItem("MoreMush/다국어/1 폰트 에셋 만들기")]

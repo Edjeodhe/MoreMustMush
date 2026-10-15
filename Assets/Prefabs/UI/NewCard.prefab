@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: NEW
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
-  m_sharedMaterial: {fileID: 1883410513914278816, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5049dd357cc23d446afce057e7d4337f, type: 2}
+  m_sharedMaterial: {fileID: 1912433573789592034, guid: 5049dd357cc23d446afce057e7d4337f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -224,8 +224,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button Mushroom
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
-  m_sharedMaterial: {fileID: 1883410513914278816, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5049dd357cc23d446afce057e7d4337f, type: 2}
+  m_sharedMaterial: {fileID: 1912433573789592034, guid: 5049dd357cc23d446afce057e7d4337f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

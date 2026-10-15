@@ -86,7 +86,9 @@ async function buildSheet(s) {
     return true;
   }
   const names = s.items.map(([name]) => name).join(",");
-  const sl = await run("python", ["Tools/art/slice_sheet.py", raw, String(s.rows), String(s.cols), path.join(genRoot, s.out), names]);
+  // fx sheets keep soft alpha and fill a fixed canvas (tintable effect textures), see slice_fx.py
+  const slicer = s.fx ? "Tools/art/slice_fx.py" : "Tools/art/slice_sheet.py";
+  const sl = await run("python", [slicer, raw, String(s.rows), String(s.cols), path.join(genRoot, s.out), names]);
   if (sl.code !== 0) { console.error(`[${s.id}] slicing failed:\n${sl.err.trim()}`); return false; }
   const res = JSON.parse(sl.out);
   console.log(`[${s.id}] sliced ${Object.keys(res.items).length}/${s.items.length}${res.warnings.length ? " — " + res.warnings.join("; ") : ""}`);
