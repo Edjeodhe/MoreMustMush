@@ -1,0 +1,277 @@
+[
+ {
+  "key": "power",
+  "lv": 1,
+  "gold": 12.0
+ },
+ {
+  "key": "ed_score",
+  "lv": 1,
+  "gold": 16.0
+ },
+ {
+  "key": "ed_cols",
+  "lv": 1,
+  "gold": 22.0
+ },
+ {
+  "key": "ps_dur",
+  "lv": 1,
+  "gold": 30.0
+ },
+ {
+  "key": "ed_price",
+  "lv": 1,
+  "gold": 40.0
+ },
+ {
+  "key": "power",
+  "lv": 2,
+  "gold": 46.0
+ },
+ {
+  "key": "md_bar",
+  "lv": 1,
+  "gold": 55.0
+ },
+ {
+  "key": "ed_score",
+  "lv": 2,
+  "gold": 60.0
+ },
+ {
+  "key": "ed_cols",
+  "lv": 2,
+  "gold": 84.0
+ },
+ {
+  "key": "ps_dur",
+  "lv": 2,
+  "gold": 110.0
+ },
+ {
+  "key": "ed_price",
+  "lv": 2,
+  "gold": 150.0
+ },
+ {
+  "key": "power",
+  "lv": 3,
+  "gold": 170.0
+ },
+ {
+  "key": "md_bar",
+  "lv": 2,
+  "gold": 200.0
+ },
+ {
+  "key": "dev_stump",
+  "lv": 1,
+  "gold": 220.0
+ },
+ {
+  "key": "ed_score",
+  "lv": 3,
+  "gold": 230.0
+ },
+ {
+  "key": "ed_cols",
+  "lv": 3,
+  "gold": 250.0
+ },
+ {
+  "key": "md_combo",
+  "lv": 1,
+  "gold": 260.0
+ },
+ {
+  "key": "ed_regen",
+  "lv": 1,
+  "gold": 280.0
+ },
+ {
+  "key": "ps_dur",
+  "lv": 3,
+  "gold": 300.0
+ },
+ {
+  "key": "ed_rare0",
+  "lv": 1,
+  "gold": 320.0
+ },
+ {
+  "key": "md_map",
+  "lv": 1,
+  "gold": 340.0
+ },
+ {
+  "key": "ps_atk",
+  "lv": 1,
+  "gold": 370.0
+ },
+ {
+  "key": "ed_price",
+  "lv": 3,
+  "gold": 380.0
+ },
+ {
+  "key": "dev_moss",
+  "lv": 1,
+  "gold": 420.0
+ },
+ {
+  "key": "md_bar",
+  "lv": 3,
+  "gold": 440.0
+ },
+ {
+  "key": "ps_size",
+  "lv": 1,
+  "gold": 450.0
+ },
+ {
+  "key": "ps_spd",
+  "lv": 1,
+  "gold": 480.0
+ },
+ {
+  "key": "power",
+  "lv": 4,
+  "gold": 510.0
+ },
+ {
+  "key": "ed_bonus",
+  "lv": 1,
+  "gold": 550.0
+ },
+ {
+  "key": "md_combo",
+  "lv": 2,
+  "gold": 600.0
+ },
+ {
+  "key": "ed_cols",
+  "lv": 4,
+  "gold": 650.0
+ },
+ {
+  "key": "accel",
+  "lv": 1,
+  "gold": 700.0
+ },
+ {
+  "key": "ed_regen",
+  "lv": 2,
+  "gold": 700.0
+ },
+ {
+  "key": "md_map",
+  "lv": 2,
+  "gold": 750.0
+ },
+ {
+  "key": "ed_rare0",
+  "lv": 2,
+  "gold": 800.0
+ },
+ {
+  "key": "ps_dur",
+  "lv": 4,
+  "gold": 800.0
+ },
+ {
+  "key": "dev_acorn",
+  "lv": 1,
+  "gold": 900.0
+ },
+ {
+  "key": "ps_size",
+  "lv": 2,
+  "gold": 900.0
+ },
+ {
+  "key": "ps_spd",
+  "lv": 2,
+  "gold": 960.0
+ },
+ {
+  "key": "pierce",
+  "lv": 1,
+  "gold": 1000.0
+ },
+ {
+  "key": "ed_bonus",
+  "lv": 2,
+  "gold": 1300.0
+ },
+ {
+  "key": "md_combo",
+  "lv": 3,
+  "gold": 1300.0
+ },
+ {
+  "key": "md_kid",
+  "lv": 1,
+  "gold": 1300.0
+ },
+ {
+  "key": "ps_atk",
+  "lv": 2,
+  "gold": 1400.0
+ },
+ {
+  "key": "burst",
+  "lv": 1,
+  "gold": 1600.0
+ },
+ {
+  "key": "ed_regen",
+  "lv": 3,
+  "gold": 1700.0
+ },
+ {
+  "key": "md_map",
+  "lv": 3,
+  "gold": 1700.0
+ },
+ {
+  "key": "ps_size",
+  "lv": 3,
+  "gold": 1800.0
+ },
+ {
+  "key": "ps_spd",
+  "lv": 3,
+  "gold": 1900.0
+ },
+ {
+  "key": "ed_rare0",
+  "lv": 3,
+  "gold": 2000.0
+ },
+ {
+  "key": "accel",
+  "lv": 2,
+  "gold": 2100.0
+ },
+ {
+  "key": "ps_ball",
+  "lv": 1,
+  "gold": 2400.0
+ },
+ {
+  "key": "pierce",
+  "lv": 2,
+  "gold": 2500.0
+ },
+ {
+  "key": "ed_bonus",
+  "lv": 3,
+  "gold": 2900.0
+ },
+ {
+  "key": "md_map",
+  "lv": 4,
+  "gold": 4000.0
+ }
+]

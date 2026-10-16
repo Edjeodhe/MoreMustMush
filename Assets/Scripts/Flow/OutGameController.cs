@@ -31,6 +31,7 @@ namespace MoreMush
         readonly List<Sprite> kidBlank = new List<Sprite>();   // 배치한 빈칸 그림 (아직 없는 꼬마)
         readonly List<Button> tabs = new List<Button>();
         int tab;
+        OptionWindow optionWin;   // Esc = 옵션 창 (돌아가기 버튼 포함). MainGame으로 돌아가는 버튼이 배치되기 전까지 여기서 돌아간다
         float tickT;
 
         void Awake()
@@ -65,6 +66,8 @@ namespace MoreMush
                 for (int i = 0; i < tabs.Count; i++) { int k = i; tabs[i].onClick.AddListener(() => { Snd.Ui(); tab = k; RenderTabs(); }); }
             }
             SetFolded(true, false);
+            optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
+                new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
         }
 
         void Start()
@@ -87,7 +90,7 @@ namespace MoreMush
             currency.Tick();
             if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); }
             var kb = Keyboard.current;
-            if (kb != null && kb.escapeKey.wasPressedThisFrame) ToMainGame();
+            if (kb != null && kb.escapeKey.wasPressedThisFrame) optionWin.Toggle();
         }
 
         void Render()

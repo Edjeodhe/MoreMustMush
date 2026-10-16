@@ -36,17 +36,30 @@ namespace MoreMush
 
         static void Fit(TMP_Text t)
         {
-            if (t == null) return;
+            // 캔버스 UI 글자만. 월드 글자(TextMeshPro: 트리 노드·라운드 필드)는 코드가 크기를 정한다
+            if (!(t is TextMeshProUGUI)) return;
+            float min = t.enableAutoSizing ? t.fontSizeMin : Mathf.Min(t.fontSize, Mathf.Max(MIN_SIZE, t.fontSize * MIN_RATIO));
+            // 가장 작게 줄여도 한 줄이 칸 높이에 안 들어가면 배치한 그대로 둔다 (칸보다 크게 넘쳐 그리도록 놓은 글자 — "…"로 바꾸면 통째로 사라진다)
+            if (!OneLineFits(t, min)) return;
             // 이미 자동 크기인 글자(LocText 등이 맞춰 둔 것)는 크기 범위를 그대로 둔다
             if (!t.enableAutoSizing)
             {
-                float size = t.fontSize;
-                t.fontSizeMax = size;
-                t.fontSizeMin = Mathf.Min(size, Mathf.Max(MIN_SIZE, size * MIN_RATIO));
+                t.fontSizeMax = t.fontSize;
+                t.fontSizeMin = min;
                 t.enableAutoSizing = true;
             }
             // 칸 밖으로 그대로 흘러넘치는 설정만 바꾼다 (가리기·스크롤 등 일부러 고른 설정은 둔다)
             if (t.overflowMode == TextOverflowModes.Overflow) t.overflowMode = TextOverflowModes.Ellipsis;
+        }
+
+        static bool OneLineFits(TMP_Text t, float size)
+        {
+            if (t.font == null) return true;
+            var fi = t.font.faceInfo;
+            if (fi.pointSize <= 0) return true;
+            float lineH = size * fi.lineHeight / fi.pointSize;
+            float boxH = t.rectTransform.rect.height - t.margin.y - t.margin.w;
+            return boxH + 0.5f >= lineH;
         }
     }
 }

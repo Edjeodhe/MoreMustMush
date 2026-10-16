@@ -231,7 +231,8 @@ namespace MoreMush
             st.minSpd = TUNE.min * spd;
             st.ballR = TUNE.ball0 * BALL_SCALE * (NF.ps_size(Lv("ps_size")) + ab["size"]);
             st.barLen = (150 * (NF.md_bar(Lv("md_bar")) + NF.ps_bar(Lv("ps_bar")) + 0.1 + ab["bar"] + tb.bar) + (SetDone("shelf") ? 40 : 0)) * NF.gm_bar(Lv("gm_bar")) * (wId == "cold" ? 0.75 : 1);   // 최대 필드 폭의 1/3 (RoundSim.Start)
-            st.duration = BASE_TIME + StageTime(st.stage) + NF.ps_dur(Lv("ps_dur")) + NF.ps_dur2(Lv("ps_dur2")) + ab["dur"] + tb.dur - (wId == "cold" ? 3 : 0);
+            double baseTime = st.stage <= EARLY_TIME_STAGES ? EARLY_SEC : BASE_TIME + StageTime(st.stage);   // 초반은 10초 + 시간 노드
+            st.duration = baseTime + NF.ps_dur(Lv("ps_dur")) + NF.ps_dur2(Lv("ps_dur2")) + ab["dur"] + tb.dur - (wId == "cold" ? 3 : 0);
             st.crit = NF.ps_crit(Lv("ps_crit")) + (SetDone("coral") ? 0.05 : 0) + ab["crit"] + tb.crit;
             st.critMul = NF.ps_crit2(Lv("ps_crit2"));
             st.comboK = NF.md_combo(Lv("md_combo")) + NF.md_combo2(Lv("md_combo2")) + 0.1 * ab["combo"];
@@ -251,6 +252,11 @@ namespace MoreMush
             st.zoom = MAP_ZOOM[Lv("md_map")];
             double area = Math.Pow(1 / (st.zoom * st.zoom), 0.7);
             st.maxCol = Math.Max(4, (int)U.JsRound(st.maxCol * area));
+            if (EarlyStage(st.stage))   // 초반: 군락을 덜, 천천히 (스폰 방식은 보통 판과 같다)
+            {
+                st.maxCol = Math.Max(1, (int)U.JsRound(st.maxCol * EARLY_COL_MUL[st.stage - 1]));
+                st.regen *= EARLY_REGEN_MUL[st.stage - 1];
+            }
             st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"] + tb.goldenP) * tb.goldenMul * (wId == "moon" ? 3 : 1);
             st.sparkP = tb.spark;   // 연쇄 번개 (꼬마·장식): bolt 스킬이 없어도 친다
             st.devTypes = DEVICE_TYPES.Where(d => Lv("dev_" + d) > 0).ToList();

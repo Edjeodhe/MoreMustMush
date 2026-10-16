@@ -39,15 +39,12 @@ namespace MoreMush
         public static readonly float[] PHANTOM_SPLIT = { 0.66f, 0.33f };
         public static readonly float MOVER_SPD = (float)Db.C("MOVER_SPD");
 
-        // 첫 보스는 14스테이지 (튜토리얼 기획서 Ver.01 "스테이지 흐름도": 초반 버섯 수를 줄인 만큼 늦게). 그다음부터는 BOSS_EVERY(10)마다: 20 · 30 · 40 …
-        // 10스테이지는 일반 스테이지다. 순서는 그대로 첫 보스(대왕송이)가 14, 둘째가 20
-        public const int FIRST_BOSS_STAGE = 14;
-        public static bool IsBossStage(int stage) => stage == FIRST_BOSS_STAGE || (stage > BOSS_EVERY && stage % BOSS_EVERY == 0);
-        public static BossDef BossAt(int stage) => !IsBossStage(stage) ? null : stage == FIRST_BOSS_STAGE ? BOSSES[0] : BOSSES[(stage / BOSS_EVERY - 1) % BOSSES.Count];
+        // 보스는 BOSS_EVERY(10)의 배수 스테이지마다: 10 · 20 · 30 … (사용자 결정 2026-10-16, 첫 보스 14 → 10)
+        public static int FIRST_BOSS_STAGE => BOSS_EVERY;
+        public static bool IsBossStage(int stage) => stage >= BOSS_EVERY && stage % BOSS_EVERY == 0;
+        public static BossDef BossAt(int stage) => !IsBossStage(stage) ? null : BOSSES[(stage / BOSS_EVERY - 1) % BOSSES.Count];
         // 다음 보스 스테이지 (지금이 보스 스테이지면 지금)
-        public static int NextBossStage(int stage) => stage <= FIRST_BOSS_STAGE ? FIRST_BOSS_STAGE : (stage + BOSS_EVERY - 1) / BOSS_EVERY * BOSS_EVERY;
-        // 예전 일정(10·20…)으로 적힌 "N스테이지 보스" 값을 지금 일정으로 (첫 보스 10 → 14)
-        public static int BossStageOf(int legacy) => legacy == 10 ? FIRST_BOSS_STAGE : legacy;   // 상수만 쓴다 (종 표가 BOSS_EVERY보다 먼저 초기화될 수 있음)
+        public static int NextBossStage(int stage) => System.Math.Max(BOSS_EVERY, (stage + BOSS_EVERY - 1) / BOSS_EVERY * BOSS_EVERY);
 
         // 보스 체력 = 레전드리 버섯 체력 × BOSS_HP_K × 지역·스테이지 배율 × 보스별 배율. [임시값: 밸런스 팀이 시뮬로 맞춘다]
         // tuned 기준 스테이지 10 대왕송이 ≈ 105 (공격력 5.5로 보스만 노려 맞히면 약 16초). 봇(바 오차 ±60%)은 첫 보스에서 여러 번 진다

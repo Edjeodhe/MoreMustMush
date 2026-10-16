@@ -33,15 +33,19 @@ namespace MoreMush
 
         const float MAX_DT = 0.05f, SIM_STEP = 1 / 60f;
         const float GRAB_R = 160, MIN_PULL = 20;   // 수확기를 잡는 반경 · 발사로 치는 최소 당김 (필드 px)
-        static readonly Vector2 STAGE = new Vector2(1920, 1080);
 
-        Vector2 mouse = STAGE / 2;
+        Vector2 mouse = StageSpace.SIZE / 2;
+        OptionWindow optionWin;   // Esc = 옵션 창 (열린 동안 라운드가 멈춘다: App.ModalOpen)
         RoundSim finishedR;   // 이미 정산을 넘긴 라운드 (정산 중 예외가 나도 다시 정산하지 않게)
         RoundSim begun;       // 이 씬에서 시작한 라운드
         System.Action<RoundSim> started;
-        Canvas stageCanvas;   // stageRect의 최상위 캔버스 (렌더 모드 판정용)
 
-        void Awake() => I = this;
+        void Awake()
+        {
+            I = this;
+            optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); optionWin.Close(); },
+                new OptionWindow.Extra("Button_EndNow", Loc.T("지금 끝내기"), () => { Snd.Ui(); optionWin.Close(); EndNow(); }));
+        }
         void OnDestroy() { if (I == this) I = null; }
 
         // 플레이 시작 때 이전 플레이의 배속을 지운다 (도메인 리로드를 끈 플레이 모드 대비)
@@ -52,7 +56,6 @@ namespace MoreMush
         {
             App.EnsureSave();
             if (cam == null) cam = Camera.main;
-            if (stageRect != null) { var c = stageRect.GetComponentInParent<Canvas>(); stageCanvas = c != null ? c.rootCanvas : null; }
             if (view == null) { Debug.LogError("[Stage] RoundView가 연결되지 않았어요"); enabled = false; return; }
             begun = RoundFlow.Begin();
             view.Clear();
@@ -127,7 +130,7 @@ namespace MoreMush
             if (kb != null)
             {
                 if (kb.fKey.wasPressedThisFrame) NextSpeed();
-                if (kb.escapeKey.wasPressedThisFrame && !App.ModalOpen) TogglePause();
+                if (kb.escapeKey.wasPressedThisFrame && (optionWin.IsOpen || !App.ModalOpen)) optionWin.Toggle();
             }
             if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame) NextSpeed();
 
@@ -155,20 +158,7 @@ namespace MoreMush
         }
 
         // 화면 좌표 → 스테이지 픽셀 (0..1920, 0..1080, y 아래로)
-        public Vector2 ToStage(Vector2 screen)
-        {
-            if (stageRect != null)
-            {
-                var camForUI = stageCanvas != null && stageCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : cam;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(stageRect, screen, camForUI, out var local);
-                var r = stageRect.rect;
-                return new Vector2(local.x - r.xMin, r.yMax - local.y);
-            }
-            // 캔버스가 없으면 화면 가운데에 1920×1080을 맞춰 넣은(레터박스) 것으로 본다
-            float s = Mathf.Min(Screen.width / STAGE.x, Screen.height / STAGE.y);
-            var off = new Vector2((Screen.width - STAGE.x * s) / 2, (Screen.height - STAGE.y * s) / 2);
-            return new Vector2((screen.x - off.x) / s, STAGE.y - (screen.y - off.y) / s);
-        }
+        public Vector2 ToStage(Vector2 screen) => StageSpace.FromScreen(stageRect, cam, screen);
 
         void OnApplicationFocus(bool focus)
         {

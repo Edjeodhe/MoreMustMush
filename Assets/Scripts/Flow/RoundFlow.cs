@@ -38,7 +38,9 @@ namespace MoreMush
         {
             var boss = BossRoundNext() ? BossAt(StageNow()) : null;
             // 지역은 고르지 않는다: 스테이지가 열어 준 가장 새 지역
-            return new Plan { weather = RollWeather(boss != null), theme = LatestTheme().id, boss = boss };
+            // 날씨는 5스테이지 클리어 뒤부터 (그전엔 맑음). 보스 판은 늘 나쁜 날씨
+            string w = boss != null || Unlock.On(Unlock.WEATHER) ? RollWeather(boss != null) : "clear";
+            return new Plan { weather = w, theme = LatestTheme().id, boss = boss };
         }
 
         // Stage 씬이 부른다. 에디터에서 Stage를 바로 플레이하면 여기서 조건을 정한다

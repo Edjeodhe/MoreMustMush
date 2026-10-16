@@ -60,6 +60,7 @@ namespace MoreMush
             }
             phase = "run";
             Snd.Launch();
+            if (tutorial && !looseSpawned) { looseSpawned = true; SpawnLoose(TUTORIAL_LOOSE); }   // 튜토리얼 첫 스와이프: 낱개 버섯도 나온다
             if (G.rounds == 0) Telemetry.Ftue(Telemetry.FTUE_FIRST_LAUNCH);
         }
 

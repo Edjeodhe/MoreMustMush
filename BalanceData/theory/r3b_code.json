@@ -1,0 +1,56 @@
+{
+ "Defs.cs:106 BASE_TIME": {
+  "now": 15,
+  "new": 10,
+  "note": "EARLY_TIME_STAGES 4 · EARLY_SEC 10 분기는 그대로. 주석 '처음 15초' 고침"
+ },
+ "Defs.cs:115~116 EARLY_COL_MUL · EARLY_REGEN_MUL": {
+  "now": "{0.4,…,0.85} · {1.6,…,1.1}",
+  "new": "삭제 (Game.cs:255~259 초반 블록도 삭제)"
+ },
+ "Defs.cs:123 ColCount(int L)": {
+  "now": "Mathf.CeilToInt(TUNE.col0 + TUNE.colStep * L)",
+  "new": "(int)Math.Round(V(\"ed_cols\", L))  // DB Efx 4·6·10·17·27"
+ },
+ "Game.cs:242 Math.Max(3, …) · Game.cs:254 Math.Max(4, …)": {
+  "new": "둘 다 Math.Max(1, …)"
+ },
+ "Defs.cs (새) EARLY_LOOSE": {
+  "new": [
+   6,
+   6,
+   5,
+   4,
+   3,
+   2
+  ],
+  "note": "스테이지 1~6 낱개 버섯 수 {6,6,5,4,3,2}. [0](스테이지 1)은 튜토리얼이 아닐 때만 쓴다(튜토리얼은 TUTORIAL_LOOSE 8을 첫 발사 때)"
+ },
+ "RoundSim.cs Start() (군락 스폰 다음 줄)": {
+  "new": "if (st.boss == null && !r.tutorial && EarlyStage(st.stage)) r.SpawnLoose(EARLY_LOOSE[st.stage - 1]);",
+  "note": "판 시작 때 한 번. 다시 생기지 않음(SpawnLoose 그대로: col==null, 빈 자리, PickSpecies). 노드와 무관 — 군락을 사도 줄지 않는다"
+ },
+ "RoundSim.Balls.cs:222 그루터기 점수 * 5": {
+  "now": 5,
+  "new": 3
+ },
+ "Defs.Nodes.cs NF (새)": {
+  "new": "public static double ed_rare0(int L) => V(\"ed_rare0\", L);"
+ },
+ "Defs.Nodes.cs E (새)": {
+  "new": "E[\"ed_rare0\"] = L => Loc.F(\"에픽 이상 가중치 ×{0}\", F(NF.ed_rare0(L)));"
+ },
+ "Game.cs:244 rareMul": {
+  "now": "NF.ed_rare(Lv(\"ed_rare\")) + ab[\"rare\"]",
+  "new": "(NF.ed_rare(Lv(\"ed_rare\")) + ab[\"rare\"]) * NF.ed_rare0(Lv(\"ed_rare0\"))"
+ },
+ "SaveMigration.cs CURRENT · ToV8": {
+  "now": 7,
+  "new": 8,
+  "note": "r3b_migration.json 표대로 ed_cols·ps_dur 레벨 옮김 + stage ≥ 7이면 ed_rare0 = 3"
+ },
+ "BalanceSim.cs EnforceShape 줄 규칙(:483 근처) · CapLines(:497 근처)": {
+  "new": "for 루프 안 맨 앞에 `if (t == 1 && per[1] == per[0]) continue;` — 1단계 형제(I → I+, 효과 같은 줄) ×4 규칙만 뺀다 (verify#12 안 a)",
+  "note": "공격력 줄 t=1(ps_atk → ps_atk2)은 per가 달라 그대로 검사. 수확량 줄 ed_bonus → ed_bonus1p도 빠지지만 지금 ×3.3이라 영향 없음"
+ }
+}

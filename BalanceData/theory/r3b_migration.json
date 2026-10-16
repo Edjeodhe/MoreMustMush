@@ -1,0 +1,48 @@
+{
+ "rule": "옛 레벨 → 효과가 줄지 않는 가장 낮은 새 레벨 (관리자 결정 verify#13). 군락은 ColCount 값(지역·지도 배율 전), 시간은 스테이지 5 이상 기본+노드",
+ "table": [
+  {
+   "old_lv": 0,
+   "ed_cols_old": 12,
+   "ed_cols_new_lv": 3,
+   "ed_cols_new": 17,
+   "ps_dur_old_sec": 15,
+   "ps_dur_new_lv": 3,
+   "ps_dur_new_sec": 17
+  },
+  {
+   "old_lv": 1,
+   "ed_cols_old": 17,
+   "ed_cols_new_lv": 3,
+   "ed_cols_new": 17,
+   "ps_dur_old_sec": 17,
+   "ps_dur_new_lv": 3,
+   "ps_dur_new_sec": 17
+  },
+  {
+   "old_lv": 2,
+   "ed_cols_old": 22,
+   "ed_cols_new_lv": 4,
+   "ed_cols_new": 27,
+   "ps_dur_old_sec": 19,
+   "ps_dur_new_lv": 4,
+   "ps_dur_new_sec": 21
+  },
+  {
+   "old_lv": 3,
+   "ed_cols_old": 27,
+   "ed_cols_new_lv": 4,
+   "ed_cols_new": 27,
+   "ps_dur_old_sec": 21,
+   "ps_dur_new_lv": 4,
+   "ps_dur_new_sec": 21
+  }
+ ],
+ "ed_rare0": "옛 저장(v<8)이고 stage >= 7이면 ed_rare0 = 3 (가중치 1.0 = 지금). stage <= 6이면 0 (스테이지 1~6은 0등급만 나와 영향 없음)",
+ "parent_ok": "ed_cols2·ps_dur2의 req는 '부모 최대(새 4)'. 옛 저장에서 ed_cols2·ps_dur2 ≥ 1이면 옛 부모가 3(최대) → 새 4 = 최대라 잠기지 않음. 옛 0~1 → 새 3은 옛에도 2단계를 못 샀던 경우뿐",
+ "ps_dur_parent": "ps_dur 부모가 ps_atk → power로 바뀜. 옛 ps_dur ≥ 1이면 power ≥ 1 (ps_atk 부모가 power)라 문제 없음",
+ "free_value_gold": {
+  "ed_cols_L0_to_L3": 356,
+  "ps_dur_L0_to_L3": 440
+ }
+}

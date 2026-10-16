@@ -1,0 +1,33 @@
+{
+ "objective": 1.9033333333333333,
+ "history": [
+  3.813,
+  2.867,
+  2.09,
+  1.917,
+  1.903,
+  1.903
+ ],
+ "early": {
+  "power1": 11.0,
+  "ed_score1": 15.0,
+  "ed_cols1": 21.0,
+  "ps_dur1": 28.0,
+  "ed_price1": 36.0,
+  "power2": 42.0,
+  "md_bar1": 50.0,
+  "ed_score2": 55.0,
+  "ed_cols2": 76.0,
+  "ps_dur2": 100.0,
+  "ed_price2": 140.0,
+  "power3": 160.0,
+  "md_bar2": 180.0,
+  "dev_stump1": 190.0,
+  "ed_cols3": 190.0,
+  "md_combo1": 200.0,
+  "ed_regen1": 200.0,
+  "ed_score3": 200.0,
+  "ed_rare01": 240.0,
+  "ps_dur3": 250.0
+ }
+}

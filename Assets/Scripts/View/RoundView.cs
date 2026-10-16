@@ -43,8 +43,24 @@ namespace MoreMush
         readonly Dictionary<int, Vector3[]> posBufs = new Dictionary<int, Vector3[]>();
         Vector3[] PosBuf(int n) { if (!posBufs.TryGetValue(n, out var b)) posBufs[n] = b = new Vector3[n]; return b; }
 
+        // 씬에서 사람이 배경을 키우거나 옮겨 둔 만큼 (기본 = 필드에 딱 맞음). 라운드마다 지역 그림이 바뀌어도 같은 비율·간격을 지킨다
+        Vector2 bgMul = Vector2.one;
+        Vector3 bgOffset;
+
+        void CaptureBackgroundLayout()
+        {
+            var sp = background.sprite;
+            if (sp == null) return;
+            var b = sp.bounds.size;
+            var fit = new Vector2(Defs.W / Art.PPU / b.x, Defs.H / Art.PPU / b.y);   // 줌 1에서 필드에 딱 맞는 크기
+            var s = background.transform.localScale;
+            bgMul = new Vector2(s.x / fit.x, s.y / fit.y);
+            bgOffset = background.transform.localPosition - Art.P(Defs.W / 2, Defs.H / 2);   // z는 그대로 둔다 (깊이)
+        }
+
         void Awake()
         {
+            CaptureBackgroundLayout();
             shrooms = new Pool<ShroomView>(shroomPrefab, shroomRoot);
             balls = new Pool<BallView>(ballPrefab, ballRoot);
             devices = new Pool<DeviceView>(devicePrefab, deviceRoot);
@@ -79,8 +95,8 @@ namespace MoreMush
                 bgTheme = R.themeId;
                 background.sprite = SpriteDB.Get("Backgrounds/bg_" + bgTheme) ?? SpriteDB.Get("Backgrounds/bg_forest");
             }
-            background.transform.localPosition = Art.P(RoundSim.WW / 2, RoundSim.WH / 2);
-            Art.SizePx(background.transform, background.sprite, RoundSim.WW, RoundSim.WH);
+            background.transform.localPosition = Art.P(RoundSim.WW / 2, RoundSim.WH / 2) + bgOffset;
+            Art.SizePx(background.transform, background.sprite, RoundSim.WW * bgMul.x, RoundSim.WH * bgMul.y);
 
             // 숲 장치
             for (int i = 0; i < R.devices.Count; i++) devices.Get(i).Show(R.devices[i], now);

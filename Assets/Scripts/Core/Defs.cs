@@ -105,6 +105,18 @@ namespace MoreMush
         // 라운드 시간: 처음 15초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다
         public const float BASE_TIME = 15;
         public static double StageTime(int stage) => Math.Min(10, 0.5 * (stage - 1));
+
+        // 초반 스테이지 (사용자 요청 2026-10-16): 스테이지 N까지는 버섯 종을 N종으로 고정한다 (1스테이지 1종 → 6스테이지 6종).
+        // 6종 = 처음부터 열린 종, 분류마다 2종 (식용 → 약용 → 독 순으로 하나씩 늘어난다). 7스테이지부터는 보통 뽑기
+        public const int EARLY_STAGES = 6;
+        public static readonly string[] EARLY_SPECIES = { "양송이", "구름버섯", "무당버섯", "느타리", "치마버섯", "노란다발" };
+        public static bool EarlyStage(int stage) => stage >= 1 && stage <= EARLY_STAGES;
+        // 초반 스폰: 군락 최대 수 배율 · 재생 간격 배율 (스테이지 1~6). 가안 — 밸런스 팀(3회차)이 정한다
+        public static readonly double[] EARLY_COL_MUL = { 0.4, 0.45, 0.5, 0.6, 0.7, 0.85 };
+        public static readonly double[] EARLY_REGEN_MUL = { 1.6, 1.5, 1.4, 1.3, 1.2, 1.1 };
+        // 초반 라운드 시간: 이 스테이지까지는 기본 EARLY_SEC초 (시간 노드는 더해진다)
+        public const int EARLY_TIME_STAGES = 4;
+        public const float EARLY_SEC = 10;
         public const float INCOME_MUL = 3;
         public const float SCORE_GOLD = 1;
         public const float COST_MUL = 1;
@@ -331,7 +343,7 @@ namespace MoreMush
                         case "init": s.init = true; break;
                         case "after": s.after = v; break;
                         case "cnt": s.cnt = int.Parse(v); break;
-                        case "boss": s.boss = BossStageOf(int.Parse(v)); break;   // 첫 보스가 14스테이지로 옮겨 10 → 14
+                        case "boss": s.boss = int.Parse(v); break;
                         case "theme": s.theme = v; break;
                         case "spore": s.spore = v; break;
                         case "jelly": s.jelly = true; break;

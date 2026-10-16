@@ -93,12 +93,12 @@ namespace MoreMush
             SetWorld((float)st.zoom);
             var r = new RoundSim { st = st, themeId = st.theme.id };
             R = r;
-            r.lone = st.boss == null ? LoneCount(st.stage) : 0;
-            r.tutorial = r.lone > 0 && st.stage == 1 && G != null && G.tut == 0;
-            if (r.lone > 0) st.duration = EARLY_SEC;   // 초반 스테이지(튜토리얼 포함 1~4)는 10초만
+            // 튜토리얼 판(1스테이지, 튜토리얼 전)만 군락 1개 고정. 그 밖의 초반 판은 보통처럼 스폰하고 종만 제한한다 (PickSpecies)
+            r.tutorial = st.boss == null && st.stage == 1 && G != null && G.tut == 0;
+            r.lone = r.tutorial ? 1 : 0;
             r.timeLeft = r.timeMax = (float)st.duration;
             // 보스 라운드에는 보스 말고 다른 버섯이 나오지 않는다 (군락지·재생·거대 버섯 없음). 확률은 그대로 굴려 난수 순서를 지킨다
-            r.giantState = U.Chance((float)st.giantP) && st.boss == null && r.lone == 0 ? "pending" : "none";
+            r.giantState = U.Chance((float)st.giantP) && st.boss == null && r.lone == 0 && !EarlyStage(st.stage) ? "pending" : "none";
             r.barX = WW / 2; r.barLen = (float)st.barLen;
             if (st.boss != null) r.SpawnBoss(st.boss);   // 군락지·장치보다 먼저 자리를 잡는다
             foreach (var d in st.devTypes) r.PlaceDevice(d, null);
@@ -152,7 +152,9 @@ namespace MoreMush
         Species PickSpecies(bool wall)
         {
             var w = st.weather;
-            var pool = SPECIES.Where(sp => IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)).ToList();
+            var pool = EarlyStage(st.stage) && st.boss == null
+                ? EARLY_SPECIES.Take(st.stage).Select(n => SP_BY_NAME[n]).ToList()   // 초반: 스테이지 수만큼의 종만
+                : SPECIES.Where(sp => IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)).ToList();
             return U.PickWeighted(pool, sp =>
             {
                 double x = TIERS[sp.t].w;
@@ -208,10 +210,7 @@ namespace MoreMush
             return new Cand { x = xx, y = yy, R = half, offs = offs, wall = true, side = side, shape = Shape.Rect(xx - rc, yy - half, xx + rc, yy + half) };
         }
 
-        // 초반 스테이지 (튜토리얼 기획서 "스테이지 흐름도"): 1~2스테이지는 버섯 군락 1개, 3~4스테이지는 2개만 나오고(거대 버섯 없음) 10초만 한다. 0 = 보통
-        public static int LoneCount(int stage) => stage <= 2 ? 1 : stage <= 4 ? 2 : 0;
-        public const float EARLY_SEC = 10;
-        public int lone;
+        public int lone;                       // 군락을 자리 고정으로 만드는 수 (튜토리얼 판만 1, 그 밖은 0 = 보통 스폰)
         public bool tutorial;                  // 1스테이지 튜토리얼 판: 첫 군락을 수확기 바로 위에 움직이지 않게 둔다 (Tutorial이 길을 밝혀 준다)
         public Colony TutorialColony;
         readonly List<Species> loneSp = new List<Species>();   // 자리별 종 (처음 고른 종을 기억해, 다 수확하면 같은 종으로 다시 만든다)
@@ -272,6 +271,34 @@ namespace MoreMush
                 return true;
             }
             return false;
+        }
+
+        // 튜토리얼 판의 첫 발사 때 맵에 흩뿌리는 낱개 버섯 (군락에 속하지 않는다. 수확해도 다시 생기지 않는다)
+        public const int TUTORIAL_LOOSE = 8;
+        bool looseSpawned;
+
+        void SpawnLoose(int count)
+        {
+            for (int k = 0; k < count; k++)
+            {
+                var sp = PickSpecies(false);
+                if (sp == null) return;
+                var T = TIERS[sp.t];
+                float r = T.r;
+                for (int a = 0; a < 30; a++)
+                {
+                    float x = U.Rand(FX0 + r, FX1 - r), y = U.Rand(FY0 + r, NO_SPAWN_Y - r);
+                    if (!AreaFree(Shape.C(x, y, r))) continue;
+                    bool hit = false;
+                    foreach (var o in shrooms) { float rr = o.r + r + 10; if (!o.dead && U.D2(x, y, o.x, o.y) < rr * rr) { hit = true; break; } }
+                    if (hit) continue;
+                    double hp = T.hp * st.shroomHp;
+                    var m = new Shroom { sp = sp, x = x, y = y, r = r, hp = hp, maxHp = hp, golden = U.Chance((float)st.golden), jelly = sp.jelly, spore = sp.spore, grow = 0, dropMul = 1 };
+                    shrooms.Add(m); shroomsMade++; madeT[sp.t]++;
+                    for (int i = 0; i < 6; i++) AddPart(x + U.Rand(-r, r) * 0.6f, y + U.Rand(-r, r) * 0.6f, U.Rand(-40, 40), U.Rand(-60, -10), 0.7f, U.Hex(CATS[sp.c].light), 4);
+                    break;
+                }
+            }
         }
 
         void CreateColony(Species sp, float r, Cand cand, bool instant, bool still = false)
