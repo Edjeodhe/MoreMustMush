@@ -51,6 +51,8 @@ namespace MoreMush
             Snd.Ui();
             G = null;   // 메뉴로 돌아왔다 다시 시작해도 저장된 것을 새로 읽는다
             App.EnsureSave();
+            // 처음 하는 게임(한 판도 안 함)은 바로 1스테이지 튜토리얼 판으로
+            if (G.tut == 0 && G.rounds == 0 && RoundFlow.Request()) return;
             App.Go(Scenes.MainGame);
         }
 
@@ -69,8 +71,8 @@ namespace MoreMush
 
         void OnExit() { Snd.Ui(); App.Quit(); }
 
-        // 지구본 버튼: 다음 언어로 돌린다 (Loc.LANGS 순서)
-        void OnLang() { Snd.Ui(); Loc.NextLang(); }
+        // 지구본 버튼: 언어 고르기 창
+        void OnLang() { Snd.Ui(); LangPopup.Open(gameObject.scene); }
 
         void Update()
         {

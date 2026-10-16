@@ -53,7 +53,7 @@ namespace MoreMush
             SceneUI.Bind(scene, "Button_MushDex", () => Toggle(dex != null ? dex.root : null));
             SceneUI.Bind(scene, "Button_Harvesters", () => Toggle(shop != null ? shop.root : null));
             SceneUI.Bind(scene, "Button_Option", () => Toggle(option));
-            SceneUI.Bind(scene, "Button_Lang", () => { Snd.Ui(); Loc.NextLang(); });
+            SceneUI.Bind(scene, "Button_Lang", () => { Snd.Ui(); LangPopup.Open(scene); });
 
             var shopRoot = SceneUI.Need(scene, "Harvesters");
             if (shopRoot != null) shop = new HarvesterShop(shopRoot, () => currency.Tick());

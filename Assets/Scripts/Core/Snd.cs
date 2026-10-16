@@ -20,6 +20,13 @@ namespace MoreMush
             set { muteLoaded = true; if (mutedV == value) return; mutedV = value; PlayerPrefs.SetInt(MutePref, value ? 1 : 0); PlayerPrefs.Save(); }
         }
         public static float vol = 0.2f;
+
+        // 옵션 창의 음량 (0~1, 기기에 남긴다). 효과음은 Tone에 곱하고, 배경음은 아직 곡이 없어 값만 둔다 (배경음을 붙일 때 이 값을 쓴다)
+        const string SfxPref = "mmm_sfx", BgmPref = "mmm_bgm";
+        public static float SfxVol { get => PlayerPrefs.GetFloat(SfxPref, 1); set { PlayerPrefs.SetFloat(SfxPref, Mathf.Clamp01(value)); PlayerPrefs.Save(); } }
+        public static float BgmVol { get => PlayerPrefs.GetFloat(BgmPref, 1); set { PlayerPrefs.SetFloat(BgmPref, Mathf.Clamp01(value)); PlayerPrefs.Save(); } }
+        static float sfxCache = -1;   // Tone마다 PlayerPrefs를 읽지 않게
+        public static void SetSfx(float v) { SfxVol = v; sfxCache = Mathf.Clamp01(v); }
         const int RATE = 44100;
 
         static readonly Dictionary<string, float> last = new Dictionary<string, float>();
@@ -54,7 +61,8 @@ namespace MoreMush
             if (key != null) { if (last.TryGetValue(key, out var l) && now - l < gap) return; last[key] = now; }
             var clip = Clip(Mathf.Round(f), d, type, slide);
             var src = I.voices[I.next++ % I.voices.Length];
-            src.clip = clip; src.volume = vol * v; src.Play();
+            if (sfxCache < 0) sfxCache = SfxVol;
+            src.clip = clip; src.volume = vol * v * sfxCache; src.Play();
         }
 
         static AudioClip Clip(float f, float d, Wave type, float slide)

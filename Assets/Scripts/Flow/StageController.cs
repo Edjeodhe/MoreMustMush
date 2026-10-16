@@ -58,6 +58,7 @@ namespace MoreMush
             if (cam == null) cam = Camera.main;
             if (view == null) { Debug.LogError("[Stage] RoundView가 연결되지 않았어요"); enabled = false; return; }
             begun = RoundFlow.Begin();
+            if (begun.tutorial) StageTutorial.Attach(this);   // 1스테이지 튜토리얼 판: 조준 안내
             view.Clear();
             started?.Invoke(begun);
         }
@@ -121,7 +122,7 @@ namespace MoreMush
         {
             var sum = RoundFlow.Finish();
             if (Finished != null) Finished(sum);
-            else LeaveSettle();   // 정산 창이 아직 없으면 바로 돌아간다
+            else StageSettle.Show(gameObject.scene, sum, ToMainGame);   // 씬에 정산 UI가 없으면 임시 정산 창
         }
 
         void HandleInput(RoundSim R)

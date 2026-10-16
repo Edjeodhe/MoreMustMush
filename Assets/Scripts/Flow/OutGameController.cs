@@ -41,7 +41,7 @@ namespace MoreMush
         int armed = -1; float armedT;      // 균사석을 쓰기 전 확인: 한 번 누른 칸과 그 시각
         const float ARM_SEC = 3;
         static readonly Color SILHOUETTE = new Color(0.08f, 0.09f, 0.14f, 0.85f);
-        OptionWindow optionWin;   // Esc = 옵션 창 (돌아가기 버튼 포함). MainGame으로 돌아가는 버튼이 배치되기 전까지 여기서 돌아간다
+        OptionWindow optionWin;   // 옵션 창 (배치된 Button_Option이 생기면 연다). Esc는 업그레이드 화면(MainGame)으로 돌아간다 (사용자 결정 2026-10-16)
         float tickT;
 
         void Awake()
@@ -81,7 +81,7 @@ namespace MoreMush
             SetFolded(true, false);
             tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
-                new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
+                new OptionWindow.Extra("Button_Back", Loc.T("업그레이드 화면으로"), ToMainGame));
         }
 
         void Start()
@@ -106,7 +106,13 @@ namespace MoreMush
             if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); workshop?.Tick(); }
             var kb = Keyboard.current;
             tabWin?.Tick();
-            if (kb != null && kb.escapeKey.wasPressedThisFrame) { if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); } else optionWin.Toggle(); }
+            // Esc: 열린 탭 창 → 닫기, 옵션 창 → 닫기, 아무것도 없으면 업그레이드 화면(MainGame)으로
+            if (kb != null && kb.escapeKey.wasPressedThisFrame)
+            {
+                if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); }
+                else if (optionWin.IsOpen) optionWin.Toggle();
+                else ToMainGame();
+            }
         }
 
         void Render()
