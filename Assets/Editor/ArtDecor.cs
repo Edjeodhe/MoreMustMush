@@ -54,7 +54,8 @@ namespace MoreMush.EditorTools
         {
             ("far_hill", 820, 400, 170, false, FAR, 1f), ("far_tree_b", 520, 395, 300, false, FAR + 1, 1f), ("far_shroom", 1110, 395, 330, false, FAR + 1, 1f),
             ("far_tree_a", 760, 390, 340, true, FAR + 1, 1f), ("far_tree_c", 1000, 392, 230, false, FAR + 2, 1f), ("far_pine", 1240, 398, 220, true, FAR + 2, 1f),
-            ("fog_a", 820, 430, 110, false, 1000 + 405, 0.6f), ("light_patch", 820, 760, 300, false, 1000 + 300, 0.45f),
+            // fog and the light wash stay under the world tree (order 880): drawn over it they washed the whole tree out
+            ("fog_a", 820, 430, 110, false, 860, 0.6f), ("light_patch", 820, 760, 300, false, 861, 0.25f),   // fainter: its rim read as a pasted oval next to the tree
             ("near_leaves_l", 260, 1130, 300, false, NEAR, 1f), ("near_shroom", 1400, 1120, 340, true, NEAR, 1f),
         };
 

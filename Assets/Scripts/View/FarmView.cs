@@ -75,13 +75,14 @@ namespace MoreMush
             foreach (var k in FarmOwned())
             {
                 if (crits.Any(p => p.id == k.id)) continue;
-                var p0 = initial ? GroundSpot() : new Vector2(U.Rand(HARV.x0, HARV.x1), 1080 + 60);
+                var p0 = initial ? GroundSpot() : new Vector2(WT.x + U.Rand(-1f, 1f) * HARV.halfW * Zoom, 1080 + 60);
                 crits.Add(NewCritter(k, p0.x, p0.y));
             }
             crits.RemoveAll(p => !HasSpecial(p.id) || !KID.ContainsKey(p.id));
         }
 
-        static Vector2 GroundSpot() => new Vector2(U.Rand(HARV.x0, HARV.x1), U.Rand(HARV.y0, HARV.y1));
+        // the ground widens with the camera (around the tree)
+        static Vector2 GroundSpot() => new Vector2(WT.x + U.Rand(-1f, 1f) * HARV.halfW * Zoom, U.Rand(HARV.y0, HARV.y1));
 
         // ===== critters =====
         public void Say(Critter p, string line, string anim)
@@ -112,16 +113,17 @@ namespace MoreMush
             float top = tree.Top;
             AddFloat(WT.x, top - 30, text, false, U.Hex("#ffe36e"));
             Stars(WT.x, (top + WT.y) / 2);
-            for (int i = 0; i < 3; i++) Stars(WT.x + U.Rand(-200, 200), top + U.Rand(50, 300));
+            for (int i = 0; i < 3; i++) Stars(WT.x + U.Rand(-200, 200) * Zoom, top + U.Rand(50, 300) * Zoom);
             foreach (var p in crits) if (p.job < 0) Say(p, Loc.T("나무가 커졌다!"), "jump");
         }
 
         // 보따리를 받으면 나무에서 골드·균사석이 쏟아진다
         public void BagBurst(double gold, int gem)
         {
-            AddFloat(WT.x, WT.y - 260, $"+{U.Fmt(gold)}", false, U.Hex(GOLD_C));
-            if (gem > 0) AddFloat(WT.x + 90, WT.y - 300, $"+{gem}", true, U.Hex("#a8f5d4"), -0.2f);
-            GemBurst(WT.x, WT.y - 200, Mathf.Clamp(gem, 6, 30));
+            float mid = Mathf.Lerp(WT.y, tree.Top, 0.35f);   // the bag pops from the trunk, wherever the tree's size puts it
+            AddFloat(WT.x, mid - 60, $"+{U.Fmt(gold)}", false, U.Hex(GOLD_C));
+            if (gem > 0) AddFloat(WT.x + 90 * Zoom, mid - 100, $"+{gem}", true, U.Hex("#a8f5d4"), -0.2f);
+            GemBurst(WT.x, mid, Mathf.Clamp(gem, 6, 30));
             foreach (var p in crits) if (p.job < 0) Say(p, U.Pick(FARM_LINES["thanks"]), "jump");
         }
 
@@ -211,11 +213,84 @@ namespace MoreMush
         void GemBurst(float x, float y, int n) { for (int i = 0; i < n; i++) parts.Add(new Part { k = "gem", x = x, y = y, vx = U.Rand(-160, 160), vy = U.Rand(-320, -120), life = U.Rand(0.6f, 1) }); }
         void AddFloat(float x, float y, string text, bool gem, Color col, float t = 0) { if (floats.Count < 40) floats.Add(new Float { x = x, y = y, text = text, gem = gem, col = col, t = t }); }
 
+        // ===== camera: the view widens as the tree grows (WT.zoom per picture) =====
+        // The ground (screen bottom) stays put and the view opens up and to the sides around the stage centre.
+        // Entering the farm snaps to the stage's zoom; growing while here pulls back smoothly. The round field shares
+        // this camera, so leaving resets it. The UI canvas is Screen Space - Camera and follows the frustum.
+        public static float Zoom = 1;
+        const float CAM_SIZE = 5.4f;
+        float zoomVel, zoomWait, zoomTarget; bool snapZoom = true;
+        // the zoomed-out backgrounds, outermost last: each is the previous one seen from further back, registered and
+        // measured by Tools/art/build_farm_bg.py (rects in stage px). The scene's Background shows the faded-edge core.
+        static readonly (string key, Rect r)[] BG_LAYERS =
+        {
+            ("Backgrounds/bg_ranch_wide", new Rect(-877.0f, -1020.0f, 3731.8f, 2100.2f)),     // up to zoom 1.91
+            ("Backgrounds/bg_ranch_wide2", new Rect(-2669.7f, -3044.4f, 7317.2f, 4118.1f)),   // up to zoom 3.78
+        };
+        readonly List<SpriteRenderer> bgLayers = new List<SpriteRenderer>();
+
+        void OnEnable() { snapZoom = true; SetupBackground(); }
+        void OnDisable() { Zoom = 1; ApplyCamera(); }
+
+        void SetupBackground()
+        {
+            var bg = transform.Find("Background")?.GetComponent<SpriteRenderer>();
+            var core = SpriteDB.Get("Backgrounds/bg_ranch_core");
+            if (bg == null || core == null) return;
+            if (bg.sprite != core)
+            {
+                bg.sprite = core;
+                float k = 1920f / Art.PPU / core.bounds.size.x;
+                bg.transform.localScale = new Vector3(k, k, 1);
+                bg.transform.localPosition = new Vector3(9.6f, -5.4f, bg.transform.localPosition.z);
+            }
+            for (int i = 0; i < BG_LAYERS.Length; i++)
+            {
+                var sp = SpriteDB.Get(BG_LAYERS[i].key);
+                if (sp == null) continue;
+                while (bgLayers.Count <= i)
+                {
+                    var r = new GameObject("BackgroundWide" + bgLayers.Count).AddComponent<SpriteRenderer>();
+                    r.transform.SetParent(transform, false);
+                    r.sharedMaterial = bg.sharedMaterial;
+                    r.sortingLayerID = bg.sortingLayerID;
+                    r.sortingOrder = bg.sortingOrder - 1 - bgLayers.Count;
+                    bgLayers.Add(r);
+                }
+                var R = BG_LAYERS[i].r;
+                var l = bgLayers[i];
+                l.sprite = sp;
+                float kw = R.width / Art.PPU / sp.bounds.size.x;
+                l.transform.localScale = new Vector3(kw, kw, 1);
+                l.transform.localPosition = new Vector3((R.x + R.width / 2) / Art.PPU, -(R.y + R.height / 2) / Art.PPU, bg.transform.localPosition.z + 0.1f * (i + 1));
+            }
+        }
+
+        void UpdateZoom(float dt)
+        {
+            float target = WT.zoom[WT.Picture(Stage())];
+            if (snapZoom) { Zoom = zoomTarget = target; zoomVel = 0; snapZoom = false; }
+            // grew while watching: the bigger tree shoots up first, then the camera pulls back slowly
+            if (target != zoomTarget) { zoomTarget = target; zoomWait = 0.7f; }
+            if (zoomWait > 0) zoomWait -= dt;
+            else Zoom = Mathf.SmoothDamp(Zoom, zoomTarget, ref zoomVel, 1.2f, Mathf.Infinity, dt);
+            ApplyCamera();
+        }
+
+        static void ApplyCamera()
+        {
+            var cam = Camera.main;
+            if (cam == null) return;
+            cam.orthographicSize = CAM_SIZE * Zoom;
+            cam.transform.position = new Vector3(WT.camX / Art.PPU, -(1080 - 540 * Zoom) / Art.PPU, cam.transform.position.z);
+        }
+
         // ===== frame =====
         void Update()
         {
             if (G?.farm == null) return;
             float dt = Mathf.Min(Time.deltaTime, 0.05f), now = Time.time;
+            UpdateZoom(Time.deltaTime);
             HandleInput();
             UpdateCritters(dt);
             foreach (var q in parts) { q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; if (q.k == "gem") q.vy += 700 * dt; }

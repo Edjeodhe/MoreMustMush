@@ -26,7 +26,7 @@ namespace MoreMush
         static string Glyph(char c) => c switch
         {
             >= '0' and <= '9' => "d" + c,
-            '+' => "plus", '.' => "dot", ',' => "comma", '!' => "excl",
+            '+' => "plus", '.' => "dot", ',' => "comma", '!' => "excl", '×' => "lx",
             >= 'A' and <= 'Z' => "u" + char.ToLowerInvariant(c),
             >= 'a' and <= 'z' => "l" + c,
             _ => null,
@@ -43,6 +43,35 @@ namespace MoreMush
                 else sb.Append(c);
             }
             return sb.ToString();
+        }
+
+        static readonly StringBuilder nb = new StringBuilder();
+        static readonly string[] Units2 = { "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc" };
+
+        // Mixed text ("+12 버섯", "점수 ×2", "보스 45%"): only the numbers turn into glyphs, words stay in the font.
+        // A number = optional + / × / x right before a digit, digits with . or , between them, then a unit (K… Dc, G)
+        // when no letter follows it. Rich-text tags (<sprite …>) are copied as they are. Null without the asset.
+        public static string Numbers(string s)
+        {
+            if (s == null || !Ready) return null;
+            nb.Clear();
+            int i = 0, n = s.Length;
+            while (i < n)
+            {
+                char c = s[i];
+                if (c == '<') { int e = s.IndexOf('>', i); if (e < 0) e = n - 1; nb.Append(s, i, e - i + 1); i = e + 1; continue; }
+                bool prefix = (c == '+' || c == '×' || c == 'x') && i + 1 < n && char.IsDigit(s[i + 1]) && (c != 'x' || i == 0 || !char.IsLetter(s[i - 1]));
+                if (!char.IsDigit(c) && !prefix) { nb.Append(c); i++; continue; }
+                int j = prefix ? i + 1 : i;
+                while (j < n && (char.IsDigit(s[j]) || ((s[j] == '.' || s[j] == ',') && j + 1 < n && char.IsDigit(s[j + 1])))) j++;
+                int u = 0;
+                if (j + 1 < n) foreach (var w in Units2) if (string.CompareOrdinal(s, j, w, 0, 2) == 0) { u = 2; break; }
+                if (u == 0 && j < n && "KMBTG".IndexOf(s[j]) >= 0) u = 1;
+                if (u > 0 && j + u < n && char.IsLetter(s[j + u])) u = 0;
+                nb.Append(Spell(s.Substring(i, j + u - i)));
+                i = j + u;
+            }
+            return nb.ToString();
         }
     }
 }

@@ -23,6 +23,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 3297d07da5f287b4ba152df939537f22, type: 3}
   - key: Backgrounds/bg_ranch
     sprite: {fileID: 21300000, guid: 0c0069547b7c8ad4d9d68d3b580c0276, type: 3}
+  - key: Backgrounds/bg_ranch_core
+    sprite: {fileID: 21300000, guid: 9de7cf262c496c74fb9986f70d4aa3ca, type: 3}
+  - key: Backgrounds/bg_ranch_wide
+    sprite: {fileID: 21300000, guid: cdd069462f423d540898ee2ad9528512, type: 3}
+  - key: Backgrounds/bg_ranch_wide2
+    sprite: {fileID: 21300000, guid: 78dbfdbe79163a5448975d64ca096e97, type: 3}
   - key: Backgrounds/bg_ruins
     sprite: {fileID: 21300000, guid: 114b628808398804ba65019995f0e7cf, type: 3}
   - key: Backgrounds/bg_sea
@@ -161,6 +167,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 968d3525414ef0f4ab7a571b285150ad, type: 3}
   - key: Characters/Critters/body_dew_closed
     sprite: {fileID: 21300000, guid: cb48f8fe83bbf5b4990e74d99ef7d7fb, type: 3}
+  - key: Characters/Critters/body_dew_skin
+    sprite: {fileID: 21300000, guid: 60905f9ba178f614a8faa70dda6e2af8, type: 3}
+  - key: Characters/Critters/body_dew_skin_closed
+    sprite: {fileID: 21300000, guid: d9a1342007cc34a46a9c41c95ee29e5a, type: 3}
   - key: Characters/Critters/body_fire
     sprite: {fileID: 21300000, guid: d436b2573c0878f4f9a4a33b704753b7, type: 3}
   - key: Characters/Critters/body_fire_closed
@@ -173,6 +183,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f58381f3c58c8b84a9905068587d6557, type: 3}
   - key: Characters/Critters/body_moon_closed
     sprite: {fileID: 21300000, guid: 2c79da448a512f34aa3c523403762b2f, type: 3}
+  - key: Characters/Critters/body_moon_skin
+    sprite: {fileID: 21300000, guid: 0276700f3b183fb4ea199d0f5866d04f, type: 3}
+  - key: Characters/Critters/body_moon_skin_closed
+    sprite: {fileID: 21300000, guid: 11409cf5c455e174691e2ade9847cba9, type: 3}
   - key: Characters/Critters/body_rock
     sprite: {fileID: 21300000, guid: 0e215d8842ea1404dbb97d3dba414075, type: 3}
   - key: Characters/Critters/body_rock_closed
@@ -591,6 +605,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 97d46b008b6b525418096a4e6670db63, type: 3}
   - key: FX/fever_edge
     sprite: {fileID: 21300000, guid: 58ed43b828ae1ec4da25d2eaecc05310, type: 3}
+  - key: FX/flame_0
+    sprite: {fileID: 21300000, guid: 3218d4f3ffaba634688e1d5fcf7b2b6e, type: 3}
+  - key: FX/flame_1
+    sprite: {fileID: 21300000, guid: 8035549aeb3aefc42bd3c451f6d33017, type: 3}
+  - key: FX/flame_2
+    sprite: {fileID: 21300000, guid: 83c8831f6db7f834690d44270d18dacf, type: 3}
+  - key: FX/flame_3
+    sprite: {fileID: 21300000, guid: 7de6a6cc94736244c9bab196dc9fa626, type: 3}
   - key: FX/flame_tongue
     sprite: {fileID: 21300000, guid: 06e11060fbcda7844b5dfa0d4bd3e549, type: 3}
   - key: FX/hit_0
@@ -1345,6 +1367,66 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 4952b15ab7b720b4eaf9d8e3e8454a3e, type: 3}
   - key: Props/warn_shadow
     sprite: {fileID: 21300000, guid: c2c526b0f8e1f1c47aa9b459195b5a26, type: 3}
+  - key: UI/Digits/comma
+    sprite: {fileID: 21300000, guid: 91c6ea4eee19d6940bf65614ea251f3b, type: 3}
+  - key: UI/Digits/d0
+    sprite: {fileID: 21300000, guid: 78be1e3cd1b1a3f42aba9fca4b92adc4, type: 3}
+  - key: UI/Digits/d1
+    sprite: {fileID: 21300000, guid: 4326c40e377e0ee4ab0dc95955219400, type: 3}
+  - key: UI/Digits/d2
+    sprite: {fileID: 21300000, guid: 91fc7c7fa3cf86c4891a15e32c345336, type: 3}
+  - key: UI/Digits/d3
+    sprite: {fileID: 21300000, guid: bbcd03d26f7f23246924a66566e2fef8, type: 3}
+  - key: UI/Digits/d4
+    sprite: {fileID: 21300000, guid: 75f2ac5569e445d4680e2b12d27f7a11, type: 3}
+  - key: UI/Digits/d5
+    sprite: {fileID: 21300000, guid: 0772157e811e6544faf3271f03d884a7, type: 3}
+  - key: UI/Digits/d6
+    sprite: {fileID: 21300000, guid: bd1867173142f6449b949ad0905f9c06, type: 3}
+  - key: UI/Digits/d7
+    sprite: {fileID: 21300000, guid: b6868f23ad0fbb444a922cd3d084acfc, type: 3}
+  - key: UI/Digits/d8
+    sprite: {fileID: 21300000, guid: 3c3befcfd4caa98438403eb5adf172c4, type: 3}
+  - key: UI/Digits/d9
+    sprite: {fileID: 21300000, guid: e064ea795521f7b4e9537f3ea3535d4f, type: 3}
+  - key: UI/Digits/dot
+    sprite: {fileID: 21300000, guid: 784a1984d10496a479ac6ebb84d044a6, type: 3}
+  - key: UI/Digits/excl
+    sprite: {fileID: 21300000, guid: 4aa8ab1d68b56884da41f773cfb58760, type: 3}
+  - key: UI/Digits/la
+    sprite: {fileID: 21300000, guid: f949179c43a24bf4085c6f11d5c7373e, type: 3}
+  - key: UI/Digits/lc
+    sprite: {fileID: 21300000, guid: d122b4d015f2eed45b26e705eeddbe37, type: 3}
+  - key: UI/Digits/li
+    sprite: {fileID: 21300000, guid: 52f02893808d23f4889eb40d30fb8d04, type: 3}
+  - key: UI/Digits/lo
+    sprite: {fileID: 21300000, guid: 66dae75167f6ba34782e6333a73b07c8, type: 3}
+  - key: UI/Digits/lp
+    sprite: {fileID: 21300000, guid: 06a8de57ea147b64e82eb0acbdf5c797, type: 3}
+  - key: UI/Digits/lx
+    sprite: {fileID: 21300000, guid: b5d5d87fb12c2a247954760c311c374f, type: 3}
+  - key: UI/Digits/plus
+    sprite: {fileID: 21300000, guid: f11c877b19592804db0b3b365f85cff1, type: 3}
+  - key: UI/Digits/ub
+    sprite: {fileID: 21300000, guid: 54f22ab2fd7bcdd4c95b55a9ac7b61b1, type: 3}
+  - key: UI/Digits/ud
+    sprite: {fileID: 21300000, guid: 66c2f44e033e90745aa76fa10d820b5b, type: 3}
+  - key: UI/Digits/ug
+    sprite: {fileID: 21300000, guid: 21d3bd1f23810c54a9ece7322baffa7b, type: 3}
+  - key: UI/Digits/uk
+    sprite: {fileID: 21300000, guid: 480a8e76c7ffde4419b317c75afa73ad, type: 3}
+  - key: UI/Digits/um
+    sprite: {fileID: 21300000, guid: e36b0f9be83c13f4c83cd01c311f5273, type: 3}
+  - key: UI/Digits/un
+    sprite: {fileID: 21300000, guid: 770ab26ff3c0650448e753d56b304172, type: 3}
+  - key: UI/Digits/uo
+    sprite: {fileID: 21300000, guid: 374b5f432108f7249baa913a3dcb2dcc, type: 3}
+  - key: UI/Digits/uq
+    sprite: {fileID: 21300000, guid: 153a54c762f883849b797ef307e915bc, type: 3}
+  - key: UI/Digits/us
+    sprite: {fileID: 21300000, guid: 5a5035fb0499e9944a2c2914b3e99d90, type: 3}
+  - key: UI/Digits/ut
+    sprite: {fileID: 21300000, guid: a8aaed167d6f74043843cf2a2c82ebdf, type: 3}
   - key: UI/Lettering/combo
     sprite: {fileID: 21300000, guid: acd0b5ea9999291478bdb14d2a89f535, type: 3}
   - key: UI/Lettering/en/acorn

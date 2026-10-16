@@ -429,7 +429,7 @@ namespace MoreMush
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
             foreach (var l in R.labels)
-                Text(l, l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
+                Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
             foreach (var b in R.balls)
                 if (b.combo >= 3 && b.perm)
                 {
@@ -443,7 +443,7 @@ namespace MoreMush
                 if (bm.dead) continue;
                 int pct = Mathf.CeilToInt((float)(bm.hp / bm.maxHp) * 100);
                 if (!bossStr.TryGetValue(bm, out var bs) || bs.pct != pct || bs.lang != Loc.Lang)
-                    bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + $"  {pct}%");
+                    bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + "  " + (DmgDigits.Numbers(pct + "%") ?? pct + "%"));
                 Text(bm, bs.s, bm.x, bm.y + bm.r * 1.2f + 30, bm.bossClone ? 20 : 26, 1, R.Boss.col, 1, z);
             }
             ReleaseTexts(false);

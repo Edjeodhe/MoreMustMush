@@ -102,7 +102,7 @@ namespace MoreMush
     public enum FxShape : byte { Dot, Chip, Leaf, Impact, ImpactRing, Puff, Dust, Streak, Sprout, Drop, HitAnim, Twinkle, DotRing }
     public class Fx { public FxShape shape; public float x, y, t, dur, size, rot, spin, rise; public Color col; public bool flip; }
     public class FloatText { public float x, y, vx, vy, t; public double v; public int tier; public bool crit, golden, coin; public string view; }   // view: 화면이 만든 글자 (시뮬레이션은 읽지 않음)
-    public class Label { public string text; public float x, y, size, t; public string col; }
+    public class Label { public string text; public float x, y, size, t; public string col; public string view; }   // view: 화면이 만든 글자 (숫자만 그림 글자)
     public class Flyer { public float x, y, sx, sy, tx, ty, t, dur; public Species sp; public bool golden, clock, done; public string cat; }
     public class Ember { public float x, y, vx, vy, t, life, s; }
     public class GiantWarn { public float x, y, t; }

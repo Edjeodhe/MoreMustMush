@@ -93,7 +93,9 @@ namespace MoreMush
         void ApplyParts(string id)
         {
             var l = Layout(id);
-            var bodySp = SpriteDB.Get("Characters/Critters/body_", id);
+            // a skin that wears its accessory on the body (scarf, sunglasses) swaps the whole body part: body_<id>_skin
+            string bodyId = skin != null && SpriteDB.Get("Characters/Critters/body_", id + "_skin") != null ? id + "_skin" : id;
+            var bodySp = SpriteDB.Get("Characters/Critters/body_", bodyId);
             perKind = l != null && bodySp != null && bodySprite != null;
             // the shared-body parts of the older sets
             foreach (var t in new[] { eyes, mouth, blush }) if (t != null) t.gameObject.SetActive(!perKind);
@@ -106,10 +108,11 @@ namespace MoreMush
             Set(bodySprite.transform, l.body, 1);
             bodyPartRest = bodySprite.transform.localPosition;
             bodyPartScale = bodySprite.transform.localScale;
-            bodyHalfH = bodySp.bounds.extents.y * l.body.s;
+            // the skin body may sit on a wider canvas (accessory overhang): measure the base body so the squash pivot stays
+            bodyHalfH = (SpriteDB.Get("Characters/Critters/body_", id) ?? bodySp).bounds.extents.y * l.body.s;
             // eyes closed: a second whole body drawn with the eyes shut (aligned to the open one) is swapped in;
             // older sets lay a blink patch, a child of the body part, over the face instead
-            bodyClosed = SpriteDB.Get("Characters/Critters/body_", id + "_closed");
+            bodyClosed = SpriteDB.Get("Characters/Critters/body_", bodyId + "_closed");
             blinkSprite.sprite = bodyClosed != null ? null : SpriteDB.Get("Characters/Critters/blink_", id);
             blinkSprite.transform.localPosition = new Vector3((l.blink.x - l.body.x) / l.body.s, (l.blink.y - l.body.y) / l.body.s, 0);
             blinkSprite.transform.localScale = new Vector3(l.blink.s / l.body.s, l.blink.s / l.body.s, 1);

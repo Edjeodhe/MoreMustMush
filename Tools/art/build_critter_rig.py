@@ -286,7 +286,7 @@ def layout(cid):
 
 
 ICON_PX = 300      # icon pixels per rig unit
-ICON_UNITS = 1.2   # icon canvas spans -0.6..0.6 units around the rig origin (CritterIcon draws it at 1.2 * unitPx)
+ICON_UNITS = 1.4   # icon canvas spans -0.7..0.7 units around the rig origin (CritterIcon draws it at 1.4 * unitPx); room for skin accessories
 
 
 def compose(e, cid, capkind):
@@ -368,6 +368,9 @@ def main():
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     json.dump({"kinds": [old[i] for i in IDS if i in old]}, open(OUT, "w", encoding="utf-8"), indent=1)
     print("wrote", OUT, len(old))
+    # skins with the accessory painted on: the pass above rewrote skin_<id> from rig_src, so lay them on again
+    import build_skin_acc
+    build_skin_acc.main(ids)
 
 
 if __name__ == "__main__":

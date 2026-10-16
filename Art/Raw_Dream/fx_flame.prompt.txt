@@ -1,0 +1,10 @@
+Sprite sheet: a 1x4 grid holding 4 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Tintable effect textures for a dreamy flat watercolor game, painted in PURE WHITE and very light grey watercolor on a fully transparent background (the game tints them with colour). Each fills its own cell, centered, with a soft hand-painted watercolor edge, faint paper grain and slight pigment pooling at the rim; matte, no gloss, no glow halo, no sparkles. Four different stylised FIRE flames for a cute game, 1 row of 4, each standing upright in a tall narrow cell. Each flame: a slim teardrop body that rises from a narrow rounded base and splits into 2-3 sharp licking tips that curl in an S-curve, with one or two small detached flame wisps above the tips. Crisp readable flame silhouette (clearly FIRE, not a petal, not a blob, not a drop), light watercolor texture only inside, the inner centre a touch whiter than the edges.
+
+Assets in reading order (left to right, top to bottom):
+1. a tall flame with two tips leaning slightly left and one small wisp above
+2. a tall flame with three tips, the middle one highest, one wisp
+3. a shorter wider flame with two tips leaning right and two small wisps
+4. a very tall thin flame with one long curling tip and a side tip low on the left

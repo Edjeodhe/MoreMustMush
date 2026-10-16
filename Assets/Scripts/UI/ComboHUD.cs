@@ -54,7 +54,7 @@ namespace MoreMush
                 string outl = c >= FLAME_STEP ? F.@out : c >= FEVER[1].at ? "#c2200a" : c >= FEVER[0].at ? "#d2560e" : "#5a2a00";
                 combo.localScale = new Vector3(s, s, 1);
                 combo.localRotation = Quaternion.Euler(0, 0, 0.06f * Mathf.Rad2Deg);
-                if (!comboStr.TryGetValue(c, out var cs)) comboStr[c] = cs = c.ToString();
+                if (!comboStr.TryGetValue(c, out var cs)) comboStr[c] = cs = DmgDigits.Spell(c.ToString()) ?? c.ToString();
                 Style(comboNum, cs, size, col, outl);
                 Style(comboLabel, "COMBO", Mathf.Max(26, size * 0.32f), col, outl);
                 Tint(Lettering.Apply(comboLabel, "combo", 1.25f), col, 1);
@@ -63,7 +63,7 @@ namespace MoreMush
                 if (R.fever > 0)
                 {
                     double fm = R.FeverMulPublic;
-                    if (F != shownFeverF || fm != shownFeverMul || feverLang != Loc.Lang) { shownFeverF = F; shownFeverMul = fm; feverLang = Loc.Lang; feverStr = Loc.F("{0} 점수 ×{1}", F.icon, fm); }
+                    if (F != shownFeverF || fm != shownFeverMul || feverLang != Loc.Lang) { shownFeverF = F; shownFeverMul = fm; feverLang = Loc.Lang; feverStr = Loc.F("{0} 점수 ×{1}", F.icon, fm); feverStr = DmgDigits.Numbers(feverStr) ?? feverStr; }
                     Style(feverMul, feverStr, 24, col, outl);
                     feverMul.rectTransform.anchoredPosition = feverOrigin + new Vector2(0, -size * 0.62f);
                 }
@@ -125,10 +125,11 @@ namespace MoreMush
             Edge(2, 0, H / 2, H, ed * 0.7f, -90, F.edge, ea * 0.85f);
             Edge(3, W, H / 2, H, ed * 0.7f, 90, F.edge, ea * 0.85f);
             int n = 0;
-            n = Side(n, 0, H, 1, 0, 0, -1, W, 22, 1, 0, a1, a2, I, now, F);
-            n = Side(n, 0, 0, 1, 0, 0, 1, W, 22, 0.75f, 3, a1, a2, I, now, F);
-            n = Side(n, 0, 0, 0, 1, 1, 0, H, 12, 0.75f, 7, a1, a2, I, now, F);
-            n = Side(n, W, 0, 0, 1, -1, 0, H, 12, 0.75f, 11, a1, a2, I, now, F);
+            // dense rows of narrow flames (user: denser and softer read better than a few bright big ones)
+            n = Side(n, 0, H, 1, 0, 0, -1, W, 38, 1, 0, a1, a2, I, now, F);
+            n = Side(n, 0, 0, 1, 0, 0, 1, W, 38, 0.75f, 3, a1, a2, I, now, F);
+            n = Side(n, 0, 0, 0, 1, 1, 0, H, 22, 0.75f, 7, a1, a2, I, now, F);
+            n = Side(n, W, 0, 0, 1, -1, 0, H, 22, 0.75f, 11, a1, a2, I, now, F);
             for (int i = n; i < tongues.Count; i++) tongues[i].enabled = false;
             int e = 0;
             foreach (var em in R.embers)
@@ -158,21 +159,45 @@ namespace MoreMush
             for (int i = 0; i < cnt; i++)
             {
                 float t = (i + 0.5f) / cnt;
-                float hgt = (36 + 26 * Mathf.Sin(now * 7 + i * 1.7f + seed) + 14 * Mathf.Sin(now * 13 + i * 2.9f + seed)) * a1 * (1 + 0.5f * a2) * (0.7f + 0.5f * I) * hs;
+                // neighbours rise and fall in turn (odd/even half a cycle apart) on top of the old flicker
+                float hgt = (36 + 18 * Mathf.Sin(now * 7 + i * 1.7f + seed) + 10 * Mathf.Sin(now * 13 + i * 2.9f + seed) + 16 * Mathf.Sin(now * 6 + (i & 1) * Mathf.PI)) * a1 * (1 + 0.5f * a2) * (0.7f + 0.5f * I) * hs;
                 if (hgt < 4) continue;
-                while (tongues.Count <= n) Clone(tongueTemplate, tongues);
-                var img = tongues[n++];
-                img.enabled = true;
-                float px = ox + ux * len * t, py = oy + uy * len * t, w = len / cnt * 0.8f * 2;
+                float px = ox + ux * len * t, py = oy + uy * len * t;
+                // the painted flames are tall (1:2): keep them from squashing flat into blobs on short tongues
+                float w = Mathf.Max(hgt * 0.5f, len / cnt * 1.5f);
                 float sway = Mathf.Sin(now * 11 + i + seed) * len / cnt * 0.35f;
-                img.rectTransform.anchoredPosition = new Vector2(px, -py);
-                img.rectTransform.sizeDelta = new Vector2(w, hgt);
                 // inward normal (nx, ny) in stage coords → rotation of the up-pointing tongue sprite
                 float ang = Mathf.Atan2(-ny, nx) * Mathf.Rad2Deg - 90 + sway * 0.2f;
-                img.rectTransform.localRotation = Quaternion.Euler(0, 0, ang);
-                var c = Color.Lerp(F.core, F.mid, 0.4f); c.a = Mathf.Min(0.7f, 0.42f * I); img.color = c;
+                var sp = FlameSprite(i + (int)seed);
+                // outer flame in the palette's mid colour, then a smaller brighter core from the same base
+                var c = Color.Lerp(F.core, F.mid, 0.55f); c.a = Mathf.Min(0.6f, 0.38f * I);
+                n = Tongue(n, sp, px, py, w, hgt * 1.25f, ang, c);
+                var cc = F.core; cc.a = Mathf.Min(0.45f, 0.3f * I);
+                n = Tongue(n, sp, px, py, w * 0.55f, hgt * 0.7f, ang, cc);
             }
             return n;
+        }
+
+        int Tongue(int n, Sprite sp, float px, float py, float w, float h, float ang, Color c)
+        {
+            while (tongues.Count <= n) Clone(tongueTemplate, tongues);
+            var img = tongues[n++];
+            img.enabled = true;
+            if (sp != null && img.sprite != sp) img.sprite = sp;
+            img.rectTransform.anchoredPosition = new Vector2(px, -py);
+            img.rectTransform.sizeDelta = new Vector2(w, h);
+            img.rectTransform.localRotation = Quaternion.Euler(0, 0, ang);
+            img.color = c;
+            return n;
+        }
+
+        // FX/flame_0..3 (sheet fx_flame); neighbours get different shapes. Falls back to the template's sprite.
+        static readonly Sprite[] flameSp = new Sprite[4];
+        static bool flameLoaded;
+        static Sprite FlameSprite(int i)
+        {
+            if (!flameLoaded) { flameLoaded = true; for (int k = 0; k < 4; k++) flameSp[k] = SpriteDB.Get("FX/flame_" + k); }
+            return flameSp[((i % 4) + 4) % 4];
         }
     }
 }

@@ -16,7 +16,7 @@ namespace MoreMush
         public void Set(string kind, Skin skin, bool silhouette = false)
         {
             // doodle set: the whole critter is one composed icon (Tools/art/build_critter_rig.py), centred on the rig
-            // origin and ICON_UNITS (1.2) rig units square, drawn in the cap image; the shared-body parts hide
+            // origin and ICON_UNITS (1.4) rig units square, drawn in the cap image; the shared-body parts hide
             var whole = SpriteDB.Get("Characters/Critters/icon_" + kind + (skin != null ? "_skin" : ""));
             foreach (var im in parts) if (im != null) im.enabled = whole == null;
             if (whole != null)
@@ -24,7 +24,7 @@ namespace MoreMush
                 cap.sprite = whole;
                 var crt = cap.rectTransform;
                 crt.anchoredPosition = Vector2.zero;
-                crt.sizeDelta = Vector2.one * 1.2f * unitPx;
+                crt.sizeDelta = Vector2.one * 1.4f * unitPx;   // = ICON_UNITS (room for skin accessories above the cap)
             }
             else cap.sprite = SpriteDB.Get("Characters/Critters/" + (skin != null ? "skin_" : "cap_") + kind);
             string a = skin?.acc;

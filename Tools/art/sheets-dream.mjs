@@ -205,19 +205,22 @@ const grandpa = {
 // World tree (세계수) Lv.1-8: one tree growing up. FarmTreeView scales each stage to WT.width and places
 // mushroom slots by zones of the sprite bounds, so every stage keeps base at the bottom, trunk centered, canopy on top.
 const tree = {
-  id: "mush_tree", rows: 2, cols: 4, out: "Farm/Tree", refs: [PILOT, OBJ],
-  subject: "Eight growth stages of the SAME magical mushroom world-tree where tiny mushroom critters live, front view, flat matte watercolor like the attached style references (no outlines, no gloss, no glow, no sparkles), soft low-saturation palette. Left to right, top row first, smallest to largest. KEEP ONE IDENTITY through all eight: the same warm grey-brown trunk with a soft S-curve and a small round hollow at its base, the same moss-green and sage canopy made of a few big soft rounded clumps (not many small puffs), the same pale lavender-blue shadow side. Each stage stands on its own small oval mossy base, the base centered at the bottom of the cell, the trunk centered, the canopy on top and roughly symmetric; the growth reads by size, trunk thickness and how many canopy clumps it has. Leave calm open spots on the canopy and around the roots (mushrooms and decorations are placed there separately); do NOT draw mushrooms on the branches except the few named below. Big simple shapes, little detail, readable at 160 px.",
+  // World-tree growth (user 2026-10-16: growth must read at a glance, each stage adds more of the tree village; the
+  // approved final look is concept/tree_final_v2.png, which is tree_7 itself — see build_tree_final below).
+  id: "mush_tree", rig: true, rows: 2, cols: 4, out: "Farm/Tree", refs: [raw("concept/tree_final_v2"), PILOT],
+  subject: "Seven earlier growth stages of the SAME magical mushroom world-tree as the FIRST attached image (its final, fully grown form). Same soft matte watercolor, big simple chunky rounded shapes, soft warm-brown painted rim, no glow, no gloss. SAME palette as the final form so it stands out from a cool green forest background: warm cinnamon-brown trunk, canopy clumps in golden yellow-green and soft peach-apricot with pale blossom pink, warm olive shading (no blue-teal leaves). Left to right, top row first, smallest to largest; each stage stands on its own small oval grassy base centered at the bottom of its cell, trunk centered. Growth reads by size AND by more and more of the final tree's village objects appearing each stage (each stage keeps everything from the previous one). Leave the last cell empty. No characters or creatures, no text.",
   items: [
-    ["tree_0", "stage 1: a tiny sprout with two round leaves on a little moss mound"],
-    ["tree_1", "stage 2: a small sapling with a thin curved trunk and two soft leaf clumps"],
-    ["tree_2", "stage 3: a young tree with a slim trunk and one round canopy clump with two smaller ones"],
-    ["tree_3", "stage 4: a medium tree, sturdier trunk, a fuller canopy of three clumps, two tiny shelf fungi low on the trunk"],
-    ["tree_4", "stage 5: a large tree, thick trunk with a few visible roots, a wide canopy of four clumps, soft hanging moss strands"],
-    ["tree_5", "stage 6: a big tree, mossy trunk, curling roots, a layered canopy of five clumps with a few small white flowers"],
-    ["tree_6", "stage 7: a grand tree, very thick mossy trunk, big arching roots, a huge layered canopy, a few pale butter-yellow spore dots drifting nearby, a small round door in the trunk hollow"],
-    ["tree_7", "stage 8: the majestic ancient world-tree, the biggest and widest, huge layered canopy with a soft pale-apricot light wash on its top clumps, small hanging paper-lantern mushrooms on two branches, a round door and tiny window in the trunk"],
+    ["tree_0", "stage 1: a tiny sprout with two round warm-green leaves on a little moss mound with two tiny mushrooms"],
+    ["tree_1", "stage 2: a small sapling with a thin curved trunk, two soft golden-green leaf clumps, a few small flowers and tiny mushrooms at its foot"],
+    ["tree_2", "stage 3: a young tree with three canopy clumps (one peach), two small salmon shelf fungi on the trunk, one hanging paper lantern"],
+    ["tree_3", "stage 4: a medium tree, sturdier trunk, four clumps with a little blossom pink, a small round doorway at the trunk base, three shelf fungi, two lanterns, the first small wooden platform with a tiny ladder"],
+    ["tree_4", "stage 5: a large tree, thick trunk with roots, five clumps, the doorway now has a lantern inside, shelf-fungus steps up the trunk, two platforms with rope railings, a birdhouse, vines and flowers"],
+    ["tree_5", "stage 6: a big tree, layered canopy, three platforms with ladders and little mushroom clusters, hanging lanterns and a few pale-blue crystals, a rope swing, shelves of jars in the trunk opening, a small trickle of water between the roots"],
+    ["tree_6", "stage 7: a grand tree almost like the final one: a small waterfall into a pebble pool, a tiny mushroom cottage at the left foot, all platforms, lanterns, crystals and swing; only the market stall and the crown mushrooms are still missing"],
   ],
 };
+// tree_7 = the approved final concept, cleaned (faint halo dropped) and cropped by Tools/art/build_tree_final.py
+
 
 // Tintable effect textures (white + alpha, slice_fx.py; FX sprites are one world unit wide) and bar pieces.
 const FX_STYLE = "Tintable effect textures for a dreamy flat watercolor game, painted in PURE WHITE and very light grey watercolor on a fully transparent background (the game tints them with colour). Each fills its own cell, centered, with a soft hand-painted watercolor edge, faint paper grain and slight pigment pooling at the rim; matte, no gloss, no glow halo, no sparkles.";
@@ -234,6 +237,38 @@ const fx = [
       ["splash", "a round watercolor splat: an irregular soft blob with three or four small droplets around it"],
       ["brush@512x64", "one long horizontal watercolor brush stroke, even width, soft dry-brush ends (very wide and short)"],
       ["leaf", "a single small soft leaf shape, white, for falling-leaf particles"],
+    ],
+  },
+  {
+    // critter skins (user): the accessory is painted ONTO the rig part instead of a separate sticker. Each cell
+    // redraws the part in the same cell of skin_acc_ref.png (skin caps, then the dew / moon bodies) wearing its
+    // accessory; Tools/art/build_skin_acc.py registers it back onto the original part and re-cuts the cap socket.
+    // Slices go to Art/Raw_Dream/skinacc (not into Assets; only the registered results are used).
+    id: "critter_skin_acc", lettering: false, rig: true, rows: 2, cols: 5, out: "../../../Art/Raw_Dream/skinacc", refs: [raw("skin_acc_ref"), PILOT],
+    subject: "Character skin parts for a soft dreamy watercolor game, same flat matte watercolor as the attached style references (paper grain, soft painted edges, no hard black lines, no gloss). The FIRST attached image is a reference sheet with the same 2x5 layout: in EVERY cell, redraw EXACTLY the part shown in that cell of the reference sheet (same shape, same proportions, same colours and pattern, same orientation and same open underside) and add the listed accessory worn on it naturally: it wraps around, sits on or tucks into the part with a soft contact shadow, sized to fit that part, painted in the same watercolor style. Do not change, crop or restyle the part itself, do not add faces to caps, do not add stems, bodies or limbs.",
+    items: [
+      ["fire", "the lava cap wearing a red pirate bandana with white dots tied around the cap like a headscarf, the knot and two short tails at its right side"],
+      ["spark", "the coral-shaped neon cap wearing big round lilac-and-teal headphones: the band arching over the top, the ear cups on the left and right ends of the cap rim"],
+      ["coin", "the wide green rich cap with a small black top hat with a gold band sitting on the centre of its crown, slightly tilted"],
+      ["star", "the starry wizard-hat cap with a soft glowing golden halo ring floating just above its curled tip"],
+      ["leaf", "the cherry-blossom cap with a pink cherry-blossom hairpin (two flowers and a little leaf) tucked on its upper right side"],
+      ["wind", "the cloud cap with a small fluffy white cloud resting on top of its crown"],
+      ["rock", "the gem cap with a small golden jeweled crown sitting on top of its crown"],
+      ["chest", "the strawberry-chocolate cap with a big pink ribbon bow on its upper left side"],
+      ["dew_body", "the white face body wearing a cozy cream knitted scarf around its lower neck/chest area, below the mouth, one tail hanging down at the side; the face stays fully visible"],
+      ["moon_body", "the lilac face body (keep its brown strap and lantern) wearing small round black sunglasses exactly over its eyes, the smile still visible"],
+    ],
+  },
+  {
+    // fever edge fire (ComboHUD.DrawFlames): replaces the single petal flame_tongue that read as a brown blob once
+    // tinted. Variants so neighbours differ; the code lays a smaller copy tinted with the palette core on top.
+    id: "fx_flame", fx: true, rig: true, rows: 1, cols: 4, out: "FX", refs: [PILOT],
+    subject: FX_STYLE + " Four different stylised FIRE flames for a cute game, 1 row of 4, each standing upright in a tall narrow cell. Each flame: a slim teardrop body that rises from a narrow rounded base and splits into 2-3 sharp licking tips that curl in an S-curve, with one or two small detached flame wisps above the tips. Crisp readable flame silhouette (clearly FIRE, not a petal, not a blob, not a drop), light watercolor texture only inside, the inner centre a touch whiter than the edges.",
+    items: [
+      ["flame_0@128x256", "a tall flame with two tips leaning slightly left and one small wisp above"],
+      ["flame_1@128x256", "a tall flame with three tips, the middle one highest, one wisp"],
+      ["flame_2@128x256", "a shorter wider flame with two tips leaning right and two small wisps"],
+      ["flame_3@128x256", "a very tall thin flame with one long curling tip and a side tip low on the left"],
     ],
   },
   {
