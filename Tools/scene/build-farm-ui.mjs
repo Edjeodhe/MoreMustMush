@@ -207,7 +207,7 @@ k.image(`${TB}/Buttons/Left/AutoHarvest/AutoBadge`, ART("FX/circle"), { color: c
 await b.send("tree additions");
 await call("execute_code", { action: "execute", code: `var top = GameObject.Find("Canvas").transform.Find("TreeScreen/Topbar");
 var gem = top.Find("Gem"); var dia = UnityEngine.Object.Instantiate(gem.gameObject, top); dia.name = "Dia"; dia.transform.SetSiblingIndex(gem.GetSiblingIndex() + 1);
-dia.transform.Find("Icon").GetComponent<UnityEngine.UI.Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Resources/Art/Generated/Icons/dia.png");
+dia.transform.Find("Icon").GetComponent<UnityEngine.UI.Image>().sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/ArtArchive/Generated/Icons/dia.png");
 Undo.RegisterCreatedObjectUndo(dia, "dia box");
 UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 return "dia box";` });

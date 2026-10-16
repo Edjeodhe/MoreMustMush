@@ -3,7 +3,7 @@
 // and copy the result into the Unity project.
 //
 // Usage:
-//   node Tools/codex-image.mjs --prompt "<what to draw>" --out Assets/Resources/Art/Generated/<name>.png
+//   node Tools/codex-image.mjs --prompt "<what to draw>" --out Assets/ArtArchive/Generated/<name>.png
 //        [--transparent] [--ref <image>]... [--style <file>] [--search] [--timeout <sec>]
 //
 // Prints one JSON line on success: {"out": "...", "source": "...", "rgba": true}

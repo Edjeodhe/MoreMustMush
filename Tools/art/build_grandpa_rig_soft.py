@@ -1,4 +1,4 @@
-"""Cut the soft-watercolor grandpa (Assets/Resources/Art/Soft/Characters/Grandpa/grandpa_ref.png) into rig parts.
+"""Cut the soft-watercolor grandpa (Assets/ArtArchive/Soft/Characters/Grandpa/grandpa_ref.png) into rig parts.
 
 Same part names and rig.json layout as build_grandpa_rig.py, so GrandpaRig and its prefab work unchanged:
   body.png         whole character minus the scythe; where the handle crossed the sleeve the hole is filled
@@ -20,13 +20,13 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 # Cut points per art set (reference pixels of that set's grandpa_ref.png). --set soft (default) | doodle | dream
 SETS = {
     "soft": dict(
-        root="Assets/Resources/Art/Soft", FEET=(505, 1200), WRIST=(235, 690),
+        root="Assets/ArtArchive/Soft", FEET=(505, 1200), WRIST=(235, 690),
         HANDLE=[(25, 985), (235, 690), (575, 215), (705, 20)], HANDLE_HALF=34, LOWER_STOP=0.86, UPPER_START=0.06,
         BLADE_POLY=[(640, 0), (1084, 0), (1084, 560), (1000, 560), (760, 170), (700, 175), (640, 120)],
         CHARM_POLY=[(120, 840), (210, 840), (210, 1010), (120, 1010)],
         EYES=[(458, 518, 22, 30), (606, 497, 22, 30)]),
     "doodle": dict(
-        root="Assets/Resources/Art/Doodle", FEET=(520, 1150), WRIST=(200, 700),
+        root="Assets/ArtArchive/Doodle", FEET=(520, 1150), WRIST=(200, 700),
         HANDLE=[(30, 850), (200, 700), (640, 190), (770, 20)], HANDLE_HALF=34, LOWER_STOP=0.62, UPPER_START=0.10,
         BLADE_POLY=[(690, 0), (1104, 0), (1104, 560), (1030, 560), (820, 130), (760, 145), (690, 95)],
         CHARM_POLY=[(0, 0), (1, 0), (1, 1)],

@@ -5,7 +5,7 @@
 //   node Tools/art/build-art.mjs <id> ...     # only these sheets
 //   node Tools/art/build-art.mjs --force <id> # regenerate these sheets with Codex
 //   node Tools/art/build-art.mjs --slice-only # never call Codex, just re-slice existing raw sheets
-//   node Tools/art/build-art.mjs --set soft   # the soft watercolor set (sheets-soft.mjs → Art/Raw_Soft, Assets/Resources/Art/Soft)
+//   node Tools/art/build-art.mjs --set soft   # the soft watercolor set (sheets-soft.mjs → Art/Raw_Soft, Assets/ArtArchive/Soft)
 //
 // Raw sheets and their prompts live in Art/Raw/ (committed), so a build never pays for an image twice.
 
@@ -19,10 +19,10 @@ const argv = process.argv.slice(2);
 const setIdx = argv.indexOf("--set");
 const SET = setIdx >= 0 ? argv.splice(setIdx, 2)[1] : "default";
 const SETS = {
-  default: { module: "./sheets.mjs", raw: "Art/Raw", gen: "Assets/Resources/Art/Generated", style: "Tools/art-style.md" },
-  soft: { module: "./sheets-soft.mjs", raw: "Art/Raw_Soft", gen: "Assets/Resources/Art/Soft", style: "Tools/art-style-soft.md" },
+  default: { module: "./sheets.mjs", raw: "Art/Raw", gen: "Assets/ArtArchive/Generated", style: "Tools/art-style.md" },
+  soft: { module: "./sheets-soft.mjs", raw: "Art/Raw_Soft", gen: "Assets/ArtArchive/Soft", style: "Tools/art-style-soft.md" },
   dream: { module: "./sheets-dream.mjs", raw: "Art/Raw_Dream", gen: "Assets/Resources/Art/Dream", style: "Tools/art-style-dream.md" },
-  doodle: { module: "./sheets-doodle.mjs", raw: "Art/Raw_Doodle", gen: "Assets/Resources/Art/Doodle", style: "Tools/art-style-doodle.md", imageStyle: "Tools/art-style-story.md" },
+  doodle: { module: "./sheets-doodle.mjs", raw: "Art/Raw_Doodle", gen: "Assets/ArtArchive/Doodle", style: "Tools/art-style-doodle.md", imageStyle: "Tools/art-style-story.md" },
 };
 if (!SETS[SET]) { console.error(`unknown set: ${SET}`); process.exit(1); }
 const { SHEETS } = await import(SETS[SET].module);

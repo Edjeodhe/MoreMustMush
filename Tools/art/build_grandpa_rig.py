@@ -1,6 +1,6 @@
 """Cut the grandpa reference illustration (grandpa_ref.png) into rig parts.
 
-Parts (Assets/Resources/Art/Generated/Characters/Grandpa/Rig/):
+Parts (Assets/ArtArchive/Generated/Characters/Grandpa/Rig/):
   body.png         whole character minus the scythe; the hole is filled with the nearest colours
   scythe.png       fist + handle + blade (sways around the wrist); the handle hidden behind the head
                    is continued so no gap shows while it moves
@@ -17,8 +17,8 @@ from PIL import Image, ImageDraw, ImageFilter
 from scipy import ndimage
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC = os.path.join(ROOT, "Assets/Resources/Art/Generated/Characters/Grandpa/grandpa_ref.png")
-OUT = os.path.join(ROOT, "Assets/Resources/Art/Generated/Characters/Grandpa/Rig")
+SRC = os.path.join(ROOT, "Assets/ArtArchive/Generated/Characters/Grandpa/grandpa_ref.png")
+OUT = os.path.join(ROOT, "Assets/ArtArchive/Generated/Characters/Grandpa/Rig")
 
 FEET = (517, 1205)          # rig root (bottom centre between the boots)
 WRIST = (215, 505)          # scythe joint

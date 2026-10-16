@@ -12,7 +12,7 @@ import numpy as np
 from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
-KIT = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/EvoKit")
+KIT = os.path.join(ROOT, "Assets/ArtSource/Dream/EvoKit")
 kid = sys.argv[1] if len(sys.argv) > 1 else "fire"
 form = sys.argv[2] if len(sys.argv) > 2 else "3"
 

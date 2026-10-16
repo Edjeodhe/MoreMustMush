@@ -2,7 +2,7 @@
 // Objects (mushrooms, characters, weapons, icons, props) in the bold-outline cel style of Doodle Pets: Survival
 // (Tools/art-style-doodle.md); backgrounds are pale flat grounds (Tools/art-style-story.md rules, see GROUND)
 // with the scenery placed on top as separate env objects (Env/<name>) for depth.
-// Raw sheets: Art/Raw_Doodle/<id>.png. Sliced: Assets/Resources/Art/Doodle/<same keys>. SpriteDB: Doodle > Soft > Generated.
+// Raw sheets: Art/Raw_Doodle/<id>.png. Sliced: Assets/ArtArchive/Doodle/<same keys>. SpriteDB: Doodle > Soft > Generated.
 
 import { SHEETS as SOFT } from "./sheets-soft.mjs";
 

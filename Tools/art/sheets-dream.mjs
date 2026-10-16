@@ -715,8 +715,10 @@ const evoFaces = {
 // 층: 맨몸(공용 몸통 바탕·팔·다리) / 복장(공용: 옷·신발) / 정령 머리(갓+얼굴+앞머리) / 정령 뒷머리 / 얼굴(공용 표정).
 // 먼저 공용 마네킹(kit_base_<★>) 한 장 → 모든 부위가 그 크기를 기준으로 그린다. 지금은 ★3 불 예시만.
 const KIT_ONE = "ONE single cut-out part for 2D puppet animation, alone and centered, on a FULLY TRANSPARENT background, no glow, no shadow, no ground, no text. Front view, drawn at EXACTLY the scale of the attached base mannequin (the first attached image) so it stacks back onto it. " + EVO_STYLE;
+// 조립 재료(EvoKit)는 게임이 직접 쓰지 않으니 Resources 밖에 둔다 (kit_preview.py --export가 Characters/Evo/k_* 로 내보냄). 경로는 Dream gen 루트 기준
+const KIT_OUT = "../../../ArtSource/Dream/EvoKit";
 const KIT_BASE_3 = "kit_base_3";
-const kitOne = (id, refs, subject) => ({ id, rows: 1, cols: 1, grid: true, out: "Characters/EvoKit", refs: [...refs, ...EVO_STYLE_REFS], subject, items: [[id, subject.slice(0, 80)]] });
+const kitOne = (id, refs, subject) => ({ id, rows: 1, cols: 1, grid: true, out: KIT_OUT, refs: [...refs, ...EVO_STYLE_REFS], subject, items: [[id, subject.slice(0, 80)]] });
 
 // 정령별 머리·뒷머리 (★2·★3). 진화 줄 그림에서 그 정령의 줄·칸을 짚어 준다. ★2 뒷머리는 턱선 단발 (2026-10-16 사용자: 머리 짧게)
 const EVO_KIDS = ["fire", "dew", "leaf", "wind", "rock", "spark", "moon", "star"];
@@ -727,7 +729,7 @@ const kitHead = (k, f) => kitOne(`kit_${k}_${f}_head`, [raw(kitBaseOf(f)), raw(E
 const kitHair = (k, f) => kitOne(`kit_${k}_${f}_hair`, [raw(kitBaseOf(f)), raw(EVO_ROW[k][0])], KIT_ONE + ` PART: the ${k.toUpperCase()} spirit's BACK HAIR only: the ${f === 3 ? "long hair mass" : "SHORT chin-length bob hair"} of the FORM ${f} ${k.toUpperCase()} spirit (${EVO_ROW[k][1]} row, ${EVO_COL[f]}) of the attached evolution sheet as it hangs BEHIND the head ${f === 3 ? "and shoulders down to the waist" : "ending at the chin and jaw line, NOT reaching the shoulders, small and neat, only a little wider than the face"}, the full back silhouette of the hairstyle in that spirit's hair colour, with NO face, NO cap, NO body.`);
 // ★2 공용 틀: 마네킹 · 몸통 · 드레스 · 신발 신은 다리 (팔은 생성기 필터에 막혀 예전 불 ★2 팔을 공용으로 씀)
 const kitBase2 = [
-  { id: "kit_base_2", rows: 1, cols: 1, grid: true, out: "Characters/EvoKit", refs: [raw("evo_pilot"), raw(KIT_BASE_3), ...EVO_STYLE_REFS],
+  { id: "kit_base_2", rows: 1, cols: 1, grid: true, out: KIT_OUT, refs: [raw("evo_pilot"), raw(KIT_BASE_3), ...EVO_STYLE_REFS],
     subject: "A SHARED BASE MANNEQUIN for a 2D puppet: the plain body of the FORM 2 (★2) mushroom child spirit of the attached evolution sheet (top row, third column), same height and proportions (about 2 heads tall, smaller and chubbier than the second attached mannequin) and pale cream skin, drawn in the SAME way as the second attached mannequin: NO mushroom cap, NO hair, NO face (a smooth blank round head), wearing only a plain simple sleeveless cream short slip dress, arms hanging down slightly away from the body, legs slightly apart. Front view, symmetric, standing straight. " + EVO_STYLE + " FULLY TRANSPARENT BACKGROUND, no ground, no shadow, no text.",
     items: [["kit_base_2", "base mannequin 2"]] },
   kitOne("kit_body_2_torso", [raw("kit_base_2")], KIT_ONE + " PART: the mannequin's TORSO only, in its plain cream slip: from a short neck stub at the top down to the hem, with smooth round shoulder nubs, NO head, NO arms, NO legs."),
@@ -735,7 +737,7 @@ const kitBase2 = [
   kitOne("kit_outfit_gill_2_leg", [raw("evo_pilot")], KIT_ONE.replace("the attached base mannequin (the first attached image)", "the FORM 2 spirit of the attached evolution sheet") + " PART: a cartoon puppet piece: ONE very short stubby LEG of the chibi mushroom child spirit (top row, third column of the attached sheet) WEARING its little soft brown shoe, exactly as the legs peek out under the skirt: cream, slightly rounded top end, the shoe toe pointing a little outward, hanging straight down. Simple, cute, toy-like."),
 ];
 const kitSheets = [
-  { id: KIT_BASE_3, rows: 1, cols: 1, grid: true, out: "Characters/EvoKit", refs: [raw("evo_pilot"), ...EVO_STYLE_REFS],
+  { id: KIT_BASE_3, rows: 1, cols: 1, grid: true, out: KIT_OUT, refs: [raw("evo_pilot"), ...EVO_STYLE_REFS],
     subject: "A SHARED BASE MANNEQUIN for a 2D puppet: the plain body of the FORM 3 (★3) mushroom spirit girl of the attached evolution sheet (top row, rightmost), same height, proportions (about 2.5 heads tall chibi) and pale cream skin, but with NO mushroom cap, NO hair, NO face (a smooth blank round head), wearing only a plain simple sleeveless cream knee-length slip dress, bare arms hanging down slightly away from the body, legs slightly apart, bare feet. Front view, symmetric, standing straight. " + EVO_STYLE + " FULLY TRANSPARENT BACKGROUND, no ground, no shadow, no text.",
     items: [[KIT_BASE_3, "base mannequin"]] },
   kitOne("kit_body_3_torso", [raw(KIT_BASE_3)], KIT_ONE + " PART: the mannequin's TORSO only, in its plain cream slip: from a short neck stub at the top down to the hem, with smooth round shoulder nubs, NO head, NO arms, NO legs."),
@@ -763,7 +765,7 @@ const kitOutfitSheets = ["pick", "climb", "carry"].flatMap((o) => [2, 3].map((f)
 
 // ★2 짧은 뒷머리 다시 뽑기 (2026-10-16 사용자: ★2는 머리 짧게) — 토큰 아끼려 4칸 시트 2장으로 묶음 (12칸에서만 칸이 빠졌음)
 const kitHair2 = (id, kids) => ({
-  id, rows: 2, cols: 2, grid: true, out: "Characters/EvoKit", refs: [raw("kit_base_2"), raw("evo_pilot"), raw("evo_line_a"), raw("evo_line_b"), ...EVO_STYLE_REFS],
+  id, rows: 2, cols: 2, grid: true, out: KIT_OUT, refs: [raw("kit_base_2"), raw("evo_pilot"), raw("evo_line_a"), raw("evo_line_b"), ...EVO_STYLE_REFS],
   subject: KIT_ONE.replace("ONE single cut-out part", "Cut-out parts").replace("alone and centered", "each alone and centered in its cell") + " Each cell is the BACK HAIR only of one FORM 2 mushroom child spirit from the attached evolution sheets (third column of its row): a SHORT chin-length bob ending at the chin and jaw line, NOT reaching the shoulders, small and neat, only a little wider than the face, the back layer of the hairstyle as it sits BEHIND the head, in that spirit's hair colour, with NO face, NO cap, NO body.",
   items: kids.map((k) => [`kit_${k}_2_hair`, `${k.toUpperCase()} spirit (${EVO_ROW[k][0]}, ${EVO_ROW[k][1]} row): short bob back hair`]),
 });

@@ -60,7 +60,7 @@ export function col(hex, a) {
   const n = (i) => parseInt(hex.slice(i, i + 2), 16) / 255;
   return { r: n(0), g: n(2), b: n(4), a: a ?? (hex.length === 8 ? n(6) : 1) };
 }
-export const ART = (p) => `Assets/Resources/Art/Generated/${p}.png`;
+export const ART = (p) => `Assets/ArtArchive/Generated/${p}.png`;
 export const MAT = { sprite: "Assets/Materials/Sprite.mat", add: "Assets/Materials/SpriteAdditive.mat", weather: "Assets/Materials/WeatherMask.mat" };
 export const FONT = { jua: "Assets/Fonts/Jua SDF.asset", noto: "Assets/Fonts/NotoSansKR SDF.asset" };
 export const TMAT = { dark: "Assets/Fonts/Jua Outline Dark.mat", wood: "Assets/Fonts/Jua Outline Wood.mat", brown: "Assets/Fonts/Jua Outline Brown.mat" };

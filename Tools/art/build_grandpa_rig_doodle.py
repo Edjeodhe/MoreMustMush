@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_critter_rig import load, resize, bbox, fit  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DIR = os.path.join(ROOT, "Assets/Resources/Art/Doodle/Characters/Grandpa/Parts")
+DIR = os.path.join(ROOT, "Assets/ArtArchive/Doodle/Characters/Grandpa/Parts")
 OUT = os.path.join(ROOT, "Tools/art/grandpa_rig_doodle.json")
 WORK = 360
 MATCHED = ["torso", "head", "hat", "beard", "backpack", "leg_back", "leg_front", "eyes_closed", "mouth_open"]

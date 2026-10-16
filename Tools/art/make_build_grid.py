@@ -16,5 +16,5 @@ for gy in range(ROWS):
         if ZX0 < cx < ZX1 and ZY0 < cy < ZY1: continue
         x, y = gx * CELL, gy * CELL
         d.rounded_rectangle([x + 3, y + 3, x + CELL - 4, y + CELL - 4], radius=6, fill=(255, 255, 255, 46), outline=(255, 255, 255, 110), width=2)
-img.save("Assets/Resources/Art/Generated/FX/build_grid.png")
+img.save("Assets/ArtArchive/Generated/FX/build_grid.png")
 print("build_grid", img.size)

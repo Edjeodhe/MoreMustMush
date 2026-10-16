@@ -17,7 +17,8 @@ namespace MoreMush.EditorTools
     public static class LocTools
     {
         const string FontDir = "Assets/Fonts", LocFontsPath = "Assets/Resources/Loc/LocFonts.asset", NewStringsPath = "BalanceData/db/new_strings.json";
-        const int SamplingSize = 64, Padding = 8, AtlasSize = 2048;
+        // 48/6 (2026-10-16, 64/8에서 내림): 한·일 1000자가 2048 한 장에 들어간다 (WebGL 용량). 여백 비율 12.5%는 그대로라 외곽선 굵기도 같다
+        const int SamplingSize = 48, Padding = 6, AtlasSize = 2048;
 
         // 언어, 제목 TTF, 본문 TTF (확장자 없는 파일 이름)
         static readonly (string lang, string title, string body)[] FONT_SETS =

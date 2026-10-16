@@ -3,7 +3,7 @@ using UnityEditor;
 // Images dropped into the art set folders (Tools/art/build-art.mjs) import as ready-to-use 2D sprites.
 public class GeneratedArtPostprocessor : AssetPostprocessor
 {
-    private static readonly string[] k_ArtFolders = { "Assets/Resources/Art/Generated/", "Assets/Resources/Art/Soft/", "Assets/Resources/Art/Doodle/", "Assets/Resources/Art/Dream/" };
+    private static readonly string[] k_ArtFolders = { "Assets/ArtArchive/Generated/", "Assets/ArtArchive/Soft/", "Assets/ArtArchive/Doodle/", "Assets/Resources/Art/Dream/" };
 
     private void OnPreprocessTexture()
     {

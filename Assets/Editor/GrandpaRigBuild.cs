@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MoreMush.EditorTools
 {
-    // Rebuilds GrandpaRig.prefab's Parts from the doodle grandpa parts (Assets/Resources/Art/Doodle/Characters/Grandpa/Parts)
+    // Rebuilds GrandpaRig.prefab's Parts from the doodle grandpa parts (Assets/ArtArchive/Doodle/Characters/Grandpa/Parts)
     // and the layout Tools/art/build_grandpa_rig_doodle.py fitted (Tools/art/grandpa_rig_doodle.json: px of the full
     // drawing, y up, origin at the feet). Joints: hips, shoulders, neck, chin (beard), hat, wrist (scythe).
     // Positions stay editable in the prefab afterwards; run again only to start over from the fitted layout.
@@ -14,7 +14,7 @@ namespace MoreMush.EditorTools
     {
         const string LayoutPath = "Tools/art/grandpa_rig_doodle.json";
         const string PrefabPath = "Assets/Prefabs/Characters/GrandpaRig.prefab";
-        const string PartsDir = "Assets/Resources/Art/Doodle/Characters/Grandpa/Parts/";
+        const string PartsDir = "Assets/ArtArchive/Doodle/Characters/Grandpa/Parts/";
         const float HEIGHT_WORLD = 3.68f;   // the previous rig's on-screen height (Parts scale 0.32 × 11.5 units)
 
         [Serializable] class Part { public string name; public float x, y, s, rot; public bool flip; }

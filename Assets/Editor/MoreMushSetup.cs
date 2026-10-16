@@ -12,7 +12,8 @@ namespace MoreMush.EditorTools
     public static class MoreMushSetup
     {
         // Art sets, later ones win: Doodle (outlined cel set) > Soft (watercolor) > Generated for the same key.
-        public static readonly string[] ArtRoots = { "Assets/Resources/Art/Generated", "Assets/Resources/Art/Soft", "Assets/Resources/Art/Doodle", "Assets/Resources/Art/Dream" };
+        // 옛 세트(Generated·Soft·Doodle)는 Resources 밖 ArtArchive에 둔다: Dream에 없는 키만 SpriteDB가 GUID로 물어 빌드에 들어가고, 덮인 그림은 빌드에서 빠진다.
+        public static readonly string[] ArtRoots = { "Assets/ArtArchive/Generated", "Assets/ArtArchive/Soft", "Assets/ArtArchive/Doodle", "Assets/Resources/Art/Dream" };
 
         // key ("Icons/gold") → asset path of the sprite the game uses for it
         public static SortedDictionary<string, string> ResolvedArt()

@@ -1,5 +1,5 @@
 // Sprite sheet definitions for Tools/art/build-art.mjs.
-// Each sheet is generated once by Codex (Art/Raw/<id>.png, committed) and sliced into Assets/Resources/Art/Generated/<out>/<name>.png.
+// Each sheet is generated once by Codex (Art/Raw/<id>.png, committed) and sliced into Assets/ArtArchive/Generated/<out>/<name>.png.
 // Item names match the prototype ids (SPECIES id = category + index, e.g. ed0) so game code can load by id.
 
 // [id, Korean name, scientific name / motif, what it must look like]

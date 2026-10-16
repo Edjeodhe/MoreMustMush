@@ -5,7 +5,7 @@ const path = require('path');
 const { applyTheme } = require('C:/Users/user/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/af65a7be-c802-4dd7-a623-f79dd3b45027/b55869d3-c6ce-445a-9a05-95cde2e3c2a0/skills/pptx/scripts/apply_theme.js');
 
 const ROOT = 'C:/Project/MoreMustMush';
-const ART = ROOT + '/Assets/Resources/Art/Soft';
+const ART = ROOT + '/Assets/ArtArchive/Soft';
 const HERE = __dirname;
 const OUT = ROOT + '/Marketing/MoreMustMush_PlayGuide.pptx';
 

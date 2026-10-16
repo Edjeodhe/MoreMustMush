@@ -18894,6 +18894,26 @@
       "Str_JA": "風が気持ちいい〜",
       "Str_RU": "Ветерок — прелесть~",
       "Str_UK": "Вітерець — краса~"
+    },
+    {
+      "Str_ID": 901322,
+      "Str_Group_ID": 91322,
+      "Str_Name": "ui",
+      "Str_KR": "점수",
+      "Str_EN": "Score",
+      "Str_JA": "スコア",
+      "Str_RU": "Очки",
+      "Str_UK": "Очки"
+    },
+    {
+      "Str_ID": 901323,
+      "Str_Group_ID": 91323,
+      "Str_Name": "ui",
+      "Str_KR": "세트 밖이지만 배치한 UI가 쓰는 한·영 전용 폰트 (ONEMobilePOP 등). 한국어·영어에서는 그대로 두고, 그 밖의 언어에서는 그 언어 본문 폰트로 바꾼다 (TextLangFont)",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
     }
   ]
 }
