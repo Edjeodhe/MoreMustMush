@@ -1,0 +1,9 @@
+Sprite sheet: a 3x1 grid holding 3 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Three EMPTY name-tag labels for a cozy flat matte watercolor PC game UI (no outlines, no gloss, no glow, no drop shadow, no text, no letters), flat front view, each one a very wide and short horizontal shape filling its row. The middle of each tag is a long plain even strip where a name will be written; any decoration sits only at the two short ends so the tag can be stretched sideways.
+
+Assets in reading order (left to right, top to bottom):
+1. a paper NAME TAG: pale cream parchment label with softly rounded ends, a thin warm-brown edge, a tiny round punched hole with a short twine loop at the left end
+2. a small WOODEN NAME PLATE: light honey-wood board with rounded ends, a thin darker wood edge and a tiny brass nail at each end
+3. a soft moss-green RIBBON NAME BANNER: a flat straight ribbon band with small folded swallow-tail ends

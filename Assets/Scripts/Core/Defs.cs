@@ -305,6 +305,10 @@ namespace MoreMush
         // 동전·꿀밤 꼬마는 2차 추가 예정이라 아직 얻을 수 없다.
         public static readonly string[] CRITTER_JOIN = { "leaf", "dew", "wind", "fire", "rock", "spark", "moon", "star" };
         public static int JoinLv(string id) { int i = System.Array.IndexOf(CRITTER_JOIN, id); return i < 0 ? 0 : i + 1; }   // 0 = 아직 합류할 수 없음 (2차)
+        // 정령 해금 (2026-10-16 사용자): 세계수가 그 단계에 오르면 열리고, 균사석을 내고 데려온다. 첫 정령은 새 게임에 무료로 합류.
+        // CRITTER_JOIN 순서 [임시값: 밸런스 때 조정]
+        public static readonly int[] UNLOCK_GEM = { 0, 15, 30, 60, 120, 250, 500, 1000 };
+        public static int UnlockGem(string id) { int i = System.Array.IndexOf(CRITTER_JOIN, id); return i < 0 ? 0 : UNLOCK_GEM[i]; }
 
         // ===== 보스 (규칙은 Defs.Boss.cs) =====
         public const string BOSS_ICON = "trophy";   // 임시 아이콘. 보스 전용 리소스가 생기면 바꾼다

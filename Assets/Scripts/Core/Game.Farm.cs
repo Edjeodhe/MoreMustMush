@@ -5,7 +5,8 @@ using static MoreMush.Defs;
 
 namespace MoreMush
 {
-    // 꼬마버섯 세계수 규칙 1: 성장(나이테·공물·진화), 꼬마(합류·레벨·각성·구역 배치·호감도), 나무버섯 자동 수확과 수확 보따리.
+    // 꼬마버섯 세계수 규칙 1: 성장(나이테·공물·진화), 정령(해금·레벨·각성=진화 3단계·구역 배치·호감도), 나무버섯 자동 수확과 수확 보따리.
+    // 세계수가 한 단계 자랄 때마다 새 정령이 열리고(균사석으로 데려온다) 이미 있는 정령의 다음 진화가 열린다 (2026-10-16 사용자).
     // 공방·장식·부탁·라운드 보너스는 Game.Farm.Deco.cs. 시각은 실제 시간 ms(Date.now()와 같음).
     // 수확량을 바꾸는 일(레벨 업·배치·장식 등)은 바꾸기 전에 BagSettle()로 그때까지의 수확을 보따리에 넣는다.
     public static partial class Game
@@ -46,17 +47,19 @@ namespace MoreMush
             return G.gem < WT.evoGem[Stage()] ? GrowFail.Gem : GrowFail.None;
         }
 
-        // 진화: 경험치·골드·균사석을 내고 다음 단계로 (나이테 Lv.1). joined = 이번에 합류한 꼬마
-        public static bool Evolve(out List<Special> joined)
+        // 진화: 경험치·골드·균사석을 내고 다음 단계로 (나이테 Lv.1). opened = 이번 단계에서 새로 열린 정령 (균사석으로 데려온다).
+        // 이번 단계에서 다음 진화(각성)가 열리는 정령도 생긴다 (KLV.EvoStage)
+        public static bool Evolve(out List<Special> opened)
         {
-            joined = null;
+            opened = null;
             if (CanEvolve() != GrowFail.None) return false;
             BagSettle();
             int s = Stage();
             G.gold -= WT.evoGold[s]; G.gem -= WT.evoGem[s]; F.exp -= WT.exp[s];
             F.stage++; F.ring = 1;
             Telemetry.TreeUp("stage", F.stage, WT.evoGold[s], WT.evoGem[s]);
-            joined = FarmJoin();
+            FarmJoin();
+            opened = SPECIALS.Where(k => JoinLv(k.id) == F.stage && !HasSpecial(k.id)).ToList();
             // 이번 단계에 열린 구역: 그곳이 선호 구역인 쉬는 꼬마를 보낸다 (합류할 때는 아직 닫혀 있던 꼬마)
             foreach (var k in KidsOwned())
                 if (ZoneOf(k.id) == null && ZONE[k.zone].open == F.stage && ZoneRoom(k.zone)) F.zone[k.id] = k.zone;
@@ -100,8 +103,8 @@ namespace MoreMush
         public static List<Special> FarmOwned() => SPECIALS.Where(k => KID.ContainsKey(k.id) && HasSpecial(k.id)).ToList();
         public static List<Kid> KidsOwned() => KIDS.Where(k => HasSpecial(k.id)).ToList();
 
-        // 세계수 단계까지 합류할 꼬마를 모두 합류시키고, 이번에 새로 들어온 꼬마를 돌려준다 (새 게임은 1단계 새싹 꼬마).
-        // 예전에 라운드에서 잡아 둔 꼬마는 그대로 둔다. 새로 온 꼬마는 선호 구역이 열려 있고 자리가 있으면 거기로 간다
+        // 무료 정령(해금 균사석 0 = 첫 정령)만 세계수 단계에 맞춰 저절로 합류시키고, 새로 들어온 정령을 돌려준다.
+        // 나머지는 단계가 열리면 균사석으로 데려온다 (UnlockKid). 예전 세이브에서 이미 합류한 정령은 그대로 둔다
         public static List<Special> FarmJoin()
         {
             var joined = new List<Special>();
@@ -109,11 +112,38 @@ namespace MoreMush
             for (int i = 0; i < CRITTER_JOIN.Length && i < Stage(); i++)
             {
                 string id = CRITTER_JOIN[i];
-                if (HasSpecial(id)) continue;
-                G.specials[id] = true; joined.Add(SPC[id]);
-                if (KID.TryGetValue(id, out var k) && ZoneOpen(k.zone) && ZoneRoom(k.zone)) F.zone[id] = k.zone;
+                if (HasSpecial(id) || UNLOCK_GEM[i] > 0) continue;
+                Join(id); joined.Add(SPC[id]);
             }
             return joined;
+        }
+
+        // 합류: 선호 구역이 열려 있고 자리가 있으면 거기로 간다
+        static void Join(string id)
+        {
+            G.specials[id] = true;
+            if (KID.TryGetValue(id, out var k) && ZoneOpen(k.zone) && ZoneRoom(k.zone)) F.zone[id] = k.zone;
+        }
+
+        // ===== 정령 해금 (세계수 단계가 열고, 균사석으로 데려온다) =====
+        public static bool KidOpen(string kid) => JoinLv(kid) > 0 && Stage() >= JoinLv(kid);
+        public static KidFail CanUnlockKid(string kid)
+        {
+            if (JoinLv(kid) <= 0) return KidFail.NotOwned;
+            if (HasSpecial(kid)) return KidFail.Owned;
+            if (!KidOpen(kid)) return KidFail.Stage;
+            return G.gem < UnlockGem(kid) ? KidFail.Gem : KidFail.None;
+        }
+        public static bool UnlockKid(string kid)
+        {
+            if (CanUnlockKid(kid) != KidFail.None) return false;
+            BagSettle();
+            int c = UnlockGem(kid);
+            G.gem -= c;
+            Join(kid);
+            Telemetry.TreeUp("unlock_" + kid, JoinLv(kid), 0, c);
+            SaveGame();
+            return true;
         }
 
         public static int KLv(string kid) => G?.farm?.klv != null && F.klv.TryGetValue(kid, out var l) ? l : 1;
@@ -121,7 +151,7 @@ namespace MoreMush
         public static int KLvSum() => KidsOwned().Sum(k => KLv(k.id));
         public static int KLvSteps() => KLV.sumAt.Count(a => KLvSum() >= a);
 
-        public enum KidFail { None, NotOwned, Max, Cap, Gold, Gem, Lv }
+        public enum KidFail { None, NotOwned, Max, Cap, Gold, Gem, Lv, Owned, Stage }   // Stage = 세계수 단계가 아직 낮다
         public static double KLvCost(string kid) => KLv(kid) >= KLV.max ? 0 : KLV.Cost(KLv(kid));
         public static KidFail CanKidLvUp(string kid)
         {
@@ -141,14 +171,16 @@ namespace MoreMush
             return true;
         }
 
-        // 각성: Lv.10·20·30에서 멈춘 성장을 풀고 특별 보너스 단계를 올린다
+        // 각성 = 정령 진화 (★1~3): Lv.10·20·30에서 멈춘 성장을 풀고 특별 보너스 단계를 올린다.
+        // 세계수가 그 진화의 단계(KLV.EvoStage)에 올라 있어야 하고, 균사석만 낸다
+        public static int AwakenStage(string kid) => KLV.EvoStage(kid, Awaken(kid) + 1);   // 다음 진화가 열리는 세계수 단계
         public static KidFail CanAwaken(string kid)
         {
             if (!HasSpecial(kid)) return KidFail.NotOwned;
             int a = Awaken(kid);
             if (a >= KLV.awakenMax) return KidFail.Max;
+            if (Stage() < AwakenStage(kid)) return KidFail.Stage;
             if (KLv(kid) < 10 * (a + 1)) return KidFail.Lv;
-            if (G.gold < KLV.awakenGold[a]) return KidFail.Gold;
             return G.gem < KLV.awakenGem[a] ? KidFail.Gem : KidFail.None;
         }
         public static bool KidAwaken(string kid)
@@ -156,8 +188,8 @@ namespace MoreMush
             if (CanAwaken(kid) != KidFail.None) return false;
             BagSettle();
             int a = Awaken(kid);
-            G.gold -= KLV.awakenGold[a]; G.gem -= KLV.awakenGem[a]; F.awaken[kid] = a + 1;
-            Telemetry.TreeUp("awaken_" + kid, a + 1, KLV.awakenGold[a], KLV.awakenGem[a]);
+            G.gem -= KLV.awakenGem[a]; F.awaken[kid] = a + 1;
+            Telemetry.TreeUp("awaken_" + kid, a + 1, 0, KLV.awakenGem[a]);
             SaveGame();
             return true;
         }

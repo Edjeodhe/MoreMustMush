@@ -1,0 +1,1308 @@
+{
+ "looks": [
+  {
+   "id": "dew_0",
+   "kind": "dew",
+   "form": 0,
+   "face": "e_dew_0_face_",
+   "body": {
+    "x": 0.025,
+    "y": 1.53,
+    "sprite": "e_dew_0_body",
+    "bare": "e_dew_0_body_bare"
+   },
+   "height": 3.1,
+   "k": 0.8097
+  },
+  {
+   "id": "dew_1",
+   "kind": "dew",
+   "form": 1,
+   "face": "e_dew_1_face_",
+   "body": {
+    "x": 0.005,
+    "y": 1.59,
+    "sprite": "e_dew_1_body",
+    "bare": "e_dew_1_body_bare"
+   },
+   "height": 3.24,
+   "k": 0.8519
+  },
+  {
+   "id": "dew_2",
+   "kind": "dew",
+   "form": 2,
+   "face": "k_dew_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_dew_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 3.9047,
+    "sprite": "k_dew_2_head",
+    "bare": "k_dew_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_dew_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_dew_2_arm_up",
+   "armLo": "k_dew_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_dew_2_hair",
+   "hairPos": [
+    0.0,
+    3.0765
+   ],
+   "leg": "k_dew_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 5.4772,
+   "k": 0.6354
+  },
+  {
+   "id": "dew_3",
+   "kind": "dew",
+   "form": 3,
+   "face": "k_dew_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_dew_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.1562,
+    "sprite": "k_dew_3_head",
+    "bare": "k_dew_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_dew_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_dew_3_arm_up",
+   "armLo": "k_dew_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_dew_3_hair",
+   "hairPos": [
+    0.0,
+    2.6579
+   ],
+   "leg": "k_dew_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 5.7787,
+   "k": 0.706
+  },
+  {
+   "id": "fire_0",
+   "kind": "fire",
+   "form": 0,
+   "face": "e_fire_0_face_",
+   "body": {
+    "x": 0.01,
+    "y": 1.71,
+    "sprite": "e_fire_0_body",
+    "bare": "e_fire_0_body_bare"
+   },
+   "height": 3.44,
+   "k": 0.7413
+  },
+  {
+   "id": "fire_1",
+   "kind": "fire",
+   "form": 1,
+   "face": "e_fire_1_face_",
+   "body": {
+    "x": 0.02,
+    "y": 1.82,
+    "sprite": "e_fire_1_body",
+    "bare": "e_fire_1_body_bare"
+   },
+   "height": 3.68,
+   "k": 0.788
+  },
+  {
+   "id": "fire_2",
+   "kind": "fire",
+   "form": 2,
+   "face": "k_fire_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_fire_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.3489,
+    "sprite": "k_fire_2_head",
+    "bare": "k_fire_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_fire_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_fire_2_arm_up",
+   "armLo": "k_fire_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_fire_2_hair",
+   "hairPos": [
+    0.0,
+    2.9999
+   ],
+   "leg": "k_fire_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 6.3939,
+   "k": 0.6006
+  },
+  {
+   "id": "fire_3",
+   "kind": "fire",
+   "form": 3,
+   "face": "k_fire_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_fire_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.1538,
+    "sprite": "k_fire_3_head",
+    "bare": "k_fire_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_fire_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_fire_3_arm_up",
+   "armLo": "k_fire_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_fire_3_hair",
+   "hairPos": [
+    0.0,
+    2.9698
+   ],
+   "leg": "k_fire_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 5.7738,
+   "k": 0.7344
+  },
+  {
+   "id": "leaf_0",
+   "kind": "leaf",
+   "form": 0,
+   "face": "e_leaf_0_face_",
+   "body": {
+    "x": 0.005,
+    "y": 1.67,
+    "sprite": "e_leaf_0_body",
+    "bare": "e_leaf_0_body_bare"
+   },
+   "height": 3.38,
+   "k": 0.7515
+  },
+  {
+   "id": "leaf_1",
+   "kind": "leaf",
+   "form": 1,
+   "face": "e_leaf_1_face_",
+   "body": {
+    "x": 0.015,
+    "y": 1.72,
+    "sprite": "e_leaf_1_body",
+    "bare": "e_leaf_1_body_bare"
+   },
+   "height": 3.47,
+   "k": 0.879
+  },
+  {
+   "id": "leaf_2",
+   "kind": "leaf",
+   "form": 2,
+   "face": "k_leaf_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_leaf_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.0575,
+    "sprite": "k_leaf_2_head",
+    "bare": "k_leaf_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_leaf_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_leaf_2_arm_up",
+   "armLo": "k_leaf_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_leaf_2_hair",
+   "hairPos": [
+    0.0,
+    3.1555
+   ],
+   "leg": "k_leaf_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 5.7925,
+   "k": 0.6491
+  },
+  {
+   "id": "leaf_3",
+   "kind": "leaf",
+   "form": 3,
+   "face": "k_leaf_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_leaf_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.3888,
+    "sprite": "k_leaf_3_head",
+    "bare": "k_leaf_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_leaf_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_leaf_3_arm_up",
+   "armLo": "k_leaf_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_leaf_3_hair",
+   "hairPos": [
+    0.0,
+    3.2548
+   ],
+   "leg": "k_leaf_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 6.2588,
+   "k": 0.6519
+  },
+  {
+   "id": "moon_2",
+   "kind": "moon",
+   "form": 2,
+   "face": "k_moon_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_moon_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.0269,
+    "sprite": "k_moon_2_head",
+    "bare": "k_moon_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_moon_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_moon_2_arm_up",
+   "armLo": "k_moon_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_moon_2_hair",
+   "hairPos": [
+    0.0,
+    3.0952
+   ],
+   "leg": "k_moon_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 5.7294,
+   "k": 0.5725
+  },
+  {
+   "id": "moon_3",
+   "kind": "moon",
+   "form": 3,
+   "face": "k_moon_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_moon_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.1914,
+    "sprite": "k_moon_3_head",
+    "bare": "k_moon_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_moon_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_moon_3_arm_up",
+   "armLo": "k_moon_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_moon_3_hair",
+   "hairPos": [
+    0.0,
+    2.7519
+   ],
+   "leg": "k_moon_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 5.8514,
+   "k": 0.6084
+  },
+  {
+   "id": "rock_0",
+   "kind": "rock",
+   "form": 0,
+   "face": "e_rock_0_face_",
+   "body": {
+    "x": 0.02,
+    "y": 1.24,
+    "sprite": "e_rock_0_body",
+    "bare": "e_rock_0_body_bare"
+   },
+   "height": 2.53,
+   "k": 0.8182
+  },
+  {
+   "id": "rock_1",
+   "kind": "rock",
+   "form": 1,
+   "face": "e_rock_1_face_",
+   "body": {
+    "x": 0.015,
+    "y": 1.55,
+    "sprite": "e_rock_1_body",
+    "bare": "e_rock_1_body_bare"
+   },
+   "height": 3.12,
+   "k": 0.7949
+  },
+  {
+   "id": "rock_2",
+   "kind": "rock",
+   "form": 2,
+   "face": "k_rock_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_rock_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.081,
+    "sprite": "k_rock_2_head",
+    "bare": "k_rock_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_rock_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_rock_2_arm_up",
+   "armLo": "k_rock_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_rock_2_hair",
+   "hairPos": [
+    0.0,
+    3.1315
+   ],
+   "leg": "k_rock_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 5.841,
+   "k": 0.5273
+  },
+  {
+   "id": "rock_3",
+   "kind": "rock",
+   "form": 3,
+   "face": "k_rock_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_rock_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.3606,
+    "sprite": "k_rock_3_head",
+    "bare": "k_rock_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_rock_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_rock_3_arm_up",
+   "armLo": "k_rock_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_rock_3_hair",
+   "hairPos": [
+    0.0,
+    3.2051
+   ],
+   "leg": "k_rock_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 6.2006,
+   "k": 0.5032
+  },
+  {
+   "id": "spark_0",
+   "kind": "spark",
+   "form": 0,
+   "face": "e_spark_0_face_",
+   "body": {
+    "x": 0.01,
+    "y": 1.54,
+    "sprite": "e_spark_0_body",
+    "bare": "e_spark_0_body_bare"
+   },
+   "height": 3.13,
+   "k": 0.7508
+  },
+  {
+   "id": "spark_1",
+   "kind": "spark",
+   "form": 1,
+   "face": "e_spark_1_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.71,
+    "sprite": "e_spark_1_body",
+    "bare": "e_spark_1_body_bare"
+   },
+   "height": 3.44,
+   "k": 0.8256
+  },
+  {
+   "id": "spark_2",
+   "kind": "spark",
+   "form": 2,
+   "face": "k_spark_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_spark_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.041,
+    "sprite": "k_spark_2_head",
+    "bare": "k_spark_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_spark_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_spark_2_arm_up",
+   "armLo": "k_spark_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_spark_2_hair",
+   "hairPos": [
+    0.0,
+    3.1863
+   ],
+   "leg": "k_spark_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 5.7585,
+   "k": 0.5904
+  },
+  {
+   "id": "spark_3",
+   "kind": "spark",
+   "form": 3,
+   "face": "k_spark_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_spark_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.081,
+    "sprite": "k_spark_3_head",
+    "bare": "k_spark_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_spark_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_spark_3_arm_up",
+   "armLo": "k_spark_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_spark_3_hair",
+   "hairPos": [
+    0.0,
+    2.7587
+   ],
+   "leg": "k_spark_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 5.6235,
+   "k": 0.69
+  },
+  {
+   "id": "star_2",
+   "kind": "star",
+   "form": 2,
+   "face": "k_star_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_star_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.1938,
+    "sprite": "k_star_2_head",
+    "bare": "k_star_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_star_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_star_2_arm_up",
+   "armLo": "k_star_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_star_2_hair",
+   "hairPos": [
+    0.0,
+    3.2378
+   ],
+   "leg": "k_star_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 6.0738,
+   "k": 0.54
+  },
+  {
+   "id": "star_3",
+   "kind": "star",
+   "form": 3,
+   "face": "k_star_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_star_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.222,
+    "sprite": "k_star_3_head",
+    "bare": "k_star_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_star_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_star_3_arm_up",
+   "armLo": "k_star_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_star_3_hair",
+   "hairPos": [
+    0.0,
+    2.9622
+   ],
+   "leg": "k_star_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 5.9145,
+   "k": 0.5816
+  },
+  {
+   "id": "wind_0",
+   "kind": "wind",
+   "form": 0,
+   "face": "e_wind_0_face_",
+   "body": {
+    "x": 0.01,
+    "y": 1.49,
+    "sprite": "e_wind_0_body",
+    "bare": "e_wind_0_body_bare"
+   },
+   "height": 3.04,
+   "k": 0.7237
+  },
+  {
+   "id": "wind_1",
+   "kind": "wind",
+   "form": 1,
+   "face": "e_wind_1_face_",
+   "body": {
+    "x": 0.02,
+    "y": 1.63,
+    "sprite": "e_wind_1_body",
+    "bare": "e_wind_1_body_bare"
+   },
+   "height": 3.3,
+   "k": 0.7485
+  },
+  {
+   "id": "wind_2",
+   "kind": "wind",
+   "form": 2,
+   "face": "k_wind_2_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.6316,
+    "sprite": "k_wind_2_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 3.8671,
+    "sprite": "k_wind_2_head",
+    "bare": "k_wind_2_head_bare",
+    "back": ""
+   },
+   "collar": "k_wind_2_collar",
+   "collarPos": [
+    0.0,
+    1.6316
+   ],
+   "arm": "",
+   "armUp": "k_wind_2_arm_up",
+   "armLo": "k_wind_2_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.39
+   ],
+   "armElbow": [
+    0.0,
+    -0.39
+   ],
+   "neck": [
+    0.0,
+    2.4266
+   ],
+   "shoulderL": [
+    -0.4464,
+    2.197
+   ],
+   "shoulderR": [
+    0.4464,
+    2.197
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_wind_2_hair",
+   "hairPos": [
+    0.0,
+    2.9319
+   ],
+   "leg": "k_wind_2_leg",
+   "hipL": [
+    -0.34,
+    0.9245
+   ],
+   "hipR": [
+    0.34,
+    0.9245
+   ],
+   "legCenter": [
+    0.0,
+    -0.307
+   ],
+   "legTilt": -3,
+   "height": 5.3996,
+   "k": 0.5852
+  },
+  {
+   "id": "wind_3",
+   "kind": "wind",
+   "form": 3,
+   "face": "k_wind_3_face_",
+   "body": {
+    "x": 0.0,
+    "y": 1.786,
+    "sprite": "k_wind_3_body",
+    "bare": ""
+   },
+   "head": {
+    "x": 0.0,
+    "y": 4.0998,
+    "sprite": "k_wind_3_head",
+    "bare": "k_wind_3_head_bare",
+    "back": ""
+   },
+   "collar": "k_wind_3_collar",
+   "collarPos": [
+    0.0,
+    1.786
+   ],
+   "arm": "",
+   "armUp": "k_wind_3_arm_up",
+   "armLo": "k_wind_3_arm_lo",
+   "armCenter": [
+    -0.0375,
+    -0.4095
+   ],
+   "armElbow": [
+    0.0,
+    -0.4095
+   ],
+   "neck": [
+    0.0,
+    2.631
+   ],
+   "shoulderL": [
+    -0.3816,
+    2.3862
+   ],
+   "shoulderR": [
+    0.3816,
+    2.3862
+   ],
+   "armScale": 1.0,
+   "armTilt": 0,
+   "armRest": 0,
+   "hair": "k_wind_3_hair",
+   "hairPos": [
+    0.0,
+    2.5035
+   ],
+   "leg": "k_wind_3_leg",
+   "hipL": [
+    -0.3222,
+    1.037
+   ],
+   "hipR": [
+    0.3222,
+    1.037
+   ],
+   "legCenter": [
+    0.0,
+    -0.397
+   ],
+   "legTilt": -3,
+   "height": 5.6623,
+   "k": 0.5863
+  }
+ ]
+}

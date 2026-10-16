@@ -9,7 +9,7 @@ using static MoreMush.Game;
 namespace MoreMush
 {
     // 버섯 도감 팝업. 배치한 MushDex에 기능만 잇는다 (이름으로 찾음):
-    //   Tab/Button_Mush_1~4 = 분류 탭 (식용 · 약용 · 독버섯 · 꼬마)
+    //   Tab/Button_Mush_1~3 = 분류 탭 (식용 · 약용 · 독버섯). Button_Mush_4(옛 꼬마 탭)는 숨긴다 — 정령(옛 꼬마)은 도감에 넣지 않는다 (2026-10-16)
     //   Mush_Dex_Group 안의 카드들 = 도감 칸. 등록한(처음 수확한) 순서대로 앞 칸부터 채우고, 남는 칸은 비운다.
     //     카드 구성: Image(그림) · Image/Name(이름) · Star ×5(별)
     //     등록한 종이 칸보다 많으면 카드 위에서 마우스 휠로 한 줄씩 내린다
@@ -19,13 +19,12 @@ namespace MoreMush
     // 다시 그리기는 팝업을 열 때 · 탭·카드를 누를 때 · 언어를 바꿀 때만.
     public class MushDexPopup
     {
-        const string KID_TAB = "kid";                                        // 꼬마 탭 (특수 버섯)
-        static readonly string[] TABS = { "ed", "md", "ps", KID_TAB };
-        static readonly string[] TAB_NAMES = { "식용", "약용", "독버섯", "꼬마" };
+        static readonly string[] TABS = { "ed", "md", "ps" };
+        static readonly string[] TAB_NAMES = { "식용", "약용", "독버섯" };
         const float SCROLL_STEP = 60;     // 상세 창 휠 한 칸에 내려가는 거리
         const float SCROLL_PAD = 16;      // 상세 창 아래쪽 여백
         const float MASK_RIGHT = -40;     // 상세 창 마스크를 오른쪽으로 넓혀 바깥에 붙은 스크롤바는 가리지 않게
-        static readonly Color STAR_OFF = new Color32(0xd8, 0xcc, 0xb4, 0xff);
+        static readonly Color STAR_OFF = new Color32(0x5a, 0x4a, 0x3a, 0x55);   // 별 그림(노랑)에 곱해져 흐린 갈색 빈 별로 보임
         static readonly Color CARD_SEL = new Color32(0xff, 0xf3, 0xb0, 0xff);
 
         public readonly GameObject root;
@@ -56,6 +55,7 @@ namespace MoreMush
                 tabs[i] = SceneUI.Bind(b, () => { Snd.Ui(); SetTab(k); });
                 tabTexts[i] = SceneUI.TextIn(b);
             }
+            SceneUI.Find(root.transform, "Button_Mush_4")?.gameObject.SetActive(false);
             var group = SceneUI.Need(root.transform, "Mush_Dex_Group");
             if (group != null)
             {
@@ -93,15 +93,6 @@ namespace MoreMush
         {
             ids.Clear();
             if (G == null) return;
-            if (TABS[tab] == KID_TAB)
-            {
-                // 꼬마는 세계수 단계 순서대로 합류하니 그 순서가 곧 등록 순서 (아직 얻을 수 없는 꼬마는 맨 뒤)
-                var owned = new List<Special>();
-                foreach (var k in SPECIALS) if (HasSpecial(k.id)) owned.Add(k);
-                owned.Sort((a, b) => JoinOrder(a.id).CompareTo(JoinOrder(b.id)));
-                foreach (var k in owned) ids.Add(k.id);
-                return;
-            }
             var list = new List<Species>();
             foreach (var sp in SPECIES) if (sp.c == TABS[tab] && Harvested(sp.id)) list.Add(sp);
             // 처음 수확한 라운드 순, 같은 라운드면 도감 번호 순
@@ -113,10 +104,6 @@ namespace MoreMush
             foreach (var sp in list) ids.Add(sp.id);
         }
 
-        static int JoinOrder(string id) { int lv = JoinLv(id); return lv > 0 ? lv : int.MaxValue; }
-
-        bool IsKid => TABS[tab] == KID_TAB;
-
         public void Render()
         {
             if (G == null || !IsOpen) return;
@@ -126,7 +113,7 @@ namespace MoreMush
                 UIUtil.SetText(tabTexts[i], Loc.T(TAB_NAMES[i]));
             }
             RenderCards();
-            detail?.Render(selected, IsKid);
+            detail?.Render(selected);
         }
 
         void RenderCards()
@@ -134,7 +121,7 @@ namespace MoreMush
             for (int i = 0; i < cards.Count; i++)
             {
                 int n = row * cols + i;
-                cards[i].Render(n < ids.Count ? ids[n] : null, IsKid, selected);
+                cards[i].Render(n < ids.Count ? ids[n] : null, selected);
             }
         }
 
@@ -144,7 +131,7 @@ namespace MoreMush
             Snd.Ui();
             selected = id;
             RenderCards();
-            detail?.Render(selected, IsKid);
+            detail?.Render(selected);
         }
 
         // 언어를 바꿨을 때. 글 길이 재기는 언어 폰트가 바뀐 뒤여야 해서 다음 Tick에서 그린다
@@ -172,12 +159,12 @@ namespace MoreMush
         }
 
         // 그림: 일반 버섯은 한 송이 그림, 꼬마는 캐릭터 그림. 황금이면 황금 효과
-        static void SetIcon(Image img, string id, bool kid)
+        static void SetIcon(Image img, string id)
         {
             if (img == null) return;
             if (id == null) { UIUtil.SetImage(img, null); return; }
-            bool gold = !kid && G.codex.TryGetValue(id, out var e) && e.gold;
-            UIUtil.SetImage(img, kid ? SpriteDB.Get($"Characters/Critters/{id}_ref") : SpriteDB.Single(id), gold ? 3 : 0);
+            bool gold = G.codex.TryGetValue(id, out var e) && e.gold;
+            UIUtil.SetImage(img, SpriteDB.Single(id), gold ? 3 : 0);
             img.color = Color.white;   // 배치할 때 넣은 검은 자리 표시 색을 지운다
         }
 
@@ -203,8 +190,16 @@ namespace MoreMush
             readonly TMP_Text name;
             readonly Image[] stars;
             readonly Color bgColor, starColor;
+            readonly Sprite bgCard;                   // 배치한 카드 그림 (등록한 종)
+            readonly GameObject nameTag;              // 이름 라벨 판 (빈칸이면 숨김)
             readonly Button button;
             string id;
+
+            // 빈칸·고른 칸 그림 (몽환 수채화 UI/Dex, 없으면 색만 바꾼다)
+            static Sprite Empty => SpriteDB.Get("UI/Dex/dex_card_empty");
+            static Sprite Sel => SpriteDB.Get("UI/Dex/dex_card_sel");
+            static Sprite Lock => SpriteDB.Get("Icons/lock");
+            static readonly Color LOCK_C = new Color(1, 1, 1, 0.55f);
 
             public float X => rt.anchoredPosition.x;
             public float Y => rt.anchoredPosition.y;
@@ -215,6 +210,8 @@ namespace MoreMush
                 rt = (RectTransform)t;
                 bg = t.GetComponent<Image>();
                 bgColor = bg != null ? bg.color : Color.white;
+                bgCard = bg != null ? bg.sprite : null;
+                nameTag = t.Find("NameTag")?.gameObject;
                 icon = t.Find("Image")?.GetComponent<Image>();
                 name = SceneUI.Need(t, "Name")?.GetComponent<TMP_Text>();
                 stars = StarsIn(t);
@@ -224,14 +221,22 @@ namespace MoreMush
                 button.onClick.AddListener(() => dex.Select(id));
             }
 
-            public void Render(string id, bool kid, string selected)
+            public void Render(string id, string selected)
             {
                 this.id = id;
                 button.interactable = id != null;
-                if (bg != null) bg.color = id != null && id == selected ? CARD_SEL : bgColor;
-                SetIcon(icon, id, kid);
-                UIUtil.SetText(name, id == null ? "" : kid ? SPC[id].n : SP[id].n);
-                bool showStars = id != null && !kid;   // 꼬마는 별(수확 등급)이 없다
+                if (bg != null)
+                {
+                    bool sel = id != null && id == selected;
+                    var sp = id == null ? Empty : sel ? Sel : null;
+                    bg.sprite = sp != null ? sp : bgCard;
+                    bg.color = sel && Sel == null ? CARD_SEL : bgColor;
+                }
+                SetIcon(icon, id);
+                if (id == null && icon != null && Lock != null) { UIUtil.SetImage(icon, Lock); icon.color = LOCK_C; }   // 아직 못 찾은 칸 = 자물쇠
+                UIUtil.SetText(name, id == null ? "" : SP[id].n);
+                if (nameTag != null) nameTag.SetActive(id != null);
+                bool showStars = id != null;
                 foreach (var s in stars) UIUtil.Show(s, showStars);
                 if (showStars) SetStars(stars, starColor, StarOf(id));
             }
@@ -308,17 +313,16 @@ namespace MoreMush
                 for (int i = 0; i < content.Count; i++) content[i].anchoredPosition = basePos[i] + new Vector2(0, offset);
             }
 
-            public void Render(string id, bool kid)
+            public void Render(string id)
             {
                 if (id == null) Empty();
-                else if (kid) RenderKid(SPC[id]);
                 else RenderSpecies(SP[id]);
                 Relayout();
             }
 
             void Empty()
             {
-                SetIcon(icon, null, false);
+                SetIcon(icon, null);
                 foreach (var s in stars) UIUtil.Show(s, false);
                 foreach (var t in new[] { title, sub, body1, body2 }) UIUtil.SetText(t, "");
                 Headings();
@@ -334,7 +338,7 @@ namespace MoreMush
             {
                 var e = G.codex[sp.id];
                 int s = StarOf(sp.id);
-                SetIcon(icon, sp.id, false);
+                SetIcon(icon, sp.id);
                 foreach (var st in stars) UIUtil.Show(st, true);
                 SetStars(stars, starColor, s);
                 UIUtil.SetText(title, sp.n);
@@ -350,18 +354,6 @@ namespace MoreMush
                     + (s < 5 ? " " + Loc.F("(5성 {0})", AbFmt(sp.ab, per * 5)) : "");
                 string rec = Loc.F("처음 딴 라운드 {0} · 누적 수확 {1}개 · 창고 {2}개 · 황금 {3} · 거대 {4}", e.first, U.Fmt(e.n), U.Fmt(StoreOf(sp.id)), e.gold ? "○" : "×", e.giant ? "○" : "×");
                 UIUtil.SetText(body2, next + "\n\n" + ab + "\n\n" + rec + "\n\n" + UnlockText(sp));
-            }
-
-            void RenderKid(Special k)
-            {
-                SetIcon(icon, k.id, true);
-                foreach (var st in stars) UIUtil.Show(st, false);
-                UIUtil.SetText(title, k.n);
-                UIUtil.SetText(sub, Loc.T("특수 버섯"));
-                Headings();
-                UIUtil.SetText(body1, Loc.T("숲을 깡총깡총 뛰어다니던 캐릭터 버섯. 지금은 세계수에서 나무버섯을 따고 있어요."));
-                // 특성 글이 곧 능력 설명이라 따로 덧붙이지 않는다 (세계수에 없는 꼬마는 능력 대신 안내 문구)
-                UIUtil.SetText(body2, KID.TryGetValue(k.id, out var kd) ? Loc.F("보유 중 · Lv.{0} ★{1} · 특성: {2}", KLv(k.id), Awaken(k.id), kd.traitText) : k.perk);
             }
 
             // 기록 글 길이에 맞춰 칸을 늘이고, 창 아래로 넘친 만큼 스크롤 범위를 잡는다 (맨 위로 돌아간다)

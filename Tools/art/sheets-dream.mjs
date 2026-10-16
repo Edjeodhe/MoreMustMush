@@ -381,6 +381,74 @@ const icons = [
       ["n_inf_gold", "ENDLESS HARVEST: an infinity-shaped ribbon looped around a gold coin"],
     ],
   },
+  {
+    // 2026-10-16 UI 버튼 아이콘 + 도감 세트효과(Defs.World SETS, set_<id>)
+    id: "icons_ui", rig: true, rows: 4, cols: 4, out: "Icons", refs: [raw("icons_a"), raw("icons_node"), OBJ],
+    subject: ICON_RULE + " Menu-button icons and mushroom-collection set badges.",
+    items: [
+      ["option", "SETTINGS: a chunky wooden cogwheel with a small leaf tucked on it"],
+      ["lang", "LANGUAGE: a small round earth globe in soft blue and green with a tiny speech bubble"],
+      ["quest", "QUESTS: a rolled parchment scroll tied with a red ribbon and a small checkmark"],
+      ["stage", "GO HARVEST: a wooden signpost arrow pointing right planted on a mossy mound"],
+      ["mushtree", "UPGRADE TREE: a glowing mycelium sprout with three round branching nodes"],
+      ["set_amanita", "AMANITA FAMILY: a red fly-agaric mushroom with white dots and a smaller white amanita beside it"],
+      ["set_shelf", "SHELF FUNGI: three brown bracket fungi stacked on the side of a short log"],
+      ["set_cordy", "CORDYCEPS BROTHERS: two thin orange club-shaped cordyceps stalks rising from a tiny caterpillar"],
+      ["set_jelly", "JELLY FRIENDS: a translucent amber wood-ear jelly fungus wobbling beside a white jelly blob"],
+      ["set_fart", "PUFF AND SMOKE: a round puffball mushroom puffing a soft grey cloud"],
+      ["set_glow", "GLOWING FOREST: a pale mushroom with a soft mint glow halo at night beside a tiny crescent moon"],
+      ["set_coral", "CORAL AND ANTLERS: a red coral fungus branching like deer antlers"],
+      ["set_cook", "MUSHROOM CHEF: a white chef hat over a small pan holding a mushroom"],
+      ["set_herb", "HERBALIST: a mortar and pestle with a mushroom and a green herb leaf"],
+      ["set_poison", "POISON RESEARCHER: a small round purple potion flask bubbling, a tiny purple mushroom beside it"],
+    ],
+  },
+  {
+    // 2026-10-16 도감(MushDex) 전용 판·슬롯. 9-slice 값은 MoreMushSetup Configure 9-Slice (UI/Dex/*)
+    id: "ui_dex", rows: 3, cols: 3, out: "UI/Dex", refs: [raw("ui_kit2"), PILOT],
+    subject: "A UI kit of EMPTY interface pieces for the mushroom field-guide (herbarium) screen of a cozy watercolor PC game, flat front view, no icons, no symbols, no text inside. Flat matte watercolor (no outlines, no gloss, no glow, no drop shadow), low-saturation pastel parchment, moss and warm-wood colours matching the attached UI kit. Every frame keeps its decoration only near the edges and corners, with a large plain even centre, and even borders on all four sides so it can be 9-sliced.",
+    items: [
+      ["dex_window", "the big field-guide window, wide landscape: pale parchment page fill, a soft moss-green cloth border with slightly darker stitched edge, a tiny pressed fern leaf in each of the four corners"],
+      ["dex_card", "a COLLECTED specimen card, portrait: cream parchment card with soft rounded corners, a thin warm-brown edge and a small washi-tape strip at the top centre"],
+      ["dex_card_empty", "an EMPTY specimen slot, portrait, same size as the card: a slightly recessed pale grey-beige rounded rectangle with a soft dashed sand-coloured edge, nothing inside"],
+      ["dex_card_sel", "the SELECTED specimen card, portrait, same size as the card: cream parchment card with a thicker soft butter-yellow glowing-free edge and a small washi-tape strip at the top centre"],
+      ["dex_page", "the detail page, tall portrait: pale parchment page with a gently deckled soft edge and a thin moss-green rule along the top"],
+      ["dex_frame", "a picture frame for a specimen illustration, square: rounded wooden frame with a thin vine and two small leaves wrapping one corner, pale cream mat in the middle"],
+      ["dex_tab", "a folder bookmark tab, wide and short, rounded top corners, flat bottom: light cream-beige with a thin soft brown edge"],
+      ["dex_tab_on", "the same folder bookmark tab but selected: moss-green fill with a slightly darker green edge and a tiny leaf on the top left"],
+      ["dex_medal", "a round set-bonus medallion frame: honey-wood ring with tiny leaves around a pale cream centre (empty centre for an icon)"],
+    ],
+  },
+  {
+    // 2026-10-16 이름표 라벨 (도감 카드 이름 · 공방 카드 이름). 가운데는 비우고 장식은 양 끝에만 → 가로 9-slice
+    id: "ui_tags", rows: 1, cols: 3, out: "UI/Dex", refs: [raw("ui_dex"), raw("ui_kit2"), PILOT],
+    subject: "Three EMPTY name-tag labels for a cozy flat matte watercolor PC game UI (no outlines, no gloss, no glow, no drop shadow, no text, no letters), flat front view, each one a very wide and short horizontal shape filling its row. The middle of each tag is a long plain even strip where a name will be written; any decoration sits only at the two short ends so the tag can be stretched sideways.",
+    items: [
+      ["tag_name", "a paper NAME TAG: pale cream parchment label with softly rounded ends, a thin warm-brown edge, a tiny round punched hole with a short twine loop at the left end"],
+      ["tag_wood", "a small WOODEN NAME PLATE: light honey-wood board with rounded ends, a thin darker wood edge and a tiny brass nail at each end"],
+      ["tag_ribbon", "a soft moss-green RIBBON NAME BANNER: a flat straight ribbon band with small folded swallow-tail ends"],
+    ],
+  },
+  // 세계수 탭 창(FarmTabWindow) 줄 아이콘 (2026-10-16) — 아이콘은 규격이 같아 한 장에 몰아 뽑는다
+  {
+    id: "icons_farm", rows: 3, cols: 4, grid: true, sliceAs: [4, 3], out: "Icons",   // 4행×3열로 와서 그대로 자른다 (읽는 순서 같음)
+    refs: [raw("icons_a"), OBJ],
+    subject: "Menu icons for the cozy World Tree screen of a mushroom-spirit idle game, readable at 48 px, in the flat matte watercolor style of the attached icon sheet (no outlines, no gloss, no glow, no sparkles, no text). Each icon = ONE big chunky main object, simple big shapes, soft low-saturation palette with one warm accent, centered with empty space around it.",
+    items: [
+      ["f_ring", "TREE RINGS: a round cross-section slice of a tree trunk showing concentric growth rings, a tiny green sprout on its bark edge"],
+      ["f_tribute", "OFFERING: a small woven tray holding a neat heap of three little mushrooms, offered up"],
+      ["f_zone", "ZONES: a small folded treasure-map style leaf map with three dotted round spots on it"],
+      ["f_request", "REQUEST: a round cream speech bubble with a small red mushroom drawn inside it"],
+      ["f_box", "LITTLE ONE'S BOX: a small wooden gift chest tied with a moss-green ribbon bow"],
+      ["f_bless", "BLESSING: a single big glowing-looking green leaf held in a soft cupped pale-gold halo shape (painted, no glow effect)"],
+      ["f_beauty", "BEAUTY: a pink blossom flower with five round petals and a tiny butterfly beside it"],
+      ["f_set", "SET: three small round wooden charms hanging together from one short twig"],
+      ["f_evolve", "EVOLVE: a small sapling in a clay pot with a bold upward arrow beside it"],
+      ["f_slot", "EMPTY SLOT: a round empty wooden picture frame ring with a small brass hook on top"],
+      ["f_recipe", "RECIPE: a rolled parchment scroll tied with twine, a tiny pencil across it"],
+      ["f_craft", "CRAFTING: a small wooden mallet and a chisel crossed over a little wood block"],
+    ],
+  },
 ];
 
 // Upgrade-tree node slots (user 2026-10-16): one picture per state instead of stacked glow / ring / disc circles.
@@ -475,4 +543,230 @@ const scenes = [
 ];
 
 // critters come after KEEP so their cap_<id> slices win over the shared-body critter_parts caps
-export const SHEETS = [...mushrooms, ...KEEP.map(fromDoodle), ...critters, grandpa, tree, slots, ...fx, ...icons, ...lettering, ...env, ...bgs, ...scenes];
+
+// 2026-10-16 꼬마버섯 통짜 그림 (갓이 몸통에 붙은 한 장, 부품 리그 없음). 한 시트 = 꼬마 4종(열) × 모습 5가지(행):
+// 기본 · 따기(pick) · 오르기(climb) · 나르기(carry) · 스킨(skin). 같은 꼬마는 같은 열이라 모습끼리 맞는다.
+const KID_LOOK = {
+  fire: "FIRE SPIRIT: tall and lively; the whole body is living flame in warm coral, apricot and butter yellow; hair is one big flickering flame swept upward; a few tiny ember sparks around; below the waist the body thins into a single curling tongue of flame; bold eyebrows and a cheeky grin",
+  dew: "WATER SPIRIT: round and soft; the body is clear flowing sky-blue water with tiny bubbles inside and lighter ripples; hair is a splashing wave ponytail with a few droplets; below the waist a swirling little whirlpool tail; gentle smile",
+  wind: "WIND SPIRIT: the slimmest and tallest; the body is pale translucent mint air with soft swirl lines; long hair streams sideways like wind ribbons; below the waist a thin spiraling whirlwind tail; playful wink",
+  rock: "EARTH SPIRIT: the widest and heaviest, broad shoulders and big stone fists; the body is smooth warm grey-beige stone with thin amethyst crystal veins; hair is a cap of green moss with a small crystal; below the waist it sits on a floating chunk of rock instead of a tail; calm steady face with thick eyebrows",
+  spark: "LIGHTNING SPIRIT: sharp angular zigzag silhouette; the body is crackling pale yellow-white electricity with small blue arcs; hair is spiky zigzag bolts; below the waist a jagged lightning-bolt tail; wide excited eyes and a toothy grin",
+  leaf: "NATURE SPIRIT: the smallest and plumpest; the body is soft fresh leaf-green with a pale cream belly and fine leaf veins; hair is layered round leaves with one small white flower; below the waist a curl of vine with two tiny leaves; cheerful open smile",
+  moon: "MOON SPIRIT: serene and elegant; the body is translucent night-blue and periwinkle; a thin silver crescent moon ornament crowns the hair; a long starry night veil flows behind; below the waist the veil trails into a soft tail of tiny stars; calm half-closed eyes",
+  star: "STAR SPIRIT: sparkly and bright; the body is pale gold and lilac starlight; hair spreads into five soft rounded star points; below the waist a twinkling comet tail of tiny dots; big starry eyes and a happy smile",
+};
+const KID_SKIN = {
+  fire: "LAVA skin: the flame body turns deep magma red with dark basalt flecks and molten orange cracks",
+  dew: "SNOWFLAKE skin: the water body turns frosty pale ice-blue with little snowflake patterns, the ponytail ends in an icicle",
+  wind: "CLOUD skin: the air body becomes fluffy white cloud puffs with a tiny rainbow in the swirl tail",
+  rock: "JEWEL skin: the stone body is studded with faceted pastel crystals and a big pink gem on top",
+  spark: "NEON skin: the lightning turns candy pink and electric teal, small round sunglasses",
+  leaf: "CHERRY-BLOSSOM skin: the leaf hair turns pale sakura pink with small blossoms, a petal on the cheek",
+  moon: "SUN skin: the crescent becomes a warm little smiling sun and the night veil turns sunflower yellow",
+  star: "GALAXY skin: the starlight body turns deep night-blue sprinkled with tiny stars and a pastel nebula swirl",
+};
+const KID_ROWS = [
+  ["", (k) => `${KID_LOOK[k]}. BASE LOOK: no clothes, tiny arms slightly out`],
+  ["_pick", (k) => `${KID_LOOK[k]}. PICKING OUTFIT: a small straw sun hat perched on its head, a short canvas apron with a pocket, holding a little woven harvest basket in both hands`],
+  ["_climb", (k) => `${KID_LOOK[k]}. CLIMBING OUTFIT: a small round yellow safety helmet perched on its head, a rope harness around the body with a coiled rope over one shoulder, reaching one hand up as if climbing`],
+  ["_carry", (k) => `${KID_LOOK[k]}. CARRYING OUTFIT: a wooden A-frame back carrier (jige) on its back loaded with a big cloth bundle of mushrooms, a sweat towel around the neck, leaning slightly forward`],
+  ["_skin", (k) => `${KID_LOOK[k]}. ${KID_SKIN[k]}, otherwise exactly the same spirit`],
+];
+const KID_SUBJECT = "Cute little ELEMENTAL SPIRITS who live in a giant world tree in a cozy dreamy forest game, in the spirit of MapleStory Arcana spirits and Pixar Elemental characters: a small humanoid upper body (head, torso, tiny arms and hands) whose WHOLE BODY IS MADE OF ITS OWN ELEMENT, and instead of legs the lower body flows into an elemental wisp tail, so they float. Big expressive eyes with catchlights, small mouth, cute chibi head about one third of the height. Painted in the flat matte watercolor style of the attached title-screen painting (soft paper grain, soft colors, no hard outlines, no gloss, no outer glow halo; any light is painted inside the body). They are NOT mushrooms and NOT round blobs: each spirit has a clearly different silhouette, body build and size as described, so all eight are told apart at 64 px. Every picture is centered in its cell and fills it the same way, front three-quarter view, no ground, no shadow.";
+const SPIRIT_REF = "Art/Raw_Dream/concept/spirits.png";   // 확정 시안 (2026-10-16, 4행 × 2열: 불·물 / 바람·땅 / 번개·새싹 / 달·별)
+// 기본 모습 8종 한 장(먼저 승인) → 복장·스킨은 기본 시트를 참고로 4종 × 4행 두 장
+const KID_ORDER = ["fire", "dew", "wind", "rock", "spark", "leaf", "moon", "star"];
+const kidBase = {
+  // 시안을 그대로 참고하면 어두운 빛 번짐 배경까지 따라 그려서, 투명하게 나온 복장 시트 두 장을 참고로 쓴다
+  id: "spirits_base", rows: 2, cols: 4, out: "Characters/Kids", refs: [raw("spirits_a"), raw("spirits_b")],
+  subject: KID_SUBJECT + " Draw the eight spirits EXACTLY as they look in the two attached sheets (same shapes, colors, faces) but with NO hat, NO clothes, NO bag, NO tools: just the bare spirit, one per cell, neutral floating pose, arms slightly out. Order left to right, top to bottom: FIRE, WATER, WIND, EARTH / LIGHTNING, NATURE, MOON, STAR. FULLY TRANSPARENT BACKGROUND: no dark backdrop, no colored glow or light bloom behind or around the spirits.",
+  items: KID_ORDER.map((k) => [k, KID_ROWS[0][1](k)]),
+};
+const kidSheet = (id, kinds) => ({
+  id, rows: 4, cols: 4, out: "Characters/Kids", refs: [SPIRIT_REF, PILOT],
+  subject: KID_SUBJECT + " FULLY TRANSPARENT BACKGROUND: no dark backdrop, no colored glow or light bloom around the spirits. Draw each spirit EXACTLY as it looks in the attached spirit concept sheet. Each COLUMN is one spirit (same shape, colors, face); each ROW is one look. Columns left to right: " + kinds.map((k) => k.toUpperCase()).join(", ") + ".",
+  items: KID_ROWS.slice(1).flatMap(([suf, desc]) => kinds.map((k) => [k + suf, desc(k)])),
+});
+const kids = [kidBase, kidSheet("spirits_a", ["fire", "dew", "wind", "rock"]), kidSheet("spirits_b", ["spark", "leaf", "moon", "star"])];
+
+
+// 2026-10-16 정령 부품 리그: 머리(얼굴+머리카락) · 몸통+꼬리(팔·머리 없음) · 팔(보는 쪽 왼팔 하나, 반대는 뒤집음).
+// 복장은 몸통만 바꾼다 (모자는 공용 그림을 머리에 얹음). 스킨은 머리·몸통·팔 셋 다. 자리는 통짜 그림에 대어 자동으로 맞춘다
+// (Tools/art/fit_spirit_parts.py). 한 정령 = 3행: [head, torso, arm] / [torso_pick, torso_climb, torso_carry] / [head_skin, torso_skin, arm_skin]
+const PART_RULE = "A CUT-OUT PARTS SHEET for 2D puppet animation of cute elemental spirits, on a FULLY TRANSPARENT background, no glow, no shadow. Every part is drawn separately with clear empty space around it, at EXACTLY the same scale as the matching spirit in the attached sheets, front view, so the parts can be stacked back into the same character. HEAD part = the head with its face and all of its hair/flame/crown, cut cleanly at the neck (nothing below the chin except a short neck stub). TORSO part = the body from the neck down INCLUDING the whole lower wisp tail (or floating rock base), with NO head and NO arms: just smooth round shoulders where the arms attach. ARM part = only the spirit's LEFT arm as seen by the viewer, hanging down, from the shoulder to the tiny hand. Outfit torsos wear the outfit painted on the torso exactly as in the attached outfit sheet but without the hat. Keep the flat matte watercolor look of the attached sheets.";
+const partRows = (k, name) => [
+  [`p_${k}_head`, `${name} HEAD (face and hair, no hat)`], [`p_${k}_torso`, `${name} TORSO with tail, no arms, no clothes`], [`p_${k}_arm`, `${name} LEFT ARM`],
+  [`p_${k}_torso_pick`, `${name} TORSO wearing the picking outfit: canvas apron, a woven basket held against the tummy, no arms`],
+  [`p_${k}_torso_climb`, `${name} TORSO wearing the climbing outfit: rope harness and a coiled rope over one shoulder, no arms`],
+  [`p_${k}_torso_carry`, `${name} TORSO wearing the carrying outfit: wooden A-frame back carrier loaded with a cloth bundle of mushrooms behind the back, towel around the neck, no arms`],
+  [`p_${k}_head_skin`, `${name} HEAD in its skin colors (see the skin row of the attached outfit sheet)`], [`p_${k}_torso_skin`, `${name} TORSO with tail in its skin colors, no arms`], [`p_${k}_arm_skin`, `${name} LEFT ARM in its skin colors`],
+];
+// style: 이미 잘 나온 부품 시트 하나를 그림체 참고로 더 붙인다 (번개·새싹 첫 시트가 외곽선 있는 애니풍으로 나와서, 2026-10-16)
+const spiritParts = (id, kinds, names, ref, style) => ({
+  id, rig: true, rows: kinds.length * 3, cols: 3, out: "Characters/Spirits", refs: [raw("spirits_base"), raw(ref), ...(style ? [raw(style)] : [])],
+  subject: PART_RULE + (style ? " PAINTING STYLE: match the attached cut-out parts sheet of other spirits EXACTLY (soft textured watercolor with visible paper grain and faceted color patches, NO outlines, NO line art, NO cel shading, the same soft eyes with no dark outline around the face), and paint the faces exactly like the matching spirit in the attached full-spirit sheet." : "") + " Rows top to bottom: " + kinds.map((k, i) => `three rows for the ${names[i]}`).join(", ") + ".",
+  items: kinds.flatMap((k, i) => partRows(k, names[i])),
+});
+const spiritPartSheets = [
+  spiritParts("parts_pilot", ["fire", "rock"], ["FIRE SPIRIT", "EARTH SPIRIT"], "spirits_a"),
+  { ...spiritParts("parts_dew_wind", ["dew", "wind"], ["WATER SPIRIT", "WIND SPIRIT"], "spirits_a"), sliceAs: [3, 6] },   // 3행 × 6열로 나옴
+  { ...spiritParts("parts_spark_leaf", ["spark", "leaf"], ["LIGHTNING SPIRIT", "NATURE SPIRIT"], "spirits_b", "parts_dew_wind"), sliceAs: [3, 6] },
+  { ...spiritParts("parts_moon_star", ["moon", "star"], ["MOON SPIRIT", "STAR SPIRIT"], "spirits_b"), sliceAs: [3, 6] },
+];
+
+// 2026-10-16 정령 표정: 머리는 눈·눈썹·입을 지운 빈 얼굴(build_spirit_faces.py가 원래 머리에서 잘라 냄), 표정은 얼굴 층만 갈아 끼운다.
+// 기본 얼굴은 원래 머리에서 떼어 낸 것, 나머지 6개는 여기서 "이목구비만" 그려서 기본 얼굴 크기·자리에 맞춘다.
+// 한 정령 = 2행 × 3열: [blink, happy, surprise] / [love, effort, tired]. 참고 그림 = 원래 머리 | 떼어 낸 기본 얼굴 (정령마다 한 줄)
+const FACE_RULE = "A FACE-PARTS SHEET for 2D puppet animation: ONLY the facial features (the two eyes, the two eyebrows and the mouth) of the spirits in the attached reference, on a FULLY TRANSPARENT background. NO head, NO skin, NO face outline, NO hair, NO blush, NO sweat drops, NO tears, NO symbols or effects: just the separate painted feature marks floating in empty space, laid out exactly as they sit on the face (eyes level, eyebrows above them, mouth centred below). The reference shows each spirit's head and, next to it, its neutral face features alone: copy that spirit's exact feature style (shape language, stroke colours, eye colour, eyelashes or fangs), eye size, eye spacing and eyebrow position, and draw every expression at the SAME size as that neutral face, filling its cell the same way; only what the expression changes may change. Flat matte watercolor like the reference, no outlines added, no glow.";
+const FACE_EXPR = [
+  ["blink", "BLINK: both eyes gently closed as soft downward curves, the usual calm eyebrows, the usual mouth"],
+  ["happy", "HAPPY: eyes closed in happy upward arcs (like ^ ^), a big open smile"],
+  ["surprise", "SURPRISED: eyes wide open and round, eyebrows raised high, a small round open 'o' mouth"],
+  ["love", "LOVE: both eyes are small pink-red hearts, relaxed eyebrows, a wide open smile"],
+  ["effort", "EFFORT: determined slightly narrowed eyes, eyebrows angled down toward the middle, mouth clenched in a straight grit"],
+  ["tired", "TIRED: droopy half-closed eyes, eyebrows slanting up in the middle, a small wavy mouth"],
+];
+const spiritFaces = (id, kinds, names, ref) => ({
+  id, grid: true, rows: kinds.length * 2, cols: 3, out: "../../../../Art/Raw_Dream/faces", refs: [ref],
+  subject: FACE_RULE + " Rows top to bottom: " + kinds.map((k, i) => `two rows for the ${names[i]} (reference row ${i + 1})`).join(", ") + ".",
+  items: kinds.flatMap((k, i) => FACE_EXPR.map(([e, d]) => [`f_${k}_${e}`, `${names[i]} face features, ${d}`])),
+});
+const spiritFaceSheets = [
+  spiritFaces("faces_pilot", ["fire", "rock"], ["FIRE SPIRIT", "EARTH SPIRIT"], raw("faces_ref_pilot")),
+  spiritFaces("faces_dew_wind", ["dew", "wind"], ["WATER SPIRIT", "WIND SPIRIT"], raw("faces_ref_dew_wind")),
+  spiritFaces("faces_spark_leaf", ["spark", "leaf"], ["LIGHTNING SPIRIT", "NATURE SPIRIT"], raw("faces_ref_spark_leaf")),
+  spiritFaces("faces_moon_star", ["moon", "star"], ["MOON SPIRIT", "STAR SPIRIT"], raw("faces_ref_moon_star")),
+];
+
+// 2026-10-16 정령 진화 컨셉 (사용자): ★0 그냥 버섯 → ★3 귀여운 수인형 버섯 정령, 4모습이 점점 변하는 게 보이게. 그림체는 지금 게임(몽환 수채).
+// 원소별 실제 버섯: leaf 이끼·녹색 · dew 젖버섯(쪽빛) · wind 느타리(흰) · fire 광대버섯(빨강) · rock 그물버섯(갈색) · spark 꾀꼬리버섯(노랑) · moon 발광 버섯 · star 먼지버섯(별)
+// 리깅 메모: 버섯 모습(★0·★1)은 갓과 대를 나누지 않고 몸통 한 장(갓 붙은 대)으로 리깅한다 — 갓을 따로 떼면 갓 밑면에 몸통 자리를
+// 파내야 했고(갓마다 손으로 좌표, 시트를 다시 그리면 다시 찍기, 납작한 갓은 못 팜) 문제가 많았다 (2026-10-15_몽환수채화_2.md)
+const EVO_SPECIES = {
+  fire: "FIRE: a FLY AGARIC (Amanita muscaria): glossy-matte red cap with soft white warts, white stem with a little skirt ring; warm ember accents",
+  dew: "WATER: an INDIGO MILK CAP (Lactarius indigo): soft indigo-blue funnel cap with darker blue rings, pale blue gills that drip tiny dew drops; cool watery accents",
+  leaf: "NATURE: a MOSSY GREEN mushroom (like a green russula with soft moss on the cap and a tiny sprout on top): sage-green cap, cream stem; leafy accents",
+  wind: "WIND: an OYSTER MUSHROOM (Pleurotus): pale cream-white fan-shaped wavy cap that sweeps to one side as if in a breeze, soft gills; airy breezy accents",
+  rock: "EARTH: a PORCINI (Boletus edulis): round chestnut-brown bun cap, thick pale stout stem with a fine net pattern; small pebble accents",
+  spark: "LIGHTNING: a GOLDEN CHANTERELLE (Cantharellus): bright golden-yellow trumpet cap with wavy edge and forked ridges; little zigzag spark accents",
+  moon: "MOON: a GLOWING night mushroom (bioluminescent, like Mycena): slender bell cap in soft lavender-night blue that glows faint mint from within (painted, no halo), thin pale stem; crescent moon accents",
+  star: "STAR: an EARTHSTAR (Geastrum): a round puffball sitting on star-shaped outer rays like petals, warm cream and soft gold with a star tip; twinkling star accents",
+};
+const EVO_V1 = "Art/Raw_Dream/concept/evo_v1.png";   // 확정 시안 (불·물 4모습)
+// 사용자 확정 (2026-10-16): 첫 시안(v1) 느낌으로. 무드보드(유아 카와이 덩어리 · 성장 흐느적 버섯 사람 · 최종 버섯 요정)로 다시 그린 v2는
+// Art/Raw_Dream/_rejected/evo_pilot_v2.png 에 보관 (선택 안 됨)
+const EVO_FORMS = [
+  "FORM 0 (★0): just a small cute MUSHROOM with a face: the cap and a short chubby stem in one piece, a simple cute face on the stem under the cap, tiny nub feet, NO arms, NO hair, it still reads mostly as a mushroom",
+  "FORM 1 (★1): a mushroom sprout-critter: the same cap a little bigger, the stem grows into a small round body with two tiny stubby arms and tiny feet, the face a bit more expressive; still clearly a mushroom",
+  "FORM 2 (★2): a mushroom child spirit: about 2 heads tall, a small head with a face and short hair-like strands of gill under the cap, the cap worn like a big hat, the stem becomes a little dress-like body with a gill ruffle, short arms with small hands, short legs",
+  "FORM 3 (★3): the final cute HUMANOID MUSHROOM SPIRIT: about 2.5 heads tall chibi, the cap is a big elegant hat-like cap over soft hair, the gills become a flowing ruffled skirt, the stem pattern becomes the outfit, slender arms with hands, small legs and feet, a gentle magical charm and a small element motif; graceful and cute, not scary",
+];
+// 그림체 (2026-10-16 사용자: 기존 그림체와 이질적 → 코드 필터 말고 그림 자체를 다시): 펠트·인형 질감과 입체 음영이 나왔던 첫 판을
+// 배경·기존 정령처럼 맑은 수채로 다시 그린다. 디자인은 확정 시안 그대로 (첫 판은 concept/evo_*_v1.png 로 남겨 디자인 참고로 씀)
+const EVO_STYLE = "PAINTING STYLE (most important): paint exactly like the attached title-screen painting and the attached watercolor spirit sheet of this game: light transparent watercolor washes on paper, visible paper grain, soft faceted colour patches inside each area, a thin slightly darker pigment edge where a wash dried, gentle pastel colours, flat soft lighting. NOT felt, NOT plush, NOT fuzzy or fabric texture, NOT 3D rendered, no airbrush gradients, no hard black outlines. Faces: small soft dark-brown dot eyes, soft blush.";
+const EVO_STYLE_REFS = [PILOT, raw("spirits_base")];
+const evoDesign = (id) => `Art/Raw_Dream/concept/${id}_v1.png`;   // 첫 판 (디자인만 참고)
+const evoConcept = {
+  id: "evo_pilot", rows: 2, cols: 4, grid: true, out: "Characters/Evo", refs: [evoDesign("evo_pilot"), ...EVO_STYLE_REFS],
+  subject: "EVOLUTION LINE sheet for a cozy dreamy forest game: each ROW is ONE mushroom spirit evolving left to right through four forms, from a plain cute mushroom to a cute humanoid mushroom spirit. Keep EXACTLY the designs, proportions, poses and sizes of the attached evolution concept (the first attached image), only repaint them in the game's watercolor style. " + EVO_STYLE + " Front three-quarter view, centered in each cell, FULLY TRANSPARENT BACKGROUND, no ground, no shadow, no text. Rows top to bottom: FIRE spirit, WATER spirit.",
+  items: ["fire", "dew"].flatMap((k) => EVO_FORMS.map((f, i) => [`evo_${k}_${i}`, `${EVO_SPECIES[k]}. ${f}`])),
+};
+
+// 나머지 6종 진화 줄: 정령마다 한 줄 × 4모습. 이 통짜 그림이 칸·아이콘 그림이자 부품 시트의 기준 (크기 k도 여기서)
+const evoLine = (id, kinds) => ({
+  id, rows: kinds.length, cols: 4, grid: true, out: "Characters/Evo", refs: [evoDesign(id), ...EVO_STYLE_REFS],
+  subject: "EVOLUTION LINE sheet for a cozy dreamy forest game: each ROW is ONE mushroom spirit evolving left to right through four forms (plain cute mushroom, mushroom sprout-critter with stubby arms, mushroom child spirit with hair and a gill dress, final humanoid mushroom spirit with long hair, a ruffled gill skirt and a small element motif by one hand). Keep EXACTLY the designs, proportions, poses and sizes of the first attached sheet, only repaint them in the game's watercolor style. " + EVO_STYLE + " Front three-quarter view, centered in each cell, FULLY TRANSPARENT BACKGROUND, no ground, no shadow, no text. Rows top to bottom: " + kinds.map((k) => k.toUpperCase()).join(", ") + ".",
+  items: kinds.flatMap((k) => EVO_FORMS.map((f, i) => [`evo_${k}_${i}`, `${EVO_SPECIES[k]}. ${f}`])),
+});
+const evoLines = [evoLine("evo_line_a", ["leaf", "wind", "rock"]), evoLine("evo_line_b", ["spark", "moon", "star"])];
+
+// 진화 부품 시트 (2026-10-16 사용자: 다리도 리깅 · 머리카락은 확실히 뒤로 — 손·몸통을 가리지 않게 따로 그림). 정령 하나 = 3행 × 5열 고정 격자:
+// [★2 머리 · 뒷머리 · 몸통 · 팔 · 다리] / [★3 같은 순서] / [★0 몸 · ★1 몸] (★0·★1은 갓과 대를 나누지 않은 한 장)
+const EVO_PART_RULE = "A CUT-OUT PARTS SHEET for 2D puppet animation, on a FULLY TRANSPARENT background, no glow, no shadow, no text. Every part is drawn separately with clear empty space around it, at EXACTLY the same scale and colors as the matching form of this spirit in the attached evolution line, front view, so the parts stack back into the same character. " + EVO_STYLE + " PART RULES: HEAD = the face, the cap worn on it and ONLY the short front bangs that frame the face; the long hair is NOT part of the head; cut cleanly at the neck with a short neck stub under the chin. BACK HAIR = only the long hair mass as it hangs BEHIND the head and shoulders (the back layer of the hairstyle, the full hair silhouette), with NO face, NO cap, NO body. TORSO = the dress or skirt from a short neck stub at the top down to the hem, with smooth round shoulder nubs on both sides, and NO head, NO arms, NO hands, NO legs, NO feet (just the clean hem at the bottom). ARM = only the viewer's LEFT arm, hanging straight down, from a round shoulder end to the small hand. LEG = only the viewer's LEFT leg with its little shoe, hanging straight down, with a round hip end at the top (the legs come out from under the skirt). BODY (first two forms only) = the cap and the stem/body as ONE piece, never cut the cap off, with the face and the tiny feet.";
+const evoParts = (k) => ({
+  id: `evo_parts_${k}`, grid: true, rows: 3, cols: 5, out: "Characters/Evo",
+  refs: [raw(["fire", "dew"].includes(k) ? "evo_pilot" : ["leaf", "wind", "rock"].includes(k) ? "evo_line_a" : "evo_line_b"), ...EVO_STYLE_REFS],
+  subject: EVO_PART_RULE + ` The spirit: ${EVO_SPECIES[k]}. Use the ${k.toUpperCase()} row of the first attached evolution line.`,
+  items: [
+    [`e_${k}_2_head`, "FORM 2 HEAD: face, cap and short front bangs only, short neck stub"],
+    [`e_${k}_2_hair`, "FORM 2 BACK HAIR: the short bob hair mass behind the head, no face, no cap"],
+    [`e_${k}_2_torso`, "FORM 2 TORSO: little gill dress, neck stub, shoulder nubs, no arms, no legs"],
+    [`e_${k}_2_arm`, "FORM 2 LEFT arm, hanging down"],
+    [`e_${k}_2_leg`, "FORM 2 LEFT short leg with shoe, hanging down, round hip end"],
+    [`e_${k}_3_head`, "FORM 3 HEAD: face, big cap and short front bangs only, short neck stub"],
+    [`e_${k}_3_hair`, "FORM 3 BACK HAIR: the long flowing hair mass behind the head and shoulders, no face, no cap"],
+    [`e_${k}_3_torso`, "FORM 3 TORSO: ruffled gill skirt gown, neck stub, shoulder nubs, no arms, no hands, no legs"],
+    [`e_${k}_3_arm`, "FORM 3 LEFT slender arm with hand, hanging down"],
+    [`e_${k}_3_leg`, "FORM 3 LEFT leg with small shoe, hanging down, round hip end"],
+    [`e_${k}_0_body`, "FORM 0 whole body: cap and stem in one piece, face, tiny feet, no arms"],
+    [`e_${k}_1_body`, "FORM 1 whole body: cap and round body in one piece, face, tiny stubby arms and tiny feet painted on"],
+  ],
+});
+const evoPartSheets = ["fire", "dew", "leaf", "wind", "rock", "spark", "moon", "star"].map(evoParts);
+// 진화 정령 표정: 모든 정령·모습이 같은 점눈 얼굴이라 표정 한 벌을 같이 쓴다 (fit_evo_parts.py가 모습마다 기본 얼굴 눈 간격에 맞춤)
+const evoFaces = {
+  id: "evo_faces", grid: true, rows: 2, cols: 3, out: "../../../../Art/Raw_Dream/faces", refs: [raw("faces_ref_evo")],
+  subject: FACE_RULE.replace("The reference shows each spirit's head and, next to it, its neutral face features alone", "The reference shows two spirits and, next to each, its neutral face features alone (simple round dark dot eyes and a small curved mouth)") + " All six cells are the SAME character's face features (the simple dot-eyed face of the reference), drawn at the same size as the reference's neutral features.",
+  items: FACE_EXPR.map(([e, d]) => [`fe_${e}`, d]),
+};
+
+// 공용 맨몸 틀 + 부위별 한 장씩 (2026-10-16 사용자: 시트에 몰아 그리면 칸이 빠짐 · 복장은 정령끼리 공용).
+// 층: 맨몸(공용 몸통 바탕·팔·다리) / 복장(공용: 옷·신발) / 정령 머리(갓+얼굴+앞머리) / 정령 뒷머리 / 얼굴(공용 표정).
+// 먼저 공용 마네킹(kit_base_<★>) 한 장 → 모든 부위가 그 크기를 기준으로 그린다. 지금은 ★3 불 예시만.
+const KIT_ONE = "ONE single cut-out part for 2D puppet animation, alone and centered, on a FULLY TRANSPARENT background, no glow, no shadow, no ground, no text. Front view, drawn at EXACTLY the scale of the attached base mannequin (the first attached image) so it stacks back onto it. " + EVO_STYLE;
+const KIT_BASE_3 = "kit_base_3";
+const kitOne = (id, refs, subject) => ({ id, rows: 1, cols: 1, grid: true, out: "Characters/EvoKit", refs: [...refs, ...EVO_STYLE_REFS], subject, items: [[id, subject.slice(0, 80)]] });
+
+// 정령별 머리·뒷머리 (★2·★3). 진화 줄 그림에서 그 정령의 줄·칸을 짚어 준다. ★2 뒷머리는 턱선 단발 (2026-10-16 사용자: 머리 짧게)
+const EVO_KIDS = ["fire", "dew", "leaf", "wind", "rock", "spark", "moon", "star"];
+const EVO_ROW = { fire: ["evo_pilot", "top"], dew: ["evo_pilot", "bottom"], leaf: ["evo_line_a", "top"], wind: ["evo_line_a", "middle"], rock: ["evo_line_a", "bottom"], spark: ["evo_line_b", "top"], moon: ["evo_line_b", "middle"], star: ["evo_line_b", "bottom"] };
+const EVO_COL = { 2: "third column", 3: "rightmost column" };
+const kitBaseOf = (f) => (f === 2 ? "kit_base_2" : KIT_BASE_3);
+const kitHead = (k, f) => kitOne(`kit_${k}_${f}_head`, [raw(kitBaseOf(f)), raw(EVO_ROW[k][0])], KIT_ONE + ` PART: the ${k.toUpperCase()} spirit's HEAD for the mannequin: the face (small dark dot eyes, soft blush, small smile), its mushroom cap worn like a hat (${EVO_SPECIES[k]}), and ONLY the short front bangs framing the face, copied from the FORM ${f} ${k.toUpperCase()} spirit (${EVO_ROW[k][1]} row, ${EVO_COL[f]}) of the attached evolution sheet; the back hair is NOT included; cut cleanly at the neck with a short neck stub under the chin.`);
+const kitHair = (k, f) => kitOne(`kit_${k}_${f}_hair`, [raw(kitBaseOf(f)), raw(EVO_ROW[k][0])], KIT_ONE + ` PART: the ${k.toUpperCase()} spirit's BACK HAIR only: the ${f === 3 ? "long hair mass" : "SHORT chin-length bob hair"} of the FORM ${f} ${k.toUpperCase()} spirit (${EVO_ROW[k][1]} row, ${EVO_COL[f]}) of the attached evolution sheet as it hangs BEHIND the head ${f === 3 ? "and shoulders down to the waist" : "ending at the chin and jaw line, NOT reaching the shoulders, small and neat, only a little wider than the face"}, the full back silhouette of the hairstyle in that spirit's hair colour, with NO face, NO cap, NO body.`);
+// ★2 공용 틀: 마네킹 · 몸통 · 드레스 · 신발 신은 다리 (팔은 생성기 필터에 막혀 예전 불 ★2 팔을 공용으로 씀)
+const kitBase2 = [
+  { id: "kit_base_2", rows: 1, cols: 1, grid: true, out: "Characters/EvoKit", refs: [raw("evo_pilot"), raw(KIT_BASE_3), ...EVO_STYLE_REFS],
+    subject: "A SHARED BASE MANNEQUIN for a 2D puppet: the plain body of the FORM 2 (★2) mushroom child spirit of the attached evolution sheet (top row, third column), same height and proportions (about 2 heads tall, smaller and chubbier than the second attached mannequin) and pale cream skin, drawn in the SAME way as the second attached mannequin: NO mushroom cap, NO hair, NO face (a smooth blank round head), wearing only a plain simple sleeveless cream short slip dress, arms hanging down slightly away from the body, legs slightly apart. Front view, symmetric, standing straight. " + EVO_STYLE + " FULLY TRANSPARENT BACKGROUND, no ground, no shadow, no text.",
+    items: [["kit_base_2", "base mannequin 2"]] },
+  kitOne("kit_body_2_torso", [raw("kit_base_2")], KIT_ONE + " PART: the mannequin's TORSO only, in its plain cream slip: from a short neck stub at the top down to the hem, with smooth round shoulder nubs, NO head, NO arms, NO legs."),
+  kitOne("kit_outfit_gill_2_dress", [raw("kit_base_2"), raw("evo_pilot")], KIT_ONE + " PART: an OUTFIT piece worn over the mannequin's torso: the little cream mushroom-gill dress of the FORM 2 fire spirit in the attached evolution sheet (top row, third column) with a petal collar and a short gill ruffle skirt, shaped to fit EXACTLY over the mannequin's torso: from a neck opening at the top to the skirt hem, covering the shoulder nubs, with NO head, NO arms, NO legs, NO body visible."),
+  kitOne("kit_outfit_gill_2_leg", [raw("evo_pilot")], KIT_ONE.replace("the attached base mannequin (the first attached image)", "the FORM 2 spirit of the attached evolution sheet") + " PART: a cartoon puppet piece: ONE very short stubby LEG of the chibi mushroom child spirit (top row, third column of the attached sheet) WEARING its little soft brown shoe, exactly as the legs peek out under the skirt: cream, slightly rounded top end, the shoe toe pointing a little outward, hanging straight down. Simple, cute, toy-like."),
+];
+const kitSheets = [
+  { id: KIT_BASE_3, rows: 1, cols: 1, grid: true, out: "Characters/EvoKit", refs: [raw("evo_pilot"), ...EVO_STYLE_REFS],
+    subject: "A SHARED BASE MANNEQUIN for a 2D puppet: the plain body of the FORM 3 (★3) mushroom spirit girl of the attached evolution sheet (top row, rightmost), same height, proportions (about 2.5 heads tall chibi) and pale cream skin, but with NO mushroom cap, NO hair, NO face (a smooth blank round head), wearing only a plain simple sleeveless cream knee-length slip dress, bare arms hanging down slightly away from the body, legs slightly apart, bare feet. Front view, symmetric, standing straight. " + EVO_STYLE + " FULLY TRANSPARENT BACKGROUND, no ground, no shadow, no text.",
+    items: [[KIT_BASE_3, "base mannequin"]] },
+  kitOne("kit_body_3_torso", [raw(KIT_BASE_3)], KIT_ONE + " PART: the mannequin's TORSO only, in its plain cream slip: from a short neck stub at the top down to the hem, with smooth round shoulder nubs, NO head, NO arms, NO legs."),
+  // 팔(kit_body_3_arm)은 생성기 안전 필터에 계속 막혀(맨팔·소매·인형 팔 모두) 정의를 뺐다 — 예전 불 팔(e_fire_3_arm·e_fire_2_arm)을 EvoKit/kit_body_<모습>_arm.png로 복사해 공용으로 씀
+  // 다리는 신발까지 한 장 (2026-10-16 사용자: 발을 따로 나눌 필요 없음) → 복장 부품: 복장을 바꾸면 다리째 바꾼다
+  kitOne("kit_outfit_gill_3_leg", [raw("evo_pilot")], KIT_ONE.replace("the attached base mannequin (the first attached image)", "the FORM 3 spirit of the attached evolution sheet") + " PART: a cartoon puppet piece: ONE short LEG of the chibi mushroom spirit (top row, rightmost of the attached sheet) WEARING its little soft brown shoe, exactly as the legs peek out under the skirt in the attached sheet: slim and gently tapered, cream, slightly rounded top end, the shoe toe pointing a little outward, hanging straight down. Simple, cute, toy-like."),
+  kitOne("kit_outfit_gill_3_dress", [raw(KIT_BASE_3), raw("evo_pilot")], KIT_ONE + " PART: an OUTFIT piece that is worn over the mannequin's torso: the cream ruffled mushroom-gill dress of the FORM 3 fire spirit in the attached evolution sheet (petal collar, layered ruffled gill skirt), shaped to fit EXACTLY over the mannequin's torso: from a neck opening at the top to the skirt hem, covering the shoulder nubs, with NO head, NO arms, NO legs, NO body visible."),
+  // (예전 신발 따로) kitOne("kit_outfit_gill_3_shoe", [raw(KIT_BASE_3), raw("evo_pilot")], KIT_ONE + " PART: an OUTFIT piece: ONE small soft brown shoe for the mannequin's LEFT foot (like the shoes of the FORM 3 spirit in the attached evolution sheet), front view, fitting EXACTLY over the mannequin's bare foot."),
+  ...kitBase2,
+  // ★2 뒷머리는 kitHair2Sheets (짧은 단발 4칸 시트)
+  ...EVO_KIDS.flatMap((k) => [2, 3].flatMap((f) => (k === "fire" && f === 3 ? [] : f === 2 ? [kitHead(k, f)] : [kitHead(k, f), kitHair(k, f)]))),
+  // 불 ★3 (첫 예시, 문구 그대로 둬야 다시 뽑히지 않는다)
+  kitOne("kit_fire_3_head", [raw(KIT_BASE_3), raw("evo_pilot")], KIT_ONE + " PART: the FIRE spirit's HEAD for the mannequin: the face (small dark dot eyes, soft blush, small smile), the big red fly agaric cap with white warts worn like a hat, and ONLY the short cream front bangs framing the face, copied from the FORM 3 fire spirit (top row, rightmost) of the attached evolution sheet; the long back hair is NOT included; cut cleanly at the neck with a short neck stub under the chin."),
+  kitOne("kit_fire_3_hair", [raw(KIT_BASE_3), raw("evo_pilot")], KIT_ONE + " PART: the FIRE spirit's BACK HAIR only: the long wavy cream hair mass of the FORM 3 fire spirit (top row, rightmost) of the attached evolution sheet as it hangs BEHIND the head and shoulders down to the waist, the full back silhouette of the hairstyle, with NO face, NO cap, NO body."),
+];
+
+// 공용 작업복 (CritterRig.outfit: pick 따기 · climb 오르기 · carry 나르기). 기본 드레스처럼 마네킹 몸통에 덮어 입는 한 장 — 모자는 갓과 겹쳐 뺀다
+const KIT_OUTFITS = {
+  pick: "a PICKING outfit: the cream gill dress with a short canvas apron with a front pocket tied over it",
+  climb: "a CLIMBING outfit: the cream gill dress with a brown rope harness around the waist and a small coiled rope over one shoulder",
+  carry: "a CARRYING outfit: the cream gill dress with a little sweat towel around the neck and the shoulder straps of a back carrier",
+};
+const kitOutfit = (o, f) => kitOne(`kit_outfit_${o}_${f}_dress`, [raw(kitBaseOf(f)), raw(`kit_outfit_gill_${f}_dress`)], KIT_ONE + ` PART: an OUTFIT piece worn over the mannequin's torso: ${KIT_OUTFITS[o]}, based on the second attached dress (same shape, size and collar), shaped to fit EXACTLY over the mannequin's torso: from a neck opening at the top to the skirt hem, covering the shoulder nubs, with NO head, NO arms, NO legs, NO hat, NO body visible.`);
+const kitOutfitSheets = ["pick", "climb", "carry"].flatMap((o) => [2, 3].map((f) => kitOutfit(o, f)));
+
+// ★2 짧은 뒷머리 다시 뽑기 (2026-10-16 사용자: ★2는 머리 짧게) — 토큰 아끼려 4칸 시트 2장으로 묶음 (12칸에서만 칸이 빠졌음)
+const kitHair2 = (id, kids) => ({
+  id, rows: 2, cols: 2, grid: true, out: "Characters/EvoKit", refs: [raw("kit_base_2"), raw("evo_pilot"), raw("evo_line_a"), raw("evo_line_b"), ...EVO_STYLE_REFS],
+  subject: KIT_ONE.replace("ONE single cut-out part", "Cut-out parts").replace("alone and centered", "each alone and centered in its cell") + " Each cell is the BACK HAIR only of one FORM 2 mushroom child spirit from the attached evolution sheets (third column of its row): a SHORT chin-length bob ending at the chin and jaw line, NOT reaching the shoulders, small and neat, only a little wider than the face, the back layer of the hairstyle as it sits BEHIND the head, in that spirit's hair colour, with NO face, NO cap, NO body.",
+  items: kids.map((k) => [`kit_${k}_2_hair`, `${k.toUpperCase()} spirit (${EVO_ROW[k][0]}, ${EVO_ROW[k][1]} row): short bob back hair`]),
+});
+const kitHair2Sheets = [kitHair2("kit_hair2_a", ["fire", "dew", "leaf", "wind"]), kitHair2("kit_hair2_b", ["rock", "spark", "moon", "star"])];
+
+export const SHEETS = [...mushrooms, ...KEEP.map(fromDoodle), ...critters, grandpa, tree, slots, ...fx, ...icons, ...lettering, ...env, ...bgs, ...scenes, ...kids, ...spiritPartSheets, ...spiritFaceSheets, evoConcept, ...evoLines, ...evoPartSheets, evoFaces, ...kitSheets, ...kitOutfitSheets, ...kitHair2Sheets];

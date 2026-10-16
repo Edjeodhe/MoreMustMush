@@ -1,0 +1,18 @@
+Sprite sheet: a 3x4 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Menu icons for the cozy World Tree screen of a mushroom-spirit idle game, readable at 48 px, in the flat matte watercolor style of the attached icon sheet (no outlines, no gloss, no glow, no sparkles, no text). Each icon = ONE big chunky main object, simple big shapes, soft low-saturation palette with one warm accent, centered with empty space around it.
+
+Assets in reading order (left to right, top to bottom):
+1. TREE RINGS: a round cross-section slice of a tree trunk showing concentric growth rings, a tiny green sprout on its bark edge
+2. OFFERING: a small woven tray holding a neat heap of three little mushrooms, offered up
+3. ZONES: a small folded treasure-map style leaf map with three dotted round spots on it
+4. REQUEST: a round cream speech bubble with a small red mushroom drawn inside it
+5. LITTLE ONE'S BOX: a small wooden gift chest tied with a moss-green ribbon bow
+6. BLESSING: a single big glowing-looking green leaf held in a soft cupped pale-gold halo shape (painted, no glow effect)
+7. BEAUTY: a pink blossom flower with five round petals and a tiny butterfly beside it
+8. SET: three small round wooden charms hanging together from one short twig
+9. EVOLVE: a small sapling in a clay pot with a bold upward arrow beside it
+10. EMPTY SLOT: a round empty wooden picture frame ring with a small brass hook on top
+11. RECIPE: a rolled parchment scroll tied with twine, a tiny pencil across it
+12. CRAFTING: a small wooden mallet and a chisel crossed over a little wood block

@@ -1,0 +1,19 @@
+Sprite sheet: a 3x5 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A CUT-OUT PARTS SHEET for 2D puppet animation, on a FULLY TRANSPARENT background, no glow, no shadow, no text. Every part is drawn separately with clear empty space around it, at EXACTLY the same scale and colors as the matching form of this spirit in the attached evolution line, front view, so the parts stack back into the same character. PAINTING STYLE (most important): paint exactly like the attached title-screen painting and the attached watercolor spirit sheet of this game: light transparent watercolor washes on paper, visible paper grain, soft faceted colour patches inside each area, a thin slightly darker pigment edge where a wash dried, gentle pastel colours, flat soft lighting. NOT felt, NOT plush, NOT fuzzy or fabric texture, NOT 3D rendered, no airbrush gradients, no hard black outlines. Faces: small soft dark-brown dot eyes, soft blush. PART RULES: HEAD = the face, the cap worn on it and ONLY the short front bangs that frame the face; the long hair is NOT part of the head; cut cleanly at the neck with a short neck stub under the chin. BACK HAIR = only the long hair mass as it hangs BEHIND the head and shoulders (the back layer of the hairstyle, the full hair silhouette), with NO face, NO cap, NO body. TORSO = the dress or skirt from a short neck stub at the top down to the hem, with smooth round shoulder nubs on both sides, and NO head, NO arms, NO hands, NO legs, NO feet (just the clean hem at the bottom). ARM = only the viewer's LEFT arm, hanging straight down, from a round shoulder end to the small hand. LEG = only the viewer's LEFT leg with its little shoe, hanging straight down, with a round hip end at the top (the legs come out from under the skirt). BODY (first two forms only) = the cap and the stem/body as ONE piece, never cut the cap off, with the face and the tiny feet. The spirit: EARTH: a PORCINI (Boletus edulis): round chestnut-brown bun cap, thick pale stout stem with a fine net pattern; small pebble accents. Use the ROCK row of the first attached evolution line.
+
+Assets in reading order (left to right, top to bottom):
+1. FORM 2 HEAD: face, cap and short front bangs only, short neck stub
+2. FORM 2 BACK HAIR: the short bob hair mass behind the head, no face, no cap
+3. FORM 2 TORSO: little gill dress, neck stub, shoulder nubs, no arms, no legs
+4. FORM 2 LEFT arm, hanging down
+5. FORM 2 LEFT short leg with shoe, hanging down, round hip end
+6. FORM 3 HEAD: face, big cap and short front bangs only, short neck stub
+7. FORM 3 BACK HAIR: the long flowing hair mass behind the head and shoulders, no face, no cap
+8. FORM 3 TORSO: ruffled gill skirt gown, neck stub, shoulder nubs, no arms, no hands, no legs
+9. FORM 3 LEFT slender arm with hand, hanging down
+10. FORM 3 LEFT leg with small shoe, hanging down, round hip end
+11. FORM 0 whole body: cap and stem in one piece, face, tiny feet, no arms
+12. FORM 1 whole body: cap and round body in one piece, face, tiny stubby arms and tiny feet painted on
+Leave the remaining 3 cell(s) empty.

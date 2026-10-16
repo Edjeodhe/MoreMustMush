@@ -53,6 +53,18 @@ namespace MoreMush.EditorTools
                 // Vector4 = (left, bottom, right, top) in pixels
                 ["UI/panel_wood"] = (w, h) => Uniform(w, h, 0.28f),
                 ["UI/panel_paper"] = (w, h) => Uniform(w, h, 0.2f),
+                // 도감 전용 (2026-10-16 ui_dex)
+                ["UI/Dex/dex_window"] = (w, h) => Uniform(w, h, 0.16f),
+                ["UI/Dex/dex_card"] = (w, h) => Uniform(w, h, 0.24f),
+                ["UI/Dex/dex_card_empty"] = (w, h) => Uniform(w, h, 0.24f),
+                ["UI/Dex/dex_card_sel"] = (w, h) => Uniform(w, h, 0.24f),
+                ["UI/Dex/dex_page"] = (w, h) => Uniform(w, h, 0.14f),
+                ["UI/Dex/dex_tab"] = (w, h) => Uniform(w, h, 0.4f),
+                ["UI/Dex/dex_tab_on"] = (w, h) => Uniform(w, h, 0.4f),
+                // 이름표: 장식은 양 끝에만 → 가로로만 늘인다
+                ["UI/Dex/tag_name"] = (w, h) => Ends(w, h),
+                ["UI/Dex/tag_wood"] = (w, h) => Ends(w, h),
+                ["UI/Dex/tag_ribbon"] = (w, h) => Ends(w, h),
                 ["UI/btn_wood"] = (w, h) => Uniform(w, h, 0.42f),
                 ["UI/btn_go"] = (w, h) => Uniform(w, h, 0.42f),
                 ["UI/btn_danger"] = (w, h) => Uniform(w, h, 0.42f),
@@ -92,6 +104,7 @@ namespace MoreMush.EditorTools
             }
         }
 
+        static Vector4 Ends(int w, int h) { float e = Mathf.Round(Mathf.Min(w * 0.3f, h * 1.1f)), v = Mathf.Round(h * 0.3f); return new Vector4(e, v, e, v); }
         static Vector4 Uniform(int w, int h, float k) { float b = Mathf.Round(Mathf.Min(w, h) * k); return new Vector4(b, b, b, b); }
 
         // ===== Sprite DB =====
@@ -147,6 +160,7 @@ namespace MoreMush.EditorTools
             AssetDatabase.ImportAsset(atlasPath);
             var imp = (TextureImporter)AssetImporter.GetAtPath(atlasPath);
             imp.textureType = TextureImporterType.Sprite; imp.spriteImportMode = SpriteImportMode.Single; imp.alphaIsTransparency = true; imp.mipmapEnabled = false;
+            imp.maxTextureSize = 4096;   // 아틀라스가 2048보다 크면 줄어들어 아이콘 좌표(원래 픽셀)가 어긋난다 (오른쪽 열 골드가 빈칸으로 나오던 것)
             imp.SaveAndReimport();
             var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(atlasPath);
 
@@ -214,6 +228,7 @@ namespace MoreMush.EditorTools
             AssetDatabase.ImportAsset(atlasPath);
             var imp = (TextureImporter)AssetImporter.GetAtPath(atlasPath);
             imp.textureType = TextureImporterType.Sprite; imp.spriteImportMode = SpriteImportMode.Single; imp.alphaIsTransparency = true; imp.mipmapEnabled = false;
+            imp.maxTextureSize = 4096;   // 아틀라스가 2048보다 크면 줄어들어 아이콘 좌표(원래 픽셀)가 어긋난다 (오른쪽 열 골드가 빈칸으로 나오던 것)
             imp.SaveAndReimport();
             var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(atlasPath);
 

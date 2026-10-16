@@ -93,8 +93,10 @@ async function buildSheet(s) {
   // fx sheets keep soft alpha and fill a fixed canvas (tintable effect textures), see slice_fx.py
   // rig: true = group blobs per row by their gaps (uneven spacing, detached bits like stars or swirls), see slice_rig.py;
   // with fx: true the FX slicer cuts each item by that grouping instead of by grid cell
-  const slicer = s.fx ? "Tools/art/slice_fx.py" : s.rig ? "Tools/art/slice_rig.py" : "Tools/art/slice_sheet.py";
-  const sl = await run("python", [slicer, raw, String(s.rows), String(s.cols), path.join(genRoot, s.out), names], s.fx && s.rig ? { FX_GROUP: "1" } : null);
+  // sliceAs: [rows, cols] = the raw sheet came back in another grid (same reading order): cut that grid as is
+  const slicer = s.sliceAs ? "Tools/art/slice_sheet.py" : s.fx ? "Tools/art/slice_fx.py" : s.rig ? "Tools/art/slice_rig.py" : "Tools/art/slice_sheet.py";
+  const [rr, cc] = s.sliceAs || [s.rows, s.cols];
+  const sl = await run("python", [slicer, raw, String(rr), String(cc), path.join(genRoot, s.out), names], s.fx && s.rig ? { FX_GROUP: "1" } : s.grid || s.sliceAs ? { SLICE_GRID: "1" } : null);
   if (sl.code !== 0) { console.error(`[${s.id}] slicing failed:\n${sl.err.trim()}`); return false; }
   const res = JSON.parse(sl.out);
   console.log(`[${s.id}] sliced ${Object.keys(res.items).length}/${s.items.length}${res.warnings.length ? " — " + res.warnings.join("; ") : ""}`);
