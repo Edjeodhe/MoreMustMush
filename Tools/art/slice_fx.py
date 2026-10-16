@@ -21,6 +21,13 @@ def main():
     w, h = img.size
     cw, ch = w / cols, h / rows
     os.makedirs(out_dir, exist_ok=True)
+    groups = None
+    if os.environ.get("FX_GROUP"):
+        # reuse slice_rig's grouping (blobs per row, closest gaps merged) to get one mask per item
+        import importlib.util, tempfile
+        spec = importlib.util.spec_from_file_location("slice_rig", os.path.join(os.path.dirname(os.path.abspath(__file__)), "slice_rig.py"))
+        sr = importlib.util.module_from_spec(spec); spec.loader.exec_module(sr)
+        groups = sr.item_masks(np.asarray(img), rows, cols, len(names))
     items, warnings = {}, []
     for i, spec in enumerate(names):
         name, _, size = spec.partition("@")
@@ -28,8 +35,15 @@ def main():
         name = name.rstrip("~")
         tw, th = (int(v) for v in size.split("x")) if size else (256, 256)
         r, c = divmod(i, cols)
-        cell = img.crop((round(c * cw), round(r * ch), round((c + 1) * cw), round((r + 1) * ch)))
-        a = np.asarray(cell).astype(np.float32)
+        if groups is not None:
+            # unevenly spaced sheet: this item's own pixels (slice_rig grouping), not its grid cell
+            if i >= len(groups):
+                warnings.append(f"{name}: missing"); continue
+            a = np.asarray(img).astype(np.float32).copy()
+            a[:, :, 3] = np.where(groups[i], a[:, :, 3], 0)
+        else:
+            cell = img.crop((round(c * cw), round(r * ch), round((c + 1) * cw), round((r + 1) * ch)))
+            a = np.asarray(cell).astype(np.float32)
         alpha = a[:, :, 3]
         if alpha.min() >= 250:   # opaque background came back: key out the corner colour
             corner = np.median(np.concatenate([a[:6, :6, :3].reshape(-1, 3), a[-6:, -6:, :3].reshape(-1, 3)]), axis=0)

@@ -182,6 +182,8 @@ namespace MoreMush
             var R = RoundSim.R;
             if (R == null || R.phase == "end") return;
             R.paused = true;
+            var pl = Lettering.Apply(pausePanel.transform.Find("Title")?.GetComponent<TMPro.TMP_Text>(), "pause", 1.3f);
+            if (pl != null) pl.color = new Color(0.72f, 0.5f, 0.32f);   // warm brown on the cream window
             OpenModal(pausePanel, () => { if (RoundSim.R != null) RoundSim.R.paused = false; });
         }
 

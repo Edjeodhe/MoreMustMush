@@ -4,11 +4,12 @@ using UnityEngine;
 namespace MoreMush
 {
     // Cut-out rig for the special mushroom critters.
-    // Doodle set (2026-10-15 4th pass): every kind has its own parts — cap, body with face, blink patch, one arm and
-    // one foot (mirrored for the other side) — laid out per kind by Resources/Rig/critter_rig.json
-    // (Tools/art/build_critter_rig.py fits the parts onto each kind's design drawing).
+    // Per-kind sets (Doodle, Dream 2026-10-15): every kind has its own parts — cap, body with face (Dream: a round
+    // cylinder that goes into a socket cut in the cap's gills, plus the same body with the eyes closed; Doodle: a blink
+    // patch), one arm blob in front of the body and one foot blob (each mirrored for the other side) — laid out per kind
+    // by Resources/Rig/critter_rig.json (Tools/art/build_critter_rig.py stacks the parts by the body structure).
     // Older art sets share one body and swap only the cap; their pose is the one authored in the hierarchy.
-    // Animates around the rest pose: breathing bob, cap wobble, arm swing, stepping feet, blinking, hop squash.
+    // Animates around the rest pose: cap wobble, arm swing, stepping feet, blinking, idle fidgets, hop squash.
     public class CritterRig : MonoBehaviour
     {
         public Transform root;                  // squash/scale pivot (feet line)
@@ -27,8 +28,13 @@ namespace MoreMush
         public float blinkEvery = 3.2f;
         public bool silhouette;
 
-        Vector3 capRest, bodyRest, bodyPartRest, armLRest, armRRest, footLRest, footRRest;
+        Vector3 capRest, bodyRest, bodyPartRest, bodyPartScale, armLRest, armRRest, footLRest, footRRest;
         float blinkT, phase;
+        // idle fidgets: every few seconds one short action (wave · stretch · look · hop · yawn)
+        enum Fidget { None, Wave, Stretch, Look, Hop, Yawn }
+        Fidget fidget;
+        float fidgetT, fidgetLen, fidgetSide = 1, bodyHalfH;
+        Sprite bodyOpen, bodyClosed;
         string shownKind, shownSkin, shownHat;   // 지금 그려진 모습 (문자열을 이어 붙여 비교하지 않고 칸별로 비교)
         bool shownAny, perKind;
 
@@ -42,6 +48,7 @@ namespace MoreMush
             footLRest = footL.localPosition; footRRest = footR.localPosition;
             blinkT = Random.Range(0.5f, blinkEvery);
             phase = Random.Range(0f, 10f);
+            fidgetT = -Random.Range(1.5f, 6f);
         }
 
         public void SetKind(string id)
@@ -95,11 +102,15 @@ namespace MoreMush
             foreach (var sr in new[] { bodySprite, blinkSprite, armLSprite, armRSprite }) if (sr != null) sr.gameObject.SetActive(perKind);
             if (!perKind) return;
 
-            bodySprite.sprite = bodySp;
+            bodySprite.sprite = bodyOpen = bodySp;
             Set(bodySprite.transform, l.body, 1);
             bodyPartRest = bodySprite.transform.localPosition;
-            // the blink patch is a child of the body part, so it follows the body bob
-            blinkSprite.sprite = SpriteDB.Get("Characters/Critters/blink_", id);
+            bodyPartScale = bodySprite.transform.localScale;
+            bodyHalfH = bodySp.bounds.extents.y * l.body.s;
+            // eyes closed: a second whole body drawn with the eyes shut (aligned to the open one) is swapped in;
+            // older sets lay a blink patch, a child of the body part, over the face instead
+            bodyClosed = SpriteDB.Get("Characters/Critters/body_", id + "_closed");
+            blinkSprite.sprite = bodyClosed != null ? null : SpriteDB.Get("Characters/Critters/blink_", id);
             blinkSprite.transform.localPosition = new Vector3((l.blink.x - l.body.x) / l.body.s, (l.blink.y - l.body.y) / l.body.s, 0);
             blinkSprite.transform.localScale = new Vector3(l.blink.s / l.body.s, l.blink.s / l.body.s, 1);
             blinkSprite.enabled = false;
@@ -112,6 +123,8 @@ namespace MoreMush
             // arm: layout gives the LEFT arm sprite center and its shoulder joint; the right arm mirrors it
             var armSp = SpriteDB.Get("Characters/Critters/arm_", id);
             armLSprite.sprite = armRSprite.sprite = armSp;
+            // stubby arms in front of the cylinder body (user pick 2026-10-15), under the cap
+            armLSprite.sortingOrder = armRSprite.sortingOrder = bodySprite.sortingOrder + 1;
             var off = new Vector3(l.arm.x - l.shoulderX, l.arm.y - l.shoulderY, 0);
             armL.localPosition = new Vector3(l.shoulderX, l.shoulderY, 0);
             armR.localPosition = new Vector3(-l.shoulderX, l.shoulderY, 0);
@@ -182,12 +195,14 @@ namespace MoreMush
             if (blinkT <= 0) blinkT = blinkEvery * Random.Range(0.7f, 1.3f);
         }
 
-        // Doodle-set motion: angles in degrees, arm angle 0 = hanging down, positive = raised outward.
+        // Per-kind motion: angles in degrees, arm angle 0 = hanging down, positive = raised outward.
+        // stretch > 0 makes the body part taller and thinner around the feet line (idle fidgets only).
         void Animate(float t)
         {
             float bob = 0, capRot = Mathf.Sin(t * 2.3f) * 4, capLift = 0, armL0 = 8 + Mathf.Sin(t * 3) * 6, armR0 = 8 + Mathf.Sin(t * 3 + 1.2f) * 6;
-            float stepL = 0, stepR = 0, strideL = 0, strideR = 0;
+            float stepL = 0, stepR = 0, strideL = 0, strideR = 0, stretch = 0, hop = 0, lean = 0;
             bool eyesShut = false;
+            if (motion != "idle") fidget = Fidget.None;
             switch (motion)
             {
                 case "walk":
@@ -198,6 +213,7 @@ namespace MoreMush
                     stepL = Mathf.Max(0, s) * 0.05f; stepR = Mathf.Max(0, -s) * 0.05f;
                     strideL = s * 0.03f; strideR = -s * 0.03f;
                     capRot = Mathf.Sin(w * 2) * 5; capLift = Mathf.Abs(Mathf.Sin(w)) * 0.015f;
+                    lean = s * 2.5f;
                     break;
                 }
                 case "work":
@@ -216,22 +232,72 @@ namespace MoreMush
                 case "sleep":
                     armL0 = armR0 = 4; capRot = Mathf.Sin(t * 1.2f) * 3; eyesShut = true; break;
                 default:
-                    bob = Mathf.Sin(t * 4) * 0.012f;
+                    // breathing and the walk hop are whole-body squash in FarmCritter; the rig adds part motion only
+                    Fidgets(ref armL0, ref armR0, ref capRot, ref stretch, ref hop, ref lean, ref eyesShut);
                     break;
             }
-            bodySprite.transform.localPosition = bodyPartRest + new Vector3(0, bob, 0);
-            cap.localPosition = capRest + new Vector3(0, bob + capLift + Mathf.Sin(t * 4 + 0.6f) * 0.012f, 0);
-            cap.localRotation = Quaternion.Euler(0, 0, capRot);
-            armL.localPosition = armLRest + new Vector3(0, bob, 0);
-            armR.localPosition = armRRest + new Vector3(0, bob, 0);
+            // body stretches from the feet line: its center rises by half the extra height, the cap by all of it
+            float grow = bodyHalfH * stretch;
+            bodySprite.transform.localPosition = bodyPartRest + new Vector3(0, bob + hop + grow, 0);
+            bodySprite.transform.localScale = new Vector3(bodyPartScale.x * (1 - stretch * 0.6f), bodyPartScale.y * (1 + stretch), 1);
+            bodySprite.transform.localRotation = Quaternion.Euler(0, 0, lean);
+            cap.localPosition = capRest + new Vector3(-lean * 0.004f, bob + hop + grow * 2 + capLift + Mathf.Sin(t * 4 + 0.6f) * 0.008f, 0);
+            cap.localRotation = Quaternion.Euler(0, 0, capRot + lean);
+            armL.localPosition = armLRest + new Vector3(0, bob + hop + grow, 0);
+            armR.localPosition = armRRest + new Vector3(0, bob + hop + grow, 0);
             armL.localRotation = Quaternion.Euler(0, 0, -armL0);
             armR.localRotation = Quaternion.Euler(0, 0, armR0);
-            footL.localPosition = footLRest + new Vector3(strideL, stepL, 0);
-            footR.localPosition = footRRest + new Vector3(strideR, stepR, 0);
+            footL.localPosition = footLRest + new Vector3(strideL, stepL + hop, 0);
+            footR.localPosition = footRRest + new Vector3(strideR, stepR + hop, 0);
 
             blinkT -= Time.deltaTime;
-            blinkSprite.enabled = eyesShut || blinkT < 0.12f;
+            bool shut = eyesShut || blinkT < 0.12f;
+            if (bodyClosed != null) { var want = shut ? bodyClosed : bodyOpen; if (bodySprite.sprite != want) bodySprite.sprite = want; }
+            else blinkSprite.enabled = shut;
             if (blinkT <= 0) blinkT = blinkEvery * Random.Range(0.7f, 1.3f);
+        }
+
+        // One short idle action every few seconds; e = 0 → 1 → 0 envelope so it eases in and out of the rest pose.
+        void Fidgets(ref float armL0, ref float armR0, ref float capRot, ref float stretch, ref float hop, ref float lean, ref bool eyesShut)
+        {
+            fidgetT += Time.deltaTime;
+            if (fidget == Fidget.None)
+            {
+                if (fidgetT < 0) return;
+                fidget = (Fidget)Random.Range(1, 6);
+                fidgetLen = fidget == Fidget.Hop ? 0.55f : fidget == Fidget.Wave ? 1.4f : 1.2f;
+                fidgetSide = Random.value < 0.5f ? -1 : 1;
+                fidgetT = 0;
+            }
+            float p = Mathf.Clamp01(fidgetT / fidgetLen), e = Mathf.Sin(p * Mathf.PI);
+            e = e * e * (3 - 2 * e);
+            switch (fidget)
+            {
+                case Fidget.Wave:
+                    if (fidgetSide > 0) armR0 = Mathf.Lerp(armR0, 135 + Mathf.Sin(fidgetT * 16) * 22, e);
+                    else armL0 = Mathf.Lerp(armL0, 135 + Mathf.Sin(fidgetT * 16) * 22, e);
+                    capRot += -fidgetSide * 6 * e; lean = -fidgetSide * 2 * e;
+                    break;
+                case Fidget.Stretch:
+                    armL0 = Mathf.Lerp(armL0, 160, e); armR0 = Mathf.Lerp(armR0, 160, e);
+                    stretch += 0.07f * e; eyesShut = e > 0.4f;
+                    break;
+                case Fidget.Look:
+                    lean = fidgetSide * 5 * Mathf.Sin(p * Mathf.PI * 2) * Mathf.Sin(p * Mathf.PI);
+                    capRot += lean * 1.6f;
+                    break;
+                case Fidget.Hop:
+                    // crouch → jump → land squash
+                    hop = Mathf.Max(0, Mathf.Sin((p - 0.2f) / 0.6f * Mathf.PI)) * (p > 0.2f && p < 0.8f ? 0.09f : 0);
+                    stretch += p < 0.2f ? -0.08f * Mathf.Sin(p / 0.2f * Mathf.PI) : p > 0.8f ? -0.06f * Mathf.Sin((p - 0.8f) / 0.2f * Mathf.PI) : 0.05f * e;
+                    armL0 = armR0 = Mathf.Lerp(armL0, 70, hop / 0.09f);
+                    break;
+                case Fidget.Yawn:
+                    stretch += 0.03f * e; capRot += Mathf.Sin(p * Mathf.PI * 2) * 3; eyesShut = e > 0.3f;
+                    armL0 = Mathf.Lerp(armL0, 40, e);
+                    break;
+            }
+            if (p >= 1) { fidget = Fidget.None; fidgetT = -Random.Range(3f, 7f); }
         }
     }
 }

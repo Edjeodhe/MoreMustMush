@@ -9,7 +9,7 @@ Same part names and rig.json layout as build_grandpa_rig.py, so GrandpaRig and i
   eyes_closed.png  blink patch over both eyes
   rig.json         each part's top-left in reference pixels + joint positions
 
-Usage: python Tools/art/build_grandpa_rig_soft.py [--set soft|doodle] [--debug <dir>]
+Usage: python Tools/art/build_grandpa_rig_soft.py [--set soft|doodle|dream] [--debug <dir>]
 """
 import json, os, sys
 import numpy as np
@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw
 from scipy import ndimage
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-# Cut points per art set (reference pixels of that set's grandpa_ref.png). --set soft (default) | doodle
+# Cut points per art set (reference pixels of that set's grandpa_ref.png). --set soft (default) | doodle | dream
 SETS = {
     "soft": dict(
         root="Assets/Art/Soft", FEET=(505, 1200), WRIST=(235, 690),
@@ -31,6 +31,14 @@ SETS = {
         BLADE_POLY=[(690, 0), (1104, 0), (1104, 560), (1030, 560), (820, 130), (760, 145), (690, 95)],
         CHARM_POLY=[(0, 0), (1, 0), (1, 1)],
         EYES=[(380, 465, 20, 28), (507, 477, 20, 28)]),
+    # dream set (2026-10-16 redraw, sheet grandpa_full): fist on the viewer's left, handle behind the head and hat
+    "dream": dict(
+        root="Assets/Art/Dream", FEET=(465, 1148), WRIST=(288, 598),
+        # handle lines fitted to the handle's own colour (lower: x = -0.640y + 675, upper: x = -0.491y + 705)
+        HANDLE=[(51, 975), (292, 598), (581, 252), (698, 14)], HANDLE_HALF=27, PAINT_HALF=18, WOOD_ONLY=True, LOWER_STOP=0.84, UPPER_START=0.0,
+        BLADE_POLY=[(640, 0), (980, 0), (980, 420), (925, 420), (830, 210), (725, 135), (648, 122)],
+        CHARM_POLY=[(0, 0), (1, 0), (1, 1)],
+        EYES=[(493, 384, 11, 13), (566, 377, 11, 13)]),
 }
 _set = sys.argv[sys.argv.index("--set") + 1] if "--set" in sys.argv else "soft"
 _c = SETS[_set]
@@ -38,6 +46,7 @@ SRC = os.path.join(ROOT, _c["root"], "Characters/Grandpa/grandpa_ref.png")
 OUT = os.path.join(ROOT, _c["root"], "Characters/Grandpa/Rig")
 FEET, WRIST, HANDLE, HANDLE_HALF = _c["FEET"], _c["WRIST"], _c["HANDLE"], _c["HANDLE_HALF"]
 LOWER_STOP, UPPER_START = _c["LOWER_STOP"], (2, _c["UPPER_START"])
+PAINT_HALF = _c.get("PAINT_HALF", HANDLE_HALF)   # painted-in handle under the body (cut band may be wider than the handle)
 BLADE_POLY, CHARM_POLY, EYES = _c["BLADE_POLY"], _c["CHARM_POLY"], _c["EYES"]
 
 
@@ -87,15 +96,19 @@ def main():
     # --- scythe mask: lower handle (butt .. fist), upper handle (above the hat), blade, leaf charm
     lower = seg_band(shape, HANDLE[0], lerp(HANDLE[0], HANDLE[1], LOWER_STOP), HANDLE_HALF)
     upper = seg_band(shape, lerp(HANDLE[2], HANDLE[3], UPPER_START[1]), HANDLE[3], HANDLE_HALF)
+    if _c.get("WOOD_ONLY"):
+        # flat-colour sets: inside the lower band keep only the wooden handle (red-brown), not the green coat beside it
+        r, g = rgba[:, :, 0].astype(int), rgba[:, :, 1].astype(int)
+        lower &= (r - g > 12) | (rgba[:, :, 3] < 200)
     sc_mask = opaque & (lower | upper | poly(shape, BLADE_POLY) | poly(shape, CHARM_POLY))
 
     # --- scythe part: real pixels over a painted-in handle along the whole centre line (hidden by the body)
-    handle_col = rgba[ndimage.binary_erosion(lower, iterations=HANDLE_HALF - 12) & opaque][:, :3]
+    handle_col = rgba[ndimage.binary_erosion(lower, iterations=max(1, HANDLE_HALF - 12)) & opaque][:, :3]
     col = tuple(int(c) for c in np.median(handle_col, axis=0)) if len(handle_col) else (120, 72, 40)
     fill = Image.new("RGBA", im.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(fill)
-    d.line(HANDLE, fill=(70, 40, 25, 255), width=(HANDLE_HALF - 6) * 2, joint="curve")
-    d.line(HANDLE, fill=col + (255,), width=(HANDLE_HALF - 14) * 2, joint="curve")
+    d.line(HANDLE, fill=(70, 40, 25, 255), width=(PAINT_HALF - 6) * 2, joint="curve")
+    d.line(HANDLE, fill=col + (255,), width=(PAINT_HALF - 14) * 2, joint="curve")
     sc = np.asarray(fill).copy()
     sc[sc_mask] = rgba[sc_mask]
 

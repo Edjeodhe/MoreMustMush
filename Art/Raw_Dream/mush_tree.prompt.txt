@@ -1,0 +1,14 @@
+Sprite sheet: a 2x4 grid holding 8 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Eight growth stages of the SAME magical mushroom world-tree where tiny mushroom critters live, front view, flat matte watercolor like the attached style references (no outlines, no gloss, no glow, no sparkles), soft low-saturation palette. Left to right, top row first, smallest to largest. KEEP ONE IDENTITY through all eight: the same warm grey-brown trunk with a soft S-curve and a small round hollow at its base, the same moss-green and sage canopy made of a few big soft rounded clumps (not many small puffs), the same pale lavender-blue shadow side. Each stage stands on its own small oval mossy base, the base centered at the bottom of the cell, the trunk centered, the canopy on top and roughly symmetric; the growth reads by size, trunk thickness and how many canopy clumps it has. Leave calm open spots on the canopy and around the roots (mushrooms and decorations are placed there separately); do NOT draw mushrooms on the branches except the few named below. Big simple shapes, little detail, readable at 160 px.
+
+Assets in reading order (left to right, top to bottom):
+1. stage 1: a tiny sprout with two round leaves on a little moss mound
+2. stage 2: a small sapling with a thin curved trunk and two soft leaf clumps
+3. stage 3: a young tree with a slim trunk and one round canopy clump with two smaller ones
+4. stage 4: a medium tree, sturdier trunk, a fuller canopy of three clumps, two tiny shelf fungi low on the trunk
+5. stage 5: a large tree, thick trunk with a few visible roots, a wide canopy of four clumps, soft hanging moss strands
+6. stage 6: a big tree, mossy trunk, curling roots, a layered canopy of five clumps with a few small white flowers
+7. stage 7: a grand tree, very thick mossy trunk, big arching roots, a huge layered canopy, a few pale butter-yellow spore dots drifting nearby, a small round door in the trunk hollow
+8. stage 8: the majestic ancient world-tree, the biggest and widest, huge layered canopy with a soft pale-apricot light wash on its top clumps, small hanging paper-lantern mushrooms on two branches, a round door and tiny window in the trunk

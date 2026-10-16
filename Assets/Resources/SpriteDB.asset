@@ -14,317 +14,621 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MoreMush.SpriteDB
   entries:
   - key: Backgrounds/bg_field
-    sprite: {fileID: 21300000, guid: 0ca0745821ea75541b374a05b5a7b5c6, type: 3}
+    sprite: {fileID: 21300000, guid: dd79618117a5ac14a9c7e91bf8e11005, type: 3}
   - key: Backgrounds/bg_forest
-    sprite: {fileID: 21300000, guid: ce5b603897efa5c4f8cd5eddfb9bb164, type: 3}
+    sprite: {fileID: 21300000, guid: 2b0b060626732904dbad4322d6e80006, type: 3}
   - key: Backgrounds/bg_kitchen
     sprite: {fileID: 21300000, guid: ddf6777c963c7a1448369116eb577e7f, type: 3}
   - key: Backgrounds/bg_night
-    sprite: {fileID: 21300000, guid: 32749ecca9c6ce14ea3bd2af9c14b664, type: 3}
+    sprite: {fileID: 21300000, guid: 3297d07da5f287b4ba152df939537f22, type: 3}
   - key: Backgrounds/bg_ranch
-    sprite: {fileID: 21300000, guid: 5702aaecc45adf2459fdd7fabc4696dc, type: 3}
+    sprite: {fileID: 21300000, guid: 0c0069547b7c8ad4d9d68d3b580c0276, type: 3}
   - key: Backgrounds/bg_ruins
-    sprite: {fileID: 21300000, guid: 2f6e7a59362bc6846b0d8a50bed778ab, type: 3}
+    sprite: {fileID: 21300000, guid: 114b628808398804ba65019995f0e7cf, type: 3}
   - key: Backgrounds/bg_sea
-    sprite: {fileID: 21300000, guid: 82f51bcd523bb994c8e87b2fc3fdda73, type: 3}
+    sprite: {fileID: 21300000, guid: 7c29a49a65b6cd04c88ae32f6f98fe07, type: 3}
   - key: Backgrounds/bg_title
-    sprite: {fileID: 21300000, guid: 3ff2830b6acabbd44844050e6f21c639, type: 3}
+    sprite: {fileID: 21300000, guid: 2fd1c4fd41d0e48438f5481bd4fb4754, type: 3}
   - key: Bosses/angel
-    sprite: {fileID: 21300000, guid: ba2fd9a35f937f44f90b3c6a95ea3011, type: 3}
+    sprite: {fileID: 21300000, guid: 689d8245d7cbace45a3db49c3371dc37, type: 3}
   - key: Bosses/cleaner
-    sprite: {fileID: 21300000, guid: 26bf2346eede7634c80a19efcda588ca, type: 3}
+    sprite: {fileID: 21300000, guid: 73b009577a12d93499c1adfe574f2494, type: 3}
   - key: Bosses/king
-    sprite: {fileID: 21300000, guid: 7fca4f992f30d6d4582abd3fa3825a6d, type: 3}
+    sprite: {fileID: 21300000, guid: 5a049a46ee93cd04387ee48a15705e81, type: 3}
   - key: Bosses/mover
-    sprite: {fileID: 21300000, guid: f18317dffd0339142811f29d368b74c6, type: 3}
+    sprite: {fileID: 21300000, guid: 44b0259194fff114bb8178434995dd9c, type: 3}
   - key: Bosses/phantom
-    sprite: {fileID: 21300000, guid: eae78ba405dbb244ca9799c2d4d3ca5b, type: 3}
+    sprite: {fileID: 21300000, guid: 5fd04d1d814350144a988ca49a6b58ab, type: 3}
   - key: Characters/Critters/Acc/bandana
-    sprite: {fileID: 21300000, guid: 50a1f2843e4d84e41a975768a849127d, type: 3}
+    sprite: {fileID: 21300000, guid: 5889b8dff5c506f44857c34b445cfd09, type: 3}
   - key: Characters/Critters/Acc/bow
-    sprite: {fileID: 21300000, guid: dfe9abde00c19f3469377d803a40d863, type: 3}
+    sprite: {fileID: 21300000, guid: 1e466898bf09970469ee7de709311468, type: 3}
   - key: Characters/Critters/Acc/chef
-    sprite: {fileID: 21300000, guid: 445a93e629a48ce46883d376d23ff3fe, type: 3}
+    sprite: {fileID: 21300000, guid: db01ea7fea77abc4e96862f0f13a3cfb, type: 3}
   - key: Characters/Critters/Acc/cloud
-    sprite: {fileID: 21300000, guid: f6efbf889df2996489012aeb475e18e8, type: 3}
+    sprite: {fileID: 21300000, guid: 4f31a421dfc98bf4194a51b961b000c2, type: 3}
   - key: Characters/Critters/Acc/crown
-    sprite: {fileID: 21300000, guid: 5cce23ddd27783341b7eea689a021b34, type: 3}
+    sprite: {fileID: 21300000, guid: febb2016e78a3c1459802d447aced1ec, type: 3}
   - key: Characters/Critters/Acc/flower
-    sprite: {fileID: 21300000, guid: 79a33efd48ff34a4f8acc84b85e25b12, type: 3}
+    sprite: {fileID: 21300000, guid: 3b91e095ad8c8c346bbc225e36e938cf, type: 3}
   - key: Characters/Critters/Acc/halo
-    sprite: {fileID: 21300000, guid: 7856cf3c1f77aae4dabf1527b16e9681, type: 3}
+    sprite: {fileID: 21300000, guid: 879ec69c6adb689429adecd0b4b6cbec, type: 3}
   - key: Characters/Critters/Acc/hardhat
-    sprite: {fileID: 21300000, guid: 6e694b078fdc18548b07d9896cd41559, type: 3}
+    sprite: {fileID: 21300000, guid: 61d0a1f7306e3e34d871c8b75851e317, type: 3}
   - key: Characters/Critters/Acc/headphones
-    sprite: {fileID: 21300000, guid: 6a96af4075f23ec4492bf74568afe7d7, type: 3}
+    sprite: {fileID: 21300000, guid: 4f98ac4d9378e96429f9b437cb7e4b82, type: 3}
   - key: Characters/Critters/Acc/scarf
-    sprite: {fileID: 21300000, guid: d4587534724d05e489c99a962f7cb6f2, type: 3}
+    sprite: {fileID: 21300000, guid: 34c93871efe7b5d41b96a858b44f1078, type: 3}
   - key: Characters/Critters/Acc/straw
-    sprite: {fileID: 21300000, guid: deb697021b465fc4b9f50f669013a6b1, type: 3}
+    sprite: {fileID: 21300000, guid: 554462fc80a51744a8c0727cbc0173d7, type: 3}
   - key: Characters/Critters/Acc/sunglasses
-    sprite: {fileID: 21300000, guid: ed0db04b0205060469e0c1af7345a897, type: 3}
+    sprite: {fileID: 21300000, guid: 51a107b87d5b9614cb231ad4000fe8b1, type: 3}
   - key: Characters/Critters/Acc/tophat
-    sprite: {fileID: 21300000, guid: 983761b5edd87524ea63625c95d7bd94, type: 3}
+    sprite: {fileID: 21300000, guid: a45e68e86e7a78644a7e2bb1a750f394, type: 3}
   - key: Characters/Critters/Build/build_chest_0
-    sprite: {fileID: 21300000, guid: b3475e1aed794864db457ebd2279cb8f, type: 3}
+    sprite: {fileID: 21300000, guid: a4baa18867c69e541bf609bb13c7ecc7, type: 3}
   - key: Characters/Critters/Build/build_chest_1
-    sprite: {fileID: 21300000, guid: c426b214e6f075345ac05949faeda2fe, type: 3}
+    sprite: {fileID: 21300000, guid: f97faf8cfb97aa4428537e7bab03679e, type: 3}
   - key: Characters/Critters/Build/build_coin_0
-    sprite: {fileID: 21300000, guid: e0bced2dd61308548aaeabee21677678, type: 3}
+    sprite: {fileID: 21300000, guid: 43c7d39515bcc20429b7599baf7f1c12, type: 3}
   - key: Characters/Critters/Build/build_coin_1
-    sprite: {fileID: 21300000, guid: c65b6ce216734ab4a80c940c3c6e88fa, type: 3}
+    sprite: {fileID: 21300000, guid: 31f00d717ad18914993ea422c82b3987, type: 3}
   - key: Characters/Critters/Build/build_dew_0
-    sprite: {fileID: 21300000, guid: ef7578a4cf093b44e9da3f918952274d, type: 3}
+    sprite: {fileID: 21300000, guid: 7c5f3e335dc15644b8b0f0c9e835f1d0, type: 3}
   - key: Characters/Critters/Build/build_dew_1
-    sprite: {fileID: 21300000, guid: ded817aa2efe06544bde128be04bc5aa, type: 3}
+    sprite: {fileID: 21300000, guid: a33b09a8ebbbb1e4098bcadbc564f073, type: 3}
   - key: Characters/Critters/Build/build_fire_0
-    sprite: {fileID: 21300000, guid: c7adfd21f2a57164f9597c4a6d167c68, type: 3}
+    sprite: {fileID: 21300000, guid: 0e06cdbc04f8d5245affa3ca8470e600, type: 3}
   - key: Characters/Critters/Build/build_fire_1
-    sprite: {fileID: 21300000, guid: 1dc909f21871b0c4d84ee6287f7d9af6, type: 3}
+    sprite: {fileID: 21300000, guid: 9500d3150f075be4388b83eb842fca97, type: 3}
   - key: Characters/Critters/Build/build_leaf_0
-    sprite: {fileID: 21300000, guid: 52de3b2cf727cfc4d8ac58b7891c6519, type: 3}
+    sprite: {fileID: 21300000, guid: 5d75712f142949e4395d2e0456d8ed91, type: 3}
   - key: Characters/Critters/Build/build_leaf_1
-    sprite: {fileID: 21300000, guid: 293dc4f220af80b4c97ff7a2e9e0fd1b, type: 3}
+    sprite: {fileID: 21300000, guid: 77f3187d3f83d374b90078f31aaba0dc, type: 3}
   - key: Characters/Critters/Build/build_moon_0
-    sprite: {fileID: 21300000, guid: 9ecc5ee014332b944b5fa0d2c03ac3c1, type: 3}
+    sprite: {fileID: 21300000, guid: 12b1fa057d0b69c4cb7ed6ea4af24394, type: 3}
   - key: Characters/Critters/Build/build_moon_1
-    sprite: {fileID: 21300000, guid: 07caa786d8e3c314d96c237f64ae09ca, type: 3}
+    sprite: {fileID: 21300000, guid: 256d7f2770da6d64f901c6f057de5a7c, type: 3}
   - key: Characters/Critters/Build/build_rock_0
-    sprite: {fileID: 21300000, guid: 05080e92d207ebb4aa12f16ddaa88a8d, type: 3}
+    sprite: {fileID: 21300000, guid: 6187255e6eefd1a43ab5e2b58455e5b4, type: 3}
   - key: Characters/Critters/Build/build_rock_1
-    sprite: {fileID: 21300000, guid: 811859d638efc41499565bd0a7e3cad4, type: 3}
+    sprite: {fileID: 21300000, guid: d29327c8b69c6ae459668bbe02b1f7ec, type: 3}
   - key: Characters/Critters/Build/build_spark_0
-    sprite: {fileID: 21300000, guid: ccd0440c37b8e754e849292905ec7b7f, type: 3}
+    sprite: {fileID: 21300000, guid: e7409b3458bc57c45adac3ad0cdb5796, type: 3}
   - key: Characters/Critters/Build/build_spark_1
-    sprite: {fileID: 21300000, guid: 83bfd827012672d44a81edef23f9b11f, type: 3}
+    sprite: {fileID: 21300000, guid: e7423bd2cc8cfa24ea6fbcd305018b5e, type: 3}
   - key: Characters/Critters/Build/build_star_0
-    sprite: {fileID: 21300000, guid: 1d1976de43dd2914fad3de41ec7e0532, type: 3}
+    sprite: {fileID: 21300000, guid: c7e6889ad8168964d806d3e699ac8ad3, type: 3}
   - key: Characters/Critters/Build/build_star_1
-    sprite: {fileID: 21300000, guid: 5cce91ae68339f24f8df9f80a211b1dd, type: 3}
+    sprite: {fileID: 21300000, guid: 358669cf96292584a900f4bec82d9947, type: 3}
   - key: Characters/Critters/Build/build_wind_0
-    sprite: {fileID: 21300000, guid: 0751713b5b226f04fb0569c827be6318, type: 3}
+    sprite: {fileID: 21300000, guid: 98586dcd16662ed449c085321dbc115a, type: 3}
   - key: Characters/Critters/Build/build_wind_1
-    sprite: {fileID: 21300000, guid: 535340200a303da44a6476e6bc4c4375, type: 3}
+    sprite: {fileID: 21300000, guid: 36855519867ba8440b9cea0ba69c5836, type: 3}
+  - key: Characters/Critters/arm_chest
+    sprite: {fileID: 21300000, guid: 1c62ec849e738e045866f9cfe4455bf6, type: 3}
+  - key: Characters/Critters/arm_coin
+    sprite: {fileID: 21300000, guid: b28e048f240c45d4b997982912c4b31d, type: 3}
+  - key: Characters/Critters/arm_dew
+    sprite: {fileID: 21300000, guid: b7e71c84e9ae21547b9a929bb88dd0d3, type: 3}
+  - key: Characters/Critters/arm_fire
+    sprite: {fileID: 21300000, guid: 4877ec5042970784abae347af44069a6, type: 3}
+  - key: Characters/Critters/arm_leaf
+    sprite: {fileID: 21300000, guid: 1e8652e061c244c41bb016a3fe2a839d, type: 3}
+  - key: Characters/Critters/arm_moon
+    sprite: {fileID: 21300000, guid: ac7da937ab7f3964d9d0bc1b194fa22b, type: 3}
+  - key: Characters/Critters/arm_rock
+    sprite: {fileID: 21300000, guid: 37ea0add4a1d174458242456d4ff2cac, type: 3}
+  - key: Characters/Critters/arm_spark
+    sprite: {fileID: 21300000, guid: fb0002e446d78884f9c19cb332001bc6, type: 3}
+  - key: Characters/Critters/arm_star
+    sprite: {fileID: 21300000, guid: e08903d91460c234988d0dfb3269c34d, type: 3}
+  - key: Characters/Critters/arm_wind
+    sprite: {fileID: 21300000, guid: 0cf06a4d5439a904990617d9b473c53d, type: 3}
+  - key: Characters/Critters/blink_chest
+    sprite: {fileID: 21300000, guid: 62e3a051d64d66949b8fa3bd548af6fc, type: 3}
+  - key: Characters/Critters/blink_coin
+    sprite: {fileID: 21300000, guid: d533a316b0deaa5489a5f0cd6dcd8979, type: 3}
+  - key: Characters/Critters/blink_dew
+    sprite: {fileID: 21300000, guid: 5a3de6b66562f124e8d348887cfb613b, type: 3}
+  - key: Characters/Critters/blink_fire
+    sprite: {fileID: 21300000, guid: 888c94179b9046f46915504fc508691c, type: 3}
+  - key: Characters/Critters/blink_leaf
+    sprite: {fileID: 21300000, guid: a5a2b052fa9ebce49999b78f92a977cc, type: 3}
+  - key: Characters/Critters/blink_moon
+    sprite: {fileID: 21300000, guid: 612f32b4f36b8904bb9b644d0064f4a9, type: 3}
+  - key: Characters/Critters/blink_rock
+    sprite: {fileID: 21300000, guid: f268db2ffd641b6458745545c4682475, type: 3}
+  - key: Characters/Critters/blink_spark
+    sprite: {fileID: 21300000, guid: c00509880735b804ca02c82b37e090be, type: 3}
+  - key: Characters/Critters/blink_star
+    sprite: {fileID: 21300000, guid: 469860be6b6b20d469403a7e6929c62b, type: 3}
+  - key: Characters/Critters/blink_wind
+    sprite: {fileID: 21300000, guid: 128e87608ee74fc46b46d673fe5be6de, type: 3}
   - key: Characters/Critters/blush
-    sprite: {fileID: 21300000, guid: d70bdaf78b1a6f649bd33c3b997355c2, type: 3}
+    sprite: {fileID: 21300000, guid: 926d7555d5ab71949b636d38c3e4fa02, type: 3}
   - key: Characters/Critters/body
-    sprite: {fileID: 21300000, guid: 4e4b90f738cb6544b9cec2c6a64c207c, type: 3}
+    sprite: {fileID: 21300000, guid: 5c46a201c8fdf7644bdc4c24b1ff2705, type: 3}
+  - key: Characters/Critters/body_chest
+    sprite: {fileID: 21300000, guid: a806ed7ae18d93b4ab94534cfbd4fa3d, type: 3}
+  - key: Characters/Critters/body_chest_closed
+    sprite: {fileID: 21300000, guid: 3b1d32087fea5ca4aad03f5aadc4fb03, type: 3}
+  - key: Characters/Critters/body_coin
+    sprite: {fileID: 21300000, guid: 3b51c7da7c9b554418616b7eed0fa08e, type: 3}
+  - key: Characters/Critters/body_coin_closed
+    sprite: {fileID: 21300000, guid: f981606e560e2334d95811013cb0dc77, type: 3}
+  - key: Characters/Critters/body_dew
+    sprite: {fileID: 21300000, guid: 968d3525414ef0f4ab7a571b285150ad, type: 3}
+  - key: Characters/Critters/body_dew_closed
+    sprite: {fileID: 21300000, guid: cb48f8fe83bbf5b4990e74d99ef7d7fb, type: 3}
+  - key: Characters/Critters/body_fire
+    sprite: {fileID: 21300000, guid: d436b2573c0878f4f9a4a33b704753b7, type: 3}
+  - key: Characters/Critters/body_fire_closed
+    sprite: {fileID: 21300000, guid: 999e6e14be8b03a4ca91a28ee0313f56, type: 3}
+  - key: Characters/Critters/body_leaf
+    sprite: {fileID: 21300000, guid: 377db7986b3c18841948889edd89bb47, type: 3}
+  - key: Characters/Critters/body_leaf_closed
+    sprite: {fileID: 21300000, guid: 109a520714edc3e409ac0f8e00e5ea9e, type: 3}
+  - key: Characters/Critters/body_moon
+    sprite: {fileID: 21300000, guid: f58381f3c58c8b84a9905068587d6557, type: 3}
+  - key: Characters/Critters/body_moon_closed
+    sprite: {fileID: 21300000, guid: 2c79da448a512f34aa3c523403762b2f, type: 3}
+  - key: Characters/Critters/body_rock
+    sprite: {fileID: 21300000, guid: 0e215d8842ea1404dbb97d3dba414075, type: 3}
+  - key: Characters/Critters/body_rock_closed
+    sprite: {fileID: 21300000, guid: 83cf129ff680ee647839c1a5a72d5eb4, type: 3}
+  - key: Characters/Critters/body_spark
+    sprite: {fileID: 21300000, guid: 3588a9053ebc3d14e97b99c344065013, type: 3}
+  - key: Characters/Critters/body_spark_closed
+    sprite: {fileID: 21300000, guid: 6ce25ae55bea9a0458acd416ae34d480, type: 3}
+  - key: Characters/Critters/body_star
+    sprite: {fileID: 21300000, guid: b0093503508c5be4bb7de42caf712013, type: 3}
+  - key: Characters/Critters/body_star_closed
+    sprite: {fileID: 21300000, guid: bc5d6930b80ee064ca5d3ef9d4c8675e, type: 3}
+  - key: Characters/Critters/body_wind
+    sprite: {fileID: 21300000, guid: 08efb437b2482f749b349cae8a26beef, type: 3}
+  - key: Characters/Critters/body_wind_closed
+    sprite: {fileID: 21300000, guid: 78fa11257c6c8e143a8b89dfb187e1e4, type: 3}
   - key: Characters/Critters/cap_chest
-    sprite: {fileID: 21300000, guid: a70de79b46e22ce4786a658ca09d9111, type: 3}
+    sprite: {fileID: 21300000, guid: 814b8312ed46fd349998a45426ac2b6e, type: 3}
   - key: Characters/Critters/cap_coin
-    sprite: {fileID: 21300000, guid: 402b3b8ffbd6c1a4590302ce72b1414c, type: 3}
+    sprite: {fileID: 21300000, guid: 0cbcaa2d69747304b932cea6b4d01282, type: 3}
   - key: Characters/Critters/cap_dew
-    sprite: {fileID: 21300000, guid: f8a90482f272e18409a547d8e7f72960, type: 3}
+    sprite: {fileID: 21300000, guid: 608982ec089afd149a727ad881697cb5, type: 3}
   - key: Characters/Critters/cap_fire
-    sprite: {fileID: 21300000, guid: baebce4b8e6707146880ff851b53b427, type: 3}
+    sprite: {fileID: 21300000, guid: 997b030470a8f2e4cb4877f408a3e3dd, type: 3}
   - key: Characters/Critters/cap_leaf
-    sprite: {fileID: 21300000, guid: d8a038a0feb4d92429cdd2e71ee7a7be, type: 3}
+    sprite: {fileID: 21300000, guid: 0f922b5cc6572094881a666572f81a2c, type: 3}
   - key: Characters/Critters/cap_moon
-    sprite: {fileID: 21300000, guid: d55a8807afce6a240848c104409b508c, type: 3}
+    sprite: {fileID: 21300000, guid: e0d8ccc8627a6c040baf432bdd7c2573, type: 3}
   - key: Characters/Critters/cap_rock
-    sprite: {fileID: 21300000, guid: c35d13be6916722468f2da6efcf62ce5, type: 3}
+    sprite: {fileID: 21300000, guid: f7f3ed26eae999b4ab5c4f56f5bdedd6, type: 3}
   - key: Characters/Critters/cap_spark
-    sprite: {fileID: 21300000, guid: ac455837402ff3b4aae03904fdf4f4c2, type: 3}
+    sprite: {fileID: 21300000, guid: e369eb8d7357ecf459d54e25ac95215f, type: 3}
   - key: Characters/Critters/cap_star
-    sprite: {fileID: 21300000, guid: 31b54e1f2241fd44093be4d8e835141d, type: 3}
+    sprite: {fileID: 21300000, guid: 0cecb4d10abbd0a42befb225c1e8563f, type: 3}
   - key: Characters/Critters/cap_wind
-    sprite: {fileID: 21300000, guid: e62a7f2df05503645b2a1c18d91a42bd, type: 3}
+    sprite: {fileID: 21300000, guid: 3993fd392150cc7459d7d08acfb3ffac, type: 3}
   - key: Characters/Critters/chest_ref
-    sprite: {fileID: 21300000, guid: 40fac8a2c58605a4588cbcdb6e8185f3, type: 3}
+    sprite: {fileID: 21300000, guid: 94a1773475cc7ea4fb0b2ad5dcebe7b7, type: 3}
   - key: Characters/Critters/coin_ref
-    sprite: {fileID: 21300000, guid: 0556e084d3b2f324b9828616e6e7d549, type: 3}
+    sprite: {fileID: 21300000, guid: 2994d0ffdb14d7149a86c5eb3c165d34, type: 3}
   - key: Characters/Critters/dew_ref
-    sprite: {fileID: 21300000, guid: 93b7fe25bf0884a4baffdaa28dc0f66d, type: 3}
+    sprite: {fileID: 21300000, guid: ffe006d6902e8f14cb6fd0ecc2ea78ba, type: 3}
   - key: Characters/Critters/eyes_closed
-    sprite: {fileID: 21300000, guid: c22912b4f08ea20439b4564bf9afba36, type: 3}
+    sprite: {fileID: 21300000, guid: f4066d362b5bbed41aa445eecec2b62f, type: 3}
   - key: Characters/Critters/eyes_open
-    sprite: {fileID: 21300000, guid: 58cc2c51a54ec7840bc495007bedd337, type: 3}
+    sprite: {fileID: 21300000, guid: 7fb6101fea794f24689ea0aecb371f91, type: 3}
   - key: Characters/Critters/eyes_x
-    sprite: {fileID: 21300000, guid: 65e7dce92694bce49abfabb5099db930, type: 3}
+    sprite: {fileID: 21300000, guid: de55fed82470e7c4f8c20dc12ab07754, type: 3}
   - key: Characters/Critters/fire_ref
-    sprite: {fileID: 21300000, guid: 668efe3ae62ac324696d8d8a072400f9, type: 3}
+    sprite: {fileID: 21300000, guid: c4e336dd8033df647838cd217e251201, type: 3}
   - key: Characters/Critters/foot
-    sprite: {fileID: 21300000, guid: e2f2c3f02c1656c429dd707fa39fd8c6, type: 3}
+    sprite: {fileID: 21300000, guid: d95dd67484425e24085558fead83dffa, type: 3}
+  - key: Characters/Critters/foot_chest
+    sprite: {fileID: 21300000, guid: 32034898897442f48a7f8d163e1bf2be, type: 3}
+  - key: Characters/Critters/foot_coin
+    sprite: {fileID: 21300000, guid: 3997ff82d6e751f40bb0946ebb47a585, type: 3}
+  - key: Characters/Critters/foot_dew
+    sprite: {fileID: 21300000, guid: 308bf7221d721734480ccc3f8b6bf9ab, type: 3}
+  - key: Characters/Critters/foot_fire
+    sprite: {fileID: 21300000, guid: 608727c6dafc92b4ea2c428846d5d608, type: 3}
+  - key: Characters/Critters/foot_leaf
+    sprite: {fileID: 21300000, guid: f9df60f4614e8504d9a4b5173090799a, type: 3}
+  - key: Characters/Critters/foot_moon
+    sprite: {fileID: 21300000, guid: d8e34d68c93b4c741a0af7073886eeea, type: 3}
+  - key: Characters/Critters/foot_rock
+    sprite: {fileID: 21300000, guid: 9358703eaed7caa47903d6e72aa4b20a, type: 3}
+  - key: Characters/Critters/foot_spark
+    sprite: {fileID: 21300000, guid: 656aa6a08a53a5946a268a7f4250a4b2, type: 3}
+  - key: Characters/Critters/foot_star
+    sprite: {fileID: 21300000, guid: e3eec9e23ed04634e943ab9061c3bdcc, type: 3}
+  - key: Characters/Critters/foot_wind
+    sprite: {fileID: 21300000, guid: 368ea702a82cb8c42b360179de446c73, type: 3}
   - key: Characters/Critters/heart
-    sprite: {fileID: 21300000, guid: 82027febf025508428c560876f786536, type: 3}
+    sprite: {fileID: 21300000, guid: 3ea67df4914e97c4e85a0a2790e5bfa3, type: 3}
+  - key: Characters/Critters/icon_chest
+    sprite: {fileID: 21300000, guid: 39e5d1dffe3f0f64cb1fe042f9e59147, type: 3}
+  - key: Characters/Critters/icon_chest_skin
+    sprite: {fileID: 21300000, guid: f7480414204b07146a130c1ee9c1f458, type: 3}
+  - key: Characters/Critters/icon_coin
+    sprite: {fileID: 21300000, guid: e1fd3e41d01ecef468dc05b0257c8458, type: 3}
+  - key: Characters/Critters/icon_coin_skin
+    sprite: {fileID: 21300000, guid: b0dbbdbbd7a287a48870ccbb14bfeebd, type: 3}
+  - key: Characters/Critters/icon_dew
+    sprite: {fileID: 21300000, guid: cdc91b51af154dc42bc4d2064c00c6c5, type: 3}
+  - key: Characters/Critters/icon_dew_skin
+    sprite: {fileID: 21300000, guid: d3f60333a6e78504db4fa2bd448d5aaa, type: 3}
+  - key: Characters/Critters/icon_fire
+    sprite: {fileID: 21300000, guid: 9efbbabf248b91940ae4b8e6bca5ac67, type: 3}
+  - key: Characters/Critters/icon_fire_skin
+    sprite: {fileID: 21300000, guid: 2daa8822048aaef4481cef6f5ef70ead, type: 3}
+  - key: Characters/Critters/icon_leaf
+    sprite: {fileID: 21300000, guid: 20f9b8372912af643a734f832c721aa7, type: 3}
+  - key: Characters/Critters/icon_leaf_skin
+    sprite: {fileID: 21300000, guid: a5fedb79888287244885c5597d910485, type: 3}
+  - key: Characters/Critters/icon_moon
+    sprite: {fileID: 21300000, guid: 9d78ef11abda72041961a5d0f9e473c4, type: 3}
+  - key: Characters/Critters/icon_moon_skin
+    sprite: {fileID: 21300000, guid: 6b8d7934396d5194b8348b0f20d680b4, type: 3}
+  - key: Characters/Critters/icon_rock
+    sprite: {fileID: 21300000, guid: e27a5c679d76ad248adf22d77e5d247d, type: 3}
+  - key: Characters/Critters/icon_rock_skin
+    sprite: {fileID: 21300000, guid: 4e29ec8e78306d74089414f1f9e7534c, type: 3}
+  - key: Characters/Critters/icon_spark
+    sprite: {fileID: 21300000, guid: 777d369cf7e5da545ba9ccbb41344710, type: 3}
+  - key: Characters/Critters/icon_spark_skin
+    sprite: {fileID: 21300000, guid: d59f33d126f52ee4e9f16fc68d7d4911, type: 3}
+  - key: Characters/Critters/icon_star
+    sprite: {fileID: 21300000, guid: a8093930a1d91a34ea69f0da6f64da40, type: 3}
+  - key: Characters/Critters/icon_star_skin
+    sprite: {fileID: 21300000, guid: 376feb965d5ae5c4bbf104b00319ebb6, type: 3}
+  - key: Characters/Critters/icon_wind
+    sprite: {fileID: 21300000, guid: 6c5106a493324134784e07284f3ffee8, type: 3}
+  - key: Characters/Critters/icon_wind_skin
+    sprite: {fileID: 21300000, guid: 0cef3642bbed46f4dbb80245d76bf210, type: 3}
   - key: Characters/Critters/leaf_ref
-    sprite: {fileID: 21300000, guid: b8335e0032fcb3245ad77f6a8824bea3, type: 3}
+    sprite: {fileID: 21300000, guid: d436eec0804645640a9c652edc91c145, type: 3}
   - key: Characters/Critters/moon_ref
-    sprite: {fileID: 21300000, guid: 9a301d37c27513c4a9c0a872576e8ccc, type: 3}
+    sprite: {fileID: 21300000, guid: 1637ef489ca1989499b8934c262f9ab2, type: 3}
   - key: Characters/Critters/mouth_open
-    sprite: {fileID: 21300000, guid: b0dd1e061cf113048960358bd50c0186, type: 3}
+    sprite: {fileID: 21300000, guid: 834a1991ed8eccf42a347a288238391a, type: 3}
   - key: Characters/Critters/mouth_smile
-    sprite: {fileID: 21300000, guid: ec78b6623cbf42a43bfaeed320e8a730, type: 3}
+    sprite: {fileID: 21300000, guid: fde98170d07a10f4ba77d3a5950f71e4, type: 3}
+  - key: Characters/Critters/nub_chest
+    sprite: {fileID: 21300000, guid: eaab24c1b3207d54eb906eeb54ce01df, type: 3}
+  - key: Characters/Critters/nub_coin
+    sprite: {fileID: 21300000, guid: 4901e6cb87e3c8845947f34b18742aff, type: 3}
+  - key: Characters/Critters/nub_dew
+    sprite: {fileID: 21300000, guid: f67f20a715dc3bb41ad24948fcf12848, type: 3}
+  - key: Characters/Critters/nub_fire
+    sprite: {fileID: 21300000, guid: 64f6bd9269ac1c649a397e20d19eaae4, type: 3}
+  - key: Characters/Critters/nub_leaf
+    sprite: {fileID: 21300000, guid: 8b12527c65ddbd94ebdf5966c1d0e0d6, type: 3}
+  - key: Characters/Critters/nub_moon
+    sprite: {fileID: 21300000, guid: ab8e8e0d5fe48f3439d3883ba743f7d3, type: 3}
+  - key: Characters/Critters/nub_rock
+    sprite: {fileID: 21300000, guid: add622d40cbfb084c97bdffa7903c2d9, type: 3}
+  - key: Characters/Critters/nub_spark
+    sprite: {fileID: 21300000, guid: f6b7d79f9ceeaee4baceca0927b54527, type: 3}
+  - key: Characters/Critters/nub_star
+    sprite: {fileID: 21300000, guid: a6422196dcc2aeb46ab20fb35eb5231b, type: 3}
+  - key: Characters/Critters/nub_wind
+    sprite: {fileID: 21300000, guid: 52534950923e5094a8c5f7eda284a98a, type: 3}
+  - key: Characters/Critters/rigbody_chest
+    sprite: {fileID: 21300000, guid: f11c107c86dcb194e9cbdf0302cc6216, type: 3}
+  - key: Characters/Critters/rigbody_coin
+    sprite: {fileID: 21300000, guid: be45d4bc896b824418d6e28cc3d33e38, type: 3}
+  - key: Characters/Critters/rigbody_dew
+    sprite: {fileID: 21300000, guid: 5282710f2cf78174ab29d4432aa2c353, type: 3}
+  - key: Characters/Critters/rigbody_fire
+    sprite: {fileID: 21300000, guid: 6337ea4c6f0b73d4e8f420f43b9ec9fe, type: 3}
+  - key: Characters/Critters/rigbody_leaf
+    sprite: {fileID: 21300000, guid: 24ae6405e570ce843821c05c4d5af23e, type: 3}
+  - key: Characters/Critters/rigbody_moon
+    sprite: {fileID: 21300000, guid: 3b33cdbb7d922ee458a4c48611d4ecb3, type: 3}
+  - key: Characters/Critters/rigbody_rock
+    sprite: {fileID: 21300000, guid: a8c3d5a5710a6fa47a82b0103d0f981d, type: 3}
+  - key: Characters/Critters/rigbody_spark
+    sprite: {fileID: 21300000, guid: d26efcfbbc518574c9e2dbc37b112ea6, type: 3}
+  - key: Characters/Critters/rigbody_star
+    sprite: {fileID: 21300000, guid: f70073ff4b1951143b3809a09e51263d, type: 3}
+  - key: Characters/Critters/rigbody_wind
+    sprite: {fileID: 21300000, guid: 8fc42dbd8e2e7994693699defafc7844, type: 3}
+  - key: Characters/Critters/rigcap_chest
+    sprite: {fileID: 21300000, guid: 2fd290d50f2001648bcde4e5f47c02ed, type: 3}
+  - key: Characters/Critters/rigcap_coin
+    sprite: {fileID: 21300000, guid: 6886bc3464beb9546815efc51ffa1597, type: 3}
+  - key: Characters/Critters/rigcap_dew
+    sprite: {fileID: 21300000, guid: c5ec7d7b139147c46815cb7035164687, type: 3}
+  - key: Characters/Critters/rigcap_fire
+    sprite: {fileID: 21300000, guid: e3f1f4d7899f6cf4ba0db840b44cbecf, type: 3}
+  - key: Characters/Critters/rigcap_leaf
+    sprite: {fileID: 21300000, guid: 6460dfef79bf97c419052935e5149df0, type: 3}
+  - key: Characters/Critters/rigcap_moon
+    sprite: {fileID: 21300000, guid: ff3c2ca721787794db678583ad8bb5e5, type: 3}
+  - key: Characters/Critters/rigcap_rock
+    sprite: {fileID: 21300000, guid: c6cdc98232a59ef468f6458228d5f33c, type: 3}
+  - key: Characters/Critters/rigcap_spark
+    sprite: {fileID: 21300000, guid: 16a317a5ed23eb944a30b5e05b85ee5b, type: 3}
+  - key: Characters/Critters/rigcap_star
+    sprite: {fileID: 21300000, guid: 281c95bfaaa7af846a4d766301f89aac, type: 3}
+  - key: Characters/Critters/rigcap_wind
+    sprite: {fileID: 21300000, guid: 07366d4ad33eda9498a10d9a45d1a6ef, type: 3}
+  - key: Characters/Critters/rigskin_chest
+    sprite: {fileID: 21300000, guid: 59f76abd212583048bec4e57c7aa7fa0, type: 3}
+  - key: Characters/Critters/rigskin_coin
+    sprite: {fileID: 21300000, guid: 370621c1d40d1764d8437738c247de33, type: 3}
+  - key: Characters/Critters/rigskin_dew
+    sprite: {fileID: 21300000, guid: ba4c8199788e7f94fb695cf276f0a354, type: 3}
+  - key: Characters/Critters/rigskin_fire
+    sprite: {fileID: 21300000, guid: d6f0a213ac9bf5b4a8223facb8197fcc, type: 3}
+  - key: Characters/Critters/rigskin_leaf
+    sprite: {fileID: 21300000, guid: aed3679e5825c2e4e9425e23b8121c78, type: 3}
+  - key: Characters/Critters/rigskin_moon
+    sprite: {fileID: 21300000, guid: 2f5682ea2505bcc47b65c36f549f71af, type: 3}
+  - key: Characters/Critters/rigskin_rock
+    sprite: {fileID: 21300000, guid: c2ab2b0893da93f4d91abf05474756da, type: 3}
+  - key: Characters/Critters/rigskin_spark
+    sprite: {fileID: 21300000, guid: 5d41029ffa5d5644286f5dc76e180c08, type: 3}
+  - key: Characters/Critters/rigskin_star
+    sprite: {fileID: 21300000, guid: 7ce8b36a861c41d408665e7b6fff9320, type: 3}
+  - key: Characters/Critters/rigskin_wind
+    sprite: {fileID: 21300000, guid: 50dd8489dec9fed4fbf664748aa630ff, type: 3}
   - key: Characters/Critters/rock_ref
-    sprite: {fileID: 21300000, guid: 9f0b02703589fdd42898b193fd4c9ccf, type: 3}
+    sprite: {fileID: 21300000, guid: 52e801f933e1ef442884068b0ef37c1b, type: 3}
   - key: Characters/Critters/skin_chest
-    sprite: {fileID: 21300000, guid: ad295c100acea394d81cfa61c2463b7e, type: 3}
+    sprite: {fileID: 21300000, guid: f7b504da04915684ebacd9252c711f38, type: 3}
   - key: Characters/Critters/skin_coin
-    sprite: {fileID: 21300000, guid: f5b8a51350f760e4ca77e0c9649ea7b7, type: 3}
+    sprite: {fileID: 21300000, guid: b73dc49fe45e6494b926b336b820019e, type: 3}
   - key: Characters/Critters/skin_dew
-    sprite: {fileID: 21300000, guid: 32e29e59b4880e746a8f5927c196b06b, type: 3}
+    sprite: {fileID: 21300000, guid: 6e64b028c358c1847837ec2afc57c997, type: 3}
   - key: Characters/Critters/skin_fire
-    sprite: {fileID: 21300000, guid: 3db3270b47bd02f4d905187ef7b64abf, type: 3}
+    sprite: {fileID: 21300000, guid: 90142e7e81b3f8443bcf9ba2338a7ee2, type: 3}
   - key: Characters/Critters/skin_leaf
-    sprite: {fileID: 21300000, guid: 2358fc65cba557c4abdf9e146a7adf60, type: 3}
+    sprite: {fileID: 21300000, guid: 45902c792348a6b4ba841e041dccf637, type: 3}
   - key: Characters/Critters/skin_moon
-    sprite: {fileID: 21300000, guid: be87baa493f35fc4cab4736c998aa523, type: 3}
+    sprite: {fileID: 21300000, guid: 166ed052d6c818146b1667422dab8ca6, type: 3}
   - key: Characters/Critters/skin_rock
-    sprite: {fileID: 21300000, guid: 5f9db0d358753194e8508e9e459a4fda, type: 3}
+    sprite: {fileID: 21300000, guid: b6795052c35ab1b459b705583de16f09, type: 3}
   - key: Characters/Critters/skin_spark
-    sprite: {fileID: 21300000, guid: 335f06c3e6946424b85709c6fa0dd99e, type: 3}
+    sprite: {fileID: 21300000, guid: 3aef3175137981e4d8f26819ce454b89, type: 3}
   - key: Characters/Critters/skin_star
-    sprite: {fileID: 21300000, guid: 58154e930ccfaeb4c88c7ac51e5b74a6, type: 3}
+    sprite: {fileID: 21300000, guid: d915d06b8b04b8842a85be01a60853a4, type: 3}
   - key: Characters/Critters/skin_wind
-    sprite: {fileID: 21300000, guid: 03eaa5d6386e79a4696521af76197930, type: 3}
+    sprite: {fileID: 21300000, guid: ca1ee80b1ac05a44493286a8fdf08041, type: 3}
   - key: Characters/Critters/spark_ref
-    sprite: {fileID: 21300000, guid: abf33f20939ff814bae1d10bda8b174d, type: 3}
+    sprite: {fileID: 21300000, guid: 0c631cb8cde1b7f4c955f6e89265ba4d, type: 3}
   - key: Characters/Critters/star_ref
-    sprite: {fileID: 21300000, guid: 172d8052fc9aebd4e906bb03ec9a2887, type: 3}
+    sprite: {fileID: 21300000, guid: 0d9b0464369cd7e47b15a1647b182643, type: 3}
   - key: Characters/Critters/sweat
-    sprite: {fileID: 21300000, guid: 04882ea5c3ff19a47bf9f45cf505a665, type: 3}
+    sprite: {fileID: 21300000, guid: 4d6857140a271034a8a9208cea99d44c, type: 3}
   - key: Characters/Critters/wind_ref
-    sprite: {fileID: 21300000, guid: 4f00dfb36d2178d4d8882e8e5b0f03da, type: 3}
+    sprite: {fileID: 21300000, guid: 4cc4fd7242790d9459d57efe9b82a161, type: 3}
   - key: Characters/Grandpa/Rig/body
-    sprite: {fileID: 21300000, guid: f8367ceda87e11e428c1062887bbf9cf, type: 3}
+    sprite: {fileID: 21300000, guid: 32625db15ea2f994ebc2bda81cdf867f, type: 3}
   - key: Characters/Grandpa/Rig/eyes_closed
-    sprite: {fileID: 21300000, guid: fc73db4210e67694ca6bb021a202dead, type: 3}
+    sprite: {fileID: 21300000, guid: ea66c9911bfc3e0449f7ff15c4aab7d7, type: 3}
   - key: Characters/Grandpa/Rig/head_cover
-    sprite: {fileID: 21300000, guid: ba76c6e3c070f004ebbe44f1b3c08199, type: 3}
+    sprite: {fileID: 21300000, guid: efa5ae9dc078c0c4ba9919ba98b40791, type: 3}
   - key: Characters/Grandpa/Rig/scythe
-    sprite: {fileID: 21300000, guid: 381e4e246c866fd4ca9fb78d74b19c50, type: 3}
+    sprite: {fileID: 21300000, guid: c248b55ea56c03543a745e29a93adc60, type: 3}
   - key: Characters/NPC/baker
-    sprite: {fileID: 21300000, guid: 94b5d61d14321db43be70ee9e3e076b0, type: 3}
+    sprite: {fileID: 21300000, guid: 02e3eab22bfcd20429415af09739abd3, type: 3}
   - key: Characters/NPC/dr
-    sprite: {fileID: 21300000, guid: 2ca16cd8517b12548ad4b749dae018f7, type: 3}
+    sprite: {fileID: 21300000, guid: ab7e2f677055f9146b792321cef08d79, type: 3}
   - key: Characters/NPC/herb
-    sprite: {fileID: 21300000, guid: c32b9d3fae3cfb74e8328f12a8cb89da, type: 3}
+    sprite: {fileID: 21300000, guid: a551071bdf009ec448a496b1f36a2b96, type: 3}
   - key: Characters/NPC/inn
-    sprite: {fileID: 21300000, guid: 6f9ca2a216b31ed40b193d14cad69fbc, type: 3}
+    sprite: {fileID: 21300000, guid: 2324d9fca92ffe349a27eeaa484c48f4, type: 3}
   - key: Characters/NPC/kid
-    sprite: {fileID: 21300000, guid: 233e0de1c994ae84984faa94f37e6aab, type: 3}
+    sprite: {fileID: 21300000, guid: 641efd148153d7e4a9d8aff7e9ec152c, type: 3}
   - key: Characters/NPC/merch
-    sprite: {fileID: 21300000, guid: 5be2ee3388e76ff4bb8013c8d4b7137d, type: 3}
+    sprite: {fileID: 21300000, guid: 9181f5cdeaf73ff4b9ebcfe213c29447, type: 3}
   - key: Characters/NPC/ranger
-    sprite: {fileID: 21300000, guid: 6743574cf8f04904eab6ed6cf26ccae6, type: 3}
+    sprite: {fileID: 21300000, guid: 6c711d3f7b35971478ad95463e92a361, type: 3}
   - key: Characters/NPC/smith
-    sprite: {fileID: 21300000, guid: 13cba63c243b429438b83d456e72f518, type: 3}
+    sprite: {fileID: 21300000, guid: 58beb341733a5be44b57f74c770135e3, type: 3}
   - key: Env/bush_big
-    sprite: {fileID: 21300000, guid: eef9791dea351bd4db8bbd52ce252121, type: 3}
+    sprite: {fileID: 21300000, guid: dc898d239f095f048b97ee0a6260adaf, type: 3}
   - key: Env/bush_mid
-    sprite: {fileID: 21300000, guid: 0762a48f242c35d43bc229a8e3d088cb, type: 3}
+    sprite: {fileID: 21300000, guid: 475e726262b1cf84cae3cedb88c3a2ee, type: 3}
   - key: Env/bush_small
-    sprite: {fileID: 21300000, guid: 126934e51fae2ed4a95faf8973bcb2e5, type: 3}
+    sprite: {fileID: 21300000, guid: 11c8f939d71839f45b9b96acb2a414e4, type: 3}
   - key: Env/clover
-    sprite: {fileID: 21300000, guid: 747e6290993b53344b4e579f19c55f00, type: 3}
+    sprite: {fileID: 21300000, guid: f01f7bbc87321564ca61e8a172aa66e2, type: 3}
+  - key: Env/far_arch
+    sprite: {fileID: 21300000, guid: 097d70e4abfde90429c50a2f9decfcd1, type: 3}
+  - key: Env/far_bush
+    sprite: {fileID: 21300000, guid: 6f766adc8fa1f9a48aad4cf98c6204cd, type: 3}
+  - key: Env/far_hill
+    sprite: {fileID: 21300000, guid: c182e1a44125e8245889d5ec047fbce8, type: 3}
+  - key: Env/far_pine
+    sprite: {fileID: 21300000, guid: 85de82836ffeda943a0edbd01f026018, type: 3}
+  - key: Env/far_rock
+    sprite: {fileID: 21300000, guid: 0e1b65854c3ce534fa036b8b5bf85bf7, type: 3}
+  - key: Env/far_shroom
+    sprite: {fileID: 21300000, guid: 86740b97bba0a2841a849ad1d2a99577, type: 3}
+  - key: Env/far_tree_a
+    sprite: {fileID: 21300000, guid: 8fe8dcf121013e040a561db0fe28c790, type: 3}
+  - key: Env/far_tree_b
+    sprite: {fileID: 21300000, guid: d43b1e283038f4d46948d79718354552, type: 3}
+  - key: Env/far_tree_c
+    sprite: {fileID: 21300000, guid: adea8a283d21e2148b2172dbcd14baf3, type: 3}
   - key: Env/fence
-    sprite: {fileID: 21300000, guid: e73420077c205b8449c48932322fd1c3, type: 3}
+    sprite: {fileID: 21300000, guid: 4cd628bfc22342045b33113d4b15cf40, type: 3}
   - key: Env/fence_post
-    sprite: {fileID: 21300000, guid: 7f816397fb6ac554fa4d3bdabeb15be0, type: 3}
+    sprite: {fileID: 21300000, guid: 66271b36a7b0a78408bb90d8b3151cf6, type: 3}
   - key: Env/fern
-    sprite: {fileID: 21300000, guid: 855efae84cf7d2241a0772a479f5916c, type: 3}
+    sprite: {fileID: 21300000, guid: 7189f20f1b5ca3f45a06c16d18bbd9b1, type: 3}
   - key: Env/field_flowers
-    sprite: {fileID: 21300000, guid: cc3a09f150ec302488e695b727e9b643, type: 3}
+    sprite: {fileID: 21300000, guid: c4e347d4583d34a46b2e1609fee0eb6f, type: 3}
   - key: Env/field_haybale
-    sprite: {fileID: 21300000, guid: ce52504b57c409346aae29421e8864eb, type: 3}
+    sprite: {fileID: 21300000, guid: 8d3f7bc2f2f3ff14bae0491b7ed59e87, type: 3}
   - key: Env/field_scarecrow
-    sprite: {fileID: 21300000, guid: 596721f1253b6ad46aaef35d28b9949f, type: 3}
+    sprite: {fileID: 21300000, guid: 4c1b51dfebe765d4c8161f0cec3493d5, type: 3}
   - key: Env/field_sunflower
-    sprite: {fileID: 21300000, guid: 92ebd55092d687d44a0ca099082c663d, type: 3}
+    sprite: {fileID: 21300000, guid: 2f7205e755eb1fb498faf1a5072a3da3, type: 3}
   - key: Env/field_wheat
-    sprite: {fileID: 21300000, guid: dfabed5a3c760854290c20f9a526061b, type: 3}
+    sprite: {fileID: 21300000, guid: 10bf886c92df7b944a4488c5b638b217, type: 3}
   - key: Env/field_windmill
-    sprite: {fileID: 21300000, guid: 32aff89e1b3d11c4783a76edd7479765, type: 3}
+    sprite: {fileID: 21300000, guid: 5cd004198f4e8c740a67f6870e50845e, type: 3}
   - key: Env/flowers_pink
-    sprite: {fileID: 21300000, guid: c5391c3e78f66664ea9b8a1e8ccee4ff, type: 3}
+    sprite: {fileID: 21300000, guid: 329edbac77e99604ab873abac81ed249, type: 3}
   - key: Env/flowers_white
-    sprite: {fileID: 21300000, guid: c36b96be2899a15468ea72e6af4a8fcd, type: 3}
+    sprite: {fileID: 21300000, guid: 74667a9d7e334364b9265972f610d9f6, type: 3}
   - key: Env/flowers_yellow
-    sprite: {fileID: 21300000, guid: 2b3eb37d9584d9b41a01ec84156c9a92, type: 3}
+    sprite: {fileID: 21300000, guid: f13967b5241ee6443a79de1bd49d8a05, type: 3}
+  - key: Env/fog_a
+    sprite: {fileID: 21300000, guid: 65d24da7b7229de4e8eb2fb2ca2da03d, type: 3}
+  - key: Env/fog_b
+    sprite: {fileID: 21300000, guid: 6cb26163162e5c54a8b0589f305002bd, type: 3}
+  - key: Env/frog
+    sprite: {fileID: 21300000, guid: 642e4567182fc6746b2e7a9ca1c2ff2e, type: 3}
+  - key: Env/grass_small
+    sprite: {fileID: 21300000, guid: f6e6e549c13324f4eb592b1e8165bb55, type: 3}
   - key: Env/grass_tall
-    sprite: {fileID: 21300000, guid: 05a2af35ab691d346b15abc446449f49, type: 3}
+    sprite: {fileID: 21300000, guid: c8954733c3f7f4642913cf38641596f3, type: 3}
+  - key: Env/leaf_litter
+    sprite: {fileID: 21300000, guid: c71a033719e25994db4c8f38e5ff6f9d, type: 3}
+  - key: Env/light_patch
+    sprite: {fileID: 21300000, guid: 894490494649c7e4483b3bffa450d6b6, type: 3}
   - key: Env/log
-    sprite: {fileID: 21300000, guid: c26f98a790ca2d445a0281de59faccfc, type: 3}
+    sprite: {fileID: 21300000, guid: d3ad3d8a5cd75a04785273bcd2cd7252, type: 3}
+  - key: Env/moss
+    sprite: {fileID: 21300000, guid: 171035355aca03148a29f835712cfdce, type: 3}
   - key: Env/mush_deco
-    sprite: {fileID: 21300000, guid: d514331ca96787049b5c30f9b68c8765, type: 3}
+    sprite: {fileID: 21300000, guid: a9a070ca2d2082d47844e9b4329a731a, type: 3}
+  - key: Env/near_branch
+    sprite: {fileID: 21300000, guid: a67fdca209fa1714ca6148ca9c80b527, type: 3}
+  - key: Env/near_grass
+    sprite: {fileID: 21300000, guid: f4bbc79a70b12484e9f39a428098ee95, type: 3}
+  - key: Env/near_leaves_l
+    sprite: {fileID: 21300000, guid: 8e39e4d1483b8b14094f4c01f10590c6, type: 3}
+  - key: Env/near_leaves_r
+    sprite: {fileID: 21300000, guid: 954f13569c07e8843ae8df9ea1de6d16, type: 3}
+  - key: Env/near_shroom
+    sprite: {fileID: 21300000, guid: 20eb5b2469a5f0b4e8691e8fc0f6168c, type: 3}
+  - key: Env/near_trunk
+    sprite: {fileID: 21300000, guid: b3e5c46467368e7409c3366987937c0c, type: 3}
   - key: Env/night_bush
-    sprite: {fileID: 21300000, guid: 654d85a8cb579604bb309a0135ddf787, type: 3}
+    sprite: {fileID: 21300000, guid: aa4bd8dc3056d3b4c83ebfc7b0d43991, type: 3}
   - key: Env/night_flowers
-    sprite: {fileID: 21300000, guid: b0fb2ab54ef510846b1f55998ae963d6, type: 3}
+    sprite: {fileID: 21300000, guid: 63cacd54fee8c9f40ae136f4a02f8dd9, type: 3}
   - key: Env/night_glowshroom
-    sprite: {fileID: 21300000, guid: 1f8c1be816828454784be95b64a5d088, type: 3}
+    sprite: {fileID: 21300000, guid: 404b726df3fd0cf4a9f19e883fa265d0, type: 3}
   - key: Env/night_lantern
-    sprite: {fileID: 21300000, guid: 2a3581c5e6f41f84dab77e0d5a522ac4, type: 3}
+    sprite: {fileID: 21300000, guid: cd2a302c809a6824eb38e43ffb93debe, type: 3}
+  - key: Env/night_moth
+    sprite: {fileID: 21300000, guid: bbc80ba41f7ad8248924f00896552e6f, type: 3}
   - key: Env/night_rock
-    sprite: {fileID: 21300000, guid: f46c2e7c5afb3184dba32556870c2169, type: 3}
+    sprite: {fileID: 21300000, guid: 046ba8c0f9e848443b3b4c4961c85dc5, type: 3}
   - key: Env/night_tree
-    sprite: {fileID: 21300000, guid: 821fddd62d9474f43894a40f474ed2d1, type: 3}
+    sprite: {fileID: 21300000, guid: b9561f3895150b84f84686e11d43295d, type: 3}
   - key: Env/path
-    sprite: {fileID: 21300000, guid: 8d3a0b74a60d2214fa40787b3a6d85af, type: 3}
+    sprite: {fileID: 21300000, guid: 243a3133aa5e61b42885ea489a4781e2, type: 3}
   - key: Env/pond
-    sprite: {fileID: 21300000, guid: 007be290335c4cc43b135e66cfb9c2c0, type: 3}
+    sprite: {fileID: 21300000, guid: 9499f279a557e9c45a79c03f6e7c918b, type: 3}
   - key: Env/rock_big
-    sprite: {fileID: 21300000, guid: c4f3446619fac994e87ea928b658a6e6, type: 3}
+    sprite: {fileID: 21300000, guid: adfe53afbb5f8cd468211440d6e08960, type: 3}
   - key: Env/rock_mid
-    sprite: {fileID: 21300000, guid: 3da364f66f6a5f045be4183621608798, type: 3}
+    sprite: {fileID: 21300000, guid: 677b31e9d4a148b4185951bd9ccacb07, type: 3}
   - key: Env/rock_small
-    sprite: {fileID: 21300000, guid: 2b1ff30781904b7428e687854e0abe26, type: 3}
+    sprite: {fileID: 21300000, guid: 03a39f1922058ee42af8b0fb768035c9, type: 3}
   - key: Env/roots
-    sprite: {fileID: 21300000, guid: a34878d864fbae6478aa60d783e82533, type: 3}
+    sprite: {fileID: 21300000, guid: f3307c111b0e70c4ead0effb8ae90834, type: 3}
   - key: Env/ruins_arch
-    sprite: {fileID: 21300000, guid: 0e7606abc5bccdc40af234168da5103f, type: 3}
+    sprite: {fileID: 21300000, guid: 316cda2f962bba949b55fbc37a164f74, type: 3}
   - key: Env/ruins_bush
-    sprite: {fileID: 21300000, guid: fe5ca5c4c67528542b576d9dffe8cf7d, type: 3}
+    sprite: {fileID: 21300000, guid: 39ff134300422e247a191668fe617d03, type: 3}
   - key: Env/ruins_giantshroom
-    sprite: {fileID: 21300000, guid: 66920dc89dc27e14aa9d298d754b14ab, type: 3}
+    sprite: {fileID: 21300000, guid: 228e580650e52494385f6e134ce3f6aa, type: 3}
   - key: Env/ruins_lantern
-    sprite: {fileID: 21300000, guid: c390d04bf189da34d887e52b4ae3678a, type: 3}
+    sprite: {fileID: 21300000, guid: 51d93fd7cd14cdb4d92ecb4c86be95ae, type: 3}
   - key: Env/ruins_pillar
-    sprite: {fileID: 21300000, guid: 380c010121b74af468bde130a9c49abe, type: 3}
+    sprite: {fileID: 21300000, guid: 2c7ce44b0d0408948b534f0f9d310497, type: 3}
   - key: Env/ruins_rubble
-    sprite: {fileID: 21300000, guid: 72028af0067aa9140ac0cc0dc4c9eba2, type: 3}
+    sprite: {fileID: 21300000, guid: 9dd0566c5cb692f428a7887e108f8899, type: 3}
   - key: Env/ruins_wall
-    sprite: {fileID: 21300000, guid: 7be2047d0f51a704eb8ccbe0c44872df, type: 3}
+    sprite: {fileID: 21300000, guid: ead4b6207580a324a84b5f5c1ba5f478, type: 3}
   - key: Env/sea_coral
-    sprite: {fileID: 21300000, guid: 6c30e2f5bdd8eb741b484d766bfb0e1b, type: 3}
+    sprite: {fileID: 21300000, guid: 91f825cf1b3661e4d957904ccaf0d86e, type: 3}
   - key: Env/sea_driftwood
-    sprite: {fileID: 21300000, guid: 3e7dc2fbc3414e048a866cc6d0882e1a, type: 3}
+    sprite: {fileID: 21300000, guid: 88102360e9b50144a91608a5095752fb, type: 3}
   - key: Env/sea_grass
-    sprite: {fileID: 21300000, guid: 15cc76f6bcc776240b17a079ea73c129, type: 3}
+    sprite: {fileID: 21300000, guid: 8980cd719af5c3644bb6e4928c38e6b3, type: 3}
   - key: Env/sea_palm
-    sprite: {fileID: 21300000, guid: 9a0026fe8bdb24643ab4bb4f98e9b600, type: 3}
+    sprite: {fileID: 21300000, guid: 16ada91f160a08b458850d3e66d99717, type: 3}
   - key: Env/sea_rock
-    sprite: {fileID: 21300000, guid: 1e3be51826efafc4fad8e1446d6cd99a, type: 3}
+    sprite: {fileID: 21300000, guid: 98c8f8e27e43fb945bbbea0dc0801ff8, type: 3}
   - key: Env/sea_shells
-    sprite: {fileID: 21300000, guid: 4459e69505956644a8b20655f4eed66e, type: 3}
+    sprite: {fileID: 21300000, guid: 8b079e1d6935c5941bc2da69ad8f25ee, type: 3}
   - key: Env/stump
-    sprite: {fileID: 21300000, guid: 70921ebbb4ca94748a5c76c4db05bb63, type: 3}
+    sprite: {fileID: 21300000, guid: 5ee23f65f4d7a784d898ac17da8f2ee3, type: 3}
   - key: Env/tree_big
-    sprite: {fileID: 21300000, guid: ac3817fdaea5c104486be3b02bc6471a, type: 3}
+    sprite: {fileID: 21300000, guid: 646fabff5caa6d3418ba3e416d0d5f7d, type: 3}
   - key: Env/tree_mid
-    sprite: {fileID: 21300000, guid: 0c4b7148b658c3e4fbcdfb5419608ad8, type: 3}
+    sprite: {fileID: 21300000, guid: fca1ee2eff7c5114585ed2b245c41dda, type: 3}
   - key: Env/tree_pine
-    sprite: {fileID: 21300000, guid: 96ec6222958b8074b85b54c219b57332, type: 3}
+    sprite: {fileID: 21300000, guid: e5b658d9e6539b14d80298baed52819c, type: 3}
   - key: Env/tree_small
-    sprite: {fileID: 21300000, guid: e27f76f8b5b0e5142825c507605e7d9a, type: 3}
+    sprite: {fileID: 21300000, guid: 4223456b3a5c1e948b0253c988318256, type: 3}
+  - key: Env/twig
+    sprite: {fileID: 21300000, guid: d330066e0ab7bf04e8b0b6cba4f532c2, type: 3}
+  - key: FX/brush
+    sprite: {fileID: 21300000, guid: a89846542351ec24b8b165b0b5311cf5, type: 3}
   - key: FX/build_grid
     sprite: {fileID: 21300000, guid: 1674479cdab87b34baf93101d32d9f10, type: 3}
+  - key: FX/chip
+    sprite: {fileID: 21300000, guid: 778e3b7c907c06e49b10b80398153d19, type: 3}
   - key: FX/circle
-    sprite: {fileID: 21300000, guid: b51babe6898cafa498f9a1abfda2c89f, type: 3}
+    sprite: {fileID: 21300000, guid: 6feb57202ab7a2e4cbe08d5b1f35c452, type: 3}
+  - key: FX/dot_ring
+    sprite: {fileID: 21300000, guid: 1ec07bbf4c7942344a4bcb2d7df6a749, type: 3}
+  - key: FX/drop
+    sprite: {fileID: 21300000, guid: 19ab5292d78cf1a409476648f766853f, type: 3}
+  - key: FX/dust
+    sprite: {fileID: 21300000, guid: 97d46b008b6b525418096a4e6670db63, type: 3}
   - key: FX/fever_edge
     sprite: {fileID: 21300000, guid: 58ed43b828ae1ec4da25d2eaecc05310, type: 3}
   - key: FX/flame_tongue
-    sprite: {fileID: 21300000, guid: 07c5471149fe76940a660070b4e6545d, type: 3}
+    sprite: {fileID: 21300000, guid: 06e11060fbcda7844b5dfa0d4bd3e549, type: 3}
+  - key: FX/hit_0
+    sprite: {fileID: 21300000, guid: 45e9f063644b1eb43bbc5d1d48283313, type: 3}
+  - key: FX/hit_1
+    sprite: {fileID: 21300000, guid: 715fa37dbc7db704e802f6eae1cef8a4, type: 3}
+  - key: FX/hit_2
+    sprite: {fileID: 21300000, guid: 003cd2d5aeb40e743b8b5b7d39aad47c, type: 3}
+  - key: FX/hit_3
+    sprite: {fileID: 21300000, guid: adbd79f69def56d408921d5855b2711f, type: 3}
+  - key: FX/hit_4
+    sprite: {fileID: 21300000, guid: 73653fa61dd5b2e4c818e2b73c25ed74, type: 3}
+  - key: FX/impact
+    sprite: {fileID: 21300000, guid: 0f099ba1525007b4084241df5b1bb306, type: 3}
+  - key: FX/impact_ring
+    sprite: {fileID: 21300000, guid: 709381f8c4ae15e419c1ba597c1c82b7, type: 3}
+  - key: FX/leaf
+    sprite: {fileID: 21300000, guid: abececc8499456f4b9f9ea3b49247cf3, type: 3}
+  - key: FX/puff
+    sprite: {fileID: 21300000, guid: 3a78b5b368afaa3428921e945d65691f, type: 3}
   - key: FX/ring
-    sprite: {fileID: 21300000, guid: b7087ef5e29752b4f93c91b6c588fb31, type: 3}
+    sprite: {fileID: 21300000, guid: cff41d13febc6c747ae50ee2adba5706, type: 3}
   - key: FX/ring_thin
-    sprite: {fileID: 21300000, guid: 12493506f6f430946abb0734c9f84331, type: 3}
+    sprite: {fileID: 21300000, guid: b4ea2e746f011514395af1f28d28b101, type: 3}
   - key: FX/soft
-    sprite: {fileID: 21300000, guid: d2573f52ee2e3de4c99ab9d69e5bb63b, type: 3}
+    sprite: {fileID: 21300000, guid: d02d5f79d1b8477468bc0f3d0a1966b5, type: 3}
+  - key: FX/splash
+    sprite: {fileID: 21300000, guid: c1d4225258b519b438cdd2a66bfcd390, type: 3}
+  - key: FX/sprout
+    sprite: {fileID: 21300000, guid: 50557b60d918f30479e0936bb830636f, type: 3}
   - key: FX/square
     sprite: {fileID: 21300000, guid: 1a04737655ccbdd49bcbb95786643a9f, type: 3}
+  - key: FX/streak
+    sprite: {fileID: 21300000, guid: 09dea24b4919dbf4288d33547ecc72c9, type: 3}
   - key: FX/tree_soil
-    sprite: {fileID: 21300000, guid: db87efc2154e3e84dbda8d00e19368db, type: 3}
+    sprite: {fileID: 21300000, guid: f00c229aea793df48a2dffdce2aaa74e, type: 3}
+  - key: FX/twinkle
+    sprite: {fileID: 21300000, guid: 7d4bda141443d8c48a421c3954eb3fa7, type: 3}
   - key: Farm/Field/crop_ed
     sprite: {fileID: 21300000, guid: f3860f1098325df4c915745e61538d44, type: 3}
   - key: Farm/Field/crop_md
@@ -370,23 +674,23 @@ MonoBehaviour:
   - key: Farm/Icons/dish_venom
     sprite: {fileID: 21300000, guid: 4ace641087a9e94409a443cc25844156, type: 3}
   - key: Farm/Icons/fx_heart
-    sprite: {fileID: 21300000, guid: ae0a01f199ecdde45a5d54d1fd27341a, type: 3}
+    sprite: {fileID: 21300000, guid: 9ba98b3ed2bf13c439a008742b612a84, type: 3}
   - key: Farm/Icons/fx_note
-    sprite: {fileID: 21300000, guid: 2577ca90d35a2f541bbbdb1994a71c95, type: 3}
+    sprite: {fileID: 21300000, guid: 9786091d651e1154b8103906684f6a9c, type: 3}
   - key: Farm/Icons/fx_surprise
-    sprite: {fileID: 21300000, guid: b7efa8ca8d9d2454abd14e5a8ee71940, type: 3}
+    sprite: {fileID: 21300000, guid: c773e2c3365a6ee46b5c73b5a64478dd, type: 3}
   - key: Farm/Icons/fx_zzz
-    sprite: {fileID: 21300000, guid: 98c273ea8697d5545bbd5ad4087a618d, type: 3}
+    sprite: {fileID: 21300000, guid: 94be4024fe02a804383d2d73ed89aa74, type: 3}
   - key: Farm/Icons/req_gift
-    sprite: {fileID: 21300000, guid: 4d40500ce7273754db1d5c01e5feb2c5, type: 3}
+    sprite: {fileID: 21300000, guid: ef83c576e848e7f41887a9ffc2761764, type: 3}
   - key: Farm/Icons/req_pet
-    sprite: {fileID: 21300000, guid: 5ef657c46ba8d824283fb50f6dd2fffe, type: 3}
+    sprite: {fileID: 21300000, guid: cfd03f101ba0c8745a336a70b304f869, type: 3}
   - key: Farm/Icons/req_snack
-    sprite: {fileID: 21300000, guid: 38bbbadbc47424842a09b682fb4d3497, type: 3}
+    sprite: {fileID: 21300000, guid: c0d3d2f6a61ce6340a506009d2df3992, type: 3}
   - key: Farm/Icons/req_song
-    sprite: {fileID: 21300000, guid: d76c537e06dbd8449a86ef902853d537, type: 3}
+    sprite: {fileID: 21300000, guid: cd82919bcf4e3484fb9bcc043f81b9cb, type: 3}
   - key: Farm/Icons/req_water
-    sprite: {fileID: 21300000, guid: f5b0cc3b78480c845a4970af2c8e24c5, type: 3}
+    sprite: {fileID: 21300000, guid: 04cf9411f2b85ef46afb9cd8b7b42d93, type: 3}
   - key: Farm/Icons/tool_knife
     sprite: {fileID: 21300000, guid: 8aae36112f95e8e4a8f7c4c9166f0d5b, type: 3}
   - key: Farm/Icons/tool_ladle
@@ -394,7 +698,7 @@ MonoBehaviour:
   - key: Farm/Icons/tool_plate
     sprite: {fileID: 21300000, guid: 48a31d24d36fcb3418820e4312ceae08, type: 3}
   - key: Farm/Props/auto_reward
-    sprite: {fileID: 21300000, guid: 5ce1524a175e1654a9dfe9e2e525581b, type: 3}
+    sprite: {fileID: 21300000, guid: 9b475c9dee15fc241a30f09d82527453, type: 3}
   - key: Farm/Props/counter
     sprite: {fileID: 21300000, guid: 917feb9c86f3e9b48921f1d8bcfa6891, type: 3}
   - key: Farm/Props/dc_bed
@@ -414,591 +718,755 @@ MonoBehaviour:
   - key: Farm/Props/dc_well
     sprite: {fileID: 21300000, guid: 3383c00097572bc4494a380b7b826ed3, type: 3}
   - key: Farm/Props/dew_chime
-    sprite: {fileID: 21300000, guid: a20cff404693b4e49b3d9c8aec4a78fc, type: 3}
+    sprite: {fileID: 21300000, guid: a8d946d16f286814899a132a76be2b61, type: 3}
   - key: Farm/Props/dew_pond
-    sprite: {fileID: 21300000, guid: 70f2d2a58f1d8ef41bccb9296fe92d8c, type: 3}
+    sprite: {fileID: 21300000, guid: 5b9f132576aedc948b1bf9462ef0ff1e, type: 3}
   - key: Farm/Props/dew_spring
-    sprite: {fileID: 21300000, guid: 03cd7b143e455cf4c98e6b40c0635b97, type: 3}
+    sprite: {fileID: 21300000, guid: e2151f082ede5b246b771fcfc7f2b0bb, type: 3}
   - key: Farm/Props/dining
     sprite: {fileID: 21300000, guid: 75c8a2183eb18494c974c16980d508c2, type: 3}
   - key: Farm/Props/fire_brazier
-    sprite: {fileID: 21300000, guid: eac5c28fbdfd1364b8e0fb99d4d882f2, type: 3}
+    sprite: {fileID: 21300000, guid: e606c71fc8354cf42948640bb9483259, type: 3}
   - key: Farm/Props/fire_candle
-    sprite: {fileID: 21300000, guid: b45682cc417ca6f4e8caee29f499bbc2, type: 3}
+    sprite: {fileID: 21300000, guid: 06bdb6feb2bd13a44a2b8d0a8948764e, type: 3}
   - key: Farm/Props/fire_lantern
-    sprite: {fileID: 21300000, guid: c12b53c39bbc0b34c95dcda5ccd2d3e0, type: 3}
+    sprite: {fileID: 21300000, guid: 940785d376fa6da44ab263be90e84492, type: 3}
   - key: Farm/Props/leaf_crown
-    sprite: {fileID: 21300000, guid: 6e16eec34bc59524bb7dbbc9c8cc3ade, type: 3}
+    sprite: {fileID: 21300000, guid: 44b2b85d62f6655458de8fcf30f97899, type: 3}
   - key: Farm/Props/leaf_house
-    sprite: {fileID: 21300000, guid: 295d90e97ef4ad14c8e1fa896fc99309, type: 3}
+    sprite: {fileID: 21300000, guid: ade6d80847a71d64abee34192d2b9c5a, type: 3}
   - key: Farm/Props/leaf_lamp
-    sprite: {fileID: 21300000, guid: 2cd89695e7c1b154b96d194036deaef0, type: 3}
+    sprite: {fileID: 21300000, guid: bd88498783289ed49a1b088c9d051007, type: 3}
   - key: Farm/Props/moon_crescent
-    sprite: {fileID: 21300000, guid: 0ae391fe7ee74a0498fa1ee037c32252, type: 3}
+    sprite: {fileID: 21300000, guid: 8631dab6568880646bfd95f70993ac73, type: 3}
   - key: Farm/Props/moon_garland
-    sprite: {fileID: 21300000, guid: 884a0990badefa24d867f3328b2211b9, type: 3}
+    sprite: {fileID: 21300000, guid: 565cfa5ba869340498b29f1febc16e40, type: 3}
   - key: Farm/Props/moon_owl
-    sprite: {fileID: 21300000, guid: e05aef3fd465d1247b7da955f0472c6f, type: 3}
+    sprite: {fileID: 21300000, guid: d738d07098f75f04bb45e65d8c43a5c6, type: 3}
   - key: Farm/Props/rock_geode
-    sprite: {fileID: 21300000, guid: 6ce45d13d6a3a764c912be5ce51ce331, type: 3}
+    sprite: {fileID: 21300000, guid: 857d3e2b034e7ec48afa74f4dd5ddf1c, type: 3}
   - key: Farm/Props/rock_moss
-    sprite: {fileID: 21300000, guid: 612efd882db7f2043b03d4e1af6abd15, type: 3}
+    sprite: {fileID: 21300000, guid: 6ed910d1644281445b32e40f219cb682, type: 3}
   - key: Farm/Props/rock_table
-    sprite: {fileID: 21300000, guid: 5dce004e16526f048b2b764751dac433, type: 3}
+    sprite: {fileID: 21300000, guid: 9549eb4bc8074b846ad45587e1785882, type: 3}
   - key: Farm/Props/scarecrow
     sprite: {fileID: 21300000, guid: e1048ad16a09bcc4fa93254c1b34f1d5, type: 3}
   - key: Farm/Props/spark_bell
-    sprite: {fileID: 21300000, guid: aaf47d76a3a9eca429d66998fedb6055, type: 3}
+    sprite: {fileID: 21300000, guid: cbed8ba85305fc849902f2e339863415, type: 3}
   - key: Farm/Props/spark_lamp
-    sprite: {fileID: 21300000, guid: cfa44b2819803a240902cc3f83085dd5, type: 3}
+    sprite: {fileID: 21300000, guid: 4018918409cefb946af0ef8a3ddcb5b5, type: 3}
   - key: Farm/Props/spark_orb
-    sprite: {fileID: 21300000, guid: 7acab2f686940654aa856d2f67d2f604, type: 3}
+    sprite: {fileID: 21300000, guid: 6d038b33122ffeb42bdc356e9c3c9db9, type: 3}
   - key: Farm/Props/star_crown
-    sprite: {fileID: 21300000, guid: 76f67495afaac7444baa3d34faf14fa8, type: 3}
+    sprite: {fileID: 21300000, guid: d0db20504f1074842b6c5586fa0f9cec, type: 3}
   - key: Farm/Props/star_orb
-    sprite: {fileID: 21300000, guid: 2c41e4d80846f25478c4d80b615e517b, type: 3}
+    sprite: {fileID: 21300000, guid: b20e0b308a9428c4ea8ef003183b5c96, type: 3}
   - key: Farm/Props/star_rune
-    sprite: {fileID: 21300000, guid: 375cf23ace1bce74799a7a9811ea6362, type: 3}
+    sprite: {fileID: 21300000, guid: 413bf623b56916649a14a6a6b0bc3f52, type: 3}
   - key: Farm/Props/stove
     sprite: {fileID: 21300000, guid: c218c53bad2266b4e985577c63cfa40f, type: 3}
   - key: Farm/Props/wind_catcher
-    sprite: {fileID: 21300000, guid: 3efa09fb3a497ab40a092ec16d430bb2, type: 3}
+    sprite: {fileID: 21300000, guid: 6bc3767727bf3eb46b4433319cfb1990, type: 3}
   - key: Farm/Props/wind_mill
-    sprite: {fileID: 21300000, guid: 5f242b36dd674e642803239d18268cf6, type: 3}
+    sprite: {fileID: 21300000, guid: b2079d69d5eadf44d89c1265e4220998, type: 3}
   - key: Farm/Props/wind_swing
-    sprite: {fileID: 21300000, guid: 148c76d14a735a34da6f82b5db352e0c, type: 3}
+    sprite: {fileID: 21300000, guid: e7e2b04b0ede1fa4cac681b4e3290003, type: 3}
   - key: Farm/Tree/fruit_ed
-    sprite: {fileID: 21300000, guid: 00c80cece5d525042b2ff1de761874d7, type: 3}
+    sprite: {fileID: 21300000, guid: 5e6edaf62da760f418713d2a4708d9f9, type: 3}
   - key: Farm/Tree/fruit_md
-    sprite: {fileID: 21300000, guid: f8fb20cc3cb9b6147bf48995d17c172b, type: 3}
+    sprite: {fileID: 21300000, guid: b2ffd51bce32bf745a438aa1ef096c37, type: 3}
   - key: Farm/Tree/fruit_ps
-    sprite: {fileID: 21300000, guid: 1074bab258e47e847bdaecfb24284c68, type: 3}
+    sprite: {fileID: 21300000, guid: 24355b557d572ce4ebc30dfb74d561f7, type: 3}
   - key: Farm/Tree/tree_0
-    sprite: {fileID: 21300000, guid: 7868f301e73f462459de1c264bc72256, type: 3}
+    sprite: {fileID: 21300000, guid: cfb06133be33ffb4c9196a8be92c41a5, type: 3}
   - key: Farm/Tree/tree_1
-    sprite: {fileID: 21300000, guid: cfa61b7b17adcab40829d4c394503b8d, type: 3}
+    sprite: {fileID: 21300000, guid: 360a29e0ec9cea74eb8d3ec4d0c41330, type: 3}
   - key: Farm/Tree/tree_2
-    sprite: {fileID: 21300000, guid: c0b2fde298accc14a87c54081898d73c, type: 3}
+    sprite: {fileID: 21300000, guid: f4b36cf2608de094ebe036f7dcc1a632, type: 3}
   - key: Farm/Tree/tree_3
-    sprite: {fileID: 21300000, guid: 54905c40dcd86f94f9962727c91e195f, type: 3}
+    sprite: {fileID: 21300000, guid: 495ba144f192b204197a078db3b4377b, type: 3}
   - key: Farm/Tree/tree_4
-    sprite: {fileID: 21300000, guid: 341fa2ebc584fbe45b2ddc2d2c921e1e, type: 3}
+    sprite: {fileID: 21300000, guid: a6ead66efee86664eaeb4189fe09d913, type: 3}
   - key: Farm/Tree/tree_5
-    sprite: {fileID: 21300000, guid: 59e77990b3314634fa644595dcab8791, type: 3}
+    sprite: {fileID: 21300000, guid: deae873c4b3e3ee4b804e1fa0b339a64, type: 3}
   - key: Farm/Tree/tree_6
-    sprite: {fileID: 21300000, guid: 14c31ed4719eaa54ea206bdef72bf917, type: 3}
+    sprite: {fileID: 21300000, guid: 9f9a16ea059dce545845f6e3cbc83e24, type: 3}
   - key: Farm/Tree/tree_7
-    sprite: {fileID: 21300000, guid: af558afe12442df4781db446b1dab94b, type: 3}
+    sprite: {fileID: 21300000, guid: 0aa13eec8b9307042bda49f14457955a, type: 3}
   - key: Harvesters/bell
-    sprite: {fileID: 21300000, guid: f3caa83eceb9deb4985ba9909d11fac9, type: 3}
+    sprite: {fileID: 21300000, guid: b6955a65dfbd99c4abdeb2dfebc6fcf9, type: 3}
   - key: Harvesters/cloud_spore
-    sprite: {fileID: 21300000, guid: 53c189bad981c434baafbf26265d3f7e, type: 3}
+    sprite: {fileID: 21300000, guid: 73648904694653343b7a3f963072f84c, type: 3}
   - key: Harvesters/coin
-    sprite: {fileID: 21300000, guid: 6e57c1805ece72f4bb85b85c38896bff, type: 3}
+    sprite: {fileID: 21300000, guid: d764d5eac330d6f489691eee7763e9c6, type: 3}
   - key: Harvesters/gold
-    sprite: {fileID: 21300000, guid: cf3bb3babb0fd4545b2ffc7d7c908fd5, type: 3}
+    sprite: {fileID: 21300000, guid: 585e290902180b242a84ea27aead06a2, type: 3}
   - key: Harvesters/hoe
-    sprite: {fileID: 21300000, guid: 23918b74076d21f44a6e711ae6b80ab6, type: 3}
+    sprite: {fileID: 21300000, guid: 49e20c2cc106ded4b8cfa38921cc90d4, type: 3}
   - key: Harvesters/hs_bell
-    sprite: {fileID: 21300000, guid: fb1e44bca4c48eb459c74e76814736b9, type: 3}
+    sprite: {fileID: 21300000, guid: fa3fc8aad01fe0e498590d40c85ef15c, type: 3}
   - key: Harvesters/hs_coin
-    sprite: {fileID: 21300000, guid: 9a305b387f12a9844b4a46e52c45eaf4, type: 3}
+    sprite: {fileID: 21300000, guid: 30cd4b39d1771d44bac7a50b491771b9, type: 3}
   - key: Harvesters/hs_gold
-    sprite: {fileID: 21300000, guid: cd5d69c3e2e729a4b81dc32e6275bbe3, type: 3}
+    sprite: {fileID: 21300000, guid: 80f94fa36ea017147b8457cec3f616dd, type: 3}
   - key: Harvesters/hs_mill
-    sprite: {fileID: 21300000, guid: a6e9718bb723a7f479f9b29b55c9ea58, type: 3}
+    sprite: {fileID: 21300000, guid: 731dba6e3b9ff1f41a4b2be014caf4d6, type: 3}
   - key: Harvesters/hs_sam
-    sprite: {fileID: 21300000, guid: 6e94070bd5f7b08458db81a1919e508c, type: 3}
+    sprite: {fileID: 21300000, guid: 8b01ae15f7b16ee4a8019d175dfd16ec, type: 3}
   - key: Harvesters/hs_saw
-    sprite: {fileID: 21300000, guid: 519adf749a83f68479f492ba1802dfb3, type: 3}
+    sprite: {fileID: 21300000, guid: 0ac7589609fee694eb792d9188aa9125, type: 3}
   - key: Harvesters/hs_spore
-    sprite: {fileID: 21300000, guid: f23af1b04e2d36c40b6c75c0ad955050, type: 3}
+    sprite: {fileID: 21300000, guid: d3917e0de048dff44b4b8e2ea8044328, type: 3}
   - key: Harvesters/mill
-    sprite: {fileID: 21300000, guid: a58064f94c19b74478337ab30427f229, type: 3}
+    sprite: {fileID: 21300000, guid: 73f35b721ca563941b9c5e373ba46ee1, type: 3}
   - key: Harvesters/puff_dust
-    sprite: {fileID: 21300000, guid: 527f483549db24d42940b6c09ffdfc2c, type: 3}
+    sprite: {fileID: 21300000, guid: b6fa57632dbb8e34b8f3c4a11111d07a, type: 3}
   - key: Harvesters/sam
-    sprite: {fileID: 21300000, guid: 94da5762eeee3d04ca490ecc150a6160, type: 3}
+    sprite: {fileID: 21300000, guid: 4c733631b2bd4e34abafc55e1c43e280, type: 3}
   - key: Harvesters/saw
-    sprite: {fileID: 21300000, guid: a21a9409e3ca3524496d19ea0c2a691a, type: 3}
+    sprite: {fileID: 21300000, guid: 98797e575acf6d946b9c9a8af02c1218, type: 3}
   - key: Harvesters/spore
-    sprite: {fileID: 21300000, guid: 074c67acf77dcd34bb4433a350437d8a, type: 3}
+    sprite: {fileID: 21300000, guid: 40ddf1516043f3d4b9ef5e97df362063, type: 3}
   - key: Icons/auto_harvest
-    sprite: {fileID: 21300000, guid: c332d536cf8566346b3992fe4ac1bea5, type: 3}
+    sprite: {fileID: 21300000, guid: 36926e4c7b335674391df77e3960c673, type: 3}
   - key: Icons/book
-    sprite: {fileID: 21300000, guid: 0edac745e2493824c9c1e4a5feccd8bd, type: 3}
+    sprite: {fileID: 21300000, guid: 666063b80cc08c24d84d9c435fc182ca, type: 3}
   - key: Icons/build
-    sprite: {fileID: 21300000, guid: 6d2b59d5c58186744929d5fec69ee26c, type: 3}
+    sprite: {fileID: 21300000, guid: a5210a11b92025441bb05060df79dd92, type: 3}
   - key: Icons/clock
-    sprite: {fileID: 21300000, guid: 4d1150aac8ebb90469648f82edbad643, type: 3}
+    sprite: {fileID: 21300000, guid: 606bde082e9d4104b8557b9141c768c7, type: 3}
   - key: Icons/core_ed
-    sprite: {fileID: 21300000, guid: fefe2be6152241747ba6fe95c7930e2d, type: 3}
+    sprite: {fileID: 21300000, guid: 1148bc233a63129448d47548c6f208fb, type: 3}
   - key: Icons/core_md
-    sprite: {fileID: 21300000, guid: cb9af8e8426415e4d8e0151e708e4a35, type: 3}
+    sprite: {fileID: 21300000, guid: 7c050a17ca351364d99b425cd8b9c9b9, type: 3}
   - key: Icons/core_ps
-    sprite: {fileID: 21300000, guid: 41a07cf1746523747ba346c4601c33dd, type: 3}
+    sprite: {fileID: 21300000, guid: 554817260bde3bc46b54160fc63eb3fb, type: 3}
   - key: Icons/dia
-    sprite: {fileID: 21300000, guid: eb6a37e5ac1a0304280a0d8db75e515b, type: 3}
+    sprite: {fileID: 21300000, guid: daecdeb711fdc4b4a9f79c52d0818459, type: 3}
   - key: Icons/ed
-    sprite: {fileID: 21300000, guid: d6dbafb8563614d4ca8ae43e5563f97e, type: 3}
+    sprite: {fileID: 21300000, guid: ae97e41d8ff6d7649a08df5672a5d8df, type: 3}
   - key: Icons/gem
-    sprite: {fileID: 21300000, guid: eb9b4894a3c5e0d4e9e91a18872777c8, type: 3}
+    sprite: {fileID: 21300000, guid: 2a02ee27f1736c548879de13465bb02c, type: 3}
   - key: Icons/gold
-    sprite: {fileID: 21300000, guid: 922eae302f64b364c86fbd372193f4c5, type: 3}
+    sprite: {fileID: 21300000, guid: 1d286fde804ea054c92f8a84922d506f, type: 3}
   - key: Icons/hammer
-    sprite: {fileID: 21300000, guid: b575cc0438a242e40ac8fc637c6f6db5, type: 3}
+    sprite: {fileID: 21300000, guid: 251317497896f334084ea34c2919c08e, type: 3}
   - key: Icons/lock
-    sprite: {fileID: 21300000, guid: 1d8e091ba4d890e418d536dfd9b59918, type: 3}
+    sprite: {fileID: 21300000, guid: 3d17f9041679dbf4aae0bdcca5600662, type: 3}
   - key: Icons/md
-    sprite: {fileID: 21300000, guid: 491039450292d254785fc3f9db465735, type: 3}
+    sprite: {fileID: 21300000, guid: 24202744b52311f4fb24a67ab0fda490, type: 3}
   - key: Icons/medal
-    sprite: {fileID: 21300000, guid: bcd1e004c25ee8e40bb13da465a4423c, type: 3}
+    sprite: {fileID: 21300000, guid: 6fac01c86757f3c4a9d701df2c75aa3f, type: 3}
+  - key: Icons/n_atk
+    sprite: {fileID: 21300000, guid: 827044ab0788f9544bfc195fbfd61aca, type: 3}
+  - key: Icons/n_ball
+    sprite: {fileID: 21300000, guid: 1eea26066f0ece94990591d868f402a6, type: 3}
+  - key: Icons/n_bar
+    sprite: {fileID: 21300000, guid: fe879b4957bb97e4dab3eae6a536672e, type: 3}
+  - key: Icons/n_bardur
+    sprite: {fileID: 21300000, guid: bf34539cb48f5e74a932fbf0cd21dcca, type: 3}
+  - key: Icons/n_barrate
+    sprite: {fileID: 21300000, guid: 1ae8f182d55608349bfaab287297be40, type: 3}
+  - key: Icons/n_barspd
+    sprite: {fileID: 21300000, guid: cacb728558a1127459fc5750b5977ca1, type: 3}
+  - key: Icons/n_bonus
+    sprite: {fileID: 21300000, guid: 419877c4bd4421e48ba05adead76d444, type: 3}
+  - key: Icons/n_buffdur
+    sprite: {fileID: 21300000, guid: 2d99205805ea4cc47ab84dff0411b442, type: 3}
+  - key: Icons/n_chef
+    sprite: {fileID: 21300000, guid: aa81b1e81c7a4be48a311d2ce3a3965c, type: 3}
+  - key: Icons/n_cols
+    sprite: {fileID: 21300000, guid: 781bd4e5f39bae2438de35a79b1cf8e8, type: 3}
+  - key: Icons/n_combo
+    sprite: {fileID: 21300000, guid: a0625b30ee1948b4e9b26c289579e95a, type: 3}
+  - key: Icons/n_crit
+    sprite: {fileID: 21300000, guid: 41634a170ce534341912e00b7a41534f, type: 3}
+  - key: Icons/n_crit2
+    sprite: {fileID: 21300000, guid: 99e2946a3a573d04f980a5bbad81c6c7, type: 3}
+  - key: Icons/n_dev_acorn
+    sprite: {fileID: 21300000, guid: 31c47fe95f0a89c47b62bde74a482b81, type: 3}
+  - key: Icons/n_dev_moss
+    sprite: {fileID: 21300000, guid: 9b84d71ca807ad842945bd02da2d239c, type: 3}
+  - key: Icons/n_dev_stump
+    sprite: {fileID: 21300000, guid: 438a89e8332b60e44892bf710c039621, type: 3}
+  - key: Icons/n_dur
+    sprite: {fileID: 21300000, guid: 669efe6ff69bda541b7bea7ee7af35af, type: 3}
+  - key: Icons/n_giant
+    sprite: {fileID: 21300000, guid: 65473c4f1f031fa49904ed5fe337182f, type: 3}
+  - key: Icons/n_gold
+    sprite: {fileID: 21300000, guid: b7869ee852389ca479d5c8eaef5df900, type: 3}
+  - key: Icons/n_heavy
+    sprite: {fileID: 21300000, guid: ca8e40bb5e81a8c46808d6b1e414e39d, type: 3}
+  - key: Icons/n_hvsize
+    sprite: {fileID: 21300000, guid: d272fb9c95180bf4bb725a1e25583329, type: 3}
+  - key: Icons/n_inf_atk
+    sprite: {fileID: 21300000, guid: b1f5cd481fbe25847b506a5cd2e14717, type: 3}
+  - key: Icons/n_inf_gold
+    sprite: {fileID: 21300000, guid: 19192778fedb4b4409b3696bc8c36c41, type: 3}
+  - key: Icons/n_map
+    sprite: {fileID: 21300000, guid: 4d41f429ab79dbf46bf9e72ec2071474, type: 3}
+  - key: Icons/n_multi
+    sprite: {fileID: 21300000, guid: 1f461f96bb557fc4b8f8b5ab8a94c993, type: 3}
+  - key: Icons/n_price
+    sprite: {fileID: 21300000, guid: e62a5947a974ef24f930467610957e49, type: 3}
+  - key: Icons/n_rare
+    sprite: {fileID: 21300000, guid: 22bc786e9cbe6a54ebfec0829174f3b6, type: 3}
+  - key: Icons/n_regen
+    sprite: {fileID: 21300000, guid: 7532cfe348686c34ab866988904abc32, type: 3}
+  - key: Icons/n_resist
+    sprite: {fileID: 21300000, guid: 331f7d4a337d1254a9fa87dcc98be043, type: 3}
+  - key: Icons/n_rush
+    sprite: {fileID: 21300000, guid: e2664794f11336e47a97ca2344674ee0, type: 3}
+  - key: Icons/n_score
+    sprite: {fileID: 21300000, guid: 79c91020fffe8ee4fbf26f7b7b029c20, type: 3}
+  - key: Icons/n_size
+    sprite: {fileID: 21300000, guid: 3d90051dd588a9b45b45c7d36bd05c4d, type: 3}
+  - key: Icons/n_spd
+    sprite: {fileID: 21300000, guid: e134c74fc45404c498cf016ceb432e6f, type: 3}
+  - key: Icons/n_stump
+    sprite: {fileID: 21300000, guid: 835ec62e159f6ba49b28685f1a6857f3, type: 3}
+  - key: Icons/n_templife
+    sprite: {fileID: 21300000, guid: cb3501626f1086f4f94601611f1e67c3, type: 3}
+  - key: Icons/n_trade
+    sprite: {fileID: 21300000, guid: b683f26407225af41a1c93da0cea8062, type: 3}
   - key: Icons/pause
-    sprite: {fileID: 21300000, guid: 7ce9f21eeae0d3d43a1ed3e2db76b105, type: 3}
+    sprite: {fileID: 21300000, guid: aa07bff79ae94f8458c05e8d86ae331e, type: 3}
   - key: Icons/ps
-    sprite: {fileID: 21300000, guid: acae0906f78c36d45a23b0dbccb55968, type: 3}
+    sprite: {fileID: 21300000, guid: 4af7590510389234a9b7ce9b17bed542, type: 3}
   - key: Icons/s_accel
-    sprite: {fileID: 21300000, guid: 09b3a0b367d94fa46a9ad536b353fdd1, type: 3}
+    sprite: {fileID: 21300000, guid: 6ea3b09f1b607ab4a9eb09dc1f375706, type: 3}
   - key: Icons/s_barclone
-    sprite: {fileID: 21300000, guid: ceba055132c9721498ed9025ea0de933, type: 3}
+    sprite: {fileID: 21300000, guid: 17a8e68818266bf45b423ac6b6f29d25, type: 3}
   - key: Icons/s_blade
-    sprite: {fileID: 21300000, guid: dcdc369d7fbb3ec4ba3f03193a2c15d6, type: 3}
+    sprite: {fileID: 21300000, guid: 4b4c964ce292d124d88b5c62125d7030, type: 3}
   - key: Icons/s_bolt
-    sprite: {fileID: 21300000, guid: 7b939534ec493a848b0e8910245db98f, type: 3}
+    sprite: {fileID: 21300000, guid: b1e778026836f524a8c882b758d51250, type: 3}
   - key: Icons/s_burst
-    sprite: {fileID: 21300000, guid: 6570bd1ae9941a243930fb032c63f632, type: 3}
+    sprite: {fileID: 21300000, guid: 3ff192a09540367419cafe3a89356ca0, type: 3}
   - key: Icons/s_clear
-    sprite: {fileID: 21300000, guid: b9ff2a80ae368fd49a7f1474a228447d, type: 3}
+    sprite: {fileID: 21300000, guid: 0396f5a90d30d9a43b222a272c88345b, type: 3}
   - key: Icons/s_clone
-    sprite: {fileID: 21300000, guid: 11bd6e1f49f80f04882110569cd0ef13, type: 3}
+    sprite: {fileID: 21300000, guid: fe2c90b095782de47b51372ade767fba, type: 3}
   - key: Icons/s_device
-    sprite: {fileID: 21300000, guid: d8779b88b50387642b2a51b345e8f4ae, type: 3}
+    sprite: {fileID: 21300000, guid: ea69d7dacd1278d4d939f82073845314, type: 3}
   - key: Icons/s_fest
-    sprite: {fileID: 21300000, guid: f6a08b8979eca504a8330e45e5c8cc45, type: 3}
+    sprite: {fileID: 21300000, guid: 2e707dfe1a1bf5f45ac2776753553b07, type: 3}
   - key: Icons/s_homing
-    sprite: {fileID: 21300000, guid: 6ab295e60d562fc4ea4f27f9bbc6e0be, type: 3}
+    sprite: {fileID: 21300000, guid: bfc00c7ae0fd40a45b65907aa15e7158, type: 3}
   - key: Icons/s_kid
-    sprite: {fileID: 21300000, guid: ab8af17021901fa4694bd32bd11f0440, type: 3}
+    sprite: {fileID: 21300000, guid: 561451e8fb878e34e9fdf5bbe89833c0, type: 3}
   - key: Icons/s_magnet
-    sprite: {fileID: 21300000, guid: 4907ae0485748a9478da9b24b493640a, type: 3}
+    sprite: {fileID: 21300000, guid: 231fb8b6eb9fd9e4fb69e037012b8a73, type: 3}
   - key: Icons/s_pierce
-    sprite: {fileID: 21300000, guid: c7a878a265b7f3c4ebbe0f3747646bf5, type: 3}
+    sprite: {fileID: 21300000, guid: 456ed33e5a0a7bf4a80a5f00509733cc, type: 3}
   - key: Icons/s_power
-    sprite: {fileID: 21300000, guid: 47c8c41ab020cc242a3197b05ef7f6e8, type: 3}
+    sprite: {fileID: 21300000, guid: 0fe6246193ea43948964392ab3c8c111, type: 3}
   - key: Icons/s_sharpen
-    sprite: {fileID: 21300000, guid: 7d3de0449c1b7864488c2a0dc8953873, type: 3}
+    sprite: {fileID: 21300000, guid: 320ddd714ac6f794d899875493f5ac7b, type: 3}
   - key: Icons/s_shock
-    sprite: {fileID: 21300000, guid: 259b271d8f86a6545b4e08a18b6870e0, type: 3}
+    sprite: {fileID: 21300000, guid: d439736360b343c41a3126860592360e, type: 3}
   - key: Icons/s_sip
-    sprite: {fileID: 21300000, guid: c94bdee3e02cf934494cda1a05c2592c, type: 3}
+    sprite: {fileID: 21300000, guid: e2268db4b9e9ef742968968a36a83d2e, type: 3}
   - key: Icons/s_split
-    sprite: {fileID: 21300000, guid: 51dd4e1ffc9e98f4c9e468c3fed538b2, type: 3}
+    sprite: {fileID: 21300000, guid: eefc4c0099c5e7f43893fe84fcb1cfab, type: 3}
   - key: Icons/s_tornado
-    sprite: {fileID: 21300000, guid: e0d06799e12d03443a04644f8b87892c, type: 3}
+    sprite: {fileID: 21300000, guid: f8231983aa488cf439a9711bec6fcaf2, type: 3}
   - key: Icons/s_tspore
-    sprite: {fileID: 21300000, guid: ed63cc965501b1e489a4cfd9a2492b9e, type: 3}
+    sprite: {fileID: 21300000, guid: 18717073b9edc854a8377a7bb3e74010, type: 3}
   - key: Icons/spore
-    sprite: {fileID: 21300000, guid: abdc46c1d575ada4ab895e32a8817a3c, type: 3}
+    sprite: {fileID: 21300000, guid: 606d1d2eb4ca47d4eb091b19e2e7199d, type: 3}
   - key: Icons/star
-    sprite: {fileID: 21300000, guid: 290b86f2d4718714e91057dc47849a01, type: 3}
+    sprite: {fileID: 21300000, guid: 8d662bd1d29c2054aa41aeef38b18220, type: 3}
   - key: Icons/t_field
-    sprite: {fileID: 21300000, guid: 2595942815d2958448fd23b467565660, type: 3}
+    sprite: {fileID: 21300000, guid: 82b6ed5a1285f1b48a7519a6a22e123b, type: 3}
   - key: Icons/t_forest
-    sprite: {fileID: 21300000, guid: 58dfcd750181a9f43a5ae4a1ff648602, type: 3}
+    sprite: {fileID: 21300000, guid: b1a1f96254bded24aa847d62a727e9dd, type: 3}
   - key: Icons/t_night
-    sprite: {fileID: 21300000, guid: 1ad61fe6c73f4174f87808ba789e1313, type: 3}
+    sprite: {fileID: 21300000, guid: 85f45cff5b4411f46bcef03493eae210, type: 3}
   - key: Icons/t_ruins
-    sprite: {fileID: 21300000, guid: 77dd627282c6df44faecd25eeb68c25f, type: 3}
+    sprite: {fileID: 21300000, guid: e4ef6262c55578d4b89d568ec67057bf, type: 3}
   - key: Icons/t_sea
-    sprite: {fileID: 21300000, guid: 91c15c409fa204f41945c190418b50b4, type: 3}
+    sprite: {fileID: 21300000, guid: 606d7f9a607d718459b0833705f66d03, type: 3}
   - key: Icons/tax
     sprite: {fileID: 21300000, guid: 89962682c7f95c643aab96f331162518, type: 3}
   - key: Icons/trophy
-    sprite: {fileID: 21300000, guid: c361d8df80257a04c9a02d1f0be099de, type: 3}
+    sprite: {fileID: 21300000, guid: d08a94d324c067a45a28296ff130b074, type: 3}
   - key: Icons/w_autumn
-    sprite: {fileID: 21300000, guid: f6a35445ba49ff14b83fd181deca1256, type: 3}
+    sprite: {fileID: 21300000, guid: b798034b287543f4bbf9931d185024c3, type: 3}
   - key: Icons/w_clear
-    sprite: {fileID: 21300000, guid: 31bdd09140c3bc24cb7fe5d65311ba0a, type: 3}
+    sprite: {fileID: 21300000, guid: fbba6a86f1818984b8ccef196bf7d4ed, type: 3}
   - key: Icons/w_cold
-    sprite: {fileID: 21300000, guid: ed22e37d50bb61a41b7d0cbd1c83078d, type: 3}
+    sprite: {fileID: 21300000, guid: f1b63f2255903fb4399129dd0b56584f, type: 3}
   - key: Icons/w_drought
-    sprite: {fileID: 21300000, guid: 275765726005ed842a03090faf5f61c9, type: 3}
+    sprite: {fileID: 21300000, guid: b98c01c49d5648a46a6f2a0360b43901, type: 3}
   - key: Icons/w_fog
-    sprite: {fileID: 21300000, guid: 6ff6cf1013ac0424ab1baba0533c4b56, type: 3}
+    sprite: {fileID: 21300000, guid: 76763ded9b0e35c45834575ba641e701, type: 3}
   - key: Icons/w_moon
-    sprite: {fileID: 21300000, guid: 0402ef82b5b7bf34896e97e35517783d, type: 3}
+    sprite: {fileID: 21300000, guid: 9941951bc2f66b540a990d336e6e8995, type: 3}
   - key: Icons/w_rain
-    sprite: {fileID: 21300000, guid: 5bc8a417c8b6d8a4f873be850b1b75dd, type: 3}
+    sprite: {fileID: 21300000, guid: 83b88ba2cc4b4b54b8a9f5b20ec2d999, type: 3}
   - key: Icons/w_rainbow
-    sprite: {fileID: 21300000, guid: ae4cbb051cf3405469fca58d8d6bfd4e, type: 3}
+    sprite: {fileID: 21300000, guid: b2f2e57301f196a4c84a676be4b37921, type: 3}
   - key: Icons/w_storm
-    sprite: {fileID: 21300000, guid: 6e02778fe5031684d80514eefc91db5a, type: 3}
+    sprite: {fileID: 21300000, guid: b134ec827610019489fd57ff0f121e9a, type: 3}
   - key: Icons/w_thunder
-    sprite: {fileID: 21300000, guid: c9bb57d45b7f3244abbe4f1bd10412fd, type: 3}
+    sprite: {fileID: 21300000, guid: 0200ff15159132145a4ac1df027a4239, type: 3}
   - key: Icons/w_wind
-    sprite: {fileID: 21300000, guid: e8ecd970cce0b354c8c29ae1a7ca79d0, type: 3}
+    sprite: {fileID: 21300000, guid: c4fd2b9ddff651042b5e26f0c90576bf, type: 3}
   - key: Mushrooms/Colony/ed0
-    sprite: {fileID: 21300000, guid: b43e0c6345dfc844396d9b4b4225d57a, type: 3}
+    sprite: {fileID: 21300000, guid: 666e817e2e4837d45ac2eba7d9e5f818, type: 3}
   - key: Mushrooms/Colony/ed1
-    sprite: {fileID: 21300000, guid: 7c5ca5a27db32d84685a55cce64324e5, type: 3}
+    sprite: {fileID: 21300000, guid: b304abf861a653d45a212fffc5987d9e, type: 3}
   - key: Mushrooms/Colony/ed10
-    sprite: {fileID: 21300000, guid: 18e4830f25dcaaf4e977027d880b3ce5, type: 3}
+    sprite: {fileID: 21300000, guid: 3a141fb565c95e444accbda4a5f761cd, type: 3}
   - key: Mushrooms/Colony/ed11
-    sprite: {fileID: 21300000, guid: 27576422485cd674088557dfe2d3001b, type: 3}
+    sprite: {fileID: 21300000, guid: 36f23f4b5b65a6e40bc780131173ec0d, type: 3}
   - key: Mushrooms/Colony/ed12
-    sprite: {fileID: 21300000, guid: bd47bc5f38259834bb61279d98dc6df5, type: 3}
+    sprite: {fileID: 21300000, guid: 14088cf293f285046b32dcd2451a9150, type: 3}
   - key: Mushrooms/Colony/ed13
-    sprite: {fileID: 21300000, guid: b1dec2b9c2e8db348913ef01bf077bf8, type: 3}
+    sprite: {fileID: 21300000, guid: b9e6552543d06984b9e5c4af3b6e7ef8, type: 3}
   - key: Mushrooms/Colony/ed14
-    sprite: {fileID: 21300000, guid: a9c8c3dab1d69314188fcaa03b4f07ec, type: 3}
+    sprite: {fileID: 21300000, guid: f48d38f7976c62e49bec29565b8a716b, type: 3}
   - key: Mushrooms/Colony/ed15
-    sprite: {fileID: 21300000, guid: 9493069c56d699f4ea70679be4510985, type: 3}
+    sprite: {fileID: 21300000, guid: 092ffe0c9ae23644f8edac2cf0e9ddaf, type: 3}
   - key: Mushrooms/Colony/ed16
-    sprite: {fileID: 21300000, guid: b93e3658ee25c034bbe5efc4201b48e9, type: 3}
+    sprite: {fileID: 21300000, guid: d130c49425814544ab6b503c7a9f437a, type: 3}
   - key: Mushrooms/Colony/ed17
-    sprite: {fileID: 21300000, guid: b970a8f4422338a41af445aba5fd4f11, type: 3}
+    sprite: {fileID: 21300000, guid: 714681051062573438262b3cae7cf862, type: 3}
   - key: Mushrooms/Colony/ed18
-    sprite: {fileID: 21300000, guid: 6bae8834cb00e1f4e9c069f3515e5491, type: 3}
+    sprite: {fileID: 21300000, guid: 32f362e0434442642ba11585243b2680, type: 3}
   - key: Mushrooms/Colony/ed19
-    sprite: {fileID: 21300000, guid: 4d47a8ddecd92994f82d58c1cce3a92c, type: 3}
+    sprite: {fileID: 21300000, guid: 8d8a3498129fb714db429ead9cab6857, type: 3}
   - key: Mushrooms/Colony/ed2
-    sprite: {fileID: 21300000, guid: c37a0c8f12946634d9523f2703a5232a, type: 3}
+    sprite: {fileID: 21300000, guid: 8df43cdfed7e3054b827b2851666dfd0, type: 3}
   - key: Mushrooms/Colony/ed20
-    sprite: {fileID: 21300000, guid: dc8e58690788fad4aa491c01a5c5fc62, type: 3}
+    sprite: {fileID: 21300000, guid: 0efa25755dcab17418477798bfff8796, type: 3}
   - key: Mushrooms/Colony/ed21
-    sprite: {fileID: 21300000, guid: 50cbf1b31e10a104eaff2bd60b83e143, type: 3}
+    sprite: {fileID: 21300000, guid: 73dfcc394c375a14ebccfdb8fe7c53e1, type: 3}
   - key: Mushrooms/Colony/ed22
-    sprite: {fileID: 21300000, guid: 572a787ce43092b49b638bf8cad42d0b, type: 3}
+    sprite: {fileID: 21300000, guid: e17fb8906c012c746a060655894c1b70, type: 3}
   - key: Mushrooms/Colony/ed23
-    sprite: {fileID: 21300000, guid: aee08552d251bb941914d2dcd12c5841, type: 3}
+    sprite: {fileID: 21300000, guid: 9c2b209354b7d774181ebd6a9df864c1, type: 3}
   - key: Mushrooms/Colony/ed24
-    sprite: {fileID: 21300000, guid: e6b4cc3a0b87da0489ba0d1fdf8c303b, type: 3}
+    sprite: {fileID: 21300000, guid: da2fcd1876d55fd44a28480020453359, type: 3}
   - key: Mushrooms/Colony/ed3
-    sprite: {fileID: 21300000, guid: 821df6018a3a09946b04d9b2de1d1e92, type: 3}
+    sprite: {fileID: 21300000, guid: 7a759ef53a1da5c4aabbc4f3a993d8c0, type: 3}
   - key: Mushrooms/Colony/ed4
-    sprite: {fileID: 21300000, guid: 74a171638fc599548a0afe8f60097ba8, type: 3}
+    sprite: {fileID: 21300000, guid: 0c7f80910fbe0a747a533a49d562e5ca, type: 3}
   - key: Mushrooms/Colony/ed5
-    sprite: {fileID: 21300000, guid: e12c38d989723fc43a1833875eeae6dc, type: 3}
+    sprite: {fileID: 21300000, guid: 089c6e3e1bcdd9c4993fb49d9126d8a5, type: 3}
   - key: Mushrooms/Colony/ed6
-    sprite: {fileID: 21300000, guid: 1bebe2764c5e9ca4391f653bfbda332f, type: 3}
+    sprite: {fileID: 21300000, guid: 17ee1d7cdd301674e9bc3d5759cd8b73, type: 3}
   - key: Mushrooms/Colony/ed7
-    sprite: {fileID: 21300000, guid: 29ebe434a22d3734fb9a844a5e06d57b, type: 3}
+    sprite: {fileID: 21300000, guid: 2bb48d307779a3c4faf70a2ca9333f3d, type: 3}
   - key: Mushrooms/Colony/ed8
-    sprite: {fileID: 21300000, guid: 057d82f7452acc847937bc8eede6325d, type: 3}
+    sprite: {fileID: 21300000, guid: 0989e2108aab7d947a237b95bc7acbdd, type: 3}
   - key: Mushrooms/Colony/ed9
-    sprite: {fileID: 21300000, guid: 39dc511e1d5883846a3107b1a9aa7e67, type: 3}
+    sprite: {fileID: 21300000, guid: 2efdd4a8f5d32f242881c3982cf70e2a, type: 3}
   - key: Mushrooms/Colony/md0
-    sprite: {fileID: 21300000, guid: bccc36b0dca3b8d48be9de9ea548de60, type: 3}
+    sprite: {fileID: 21300000, guid: deedd8c01e7a6f740874d8416badb584, type: 3}
   - key: Mushrooms/Colony/md1
-    sprite: {fileID: 21300000, guid: f9f6097a668c4be4cba2ce74954d56f0, type: 3}
+    sprite: {fileID: 21300000, guid: 6d6d71a3732bb3846b93030e8df8387f, type: 3}
   - key: Mushrooms/Colony/md10
-    sprite: {fileID: 21300000, guid: d0207d95335143f4684d5a018e0a5ef1, type: 3}
+    sprite: {fileID: 21300000, guid: c33fc3de302874a4aaa73fea056c570b, type: 3}
   - key: Mushrooms/Colony/md11
-    sprite: {fileID: 21300000, guid: d5792ab03d470b84eb100e49b92e1732, type: 3}
+    sprite: {fileID: 21300000, guid: 43d9be74dcc2f344b831acedaf49e501, type: 3}
   - key: Mushrooms/Colony/md12
-    sprite: {fileID: 21300000, guid: 2c726c94bf4dadf4183568d0759d5b7b, type: 3}
+    sprite: {fileID: 21300000, guid: 7794b4ac6a9a4e14cbeb2e048e453d1f, type: 3}
   - key: Mushrooms/Colony/md13
-    sprite: {fileID: 21300000, guid: 8e822b8cfc7ea3847938374f623caf60, type: 3}
+    sprite: {fileID: 21300000, guid: f74ac6c11ddcf8148bc2368d41288f9d, type: 3}
   - key: Mushrooms/Colony/md14
-    sprite: {fileID: 21300000, guid: 95a6e0d5180f26e47bf53943e6918eda, type: 3}
+    sprite: {fileID: 21300000, guid: 5d7b96ea17f7f00438c623c945016606, type: 3}
   - key: Mushrooms/Colony/md15
-    sprite: {fileID: 21300000, guid: d25c4d25eb05f20488b0900b39d86287, type: 3}
+    sprite: {fileID: 21300000, guid: 3f4c9192c166ce94192f956753ac0796, type: 3}
   - key: Mushrooms/Colony/md16
-    sprite: {fileID: 21300000, guid: 2a4e461db6f81da40bc81c56808664dc, type: 3}
+    sprite: {fileID: 21300000, guid: defa725672c98ff4aafc2b40ac08c009, type: 3}
   - key: Mushrooms/Colony/md17
-    sprite: {fileID: 21300000, guid: 8610a6484e6016249a8ab157427baccb, type: 3}
+    sprite: {fileID: 21300000, guid: 55463b80c16bc444ab35ef463434c28e, type: 3}
   - key: Mushrooms/Colony/md18
-    sprite: {fileID: 21300000, guid: 3cdf2e3e2b647e540890fe223acd029d, type: 3}
+    sprite: {fileID: 21300000, guid: 9da9edfc0cdcc8c49809560f5df6ee58, type: 3}
   - key: Mushrooms/Colony/md19
-    sprite: {fileID: 21300000, guid: e3306a7722e24b64e931c396a9d32e3f, type: 3}
+    sprite: {fileID: 21300000, guid: df45db65d5750894da65d192307d9162, type: 3}
   - key: Mushrooms/Colony/md2
-    sprite: {fileID: 21300000, guid: 1aac21a4c1d250846877c7cef255bf86, type: 3}
+    sprite: {fileID: 21300000, guid: 1a37562bb0fbbd74ea25029673bf8303, type: 3}
   - key: Mushrooms/Colony/md20
-    sprite: {fileID: 21300000, guid: d9b2ae304c17fd542a6569db2482b095, type: 3}
+    sprite: {fileID: 21300000, guid: c5895d30afe70cb48952e79a6d67673f, type: 3}
   - key: Mushrooms/Colony/md21
-    sprite: {fileID: 21300000, guid: 29e15be555568a247ac56f34494b9f9e, type: 3}
+    sprite: {fileID: 21300000, guid: 3b18cfe5289d8f2439899b98def5eb38, type: 3}
   - key: Mushrooms/Colony/md22
-    sprite: {fileID: 21300000, guid: 2c5af817f120c584a96a13d08c7d1b01, type: 3}
+    sprite: {fileID: 21300000, guid: e8e14ee4c84a37e43a46ba7189e72738, type: 3}
   - key: Mushrooms/Colony/md23
-    sprite: {fileID: 21300000, guid: 17c1d89e0f7924542a0fa703fd8f57d5, type: 3}
+    sprite: {fileID: 21300000, guid: 41309ca6d52db3447b39264cfcb4f2e2, type: 3}
   - key: Mushrooms/Colony/md24
-    sprite: {fileID: 21300000, guid: 37a1eba973d9b314a9b4fd777e4f79b4, type: 3}
+    sprite: {fileID: 21300000, guid: c51992137d6cd144caf834ac2a1a011c, type: 3}
   - key: Mushrooms/Colony/md3
-    sprite: {fileID: 21300000, guid: c6e25cb3d7e085843a8b100026be904f, type: 3}
+    sprite: {fileID: 21300000, guid: 9e498cfe2b4434c4ca20309e23a044f6, type: 3}
   - key: Mushrooms/Colony/md4
-    sprite: {fileID: 21300000, guid: 8931f0b2fc839a34583d3a894ac022d1, type: 3}
+    sprite: {fileID: 21300000, guid: cf79d149eb0042f46ace70b7cf6cf338, type: 3}
   - key: Mushrooms/Colony/md5
-    sprite: {fileID: 21300000, guid: 55e8dee2579e0594eb1ca3cc2d32ab0c, type: 3}
+    sprite: {fileID: 21300000, guid: 426c711656e38f2489a08854d5c8524c, type: 3}
   - key: Mushrooms/Colony/md6
-    sprite: {fileID: 21300000, guid: f8d05b93c28bc2e47b2f77b026d265ee, type: 3}
+    sprite: {fileID: 21300000, guid: c682f16bd9abb3e45a9f96ceded31894, type: 3}
   - key: Mushrooms/Colony/md7
-    sprite: {fileID: 21300000, guid: 1975c8b8e58fce84e9801d264bd2b583, type: 3}
+    sprite: {fileID: 21300000, guid: 4dcab8fb17c27304fa5b913e6c2cc93d, type: 3}
   - key: Mushrooms/Colony/md8
-    sprite: {fileID: 21300000, guid: 8895299d8610e424e92012647152aa1b, type: 3}
+    sprite: {fileID: 21300000, guid: 4c843c915f9dc5d4d99ef65252494a21, type: 3}
   - key: Mushrooms/Colony/md9
-    sprite: {fileID: 21300000, guid: d7131342ca46c8047826694a3db7e539, type: 3}
+    sprite: {fileID: 21300000, guid: c71692ab7cdd57841ad3941646d4117e, type: 3}
   - key: Mushrooms/Colony/ps0
-    sprite: {fileID: 21300000, guid: 5a75eec7a20eda5468c7b0e5345d8e7d, type: 3}
+    sprite: {fileID: 21300000, guid: c0a797b952d4aef4f813b9a1a0aafe25, type: 3}
   - key: Mushrooms/Colony/ps1
-    sprite: {fileID: 21300000, guid: 5c4d3c4d954316c4e81876e48bb62619, type: 3}
+    sprite: {fileID: 21300000, guid: 7f4dabb13b09c2c418982c5f6b3f1d95, type: 3}
   - key: Mushrooms/Colony/ps10
-    sprite: {fileID: 21300000, guid: 932f378f517982941b69d006c28a903f, type: 3}
+    sprite: {fileID: 21300000, guid: f608d6fc8bdf7664cac9f5f99b45c5a9, type: 3}
   - key: Mushrooms/Colony/ps11
-    sprite: {fileID: 21300000, guid: ddda67a04ee3b254e986a192f7af09d3, type: 3}
+    sprite: {fileID: 21300000, guid: a255944d5434fb040936d4a412435a7f, type: 3}
   - key: Mushrooms/Colony/ps12
-    sprite: {fileID: 21300000, guid: b403486efd0879e459f16c650a39605c, type: 3}
+    sprite: {fileID: 21300000, guid: c2644dc38efbe6a43af63479344daf6e, type: 3}
   - key: Mushrooms/Colony/ps13
-    sprite: {fileID: 21300000, guid: bd360face0ea4ca4b949362a348c660a, type: 3}
+    sprite: {fileID: 21300000, guid: cbbadc6fe661c85479371841cb816c14, type: 3}
   - key: Mushrooms/Colony/ps14
-    sprite: {fileID: 21300000, guid: a391dba9470667348b8ba7c66b0f2985, type: 3}
+    sprite: {fileID: 21300000, guid: 2fdc9d7778c9c654e864a48e3e1ad4a6, type: 3}
   - key: Mushrooms/Colony/ps15
-    sprite: {fileID: 21300000, guid: 11a2ac71012da6a4b8b103ad1575a716, type: 3}
+    sprite: {fileID: 21300000, guid: 2d7e853975050ac4980876bfa6a29637, type: 3}
   - key: Mushrooms/Colony/ps16
-    sprite: {fileID: 21300000, guid: be503957baeb0a740bab8e6576cba592, type: 3}
+    sprite: {fileID: 21300000, guid: 2ba253ce79dbf6b4cb953eb56f17f59f, type: 3}
   - key: Mushrooms/Colony/ps17
-    sprite: {fileID: 21300000, guid: f3c15551fe946b142acaa5dd6a757c55, type: 3}
+    sprite: {fileID: 21300000, guid: 9eb2660b9d7f6e24b9879db266cc2cde, type: 3}
   - key: Mushrooms/Colony/ps18
-    sprite: {fileID: 21300000, guid: fd8dc4279adbc7d44a38922e8d3e1301, type: 3}
+    sprite: {fileID: 21300000, guid: 941217523d0dd2f409327c4cc5b97968, type: 3}
   - key: Mushrooms/Colony/ps19
-    sprite: {fileID: 21300000, guid: 060680b15d6bb9a4486837f48a1093b3, type: 3}
+    sprite: {fileID: 21300000, guid: 5d151bfeafe2dd740b5195620197b013, type: 3}
   - key: Mushrooms/Colony/ps2
-    sprite: {fileID: 21300000, guid: 3726b6943c6f7884ca3c1b41b5a62f56, type: 3}
+    sprite: {fileID: 21300000, guid: 08978c376a9868b4cb1f932e8ee8890b, type: 3}
   - key: Mushrooms/Colony/ps20
-    sprite: {fileID: 21300000, guid: c73a924addf6ac245817ba3bcb72acf0, type: 3}
+    sprite: {fileID: 21300000, guid: a3c9ecf927fd9eb44a8f0c4b44598d01, type: 3}
   - key: Mushrooms/Colony/ps21
-    sprite: {fileID: 21300000, guid: 129e1ab3482b3aa43aa055a74df3941d, type: 3}
+    sprite: {fileID: 21300000, guid: 640fef039838d5243b291bf77aa2296c, type: 3}
   - key: Mushrooms/Colony/ps22
-    sprite: {fileID: 21300000, guid: 9d01885f90b99854fb04a9cd6237a7d1, type: 3}
+    sprite: {fileID: 21300000, guid: b674f250d524c83439ddab9ddb462d2e, type: 3}
   - key: Mushrooms/Colony/ps23
-    sprite: {fileID: 21300000, guid: df2f1d44306a15847a17bf8453110b96, type: 3}
+    sprite: {fileID: 21300000, guid: 94f26c60ec4fd014aae2d650f70fe1b5, type: 3}
   - key: Mushrooms/Colony/ps24
-    sprite: {fileID: 21300000, guid: 3c9b42f289e07a242861630b8870cfb2, type: 3}
+    sprite: {fileID: 21300000, guid: dd3a096fdb94a724aaa3d01ee614548c, type: 3}
   - key: Mushrooms/Colony/ps3
-    sprite: {fileID: 21300000, guid: f21e9ddfa0908de4b988d25f3e539646, type: 3}
+    sprite: {fileID: 21300000, guid: 54ef946121488bf4e8b8e08c3f8bef41, type: 3}
   - key: Mushrooms/Colony/ps4
-    sprite: {fileID: 21300000, guid: 00eb359e08be709428966a7a637d65c4, type: 3}
+    sprite: {fileID: 21300000, guid: 67b1e1f50e46d1d439f0157078ddb5bd, type: 3}
   - key: Mushrooms/Colony/ps5
-    sprite: {fileID: 21300000, guid: 536edee5fa43cd44f8afb8be7e334eda, type: 3}
+    sprite: {fileID: 21300000, guid: 38e3df40f1d15d6429f3d3ace5a3e345, type: 3}
   - key: Mushrooms/Colony/ps6
-    sprite: {fileID: 21300000, guid: 1900156877801bd4a8b0ca84c224f10d, type: 3}
+    sprite: {fileID: 21300000, guid: 514058282a8e3cc43aba8a9f2c1cbd2e, type: 3}
   - key: Mushrooms/Colony/ps7
-    sprite: {fileID: 21300000, guid: 478348677dd6b834c9345c35d028f561, type: 3}
+    sprite: {fileID: 21300000, guid: 07c7d623ca3f82b4f861437e7c875b32, type: 3}
   - key: Mushrooms/Colony/ps8
-    sprite: {fileID: 21300000, guid: 6d27eb2db869eb843bf3a3b5df9b5f83, type: 3}
+    sprite: {fileID: 21300000, guid: 88ea16d119ad3fc4eb597fe60999cb47, type: 3}
   - key: Mushrooms/Colony/ps9
-    sprite: {fileID: 21300000, guid: 567a795e62d5acc4fae847ae8e2d2beb, type: 3}
+    sprite: {fileID: 21300000, guid: 9346d40cd760d9845b2dae17da01dbff, type: 3}
   - key: Mushrooms/Single/ed0
-    sprite: {fileID: 21300000, guid: da5ba97d4136640419fa670e974cb2eb, type: 3}
+    sprite: {fileID: 21300000, guid: 2c28bfbd363ba954689361e37bce4863, type: 3}
   - key: Mushrooms/Single/ed1
-    sprite: {fileID: 21300000, guid: 8ff848e9821caec4c8db5bc87a1d2db6, type: 3}
+    sprite: {fileID: 21300000, guid: bf2e2a669c69e0f438043850b8aefc49, type: 3}
   - key: Mushrooms/Single/ed10
-    sprite: {fileID: 21300000, guid: 85885cfb2e88ab3418bf5c672f57d427, type: 3}
+    sprite: {fileID: 21300000, guid: 030b9f481f90c9240a08a7af5eec4c05, type: 3}
   - key: Mushrooms/Single/ed11
-    sprite: {fileID: 21300000, guid: e4c37821aaed7a746b40c5d29f7104f6, type: 3}
+    sprite: {fileID: 21300000, guid: b0420903ef4ad7c45ab1f9a0757be332, type: 3}
   - key: Mushrooms/Single/ed12
-    sprite: {fileID: 21300000, guid: fe987087ac62c764ca7b368907d9721f, type: 3}
+    sprite: {fileID: 21300000, guid: 09dc2564ce9f2594e9b6b1df53d0d006, type: 3}
   - key: Mushrooms/Single/ed13
-    sprite: {fileID: 21300000, guid: f779ce4f3e9f8f44882c7c9eb75085ce, type: 3}
+    sprite: {fileID: 21300000, guid: 4532245b14f6a0c4f8ac9b6d652e3d0d, type: 3}
   - key: Mushrooms/Single/ed14
-    sprite: {fileID: 21300000, guid: 2b907567c1c0b8c429bc862c5de7cfe5, type: 3}
+    sprite: {fileID: 21300000, guid: daed32fa4fa0e584b8de538293fbb776, type: 3}
   - key: Mushrooms/Single/ed15
-    sprite: {fileID: 21300000, guid: 8f05e7a4acce74e4aaead9dd6d3887bf, type: 3}
+    sprite: {fileID: 21300000, guid: 4a7a9c2da2aa3344ab66a078ee5926fe, type: 3}
   - key: Mushrooms/Single/ed16
-    sprite: {fileID: 21300000, guid: 85188d256d440fc43bb4939b4da2d827, type: 3}
+    sprite: {fileID: 21300000, guid: b5831fc203971b64a8dda8dd4affb4db, type: 3}
   - key: Mushrooms/Single/ed17
-    sprite: {fileID: 21300000, guid: 1c134816b4b8aa34a968dc0e7a616d21, type: 3}
+    sprite: {fileID: 21300000, guid: 3a02339f1ab18414ea0d64e07f20f0ae, type: 3}
   - key: Mushrooms/Single/ed18
-    sprite: {fileID: 21300000, guid: 3e63df1c53bcbfc40a0fe14d9050daa8, type: 3}
+    sprite: {fileID: 21300000, guid: ffde2dcf5795d8e45ad3aa060654c73a, type: 3}
   - key: Mushrooms/Single/ed19
-    sprite: {fileID: 21300000, guid: 26358d07468913f468f194ead133b2af, type: 3}
+    sprite: {fileID: 21300000, guid: 4e31c5d7a0bbfc04285cb4f09a89d829, type: 3}
   - key: Mushrooms/Single/ed2
-    sprite: {fileID: 21300000, guid: 15341ed2e9d05634dae723d0a79985dd, type: 3}
+    sprite: {fileID: 21300000, guid: 1e65f58924bb53148b5b4acd2dd7fadf, type: 3}
   - key: Mushrooms/Single/ed20
-    sprite: {fileID: 21300000, guid: c53f746204f8bd9499d95c1cd52ccd7d, type: 3}
+    sprite: {fileID: 21300000, guid: 2a2ad4d91f4674446899bf2b6463ae28, type: 3}
   - key: Mushrooms/Single/ed21
-    sprite: {fileID: 21300000, guid: 8b33cb6c81571c34980064e948fcc94f, type: 3}
+    sprite: {fileID: 21300000, guid: 02254eddb106c854e990189f96f3bcac, type: 3}
   - key: Mushrooms/Single/ed22
-    sprite: {fileID: 21300000, guid: 4c9761007b9028247b9a852eab5e2987, type: 3}
+    sprite: {fileID: 21300000, guid: e0673e850dd9ada4bb4dce0d8dc13918, type: 3}
   - key: Mushrooms/Single/ed23
-    sprite: {fileID: 21300000, guid: 2d1cd87a6c296914a917e5ea443dcbcf, type: 3}
+    sprite: {fileID: 21300000, guid: 642456a2fa605cc46a84163ff534d147, type: 3}
   - key: Mushrooms/Single/ed24
-    sprite: {fileID: 21300000, guid: ba9f6c8bade08ac429d481365d190cfb, type: 3}
+    sprite: {fileID: 21300000, guid: 683ac5d0fd9408c4db2857afb4d11ce4, type: 3}
   - key: Mushrooms/Single/ed3
-    sprite: {fileID: 21300000, guid: e17891a68bdf8cc4f85b378b6b76c388, type: 3}
+    sprite: {fileID: 21300000, guid: a801b5224b1593947bd747ff658f5443, type: 3}
   - key: Mushrooms/Single/ed4
-    sprite: {fileID: 21300000, guid: d4c6c7574742bdb4ba7a133197fe4111, type: 3}
+    sprite: {fileID: 21300000, guid: 0613eb772debc6b45945d94d4f7b13ad, type: 3}
   - key: Mushrooms/Single/ed5
-    sprite: {fileID: 21300000, guid: 90b8408095b22ab418ab3a3f249618f6, type: 3}
+    sprite: {fileID: 21300000, guid: b941509aba7890148b76023baf7a4772, type: 3}
   - key: Mushrooms/Single/ed6
-    sprite: {fileID: 21300000, guid: d89bf75da6626634899f8ea33142794c, type: 3}
+    sprite: {fileID: 21300000, guid: 19047c8c8228535429e9ec3248b0c4c4, type: 3}
   - key: Mushrooms/Single/ed7
-    sprite: {fileID: 21300000, guid: 75027f023d882944dab5ddb662cac2c8, type: 3}
+    sprite: {fileID: 21300000, guid: c6b9130e6cf55434da678bbfb716b4f8, type: 3}
   - key: Mushrooms/Single/ed8
-    sprite: {fileID: 21300000, guid: 43a90dc8c8592da47ba7ad2a76e24e16, type: 3}
+    sprite: {fileID: 21300000, guid: 271e6beeea27c2149b375f28e0aa3c91, type: 3}
   - key: Mushrooms/Single/ed9
-    sprite: {fileID: 21300000, guid: b8020fe63c7ccfa47977c20d8339ec14, type: 3}
+    sprite: {fileID: 21300000, guid: e1a5d2ad01e20fc4483fd16ea09c3528, type: 3}
   - key: Mushrooms/Single/md0
-    sprite: {fileID: 21300000, guid: e65797cf7dba7204e80c3173a611b19b, type: 3}
+    sprite: {fileID: 21300000, guid: 0acae1565e2fe3d48aa706b3af180694, type: 3}
   - key: Mushrooms/Single/md1
-    sprite: {fileID: 21300000, guid: 4bfc53b7d60c3f14e925fd39b098778c, type: 3}
+    sprite: {fileID: 21300000, guid: ad7daa7ab456eee46b4a42720ddf2bf1, type: 3}
   - key: Mushrooms/Single/md10
-    sprite: {fileID: 21300000, guid: f22a934b6e7790640a88f6b1b49f9b76, type: 3}
+    sprite: {fileID: 21300000, guid: 0773bf40bc2006f49b6573fa491873a7, type: 3}
   - key: Mushrooms/Single/md11
-    sprite: {fileID: 21300000, guid: 995264c4cfcdeff4b8d3252321679ccb, type: 3}
+    sprite: {fileID: 21300000, guid: af0d3861e9d847049909ce47b011b01a, type: 3}
   - key: Mushrooms/Single/md12
-    sprite: {fileID: 21300000, guid: e94e6d8e68dfd8d4db586aece55eadc5, type: 3}
+    sprite: {fileID: 21300000, guid: 3a61c1c00aa16124e9f78e97f15a7e5a, type: 3}
   - key: Mushrooms/Single/md13
-    sprite: {fileID: 21300000, guid: 242098222a9e8874d998ce065d31aea8, type: 3}
+    sprite: {fileID: 21300000, guid: dd5d7c270ab6a7545a344886d8b1c26a, type: 3}
   - key: Mushrooms/Single/md14
-    sprite: {fileID: 21300000, guid: 362245430b01da44bac17bc1c468e56e, type: 3}
+    sprite: {fileID: 21300000, guid: 00a9d4c2f261129438ce2d4ee1af9fb3, type: 3}
   - key: Mushrooms/Single/md15
-    sprite: {fileID: 21300000, guid: 00ef29642f13ca944aad419e52782576, type: 3}
+    sprite: {fileID: 21300000, guid: 90538b5257c91b84ab3980edd702462c, type: 3}
   - key: Mushrooms/Single/md16
-    sprite: {fileID: 21300000, guid: 82eab4267afcea04f8299f8a5ba701d0, type: 3}
+    sprite: {fileID: 21300000, guid: cb74eee8404626540b2d109bb9f65fbd, type: 3}
   - key: Mushrooms/Single/md17
-    sprite: {fileID: 21300000, guid: 980934d50ea425f4c83e269d82053397, type: 3}
+    sprite: {fileID: 21300000, guid: 596cfccf64caefa4ca6c1d57d8e84163, type: 3}
   - key: Mushrooms/Single/md18
-    sprite: {fileID: 21300000, guid: a3accd93b8172dd4eb19bc18c64a4e4a, type: 3}
+    sprite: {fileID: 21300000, guid: 947067dbbea399042a9fc69e5581050f, type: 3}
   - key: Mushrooms/Single/md19
-    sprite: {fileID: 21300000, guid: 5ee45250144d0ba4e9671d52254b5f96, type: 3}
+    sprite: {fileID: 21300000, guid: 6456900f8bf4e31448456d099946e1a5, type: 3}
   - key: Mushrooms/Single/md2
-    sprite: {fileID: 21300000, guid: cc3b4ba3a1401a54eafe1f8e5cc3207c, type: 3}
+    sprite: {fileID: 21300000, guid: 512d0a6494bccd74f8d374064ca1457e, type: 3}
   - key: Mushrooms/Single/md20
-    sprite: {fileID: 21300000, guid: 12b2b9931eb39d4419f0434a0e1e6fe1, type: 3}
+    sprite: {fileID: 21300000, guid: 316bc11d22f270b4baf1d18f3f2d45c9, type: 3}
   - key: Mushrooms/Single/md21
-    sprite: {fileID: 21300000, guid: 168e35e8bcae0a247aad76004f3e6287, type: 3}
+    sprite: {fileID: 21300000, guid: abcc6c379529c2c40bd2d37faf37d694, type: 3}
   - key: Mushrooms/Single/md22
-    sprite: {fileID: 21300000, guid: 63b495d76232809448e11c6f962a86a5, type: 3}
+    sprite: {fileID: 21300000, guid: 8e62a3be2882c6b4ba157db3be94ef24, type: 3}
   - key: Mushrooms/Single/md23
-    sprite: {fileID: 21300000, guid: 021a1a92de393414a987dd38de2e1b2c, type: 3}
+    sprite: {fileID: 21300000, guid: fc02384a51e8e45418bcec6432f28b7b, type: 3}
   - key: Mushrooms/Single/md24
-    sprite: {fileID: 21300000, guid: 76e27192d938e5d4ba0ae41b2e03115d, type: 3}
+    sprite: {fileID: 21300000, guid: 2b296dd7241587545ba75d7a14076ef3, type: 3}
   - key: Mushrooms/Single/md3
-    sprite: {fileID: 21300000, guid: d4407a0028dd17f4199eb44eb4b22c34, type: 3}
+    sprite: {fileID: 21300000, guid: 4f54b1ff7bcc07d48abf2e4a661aef29, type: 3}
   - key: Mushrooms/Single/md4
-    sprite: {fileID: 21300000, guid: 5bd088c7898e3aa4f92687c214aef136, type: 3}
+    sprite: {fileID: 21300000, guid: a0e0bfd464456754fa2cd423f2bb1739, type: 3}
   - key: Mushrooms/Single/md5
-    sprite: {fileID: 21300000, guid: 79753a234f0c8a64c895b032d074c4aa, type: 3}
+    sprite: {fileID: 21300000, guid: c6a48a23610756843ac9b938e715cdaa, type: 3}
   - key: Mushrooms/Single/md6
-    sprite: {fileID: 21300000, guid: 04f7bc6b32c9a4643a96cd99e1c2a1ee, type: 3}
+    sprite: {fileID: 21300000, guid: 059d030b9e221f949b15f4a77c214e11, type: 3}
   - key: Mushrooms/Single/md7
-    sprite: {fileID: 21300000, guid: d02f7307cd3493f4cb157da225863642, type: 3}
+    sprite: {fileID: 21300000, guid: 11aaea77224806c4baf0c02a4770ec8d, type: 3}
   - key: Mushrooms/Single/md8
-    sprite: {fileID: 21300000, guid: 62ed37bde757b62478beb145b0791f69, type: 3}
+    sprite: {fileID: 21300000, guid: f16d878bf11dd7c459048a33068bc620, type: 3}
   - key: Mushrooms/Single/md9
-    sprite: {fileID: 21300000, guid: 9ee751b254189b74b87036334aeeb67c, type: 3}
+    sprite: {fileID: 21300000, guid: 0d6b436682b76f945a9f1d203d83527b, type: 3}
   - key: Mushrooms/Single/ps0
-    sprite: {fileID: 21300000, guid: 229ea0758e4389b48affba38f0ed6d86, type: 3}
+    sprite: {fileID: 21300000, guid: f8c9d0d417a18434bb3a5f8760ee0167, type: 3}
   - key: Mushrooms/Single/ps1
-    sprite: {fileID: 21300000, guid: f1a361f918bb01642b6868a1a537daaf, type: 3}
+    sprite: {fileID: 21300000, guid: 2e200fa0b73694348914b7b2e086c9e2, type: 3}
   - key: Mushrooms/Single/ps10
-    sprite: {fileID: 21300000, guid: e759bc8dc7f6d1646805e0e598d35af4, type: 3}
+    sprite: {fileID: 21300000, guid: c91355a1177b36e479cae637056aa9d7, type: 3}
   - key: Mushrooms/Single/ps11
-    sprite: {fileID: 21300000, guid: 8694d33e79557ad43874600a419b44f1, type: 3}
+    sprite: {fileID: 21300000, guid: 61c4d2324d2eeb74480d93a9774a01f5, type: 3}
   - key: Mushrooms/Single/ps12
-    sprite: {fileID: 21300000, guid: 99750dc0a75f6a744ab0fe92ca9d79c0, type: 3}
+    sprite: {fileID: 21300000, guid: 8e3174892cb6c564f9185e63bf91b0c2, type: 3}
   - key: Mushrooms/Single/ps13
-    sprite: {fileID: 21300000, guid: f61e26dcae2aecb48a47e7058dcc5828, type: 3}
+    sprite: {fileID: 21300000, guid: 5db3f8f9f66b6ce4e954ffc78ccbaf81, type: 3}
   - key: Mushrooms/Single/ps14
-    sprite: {fileID: 21300000, guid: 85c1472d8d34fa240826515bc2ecb936, type: 3}
+    sprite: {fileID: 21300000, guid: 1c99e576f19b0df43a235505cbbc0800, type: 3}
   - key: Mushrooms/Single/ps15
-    sprite: {fileID: 21300000, guid: a78cdccb16e09224590d4bb950b35e23, type: 3}
+    sprite: {fileID: 21300000, guid: e45c9ac1ca94de34a933135eb32cf5ef, type: 3}
   - key: Mushrooms/Single/ps16
-    sprite: {fileID: 21300000, guid: b65d70c763c2c4c419f8da4750185478, type: 3}
+    sprite: {fileID: 21300000, guid: dd5d6a9fb9f51284daf97e7abb585096, type: 3}
   - key: Mushrooms/Single/ps17
-    sprite: {fileID: 21300000, guid: 7462c92d9de8ed548b8d4a1c5b70a237, type: 3}
+    sprite: {fileID: 21300000, guid: ac3598dfeacdf474199e50dc6e0ba6bd, type: 3}
   - key: Mushrooms/Single/ps18
-    sprite: {fileID: 21300000, guid: 7fdf6a73a95927a4f909b5f4c56ef9a2, type: 3}
+    sprite: {fileID: 21300000, guid: 03f71ef0d13c7d04d90d4d1fa273cb4d, type: 3}
   - key: Mushrooms/Single/ps19
-    sprite: {fileID: 21300000, guid: a7cb71cb46ce18b489cae425c5edcd83, type: 3}
+    sprite: {fileID: 21300000, guid: 7dbc0063f5bc40b45ade067bd82a45d9, type: 3}
   - key: Mushrooms/Single/ps2
-    sprite: {fileID: 21300000, guid: a7cb15110511f4349943f47556e561aa, type: 3}
+    sprite: {fileID: 21300000, guid: 2e21bf34b76f37d49be6d48173c11b63, type: 3}
   - key: Mushrooms/Single/ps20
-    sprite: {fileID: 21300000, guid: d90c9e33c00521248b8db14e8646f6a2, type: 3}
+    sprite: {fileID: 21300000, guid: 32b77be7a26eb2c4bac3d278db55169f, type: 3}
   - key: Mushrooms/Single/ps21
-    sprite: {fileID: 21300000, guid: 297a4d15fce46cb4a907b547dcfd8719, type: 3}
+    sprite: {fileID: 21300000, guid: 52b3fb7955ef8b34b80471564618e60d, type: 3}
   - key: Mushrooms/Single/ps22
-    sprite: {fileID: 21300000, guid: a315f72d5d4f44840b6b770c4fd12171, type: 3}
+    sprite: {fileID: 21300000, guid: db84de9ec4903704989ba3774c17e769, type: 3}
   - key: Mushrooms/Single/ps23
-    sprite: {fileID: 21300000, guid: e9db34eb582a3904cb80aa7b1a9d90dd, type: 3}
+    sprite: {fileID: 21300000, guid: 04825e7aa6f1b24478aa65089618672e, type: 3}
   - key: Mushrooms/Single/ps24
-    sprite: {fileID: 21300000, guid: 650498e365714fb45a74fd1af752762a, type: 3}
+    sprite: {fileID: 21300000, guid: 6f466e43be3ff9f4295bbe99c91c1d52, type: 3}
   - key: Mushrooms/Single/ps3
-    sprite: {fileID: 21300000, guid: e1c00b33dc88a18429b63e3a3ba5c7de, type: 3}
+    sprite: {fileID: 21300000, guid: 4b4a4cd44076aed4eb205a03b884562c, type: 3}
   - key: Mushrooms/Single/ps4
-    sprite: {fileID: 21300000, guid: 7d634e6b769aaf84696e228317f91cfa, type: 3}
+    sprite: {fileID: 21300000, guid: 515b75ad8b36494458ba1738210ab948, type: 3}
   - key: Mushrooms/Single/ps5
-    sprite: {fileID: 21300000, guid: c9617bb2f48c73144bf4f8fc35a73e62, type: 3}
+    sprite: {fileID: 21300000, guid: 0f15cd22ed7adf248813409eb519f0f3, type: 3}
   - key: Mushrooms/Single/ps6
-    sprite: {fileID: 21300000, guid: 0d912346486923c43993fec55bb0a4ce, type: 3}
+    sprite: {fileID: 21300000, guid: 7f14e7dc0e3004c498218e5a66e2bad5, type: 3}
   - key: Mushrooms/Single/ps7
-    sprite: {fileID: 21300000, guid: 4a99ca7aefffcdb47aef3d5753d6aaa2, type: 3}
+    sprite: {fileID: 21300000, guid: 392c90cee680ed24a9bfd7879bf84348, type: 3}
   - key: Mushrooms/Single/ps8
-    sprite: {fileID: 21300000, guid: bf1febcb6207697429220191c586815f, type: 3}
+    sprite: {fileID: 21300000, guid: 8c940bdee1e1938428ca742e29bb832c, type: 3}
   - key: Mushrooms/Single/ps9
-    sprite: {fileID: 21300000, guid: 80a6d4f4fcfe8874a9bff94e0204f8e8, type: 3}
+    sprite: {fileID: 21300000, guid: 47cacb4957f363e45a410beab57a987e, type: 3}
   - key: Props/acorn_off
-    sprite: {fileID: 21300000, guid: 9164faea3ed806846b9908042bb7176a, type: 3}
+    sprite: {fileID: 21300000, guid: 03f224531797e1641bc46b27a8741554, type: 3}
   - key: Props/acorn_on
-    sprite: {fileID: 21300000, guid: a3c48a673dab24d4e8a77085a723ecf7, type: 3}
+    sprite: {fileID: 21300000, guid: 7caeb60017bc46b46b70da2250b00afe, type: 3}
   - key: Props/clover
-    sprite: {fileID: 21300000, guid: ec42bab28a598bb4284800ee5995ab94, type: 3}
+    sprite: {fileID: 21300000, guid: 68d0957215f97854a83df89d9749cab0, type: 3}
   - key: Props/crack
-    sprite: {fileID: 21300000, guid: da120778547cbd549b54d04830eddb7d, type: 3}
+    sprite: {fileID: 21300000, guid: 02e7b28369e33a64e8b9b9c8c0f38f7d, type: 3}
   - key: Props/flowers
-    sprite: {fileID: 21300000, guid: 2d016656912c0b4458a9242115c5dd86, type: 3}
+    sprite: {fileID: 21300000, guid: 97e0acc892df75e4db48c26b3ab62863, type: 3}
   - key: Props/leaf
-    sprite: {fileID: 21300000, guid: a229534dce38f8b4fa2a844e2376eb77, type: 3}
+    sprite: {fileID: 21300000, guid: b4e52da3618bc5f47900275a12a2e539, type: 3}
   - key: Props/mole
-    sprite: {fileID: 21300000, guid: cd7aa3aec1fd1ba48b63a29acb373e7c, type: 3}
+    sprite: {fileID: 21300000, guid: 5f8736425bb64d04eb1f4e9f57ef3ce7, type: 3}
   - key: Props/moss
-    sprite: {fileID: 21300000, guid: c0d2d2e1dc58aa445a5259c8207b2e5d, type: 3}
+    sprite: {fileID: 21300000, guid: 632a07855d0e44e4ea676f6acd428e3e, type: 3}
   - key: Props/mound
-    sprite: {fileID: 21300000, guid: b1c789dd648050341a55baff0bca6c3d, type: 3}
+    sprite: {fileID: 21300000, guid: 7921701438b64cc45a9c0741031f528e, type: 3}
   - key: Props/pebbles
-    sprite: {fileID: 21300000, guid: bf8f345260010b948b52ce3d91a5431b, type: 3}
+    sprite: {fileID: 21300000, guid: d0cf129f29feef2499be46c019d472dd, type: 3}
   - key: Props/snowflake
-    sprite: {fileID: 21300000, guid: b5302659885406c42bb4e7891be087ac, type: 3}
+    sprite: {fileID: 21300000, guid: ad2a70146dc92b74c8906c68ee43dcb1, type: 3}
   - key: Props/sparkle
-    sprite: {fileID: 21300000, guid: 33cd615e07913ca46aa6cc04521763cc, type: 3}
+    sprite: {fileID: 21300000, guid: d541573a0aa9eaf4ea815decfa58a47f, type: 3}
   - key: Props/sparkle_gold
-    sprite: {fileID: 21300000, guid: 4ee2b729f258fd949938ab428f56b255, type: 3}
+    sprite: {fileID: 21300000, guid: cfb656652d2efde46839f70f234156ec, type: 3}
   - key: Props/stream
-    sprite: {fileID: 21300000, guid: ff1e0e2df78694f4dbce7900a7d62d66, type: 3}
+    sprite: {fileID: 21300000, guid: 11cc65bad9511784099b8aabb92fbd42, type: 3}
   - key: Props/stump
-    sprite: {fileID: 21300000, guid: 1927cbbb15bde6a41ac880f8847c2502, type: 3}
+    sprite: {fileID: 21300000, guid: 4952b15ab7b720b4eaf9d8e3e8454a3e, type: 3}
   - key: Props/warn_shadow
-    sprite: {fileID: 21300000, guid: 58b4eed3729165548900351ea423fce1, type: 3}
+    sprite: {fileID: 21300000, guid: c2c526b0f8e1f1c47aa9b459195b5a26, type: 3}
+  - key: UI/Lettering/combo
+    sprite: {fileID: 21300000, guid: acd0b5ea9999291478bdb14d2a89f535, type: 3}
+  - key: UI/Lettering/en/acorn
+    sprite: {fileID: 21300000, guid: ecfdb61420b292c4a8a43cbaefd08ace, type: 3}
+  - key: UI/Lettering/en/clone
+    sprite: {fileID: 21300000, guid: fd3d68959f01b0746bdb1d1896439705, type: 3}
+  - key: UI/Lettering/en/crit
+    sprite: {fileID: 21300000, guid: da40361b87257e7478b21a117946a398, type: 3}
+  - key: UI/Lettering/en/giant
+    sprite: {fileID: 21300000, guid: b2b555f01f2308847b1af78305d4b966, type: 3}
+  - key: UI/Lettering/en/golden
+    sprite: {fileID: 21300000, guid: 03d2dc812f41df0458f235c27a5a370a, type: 3}
+  - key: UI/Lettering/en/harvest_end
+    sprite: {fileID: 21300000, guid: 258e874c10c5f9145a8aa22af2419e22, type: 3}
+  - key: UI/Lettering/en/multi
+    sprite: {fileID: 21300000, guid: 9740b41a795ee4a4480f551e08ec9e2d, type: 3}
+  - key: UI/Lettering/en/pause
+    sprite: {fileID: 21300000, guid: d80a9a5a6c4980c498a76aac32f3cd5c, type: 3}
+  - key: UI/Lettering/en/settle_done
+    sprite: {fileID: 21300000, guid: 3d6828ce9ec1db94b96e2702f43c83d7, type: 3}
+  - key: UI/Lettering/en/settle_stop
+    sprite: {fileID: 21300000, guid: f5a4347ec8457034f8b6f75fdecde24b, type: 3}
+  - key: UI/Lettering/fever
+    sprite: {fileID: 21300000, guid: 6540924e1a2a42244a7aa204d49798dd, type: 3}
+  - key: UI/Lettering/ko/acorn
+    sprite: {fileID: 21300000, guid: 5f022737131e4c84081f9ed11656854a, type: 3}
+  - key: UI/Lettering/ko/clone
+    sprite: {fileID: 21300000, guid: 6ef47600626cad546b5dfb6d3966f082, type: 3}
+  - key: UI/Lettering/ko/crit
+    sprite: {fileID: 21300000, guid: 43e721554580c914bb51c2af017562ee, type: 3}
+  - key: UI/Lettering/ko/giant
+    sprite: {fileID: 21300000, guid: 28e603128b040bf439c044aa4d0f6501, type: 3}
+  - key: UI/Lettering/ko/golden
+    sprite: {fileID: 21300000, guid: 5e27258fbb413ed43b7197797646bb38, type: 3}
+  - key: UI/Lettering/ko/harvest_end
+    sprite: {fileID: 21300000, guid: be1f547f2127b9448aa0b5f1dc304ded, type: 3}
+  - key: UI/Lettering/ko/multi
+    sprite: {fileID: 21300000, guid: a1f143d60438dfa4abd2e497e0816b1a, type: 3}
+  - key: UI/Lettering/ko/pause
+    sprite: {fileID: 21300000, guid: ef47aafb9e6bdcd4aa9ba151d898502e, type: 3}
+  - key: UI/Lettering/ko/settle_done
+    sprite: {fileID: 21300000, guid: 4d5287b9a4e54c64db238b5d8337e108, type: 3}
+  - key: UI/Lettering/ko/settle_stop
+    sprite: {fileID: 21300000, guid: 5a43bf68f54580f46b49e1301013362f, type: 3}
+  - key: UI/Lettering/new
+    sprite: {fileID: 21300000, guid: a3d72796d319a974abcdc1f9d6ef5ab2, type: 3}
+  - key: UI/Lettering/super_combo
+    sprite: {fileID: 21300000, guid: 5d5050b33ab6efb4b99e6dc3462218f9, type: 3}
+  - key: UI/Lettering/super_fever
+    sprite: {fileID: 21300000, guid: 739cb797f054f1c47a2e0a5d013edf12, type: 3}
+  - key: UI/Slots/slot_buy
+    sprite: {fileID: 21300000, guid: 29bf40992398b9c4d9a556a2745391dc, type: 3}
+  - key: UI/Slots/slot_core
+    sprite: {fileID: 21300000, guid: 5304a6099e0cf8a40b82daff49ac91c4, type: 3}
+  - key: UI/Slots/slot_gem
+    sprite: {fileID: 21300000, guid: 48c53457b152e4245a3b242e73f61d67, type: 3}
+  - key: UI/Slots/slot_locked
+    sprite: {fileID: 21300000, guid: dd223eedd9221d04a9b5527a5fac707a, type: 3}
+  - key: UI/Slots/slot_max
+    sprite: {fileID: 21300000, guid: 966a8a1d50ab7b74ebee2f0fd06c994e, type: 3}
+  - key: UI/Slots/slot_poor
+    sprite: {fileID: 21300000, guid: 531438a378a69854fac6eb438f0ee043, type: 3}
   - key: UI/badge_round
-    sprite: {fileID: 21300000, guid: dffc8d34ffd961741bf634480f4f1742, type: 3}
+    sprite: {fileID: 21300000, guid: b90a62faf8edf684491fdbffe2d407b2, type: 3}
+  - key: UI/bar_back
+    sprite: {fileID: 21300000, guid: 7a993e8c6a3712c4a8cd6d91eacb904b, type: 3}
+  - key: UI/bar_fill
+    sprite: {fileID: 21300000, guid: 673d2dbb06e84f84bb605fb8a6b8a923, type: 3}
   - key: UI/bar_log
-    sprite: {fileID: 21300000, guid: 8383e65d6ea13004f9eddfc533ac4ec1, type: 3}
+    sprite: {fileID: 21300000, guid: bfa9f8d572c09614083f73d80b7e63df, type: 3}
   - key: UI/bar_top
-    sprite: {fileID: 21300000, guid: 825739a447b3b4243a999ad058aa2a98, type: 3}
+    sprite: {fileID: 21300000, guid: 53f21b38d3a5cf842b885580aeb51876, type: 3}
   - key: UI/basket
-    sprite: {fileID: 21300000, guid: 051261457051a2a499d9fd4b34687e89, type: 3}
+    sprite: {fileID: 21300000, guid: 1162824440861ec46a928bdeacc8d60d, type: 3}
   - key: UI/btn_blue
-    sprite: {fileID: 21300000, guid: a18a47d42b5158d48a72d6bc38785277, type: 3}
+    sprite: {fileID: 21300000, guid: fb2534658da06594d8522ce0d44096ff, type: 3}
+  - key: UI/btn_close
+    sprite: {fileID: 21300000, guid: c0a366413d20ee44a9a180a839615caf, type: 3}
   - key: UI/btn_danger
-    sprite: {fileID: 21300000, guid: 1be8af0ae7de68a498d072ae12559e34, type: 3}
+    sprite: {fileID: 21300000, guid: 4f7ba5bf65cd48e4cb0410fc8081e283, type: 3}
   - key: UI/btn_go
-    sprite: {fileID: 21300000, guid: ac2121f323323b44d9ab14496c8d5036, type: 3}
+    sprite: {fileID: 21300000, guid: 4a92513a4427ba243b802bec8c362a5e, type: 3}
   - key: UI/btn_orange
-    sprite: {fileID: 21300000, guid: e1357bbc11acd5844a2fdbe57445185a, type: 3}
+    sprite: {fileID: 21300000, guid: 143f2052f3f8ec447b3c0e9613ebf9ec, type: 3}
+  - key: UI/btn_round
+    sprite: {fileID: 21300000, guid: 7dcf923d6f659684b90e32107f9a736d, type: 3}
   - key: UI/btn_wood
-    sprite: {fileID: 21300000, guid: 41572d571c1b85649b2156a56357ab90, type: 3}
+    sprite: {fileID: 21300000, guid: bc96001e5c39eae47a52dfc271ed93c8, type: 3}
+  - key: UI/chip
+    sprite: {fileID: 21300000, guid: 873a32f09fc820c4a970322ccc11d589, type: 3}
+  - key: UI/divider
+    sprite: {fileID: 21300000, guid: 4e22cb5a62b824841ac39a0f92d47aef, type: 3}
+  - key: UI/hp_back
+    sprite: {fileID: 21300000, guid: 7bc26bcb0a392174fa7b1bc279722f40, type: 3}
+  - key: UI/hp_fill
+    sprite: {fileID: 21300000, guid: 27864a0d1b9287741b63730b4954d20f, type: 3}
+  - key: UI/logo
+    sprite: {fileID: 21300000, guid: ba82d180eaa43e946b01d34c8f25028a, type: 3}
+  - key: UI/panel_accent
+    sprite: {fileID: 21300000, guid: bca1d6ebc4ced1944b46e7764e030f20, type: 3}
+  - key: UI/panel_mint
+    sprite: {fileID: 21300000, guid: a2bf1f701ec680d498eda8e6710cbde4, type: 3}
   - key: UI/panel_paper
-    sprite: {fileID: 21300000, guid: 2372918cbba89084cb64b8964ea04cbc, type: 3}
+    sprite: {fileID: 21300000, guid: e745f5e0758e7ff4bb11949ff89552d8, type: 3}
   - key: UI/panel_wood
-    sprite: {fileID: 21300000, guid: e4da7c6159e65444ab271aa8ffdc1d58, type: 3}
+    sprite: {fileID: 21300000, guid: 02237e8dc772a8b4eb7ffbb33bb5e835, type: 3}
+  - key: UI/progress_back
+    sprite: {fileID: 21300000, guid: ee3d441486c7c334598dbbee016b2779, type: 3}
+  - key: UI/progress_fill
+    sprite: {fileID: 21300000, guid: 0625b14c779382446bf908d97a58d380, type: 3}
   - key: UI/rail_active
-    sprite: {fileID: 21300000, guid: 7b594f9f24530b4439105b2a43f9e3cf, type: 3}
+    sprite: {fileID: 21300000, guid: dd8ccb5c0f5563d41ba611fde7dbd5c9, type: 3}
   - key: UI/rail_item
-    sprite: {fileID: 21300000, guid: efb4af8ae1002f34d85776725d597b71, type: 3}
+    sprite: {fileID: 21300000, guid: d0dd7f7dd9af0604baaef38c6039e65d, type: 3}
+  - key: UI/ribbon
+    sprite: {fileID: 21300000, guid: 8e51669dab2c2c04598eedaa32e7578f, type: 3}
   - key: UI/sign_arrow
-    sprite: {fileID: 21300000, guid: 3693b6a0cbf7d224499d5d5f97b3f97d, type: 3}
+    sprite: {fileID: 21300000, guid: 70d76c7d271f5b94d8ddbb82526eea96, type: 3}
+  - key: UI/tooltip
+    sprite: {fileID: 21300000, guid: 9c5c03527931f98469b673b4be994ff2, type: 3}
   - key: UI/window_title
-    sprite: {fileID: 21300000, guid: 656beeb106dc5074581b272e52fb3cb5, type: 3}
+    sprite: {fileID: 21300000, guid: 202cae8a8e38dba4082b22d53e2defc1, type: 3}
   uiFx:
   - {fileID: 0}
   - {fileID: 2100000, guid: 7b8ee069f7913df4aa1612583ff381c5, type: 2}

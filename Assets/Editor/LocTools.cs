@@ -22,22 +22,24 @@ namespace MoreMush.EditorTools
         // 언어, 제목 TTF, 본문 TTF (확장자 없는 파일 이름)
         static readonly (string lang, string title, string body)[] FONT_SETS =
         {
-            // 2026-10-15 수채화 화풍에 맞춘 둥근 세트 (모두 OFL): Jua · Gowun Dodum · Nunito · M PLUS Rounded 1c
-            ("ko", "Jua-Regular", "GowunDodum-Regular"),
-            ("en", "Nunito-Black", "Nunito-SemiBold"),
-            ("ja", "MPLUSRounded1c-ExtraBold", "MPLUSRounded1c-Medium"),
-            ("ru", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 문자 있음
-            ("uk", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 + ІЇЄҐ 모두 있음
+            // 2026-10-15 5차 몽환 수채화(그림책) 세트 (모두 OFL): 부드러운 세리프 제목 + 둥근 본문
+            ("ko", "GowunBatang-Bold", "GowunDodum-Regular"),
+            ("en", "Lora-Bold", "Nunito-SemiBold"),
+            ("ja", "KiwiMaru-Medium", "ZenMaruGothic-Medium"),
+            ("ru", "Lora-Bold", "Nunito-SemiBold"),     // 키릴 문자 있음
+            ("uk", "Lora-Bold", "Nunito-SemiBold"),     // 키릴 + ІЇЄҐ 모두 있음
         };
         // 어느 폰트에도 없는 글자가 나오면 이 폰트로 넘긴다 (한글·가나·한자·기호를 모두 가진 폰트)
         const string UniversalFallback = "ONEMobileRegular";
         // 외곽선 프리셋 (LocFonts.PRESETS와 같은 순서)
+        // 몽환 수채화(2026-10-15): 스티커처럼 두껍고 검은 테두리 대신 얇고 부드러운 먹색 테두리 (글자가 배경에서 떠 보일 만큼만)
         static readonly (Color32 col, float width)[] OUTLINES =
         {
-            (new Color32(0x2a, 0x1a, 0x10, 255), 0.28f),
-            (new Color32(0x3b, 0x24, 0x14, 255), 0.22f),
-            (new Color32(0x5a, 0x2a, 0x00, 255), 0.3f),
+            (new Color32(0x3a, 0x2c, 0x24, 230), 0.18f),
+            (new Color32(0x4a, 0x35, 0x26, 220), 0.15f),
+            (new Color32(0x5e, 0x3a, 0x22, 230), 0.2f),
         };
+        const float OUTLINE_SOFT = 0.12f;   // 번진 물감처럼 테두리 끝을 흐리게
         // 예전 폰트 → 역할 (씬 글자 연결 때 역할을 정하는 데만 쓴다)
         static readonly Dictionary<string, LocFonts.Role> OLD_ROLE = new Dictionary<string, LocFonts.Role>
         {
@@ -128,6 +130,7 @@ namespace MoreMush.EditorTools
             m.SetColor(ShaderUtilities.ID_OutlineColor, col);
             m.SetFloat(ShaderUtilities.ID_OutlineWidth, width);
             m.SetFloat(ShaderUtilities.ID_FaceDilate, width * 0.5f);
+            m.SetFloat(ShaderUtilities.ID_OutlineSoftness, OUTLINE_SOFT);
             EditorUtility.SetDirty(m);
         }
 

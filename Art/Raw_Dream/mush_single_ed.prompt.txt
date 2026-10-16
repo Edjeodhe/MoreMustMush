@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+25 different real edible mushroom species as CUTE CHIBI TOY-LIKE watercolor icons, drawn EXACTLY like the 4 attached sample mushrooms (same chunky proportions, same simple flat washes, same low detail). Each species must stay recognizable only by its BIG traits (cap profile, real colors, one signature marking such as spots / net / ink rim / ring / volva, clustering habit). Strong deformation: 2 heads tall at most, the cap is about 2/3 of the whole figure, the stem is shorter than half the cap width and thick and soft, everything is a round squishy blob like a jelly toy or a soft plush. Detail budget: only 3 to 6 big simple markings per mushroom, NO fine texture, NO scales drawn one by one, NO gill lines more than 5, NO bark or dirt texture, NO realistic shading. Flat matte watercolor, no outlines, no faces. One mushroom or its natural small group (max 3-5 chubby caps) per cell, seen slightly from the side.
+
+Assets in reading order (left to right, top to bottom):
+1. Agaricus bisporus (양송이): white button mushroom: smooth round white cap, short thick white stem
+2. Pleurotus ostreatus (느타리): grey oyster mushroom: overlapping fan-shaped grey caps, white gills underneath, short side stem
+3. Lentinula edodes (표고): shiitake: dark brown dome cap cracked into a white turtle-shell pattern, cream stem
+4. Flammulina velutipes (cultivated enoki) (팽이버섯): bundle of long thin cream stems with tiny round caps
+5. Auricularia auricula-judae (목이버섯): dark brown translucent jelly shaped like a human ear
+6. Pleurotus eryngii (새송이버섯): king oyster: very thick white stem, small flat light-brown cap
+7. Coprinus comatus (먹물버섯): shaggy ink cap: tall white cylindrical cap with shaggy scales, black ink dripping at the rim
+8. Lycoperdon perlatum (말불버섯): white round puffball covered in tiny warts, a small puff of spores
+9. Cantharellus cibarius (꾀꼬리버섯): golden-orange chanterelle trumpet with wavy rim and ridged false gills
+10. Laetiporus sulphureus (덕다리버섯): chicken of the woods: stacked bright orange shelves with yellow edges
+11. Macrolepiota procera (큰갓버섯): parasol: tall thin stem with a ring, wide beige cap with brown scales and a brown center bump
+12. Lepista nuda (민자주방망이버섯): wood blewit: lilac-violet cap and gills, stout violet stem
+13. Russula virescens (기와버섯): green-teal cap cracked into tile-like patches, white stem
+14. Hypsizygus marmoreus (만가닥버섯): dense bunch of small marbled light-brown caps on white stems from one base
+15. Morchella esculenta (곰보버섯): morel: honeycomb-pitted conical tan cap, hollow white stem
+16. Amanita hemibapha (Caesar's mushroom) (달걀버섯): smooth orange-red cap rising out of a white egg-like sac, yellow stem
+17. Fistulina hepatica (소혀버섯): beefsteak fungus: moist red tongue-shaped shelf
+18. Sarcodon aspratus (능이버섯): dark brown funnel with rough upturned scales on top
+19. Tricholoma matsutake (송이버섯): matsutake: thick white stem, brown fibrous cap, a faint golden glow (legendary)
+20. Tuber melanosporum (송로버섯): black warty round truffle lump with a few golden sparkles (legendary)
+21. Ramaria flava (싸리버섯): pale yellow coral fungus branching like a broom
+22. fantasy variant of Lentinula edodes (달빛표고): shiitake with an indigo-blue cap whose cracks glow silver-white
+23. Agaricus campestris (주름버섯): field mushroom: white cap tilted to show pink gills, short stem
+24. fantasy variant of Tricholoma matsutake (바다송이): thick-stemmed matsutake with a sea-blue cap dusted with salt crystals and a tiny barnacle
+25. fantasy variant of Coprinus comatus (벽돌먹물버섯): shaggy ink cap with a brick-red scaled cap and black inky rim

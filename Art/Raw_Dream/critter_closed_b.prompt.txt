@@ -1,0 +1,11 @@
+Sprite sheet: a 1x5 grid holding 5 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+The five BODY parts from the second column of the attached parts sheet, top to bottom placed left to right, each redrawn EXACTLY the same (same size, outline shape, colours, blush, accessories, pose, flat matte watercolor, no outlines), with ONE change only: both eyes are CLOSED as soft happy upward curves and the mouth is a small gentle closed smile. No cap, no arms, no feet.
+
+Assets in reading order (left to right, top to bottom):
+1. spark critter body with closed happy eyes
+2. moon critter body with closed happy eyes
+3. star critter body with closed happy eyes
+4. coin critter body with closed happy eyes
+5. chest critter body with closed happy eyes

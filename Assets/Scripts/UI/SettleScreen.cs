@@ -45,7 +45,11 @@ namespace MoreMush
             statsButton.name = "DmgStats";
             statsButton.transform.SetSiblingIndex(toTree.transform.GetSiblingIndex());   // 균사 트리로 버튼 왼쪽
             statsButton.GetComponent<UIAction>().act = "dmgstats";
+            // secondary action: the wooden button with ink text, so "to the tree" stays the one green primary
+            var wood = SpriteDB.Get("UI/btn_wood");
+            var bi = statsButton.GetComponent<Image>(); if (wood != null && bi != null) bi.sprite = wood;
             var t = statsButton.GetComponentInChildren<TMP_Text>();
+            t.color = new Color(0.29f, 0.23f, 0.16f);
             var lt = t.GetComponent<LocText>(); if (lt != null) lt.key = "데미지 통계";
             t.text = Loc.T("데미지 통계");
         }
@@ -55,7 +59,14 @@ namespace MoreMush
             sum = s; t0 = Time.unscaledTime; rolledSound = false; animating = true;
             // 제목: 끝까지 했으면 "수확 완료!", "라운드 끝내고 정산하기"로 중간에 끝냈으면 "수확 중단" (씬 Card/Title)
             if (title == null) title = transform.Find("Card/Title")?.GetComponent<TMP_Text>();
-            if (title != null) title.text = s.aborted ? Loc.T("수확 중단") : Loc.T("수확 완료!");
+            if (title != null)
+            {
+                title.text = s.aborted ? Loc.T("수확 중단") : Loc.T("수확 완료!");
+                // the cream lettering is toned down to warm brown so it reads on the cream card
+                var li = Lettering.Apply(title, s.aborted ? "settle_stop" : "settle_done", 1.5f);
+                if (li != null) li.color = LetterOnCard;
+            }
+            ShiftCritters(true);
             for (int i = 0; i < 3; i++) gainTexts[i].text = Loc.F("+{0}개", U.Fmt(s.gains[CAT_KEYS[i]]));
             scoreLabel.text = Loc.F("얻은 점수 → 골드 <size=70%><color=#8a6a4a>(×{0})</color></size>", U.FmtN(s.goldMul));
             bonusRow.SetActive(s.bonusGold > 0);
@@ -159,6 +170,24 @@ namespace MoreMush
             foreach (var c in list) if (c != null) { c.gameObject.SetActive(false); Destroy(c.gameObject); }
             list.Clear();
         }
+
+        static readonly Color LetterOnCard = new Color(0.72f, 0.5f, 0.32f);
+
+        // The settle card stands in front of the title backdrop: its critters (lower middle) step aside to the right
+        // of the card and the grandpa a little to the left, so nobody is half hidden; they come back for the title.
+        const float CRITTER_SHIFT = 8.6f, GRANDPA_SHIFT = -1.6f;
+        Transform critters, grandpa;
+        Vector3 grandpaRest;
+        void ShiftCritters(bool aside)
+        {
+            var bd = GameObject.Find("World")?.transform.Find("TitleBackdrop");
+            if (bd == null) return;
+            if (critters == null) critters = bd.Find("Critters");
+            if (grandpa == null) { grandpa = bd.Find("Grandpa"); if (grandpa != null) grandpaRest = grandpa.localPosition; }
+            if (critters != null) critters.localPosition = new Vector3(aside ? CRITTER_SHIFT : 0, 0, 0);
+            if (grandpa != null) grandpa.localPosition = grandpaRest + new Vector3(aside ? GRANDPA_SHIFT : 0, 0, 0);
+        }
+        void OnDisable() => ShiftCritters(false);
 
         void SpawnBasket(RoundSim.Summary s)
         {

@@ -1,0 +1,16 @@
+Sprite sheet: a 5x2 grid holding 10 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines and no extra words: only the exact lettering listed for each cell, spelled exactly as written. All assets share one consistent lettering style.
+Hand-lettered storybook headline words for a dreamy watercolor mushroom-forest game, each word on ONE line, centered in its own wide cell. Chunky soft rounded letters painted in flat matte watercolor, slight playful baseline bounce, letters touching nothing else. No glow, no 3D, no gloss, no drop shadow, no hard black outline. Warm cream-butter letter fill with a soft darker warm-brown watercolor edge (not a hard outline) so it reads on light and dark backgrounds; one tiny leaf or mushroom cap ornament on one letter at most. The words are Korean Hangul; spell every letter exactly.
+
+Assets in reading order (left to right, top to bottom):
+1. the words "수확 끝!"
+2. the words "수확 완료!"
+3. the words "수확 중단"
+4. the words "일시정지"
+5. the words "거대 버섯 수확!"
+6. the words "분신 소환!"
+7. the words "황금!"
+8. the words "도토리 점등!"
+9. the words "치명!"
+10. the words "배수 획득!"

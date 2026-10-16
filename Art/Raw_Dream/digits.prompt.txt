@@ -1,0 +1,36 @@
+Sprite sheet: a 6x5 grid holding 30 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines and no extra words: only the exact lettering listed for each cell, spelled exactly as written. All assets share one consistent lettering style.
+Damage-number font glyphs for a soft dreamy watercolor game, painted with the SAME brushes and paper as the meadow background: ONE single character per cell, all from one matching typeface. Keep the typeface of the reference numerals sheet (heavy, condensed, chunky numerals leaning forward in an italic slant with softly rounded corners) but repaint it fully MATTE: flat transparent watercolor washes on rough paper, visible paper grain and gentle pigment pooling at the stroke edges, slightly irregular hand-painted edges. Fill: very pale warm off-white paper colour with faint grey-beige watercolor mottling (no white highlight, no shine, no gradient sheen) so the game can tint it. Edge: a medium-thick soft warm sepia-brown painted rim (muted, NOT near-black, NOT a crisp vector outline), with a faint soft sepia shadow offset down-right that fades like wet paint. Capital letters and digits are the same height; lowercase letters have a smaller x-height (about two-thirds) and 'p' has a descender. No glow, no 3D bevel, no gloss, no sparkle, no saturated colour, no ornaments, no extra marks.
+
+Assets in reading order (left to right, top to bottom):
+1. the digit "0"
+2. the digit "1"
+3. the digit "2"
+4. the digit "3"
+5. the digit "4"
+6. the digit "5"
+7. the digit "6"
+8. the digit "7"
+9. the digit "8"
+10. the digit "9"
+11. a plus sign "+" (half the digit height)
+12. a small round period "." (only a dot)
+13. a small comma ","
+14. an exclamation mark "!"
+15. a lowercase letter "x"
+16. the capital letter "K"
+17. the capital letter "M"
+18. the capital letter "B"
+19. the capital letter "T"
+20. the capital letter "G"
+21. the capital letter "Q"
+22. the capital letter "S"
+23. the capital letter "O"
+24. the capital letter "N"
+25. the capital letter "D"
+26. the lowercase letter "a"
+27. the lowercase letter "i"
+28. the lowercase letter "p"
+29. the lowercase letter "c"
+30. the lowercase letter "o"

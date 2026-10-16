@@ -39,6 +39,25 @@ namespace MoreMush.EditorTools
             ("flowers_yellow", 1060, 1060, 60, true), ("grass_tall", 700, 1080, 60, false), ("clover", 950, 1075, 50, false),
         };
 
+        // depth layers (dream set, 2026-10-15 5차): obj, base x, base y, height px, mirror, sorting order, alpha.
+        // far_* = pale hazy silhouettes behind everything, fog_* / light_patch = soft washes, near_* = big dark framing
+        // pieces cut by the screen edge, drawn over everything but kept to the corners so the play area stays open.
+        const int FAR = 2, WASH = 6, NEAR = 3900;
+        static readonly (string obj, float x, float y, float h, bool flip, int order, float a)[] FIELD_DEPTH =
+        {
+            ("light_patch", 960, 470, 420, false, WASH, 0.55f), ("fog_b", 150, 560, 260, false, WASH, 0.5f), ("fog_b", 1780, 470, 240, true, WASH, 0.45f),
+            ("fog_a", 960, 150, 120, false, WASH, 0.45f),
+            ("near_leaves_l", 90, 1110, 360, false, NEAR, 1f), ("near_leaves_r", 1830, 1110, 360, false, NEAR, 1f),
+            ("near_branch", 260, 190, 190, false, NEAR, 1f), ("near_branch", 1680, 170, 170, true, NEAR, 1f),
+        };
+        static readonly (string obj, float x, float y, float h, bool flip, int order, float a)[] FARM_DEPTH =
+        {
+            ("far_hill", 820, 400, 170, false, FAR, 1f), ("far_tree_b", 520, 395, 300, false, FAR + 1, 1f), ("far_shroom", 1110, 395, 330, false, FAR + 1, 1f),
+            ("far_tree_a", 760, 390, 340, true, FAR + 1, 1f), ("far_tree_c", 1000, 392, 230, false, FAR + 2, 1f), ("far_pine", 1240, 398, 220, true, FAR + 2, 1f),
+            ("fog_a", 820, 430, 110, false, 1000 + 405, 0.6f), ("light_patch", 820, 760, 300, false, 1000 + 300, 0.45f),
+            ("near_leaves_l", 260, 1130, 300, false, NEAR, 1f), ("near_shroom", 1400, 1120, 340, true, NEAR, 1f),
+        };
+
         [MenuItem("MoreMush/Art/Place Env Decor")]
         public static void Place()
         {
@@ -59,6 +78,8 @@ namespace MoreMush.EditorTools
                     var s = FIELD_SLOTS[i];
                     if (Make(g, objs[i], Sp(objs[i]), s.x, s.y, s.h, s.flip, 10 + Mathf.RoundToInt(s.y / 20))) n++; else missing++;
                 }
+                if (region == "forest")
+                    foreach (var d in FIELD_DEPTH) if (Make(g, d.obj, Sp(d.obj), d.x, d.y, d.h, d.flip, d.order, d.a)) n++; else missing++;
                 g.gameObject.SetActive(region == "forest");
             }
 
@@ -66,6 +87,7 @@ namespace MoreMush.EditorTools
             var decor = Fresh(farm, "Decor");
             decor.SetSiblingIndex(1);
             foreach (var d in FARM) if (Make(decor, d.obj, Sp(d.obj), d.x, d.y, d.h, d.flip, 1000 + Mathf.RoundToInt(d.y))) n++; else missing++;
+            foreach (var d in FARM_DEPTH) if (Make(decor, d.obj, Sp(d.obj), d.x, d.y, d.h, d.flip, d.order, d.a)) n++; else missing++;
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -82,7 +104,7 @@ namespace MoreMush.EditorTools
             return go.transform;
         }
 
-        static bool Make(Transform parent, string name, Sprite sp, float x, float y, float h, bool flip, int order)
+        static bool Make(Transform parent, string name, Sprite sp, float x, float y, float h, bool flip, int order, float alpha = 1f)
         {
             if (sp == null) { Debug.LogWarning("[ArtDecor] no sprite Env/" + name); return false; }
             var go = new GameObject(name);
@@ -92,7 +114,7 @@ namespace MoreMush.EditorTools
             go.transform.localPosition = new Vector3(x / Art.PPU, -(y - h / 2) / Art.PPU, 0);
             go.transform.localScale = new Vector3(flip ? -k : k, k, 1) * (sp.pixelsPerUnit / Art.PPU);
             var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = sp; sr.sortingOrder = order;
+            sr.sprite = sp; sr.sortingOrder = order; sr.color = new Color(1, 1, 1, alpha);
             return true;
         }
     }

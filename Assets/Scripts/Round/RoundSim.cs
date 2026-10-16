@@ -46,6 +46,8 @@ namespace MoreMush
         public List<Bolt> bolts = new List<Bolt>();
         public List<Ring> rings = new List<Ring>();
         public List<Part> parts = new List<Part>();
+        public List<Fx> fxs = new List<Fx>();
+        public float barKick, barHitX;   // bar bounce: 1 -> 0 after the harvester lands, and where it landed
         public List<FloatText> texts = new List<FloatText>();
         public List<Flyer> flyers = new List<Flyer>();
         public List<Label> labels = new List<Label>();
@@ -298,8 +300,19 @@ namespace MoreMush
             }
             colonies.Add(col);
             if (!instant)
+            {
+                // the ground cracks open: a dust ring at the base, a few sprouts and soil chips, then each mushroom pops
+                var light = U.Hex(CATS[sp.c].light);
+                AddFx(FxShape.Dust, col.x, col.y + col.R * 0.35f, col.R * 2.6f, 0.55f, new Color(0.86f, 0.8f, 0.68f, 0.85f), 0, 10);
+                AddFx(FxShape.Puff, col.x, col.y, col.R * 1.6f, 0.5f, new Color(light.r, light.g, light.b, 0.55f), FxR(0, 360), 30);
+                for (int i = 0; i < 3; i++)
+                    AddFx(FxShape.Sprout, col.x + FxR(-col.R, col.R) * 0.7f, col.y + FxR(-col.R, col.R) * 0.4f, FxR(18, 26), 0.6f, new Color(0.62f, 0.78f, 0.5f), FxR(-15, 15), 0);
+                for (int i = 0; i < 6; i++)
+                    AddPart(col.x + FxR(-col.R, col.R) * 0.6f, col.y + FxR(-col.R, col.R) * 0.4f, FxR(-90, 90), FxR(-220, -120), 0.6f, new Color(0.55f, 0.43f, 0.32f), 5, FxShape.Chip);
+                // these 8 keep drawing from the gameplay stream as they always did, so seeded balance runs stay identical
                 for (int i = 0; i < 8; i++)
-                    AddPart(col.x + U.Rand(-col.R, col.R) * 0.6f, col.y + U.Rand(-col.R, col.R) * 0.6f, U.Rand(-40, 40), U.Rand(-60, -10), 0.7f, U.Hex(CATS[sp.c].light), 4);
+                    AddPart(col.x + U.Rand(-col.R, col.R) * 0.6f, col.y + U.Rand(-col.R, col.R) * 0.6f, U.Rand(-40, 40), U.Rand(-60, -10), 0.7f, light, 4);
+            }
         }
 
         void UpdateWander(float h)

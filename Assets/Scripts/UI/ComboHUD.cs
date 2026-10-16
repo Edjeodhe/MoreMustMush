@@ -57,6 +57,7 @@ namespace MoreMush
                 if (!comboStr.TryGetValue(c, out var cs)) comboStr[c] = cs = c.ToString();
                 Style(comboNum, cs, size, col, outl);
                 Style(comboLabel, "COMBO", Mathf.Max(26, size * 0.32f), col, outl);
+                Tint(Lettering.Apply(comboLabel, "combo", 1.25f), col, 1);
                 comboLabel.rectTransform.anchoredPosition = new Vector2(0, -size * 0.62f);
                 UIUtil.Show(feverMul, R.fever > 0);
                 if (R.fever > 0)
@@ -82,11 +83,19 @@ namespace MoreMush
                 if (m != shownMsg) { shownMsg = m; msgStr = m.noIcon ? m.text : $"{(MF != null ? MF.icon : UIUtil.Ic("s_burst"))} {m.text}"; }
                 string txt = msgStr;
                 Style(feverTitle, txt, m.lv == 2 ? 92 : 80, MF?.text ?? "#ffe9a0", MF?.@out ?? "#a01a08", a);
+                Tint(Lettering.Apply(feverTitle, Lettering.IdOf(m.text), 1.25f), MF?.text ?? "#ffe9a0", a);
                 UIUtil.Show(feverSub, m.sub != null);
                 if (m.sub != null) Style(feverSub, m.sub, 36, MF?.text ?? "#ffe9a0", MF?.@out ?? "#a01a08", a);
             }
             flash.enabled = R.flash > 0;
             if (flash.enabled) flash.color = new Color(1, 1, 240 / 255f, R.flash * 0.3f);
+        }
+
+        // the pale FEVER / COMBO lettering takes the flame palette colour
+        static void Tint(Image img, string col, float alpha)
+        {
+            if (img == null) return;
+            var c = U.Hex(col); c.a = alpha; img.color = c;
         }
 
         static void Style(TMP_Text t, string s, float size, string col, string outline, float alpha = 1)

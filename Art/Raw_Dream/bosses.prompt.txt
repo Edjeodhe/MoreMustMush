@@ -1,0 +1,12 @@
+Sprite sheet: a 3x2 grid holding 5 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Five big stage-boss mushroom monsters for a cute mushroom game, front view, each one big character filling its cell, 3 rows of 2. Cute-but-boss: chunky, rounded, a little menacing in a friendly way. Leave the last cell empty.
+
+Assets in reading order (left to right, top to bottom):
+1. King Matsutake: a giant thick-stemmed matsutake mushroom monster with a brown fibrous cap wearing a small gold crown, grumpy round eyes, tiny stubby arms
+2. the Forest Cleaner: a big round tan fairy-ring mushroom monster carrying a little broom made of twigs, a ring of tiny tan mushrooms around its feet, sleepy eyes
+3. the Death Angel: a tall pure white destroying-angel amanita monster with a white skirt ring like a robe, a faint halo and small wing-like gills, calm half-closed eyes
+4. the Phantom Mushroom: a big red fly agaric monster with white warts, a wobbly ghostly see-through lower body and mischievous eyes
+5. the Moving Mushroom: a bright orange cordyceps creature with several club-shaped orange stalks for a head, walking on little root legs
+Leave the remaining 1 cell(s) empty.

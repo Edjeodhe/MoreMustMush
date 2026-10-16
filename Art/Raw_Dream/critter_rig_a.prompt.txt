@@ -1,0 +1,36 @@
+Sprite sheet: a 5x6 grid holding 30 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Cut-out animation PARTS of the five mushroom critters in the attached design sheet (same designs, colors, flat matte watercolor and scale for every part, no outlines), front view. ONE ROW PER CRITTER, in this order: (1) the mushroom CAP alone with its decoration and anything worn on the cap, including the cap's underside rim; (2) the BODY alone: the chubby body with its full FACE (open eyes, mouth, cheeks) and its body accessory (scarf, belt, cape, collar, basket), but NO cap, NO arms and NO feet, the top of the body drawn complete because the cap overlaps it; (3) a small BLINK PATCH: the same two eyes CLOSED as happy curves on a patch of that critter's body color, same size and spacing as on the body; (4) ONE stubby ARM (the critter's left arm, shoulder end rounded); (5) ONE little FOOT; (6) a SKIN version of the same cap: exactly the same cap shape and size, recolored as described, WITHOUT the decoration. Each part complete and whole, rounded joint ends.
+
+Assets in reading order (left to right, top to bottom):
+1. leaf critter: its cap
+2. leaf critter: its body with face
+3. leaf critter: closed-eye patch
+4. leaf critter: one arm
+5. leaf critter: one foot
+6. leaf critter: skin cap, cherry blossom: dusty pink with cream petal spots
+7. dew critter: its cap
+8. dew critter: its body with face
+9. dew critter: closed-eye patch
+10. dew critter: one arm
+11. dew critter: one foot
+12. dew critter: skin cap, snowflake: pale icy white with soft blue snowflake spots
+13. wind critter: its cap
+14. wind critter: its body with face
+15. wind critter: closed-eye patch
+16. wind critter: one arm
+17. wind critter: one foot
+18. wind critter: skin cap, cloud: cream white with pale sky-blue cloud spots
+19. fire critter: its cap
+20. fire critter: its body with face
+21. fire critter: closed-eye patch
+22. fire critter: one arm
+23. fire critter: one foot
+24. fire critter: skin cap, lava: deep red-brown with soft orange crack bands
+25. rock critter: its cap
+26. rock critter: its body with face
+27. rock critter: closed-eye patch
+28. rock critter: one arm
+29. rock critter: one foot
+30. rock critter: skin cap, gem: pale aqua with a few soft faceted patches

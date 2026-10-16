@@ -1,0 +1,12 @@
+Sprite sheet: a 2x3 grid holding 6 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Six round upgrade-tree node slots for a dreamy flat matte watercolor game UI (no outlines, no gloss, no glow, no sparkles), seen straight from the front. ALL SIX EXACTLY THE SAME SIZE, perfectly circular and centered in their cells, the same rim width: a soft rounded rim ring about 12% of the radius wide around a flat, calm, slightly recessed pale inner face where an icon will be placed (the inner face is plain, light and even, with no pattern). Only the rim colour and a tiny ornament differ.
+
+Assets in reading order (left to right, top to bottom):
+1. UPGRADABLE: pale cream inner face, soft sky-teal watercolor rim
+2. NOT ENOUGH CURRENCY: pale warm-grey inner face, muted dusty-coral rim
+3. MAX LEVEL: pale cream inner face, moss-green rim with a few tiny butter-yellow dots on it
+4. LOCKED: pale grey-lavender stone inner face, darker grey stone rim, a little moss on the rim
+5. BRANCH START: pale cream inner face, warm honey-wood rim with three tiny leaves on the rim
+6. MYCELIUM STONE NODE: pale mint inner face, translucent-looking teal crystal rim

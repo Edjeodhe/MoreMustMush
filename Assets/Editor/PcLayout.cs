@@ -35,6 +35,7 @@ namespace MoreMush.EditorTools
             TreeHub(canvas.Find("TreeScreen"), log);
             FarmHub(canvas.Find("FarmScreen"), log);
             RoundHud(canvas.Find("RoundUI/RoundHUD"), log);
+            Settle(canvas.Find("SettleScreen"), log);
             Restyle(canvas, log);
 
             EditorSceneManager.MarkSceneDirty(scene);
@@ -42,10 +43,10 @@ namespace MoreMush.EditorTools
             Debug.Log("[PcLayout] " + string.Join(" · ", log));
         }
 
-        // ===== title (concept Art/Raw_Doodle/concept/title.png) =====
-        // logo image upper center-right, a big start button with the small buttons under it, grandpa and three critters
-        // in the lower left of the backdrop; no window box, the flat meadow shows through.
-        const float TITLE_CX = 1180;
+        // ===== title (concept Art/Raw_Dream/concept/title.png) =====
+        // logo image upper right, a big start button with the small buttons stacked under it, grandpa and three critters
+        // in the lower left of the backdrop; no window box, the misty forest shows through.
+        const float TITLE_CX = 1520;
         static void Title(Transform ts, UnityEngine.SceneManagement.Scene scene, List<string> log)
         {
             if (ts == null) { log.Add("TitleScreen 없음"); return; }
@@ -56,7 +57,7 @@ namespace MoreMush.EditorTools
             var textLogo = (RectTransform)box.Find("Logo");
             var logo = Child(box, "LogoImage"); logo.SetSiblingIndex(textLogo.GetSiblingIndex());
             var li = Get<Image>(logo); li.sprite = Sp("UI/logo"); li.type = Image.Type.Simple; li.preserveAspect = true; li.raycastTarget = false; li.color = Color.white; li.enabled = li.sprite != null;
-            TL(logo, TITLE_CX - 420, 40, 840, 470);
+            TL(logo, TITLE_CX - 370, 40, 740, 400);
             textLogo.gameObject.SetActive(li.sprite == null);   // the text title stays only until the logo art exists
             TL(textLogo, TITLE_CX - 500, 150, 1000, 150);
 
@@ -67,16 +68,22 @@ namespace MoreMush.EditorTools
             foreach (var n in new[] { "NewGame", "Continue" })
             {
                 var b = (RectTransform)buttons.Find(n);
-                TL(b, TITLE_CX - 230, 540, 460, 104);
+                TL(b, TITLE_CX - 230, 460, 460, 104);
                 SetImage(b, "UI/btn_go", Color.white); Off<Outline>(b); LabelColor(b, Color.white, 44);
             }
+            // small buttons in a layout column so the ones hidden at runtime (Reset without a save) leave no gap
             string[] small = { "Options", "Records", "Reset", "Quit" };
-            var row = small.Select(n => buttons.Find(n) as RectTransform).Where(b => b != null).ToList();
-            float sw = 140, gap = 14, x0 = TITLE_CX - (row.Count * sw + (row.Count - 1) * gap) / 2;
+            const float sw = 300, sh = 68, gap = 16;
+            var col = Child(buttons, "Small");
+            TL(col, TITLE_CX - sw / 2, 590, sw, small.Length * (sh + gap));
+            var cv = Get<VerticalLayoutGroup>(col);
+            cv.spacing = gap; cv.childAlignment = TextAnchor.UpperCenter; cv.childControlWidth = true; cv.childControlHeight = true;
+            cv.childForceExpandWidth = true; cv.childForceExpandHeight = false;
+            var row = small.Select(n => (buttons.Find(n) ?? col.Find(n)) as RectTransform).Where(b => b != null).ToList();
             for (int i = 0; i < row.Count; i++)
             {
-                TL(row[i], x0 + i * (sw + gap), 666, sw, 64);
-                SetImage(row[i], "UI/btn_wood", Color.white); Off<Outline>(row[i]); LabelColor(row[i], INK, 26);
+                row[i].SetParent(col, false); row[i].SetSiblingIndex(i); LE(row[i], sw, sh);
+                SetImage(row[i], "UI/btn_wood", Color.white); Off<Outline>(row[i]); LabelColor(row[i], INK, 30);
             }
             var howto = (RectTransform)box.Find("Howto");
             BL(howto, 460, 18, 1200, 40);
@@ -127,7 +134,20 @@ namespace MoreMush.EditorTools
             foreach (var t in score.GetComponentsInChildren<TMP_Text>(true).Concat(val.GetComponentsInChildren<TMP_Text>(true))) { Undo.RecordObject(t, "pc"); t.color = INK; }
 
             var tb = (RectTransform)hud.Find("TimeBar"); SetImage(tb, "UI/progress_back", Color.white); Off<Outline>(tb);
-            SetImage(tb.Find("Track"), "UI/rail_item", Color.white);
+            // watercolor pill gauge: trough + a sliced fill whose right edge RoundHUD moves (keeps the round end)
+            var track = tb.Find("Track");
+            SetImage(track, Sp("UI/bar_back") != null ? "UI/bar_back" : "UI/rail_item", new Color(0.36f, 0.28f, 0.24f, 0.35f));
+            var fill = track.Find("Fill") ?? tb.Find("Fill");
+            var fi = fill.GetComponent<Image>();
+            if (Sp("UI/bar_fill") != null)
+            {
+                Undo.RecordObject(fi, "pc"); fi.sprite = Sp("UI/bar_fill"); fi.type = Image.Type.Sliced;
+                var frt = (RectTransform)fill; Undo.RecordObject(frt, "pc");
+                frt.anchorMin = Vector2.zero; frt.anchorMax = Vector2.one; frt.offsetMin = frt.offsetMax = Vector2.zero; frt.pivot = new Vector2(0, 0.5f);
+                // the pill is 96 px tall with 48 px round ends: scale the ends to half the bar height
+                fi.pixelsPerUnitMultiplier = fi.sprite.rect.height / Mathf.Max(1, ((RectTransform)track).rect.height);
+                var ti = track.GetComponent<Image>(); Undo.RecordObject(ti, "pc"); ti.pixelsPerUnitMultiplier = fi.pixelsPerUnitMultiplier;
+            }
             foreach (var t in tb.GetComponentsInChildren<TMP_Text>(true)) { Undo.RecordObject(t, "pc"); t.color = INK; }
             var stat = hud.Find("StatBar"); SetImage(stat, "UI/chip", new Color(1, 1, 1, 0.9f)); Off<Outline>(stat);
             foreach (var t in stat.GetComponentsInChildren<TMP_Text>(true)) { Undo.RecordObject(t, "pc"); t.color = INK; }
@@ -140,6 +160,61 @@ namespace MoreMush.EditorTools
             }
             foreach (var t in hud.Find("AimHint").GetComponentsInChildren<TMP_Text>(true)) { Undo.RecordObject(t, "pc"); t.color = INK; }
             log.Add("라운드 HUD");
+        }
+
+        // ===== settle card: a soft dim behind it so the card reads over the busy forest, the basket picture instead of
+        // a brown-tinted button, a taller title row for the hand-lettered title, even padding =====
+        static void Settle(Transform ss, List<string> log)
+        {
+            if (ss == null) { log.Add("정산창 없음"); return; }
+            var dim = Child(ss, "Dim"); dim.SetSiblingIndex(0);
+            dim.anchorMin = Vector2.zero; dim.anchorMax = Vector2.one; dim.offsetMin = dim.offsetMax = Vector2.zero;
+            var di = Get<Image>(dim); di.sprite = null; di.color = new Color(0.06f, 0.05f, 0.1f, 0.48f); di.raycastTarget = true;
+
+            var card = ss.Find("Card");
+            var vl = card.GetComponent<VerticalLayoutGroup>(); Undo.RecordObject(vl, "pc");
+            vl.padding = new RectOffset(50, 50, 22, 40); vl.spacing = 10;
+            var tle = Get<LayoutElement>((RectTransform)card.Find("Title")); tle.preferredHeight = 112; tle.minHeight = 112;
+
+            var basket = card.Find("BasketRow/Basket");
+            var sp = Sp("UI/basket");
+            if (basket != null && sp != null)
+            {
+                var img = basket.GetComponent<Image>(); Undo.RecordObject(img, "pc");
+                img.sprite = sp; img.type = Image.Type.Simple; img.preserveAspect = true; img.color = Color.white;
+            }
+            NewCardChip();
+            log.Add("정산창");
+        }
+
+        // unlock chips on the settle card: long names shrink then end in "…" instead of running into the next chip,
+        // and the red "unlock" tag sits on the chip's top edge inside the corner instead of over the border
+        static void NewCardChip()
+        {
+            const string path = "Assets/Prefabs/UI/NewCard.prefab";
+            var root = PrefabUtility.LoadPrefabContents(path);
+            try
+            {
+                var name = root.transform.Find("Name");
+                if (name != null)
+                {
+                    var t = name.GetComponent<TMP_Text>();
+                    t.enableAutoSizing = true; t.fontSizeMin = 12; t.fontSizeMax = 20;
+                    t.textWrappingMode = TextWrappingModes.NoWrap; t.overflowMode = TextOverflowModes.Ellipsis;
+                    var le = name.GetComponent<LayoutElement>() ?? name.gameObject.AddComponent<LayoutElement>();
+                    le.flexibleWidth = 1; le.minWidth = 60;
+                }
+                var tag = root.transform.Find("Tag") as RectTransform;
+                if (tag != null)
+                {
+                    var le = tag.GetComponent<LayoutElement>() ?? tag.gameObject.AddComponent<LayoutElement>();
+                    le.ignoreLayout = true;
+                    tag.anchorMin = tag.anchorMax = new Vector2(1, 1); tag.pivot = new Vector2(1, 0.5f);
+                    tag.anchoredPosition = new Vector2(-14, 0); tag.sizeDelta = new Vector2(64, 22);
+                }
+                PrefabUtility.SaveAsPrefabAsset(root, path);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
         }
 
         // ===== upgrade tree hub =====
@@ -156,6 +231,16 @@ namespace MoreMush.EditorTools
             hl.childAlignment = TextAnchor.MiddleLeft; hl.childControlWidth = true; hl.childControlHeight = true;
             hl.childForceExpandWidth = false; hl.childForceExpandHeight = true;
             var stage = top.Find("Stage"); SetImage(stage, null, CLEAR); LE(stage, -1, -1, flex: 1);
+            // the stage title text is also called "Title"; an older run moved it into the rail by mistake
+            var texts = stage.Find("Texts");
+            var stray = ts.Find("Rail/Title");
+            if (stray != null && stray.GetComponent<Button>() == null) { Undo.SetTransformParent(stray, texts, "pc"); stray.SetSiblingIndex(0); }
+            foreach (var t in texts.GetComponentsInChildren<TMP_Text>(true))
+            {
+                Undo.RecordObject(t, "pc");
+                t.fontSize = t.name == "Title" ? 28 : 17; t.alignment = TextAlignmentOptions.MidlineLeft;
+                var le = t.GetComponent<LayoutElement>(); if (le != null) { Undo.RecordObject(le, "pc"); le.ignoreLayout = false; }
+            }
             foreach (var n in new[] { "Gold", "Gem" }) { var c = top.Find(n); SetImage(c, "UI/panel_paper", Color.white); LE(c, 190, -1); }
             var sep = top.Find("Sep"); if (sep) sep.gameObject.SetActive(false);
             foreach (var t in top.GetComponentsInChildren<TMP_Text>(true)) t.color = INK;
@@ -171,13 +256,13 @@ namespace MoreMush.EditorTools
             string[] order = { "Farm", "Quests", "Skin", "Codex", "Workshop", "AutoHarvest", "Bulk", "Records", "Options", "Title" };
             for (int i = 0; i < order.Length; i++)
             {
-                var b = Deep(ts, order[i]);
+                var b = DeepButton(ts, order[i]);
                 if (b == null) { log.Add("버튼 없음 " + order[i]); continue; }
                 b.SetParent(rail, false); b.SetSiblingIndex(i);
                 RailEntry(b);
             }
             // primary action bottom-right, boss toggle above it
-            var go = Deep(ts, "Go");
+            var go = DeepButton(ts, "Go");
             if (go != null)
             {
                 go.SetParent(ts, false);
@@ -190,7 +275,18 @@ namespace MoreMush.EditorTools
             if (buttons != null) buttons.gameObject.SetActive(false);
             // legend: top-right under the bar
             var legend = (RectTransform)ts.Find("Legend");
-            if (legend != null) { TR(legend, PAD, TOP_H + PAD, legend.rect.width, legend.rect.height); SetImage(legend, "UI/panel_paper", new Color(1, 1, 1, 0.92f)); foreach (var t in legend.GetComponentsInChildren<TMP_Text>(true)) if (t.name.StartsWith("Label") || t.name == "Head" || t.name == "GemLabel") t.color = INK; }
+            if (legend != null)
+            {
+                TR(legend, PAD, TOP_H + PAD, legend.rect.width, legend.rect.height); SetImage(legend, "UI/panel_paper", new Color(1, 1, 1, 0.92f));
+                // one size for every row (they were 18 and 13 mixed); long translations shrink instead of running past the edge
+                foreach (var t in legend.GetComponentsInChildren<TMP_Text>(true))
+                    if (t.name.StartsWith("Label") || t.name == "Head" || t.name == "GemLabel")
+                    {
+                        Undo.RecordObject(t, "pc"); t.color = t.name == "Head" ? new Color(INK.r, INK.g, INK.b, 0.7f) : INK;
+                        t.enableAutoSizing = true; t.fontSizeMin = 12; t.fontSizeMax = t.name == "Head" ? 16 : 18;
+                        t.textWrappingMode = TextWrappingModes.NoWrap; t.overflowMode = TextOverflowModes.Ellipsis;
+                    }
+            }
 
             Hints(ts, "<b>Space</b> 수확하러 가기    <b>W</b> 세계수    <b>Q</b> 의뢰    <b>S</b> 스킨    <b>C</b> 도감    <b>B</b> 공방    <b>R</b> 수확 보따리    <b>O</b> 옵션    <b>휠</b> 확대·축소    <b>드래그</b> 이동",
                 new[] { (Key.Space, "go", ""), (Key.W, "farm", ""), (Key.Q, "quests", ""), (Key.S, "skinshop", ""), (Key.C, "codex", ""), (Key.B, "workshop", ""), (Key.R, "wtbag", ""), (Key.O, "options", "") });
@@ -290,7 +386,7 @@ namespace MoreMush.EditorTools
             }
             label.anchorMin = Vector2.zero; label.anchorMax = Vector2.one; label.offsetMin = new Vector2(PAD + 8, 0); label.offsetMax = new Vector2(-PAD, 0);
             var tmp = label.GetComponent<TMP_Text>();
-            tmp.text = text; tmp.fontSize = 18; tmp.color = INK; tmp.alignment = TextAlignmentOptions.MidlineLeft; tmp.enableWordWrapping = false; tmp.raycastTarget = false;
+            tmp.text = text; tmp.fontSize = 18; tmp.color = INK; tmp.alignment = TextAlignmentOptions.MidlineLeft; tmp.textWrappingMode = TextWrappingModes.NoWrap; tmp.raycastTarget = false;
             var lt = label.GetComponent<LocText>(); if (lt != null) { lt.key = text; lt.authored = text; }
             var sc = Get<HubShortcuts>((RectTransform)screen);
             sc.binds = binds.Select(b => new HubShortcuts.Bind { key = b.key, act = b.act, arg = string.IsNullOrEmpty(b.arg) ? null : b.arg }).ToArray();
@@ -332,9 +428,10 @@ namespace MoreMush.EditorTools
             return (RectTransform)go.transform;
         }
 
-        static Transform Deep(Transform t, string name)
+        // texts share names with buttons ("Title"), so only a Button counts
+        static Transform DeepButton(Transform t, string name)
         {
-            foreach (Transform c in t) { if (c.name == name) return c; var r = Deep(c, name); if (r != null) return r; }
+            foreach (Transform c in t) { if (c.name == name && c.GetComponent<Button>() != null) return c; var r = DeepButton(c, name); if (r != null) return r; }
             return null;
         }
 

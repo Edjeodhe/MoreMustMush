@@ -30,19 +30,19 @@ namespace MoreMush
             return t;
         }
 
-        // ===== 버전 번호 — 모든 화면 왼쪽 아래. 글자는 Player Settings > Version(ProjectSettings bundleVersion)을 그대로 쓴다 =====
+        // ===== 버전 번호 — 모든 화면 오른쪽 아래. 글자는 Player Settings > Version(ProjectSettings bundleVersion)을 그대로 쓴다 =====
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void ShowVersion()
         {
             if (GameObject.Find("VersionCanvas") != null) return;   // 씬을 다시 불러도 하나만
             var c = MakeCanvas("VersionCanvas", VERSION_ORDER);
             Object.DontDestroyOnLoad(c.gameObject);
-            var t = MakeText(c.transform, $"Ver {Application.version}", 22, new Color(1, 1, 1, 0.6f));
-            t.alignment = TextAlignmentOptions.BottomLeft;
+            var t = MakeText(c.transform, $"Ver {Application.version}", 17, new Color(0.29f, 0.23f, 0.16f, 0.45f));
+            t.alignment = TextAlignmentOptions.BottomRight;
             var rt = t.rectTransform;
-            rt.anchorMin = rt.anchorMax = rt.pivot = Vector2.zero;
-            rt.anchoredPosition = new Vector2(12, 8); rt.sizeDelta = new Vector2(400, 40);
-            t.gameObject.AddComponent<VersionLabel>();   // 창 비율이 16:9가 아니어도 게임 화면 안 왼쪽 아래에
+            rt.anchorMin = rt.anchorMax = Vector2.zero; rt.pivot = new Vector2(1, 0);
+            rt.anchoredPosition = new Vector2(-12, 8); rt.sizeDelta = new Vector2(400, 40);
+            t.gameObject.AddComponent<VersionLabel>();   // 창 비율이 16:9가 아니어도 게임 화면 안 오른쪽 아래에
         }
 
         // ===== 데미지 통계 (정산 화면 버튼) — 출처(직접 타격·스킬·능력)별 · 수확기별. 아무 데나 누르면 닫힌다 =====

@@ -1,0 +1,36 @@
+Sprite sheet: a 5x6 grid holding 29 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Game icons drawn as ONE family: each icon is a single chunky, rounded object centered in its cell, filling about 80% of it, front or slight 3/4 view, all the same visual size and weight. Soft flat watercolor fill with at most three colors plus cream highlights, the same thin warm-brown hand-drawn outline, gentle top-left light, bright cheerful sunny-day palette. Simple shapes that read at 32 px. No frames, no badges, no backgrounds, no faces on objects, no text. Pinball skills plus small farm request / emotion icons. Same family as the attached icon sheet.
+
+Assets in reading order (left to right, top to bottom):
+1. acceleration: a spinning round token with three speed streaks
+2. sharpen: a grey whetstone with a gleaming steel blade and a spark
+3. split: one softly lit orb splitting into two smaller orbs
+4. sip of time: a small hourglass beside a steaming teacup
+5. clear spore shield: a clear blue bubble with a leaf reflected in it
+6. spore burst: a puffball mushroom bursting into a round orange spore cloud
+7. time spore: a round spore with a little clock face
+8. clone harvester: two overlapping spinning blades, the back one see-through
+9. mushroom magnet: a red horseshoe magnet pulling two tiny mushrooms
+10. chain lightning: a chunky yellow zigzag lightning bolt
+11. tornado: a mint-green whirlwind with two leaves
+12. shockwave: orange rings bursting out from a point
+13. forest device: a tree stump with a green sprout
+14. pierce: a short pointed dagger passing through a leaf
+15. bountiful harvest: a golden wheat sheaf tied with a red ribbon
+16. spinning blade: a four-point steel blade star with a red hub
+17. kid harvester: a tiny round spinning token with a little mushroom cap on top
+18. homing: a curving arrow sweeping round into a small target
+19. power up: a spinning token with a softly lit upward arrow above it
+20. bar clone: two short wooden log paddles, the back one see-through
+21. water request: a blue water drop
+22. pet request: an open hand with a small heart
+23. song request: two musical notes
+24. snack request: a round cookie with chocolate chips
+25. gift request: a small gift box with a red ribbon
+26. affection: a plump pink heart
+27. sleepy: the letters Z z made of soft cloud puffs
+28. surprise: a yellow exclamation burst
+29. happy tune: a single green music note
+Leave the remaining 1 cell(s) empty.

@@ -12,7 +12,7 @@ namespace MoreMush.EditorTools
     public static class MoreMushSetup
     {
         // Art sets, later ones win: Doodle (outlined cel set) > Soft (watercolor) > Generated for the same key.
-        public static readonly string[] ArtRoots = { "Assets/Art/Generated", "Assets/Art/Soft", "Assets/Art/Doodle" };
+        public static readonly string[] ArtRoots = { "Assets/Art/Generated", "Assets/Art/Soft", "Assets/Art/Doodle", "Assets/Art/Dream" };
 
         // key ("Icons/gold") → asset path of the sprite the game uses for it
         public static SortedDictionary<string, string> ResolvedArt()
@@ -39,6 +39,7 @@ namespace MoreMush.EditorTools
             RebuildSpriteDB();
             BuildFontAssets();
             BuildIconSpriteAsset();
+            BuildDigitSpriteAsset();
             BuildMaterials();
             Debug.Log("[MoreMush] setup done");
         }
@@ -71,6 +72,11 @@ namespace MoreMush.EditorTools
                 ["UI/progress_fill"] = (w, h) => Uniform(w, h, 0.45f),
                 ["UI/bar_log"] = (w, h) => new Vector4(Mathf.Min(w * 0.2f, h * 1.6f), 0, Mathf.Min(w * 0.2f, h * 1.6f), 0),
                 ["Props/moss"] = (w, h) => Uniform(w, h, 0.3f),
+                // dream gauge pills: round ends (half the height) stay round, the middle stretches
+                ["UI/bar_fill"] = (w, h) => new Vector4(h / 2, 0, h / 2, 0),
+                ["UI/bar_back"] = (w, h) => new Vector4(h / 2, 0, h / 2, 0),
+                ["UI/hp_fill"] = (w, h) => new Vector4(h / 2, 0, h / 2, 0),
+                ["UI/hp_back"] = (w, h) => new Vector4(h / 2, 0, h / 2, 0),
             };
             var art = ResolvedArt();
             foreach (var kv in rules)
@@ -173,6 +179,97 @@ namespace MoreMush.EditorTools
             }
             AssetDatabase.SaveAssets();
             Debug.Log($"[MoreMush] icon sprite asset: {names.Count} icons");
+        }
+
+        // ===== Damage number glyphs (sheet "digits" → UI/Digits/*): <sprite="DmgDigits" name="d7" tint=1> =====
+        // The slicer crops every glyph tight, so the baseline is put back here: digits and letters stand on it at one
+        // common height (median digit height), + and x sit centred on the digit middle, . and , sit low.
+        [MenuItem("MoreMush/Build Damage Digit Sprite Asset")]
+        public static void BuildDigitSpriteAsset()
+        {
+            const float H = 128;   // digit height in the atlas
+            const int pad = 4;
+            var src = ResolvedArt().Where(kv => kv.Key.StartsWith("UI/Digits/")).ToDictionary(kv => Path.GetFileName(kv.Key), kv => kv.Value);
+            if (src.Count == 0) { Debug.LogWarning("[MoreMush] no UI/Digits art"); return; }
+            var texs = src.ToDictionary(kv => kv.Key, kv => Bleach(LoadReadable(kv.Value)));
+            var digitH = texs.Where(kv => kv.Key.Length == 2 && kv.Key[0] == 'd').Select(kv => kv.Value.height).OrderBy(h => h).ToList();
+            float k = H / (digitH.Count > 0 ? digitH[digitH.Count / 2] : texs.Values.Max(t => t.height));
+            var names = texs.Keys.OrderBy(n => n, System.StringComparer.Ordinal).ToList();
+            var scaled = names.ToDictionary(n => n, n => Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * k)));
+            int cell = scaled.Values.Max(t => Mathf.Max(t.width, t.height)) + pad * 2;
+            int cols = Mathf.CeilToInt(Mathf.Sqrt(names.Count)), rows = Mathf.CeilToInt(names.Count / (float)cols);
+            var atlas = new Texture2D(cols * cell, rows * cell, TextureFormat.RGBA32, false);
+            atlas.SetPixels32(new Color32[atlas.width * atlas.height]);
+            var rects = new List<GlyphRect>();
+            for (int i = 0; i < names.Count; i++)
+            {
+                var t = scaled[names[i]];
+                int x = (i % cols) * cell + pad, y = (rows - 1 - i / cols) * cell + pad;
+                atlas.SetPixels(x, y, t.width, t.height, t.GetPixels());
+                rects.Add(new GlyphRect(x, y, t.width, t.height));
+            }
+            atlas.Apply();
+            string atlasPath = "Assets/Fonts/DmgDigitsAtlas.png";
+            File.WriteAllBytes(atlasPath, atlas.EncodeToPNG());
+            AssetDatabase.ImportAsset(atlasPath);
+            var imp = (TextureImporter)AssetImporter.GetAtPath(atlasPath);
+            imp.textureType = TextureImporterType.Sprite; imp.spriteImportMode = SpriteImportMode.Single; imp.alphaIsTransparency = true; imp.mipmapEnabled = false;
+            imp.SaveAndReimport();
+            var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(atlasPath);
+
+            string assetPath = "Assets/Resources/Sprite Assets/DmgDigits.asset";
+            var sa = AssetDatabase.LoadAssetAtPath<TMP_SpriteAsset>(assetPath);
+            if (sa == null) { sa = ScriptableObject.CreateInstance<TMP_SpriteAsset>(); AssetDatabase.CreateAsset(sa, assetPath); }
+            typeof(TMP_SpriteAsset).GetField("m_Version", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(sa, "1.1.0");
+            sa.spriteSheet = tex;
+            // without a face (pointSize 0) TMP scales each sprite to the font ascent on its own, which blew the dot up to
+            // digit size; with one, every glyph shares one scale. Digits come out at 1 em, bigger than font digits (they carry their own rim).
+            var face = new UnityEngine.TextCore.FaceInfo { pointSize = Mathf.RoundToInt(H), scale = 1, ascentLine = H, capLine = H, meanLine = H * 0.5f, baseline = 0, descentLine = -H * 0.2f, lineHeight = H * 1.2f };
+            typeof(TMP_SpriteAsset).GetField("m_FaceInfo", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(sa, face);
+            sa.spriteGlyphTable.Clear(); sa.spriteCharacterTable.Clear();
+            for (int i = 0; i < names.Count; i++)
+            {
+                var r = rects[i];
+                float w = r.width, h = r.height;
+                // everything stands on the baseline at its painted height (lowercase keeps its smaller x-height),
+                // except + (centred on the digit middle), the comma and p (hang below it)
+                float top = names[i] switch
+                {
+                    "plus" => H * 0.5f + h * 0.5f,
+                    "comma" => h * 0.55f,
+                    "lp" => h * 0.72f,
+                    _ => h,
+                };
+                // italic glyphs tuck into each other a little; the thick rims overlap instead of leaving gaps
+                var glyph = new TMP_SpriteGlyph { index = (uint)i, metrics = new GlyphMetrics(w, h, 0, top, w * 0.86f), glyphRect = r, scale = 1, atlasIndex = 0 };
+                sa.spriteGlyphTable.Add(glyph);
+                sa.spriteCharacterTable.Add(new TMP_SpriteCharacter(0xFFFE, glyph) { name = names[i] });
+            }
+            var shader = Shader.Find("TextMeshPro/Sprite");
+            if (sa.material == null) { sa.material = new Material(shader) { name = "DmgDigits Material" }; AssetDatabase.AddObjectToAsset(sa.material, sa); }
+            sa.material.SetTexture(ShaderUtilities.ID_MainTex, tex);
+            sa.UpdateLookupTables();
+            EditorUtility.SetDirty(sa);
+            AssetDatabase.SaveAssets();
+            Debug.Log($"[MoreMush] damage digit sprite asset: {names.Count} glyphs ({string.Join(" ", names)})");
+        }
+
+        // the painted fill can come out peach; tint=1 multiplies it, so blue/violet tiers turned muddy. Light pixels go to
+        // a barely warm paper grey of the same lightness (grain kept, matches the field), the brown rim stays as painted.
+        static Texture2D Bleach(Texture2D t)
+        {
+            var px = t.GetPixels32();
+            for (int i = 0; i < px.Length; i++)
+            {
+                var c = px[i];
+                if (c.a < 16) { px[i] = default; continue; }   // near-invisible coloured speckle the generator leaves in the background
+                float l = (0.299f * c.r + 0.587f * c.g + 0.114f * c.b) / 255f;
+                float k = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0.35f, 0.6f, l));
+                byte g = (byte)Mathf.Clamp(Mathf.RoundToInt(Mathf.Min(1, l * 1.12f) * 255), 0, 255);
+                px[i] = new Color32((byte)Mathf.Lerp(c.r, g, k), (byte)Mathf.Lerp(c.g, g * 0.985f, k), (byte)Mathf.Lerp(c.b, g * 0.95f, k), c.a);
+            }
+            t.SetPixels32(px); t.Apply();
+            return t;
         }
 
         static Texture2D LoadReadable(string path)

@@ -1,0 +1,21 @@
+Sprite sheet: a 5x3 grid holding 15 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Cut-out BODY parts for the five mushroom critters in the attached design sheet (same colours, faces, blush and body accessories; flat matte watercolor, no outlines), front view, ONE ROW PER CRITTER in the design sheet's order. Every body is a soft rounded CYLINDER like a thick plump mushroom stem or a marshmallow: straight soft sides, slightly wider at the bottom, a flat gently domed top (a mushroom cap will sit on it), rounded bottom edge, no neck, no head shape; all five the same height, the rock critter wider. The face sits in the upper half just under the top. Each row: (1) the BODY with the face, eyes OPEN, and its body accessory (scarf, cape, basket, belt, collar, held acorn); NO cap, NO arms, NO feet; (2) the SAME body drawn exactly the same (same size, shape, colours, accessory) with ONE change: both eyes CLOSED as soft happy upward curves and a small gentle closed smile; (3) ONE small soft round NUB in the body's colour (a plump oval blob with faint shading) used for both hands and feet. Leave clear space between parts.
+
+Assets in reading order (left to right, top to bottom):
+1. leaf critter: cylinder body, eyes open
+2. leaf critter: same body, eyes closed
+3. leaf critter: one hand/foot nub
+4. dew critter: cylinder body, eyes open
+5. dew critter: same body, eyes closed
+6. dew critter: one hand/foot nub
+7. wind critter: cylinder body, eyes open
+8. wind critter: same body, eyes closed
+9. wind critter: one hand/foot nub
+10. fire critter: cylinder body, eyes open
+11. fire critter: same body, eyes closed
+12. fire critter: one hand/foot nub
+13. rock critter: cylinder body, eyes open
+14. rock critter: same body, eyes closed
+15. rock critter: one hand/foot nub

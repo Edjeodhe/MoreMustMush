@@ -21,6 +21,7 @@ namespace MoreMush
         public RectTransform codexButton; public TMP_Text codexText;
         public GameObject aimHint; public TMP_Text aimHint2;
         public Image endDim; public RectTransform endTitle;
+        static readonly Color TimeOk = U.Hex("#8cc47a"), TimeMid = U.Hex("#e8c25e"), TimeLow = U.Hex("#dd6a52"), TimeLow2 = U.Hex("#e8946a");   // muted watercolor
         public GameObject pausedDim;
 
         readonly List<Image> skillIcons = new List<Image>();
@@ -118,8 +119,10 @@ namespace MoreMush
             if (gold != shownValue) { shownValue = gold; UIUtil.SetText(valueText, U.Fmt(gold)); }
 
             float frac = Mathf.Clamp01(R.timeLeft / R.timeMax);
-            timeFill.fillAmount = frac;
-            timeFill.color = R.timeLeft <= 5 ? (Mathf.Sin(now * 12) > 0 ? U.Hex("#ff5a4a") : U.Hex("#ff9a4a")) : R.timeLeft <= 10 ? U.Hex("#ffc44a") : U.Hex("#7fd65a");
+            // sliced pill (dream set): move its right edge so the round end stays; a filled image just cuts
+            if (timeFill.type == Image.Type.Sliced) { var ft = timeFill.rectTransform; float fx = Mathf.Max(frac, 0.04f); if (ft.anchorMax.x != fx) ft.anchorMax = new Vector2(fx, 1); timeFill.enabled = frac > 0; }
+            else timeFill.fillAmount = frac;
+            timeFill.color = R.timeLeft <= 5 ? (Mathf.Sin(now * 12) > 0 ? TimeLow : TimeLow2) : R.timeLeft <= 10 ? TimeMid : TimeOk;
             int tenths = Game.DBG.infinite ? int.MaxValue : Mathf.RoundToInt(R.timeLeft * 10);
             if (tenths != shownTenths) { shownTenths = tenths; UIUtil.SetText(timeText, Game.DBG.infinite ? "∞" : Loc.F("{0:F1}초", R.timeLeft)); }
             UIUtil.Show(festText, R.festOn);
@@ -168,6 +171,7 @@ namespace MoreMush
                 endDim.color = new Color(0, 0, 0, Mathf.Min(0.35f, k * 0.5f));
                 float s = k < 0.2f ? 0.5f + k * 2.5f : 1;
                 endTitle.localScale = new Vector3(s, s, 1);
+                Lettering.Apply(endTitle.GetComponent<TMPro.TMP_Text>(), "harvest_end", 1.2f);
             }
             UIUtil.Show(pausedDim, R.paused);
         }
