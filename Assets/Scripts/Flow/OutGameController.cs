@@ -17,6 +17,7 @@ namespace MoreMush
     //     누르면 (정령 창이 배치되기 전 임시): 안 데려온 정령 = 균사석으로 데려오기, 있는 정령 = 골드로 Lv 업, Lv 상한이면 균사석으로 진화(각성).
     //     균사석을 쓰는 일은 한 번 눌러 값을 보여 주고, 3초 안에 다시 누르면 한다
     //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 → 세계수 탭 창(FarmTabWindow, 배치된 FarmTabPanel 또는 임시 창). 같은 탭을 다시 누르면 닫힘
+    //   Workshop_Panel = 꼬마 공방 (WorkshopPanel 참고). 배치돼 있으면 공방 탭은 세계수 탭 창 대신 이 창을 연다
     // 세계수 월드(FarmView)는 씬에 있으면 연다. Esc = MainGame으로.
     public class OutGameController : MonoBehaviour
     {
@@ -24,9 +25,11 @@ namespace MoreMush
         public FarmView farm;
 
         const float TICK = 1;   // 보따리·보관 시간 갱신 간격 (초)
+        const int TAB_CRAFT = 2;   // TAB_NAMES의 공방
         static readonly string[] TAB_NAMES = { "성장", "꼬마", "공방", "꾸미기" };
 
         CurrencyBar currency;
+        WorkshopPanel workshop;
         TMP_Text storeText, bagText;
         Button bag;
         GameObject fold, unfold;           // Down_Panel · Down_hidden_Panel
@@ -73,6 +76,8 @@ namespace MoreMush
                 tabs.Sort((a, b) => Order(a.transform, b.transform, false));   // 위 → 아래
                 for (int i = 0; i < tabs.Count; i++) { int k = i; tabs[i].onClick.AddListener(() => OpenTab(k)); }
             }
+            var ws = SceneUI.Find(scene, "Workshop_Panel");
+            if (ws != null) { workshop = new WorkshopPanel(ws.gameObject, () => currency.Tick()); UIUtil.Show(workshop.root, false); }
             SetFolded(true, false);
             tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
@@ -97,11 +102,11 @@ namespace MoreMush
 
         void Update()
         {
-            currency.Tick();
-            if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); }
+            if (currency.Tick()) workshop?.Render();   // 재화가 바뀌면 제작 가능 여부도
+            if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); workshop?.Tick(); }
             var kb = Keyboard.current;
             tabWin?.Tick();
-            if (kb != null && kb.escapeKey.wasPressedThisFrame) { if (tabWin != null && tabWin.IsOpen) { Snd.Ui(); tabWin.Close(); RenderTabs(); } else optionWin.Toggle(); }
+            if (kb != null && kb.escapeKey.wasPressedThisFrame) { if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); } else optionWin.Toggle(); }
         }
 
         void Render()
@@ -191,22 +196,31 @@ namespace MoreMush
         void OpenTab(int k)
         {
             Snd.Ui();
-            if (tabWin == null) return;
-            if (tabWin.IsOpen && tab == k) tabWin.Close();
-            else { tab = k; tabWin.Open((FarmTabWindow.Tab)Mathf.Clamp(k, 0, 3)); }
+            bool wasOpen = TabOpen() && tab == k;
+            tabWin?.Close();
+            UIUtil.Show(workshop?.root, false);
+            if (!wasOpen)
+            {
+                tab = k;
+                if (k == TAB_CRAFT && workshop != null) UIUtil.Show(workshop.root, true);
+                else tabWin?.Open((FarmTabWindow.Tab)Mathf.Clamp(k, 0, 3));
+            }
             RenderTabs();
         }
 
         // 열린 탭만 눌린 모양으로
         void RenderTabs()
         {
-            bool open = tabWin != null && tabWin.IsOpen;
+            bool open = TabOpen();
             for (int i = 0; i < tabs.Count; i++)
             {
                 tabs[i].interactable = !(open && i == tab);
                 if (i < TAB_NAMES.Length) UIUtil.SetText(SceneUI.TextIn(tabs[i].transform), Loc.T(TAB_NAMES[i]));
             }
+            workshop?.Render();
         }
+
+        bool TabOpen() => (tabWin != null && tabWin.IsOpen) || (workshop != null && workshop.IsOpen);
 
         void SetFolded(bool folded, bool sound = true)
         {
