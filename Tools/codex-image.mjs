@@ -105,6 +105,8 @@ async function main() {
   const args = ["exec", "--skip-git-repo-check", "--json", "-s", "read-only", "-C", repoRoot];
   // Live web search lets Codex look up real references (e.g. actual mushroom species) before drawing.
   if (opts.search) args.push("-c", 'web_search="live"');
+  // 코덱스 전역 설정의 모델을 이 계정이 못 쓸 때 (2026-10-16: gpt-6-astra 거부) 이미지 생성만 다른 모델로
+  if (process.env.CODEX_IMAGE_MODEL) args.push("-m", process.env.CODEX_IMAGE_MODEL);
   for (const r of opts.refs) args.push("-i", path.resolve(r));
   args.push("-");
 

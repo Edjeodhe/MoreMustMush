@@ -31,9 +31,18 @@ namespace MoreMush
             public string id; public Special kind;
             public float x, y, tx, ty, t, hop, animT, sayT;
             public int face = 1;
-            public string state = "idle", anim, say, tool;   // state: idle · walk · work
+            public string state = "idle", anim, say, tool;   // state: idle · walk · work · carry (딴 버섯을 밑동 보따리로)
             public int job = -1;                             // 따러 가는 나무버섯 슬롯
             public int bframe = -1;                          // (예전 건설 그림, 쓰지 않음)
+            public double carryGold;                         // 나르는 버섯 값 (내려놓을 때 뜨는 숫자)
+            public float pokeAt = -99;                       // 눌린 시각 (진화 정령 리그: 갓이 통통 튄다)
+            // 들기·나무 오르기 (2026-10-16): state held(들림) · fall(떨어짐) · climb(나무 오르내림) · perch(나무 위에서 노는 중) · pick(나무 위에서 따기)
+            public float vy, fallTo, swing, swingV, landT, perchT, prevX;
+            public int perchSlot = -1, perchDeco = -1;       // (예전) 나무 위 자리: 버섯 슬롯 · 장식
+            public bool goingDown;                           // climb: 내려가는 중
+            public List<int> path; public int pathI;         // 나무 길(tree_nav) 위 경로와 지금 향하는 마디
+            public int navAt = -1;                           // 머무는 마디 (perch/pick)
+            public string edge = "walk";                     // 지금 지나는 길 종류: walk · climb · hop
         }
         class Part { public string k; public float x, y, vx, vy, t, life; }
         class Float { public float x, y, t; public string text; public bool gem; public Color col; }
@@ -91,6 +100,14 @@ namespace MoreMush
             if (anim != null) { p.anim = anim; p.animT = 0; if (p.job < 0) { p.state = "idle"; p.t = Mathf.Max(p.t, FARM_ANIMS[anim] + 0.3f); } }
         }
         public Critter Find(string id) => crits.FirstOrDefault(q => q.id == id);
+
+        // 지금 행동에 맞는 복장 (CritterRig 통짜 그림): 나르기 · 높은 구역(가지·수관)으로 가서 따기 = 오르기 · 낮은 구역 = 따기
+        public string OutfitOf(Critter p)
+        {
+            if (p.state == "carry") return "carry";
+            if (p.job < 0 || p.job >= tree.slots.Count) return null;
+            return ZONE.TryGetValue(tree.slots[p.job].zone, out var z) && z.high ? "climb" : "pick";
+        }
         public void Cheer(string id, string line, string text)
         {
             var p = Find(id); if (p == null) return;
@@ -102,6 +119,7 @@ namespace MoreMush
         void ClickCritter(Critter p)
         {
             Snd.Ui();
+            p.pokeAt = Time.time;
             string anim = U.Pick(FARM_ANIMS.Keys.ToList());
             string zone = ZoneOf(p.id);
             Say(p, zone == null ? U.Pick(FARM_LINES["idle"]) : p.job >= 0 ? U.Pick(FARM_LINES["field"]) : anim == "sleep" ? Loc.T("쿨쿨... 음냐...") : U.Pick(FARM_LINES[p.id].Concat(FARM_LINES["all"]).ToList()), p.job < 0 ? anim : null);
@@ -130,6 +148,176 @@ namespace MoreMush
         void Stars(float x, float y) { for (int i = 0; i < 30; i++) { float a = U.Rand(0, U.TAU), v = U.Rand(80, 300); parts.Add(new Part { k = "star", x = x, y = y, vx = Mathf.Cos(a) * v, vy = Mathf.Sin(a) * v, life = U.Rand(0.6f, 1.1f) }); } }
 
         static float Radius(string id) => 40 * (1 + 0.1f * Awaken(id));
+
+        // ===== 들기 · 떨어뜨리기 · 나무 오르기 =====
+        static readonly string[] HELD_LINES = { "으앗!", "높다~!", "내려 줘~", "와아!", "어디 가?" };
+        static readonly string[] LAND_LINES = { "아야!", "콩!", "휴~", "다시 해 줘!" };
+        static readonly string[] PERCH_LINES = { "여기 좋다~", "높은 데 최고!", "냠냠 버섯 냄새", "바람 시원해~" };
+        static float Hang(Critter p) => Radius(p.id) * 1.9f;    // 갓을 잡고 든다: 손가락 아래로 몸이 매달린다
+
+        void Pick(Critter p, Vector2 s)
+        {
+            held = p;
+            p.state = "held"; p.job = -1; p.tool = null; p.anim = null; p.t = 0; p.goingDown = false;
+            p.path = null; p.navAt = -1; p.edge = "walk";
+            p.prevX = s.x; p.swing = p.swingV = 0;
+            p.pokeAt = Time.time;
+            Snd.Ui();
+            Say(p, Loc.T(U.Pick(HELD_LINES)), null);
+            Carry(p, s);
+        }
+
+        void Carry(Critter p, Vector2 s)
+        {
+            float dt = Mathf.Max(Time.deltaTime, 1e-4f);
+            p.x = s.x; p.y = s.y + Hang(p);
+            // 진자: 옆으로 끌면 반대로 기울었다가 흔들리며 돌아온다
+            float vx = (p.x - p.prevX) / dt; p.prevX = p.x;
+            p.swingV += (-p.swing * 60 - p.swingV * 5 - vx * 0.004f) * dt;
+            p.swing = Mathf.Clamp(p.swing + p.swingV * dt, -0.8f, 0.8f);
+            if (Mathf.Abs(vx) > 30) p.face = vx > 0 ? 1 : -1;
+        }
+
+        // 놓기: 나무 길(tree_nav)의 마디 가까이면 거기 올라앉고, 아니면 땅으로 떨어진다
+        void Drop(Critter p)
+        {
+            p.swing = 0; p.swingV = 0;
+            int n = tree.NearestNav(new Vector2(p.x, p.y), false, 80 * Zoom);
+            if (n >= 0 && !tree.CurrentNav().nodes[n].ground)
+            {
+                var at = tree.NavPos(n);
+                Perch(p, n);
+                Stars(at.x, at.y - 40);
+                return;
+            }
+            p.state = "fall"; p.vy = 0;
+            p.fallTo = Mathf.Max(p.y, HARV.y0 + (HARV.y1 - HARV.y0) * Random.value * 0.6f);   // 땅보다 아래면 그 자리
+        }
+
+        void Perch(Critter p, int node)
+        {
+            var at = tree.NavPos(node);
+            p.state = "perch"; p.x = at.x; p.y = at.y; p.goingDown = false; p.path = null;
+            p.navAt = node; p.edge = "walk";
+            p.perchT = U.Rand(6f, 11f); p.t = U.Rand(0.4f, 1f);
+            p.pokeAt = Time.time;
+        }
+
+        // 쉬는 정령이 나무에 오르기 시작: 머물 곳 하나를 골라 가장 가까운 땅 입구로 걸어간 뒤 길을 따라 오른다
+        bool StartClimb(Critter p)
+        {
+            int spot = tree.RandomSpot(); if (spot < 0) return false;
+            int g = tree.GroundFor(spot); if (g < 0) return false;
+            p.path = tree.NavPath(g, spot); p.pathI = 0; p.goingDown = false;
+            p.state = "climb"; p.edge = "walk"; p.navAt = -1;
+            return p.path != null;
+        }
+
+        // 내려가기: 머물던 마디에서 가장 가까운 땅 입구까지 길을 따라
+        void StartDescend(Critter p)
+        {
+            var path = tree.NavPathToGround(p.navAt);
+            if (path == null) { p.state = "fall"; p.vy = 0; p.fallTo = Mathf.Max(p.y, HARV.y0); return; }
+            p.path = path; p.pathI = 1; p.goingDown = true; p.state = "climb"; p.navAt = -1;
+            p.edge = path.Count > 1 ? tree.NavEdge(path[0], path[1]) : "walk";
+        }
+
+        // 길 따라가기: 사다리·줄기는 천천히 기어오르고, 버섯 계단은 폴짝, 발판은 걷기. true = 끝까지 옴
+        bool FollowPath(Critter p, float dt)
+        {
+            if (p.path == null || p.pathI >= p.path.Count) return true;
+            var to = tree.NavPos(p.path[p.pathI]);
+            float spd = p.edge == "climb" ? 110 : p.edge == "hop" ? 170 : 130;
+            if (p.pathI == 0) spd = 120;                                     // 땅 입구까지 걷기
+            if (p.edge == "hop") p.hop += dt * 6;                           // 폴짝 (FarmCritter가 hop으로 띄운다)
+            if (!WalkTo(p, to.x, to.y, spd * Mathf.Sqrt(Zoom), dt)) return false;
+            p.pathI++;
+            if (p.pathI >= p.path.Count) return true;
+            p.edge = tree.NavEdge(p.path[p.pathI - 1], p.path[p.pathI]);
+            return false;
+        }
+
+        // 나무 위에서 오르내리는 중인가 (리그: 기어오르는 팔)
+        public static bool Climbing(Critter p) => p.state == "climb" && p.edge == "climb" && p.pathI > 0;
+        public static bool Hopping(Critter p) => p.state == "climb" && p.edge == "hop" && p.pathI > 0;
+
+        // 들기·떨어지기·나무 위 놀이. true = 이번 프레임은 여기서 다 했다
+        bool UpdateTreePlay(Critter p, float dt)
+        {
+            switch (p.state)
+            {
+                case "held":
+                    if (held != p) { Drop(p); return true; }
+                    return true;
+                case "fall":
+                    p.vy += 2600 * dt; p.y += p.vy * dt;
+                    if (p.y >= p.fallTo)
+                    {
+                        p.y = p.fallTo; p.state = "idle"; p.t = U.Rand(1f, 2f); p.landT = 0.35f; p.pokeAt = Time.time;
+                        if (p.vy > 900) Say(p, Loc.T(U.Pick(LAND_LINES)), null);
+                    }
+                    return true;
+                case "climb":
+                    if (FollowPath(p, dt))
+                    {
+                        if (p.goingDown || p.path == null) { p.state = "idle"; p.goingDown = false; p.path = null; p.t = U.Rand(1f, 3f); p.y = Mathf.Max(p.y, HARV.y0); }
+                        else Perch(p, p.path[p.path.Count - 1]);
+                    }
+                    return true;
+                case "perch":
+                case "pick":
+                    p.perchT -= dt; p.t -= dt;
+                    if (p.state == "pick")
+                    {
+                        if (p.t <= 0) { p.state = "perch"; p.t = U.Rand(1.5f, 3f); parts.Add(new Part { k = "heart", x = p.x, y = p.y - 90, vx = 0, vy = -70, life = 1.1f }); }
+                        return true;
+                    }
+                    if (p.perchT <= 0 && p.anim == null)
+                    {
+                        // 내려간다 (일하는 구역이 있으면 내려와서 다시 일하러 간다). 가끔은 옆 마디로 옮겨 가서 더 논다
+                        var nav = tree.CurrentNav();
+                        if (nav != null && Random.value < 0.4f && p.navAt >= 0)
+                        {
+                            var next = nav.adj[p.navAt].Where(e => !nav.nodes[e.to].ground).ToList();
+                            if (next.Count > 0)
+                            {
+                                var e = U.Pick(next);
+                                // 머무는 곳까지 이어서 간다 (계단 중간 마디에 서지 않게)
+                                int spot = e.to; var seen = new HashSet<int> { p.navAt };
+                                p.path = new List<int> { p.navAt, spot };
+                                while (!nav.nodes[spot].spot && seen.Add(spot))
+                                {
+                                    var on = nav.adj[spot].Where(x => !seen.Contains(x.to) && !nav.nodes[x.to].ground).ToList();
+                                    if (on.Count == 0) break;
+                                    spot = U.Pick(on).to; p.path.Add(spot);
+                                }
+                                if (nav.nodes[spot].spot)
+                                {
+                                    p.pathI = 1; p.edge = e.kind; p.state = "climb"; p.goingDown = false; p.navAt = -1;
+                                    return true;
+                                }
+                            }
+                        }
+                        StartDescend(p);
+                        return true;
+                    }
+                    if (p.t <= 0 && p.anim == null)
+                    {
+                        // 나무 위 놀이: 버섯 자리면 따 보고, 장식이면 좋아하고, 아니면 춤·폴짝·말하기
+                        p.t = U.Rand(1.8f, 3.5f);
+                        float r = Random.value;
+                        // 근처에 나무버섯이 있으면 따 보고, 아니면 춤·폴짝·하트·말하기
+                        var me = new Vector2(p.x, p.y);
+                        bool mush = tree.slots.Any(sl => ZoneOpen(sl.zone) && (sl.pos - me).sqrMagnitude < 140 * 140 * Zoom * Zoom);
+                        if (mush && r < 0.4f) { p.state = "pick"; p.t = 1.3f; }
+                        else if (r < 0.55f) { p.anim = "heart"; p.animT = 0; }
+                        else if (r < 0.8f) { p.anim = U.Pick(new[] { "dance", "jump" }); p.animT = 0; }
+                        else if (!crits.Any(q => q.sayT > 0)) Say(p, Loc.T(U.Pick(PERCH_LINES)), null);
+                    }
+                    return true;
+            }
+            return false;
+        }
 
         Critter CritterAt(float x, float y)
         {
@@ -167,6 +355,12 @@ namespace MoreMush
         {
             foreach (var p in crits)
             {
+                if (p.landT > 0) p.landT -= dt;
+                if (p.state == "held" || p.state == "fall" || p.state == "climb" || p.state == "perch" || p.state == "pick")
+                {
+                    TickAnim(p, dt);
+                    if (UpdateTreePlay(p, dt)) continue;
+                }
                 p.t -= dt;
                 bool anim = TickAnim(p, dt);
                 string zone = ZoneOf(p.id);
@@ -182,10 +376,20 @@ namespace MoreMush
                         else if (p.state == "work" && p.t <= 0)
                         {
                             var s = tree.slots[p.job];
-                            p.job = -1; p.tool = null; p.state = "idle"; p.t = U.Rand(0.3f, 1.2f);
-                            double gold = s.mush.gold * KidMul(p.id, zone);
-                            if (Random.value < 0.6f) AddFloat(s.pos.x, s.pos.y - 30, $"+{U.Fmt(System.Math.Round(gold))}", false, U.Hex(GOLD_C));
                             if (s.mush.gem > 0) GemBurst(s.pos.x, s.pos.y, 4);
+                            // 딴 버섯은 지고 밑동 보따리까지 나른다 (골드는 내려놓을 때 뜬다)
+                            p.job = -1; p.tool = null; p.state = "carry";
+                            p.carryGold = s.mush.gold * KidMul(p.id, zone);
+                            p.tx = WT.x + U.Rand(-60, 60) * Zoom; p.ty = WT.y + U.Rand(10, 30);
+                        }
+                        continue;
+                    }
+                    if (p.state == "carry")
+                    {
+                        if (WalkTo(p, p.tx, p.ty, 200 * speed, dt))
+                        {
+                            p.state = "idle"; p.t = U.Rand(0.3f, 1.2f);
+                            if (Random.value < 0.6f) AddFloat(p.x, p.y - 90, $"+{U.Fmt(System.Math.Round(p.carryGold))}", false, U.Hex(GOLD_C));
                         }
                         continue;
                     }
@@ -197,12 +401,16 @@ namespace MoreMush
                     continue;
                 }
                 p.job = -1; p.tool = null;
+                if (p.state == "carry") p.state = "idle";   // 일하는 구역에서 빠지면 짐을 내려놓는다
                 if (anim) continue;
 
                 // 쉬는 꼬마: 나무 앞 땅을 산책
                 if (p.state == "walk") { if (WalkTo(p, p.tx, p.ty, 70, dt) || p.t <= 0) { p.state = "idle"; p.t = U.Rand(1, 3.5f); } }
                 else if (p.t <= 0)
                 {
+                    // 가끔은 나무에 올라가 논다
+                    if (Random.value < 0.3f && crits.Count(q => q.state == "perch" || q.state == "climb" || q.state == "pick") < 4 && StartClimb(p))
+                        continue;
                     var tg = GroundSpot(); p.tx = tg.x; p.ty = tg.y; p.state = "walk"; p.t = 8;
                     if (Random.value < 0.06f && !crits.Any(q => q.sayT > 0)) { p.say = U.Pick(FARM_LINES[p.id]); p.sayT = 2.4f; }
                 }
@@ -382,20 +590,36 @@ namespace MoreMush
         }
 
         bool pressOverUI;
+        // 정령 누르기: 짧게 눌렀다 떼면 톡 (갓 통통), 꾹 누르거나 끌면 들어 올린다 (들린 채 버둥버둥). 놓은 곳이 나무 위 자리면 거기 올라가 놀고, 아니면 떨어진다
+        Critter pressed, held;
+        float pressT; Vector2 pressAt;
+        const float HOLD_SEC = 0.25f, DRAG_PX = 14;
+
         void HandleInput()
         {
             var p = Pointer.current;
             hover = null; hoverSlot = -1;
-            if (p == null || App.ModalOpen) return;
+            if (p == null || App.ModalOpen) { if (held != null) Drop(held); held = pressed = null; return; }
+            var s = ToStage(p.position.ReadValue());
+            if (held != null)
+            {
+                if (p.press.isPressed) { Carry(held, s); return; }
+                Drop(held); held = null; return;
+            }
+            if (pressed != null)
+            {
+                if (!p.press.isPressed) { ClickCritter(pressed); pressed = null; return; }
+                if (Time.unscaledTime - pressT > HOLD_SEC || (s - pressAt).sqrMagnitude > DRAG_PX * DRAG_PX) { Pick(pressed, s); pressed = null; }
+                return;
+            }
             // -1 = 지금 쓰는 포인터. 손을 뗀 프레임에는 터치 기록이 이미 없을 수 있어, 누를 때 UI 위였는지를 기억해 둔다.
             bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
             if (p.press.wasPressedThisFrame) pressOverUI = overUI;
             if (overUI || pressOverUI) return;
-            var s = ToStage(p.position.ReadValue());
             if (p is Mouse) { hover = CritterAt(s.x, s.y); if (hover == null) hoverSlot = tree.SlotAt(s.x, s.y); }
             if (!p.press.wasPressedThisFrame) return;
             var c = CritterAt(s.x, s.y);
-            if (c != null) { ClickCritter(c); return; }
+            if (c != null) { pressed = c; pressT = Time.unscaledTime; pressAt = s; return; }
             int slot = tree.SlotAt(s.x, s.y);
             if (slot >= 0)
             {

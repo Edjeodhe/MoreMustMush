@@ -9,7 +9,7 @@ namespace MoreMush
     // 세계수 그림: 단계별 나무, 구역(뿌리·줄기·가지·수관)마다 돋는 나무버섯, 장식 슬롯에 놓은 장식, 단계 팻말.
     // 나무버섯이 자라고 따이는 모습은 보여 주기용이다 (실제 수확은 Game.BagRate가 시간으로 계산해 보따리에 쌓는다).
     // 씬의 fruits·glows 칸(13개)이 모자라면 첫 칸을 복제해 늘린다. 오브젝트는 나무 밑동(WT.x, y)에 있다.
-    public class FarmTreeView : MonoBehaviour
+    public partial class FarmTreeView : MonoBehaviour
     {
         public SpriteRenderer treeSprite, shadow;
         public SpriteRenderer[] fruits = new SpriteRenderer[13];
@@ -66,8 +66,13 @@ namespace MoreMush
                     ? new Vector2(WT.x + side * (0.18f + 0.1f * step) * widthPx, WT.y - (0.5f + 0.06f * (k % 3)) * heightPx)
                     : new Vector2(WT.x + side * (0.42f + 0.14f * step) * widthPx, WT.y + 24 + 10 * (k % 2)));
             }
-            signText.text = Loc.F("{0}단계", Stage());
+            Sign();
         }
+
+        // 나무 옆 단계 팻말: 단계가 오를 때와 언어가 바뀔 때
+        void Sign() { if (signText != null) signText.text = Loc.F("{0}단계", Stage()); }
+        void OnEnable() => Loc.Changed += Sign;
+        void OnDisable() => Loc.Changed -= Sign;
 
         public Vector2 SlotPos(int i) { Layout(); return i >= 0 && i < slots.Count ? slots[i].pos : new Vector2(WT.x, WT.y); }
         public IEnumerable<int> SlotsIn(string zone) { Layout(); for (int i = 0; i < slots.Count; i++) if (slots[i].zone == zone) yield return i; }

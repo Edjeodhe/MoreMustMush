@@ -34,13 +34,17 @@ namespace MoreMush
 
         public void Draw(FarmView.Critter p, float now, string hat, bool hovered)
         {
-            int e = Awaken(p.id);   // 각성 ★: 1 발밑 빛 · 2~3 둘레를 도는 별
+            int e = Awaken(p.id);   // 각성 ★ = 진화 모습
             float R0 = 40 * (1 + 0.1f * e);
             float ox = 0, oy = 0, rot = 0, sx = 1, sy = 1;
             float at = p.animT, ad = p.anim != null ? FARM_ANIMS[p.anim] : 1, u = at / ad;
             if (p.anim == null)
             {
-                if (p.state == "walk") { oy = -Mathf.Abs(Mathf.Sin(p.hop)) * 8; sy = 1 + Mathf.Sin(p.hop * 2) * 0.03f; }
+                if (p.state == "held") { rot = p.swing; sy = 1.04f; sx = 0.97f; }                         // 갓을 잡혀 매달림 (흔들림은 FarmView 진자)
+                else if (p.state == "fall") { sy = 1.08f; sx = 0.93f; }
+                else if (FarmView.Climbing(p)) { oy = -Mathf.Abs(Mathf.Sin(p.hop * 0.6f)) * 4; }
+                else if (FarmView.Hopping(p)) { oy = -Mathf.Abs(Mathf.Sin(p.hop * 1.6f)) * 22; sy = 1 + Mathf.Sin(p.hop * 3.2f) * 0.06f; }   // 버섯 계단 폴짝
+                else if (p.state == "walk" || p.state == "carry" || p.state == "climb") { oy = -Mathf.Abs(Mathf.Sin(p.hop)) * 8; sy = 1 + Mathf.Sin(p.hop * 2) * 0.03f; }
                 else if (p.state == "work") { oy = -Mathf.Abs(Mathf.Sin(now * 12 + p.x)) * 9; sy = 1 + Mathf.Sin(now * 24 + p.x) * 0.05f; sx = 2 - sy; }
                 else { sy = 1 + Mathf.Sin(now * 3 + p.x) * 0.025f; sx = 2 - sy; }
             }
@@ -54,44 +58,40 @@ namespace MoreMush
                 case "surprise": oy = -Mathf.Min(1, u * 6) * 26 * (1 - u); ox = Mathf.Sin(at * 50) * 4 * (1 - u); break;
             }
 
+            if (p.landT > 0) { float l = p.landT / 0.35f; sy *= 1 - 0.22f * l * l; sx *= 1 + 0.18f * l * l; }   // 떨어져 착지: 납작했다 돌아옴
+
             transform.localPosition = Art.P(p.x, p.y);
             // a little bigger as the camera pulls back (not fully: the tree must look like it outgrew them)
             float zs = zsc = Mathf.Pow(FarmView.Zoom, 0.75f);
             transform.localScale = new Vector3(zs, zs, 1);
-            int order = 1000 + Mathf.RoundToInt(p.y);
+            // 들린 정령은 맨 앞. 나무 위(y가 작거나 음수)에서는 1000 + y가 나무(WT.order) 아래로 떨어져 나무 뒤로 숨던 것: 나무·나무버섯·걸이 장식보다 앞에 둔다
+            bool onTree = p.state == "perch" || p.state == "pick" || (p.state == "climb" && p.pathI > 0);
+            int order = p.state == "held" || p.state == "fall" ? 4000 : onTree ? Mathf.Max(WT.order + 10, 1000 + Mathf.RoundToInt(p.y)) : 1000 + Mathf.RoundToInt(p.y);
             body.localPosition = new Vector3(ox / P, -oy / P, 0);
             body.localRotation = Quaternion.Euler(0, 0, -rot * Mathf.Rad2Deg);
             float k = R0 / rig.baseRadius;
             body.localScale = new Vector3(sx * p.face * k, sy * k, 1);
+            rig.outfit = FarmView.I != null ? FarmView.I.OutfitOf(p) : null;
+            rig.form = e;            // 진화 모습 = 각성 ★
+            rig.pokeAt = p.pokeAt;   // 누르면 갓이 통통 튄다
             rig.SetLook(p.id, CharSkinOn(p.id)?.id, hat);
-            rig.motion = p.anim ?? p.state;
+            rig.motion = p.anim ?? (FarmView.Climbing(p) ? "climb" : p.state == "pick" ? "work" : p.state == "perch" ? "idle" : p.state == "climb" ? "walk" : p.state);
             rigGroup.sortingOrder = order;
             if (!rig.gameObject.activeSelf) rig.gameObject.SetActive(true);
             builder.enabled = false;
 
+            shadow.enabled = p.y >= HARV.y0 - 30 && p.state != "held" && p.state != "perch" && p.state != "pick" && !(p.state == "climb" && p.pathI > 0);   // 나무 위·들린 동안은 그림자 없음
             shadow.transform.localPosition = new Vector3(ox / P, -2 / P, 0);
             shadow.transform.localScale = new Vector3(R0 * 1.5f * (1 + oy / 200) / P, R0 * 0.44f / P, 1);
 
-            // 진화: 발밑 빛 · 2단 진화: 둘레를 도는 별
-            glow.enabled = e > 0;
-            if (e > 0)
-            {
-                glow.color = e > 1 ? new Color(1, 0.86f, 0.35f, 0.55f) : new Color(0.63f, 1, 0.82f, 0.45f);
-                glow.transform.localScale = new Vector3(R0 * 2.6f / P, R0 * 0.95f / P, 1);
-            }
-            for (int i = 0; i < stars.Length; i++)
-            {
-                stars[i].enabled = e > 1;
-                if (e <= 1) continue;
-                float a = now * 2 + i * U.TAU / 3;
-                stars[i].transform.localPosition = new Vector3(Mathf.Cos(a) * R0 * 1.05f / P, -(-R0 * 0.9f + Mathf.Sin(a) * R0 * 0.35f) / P, 0);
-                stars[i].sortingOrder = Mathf.Sin(a) > 0 ? order + 1 : order - 1;
-            }
+            // 진화 단계 표시(발밑 빛·도는 별)는 없앴다: 진화 정령은 생김새로 단계가 보인다 (2026-10-16 사용자)
+            glow.enabled = false;
+            for (int i = 0; i < stars.Length; i++) stars[i].enabled = false;
             surprise.enabled = p.anim == "surprise";
             if (surprise.enabled) surprise.transform.localPosition = new Vector3(34 / P, -(-90 + oy) / P, 0);
 
             // 일하는 중: 손에 든 도구
-            bool work = p.state == "work" && p.tool != null;
+            bool work = p.state == "work" && p.tool != null && !rig.WholeOn;   // 통짜 복장 그림에는 바구니가 그려져 있다
             tool.enabled = work;
             if (work)
             {

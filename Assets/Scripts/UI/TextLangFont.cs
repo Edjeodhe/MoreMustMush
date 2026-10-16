@@ -5,7 +5,8 @@ using UnityEngine;
 namespace MoreMush
 {
     // 배치한 글자(LocText가 없는 TMP)도 언어에 맞는 폰트로 바꾼다. TextFit.ApplyScene이 씬마다 등록한다.
-    // 대상은 LocFonts 세트에 들어 있는 폰트로 배치한 글자뿐 — 세트 밖 폰트(장식용 등)는 배치한 그대로 둔다.
+    // 대상은 LocFonts 세트에 들어 있는 폰트로 배치한 글자, 그리고 LocFonts.koEnFonts(ONEMobilePOP 등 한·영 전용 UI 폰트)로 배치한 글자
+    // — 그 밖의 세트 밖 폰트(장식용 등)는 배치한 그대로 둔다. koEnFonts 글자는 한국어·영어에선 그대로, 다른 언어에선 그 언어 본문 폰트로.
     //   그 언어 세트의 폰트가 배치한 폰트와 같으면 배치한 폰트·머티리얼 그대로
     //   다르면 그 언어 폰트로 바꾸고, 머티리얼은 LocFonts 프리셋 순번을 이어받는다 (프리셋이 아니면 그 폰트 기본)
     public static class TextLangFont
@@ -17,6 +18,7 @@ namespace MoreMush
             public Material mat;           // 배치한 머티리얼
             public LocFonts.Role role;     // 배치한 폰트가 세트에서 맡은 역할 (제목·본문)
             public int preset;             // 배치한 머티리얼의 프리셋 순번 (−1 = 프리셋 아님)
+            public bool koEn;              // LocFonts.koEnFonts의 폰트: 한국어·영어에서는 배치한 그대로
         }
 
         static readonly List<Entry> entries = new List<Entry>();
@@ -51,7 +53,12 @@ namespace MoreMush
                 e = new Entry { text = t, font = t.font, mat = t.fontSharedMaterial, role = role.Value, preset = System.Array.IndexOf(face.presets, t.fontSharedMaterial) };
                 return true;
             }
-            return false;   // 세트 밖 폰트
+            if (System.Array.IndexOf(lf.koEnFonts, t.font) >= 0)
+            {
+                e = new Entry { text = t, font = t.font, mat = t.fontSharedMaterial, role = LocFonts.Role.Body, preset = -1, koEn = true };
+                return true;
+            }
+            return false;   // 세트 밖 폰트 (장식용 등)
         }
 
         public static void ApplyAll()
@@ -67,7 +74,7 @@ namespace MoreMush
         static void Apply(Entry e, LocFonts lf)
         {
             var face = lf != null ? lf.FaceFor(Loc.Lang, e.role) : null;
-            bool keep = face == null || face.font == null || face.font == e.font;
+            bool keep = face == null || face.font == null || face.font == e.font || (e.koEn && LocFonts.KoEnLang(Loc.Lang));
             var font = keep ? e.font : face.font;
             var mat = keep ? e.mat
                 : e.preset >= 0 && e.preset < face.presets.Length && face.presets[e.preset] != null ? face.presets[e.preset] : face.font.material;

@@ -1,0 +1,7 @@
+Sprite sheet: a 1x1 grid holding 1 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+ONE single cut-out part for 2D puppet animation, alone and centered, on a FULLY TRANSPARENT background, no glow, no shadow, no ground, no text. Front view, drawn at EXACTLY the scale of the attached base mannequin (the first attached image) so it stacks back onto it. PAINTING STYLE (most important): paint exactly like the attached title-screen painting and the attached watercolor spirit sheet of this game: light transparent watercolor washes on paper, visible paper grain, soft faceted colour patches inside each area, a thin slightly darker pigment edge where a wash dried, gentle pastel colours, flat soft lighting. NOT felt, NOT plush, NOT fuzzy or fabric texture, NOT 3D rendered, no airbrush gradients, no hard black outlines. Faces: small soft dark-brown dot eyes, soft blush. PART: the SPARK spirit's BACK HAIR only: the long hair mass of the FORM 3 SPARK spirit (top row, rightmost column) of the attached evolution sheet as it hangs BEHIND the head and shoulders down to the waist, the full back silhouette of the hairstyle in that spirit's hair colour, with NO face, NO cap, NO body.
+
+Assets in reading order (left to right, top to bottom):
+1. ONE single cut-out part for 2D puppet animation, alone and centered, on a FULLY 

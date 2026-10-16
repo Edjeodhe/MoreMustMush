@@ -1,0 +1,24 @@
+Sprite sheet: a 6x3 grid holding 18 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A CUT-OUT PARTS SHEET for 2D puppet animation of cute elemental spirits, on a FULLY TRANSPARENT background, no glow, no shadow. Every part is drawn separately with clear empty space around it, at EXACTLY the same scale as the matching spirit in the attached sheets, front view, so the parts can be stacked back into the same character. HEAD part = the head with its face and all of its hair/flame/crown, cut cleanly at the neck (nothing below the chin except a short neck stub). TORSO part = the body from the neck down INCLUDING the whole lower wisp tail (or floating rock base), with NO head and NO arms: just smooth round shoulders where the arms attach. ARM part = only the spirit's LEFT arm as seen by the viewer, hanging down, from the shoulder to the tiny hand. Outfit torsos wear the outfit painted on the torso exactly as in the attached outfit sheet but without the hat. Keep the flat matte watercolor look of the attached sheets. Rows top to bottom: three rows for the WATER SPIRIT, three rows for the WIND SPIRIT.
+
+Assets in reading order (left to right, top to bottom):
+1. WATER SPIRIT HEAD (face and hair, no hat)
+2. WATER SPIRIT TORSO with tail, no arms, no clothes
+3. WATER SPIRIT LEFT ARM
+4. WATER SPIRIT TORSO wearing the picking outfit: canvas apron, a woven basket held against the tummy, no arms
+5. WATER SPIRIT TORSO wearing the climbing outfit: rope harness and a coiled rope over one shoulder, no arms
+6. WATER SPIRIT TORSO wearing the carrying outfit: wooden A-frame back carrier loaded with a cloth bundle of mushrooms behind the back, towel around the neck, no arms
+7. WATER SPIRIT HEAD in its skin colors (see the skin row of the attached outfit sheet)
+8. WATER SPIRIT TORSO with tail in its skin colors, no arms
+9. WATER SPIRIT LEFT ARM in its skin colors
+10. WIND SPIRIT HEAD (face and hair, no hat)
+11. WIND SPIRIT TORSO with tail, no arms, no clothes
+12. WIND SPIRIT LEFT ARM
+13. WIND SPIRIT TORSO wearing the picking outfit: canvas apron, a woven basket held against the tummy, no arms
+14. WIND SPIRIT TORSO wearing the climbing outfit: rope harness and a coiled rope over one shoulder, no arms
+15. WIND SPIRIT TORSO wearing the carrying outfit: wooden A-frame back carrier loaded with a cloth bundle of mushrooms behind the back, towel around the neck, no arms
+16. WIND SPIRIT HEAD in its skin colors (see the skin row of the attached outfit sheet)
+17. WIND SPIRIT TORSO with tail in its skin colors, no arms
+18. WIND SPIRIT LEFT ARM in its skin colors

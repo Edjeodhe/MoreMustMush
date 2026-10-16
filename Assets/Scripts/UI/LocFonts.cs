@@ -20,6 +20,10 @@ namespace MoreMush
 
         public Set[] sets = new Set[0];
 
+        [Tooltip("세트 밖이지만 배치한 UI가 쓰는 한·영 전용 폰트 (ONEMobilePOP 등). 한국어·영어에서는 그대로 두고, 그 밖의 언어에서는 그 언어 본문 폰트로 바꾼다 (TextLangFont)")]
+        public TMP_FontAsset[] koEnFonts = new TMP_FontAsset[0];
+        public static bool KoEnLang(string lang) => lang == "ko" || lang == "en";
+
         static LocFonts inst;
         public static LocFonts I => inst != null ? inst : inst = Resources.Load<LocFonts>("Loc/LocFonts");
 

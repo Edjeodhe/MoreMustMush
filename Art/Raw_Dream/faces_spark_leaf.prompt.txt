@@ -1,0 +1,18 @@
+Sprite sheet: a 4x3 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A FACE-PARTS SHEET for 2D puppet animation: ONLY the facial features (the two eyes, the two eyebrows and the mouth) of the spirits in the attached reference, on a FULLY TRANSPARENT background. NO head, NO skin, NO face outline, NO hair, NO blush, NO sweat drops, NO tears, NO symbols or effects: just the separate painted feature marks floating in empty space, laid out exactly as they sit on the face (eyes level, eyebrows above them, mouth centred below). The reference shows each spirit's head and, next to it, its neutral face features alone: copy that spirit's exact feature style (shape language, stroke colours, eye colour, eyelashes or fangs), eye size, eye spacing and eyebrow position, and draw every expression at the SAME size as that neutral face, filling its cell the same way; only what the expression changes may change. Flat matte watercolor like the reference, no outlines added, no glow. Rows top to bottom: two rows for the LIGHTNING SPIRIT (reference row 1), two rows for the NATURE SPIRIT (reference row 2).
+
+Assets in reading order (left to right, top to bottom):
+1. LIGHTNING SPIRIT face features, BLINK: both eyes gently closed as soft downward curves, the usual calm eyebrows, the usual mouth
+2. LIGHTNING SPIRIT face features, HAPPY: eyes closed in happy upward arcs (like ^ ^), a big open smile
+3. LIGHTNING SPIRIT face features, SURPRISED: eyes wide open and round, eyebrows raised high, a small round open 'o' mouth
+4. LIGHTNING SPIRIT face features, LOVE: both eyes are small pink-red hearts, relaxed eyebrows, a wide open smile
+5. LIGHTNING SPIRIT face features, EFFORT: determined slightly narrowed eyes, eyebrows angled down toward the middle, mouth clenched in a straight grit
+6. LIGHTNING SPIRIT face features, TIRED: droopy half-closed eyes, eyebrows slanting up in the middle, a small wavy mouth
+7. NATURE SPIRIT face features, BLINK: both eyes gently closed as soft downward curves, the usual calm eyebrows, the usual mouth
+8. NATURE SPIRIT face features, HAPPY: eyes closed in happy upward arcs (like ^ ^), a big open smile
+9. NATURE SPIRIT face features, SURPRISED: eyes wide open and round, eyebrows raised high, a small round open 'o' mouth
+10. NATURE SPIRIT face features, LOVE: both eyes are small pink-red hearts, relaxed eyebrows, a wide open smile
+11. NATURE SPIRIT face features, EFFORT: determined slightly narrowed eyes, eyebrows angled down toward the middle, mouth clenched in a straight grit
+12. NATURE SPIRIT face features, TIRED: droopy half-closed eyes, eyebrows slanting up in the middle, a small wavy mouth

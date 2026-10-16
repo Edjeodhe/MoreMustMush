@@ -78,3 +78,7 @@ MonoBehaviour:
       - {fileID: 2100000, guid: b88768834d115bf4da057a2bc4fc150e, type: 2}
       - {fileID: 2100000, guid: c32fa84a52a521c4b9ff7fef00c02d3b, type: 2}
       - {fileID: 2100000, guid: dd409a37470503b4783ee192bfe35e5c, type: 2}
+  koEnFonts:
+  - {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+  - {fileID: 11400000, guid: c0448b3cc8b872640ba01688f14753d0, type: 2}
+  - {fileID: 11400000, guid: 1858953a4d8fee74188f368f8ca7c645, type: 2}

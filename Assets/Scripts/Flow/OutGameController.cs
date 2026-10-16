@@ -12,8 +12,11 @@ namespace MoreMush
     // 이름으로 찾는 것:
     //   UP_Panel/Gold·수확석 안의 글자 = 골드·균사석 · UP_Panel/Text (TMP) (1) = 보따리 보관 시간
     //   Button_Bag = 수확 보따리 받기 (쌓인 게 있을 때만 눌린다)
-    //   Down_Panel(접힘) ↔ Down_hidden_Panel(펼침) = 누르면 서로 바뀐다. 펼침 안의 칸 = 꼬마 (합류 순서대로)
-    //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 (내용은 아직 없음, 고른 탭만 표시)
+    //   Down_Panel(접힘) ↔ Down_hidden_Panel(펼침) = 누르면 서로 바뀐다. 펼침 안의 칸 = 정령 (CRITTER_JOIN 순서, 칸 하나 = 정령 하나)
+    //     있는 정령 = 그림 · 열렸지만 아직 안 데려온 정령 = 검은 실루엣 · 안 열린 정령 = 배치한 빈칸 그림.
+    //     누르면 (정령 창이 배치되기 전 임시): 안 데려온 정령 = 균사석으로 데려오기, 있는 정령 = 골드로 Lv 업, Lv 상한이면 균사석으로 진화(각성).
+    //     균사석을 쓰는 일은 한 번 눌러 값을 보여 주고, 3초 안에 다시 누르면 한다
+    //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 → 세계수 탭 창(FarmTabWindow, 배치된 FarmTabPanel 또는 임시 창). 같은 탭을 다시 누르면 닫힘
     // 세계수 월드(FarmView)는 씬에 있으면 연다. Esc = MainGame으로.
     public class OutGameController : MonoBehaviour
     {
@@ -31,6 +34,10 @@ namespace MoreMush
         readonly List<Sprite> kidBlank = new List<Sprite>();   // 배치한 빈칸 그림 (아직 없는 꼬마)
         readonly List<Button> tabs = new List<Button>();
         int tab;
+        FarmTabWindow tabWin;
+        int armed = -1; float armedT;      // 균사석을 쓰기 전 확인: 한 번 누른 칸과 그 시각
+        const float ARM_SEC = 3;
+        static readonly Color SILHOUETTE = new Color(0.08f, 0.09f, 0.14f, 0.85f);
         OptionWindow optionWin;   // Esc = 옵션 창 (돌아가기 버튼 포함). MainGame으로 돌아가는 버튼이 배치되기 전까지 여기서 돌아간다
         float tickT;
 
@@ -55,6 +62,7 @@ namespace MoreMush
                     if (c.TryGetComponent<Image>(out var img)) kidSlots.Add(img);
                 kidSlots.Sort((a, b) => Order(a.transform, b.transform, true));
                 foreach (var s in kidSlots) kidBlank.Add(s.sprite);
+                for (int i = 0; i < kidSlots.Count; i++) { int k = i; Clickable(kidSlots[i].gameObject, () => KidSlot(k)); }
             }
 
             var group = SceneUI.Need(scene, "Button_Group");
@@ -63,9 +71,10 @@ namespace MoreMush
                 foreach (Transform c in group.transform)
                     if (c.TryGetComponent<Button>(out var b)) tabs.Add(b);
                 tabs.Sort((a, b) => Order(a.transform, b.transform, false));   // 위 → 아래
-                for (int i = 0; i < tabs.Count; i++) { int k = i; tabs[i].onClick.AddListener(() => { Snd.Ui(); tab = k; RenderTabs(); }); }
+                for (int i = 0; i < tabs.Count; i++) { int k = i; tabs[i].onClick.AddListener(() => OpenTab(k)); }
             }
             SetFolded(true, false);
+            tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
                 new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
         }
@@ -76,6 +85,7 @@ namespace MoreMush
             if (farm == null) farm = FindFirstObjectByType<FarmView>();
             if (farm != null) farm.Enter();
             else Debug.LogWarning("[OutGame] FarmView가 씬에 없어요 (세계수 월드를 배치하면 연결돼요)");
+            tabWin?.SetFarm(farm);
             Render();
         }
 
@@ -90,7 +100,8 @@ namespace MoreMush
             currency.Tick();
             if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); }
             var kb = Keyboard.current;
-            if (kb != null && kb.escapeKey.wasPressedThisFrame) optionWin.Toggle();
+            tabWin?.Tick();
+            if (kb != null && kb.escapeKey.wasPressedThisFrame) { if (tabWin != null && tabWin.IsOpen) { Snd.Ui(); tabWin.Close(); RenderTabs(); } else optionWin.Toggle(); }
         }
 
         void Render()
@@ -100,6 +111,7 @@ namespace MoreMush
             RenderBag();
             RenderKids();
             RenderTabs();
+            tabWin?.Refresh();
         }
 
         void RenderBag()
@@ -111,24 +123,87 @@ namespace MoreMush
             UIUtil.SetText(bagText, Loc.F("수확 보따리 받기  <size=80%>{0}{1}</size>", UIUtil.Ic("gold"), U.Fmt(System.Math.Floor(b.gold))));
         }
 
-        // 꼬마 칸: 합류한 꼬마를 합류 순서대로 앞 칸부터, 나머지는 배치한 빈칸 그림 그대로
+        // 정령 칸: CRITTER_JOIN 순서로 칸 하나에 정령 하나. 있는 정령 = 그림 · 열린 정령 = 실루엣 · 안 열린 정령 = 빈칸 그림
         void RenderKids()
         {
-            var owned = new List<string>();
-            foreach (var id in CRITTER_JOIN) if (HasSpecial(id)) owned.Add(id);
             for (int i = 0; i < kidSlots.Count; i++)
             {
-                var s = i < owned.Count ? SpriteDB.Get($"Characters/Critters/{owned[i]}_ref") : null;
+                string id = i < CRITTER_JOIN.Length ? CRITTER_JOIN[i] : null;
+                bool shown = id != null && (HasSpecial(id) || KidOpen(id));
+                var s = shown ? (SpriteDB.Get($"Characters/Kids/{id}") ?? SpriteDB.Get($"Characters/Critters/{id}_ref")) : null;
                 kidSlots[i].sprite = s != null ? s : kidBlank[i];
+                kidSlots[i].color = s != null && !HasSpecial(id) ? SILHOUETTE : Color.white;
             }
         }
 
-        // 임시 탭: 고른 탭만 눌린 모양으로 (탭 내용 창은 배치되면 연결)
+        // 정령 칸을 눌렀을 때 (정령 창이 배치되기 전 임시 동작)
+        void KidSlot(int i)
+        {
+            if (G?.farm == null || i >= CRITTER_JOIN.Length) return;
+            string id = CRITTER_JOIN[i], name = SPC[id].n;
+            bool confirm = armed == i && Time.unscaledTime - armedT < ARM_SEC;
+            armed = -1;
+            if (!HasSpecial(id))
+            {
+                switch (CanUnlockKid(id))
+                {
+                    case KidFail.Stage: Snd.Err(); App.Notify(Loc.F("세계수가 {0}단계({1})가 되면 열려요", JoinLv(id), WT.StageName(JoinLv(id)))); return;
+                    case KidFail.Gem: Snd.Err(); App.Notify(Loc.F("{0}을(를) 데려오려면 {1}{2}이 필요해요 (지금 {3})", name, UIUtil.Ic("gem"), UnlockGem(id), G.gem)); return;
+                    case KidFail.None:
+                        if (!confirm) { Arm(i); App.Notify(Loc.F("한 번 더 누르면 {0}{1}으로 {2}을(를) 데려와요", UIUtil.Ic("gem"), UnlockGem(id), name)); return; }
+                        UnlockKid(id);
+                        Snd.Record(); App.Notify(Loc.F("{0}이(가) 세계수에 왔어요!", name));
+                        break;
+                    default: return;
+                }
+            }
+            else if (CanKidLvUp(id) != KidFail.Cap && KLv(id) < KLV.max)
+            {
+                if (CanKidLvUp(id) == KidFail.Gold) { Snd.Err(); App.Notify(Loc.F("Lv 업에 {0}{1}이 필요해요", UIUtil.Ic("gold"), U.Fmt(KLvCost(id)))); return; }
+                KidLvUp(id);
+                Snd.Ui(); App.Notify(Loc.F("{0} Lv.{1}", name, KLv(id)));
+            }
+            else
+            {
+                int a = Awaken(id);
+                switch (CanAwaken(id))
+                {
+                    case KidFail.Max: App.Notify(Loc.F("{0}은(는) 마지막 진화까지 마쳤어요 {1}", name, new string('★', a))); return;
+                    case KidFail.Stage: Snd.Err(); App.Notify(Loc.F("세계수가 {0}단계({1})가 되면 ★{2} 진화가 열려요", AwakenStage(id), WT.StageName(AwakenStage(id)), a + 1)); return;
+                    case KidFail.Lv: Snd.Err(); App.Notify(Loc.F("Lv.{0}이 되면 진화할 수 있어요 (지금 Lv.{1})", 10 * (a + 1), KLv(id))); return;
+                    case KidFail.Gem: Snd.Err(); App.Notify(Loc.F("★{0} 진화에 {1}{2}이 필요해요 (지금 {3})", a + 1, UIUtil.Ic("gem"), KLV.awakenGem[a], G.gem)); return;
+                    case KidFail.None:
+                        if (!confirm) { Arm(i); App.Notify(Loc.F("한 번 더 누르면 {0}{1}으로 ★{2} 진화해요", UIUtil.Ic("gem"), KLV.awakenGem[a], a + 1)); return; }
+                        KidAwaken(id);
+                        Snd.Record(); App.Notify(Loc.F("{0} 진화! {1}", name, new string('★', a + 1)));
+                        break;
+                    default: return;
+                }
+            }
+            if (farm != null) farm.Sync(false);
+            currency.Tick();
+            RenderKids();
+        }
+
+        void Arm(int i) { armed = i; armedT = Time.unscaledTime; Snd.Ui(); }
+
+        // 탭 버튼: 세계수 탭 창을 연다 (열린 탭을 다시 누르면 닫는다)
+        void OpenTab(int k)
+        {
+            Snd.Ui();
+            if (tabWin == null) return;
+            if (tabWin.IsOpen && tab == k) tabWin.Close();
+            else { tab = k; tabWin.Open((FarmTabWindow.Tab)Mathf.Clamp(k, 0, 3)); }
+            RenderTabs();
+        }
+
+        // 열린 탭만 눌린 모양으로
         void RenderTabs()
         {
+            bool open = tabWin != null && tabWin.IsOpen;
             for (int i = 0; i < tabs.Count; i++)
             {
-                tabs[i].interactable = i != tab;
+                tabs[i].interactable = !(open && i == tab);
                 if (i < TAB_NAMES.Length) UIUtil.SetText(SceneUI.TextIn(tabs[i].transform), Loc.T(TAB_NAMES[i]));
             }
         }

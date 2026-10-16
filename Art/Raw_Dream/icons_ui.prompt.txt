@@ -1,0 +1,22 @@
+Sprite sheet: a 4x4 grid holding 15 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Game icons for an upgrade tree and skill bar, readable at 40 px, in the flat matte watercolor style of the attached icon sheet (no outlines, no gloss, no glow, no sparkles). Each icon = ONE big chunky main object that names the effect + at most ONE small modifier symbol from this fixed set: a plus sign (more), two outward arrows (wider / bigger), a bold upward arrow (stronger), a small hourglass (lasts longer), curved motion swirls (faster), a four-leaf clover (chance). Strong value contrast between the object and the modifier, simple big shapes, soft low-saturation palette with one warm accent. The 'harvester' is the round spinning scythe disc token from the attached harvester sheet. Menu-button icons and mushroom-collection set badges.
+
+Assets in reading order (left to right, top to bottom):
+1. SETTINGS: a chunky wooden cogwheel with a small leaf tucked on it
+2. LANGUAGE: a small round earth globe in soft blue and green with a tiny speech bubble
+3. QUESTS: a rolled parchment scroll tied with a red ribbon and a small checkmark
+4. GO HARVEST: a wooden signpost arrow pointing right planted on a mossy mound
+5. UPGRADE TREE: a glowing mycelium sprout with three round branching nodes
+6. AMANITA FAMILY: a red fly-agaric mushroom with white dots and a smaller white amanita beside it
+7. SHELF FUNGI: three brown bracket fungi stacked on the side of a short log
+8. CORDYCEPS BROTHERS: two thin orange club-shaped cordyceps stalks rising from a tiny caterpillar
+9. JELLY FRIENDS: a translucent amber wood-ear jelly fungus wobbling beside a white jelly blob
+10. PUFF AND SMOKE: a round puffball mushroom puffing a soft grey cloud
+11. GLOWING FOREST: a pale mushroom with a soft mint glow halo at night beside a tiny crescent moon
+12. CORAL AND ANTLERS: a red coral fungus branching like deer antlers
+13. MUSHROOM CHEF: a white chef hat over a small pan holding a mushroom
+14. HERBALIST: a mortar and pestle with a mushroom and a green herb leaf
+15. POISON RESEARCHER: a small round purple potion flask bubbling, a tiny purple mushroom beside it
+Leave the remaining 1 cell(s) empty.

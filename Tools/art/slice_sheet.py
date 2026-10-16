@@ -70,6 +70,9 @@ def main():
         bands.append((start, prev))
         bands = [b for b in bands if b[1] - b[0] > h * 0.03]   # drop stray sparkles
     row_edges = None
+    # SLICE_GRID=1: the requested grid as is (face-part sheets: the gap between eyebrows and eyes looks like a row gap)
+    if os.environ.get("SLICE_GRID"):
+        bands = []
     if len(bands) >= rows and len(bands) > 1:
         if len(bands) != rows:
             rows = len(bands)

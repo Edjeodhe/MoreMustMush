@@ -163,9 +163,11 @@ namespace MoreMush
             public static double Cost(int lv) => System.Math.Ceiling(100 * System.Math.Pow(1.25, lv - 1));   // Lv → Lv+1 골드
             public static int Cap(int awaken) => System.Math.Min(max, 10 * (awaken + 1));                      // 각성 전 Lv.10에서 멈춘다
             public static readonly double[] awakenMul = { 1, 1.3, 1.7, 2.2 };
-            public static readonly double[] awakenGold = { 10000, 50000, 200000 };   // ★n → ★n+1
+            // 각성 = 정령 진화 3단계 (2026-10-16 사용자): 균사석만 낸다 (골드 없음). ★n → ★n+1 [임시값: 밸런스 때 조정]
             public static readonly int[] awakenGem = { 20, 80, 250 };
             public const int awakenMax = 3;
+            // ★n 진화가 열리는 세계수 단계: 그 정령이 열린 단계 + n (세계수가 자랄 때마다 다음 진화가 열린다). 마지막 단계를 넘지 않는다
+            public static int EvoStage(string kid, int star) => System.Math.Min(WT.stages, JoinLv(kid) + star);
             public static readonly int[] sumAt = { 50, 100, 150, 200, 240 };   // 꼬마 Lv 합계 보상: 장식 슬롯 +1 (100·200은 구역 정원 +1, 240은 칭호)
         }
 
