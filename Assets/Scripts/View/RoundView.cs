@@ -13,7 +13,11 @@ namespace MoreMush
         public SpriteRenderer background;
         [ScenePath("World/Round/Field/Decor")] public Transform decor;   // 지역별 테두리 장식 묶음 (자식 이름 = 지역 id, 없으면 forest)
         public Transform deviceRoot, shroomRoot, fxRoot, ballRoot, flyerRoot;
-        public SpriteRenderer bar;
+        public SpriteRenderer bar;              // 9-slice 그림(Draw Mode Sliced). 테두리는 그림의 Sprite Editor에서 잡는다
+        [Tooltip("바 그림 전체를 화면에 그릴 높이 (필드 px). 그림을 이 높이로 줄이고 9-slice 가운데만 바 길이만큼 늘인다")]
+        public float barHeight = 56;
+        [Tooltip("바 그림에서 실제 바(충돌 길이) 밖으로 나오는 왼쪽·오른쪽 장식 폭 (그림 px). 잎처럼 끝에 달린 장식")]
+        public float barOverhangL = 46, barOverhangR = 54;
         public SpriteRenderer giantWarn;
         public SpriteRenderer festTint;
         public LineRenderer acornFrame;
@@ -333,7 +337,7 @@ namespace MoreMush
             float tilt = R.barLen > 0 ? Mathf.Clamp((R.barHitX - R.barX) / (R.barLen / 2), -1, 1) : 0;
             bar.transform.localPosition = Art.P(R.barX, y + BAR_T / 2 + spring * 7);
             bar.transform.localRotation = Quaternion.Euler(0, 0, tilt * spring * 3.5f);
-            bar.size = new Vector2(R.barLen * (1 + spring * 0.04f) / Art.PPU, (BAR_T + 10) * (1 - spring * 0.28f) / Art.PPU);
+            SizeBar(bar, R.barLen * (1 + spring * 0.04f), 1 - spring * 0.28f);
             float k = Mathf.Min(1, R.feverK);
             if (k > 0.03f)
             {
@@ -347,13 +351,24 @@ namespace MoreMush
             {
                 var s = R.extraBars[i]; var sr = extraBars.Get(i);
                 sr.transform.localPosition = Art.P(s.x, s.y);
-                sr.size = new Vector2(s.len / Art.PPU, (BAR_T + 10) / Art.PPU);
+                SizeBar(sr, s.len, 1);
                 sr.sortingOrder = bar.sortingOrder;
                 float blink = s.clone && s.life < 1 ? 0.4f + 0.4f * Mathf.Abs(Mathf.Sin(now * 12)) : 0.8f;
                 sr.color = s.clone ? new Color(0.65f, 0.85f, 1, blink) : new Color(0.9f, 0.8f, 0.65f, 1);
                 Art.SetFx(sr);
             }
             extraBars.Trim(R.extraBars.Count);
+        }
+
+        // 9-slice 바: 그림 전체를 barHeight 높이로 줄이고(테두리 비율 유지), 가운데만 늘여 몸통 길이 = len (필드 px).
+        // 줄이지 않고 size만 낮추면 위아래 테두리가 높이보다 커서 잎·끝이 찌그러진다. sy = 착지할 때 납작해지는 비율
+        public void SizeBar(SpriteRenderer sr, float len, float sy)
+        {
+            var sp = sr.sprite;
+            if (sp == null) return;
+            float h = sp.rect.height, ppu = sp.pixelsPerUnit, k = barHeight / h;
+            sr.transform.localScale = new Vector3(k, k * sy, 1);
+            sr.size = new Vector2((len / k + barOverhangL + barOverhangR) / ppu, h / ppu);
         }
 
         int DrawAim(RoundSim R, float now, int nl)
