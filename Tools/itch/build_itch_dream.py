@@ -1,5 +1,5 @@
 # itch.io 페이지 에셋 (몽환 수채화판): 배경·배너·커버·소개 띠·맺음 그림.
-# 입력: Marketing/itch_dream/{bg,cover_art,intro_art,footer_art}.png (사용자가 생성한 원화), Dream/UI/logo.png
+# 입력: Marketing/itch_dream/{bg,cover_art,intro_art,footer_art,banner_art}.png (사용자가 생성한 원화), Dream/UI/logo.png
 # 출력: Marketing/itch_dream/out/
 import os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -53,6 +53,20 @@ def banner():
     out = Image.new('RGBA', (logo.width + pad * 2, logo.height + pad * 2), (0, 0, 0, 0))
     with_shadow(out, logo, (pad, pad), blur=12).save(os.path.join(OUT, 'banner.png'))
 
+# 배너 띠: banner_art.png(가운데를 비워 둔 숲 풍경)를 본문 폭 1280×380으로 자르고 가운데에 로고.
+# 로고 뒤에 크림빛 번짐을 깔아 하늘 위에서도 글자가 또렷하게
+def banner_strip():
+    W, H = 1280, 380
+    im = src('banner_art.png')
+    h = round(im.width * H / W); top = round(im.height * 0.47 - h / 2)   # 풍경의 가운데 띠
+    strip = im.crop((0, top, im.width, top + h)).resize((W, H), Image.LANCZOS).convert('RGBA')
+    glow = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(glow).ellipse((W // 2 - 360, 40, W // 2 + 360, H - 40), fill=PAPER + (150,))
+    strip = Image.alpha_composite(strip, glow.filter(ImageFilter.GaussianBlur(60)))
+    logo = logo_img(560)
+    strip = with_shadow(strip, logo, ((W - logo.width) // 2, (H - logo.height) // 2), blur=12)
+    strip.convert('RGB').save(os.path.join(OUT, 'banner_strip.png'))
+
 def cover():
     W, H = 630, 500
     cov = src('cover_art.png').resize((W, H), Image.LANCZOS).convert('RGBA')
@@ -103,6 +117,8 @@ def footer():
     im.save(os.path.join(OUT, 'footer.png'))
 
 if __name__ == '__main__':
-    background(); banner(); cover(); intro(); footer()
-    for n in sorted(os.listdir(OUT)):
+    import sys
+    steps = sys.argv[1:] or ['background', 'banner', 'banner_strip', 'cover', 'intro', 'footer']
+    for st in steps: globals()[st]()
+    for n in sorted(x for x in os.listdir(OUT) if x.endswith(('.png', '.jpg', '.gif'))):
         p = os.path.join(OUT, n); print(n, Image.open(p).size, round(os.path.getsize(p) / 1e3), 'KB')
