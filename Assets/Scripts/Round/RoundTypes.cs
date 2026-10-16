@@ -28,6 +28,9 @@ namespace MoreMush
         public int dropMul = 1, qs;
         public string spore;
         public int viewId = -1;   // RoundView sprite slot
+        public double hpLag = -1;  // HP bar trail: drains toward hp after a hit (view only)
+        public float hitT = 9;     // seconds since this mushroom was last hit (HP bar pop / fade, hit flash)
+        public float kx, ky;       // knock direction of the last hit (view only: the mushroom leans away and springs back)
     }
 
     public class Colony
@@ -94,9 +97,12 @@ namespace MoreMush
     public class Tornado { public float y, h, x, dir; public double dmg; public HashSet<Shroom> hit = new HashSet<Shroom>(); public Ball b; }
     public class Bolt { public List<Vector2> pts; public float t; public bool slash, big; public string col; public float jitterSeed; }
     public class Ring { public float x, y, r, t, dur; public string col; public bool quiet; }
-    public class Part { public float x, y, vx, vy, t, life, size; public Color col; }
-    public class FloatText { public float x, y, t; public double v; public int tier; public bool crit, golden, coin; public string view; }   // view: 화면이 만든 글자 (시뮬레이션은 읽지 않음)
-    public class Label { public string text; public float x, y, size, t; public string col; }
+    public class Part { public float x, y, vx, vy, t, life, size; public Color col; public byte shape; }   // shape: FxShape
+    // one-shot sprite effects (hit bursts, spawn puffs, bar dust); the view draws them, the sim only ages them
+    public enum FxShape : byte { Dot, Chip, Leaf, Impact, ImpactRing, Puff, Dust, Streak, Sprout, Drop, HitAnim, Twinkle, DotRing }
+    public class Fx { public FxShape shape; public float x, y, t, dur, size, rot, spin, rise; public Color col; public bool flip; }
+    public class FloatText { public float x, y, vx, vy, t; public double v; public int tier; public bool crit, golden, coin; public string view; }   // view: 화면이 만든 글자 (시뮬레이션은 읽지 않음)
+    public class Label { public string text; public float x, y, size, t; public string col; public string view; }   // view: 화면이 만든 글자 (숫자만 그림 글자)
     public class Flyer { public float x, y, sx, sy, tx, ty, t, dur; public Species sp; public bool golden, clock, done; public string cat; }
     public class Ember { public float x, y, vx, vy, t, life, s; }
     public class GiantWarn { public float x, y, t; }

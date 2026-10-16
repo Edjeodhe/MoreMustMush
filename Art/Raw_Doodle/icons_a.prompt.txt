@@ -1,0 +1,42 @@
+Sprite sheet: a 6x6 grid holding 36 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Game icons drawn as ONE family: each icon is a single chunky, rounded object centered in its cell, filling about 80% of it, front or slight 3/4 view, all the same visual size and weight. Soft flat watercolor fill with at most three colors plus cream highlights, the same thin warm-brown hand-drawn outline, gentle top-left light, bright cheerful sunny-day palette. Simple shapes that read at 32 px. No frames, no badges, no backgrounds, no faces on objects, no text. Currencies, mushroom categories, regions and weather.
+
+Assets in reading order (left to right, top to bottom):
+1. gold: a chubby round gold coin stamped with a tiny mushroom silhouette
+2. edible category: a plump mushroom with a round ORANGE cap and cream stem
+3. medicinal category: a plump mushroom with a round GREEN cap, a tiny leaf on the cap
+4. poison category: a plump mushroom with a round PURPLE cap with white dots and one small purple drip
+5. mycelite: a rounded teal crystal stone wrapped in glowing white mycelium threads with a tiny sprout
+6. spores: a small tied cloth pouch with glowing golden spores floating out
+7. time: a round wooden stopwatch with a little leaf on the crown
+8. diamond: a soft pink-violet faceted gem with one sparkle
+9. build: a wooden mallet with a leaf tied to the handle
+10. idle reward: a woven basket heaped with mushrooms and gold coins
+11. construction: a tiny mushroom-cap cottage frame with a little scaffold
+12. trophy: a golden cup whose lid is a mushroom cap
+13. locked: a round brass padlock shaped like an acorn
+14. encyclopedia: an open field-guide book with a mushroom drawing
+15. pause: two rounded upright wooden sticks side by side
+16. star: a plump golden star with soft rounded points
+17. medal: a gold medal with a mushroom emblem on a red ribbon
+18. gold income: a cloth money pouch overflowing with gold coins
+19. precision: a tree-stump target (rings) with an arrow in the center
+20. attack: two small crossed sickles
+21. forest region: two round pine trees with a small mushroom between them
+22. moonlit night region: a crescent moon over a round dark hill with two glowing mushrooms
+23. field region: golden wheat stalks and a white daisy
+24. sea region: a curling blue wave with a pink seashell
+25. ruins region: a broken stone arch with a big red mushroom growing through it
+26. clear weather: a round sun with soft rounded rays
+27. drizzle: a puffy white cloud with three blue raindrops
+28. full moon: a round pale yellow full moon with soft craters
+29. heavy rain: a dark grey-blue cloud with slanted heavy rain
+30. spore wind: two swirling violet wind ribbons carrying spores
+31. cold snap: a pale blue snowflake with rounded arms
+32. autumn: two falling orange maple leaves
+33. thunder: a dark cloud with a yellow zigzag bolt
+34. rainbow: a short rainbow arching between two small clouds
+35. fog: three layered soft grey mist bands
+36. drought: a cracked tan earth tile under a small hot sun

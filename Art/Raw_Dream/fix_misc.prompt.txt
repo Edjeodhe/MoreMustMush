@@ -1,0 +1,12 @@
+Sprite sheet: a 2x3 grid holding 6 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A few missing game assets in the same flat matte watercolor style as the attached sheets. Round weapon tokens are spinning harvester discs seen from above, same size family as the attached tokens.
+
+Assets in reading order (left to right, top to bottom):
+1. herb hoe token: a black-iron hoe blade with an awl-sharp tip curled around a round wooden hub
+2. golden scythe token: a round spinning scythe disc made of softly lit gold with two softly lit
+3. golden bell token: a softly lit gold bell with a dark gold cap
+4. a small soft white dust puff with a thin grey outline (effect)
+5. mushroom magnet icon: a red horseshoe magnet pulling two tiny mushrooms
+6. a small tuft of grass

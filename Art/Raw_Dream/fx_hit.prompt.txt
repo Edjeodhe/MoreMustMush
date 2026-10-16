@@ -1,0 +1,14 @@
+Sprite sheet: a 2x4 grid holding 8 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Tintable effect textures for a dreamy flat watercolor game, painted in PURE WHITE and very light grey watercolor on a fully transparent background (the game tints them with colour). Each fills its own cell, centered, with a soft hand-painted watercolor edge, faint paper grain and slight pigment pooling at the rim; matte, no gloss, no glow halo, no sparkles. Impact and spawn effect shapes for a cute action game, 2 rows of 4.
+
+Assets in reading order (left to right, top to bottom):
+1. a punchy impact burst: a round soft core with six to eight rounded watercolor petals shooting outward, like a splashed star
+2. a thick broken impact ring made of six short curved brush dashes around an empty centre
+3. a fluffy round cloud puff of three overlapping soft blobs, white with light grey shading
+4. a low wide dust cloud of four or five small round puffs lying along the ground (wide and short)
+5. three short tapered speed streaks fanning out from the left, like a quick swoosh (wide and short)
+6. a small irregular rounded chip like a broken bit of mushroom cap
+7. a tiny two-leaf sprout popping up, white
+8. a single plump rounded water drop shape

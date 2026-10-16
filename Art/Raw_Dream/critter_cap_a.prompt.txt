@@ -1,0 +1,16 @@
+Sprite sheet: a 5x2 grid holding 10 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+The mushroom CAPS of the five critters in the attached parts sheet (first column) and their recoloured SKIN caps (last column), redrawn the same: same shape, size, colours, decoration, flat matte watercolor, no outlines. ONE ROW PER CRITTER in the parts sheet's order: (1) the cap with its decoration; (2) the same cap shape and size recoloured as described, WITHOUT the decoration. Each cap is ONLY the cap: front view seen slightly from below, the shell on top and the underside gills visible as a shallow dish under the rim. ABSOLUTELY NO STEM, no stem stub, no neck, nothing hanging below the gills: the middle of the underside is just gills. Clear space between all caps.
+
+Assets in reading order (left to right, top to bottom):
+1. leaf critter: its cap, no stem
+2. leaf critter: skin cap, cherry blossom: dusty pink with cream petal spots, no stem
+3. dew critter: its cap, no stem
+4. dew critter: skin cap, snowflake: pale icy white with soft blue snowflake spots, no stem
+5. wind critter: its cap, no stem
+6. wind critter: skin cap, cloud: cream white with pale sky-blue cloud spots, no stem
+7. fire critter: its cap, no stem
+8. fire critter: skin cap, lava: deep red-brown with soft orange crack bands, no stem
+9. rock critter: its cap, no stem
+10. rock critter: skin cap, gem: pale aqua with a few soft faceted patches, no stem

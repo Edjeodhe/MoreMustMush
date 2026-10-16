@@ -25,8 +25,14 @@ namespace MoreMush
             public static double RingCost(int stage, int lv) => (stage < stages ? evoGold[stage] : evoGold[stages - 1] * lastRingMul) / ringDiv * System.Math.Pow(ringK, lv - 1);
             public const double ringGrow = 0.03;                  // 나이테 레벨마다 나무버섯 성장 속도 +3%
             public static int Picture(int stage) => System.Math.Max(1, System.Math.Min(stages, stage)) - 1;   // tree_0~7 (단계마다 그림 하나)
-            public static readonly float[] width = { 220, 300, 370, 440, 510, 580, 640, 700 };   // 그림(단계)별 나무 너비 (px)
-            public const float x = 640, y = 930;                  // 나무 밑동 (화면 좌표): 오른쪽 패널을 피해 왼쪽 가운데
+            // 그림(단계)별 나무 너비 (px, 1920×1080 무대 기준). 단계마다 확 커지고 마지막 단계는 훨씬 크게 (2026-10-16)
+            // 나무가 화각보다 빨리 커져서 꼭대기가 화면에서 단계마다 확실히 올라간다 (사용자: 위로 커지는 느낌):
+            // 화면 아래에서 꼭대기까지 50→54→58→62→66→70→74%, 마지막 단계만 95%로 확 (키 ×1.44, 화각은 조금만 넓혀 상쇄하지 않는다)
+            public static readonly float[] width = { 220, 246, 388, 569, 670, 1012, 1556, 2883 };
+            // 단계별 카메라 화각 배율: 땅(화면 아래)은 고정하고 위·양옆으로 넓어진다. 겹친 큰 배경(FarmView.BG_LAYERS)이 3.8배까지 덮는다
+            public static readonly float[] zoom = { 1f, 1.1f, 1.25f, 1.42f, 1.62f, 1.85f, 2.1f, 2.2f };
+            public const float x = 820, y = 720;                  // 나무 밑동 (화면 좌표): 배경 빈터의 밝은 자리 (장식도 이 자리를 중심으로 놓였다)
+            public const float camX = 960;                        // 화각이 넓어질 때 카메라 중심 x (무대 가운데, 큰 배경이 양옆을 덮는다)
             public const int order = 880;
             public const int craftBase = 2;                       // 동시 제작 슬롯 (4·6·8단계에 +1)
             public static int CraftSlots(int stage) => craftBase + (stage >= 4 ? 1 : 0) + (stage >= 6 ? 1 : 0) + (stage >= 8 ? 1 : 0);
@@ -105,7 +111,8 @@ namespace MoreMush
             public static int ZoneCap(int stage) => stage >= 6 ? 3 : 2;   // 구역당 꼬마 수
             public const float bagHours = 8;                      // 수확 보따리 최대 보관 (시간)
             public const float bagMinClaim = 1;                   // 받을 수 있는 최소 금액(골드) — 빈 보따리는 받지 않는다
-            public const float x0 = 120, x1 = 1180, y0 = 880, y1 = 1010;   // 쉬는 꼬마가 돌아다니는 땅 (오른쪽 패널 왼쪽)
+            public const float x0 = 300, x1 = 1300, y0 = 880, y1 = 1010;   // 쉬는 꼬마가 돌아다니는 땅 (화각 1배 기준, 넓어지면 나무 밑동 중심으로 같이 넓힌다)
+            public const float halfW = (x1 - x0) / 2;
             public const float returnMin = 600;                   // 이만큼(초) 자리를 비웠다 돌아오면 보따리 창
         }
 
@@ -306,16 +313,18 @@ namespace MoreMush
         }
         public static readonly Skin[] CHAR_SKINS =
         {
-            new Skin { id = "sk_fire", of = "fire", n = "용암 꼬마", acc = "bandana", price = 30, ch = true },
-            new Skin { id = "sk_spark", of = "spark", n = "네온 꼬마", acc = "headphones", price = 30, ch = true },
-            new Skin { id = "sk_dew", of = "dew", n = "눈송이 꼬마", acc = "scarf", price = 30, ch = true },
-            new Skin { id = "sk_coin", of = "coin", n = "부자 꼬마", acc = "tophat", top = true, price = 40, ch = true },
-            new Skin { id = "sk_star", of = "star", n = "은하 꼬마", acc = "halo", price = 40, ch = true },
-            new Skin { id = "sk_leaf", of = "leaf", n = "벚꽃 꼬마", acc = "flower", price = 30, ch = true },
-            new Skin { id = "sk_moon", of = "moon", n = "햇님 꼬마", acc = "sunglasses", price = 30, ch = true },
-            new Skin { id = "sk_wind", of = "wind", n = "구름 꼬마", acc = "cloud", top = true, price = 30, ch = true },
-            new Skin { id = "sk_rock", of = "rock", n = "보석 꼬마", acc = "crown", top = true, price = 50, ch = true },
-            new Skin { id = "sk_chest", of = "chest", n = "딸기초코 꼬마", acc = "bow", price = 30, ch = true },
+            // Dream: each skin's accessory is painted onto its cap (skin_<id>) or body (body_<id>_skin) by
+            // Tools/art/build_skin_acc.py, so no separate acc sprite is stacked on top any more
+            new Skin { id = "sk_fire", of = "fire", n = "용암 꼬마", price = 30, ch = true },
+            new Skin { id = "sk_spark", of = "spark", n = "네온 꼬마", price = 30, ch = true },
+            new Skin { id = "sk_dew", of = "dew", n = "눈송이 꼬마", price = 30, ch = true },
+            new Skin { id = "sk_coin", of = "coin", n = "부자 꼬마", top = true, price = 40, ch = true },
+            new Skin { id = "sk_star", of = "star", n = "은하 꼬마", price = 40, ch = true },
+            new Skin { id = "sk_leaf", of = "leaf", n = "벚꽃 꼬마", price = 30, ch = true },
+            new Skin { id = "sk_moon", of = "moon", n = "햇님 꼬마", price = 30, ch = true },
+            new Skin { id = "sk_wind", of = "wind", n = "구름 꼬마", top = true, price = 30, ch = true },
+            new Skin { id = "sk_rock", of = "rock", n = "보석 꼬마", top = true, price = 50, ch = true },
+            new Skin { id = "sk_chest", of = "chest", n = "딸기초코 꼬마", price = 30, ch = true },
         };
         // 수확기 스킨: 수확기마다 1개. 스프라이트 Harvesters/hs_<of>
         public static readonly Skin[] HV_SKINS =

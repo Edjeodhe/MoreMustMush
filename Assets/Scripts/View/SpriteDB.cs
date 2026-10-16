@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MoreMush
 {
-    // All game art by path key, e.g. "Mushrooms/Single/ed0", "Icons/gold": Assets/Resources/Art/Soft/** (watercolor set) over Assets/Resources/Art/Generated/**.
+    // All game art by path key, e.g. "Mushrooms/Single/ed0", "Icons/gold": Assets/Resources/Art/Dream/** over Doodle/** over Soft/** over Generated/**.
     // Filled by the editor menu MoreMush/Rebuild Sprite DB (runs automatically after art import).
     [CreateAssetMenu(menuName = "MoreMush/Sprite DB")]
     public class SpriteDB : ScriptableObject

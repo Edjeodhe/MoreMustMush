@@ -1,0 +1,14 @@
+Sprite sheet: a 2x4 grid holding 7 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Tintable effect textures for a dreamy flat watercolor game, painted in PURE WHITE and very light grey watercolor on a fully transparent background (the game tints them with colour). Each fills its own cell, centered, with a soft hand-painted watercolor edge, faint paper grain and slight pigment pooling at the rim; matte, no gloss, no glow halo, no sparkles. A 5-frame flipbook of ONE watercolor impact burst, then a twinkle, a heart-free soft star and a ring of dots. Frames in reading order, same centre and same canvas scale for all five burst frames.
+
+Assets in reading order (left to right, top to bottom):
+1. burst frame 1: a small tight bright splat, a round core with short stubby rays
+2. burst frame 2: the splat opens up, a bigger star-shaped burst with 8 long rounded rays and a few droplets
+3. burst frame 3: the biggest burst, rays stretched far out, the core opening into a ring
+4. burst frame 4: the burst breaks apart into a loose ring of separate rounded blobs and droplets, empty centre
+5. burst frame 5: only a few small scattered droplets remain in a wide loose ring
+6. a soft four-point twinkle star with rounded tips
+7. a ring of eight small round dots
+Leave the remaining 1 cell(s) empty.

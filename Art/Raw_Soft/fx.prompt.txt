@@ -1,0 +1,12 @@
+Sprite sheet: a 2x3 grid holding 5 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Tintable effect textures for a cute watercolor game, painted in PURE WHITE and very light grey watercolor on a fully transparent background (the game tints them with colour). Each fills its own cell, centered, with a soft hand-painted watercolor edge and faint pigment texture. Leave the last cell empty.
+
+Assets in reading order (left to right, top to bottom):
+1. a solid filled round watercolor disc, evenly white with a slightly darker soft pigment rim
+2. a soft round watercolor bloom: bright white center fading smoothly to fully transparent at the edge
+3. a thick round brush-stroke ring (donut), white, with a dry-brush watercolor edge, empty transparent center
+4. a thin round brush-stroke ring, white, light and delicate, empty transparent center
+5. a single tall soft flame tongue, white, rounded bottom and a pointed wavy top, watercolor edges
+Leave the remaining 1 cell(s) empty.

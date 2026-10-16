@@ -178,9 +178,14 @@ namespace MoreMush
 
         void UpdateFx(float h)
         {
-            foreach (var p in parts) { p.t += h; p.x += p.vx * h; p.y += p.vy * h; p.vy += 500 * h; p.vx *= 0.97f; }
+            foreach (var p in parts) { p.t += h; p.x += p.vx * h; p.y += p.vy * h; p.vy += (p.shape == (byte)FxShape.Chip ? 900 : 500) * h; p.vx *= 0.97f; }
             parts.RemoveAll(p => p.t >= p.life);
-            foreach (var tx in texts) { tx.t += h; tx.y -= 50 * h; }
+            foreach (var f in fxs) { f.t += h; f.y -= f.rise * h; f.rot += f.spin * h; }
+            fxs.RemoveAll(f => f.t >= f.dur);
+            barKick = Mathf.Max(0, barKick - h * 4);
+            if (popStopCd > 0) popStopCd -= h;
+            // numbers jump up, slow down and drift aside instead of sliding up at a constant speed
+            foreach (var tx in texts) { tx.t += h; tx.x += tx.vx * h; tx.y += tx.vy * h; tx.vy = Mathf.Min(tx.vy + 300 * h, -20); tx.vx *= 0.94f; }
             texts.RemoveAll(tx => tx.t >= (tx.tier >= 2 ? 1.2f : 0.8f));
             foreach (var l in labels) { l.t += h; l.y -= 25 * h; }
             labels.RemoveAll(l => l.t >= 1.4f);
@@ -244,6 +249,8 @@ namespace MoreMush
                 if (m.grow < 1) m.grow = Mathf.Min(1, m.grow + h / 0.35f);
                 if (m.sporeCd > 0) m.sporeCd -= h;
                 if (m.squish > 0) m.squish = Mathf.Max(0, m.squish - h * 5);
+                m.hitT += h;
+                if (m.hpLag > m.hp && m.hitT > 0.25f) m.hpLag = Math.Max(m.hp, m.hpLag - m.maxHp * h * 1.6);
             }
             if (phase == "run")
             {

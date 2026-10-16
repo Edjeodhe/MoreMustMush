@@ -1,0 +1,22 @@
+Sprite sheet: a 4x4 grid holding 16 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A style sample sheet for a mushroom-harvesting pinball game with a cozy mushroom village: mushrooms, spinning harvester tokens (seen from above), skill icons, currency icons, a critter character and a decoration.
+
+Assets in reading order (left to right, top to bottom):
+1. white button mushroom (Agaricus bisporus): smooth round white cap, short thick white stem
+2. fly agaric (Amanita muscaria): red cap with white warts, white stem with a skirt ring
+3. reishi (Ganoderma lucidum): glossy lacquered red-brown kidney-shaped cap with a yellow rim and side stem
+4. golden chanterelle (Cantharellus cibarius): golden-orange trumpet with wavy rim and ridged false gills
+5. scythe harvester token: a short wooden handle with a curved steel scythe blade, coiled into a round spinning shape
+6. shuriken harvester token: four wide gunmetal blades around a round hub with a red gem in the middle
+7. bell harvester token: a big acorn-shaped brass bell with an acorn-cap top
+8. a shiny gold coin
+9. skill icon chain lightning: a zigzag yellow lightning bolt
+10. skill icon tornado: a mint-green whirlwind
+11. skill icon spore burst: an orange explosion of spores
+12. skill icon clear spore shield: a translucent cyan bubble
+13. mycelite currency: a bumpy purple stone with glowing teal mycelium threads and a tiny mushroom sprout on top
+14. a cute chibi mushroom critter, front view: round cream face/body with big round eyes, small smile, rosy cheeks, little feet, a big orange-red mushroom cap with yellow spots and a little flame on top
+15. tree decoration: a leaf lantern, a glowing lantern made of curled leaves hanging from a short vine
+16. full moon night weather icon: a big glowing full moon

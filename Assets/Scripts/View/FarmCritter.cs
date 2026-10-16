@@ -55,12 +55,16 @@ namespace MoreMush
             }
 
             transform.localPosition = Art.P(p.x, p.y);
+            // a little bigger as the camera pulls back (not fully: the tree must look like it outgrew them)
+            float zs = zsc = Mathf.Pow(FarmView.Zoom, 0.75f);
+            transform.localScale = new Vector3(zs, zs, 1);
             int order = 1000 + Mathf.RoundToInt(p.y);
             body.localPosition = new Vector3(ox / P, -oy / P, 0);
             body.localRotation = Quaternion.Euler(0, 0, -rot * Mathf.Rad2Deg);
             float k = R0 / rig.baseRadius;
             body.localScale = new Vector3(sx * p.face * k, sy * k, 1);
             rig.SetLook(p.id, CharSkinOn(p.id)?.id, hat);
+            rig.motion = p.anim ?? p.state;
             rigGroup.sortingOrder = order;
             if (!rig.gameObject.activeSelf) rig.gameObject.SetActive(true);
             builder.enabled = false;
@@ -117,8 +121,11 @@ namespace MoreMush
                 float a = Mathf.Clamp01(Mathf.Min(1, Mathf.Min(p.sayT * 3, (2.8f - p.sayT) * 8 + 0.2f)));
                 if (shownSay != p.say) { shownSay = p.say; sayText.text = p.say; sayText.ForceMeshUpdate(); }
                 float w = Mathf.Min(420, sayText.preferredWidth * P + 34);
-                float bx = Mathf.Clamp(p.x - w / 2, 10, W - w - 10), by = -R0 * 2 - 78;
-                sayRect = new Rect(bx, p.y + by, w, 50); sayFeetX = p.x; sayFeetY = p.y;
+                // sayRect is in stage px at the critter's scale (it is spread against the other bubbles); clamp it
+                // to the visible stage, which widens with the farm camera
+                float ws = w * zsc, half = W / 2 * FarmView.Zoom;
+                float bx = Mathf.Clamp(p.x - ws / 2, WT.camX - half + 10, WT.camX + half - ws - 10), by = (-R0 * 2 - 78) * zsc;
+                sayRect = new Rect(bx, p.y + by, ws, 50 * zsc); sayFeetX = p.x; sayFeetY = p.y;
                 Art.SlicedPx(sayBack, w, 50);
                 PlaceSay(0, 0);
                 SetA(sayBack, a); SetA(sayTail, a); sayText.alpha = a;
@@ -128,11 +135,13 @@ namespace MoreMush
         }
 
         // 말풍선을 lift(px)만큼 위로 올리고, slot번째 그리기 순서를 준다 (겹쳐도 한 말풍선이 다른 것을 통째로 덮게).
+        float zsc = 1;   // this critter's farm-camera scale (Draw)
+
         public void PlaceSay(float lift, int slot)
         {
-            float cx = sayRect.center.x;
-            say.transform.localPosition = new Vector3((cx - sayFeetX) / P, -(sayRect.y - lift - sayFeetY + 25) / P, 0);
-            sayTail.transform.localPosition = new Vector3((sayFeetX - cx) / P, -33 / P, 0);
+            float cx = sayRect.center.x;   // stage px; the critter root is scaled by zsc, so local offsets divide by it
+            say.transform.localPosition = new Vector3((cx - sayFeetX) / zsc / P, -((sayRect.y - lift - sayFeetY) / zsc + 25) / P, 0);
+            sayTail.transform.localPosition = new Vector3((sayFeetX - cx) / zsc / P, -33 / P, 0);
             int o = SAY_ORDER + slot * 3;
             sayTail.sortingOrder = o - 1; sayBack.sortingOrder = o; if (sayText is TextMeshPro tm) tm.sortingOrder = o + 1;
         }

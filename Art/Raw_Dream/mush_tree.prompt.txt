@@ -1,0 +1,14 @@
+Sprite sheet: a 2x4 grid holding 7 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Seven earlier growth stages of the SAME magical mushroom world-tree as the FIRST attached image (its final, fully grown form). Same soft matte watercolor, big simple chunky rounded shapes, soft warm-brown painted rim, no glow, no gloss. SAME palette as the final form so it stands out from a cool green forest background: warm cinnamon-brown trunk, canopy clumps in golden yellow-green and soft peach-apricot with pale blossom pink, warm olive shading (no blue-teal leaves). Left to right, top row first, smallest to largest; each stage stands on its own small oval grassy base centered at the bottom of its cell, trunk centered. Growth reads by size AND by more and more of the final tree's village objects appearing each stage (each stage keeps everything from the previous one). Leave the last cell empty. No characters or creatures, no text.
+
+Assets in reading order (left to right, top to bottom):
+1. stage 1: a tiny sprout with two round warm-green leaves on a little moss mound with two tiny mushrooms
+2. stage 2: a small sapling with a thin curved trunk, two soft golden-green leaf clumps, a few small flowers and tiny mushrooms at its foot
+3. stage 3: a young tree with three canopy clumps (one peach), two small salmon shelf fungi on the trunk, one hanging paper lantern
+4. stage 4: a medium tree, sturdier trunk, four clumps with a little blossom pink, a small round doorway at the trunk base, three shelf fungi, two lanterns, the first small wooden platform with a tiny ladder
+5. stage 5: a large tree, thick trunk with roots, five clumps, the doorway now has a lantern inside, shelf-fungus steps up the trunk, two platforms with rope railings, a birdhouse, vines and flowers
+6. stage 6: a big tree, layered canopy, three platforms with ladders and little mushroom clusters, hanging lanterns and a few pale-blue crystals, a rope swing, shelves of jars in the trunk opening, a small trickle of water between the roots
+7. stage 7: a grand tree almost like the final one: a small waterfall into a pebble pool, a tiny mushroom cottage at the left foot, all platforms, lanterns, crystals and swing; only the market stall and the crown mushrooms are still missing
+Leave the remaining 1 cell(s) empty.

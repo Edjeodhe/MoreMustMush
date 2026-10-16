@@ -1,0 +1,22 @@
+Sprite sheet: a 4x4 grid holding 16 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, outline weight and lighting.
+A style sample sheet for a cute mushroom-harvesting pinball game seen from a slight top-down 3/4 view: mushrooms, critter characters, weapon tokens and environment objects that will be placed separately on the ground to build a scene with depth.
+
+Assets in reading order (left to right, top to bottom):
+1. white button mushroom (Agaricus bisporus): round white cap, short thick stem
+2. fly agaric (Amanita muscaria): red cap with white warts, white stem with a skirt ring
+3. reishi (Ganoderma lucidum): glossy red-brown kidney-shaped shelf cap with a yellow rim
+4. golden chanterelle: golden-orange trumpet with a wavy rim
+5. a big chunky heap (colony) of many small orange mushrooms on a little mound of soil
+6. cute mushroom critter, front view: round cream body, tiny dot eyes, small smile, pink cheeks, two stubby feet, big orange-red cap with yellow spots and a little flame on top
+7. the same critter design with a sky-blue cap with a water drop on top
+8. a kind old human mushroom-hunter grandpa, chibi, brown hat with a feather, big grey beard, olive coat, scythe on his shoulder
+9. scythe weapon token: round spinning disc made of a curved steel blade around a wooden hub
+10. shuriken weapon token: four rounded grey blades around a red gem hub
+11. a round leafy bush (environment object)
+12. a small round-canopy tree with a short trunk (environment object)
+13. a cluster of two rounded grey-blue rocks with a tuft of grass (environment object)
+14. a cut tree stump with rings on top and a little sprout (environment object)
+15. a small patch of white and yellow flowers with leaves (environment object)
+16. a fallen hollow log with moss (environment object)

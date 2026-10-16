@@ -208,7 +208,7 @@ namespace MoreMush
             foreach (var r in db.Skill)
             {
                 if (!skillEff.TryGetValue(r.Skill_Key, out var eff)) throw new InvalidOperationException($"[DB] Skill 시트의 {r.Skill_Key}: 코드에 효과가 없는 스킬이에요 (Defs.Nodes.cs SkillEffects)");
-                SKILLS[r.Skill_Key] = new Skill { id = r.Skill_Key, nKo = r.Skill_Name, kind = r.Kind, col = r.Color, icon = r.Icon, noRate = r.No_Rate != 0, eff = eff };
+                SKILLS[r.Skill_Key] = new Skill { id = r.Skill_Key, nKo = r.Skill_Name, kind = r.Kind, col = r.Color, icon = SkillIcon(r.Skill_Key, r.Icon), noRate = r.No_Rate != 0, eff = eff };
                 SKILL_IDS.Add(r.Skill_Key);
             }
 

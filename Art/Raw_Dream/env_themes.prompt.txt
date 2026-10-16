@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Scenery objects for a dreamy misty watercolor forest game scene, each drawn alone on its own base so it can be placed separately to build depth. Flat matte watercolor shapes, no outlines, no glow. Same scale family. Region sets for a moonlit night forest, a windy meadow, a beach and old mushroom-town ruins, painted with the same palette and haze as the attached forest set.
+
+Assets in reading order (left to right, top to bottom):
+1. a dark blue-green round tree with tiny softly lit yellow fireflies
+2. a deep teal bush with two small softly lit blue mushrooms
+3. a cluster of softly lit pale-blue mushrooms
+4. a dark blue rounded rock with a softly lit moss patch
+5. a small mushroom-shaped stone lantern with a warm softly lit
+6. a round golden hay bale
+7. a clump of golden wheat stalks
+8. two cheerful sunflowers
+9. a cute scarecrow wearing a mushroom-cap hat
+10. a tiny wooden pinwheel windmill on a post
+11. a short chubby palm tree
+12. a beach rock with a pink seashell and a starfish
+13. a cluster of pink and orange coral
+14. a piece of bleached driftwood with a little seaweed
+15. three seashells on sand
+16. a broken stone pillar with moss
+17. a broken low stone wall chunk with ivy
+18. a crumbling small stone arch with a red mushroom growing on it
+19. a giant red-capped mushroom with white spots growing out of rubble
+20. an old tilted stone lantern
+21. a patch of softly lit magenta flowers
+22. a patch of blue cornflowers and poppies
+23. a tuft of beach grass
+24. a pile of stone rubble
+25. an overgrown bush with ivy over a stone

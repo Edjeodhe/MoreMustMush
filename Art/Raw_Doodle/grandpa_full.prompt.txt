@@ -1,0 +1,7 @@
+Sprite sheet: a 1x1 grid holding 1 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+One full-body HUMAN character (an old man, NOT a mushroom creature: he has a normal human head and face), front three-quarter view, standing, cute chibi proportions (big round head, small body), drawn in the same soft watercolor style and line as the attached references.
+
+Assets in reading order (left to right, top to bottom):
+1. a veteran human mushroom-hunter grandpa with a human face: a round nose, rosy cheeks, bushy grey eyebrows, kind gentle eyes and a smiling mouth under a big braided grey beard; worn brown leather hunting hat with a feather, a braided grey beard, a long olive coat with a fur collar, a bandolier of little spore vials across the chest, a big scythe held in his RIGHT hand (viewer's left) resting on his shoulder, the blade high above his head on the other side, sturdy boots

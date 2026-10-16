@@ -1,0 +1,25 @@
+Sprite sheet: a 5x4 grid holding 18 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Game icons for an upgrade tree and skill bar, readable at 40 px, in the flat matte watercolor style of the attached icon sheet (no outlines, no gloss, no glow, no sparkles). Each icon = ONE big chunky main object that names the effect + at most ONE small modifier symbol from this fixed set: a plus sign (more), two outward arrows (wider / bigger), a bold upward arrow (stronger), a small hourglass (lasts longer), curved motion swirls (faster), a four-leaf clover (chance). Strong value contrast between the object and the modifier, simple big shapes, soft low-saturation palette with one warm accent. The 'harvester' is the round spinning scythe disc token from the attached harvester sheet. Skill icons (effects that trigger during a round).
+
+Assets in reading order (left to right, top to bottom):
+1. ACCELERATE: a harvester disc rushing to the right with three bold speed streaks behind it
+2. SHARPEN: a curved scythe blade resting on a grey whetstone, a tiny bright nick on the edge
+3. SPLIT: one harvester disc dividing into two smaller discs flying apart
+4. CLEAR SPORE SHIELD: a round pale-blue bubble shield with a small leaf inside
+5. SPORE BURST: a puffball mushroom bursting into a round apricot spore cloud
+6. CLONE HARVESTER: a harvester disc with a see-through pale ghost copy offset behind it
+7. MUSHROOM MAGNET: a red horseshoe magnet pulling two tiny mushrooms toward it
+8. CHAIN LIGHTNING: a butter-yellow zigzag bolt jumping between three small mushroom caps
+9. TORNADO: a mint-green whirlwind funnel carrying two leaves
+10. SHOCKWAVE: three expanding curved rings bursting out from a small mushroom at the center
+11. PIERCE: a pointed blade passing straight through two mushrooms in a row
+12. HOMING: a harvester disc following a curved dotted path that ends at a mushroom
+13. EMPOWER: a harvester disc with a bold upward arrow rising from it and warm wavy heat lines
+14. BAR CLONE: a wooden log paddle with a see-through pale ghost copy floating above it
+15. BOUNTIFUL HARVEST: a golden wheat sheaf tied with a red ribbon leaning on a full basket
+16. SPINNING BLADE: a four-point steel blade star with a red hub, motion swirls around it
+17. KID HARVESTER: a small harvester disc with a tiny mushroom-critter cap on top
+18. FOREST DEVICE: a mossy tree stump bumper with a small sprout
+Leave the remaining 2 cell(s) empty.

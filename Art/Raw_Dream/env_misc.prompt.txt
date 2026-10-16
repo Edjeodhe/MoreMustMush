@@ -1,0 +1,18 @@
+Sprite sheet: a 3x4 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Scenery objects for a dreamy misty watercolor forest game scene, each drawn alone on its own base so it can be placed separately to build depth. Flat matte watercolor shapes, no outlines, no glow. Same scale family.
+
+Assets in reading order (left to right, top to bottom):
+1. two rounded mossy rocks with a grass tuft
+2. three small pebbles
+3. a small tuft of grass
+4. a small round pond with a lily pad and reeds
+5. a short old wooden fence segment (two posts, two rails)
+6. a single old wooden fence post
+7. a small patch of light dirt path with two stepping stones
+8. a soft round patch of moss on the ground
+9. a few fallen leaves on the ground
+10. a small fallen twig with two leaves
+11. a pale moth resting (tiny ambient creature)
+12. a small sleepy green frog (tiny ambient creature)
