@@ -219,7 +219,7 @@ namespace MoreMush
                         if (b.stumpT <= 0)
                         {
                             b.stumpT = 0.05f; d.hitT = 0.2f;
-                            AddScore((TIERS[0].score + st.scoreFlat) * ScoreMulFor(null, b) * 5 * st.devMul, d.x, d.y - d.r, 0, false, false);
+                            AddScore((TIERS[0].score + st.scoreFlat) * ScoreMulFor(null, b) * STUMP_SCORE * st.devMul, d.x, d.y - d.r, 0, false, false);
                             Snd.Bumper();
                         }
                     }

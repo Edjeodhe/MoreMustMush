@@ -16,8 +16,9 @@ namespace MoreMush.EditorTools
         // finish: 기간(R104)의 몇 % 지점에서 다 사게 할지 (2시간 ≈ R104)
         // finish 0.85 ≈ R88: 판매 전부 가정이라 덜 파는 플레이어 몫으로 널널하게(사용자 2026-10-08)
         // tierEnds(2회차, 보스 관문 모드): 단계(초반·중반·후반)별 다 사는 판 {_, 20, 88, 172}. 넣으면 스테이지가 아니라 판 단위로 맞춘다(b = tierEnds[3])
+        // order: 다시 맞출 단계. 1단계는 밸런스 3회차에서 가격 사다리를 DB에 고정해 배율 1로 두고 맞추지 않는다(theory R3-20, verify#17)
         // bisect(판 단위 모드 기본): 단계별 이분. false면 예전 감쇠 다시 매기기(TunePricesTiers, 진동함 — round2_fit1). startMul: 단계별 DB 가격 배율 시작값(verify 제안 e)
-        public class Plan { public int a = 1, b = 104, maxIters = 20; public double finish = 0.85, damp = 0.5; public int[] tierEnds; public bool bisect = true; public double[] startMul = { 1, 0.2, 0.44, 3.8 }; public int[] order = { 1, 2, 3 }; }
+        public class Plan { public int a = 1, b = 104, maxIters = 20; public double finish = 0.85, damp = 0.5; public int[] tierEnds; public bool bisect = true; public double[] startMul = { 1, 1, 0.44, 3.8 }; public int[] order = { 2, 3 }; }
         // 판 단위 모드의 단계별 허용: 가장 빠른 시드가 목표 × FINISH_MIN 이후, 가장 느린 시드가 목표 × TIER_LATE 이내에 다 산다
         public const double TIER_LATE = 1.1;
 
@@ -159,7 +160,8 @@ namespace MoreMush.EditorTools
                 if (bad.Count == 0) { Log($"→ 수렴: {Muls(m)}"); break; }
                 if (pass == 3) { Log($"수렴 못 함(단계 {string.Join(",", bad)}): {Muls(m)}를 씀"); break; }
                 // 앞 단계를 다시 맞추면 뒤 단계 줄 가격이 바뀌므로 가장 앞의 나쁜 단계부터 끝까지 다시 본다
-                int first = p.order.First(bad.Contains);
+                int first = p.order.FirstOrDefault(bad.Contains);
+                if (first == 0) { Log($"나쁜 단계({string.Join(",", bad)})가 다시 맞추는 단계({string.Join(",", p.order)})에 없음: {Muls(m)}를 씀"); break; }
                 foreach (int t in p.order.SkipWhile(x => x != first)) { var e = BisectTier(p, seeds, m, t, TIER_STEP2, ok); while (e.MoveNext()) yield return null; }
             }
             BalanceSim.ApplyTierMuls(m);

@@ -80,6 +80,7 @@ namespace MoreMush
             public static double ps_crit2(int L) => V("ps_crit2", L);  // 치명타 배율 ×3 → ×5
             public static double ed_regen(int L) => V("ed_regen", L);
             public static double ed_rare(int L) => V("ed_rare", L);
+            public static double ed_rare0(int L) => V("ed_rare0", L);   // 희귀 포자: 에픽 이상 가중치 배율 (0레벨 0.2 → 3레벨 1.0)
             public static double ed_gold(int L) => V("ed_gold", L);
             public static double ed_trade(int L) => V("ed_trade", L);
             public static double ed_giant(int L) => V("ed_giant", L);
@@ -349,6 +350,7 @@ namespace MoreMush
             E["ed_cols2"] = L => Loc.F("군락지 +{0}개", NF.ed_cols2(L));
             E["ed_price2"] = L => Loc.F("정산 골드 +{0}%", U.JsRound(NF.ed_price2(L) * 100));
             E["ed_rare"] = L => Loc.F("에픽 이상 가중치 {0}", Plus(NF.ed_rare(L)));
+            E["ed_rare0"] = L => Loc.F("에픽 이상 가중치 ×{0}", F(NF.ed_rare0(L)));
             E["ed_size"] = L => Loc.F("군락지당 3~{0}개", NF.ed_size(L));
             // 후반
             E["ed_score3"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score3(L)));

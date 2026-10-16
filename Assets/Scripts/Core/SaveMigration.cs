@@ -6,7 +6,7 @@ namespace MoreMush
     // 세이브 버전 올리기. SaveIO.Load가 Sanitize 끝에서 부르며, 한 버전씩 차례로 올린다.
     public static class SaveMigration
     {
-        public const int CURRENT = 7;
+        public const int CURRENT = 8;
 
         // 이번 로드에서 플레이어에게 알릴 문장 (App.FlushMigrationNotice가 알리고 비운다)
         public static string Notice;
@@ -31,6 +31,7 @@ namespace MoreMush
             if (g.v < 5) ToV5(g);
             if (g.v < 6) ToV6(g);
             if (g.v < 7) ToV7(g);
+            if (g.v < 8) ToV8(g);
             g.v = Math.Max(g.v, CURRENT);
         }
 
@@ -112,6 +113,20 @@ namespace MoreMush
             if (g.rounds <= 0) return;
             g.tut = 3;
             Unlock.OpenAll(g);
+        }
+
+        // v8 (밸런스 3회차): 군락 수·라운드 시간 노드가 4레벨로 늘고 기본값이 줄었다 (군락 12 → 4, 기본 시간 15 → 10초).
+        // 옛 레벨은 효과가 줄지 않는 가장 낮은 새 레벨로 옮긴다: 0·1 → 3, 2·3 → 4. 새로 생긴 희귀 포자는 7스테이지를 넘긴 세이브면 다 산 것으로 (지금과 같은 등급 확률)
+        static readonly int[] V8_LEVEL = { 3, 3, 4, 4 };
+        static void ToV8(SaveData g)
+        {
+            if (g.rounds <= 0) return;
+            foreach (var id in new[] { "ed_cols", "ps_dur" })
+            {
+                g.nodes.TryGetValue(id, out int L);
+                g.nodes[id] = V8_LEVEL[Math.Max(0, Math.Min(V8_LEVEL.Length - 1, L))];
+            }
+            if (g.stage >= 7) g.nodes["ed_rare0"] = 3;
         }
 
         static void ToV6(SaveData g)

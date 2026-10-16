@@ -73,6 +73,8 @@ namespace MoreMush
         });
         // 그루터기에 튕긴 수확기: 공격력 ×(1 + (STUMP_ATK_MUL-1)×숲 장치 강화), STUMP_ATK_DUR초 (다시 맞으면 시간만 갱신)
         public static readonly float STUMP_ATK_MUL = (float)Db.C("STUMP_ATK_MUL"), STUMP_ATK_DUR = (float)Db.C("STUMP_ATK_DUR");   // 전투 기획서 Ver05: 예시 5초
+        // 그루터기에 부딪힐 때 얻는 점수 = 기본 1타 점수 × 이 값 (밸런스 3회차: 5 → 3, 구매 하나로 판 수입 ×2 넘지 않게)
+        public const double STUMP_SCORE = 3;
 
         // ===== 도감 세트 =====
         public class CodexSet
