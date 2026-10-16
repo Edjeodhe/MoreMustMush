@@ -14,6 +14,8 @@ namespace MoreMush
         [ScenePath("World/Round/Field/Decor")] public Transform decor;   // 지역별 테두리 장식 묶음 (자식 이름 = 지역 id, 없으면 forest)
         public Transform deviceRoot, shroomRoot, fxRoot, ballRoot, flyerRoot;
         public SpriteRenderer bar;
+        // 바 그림(UI/bar_log, 수채화 통나무) 전체 높이: 통나무 몸통 ≈ 20px + 위로 솟은 잎, 아래는 같은 만큼 투명 여백 (몸통이 판정 줄 가운데에 온다)
+        const float BAR_VIS_H = 39;
         public SpriteRenderer giantWarn;
         public SpriteRenderer festTint;
         public LineRenderer acornFrame;
@@ -78,6 +80,9 @@ namespace MoreMush
             flyers = new Pool<SpriteRenderer>(flyerPrefab, flyerRoot);
             lines = new Pool<LineRenderer>(linePrefab, fxRoot);
             aimLines = new Pool<LineRenderer>(linePrefab, fxRoot);
+            // 슬라이드 바: 씬에는 옛 그림(ArtArchive)이 걸려 있다. 얇은 바용 9슬라이스 그림(SpriteDB UI/bar_log)으로 바꾼다 (분신 바도 같이)
+            var barSp = SpriteDB.Get("UI/bar_log");
+            if (barSp != null) { bar.sprite = barSp; bar.drawMode = SpriteDrawMode.Sliced; }
             extraBars = new Pool<SpriteRenderer>(bar, bar.transform.parent);
             ringFx = new Pool<SpriteRenderer>(partPrefab, fxRoot);
             // dream watercolor effects (Tools/art sheets fx): without them the old line rings stay
@@ -333,7 +338,7 @@ namespace MoreMush
             float tilt = R.barLen > 0 ? Mathf.Clamp((R.barHitX - R.barX) / (R.barLen / 2), -1, 1) : 0;
             bar.transform.localPosition = Art.P(R.barX, y + BAR_T / 2 + spring * 7);
             bar.transform.localRotation = Quaternion.Euler(0, 0, tilt * spring * 3.5f);
-            bar.size = new Vector2(R.barLen * (1 + spring * 0.04f) / Art.PPU, (BAR_T + 10) * (1 - spring * 0.28f) / Art.PPU);
+            bar.size = new Vector2(R.barLen * (1 + spring * 0.04f) / Art.PPU, BAR_VIS_H * (1 - spring * 0.28f) / Art.PPU);
             float k = Mathf.Min(1, R.feverK);
             if (k > 0.03f)
             {
@@ -347,7 +352,7 @@ namespace MoreMush
             {
                 var s = R.extraBars[i]; var sr = extraBars.Get(i);
                 sr.transform.localPosition = Art.P(s.x, s.y);
-                sr.size = new Vector2(s.len / Art.PPU, (BAR_T + 10) / Art.PPU);
+                sr.size = new Vector2(s.len / Art.PPU, BAR_VIS_H / Art.PPU);
                 sr.sortingOrder = bar.sortingOrder;
                 float blink = s.clone && s.life < 1 ? 0.4f + 0.4f * Mathf.Abs(Mathf.Sin(now * 12)) : 0.8f;
                 sr.color = s.clone ? new Color(0.65f, 0.85f, 1, blink) : new Color(0.9f, 0.8f, 0.65f, 1);

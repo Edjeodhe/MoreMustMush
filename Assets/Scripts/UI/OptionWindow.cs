@@ -101,37 +101,114 @@ namespace MoreMush
         }
 
         public static GameObject Build(Canvas canvas, string name, string title, params (string label, UnityAction action)[] btns)
-        {
-            var dim = new GameObject(name, typeof(RectTransform), typeof(Image));
-            dim.transform.SetParent(canvas.transform, false);
-            Stretch(dim.GetComponent<RectTransform>());
-            dim.GetComponent<Image>().color = new Color(0, 0, 0, 0.6f);
+            => Build(canvas, name, title, null, btns);
 
+        // skins = 버튼마다 그림 (UI/btn_*: btn_wood 기본 · btn_go · btn_danger · btn_orange), null이면 모두 btn_wood
+        public static GameObject Build(Canvas canvas, string name, string title, string[] skins, params (string label, UnityAction action)[] btns)
+        {
+            var dim = Dim(canvas, name);
+
+            // 그림은 Art/Dream/UI (세계수 탭 창과 같은 세트): 창 panel_wood · 짧은 제목은 ribbon 위, 긴 문장(확인 질문)은 창 안 글자 + 덩굴
+            bool ribbon = title.Length <= 12;
             var box = new GameObject("Box", typeof(RectTransform), typeof(Image));
             box.transform.SetParent(dim.transform, false);
-            box.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Max(640, 220 * btns.Length + 60), 320);
-            box.GetComponent<Image>().color = new Color(0.98f, 0.93f, 0.8f);
+            box.GetComponent<RectTransform>().sizeDelta = new Vector2(Mathf.Max(700, 250 * btns.Length + 120), ribbon ? 330 : 380);
+            Skin(box.GetComponent<Image>(), "panel_wood", BOX);
 
-            MakeText(box.transform, "Title", title, new Vector2(0, 60), new Vector2(580, 120), 44);
+            if (ribbon) Ribbon(box.transform, title, new Vector2(0, 165), 560);
+            else
+            {
+                var t = MakeText(box.transform, "Title", title, new Vector2(0, 80), new Vector2(Mathf.Max(580, 250 * btns.Length), 120), 42);
+                t.color = INK;
+                var vine = new GameObject("Vine", typeof(RectTransform), typeof(Image));
+                vine.transform.SetParent(box.transform, false);
+                var vr = vine.GetComponent<RectTransform>(); vr.anchoredPosition = new Vector2(0, 8); vr.sizeDelta = new Vector2(284, 60);
+                var vi = vine.GetComponent<Image>(); Skin(vi, "divider", Color.clear); vi.type = Image.Type.Simple; vi.preserveAspect = true; vi.raycastTarget = false;
+            }
 
             var row = new GameObject("Row", typeof(RectTransform), typeof(HorizontalLayoutGroup));
             row.transform.SetParent(box.transform, false);
             var rr = row.GetComponent<RectTransform>();
-            rr.anchoredPosition = new Vector2(0, -80); rr.sizeDelta = new Vector2(Mathf.Max(580, 220 * btns.Length), 90);
+            rr.anchoredPosition = new Vector2(0, ribbon ? -36 : -95); rr.sizeDelta = new Vector2(Mathf.Max(560, 250 * btns.Length - 20), 104);
             var h = row.GetComponent<HorizontalLayoutGroup>();
-            h.spacing = 24; h.childForceExpandWidth = h.childForceExpandHeight = true;
+            h.spacing = 20; h.childForceExpandWidth = h.childForceExpandHeight = true;
             for (int i = 0; i < btns.Length; i++)
-            {
-                var b = new GameObject("Btn" + i, typeof(RectTransform), typeof(Image), typeof(Button));
-                b.transform.SetParent(row.transform, false);
-                var img = b.GetComponent<Image>();
-                img.color = new Color(0.55f, 0.36f, 0.2f);
-                var btn = b.GetComponent<Button>();
-                btn.targetGraphic = img;
-                btn.onClick.AddListener(btns[i].action);
-                MakeText(b.transform, "Label", btns[i].label, Vector2.zero, Vector2.zero, 36, true);
-            }
+                SkinButton(row.transform, "Btn" + i, btns[i].label, btns[i].action, skins != null && i < skins.Length ? skins[i] : "btn_wood", 34, out _);
             return dim;
+        }
+
+        // ===== 임시 창 그림 (Art/Dream/UI, SpriteDB) — 그림이 없으면 예전 단색 =====
+        internal static readonly Color INK = new Color(0.29f, 0.2f, 0.15f), CREAM = new Color(1f, 0.973f, 0.906f), BOX = new Color(0.98f, 0.93f, 0.8f),
+            OFF_TINT = new Color(0.8f, 0.78f, 0.75f, 0.85f), DEEP_GREEN = new Color(0.12f, 0.25f, 0.09f), DEEP_ORANGE = new Color(0.38f, 0.16f, 0.04f);
+
+        internal static void Skin(Image im, string sprite, Color fallback)
+        {
+            var sp = SpriteDB.Get("UI/" + sprite);
+            if (sp == null) { im.color = fallback; return; }
+            im.sprite = sp; im.color = Color.white;
+            im.type = sp.border.sqrMagnitude > 0 ? Image.Type.Sliced : Image.Type.Simple;
+        }
+
+        // 낮은 칸(줄·버튼)에서 9-slice 둥근 끝이 칸 높이를 다 먹어 뾰족해지지 않게, 테두리를 칸 높이의 share 만큼으로 줄인다
+        internal static void FitBorder(Image im, float height, float share = 0.7f)
+        {
+            if (im == null || im.sprite == null || im.type != Image.Type.Sliced) return;
+            var b = im.sprite.border;
+            im.pixelsPerUnitMultiplier = Mathf.Max(1, (b.y + b.w) / (height * share));
+        }
+
+        // 전체를 덮는 어두운 숲색 막 (뒤 클릭 막기)
+        internal static GameObject Dim(Canvas canvas, string name)
+        {
+            var dim = new GameObject(name, typeof(RectTransform), typeof(Image));
+            dim.transform.SetParent(canvas.transform, false);
+            Stretch(dim.GetComponent<RectTransform>());
+            dim.GetComponent<Image>().color = new Color(0.05f, 0.08f, 0.05f, 0.55f);
+            return dim;
+        }
+
+        // 창 위 끝에 걸친 리본 + 흰 제목 (y = 리본 가운데)
+        internal static TextMeshProUGUI Ribbon(Transform box, string title, Vector2 pos, float width)
+        {
+            var rib = new GameObject("Ribbon", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+            rib.transform.SetParent(box, false);
+            rib.GetComponent<LayoutElement>().ignoreLayout = true;
+            var rr = rib.GetComponent<RectTransform>();
+            rr.anchorMin = rr.anchorMax = new Vector2(0.5f, 0.5f);
+            rr.anchoredPosition = pos; rr.sizeDelta = new Vector2(width, width * 0.3f);
+            var ri = rib.GetComponent<Image>(); Skin(ri, "ribbon", new Color(0.97f, 0.66f, 0.45f)); ri.type = Image.Type.Simple; ri.raycastTarget = false;
+            // 리본 띠 가운데(아래로 처진 양 끝 빼고)에 글자
+            var t = MakeText(rib.transform, "Title", title, new Vector2(0, width * 0.035f), new Vector2(width * 0.62f, width * 0.15f), 40);
+            t.color = Color.white; t.enableAutoSizing = true; t.fontSizeMin = 22; t.fontSizeMax = 40;
+            t.textWrappingMode = TextWrappingModes.NoWrap; t.fontStyle = FontStyles.Bold;
+            return t;
+        }
+
+        // 수채 버튼 글자색 (대비 4.5:1 이상): 나무 = 진한 갈색, 초록·주황 = 같은 계열 진한 색 (크림 글자는 1.8:1이라 흐림), 빨강·파랑 = 크림
+        internal static Button SkinButton(Transform parent, string name, string label, UnityAction action, string sprite, float fontSize, out TextMeshProUGUI text)
+        {
+            var b = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button));
+            b.transform.SetParent(parent, false);
+            var img = b.GetComponent<Image>();
+            Skin(img, sprite, new Color(0.55f, 0.36f, 0.2f));
+            var btn = b.GetComponent<Button>();
+            btn.targetGraphic = img;
+            var cb = btn.colors; cb.disabledColor = OFF_TINT; btn.colors = cb;
+            if (action != null) btn.onClick.AddListener(action);
+            text = MakeText(b.transform, "Label", label, Vector2.zero, Vector2.zero, fontSize, true);
+            // 테두리(9-slice 둥근 끝) 안쪽에서 한 줄, 넘치면 줄인다
+            text.rectTransform.offsetMin = new Vector2(22, 8); text.rectTransform.offsetMax = new Vector2(-22, -10);
+            text.textWrappingMode = TextWrappingModes.NoWrap; text.enableAutoSizing = true; text.fontSizeMin = 18; text.fontSizeMax = fontSize;
+            SkinButtonText(text, sprite);
+            FitBorder(img, 104 * fontSize / 34);
+            return btn;
+        }
+
+        internal static void SkinButtonText(TMP_Text t, string sprite)
+        {
+            if (t == null) return;
+            t.color = sprite == "btn_wood" ? INK : sprite == "btn_go" ? DEEP_GREEN : sprite == "btn_orange" ? DEEP_ORANGE : CREAM;
+            t.fontStyle = sprite == "btn_wood" ? FontStyles.Normal : FontStyles.Bold;
         }
 
         internal static TextMeshProUGUI MakeText(Transform parent, string name, string text, Vector2 pos, Vector2 size, float fontSize, bool stretch = false)

@@ -1,0 +1,2 @@
+{"out":"Marketing/PV/art/wave_fire.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a144aa-c939-7453-99a8-b024b367b70d\\exec-fea09af9-2468-46d8-a03a-898d6344d406.png","rgba":true}
+WAVEDONE

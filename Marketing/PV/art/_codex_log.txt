@@ -1,0 +1,8 @@
+{"out":"Marketing/PV/art/card_wash.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a14499-675f-7251-be9a-d48ba2b7e7e0\\exec-c033aec4-d588-48b9-b6a0-0150cb739183.png","rgba":false}
+{"out":"Marketing/PV/art/boss_scene.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a1449a-291b-7953-abcf-3c0f23992910\\exec-661557bf-93e6-45c1-b82a-e53f269a3ab6.png","rgba":false}
+{"out":"Marketing/PV/art/mech_bounce.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a1449b-d0e8-7113-a7aa-80066315f9b0\\exec-9c0acff8-b8d1-4c2e-8e8c-dad58e8f5c50.png","rgba":true}
+ALLDONE
+{"out":"Marketing/PV/art/boss_scene.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a1449d-2266-7f80-8594-6d36d6bc2400\\exec-0b11823e-3765-4cf1-bb4b-242c68dd11b2.png","rgba":false}
+BOSS2DONE
+{"out":"Marketing/PV/art/friends_group.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a1449e-9cdc-7f81-9e7a-d16242d8261a\\exec-d2b5c6b3-d754-4af4-aa79-70b989c4d3a4.png","rgba":true}
+FRIENDSDONE

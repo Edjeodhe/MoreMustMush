@@ -13,6 +13,8 @@ namespace MoreMush.EditorTools
     public static class DreamUiSkin
     {
         static readonly Color INK = Hex("#4a3426"), CREAM = Hex("#fff8e7"), LINE = Hex("#8b6b4e80");
+        // 초록(btn_go)·주황(btn_orange) 위 크림 글자는 대비 1.8:1이라 흐리다 → 같은 계열 진한 글자 (6:1 이상, TempDialog.SkinButtonText와 같은 색)
+        static readonly Color GREEN_INK = Hex("#1f4017"), ORANGE_INK = Hex("#61290a");
 
         // 경로 = 캔버스부터 이름 경로, 끝이 '*'이면 그 앞으로 시작하는 모든 것. 위에서부터 처음 맞는 규칙 하나만 쓴다
         class Rule
@@ -30,7 +32,7 @@ namespace MoreMush.EditorTools
                 R("Canvas/Menu_BG", "Backgrounds/bg_title"),
                 R("Canvas/Menu_BG/Panel", "UI/btn_round"),
                 R("Canvas/Menu_BG/Panel/Button_Lang", "Icons/lang", aspect: true),
-                R("Canvas/Button_Start", "UI/btn_go", CREAM, fs: 44),
+                R("Canvas/Button_Start", "UI/btn_go", GREEN_INK, fs: 44),
                 R("Canvas/Button_Reset", "UI/btn_danger", CREAM, fs: 36),
                 R("Canvas/Button_Option", "UI/btn_wood", INK, fs: 36),
                 R("Canvas/Button_Exit", "UI/btn_wood", INK, fs: 36),
@@ -45,15 +47,15 @@ namespace MoreMush.EditorTools
                 R("Canvas/MainBG/Panel", "UI/btn_round"),
                 R("Canvas/MainBG/Panel/Button_Lang", "Icons/lang", aspect: true),
                 R("Canvas/MainBG/Stage_Image", "UI/panel_wood", INK),
-                R("Canvas/MainBG/Stage_Image/Button_StageStart", "UI/btn_go", CREAM),
+                R("Canvas/MainBG/Stage_Image/Button_StageStart", "UI/btn_go", GREEN_INK),
                 R("Canvas/MainBG/Button_Harvesters", "UI/btn_wood", INK),
                 R("Canvas/MainBG/Button_MushDex", "UI/btn_wood", INK),
                 R("Canvas/MainBG/Button_MushTree", "UI/btn_wood", INK),
                 R("Canvas/Harvesters/Exit", "UI/btn_close", aspect: true),
                 R("Canvas/Harvesters/Harvesters (*/Panel (1)", "UI/panel_mint", INK),
                 R("Canvas/Harvesters/Harvesters (*/Panel", "UI/Dex/tag_wood", INK),
-                R("Canvas/Harvesters/Harvesters (*/Button_Buy", "UI/btn_go", CREAM),
-                R("Canvas/Harvesters/Harvesters (*/Button_Upg", "UI/btn_orange", CREAM),
+                R("Canvas/Harvesters/Harvesters (*/Button_Buy", "UI/btn_go", GREEN_INK),
+                R("Canvas/Harvesters/Harvesters (*/Button_Upg", "UI/btn_orange", ORANGE_INK),
                 R("Canvas/Harvesters/Harvesters (*/Image", null),   // 수확기 그림은 코드가 넣는다
                 R("Canvas/Harvesters/Harvesters (*", "UI/panel_paper", INK),
                 R("Canvas/Harvesters", "UI/panel_wood"),
@@ -71,7 +73,7 @@ namespace MoreMush.EditorTools
                 R("Canvas/MushDex/Image", "UI/Dex/dex_page", INK),
                 R("Canvas/MushDex", "UI/Dex/dex_window"),
                 R("Canvas/TreeTooltip", "UI/panel_paper"),
-                R("Canvas/Quset", "UI/btn_orange", CREAM),
+                R("Canvas/Quset", "UI/btn_orange", ORANGE_INK),
             },
             ["OutGame"] = new[]
             {
@@ -267,7 +269,9 @@ namespace MoreMush.EditorTools
                     float fs = t.fontSize, h = Mathf.Round(fs * (label ? FIT_H_LABEL : FIT_H));
                     var size = new Vector2(Mathf.Round(Mathf.Max(w + fs * FIT_PAD * 2, h * FIT_MIN_W)), h);
                     // 이름 라벨은 코드가 카드마다 다른 이름을 넣으므로 글자 대신 카드 폭에 맞춘 일정한 띠 (넘치면 TextFit이 줄인다)
-                    if (label) size.x = Mathf.Round(((RectTransform)b.transform.parent).rect.width * LABEL_W);
+                    // (카드·라벨에 가로 배율이 걸려 있어도 화면 폭 기준 80%가 되게 배율 비로 나눈다)
+                    if (label) size.x = Mathf.Round(((RectTransform)b.transform.parent).rect.width * LABEL_W
+                        * b.transform.parent.lossyScale.x / Mathf.Max(1e-6f, b.transform.lossyScale.x));
                     if (!groups.TryGetValue((b.transform.parent, label), out var g)) groups[(b.transform.parent, label)] = g = new List<(RectTransform, Vector2)>();
                     g.Add(((RectTransform)b.transform, size));
                 }

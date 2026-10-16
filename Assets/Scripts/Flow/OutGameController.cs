@@ -18,6 +18,7 @@ namespace MoreMush
     //     균사석을 쓰는 일은 한 번 눌러 값을 보여 주고, 3초 안에 다시 누르면 한다
     //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 → 세계수 탭 창(FarmTabWindow, 배치된 FarmTabPanel 또는 임시 창). 같은 탭을 다시 누르면 닫힘
     //   Workshop_Panel = 꼬마 공방 (WorkshopPanel 참고). 배치돼 있으면 공방 탭은 세계수 탭 창 대신 이 창을 연다
+    //   Button_Back = MainGame으로 돌아가기. 배치돼 있지 않으면 왼쪽 아래에 임시 나무 화살표 팻말(UI/sign_arrow)을 만든다
     // 세계수 월드(FarmView)는 씬에 있으면 연다. Esc = MainGame으로.
     public class OutGameController : MonoBehaviour
     {
@@ -43,6 +44,7 @@ namespace MoreMush
         static readonly Color SILHOUETTE = new Color(0.08f, 0.09f, 0.14f, 0.85f);
         OptionWindow optionWin;   // Esc = 옵션 창 (돌아가기 버튼 포함). MainGame으로 돌아가는 버튼이 배치되기 전까지 여기서 돌아간다
         float tickT;
+        TMP_Text backLabel;       // 돌아가기 팻말 글자 (언어가 바뀌면 다시 쓴다)
 
         void Awake()
         {
@@ -62,7 +64,7 @@ namespace MoreMush
             if (unfold != null)
             {
                 foreach (Transform c in unfold.transform)
-                    if (c.TryGetComponent<Image>(out var img)) kidSlots.Add(img);
+                    if (c.TryGetComponent<Image>(out var img)) { img.preserveAspect = true; kidSlots.Add(img); }   // 정령 그림은 가로세로 비가 제각각(0.6~1.2) → 칸에 늘리지 않고 비율대로
                 kidSlots.Sort((a, b) => Order(a.transform, b.transform, true));
                 foreach (var s in kidSlots) kidBlank.Add(s.sprite);
                 for (int i = 0; i < kidSlots.Count; i++) { int k = i; Clickable(kidSlots[i].gameObject, () => KidSlot(k)); }
@@ -82,6 +84,38 @@ namespace MoreMush
             tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
                 new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
+            BackButton(scene);
+        }
+
+        // 화면에 보이는 돌아가기 버튼. 배치된 Button_Back(옵션 창 밖)이 있으면 그것을, 없으면 왼쪽 아래 나무 화살표 팻말을 만든다
+        void BackButton(UnityEngine.SceneManagement.Scene scene)
+        {
+            var canvas = TempDialog.RootCanvas(scene);
+            if (canvas == null) return;
+            foreach (var b in canvas.GetComponentsInChildren<Button>(true))
+                if (b.name == "Button_Back" && (optionWin?.Root == null || !b.transform.IsChildOf(optionWin.Root.transform)))
+                { SceneUI.Bind(b.transform, ToMainGame); backLabel = SceneUI.TextIn(b.transform); return; }
+
+            var go = new GameObject("Button_Back", typeof(RectTransform), typeof(Image), typeof(Button));
+            var rt = (RectTransform)go.transform;
+            rt.SetParent(canvas.transform, false);
+            rt.SetSiblingIndex(0);   // 창·팝업보다 뒤 (열린 창이 덮는다)
+            rt.anchorMin = rt.anchorMax = rt.pivot = Vector2.zero;
+            rt.anchoredPosition = new Vector2(36, 32); rt.sizeDelta = new Vector2(250, 168);   // sign_arrow 220×148 비율
+            // 팻말 그림은 왼쪽을 가리키게 뒤집은 자식에 (글자는 뒤집지 않는다)
+            go.GetComponent<Image>().color = Color.clear;
+            var sign = new GameObject("Sign", typeof(RectTransform), typeof(Image));
+            var sr = (RectTransform)sign.transform; sr.SetParent(rt, false); TempDialog.Stretch(sr);
+            sr.localScale = new Vector3(-1, 1, 1);
+            var si = sign.GetComponent<Image>(); TempDialog.Skin(si, "sign_arrow", new Color(0.55f, 0.36f, 0.2f)); si.type = Image.Type.Simple; si.raycastTarget = false;
+            var btn = go.GetComponent<Button>(); btn.targetGraphic = si;
+            btn.onClick.AddListener(ToMainGame);
+            // 글자는 화살표 머리(왼쪽)를 빼고 판자 몸통 위에. 진한 나무 위 크림 글자 (대비 5:1 이상)
+            backLabel = TempDialog.MakeText(rt, "Label", Loc.T("돌아가기"), Vector2.zero, Vector2.zero, 34, true);
+            var lr = backLabel.rectTransform; lr.offsetMin = new Vector2(76, 46); lr.offsetMax = new Vector2(-22, -40);
+            backLabel.color = TempDialog.CREAM; backLabel.fontStyle = FontStyles.Bold;
+            backLabel.enableAutoSizing = true; backLabel.fontSizeMin = 18; backLabel.fontSizeMax = 34;
+            backLabel.textWrappingMode = TextWrappingModes.NoWrap;
         }
 
         void Start()
@@ -117,6 +151,7 @@ namespace MoreMush
             RenderKids();
             RenderTabs();
             tabWin?.Refresh();
+            UIUtil.SetText(backLabel, Loc.T("돌아가기"));
         }
 
         void RenderBag()
@@ -135,7 +170,7 @@ namespace MoreMush
             {
                 string id = i < CRITTER_JOIN.Length ? CRITTER_JOIN[i] : null;
                 bool shown = id != null && (HasSpecial(id) || KidOpen(id));
-                var s = shown ? (SpriteDB.Get($"Characters/Kids/{id}") ?? SpriteDB.Get($"Characters/Critters/{id}_ref")) : null;
+                var s = shown ? UIUtil.KidPortrait(id) : null;
                 kidSlots[i].sprite = s != null ? s : kidBlank[i];
                 kidSlots[i].color = s != null && !HasSpecial(id) ? SILHOUETTE : Color.white;
             }

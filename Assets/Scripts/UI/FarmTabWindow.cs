@@ -81,7 +81,7 @@ namespace MoreMush
 
         // ===== 임시 창 (배치 전): 화면 오른쪽 큰 상자 · 제목 · 스크롤 목록 · 닫기 =====
         // 그림은 Art/Dream/UI (OutGame에 배치된 것과 같은 세트): 창틀 panel_wood · 제목 ribbon · 줄 panel_paper/mint/accent · 버튼 btn_go/orange/wood · 닫기 btn_close
-        static readonly Color INK = new Color(0.29f, 0.2f, 0.15f), BTN_TEXT = Color.white, OFF_TINT = new Color(0.8f, 0.78f, 0.75f, 0.85f);
+        static readonly Color INK = new Color(0.29f, 0.2f, 0.15f), OFF_TINT = new Color(0.8f, 0.78f, 0.75f, 0.85f);
         static Sprite UI(string n) => SpriteDB.Get("UI/" + n);
         // 세계수 창 아이콘 (icons_farm 시트: f_*). 아직 없으면 비슷한 기존 아이콘
         static Sprite Ico(string name, string fallback) => SpriteDB.Icon(name) ?? SpriteDB.Icon(fallback) ?? UI(fallback);
@@ -95,11 +95,12 @@ namespace MoreMush
             return t;
         }
 
-        // 한국어·영어 = 배치한 UI와 같은 폰트 (ONEMobilePOP). 그 밖의 언어는 POP에 글자가 없어 대체 폰트로 빌려 오면 자간이 벌어지니 그 언어 본문 폰트를 바로 쓴다
+        // 한국어·영어 = 배치한 UI와 같은 폰트 (ONEMobilePOP). 그 밖의 언어는 POP에 글자가 없어 대체 폰트로 빌려 오면 자간이 벌어지니 그 언어 폰트(POP = 제목 역할)를 바로 쓴다
         static void LangFont(TMP_Text t)
         {
             if (t == null) return;
-            var f = LocFonts.KoEnLang(Loc.Lang) ? style?.font : LocFonts.I?.FaceFor(Loc.Lang, LocFonts.Role.Body)?.font ?? style?.font;
+            var lf = LocFonts.I;
+            var f = LocFonts.KoEnLang(Loc.Lang) || lf == null ? style?.font : lf.FaceFor(Loc.Lang, lf.KoEnRole(style?.font))?.font ?? style?.font;
             if (f != null && t.font != f) { t.font = f; t.fontSharedMaterial = f.material; }
         }
         static void Skin(Image im, string sprite, Color fallback)
@@ -173,13 +174,15 @@ namespace MoreMush
             var b = new GameObject(name, typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
             b.transform.SetParent(parent, false);
             var img = b.GetComponent<Image>();
-            Skin(img, on ? (kind == "gem" ? "btn_orange" : kind == "wood" ? "btn_wood" : "btn_go") : "btn_wood", new Color(0.55f, 0.36f, 0.2f));
+            string sp = on ? (kind == "gem" ? "btn_orange" : kind == "wood" ? "btn_wood" : "btn_go") : "btn_wood";
+            Skin(img, sp, new Color(0.55f, 0.36f, 0.2f));
             var btn = b.GetComponent<Button>(); btn.targetGraphic = img; if (action != null) btn.onClick.AddListener(action);
             var cb = btn.colors; cb.disabledColor = OFF_TINT; btn.colors = cb;
             btn.interactable = on;
             var text = Txt(b.transform, "Label", label, Vector2.zero, Vector2.zero, 28, true);
             var tr = text.rectTransform; tr.offsetMin = new Vector2(14, 6); tr.offsetMax = new Vector2(-14, -8);
-            text.color = on && kind != "wood" ? BTN_TEXT : INK; text.enableAutoSizing = true; text.fontSizeMin = 16; text.fontSizeMax = 28;
+            TempDialog.SkinButtonText(text, sp);   // 초록·주황 위 흰 글자는 대비가 낮아 진한 같은 계열 색
+            text.enableAutoSizing = true; text.fontSizeMin = 16; text.fontSizeMax = 28;
             if (!on) text.alpha = 0.6f;
             return b;
         }
@@ -403,7 +406,7 @@ namespace MoreMush
             foreach (var k in KIDS)
             {
                 var sp = SPC[k.id];
-                var icon = SpriteDB.Get("Characters/Kids/" + k.id) ?? SpriteDB.Get("Characters/Critters/" + k.id + "_ref");
+                var icon = UIUtil.KidPortrait(k.id);   // 세계수에 보이는 지금 진화 모습
                 if (!HasSpecial(k.id))
                 {
                     if (!KidOpen(k.id)) { Line(Gray(Loc.F("<b>{0}</b>  세계수 {1}단계 해금", sp.n, JoinLv(k.id))), SpriteDB.Icon("lock"), BG_OFF); continue; }

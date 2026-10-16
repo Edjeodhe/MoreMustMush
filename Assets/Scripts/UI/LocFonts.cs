@@ -20,9 +20,14 @@ namespace MoreMush
 
         public Set[] sets = new Set[0];
 
-        [Tooltip("세트 밖이지만 배치한 UI가 쓰는 한·영 전용 폰트 (ONEMobilePOP 등). 한국어·영어에서는 그대로 두고, 그 밖의 언어에서는 그 언어 본문 폰트로 바꾼다 (TextLangFont)")]
+        [Tooltip("세트 밖이지만 배치한 UI가 쓰는 한·영 전용 폰트 (ONEMobilePOP 등). 한국어·영어에서는 그대로 두고, 그 밖의 언어에서는 그 언어 폰트(koEnTitleFonts면 제목, 아니면 본문)로 바꾼다 (TextLangFont)")]
         public TMP_FontAsset[] koEnFonts = new TMP_FontAsset[0];
+        [Tooltip("koEnFonts 가운데 다른 언어에서 제목 폰트(둥글고 굵은 글꼴)로 바꿀 것 (ONEMobilePOP). 나머지는 본문 폰트로")]
+        public TMP_FontAsset[] koEnTitleFonts = new TMP_FontAsset[0];
         public static bool KoEnLang(string lang) => lang == "ko" || lang == "en";
+        public Role KoEnRole(TMP_FontAsset f) => Array.IndexOf(koEnTitleFonts, f) >= 0 ? Role.Title : Role.Body;
+        // 머티리얼 이름 끝(… Outline Dark 등)으로 본 프리셋 순번 (−1 = 프리셋 아님)
+        public static int PresetOfName(Material m) => m == null ? -1 : Array.FindIndex(PRESETS, p => m.name.EndsWith(p));
 
         static LocFonts inst;
         public static LocFonts I => inst != null ? inst : inst = Resources.Load<LocFonts>("Loc/LocFonts");

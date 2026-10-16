@@ -24,11 +24,12 @@ namespace MoreMush.EditorTools
         static readonly (string lang, string title, string body)[] FONT_SETS =
         {
             // 2026-10-15 5차 몽환 수채화(그림책) 세트 (모두 OFL): 부드러운 세리프 제목 + 둥근 본문
-            ("ko", "GowunBatang-Bold", "GowunDodum-Regular"),
-            ("en", "Lora-Bold", "Nunito-SemiBold"),
-            ("ja", "KiwiMaru-Medium", "ZenMaruGothic-Medium"),
-            ("ru", "Lora-Bold", "Nunito-SemiBold"),     // 키릴 문자 있음
-            ("uk", "Lora-Bold", "Nunito-SemiBold"),     // 키릴 + ІЇЄҐ 모두 있음
+            // 2026-10-16 외국어 제목은 한국어 화면(Jua·ONEMobilePOP)처럼 둥글고 굵은 글꼴로 (세리프 Lora·KiwiMaru에서 바꿈)
+            ("ko", "Jua-Regular", "GowunDodum-Regular"),     // 2026-10-16 한국어 제목도 Jua (세리프 GowunBatang에서 바꿈)
+            ("en", "Jua-Regular", "Nunito-SemiBold"),                   // Jua에 라틴 글자 있음 (°·×…→ 등 기호만 대체 폰트)
+            ("ja", "MPLUSRounded1c-ExtraBold", "ZenMaruGothic-Medium"), // 가나·한자 다 있음 (鍮 하나만 본문 폰트로)
+            ("ru", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 문자 있음
+            ("uk", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 + ІЇЄҐ 모두 있음
         };
         // 어느 폰트에도 없는 글자가 나오면 이 폰트로 넘긴다 (한글·가나·한자·기호를 모두 가진 폰트)
         const string UniversalFallback = "ONEMobileRegular";

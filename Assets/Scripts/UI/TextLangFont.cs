@@ -6,7 +6,8 @@ namespace MoreMush
 {
     // 배치한 글자(LocText가 없는 TMP)도 언어에 맞는 폰트로 바꾼다. TextFit.ApplyScene이 씬마다 등록한다.
     // 대상은 LocFonts 세트에 들어 있는 폰트로 배치한 글자, 그리고 LocFonts.koEnFonts(ONEMobilePOP 등 한·영 전용 UI 폰트)로 배치한 글자
-    // — 그 밖의 세트 밖 폰트(장식용 등)는 배치한 그대로 둔다. koEnFonts 글자는 한국어·영어에선 그대로, 다른 언어에선 그 언어 본문 폰트로.
+    // — 그 밖의 세트 밖 폰트(장식용 등)는 배치한 그대로 둔다. koEnFonts 글자는 한국어·영어에선 그대로, 다른 언어에선 그 언어 제목 폰트(koEnTitleFonts) 또는 본문 폰트로
+    //   (외곽선 프리셋은 머티리얼 이름 끝으로 이어받는다).
     //   그 언어 세트의 폰트가 배치한 폰트와 같으면 배치한 폰트·머티리얼 그대로
     //   다르면 그 언어 폰트로 바꾸고, 머티리얼은 LocFonts 프리셋 순번을 이어받는다 (프리셋이 아니면 그 폰트 기본)
     public static class TextLangFont
@@ -55,7 +56,7 @@ namespace MoreMush
             }
             if (System.Array.IndexOf(lf.koEnFonts, t.font) >= 0)
             {
-                e = new Entry { text = t, font = t.font, mat = t.fontSharedMaterial, role = LocFonts.Role.Body, preset = -1, koEn = true };
+                e = new Entry { text = t, font = t.font, mat = t.fontSharedMaterial, role = lf.KoEnRole(t.font), preset = LocFonts.PresetOfName(t.fontSharedMaterial), koEn = true };
                 return true;
             }
             return false;   // 세트 밖 폰트 (장식용 등)

@@ -67,7 +67,8 @@ namespace MoreMush
         public static readonly double[] TIER_VALUE = { 1, 3, 10, 40 };   // 공물·선물 가치 = 등급 판매 기본가
 
         // ===== 나무버섯 · 구역 =====
-        // time 자라는 시간(초) · gold·gem 수확 1개 · from 등장 단계 · icon 그림(Farm/Tree/fruit_*) · tint 색
+        // time 자라는 시간(초) · gold·gem 수확 1개 · from 등장 단계 · icon 그림(SpriteDB 키, 나무에 붙어 자라는 실제 종) · tint 색
+        // (예전 Farm/Tree/fruit_*는 흙더미 위 버섯 무리라 나무 가지에 어울리지 않았다)
         public class TreeMush
         {
             public string id, icon, tint; public int tier, from, gem; public double gold; public float time;
@@ -76,10 +77,10 @@ namespace MoreMush
         }
         public static readonly TreeMush[] TREE_MUSH =
         {
-            new TreeMush { id = "shelf", n = "선반 나무버섯", tier = 0, time = 60, gold = 50, from = 1, icon = "fruit_ed", tint = "#ffffff" },
-            new TreeMush { id = "bundle", n = "다발 나무버섯", tier = 1, time = 300, gold = 200, from = 2, icon = "fruit_md", tint = "#ffffff" },
-            new TreeMush { id = "glow", n = "발광 나무버섯", tier = 2, time = 1800, gold = 300, gem = 1, from = 4, icon = "fruit_ps", tint = "#b8f0ff" },
-            new TreeMush { id = "golden", n = "황금 나무버섯", tier = 3, time = 10800, gold = 1000, gem = 5, from = 6, icon = "fruit_ed", tint = "#ffd23a" },
+            new TreeMush { id = "shelf", n = "선반 나무버섯", tier = 0, time = 60, gold = 50, from = 1, icon = "Mushrooms/Single/md11", tint = "#ffffff" },   // 잔나비걸상버섯 (선반)
+            new TreeMush { id = "bundle", n = "다발 나무버섯", tier = 1, time = 300, gold = 200, from = 2, icon = "Mushrooms/Single/ed13", tint = "#ffffff" },   // 만가닥버섯 (다발)
+            new TreeMush { id = "glow", n = "발광 나무버섯", tier = 2, time = 1800, gold = 300, gem = 1, from = 4, icon = "Mushrooms/Single/ps14", tint = "#d2ffe6" },   // 화경버섯 (나무에서 초록빛으로 빛남)
+            new TreeMush { id = "golden", n = "황금 나무버섯", tier = 3, time = 10800, gold = 1000, gem = 5, from = 6, icon = "Mushrooms/Single/ed9", tint = "#fff3c4" },    // 덕다리버섯 (나무에 붙는 노란 선반)
         };
         public static readonly Dictionary<string, TreeMush> TMUSH = TREE_MUSH.ToDictionary(m => m.id);
         public const double GOLDEN_IN_CROWN = 0.05;              // 수관 발광 자리에 황금 나무버섯이 돋을 확률

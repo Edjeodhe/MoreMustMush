@@ -107,6 +107,7 @@ namespace MoreMush
                     // 장착한 스킨이 있으면 그 그림 (스킨을 바꾸면 다음에 그릴 때 따라온다)
                     var skin = HvSkinOn(id);
                     icon.sprite = (skin != null ? SpriteDB.Get("Harvesters/" + skin.id) : null) ?? SpriteDB.Get("Harvesters/" + id) ?? SpriteDB.Get("Harvesters/" + BallView.HvLook(id));
+                    icon.preserveAspect = true;   // 스킨 그림은 정사각이 아닌 것도 있다 (0.86~1.12)
                     icon.color = S > 0 ? Color.white : new Color(1, 1, 1, 0.55f);
                 }
                 // 이름 칸은 짧아서 이름만. 별·미보유는 설명 첫 줄에

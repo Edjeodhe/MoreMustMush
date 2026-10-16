@@ -101,7 +101,7 @@ namespace MoreMush
             if (resetConfirm != null) return resetConfirm;
             var canvas = TempDialog.RootCanvas(gameObject.scene);
             if (canvas == null) { Debug.LogWarning("[MainMenu] 캔버스가 없어 확인 창을 만들 수 없어요"); return null; }
-            resetConfirm = TempDialog.Build(canvas, "ResetConfirm", Loc.T("정말 초기화하시겠습니까?"),
+            resetConfirm = TempDialog.Build(canvas, "ResetConfirm", Loc.T("정말 초기화하시겠습니까?"), new[] { "btn_danger", "btn_wood" },
                 (Loc.T("예"), OnResetYes), (Loc.T("아니오"), CloseAll));
             return resetConfirm;
         }
