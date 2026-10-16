@@ -203,6 +203,79 @@ def kid(k):
     s = 360 / math.sqrt(im.width * im.height)   # 그림마다 크기가 달라 넓이로 맞춘다
     return im.resize((int(im.width * s), int(im.height * s)), Image.LANCZOS)
 
+# ---------- 손 흔드는 정령 (게임 리그 Resources/Rig/evo_rig.json ★2를 그대로 조립) ----------
+PPU = 100   # 부품 그림 Pixels Per Unit (리그 좌표 1 = 100px)
+@functools.lru_cache(None)
+def evo_look(kind, form=2):
+    import json
+    d = json.load(open(P('Assets', 'Resources', 'Rig', 'evo_rig.json'), encoding='utf-8'))
+    return next(l for l in d['looks'] if l['kind'] == kind and l['form'] == form)
+
+def evo_part(name):
+    p = os.path.join(DREAM, 'Characters', 'Evo', name + '.png')
+    return img(p) if name and os.path.exists(p) else None
+
+def _put(layer, sp, x, y, rot=0.0, flip=False):
+    """부품을 리그 좌표 (x, y) 중심에 (layer = 큰 캔버스, 원점은 발바닥 가운데)"""
+    if sp is None: return
+    if flip: sp = sp.transpose(Image.FLIP_LEFT_RIGHT)
+    if rot: sp = sp.rotate(rot, Image.BICUBIC, expand=True)
+    ox, oy = layer.width / 2, layer.height * 0.85
+    _paste_clip(layer, sp, int(ox + x * PPU - sp.width / 2), int(oy - y * PPU - sp.height / 2))
+
+def _rot(v, deg):
+    a = math.radians(deg); c, s = math.cos(a), math.sin(a)
+    return (v[0] * c - v[1] * s, v[0] * s + v[1] * c)
+
+def _arm(layer, l, side, raise_deg, elbow_deg, k=1.0, out=0.0):
+    """side 0 = 보는 쪽 왼팔, 1 = 오른팔(왼팔을 뒤집음). raise: 바깥으로 드는 각도, elbow: 팔꿈치 접는 각도
+    k: 팔 부품 확대 (흔드는 팔이 머리카락 밖으로 나오게), out: 어깨를 바깥으로 더 뺄 거리(리그 단위)"""
+    sx = 1 if side == 0 else -1
+    sh = l['shoulderL']; sh = ((sh[0] - out) * sx, sh[1])
+    up, lo = evo_part(l['armUp']), evo_part(l['armLo'])
+    if k != 1.0:
+        up = up.resize((int(up.width * k), int(up.height * k)), Image.BICUBIC)
+        lo = lo.resize((int(lo.width * k), int(lo.height * k)), Image.BICUBIC)
+    cen, elb = (l['armCenter'][0] * k, l['armCenter'][1] * k), (l['armElbow'][0] * k, l['armElbow'][1] * k)
+    r1 = -raise_deg * sx           # 게임과 같은 회전 (왼팔은 시계 방향으로 들면 바깥)
+    c1 = _rot((cen[0] * sx, cen[1]), r1)
+    _put(layer, up, sh[0] + c1[0], sh[1] + c1[1], r1, flip=side == 1)
+    e = _rot((elb[0] * sx, elb[1]), r1)
+    r2 = -(raise_deg + elbow_deg) * sx   # 팔꿈치도 같은 쪽으로 더 들어 아래팔이 위를 향하게
+    c2 = _rot(((cen[0] - elb[0]) * sx, cen[1] - elb[1]), r2)
+    _put(layer, lo, sh[0] + e[0] + c2[0], sh[1] + e[1] + c2[1], r2, flip=side == 1)
+
+@functools.lru_cache(maxsize=256)
+def kid_wave_frame(kind, q):
+    """q = 손 흔들기 위상 (0..1 을 16칸으로 반올림해 캐시). 오른팔을 들어 흔들고 머리는 살짝 갸웃"""
+    l = evo_look(kind)
+    layer = Image.new('RGBA', (900, 900), (0, 0, 0, 0))
+    sw = math.sin(q * 2 * math.pi)
+    tilt = 4 * sw
+    neck = l['neck']
+    _put(layer, evo_part(l['hair']), l['hairPos'][0], l['hairPos'][1], tilt)
+    for side in (0, 1):
+        _put(layer, evo_part(l['leg']), l['hipL'][0] * (1 if side == 0 else -1) + l['legCenter'][0], l['hipL'][1] + l['legCenter'][1], 0, flip=side == 1)
+    _put(layer, evo_part(l['body']['sprite']), l['body']['x'], l['body']['y'])
+    hx, hy = _rot((l['head']['x'] - neck[0], l['head']['y'] - neck[1]), tilt)
+    head = evo_part(l['head']['sprite'])
+    _put(layer, head, neck[0] + hx, neck[1] + hy, tilt)
+    _put(layer, evo_part(l['face'] + 'normal'), neck[0] + hx, neck[1] + hy, tilt)
+    _arm(layer, l, 0, 12, 0, 1.2)                     # 왼팔은 내린 채
+    # 오른팔: 리그 팔이 짧아 머리카락에 묻히므로 1.4배로 키우고 어깨를 조금 빼서, 위팔은 옆으로 뻗고 아래팔을 세워 좌우로 흔든다
+    _arm(layer, l, 1, 96 + 4 * sw, 52 + 20 * sw, 1.4, 0.1)
+    _put(layer, evo_part(l['collar']), l['collarPos'][0], l['collarPos'][1])
+    return layer.crop(layer.getbbox())
+
+def paste_kid_wave(dst, kind, cx, foot_y, t, scale=0.5, period=0.5, flip=False):
+    """발바닥 가운데가 (cx, foot_y). 박(0.5초)마다 한 번 흔든다. flip: 좌우 뒤집어 반대 손으로"""
+    q = round(((t / period) % 1) * 16) / 16
+    fr = kid_wave_frame(kind, q)
+    if flip: fr = fr.transpose(Image.FLIP_LEFT_RIGHT)
+    s = scale
+    w, h = int(fr.width * s), int(fr.height * s)
+    paste(dst, fr, cx, foot_y - h / 2, s)
+
 def hop(t, t0, period=0.5, h=40):
     """박마다 퐁 튀는 높이 + 착지 스쿼시"""
     if t < t0: return 0, 1
@@ -354,23 +427,71 @@ def s12_fast(t, t0=25.5):
     return f
 
 def s13_end(t, t0=27.0):
+    """27.0–30.0 엔드카드: 낫이 날아와 로고를 쳐서 박고(27.3), 정령들이 손 흔들며 인사 → 아이리스 아웃"""
     lt = t - t0
-    f = cover(img(P('Marketing', 'itch_dream', 'banner_art.png')), zoom=1.06 - 0.04 * ease_out(lt / 3), cy=0.6)
+    hit = 0.3                                   # 27.3초에 쾅
+    ht = lt - hit
+    # 흔들림 (쾅 뒤 0.3초, 빠르게 줄어듦)
+    dx = dy = 0.0
+    if 0 <= ht < 0.3:
+        a = 22 * (1 - ht / 0.3) ** 2
+        dx, dy = a * math.sin(ht * 95), a * 0.7 * math.cos(ht * 77)
+    f = cover(img(P('Marketing', 'itch_dream', 'banner_art.png')), zoom=1.06 - 0.04 * ease_out(lt / 3),
+              cx=0.5 - dx / W, cy=0.6 - dy / H)
     logo = img(P('Marketing', 'itch_dream', 'out', 'banner.png'))
-    k = ease_out_back(lt / 0.45)
-    paste(f, logo, 960, 400, 1.25 * (0.3 + 0.7 * k), -2 * (1 - k))
-    for i, (kd, x) in enumerate([('leaf', 300), ('fire', 520), ('dew', 1400), ('star', 1620)]):
-        ts = t0 + 0.3 + i * 0.1
+    LX, LY, LS = 960, 400, 1.25
+    HX, HY = 560, 470                           # 로고 왼쪽 아래 모서리 근처를 친다
+    if ht >= 0:
+        # 맞은 순간 오른쪽으로 납작하게 밀렸다가 용수철처럼 튀며 제자리에 박힌다
+        d = math.exp(-ht * 7.5)
+        sp = d * math.cos(ht * 34)
+        sq = 1 + 0.32 * sp                      # 가로로 늘고 세로로 눌림 → 반대로 튐
+        push = 70 * sp
+        paste(f, logo, LX + push * 0.8 + dx, LY - push * 0.25 + dy, LS * (1 + 0.06 * d), -5 * sp, sx=sq, sy=1 / sq)
+        # 충격선: 친 자리에서 사방으로 뻗는 갈색·크림 획
+        if ht < 0.28:
+            q = ht / 0.28
+            dr = ImageDraw.Draw(f)
+            rnd = random.Random(13)
+            for j in range(14):
+                ang = math.radians(100 + j * (220 / 13) + rnd.uniform(-6, 6))
+                r0 = 60 + 260 * ease_out(q); r1 = r0 + 140 * (1 - q) + 30
+                x0, y0 = HX + dx + math.cos(ang) * r0, HY + dy - math.sin(ang) * r0
+                x1, y1 = HX + dx + math.cos(ang) * r1, HY + dy - math.sin(ang) * r1
+                wdt = int(16 * (1 - q)) + 3
+                dr.line((x0, y0, x1, y1), fill=BROWN + (255,), width=wdt + 6)
+                dr.line((x0, y0, x1, y1), fill=CREAM + (255,), width=wdt)
+    # 낫: 왼쪽 아래 화면 밖에서 돌며 날아와 쾅 → 튕겨 왼쪽 위로 날아간다
+    sam = dream('Harvesters/sam.png')
+    if lt < hit:
+        q = lt / hit
+        x = -220 + (HX - 90 + 220) * q
+        y = 1250 + (HY + 20 - 1250) * q - 260 * math.sin(q * math.pi)
+        paste(f, sam, x, y, 1.15, -q * 900)
+        for j in range(1, 4):                   # 잔상
+            qq = max(0, q - j * 0.07)
+            paste(f, sam, -220 + (HX - 90 + 220) * qq, 1250 + (HY + 20 - 1250) * qq - 260 * math.sin(qq * math.pi), 1.15, -qq * 900, alpha=0.28 / j)
+    elif ht < 0.7:
+        q = ht / 0.7
+        x = HX - 90 - 900 * q
+        y = HY + 20 - 700 * q + 900 * q * q
+        paste(f, sam, x + dx, y + dy, 1.15 * (1 - 0.3 * q), -900 + q * 1500)
+    # 번쩍임
+    if 0 <= ht < 0.12:
+        f.alpha_composite(Image.new('RGBA', f.size, CREAM + (int(150 * (1 - ht / 0.12)),)))
+    # 정령들: 아래에서 솟아올라 박마다 손 흔들기 (위상을 조금씩 엇갈림)
+    for i, (kd, x) in enumerate([('leaf', 170), ('fire', 400), ('dew', 1520), ('star', 1760)]):
+        ts = t0 + 0.45 + i * 0.08
         if t < ts: continue
-        y, sq = hop(t, ts + 0.3, 0.5, 22)
-        paste(f, kid(kd), x, 1180 - 330 * ease_out_back((t - ts) / 0.3) + y, 0.5, 0, 1, sx=sq, sy=1 / sq)
-    pop_word(f, 'PLAY FREE ON itch.io', t, t0 + 0.8, 960, 790, 96, 0, wobble=False)
+        rise = ease_out_back((t - ts) / 0.32)
+        paste_kid_wave(f, kd, x + dx, 1080 + 345 - 360 * rise + dy, t + i * 0.11, scale=0.5, flip=i < 2)   # 왼쪽 둘은 뒤집어 바깥 손을 흔든다
+    pop_word(f, 'PLAY FREE ON itch.io', t, t0 + 0.8, 960 + dx, 745 + dy, 96, 0, wobble=False)
     # 아이리스 아웃: 로고 버섯 쪽으로 원이 좁혀진다
     if lt > 2.2:
         q = ease_in_out((lt - 2.2) / 0.7)
         r = (1 - q) * 1200
         m = Image.new('L', f.size, 0)
-        cx, cy = 960 - 300, 400 - 120
+        cx, cy = 960 - 255, 400 - 135   # 로고 버섯 아이콘
         ImageDraw.Draw(m).ellipse((cx - r, cy - r, cx + r, cy + r), fill=255)
         black = Image.new('RGBA', f.size, (14, 12, 16, 255))
         black.paste(f, (0, 0), m)
@@ -395,7 +516,12 @@ def frame(t):
 
 # ---------- 소리 (120BPM 오르골·피치카토 + 팝) ----------
 SR = 44100
-def synth_audio(path):
+MUSIC = P('Marketing', 'PV', 'art', 'The_Bramblewood_Picnic.mp3')   # 사용자가 Gemini로 만든 곡
+MUSIC_START = 6.0    # 곡 6초부터: 곡이 비는 24.5~26.2초 → 영상 18.5초(Uh-oh), 다시 터지는 26초 → 영상 20초(BOSS!!)
+MUSIC_VOL, SFX_VOL = 0.8, 0.75   # 곡이 0dB까지 꽉 차 있어 조금 낮추고, 효과음(정규화 후 최대 1)은 그보다 작게 얹는다
+
+def synth_audio(path, sfx_only=False):
+    """sfx_only: 합성 음악은 빼고 효과음(글자 팝·휙·bonk·수확 틱)만"""
     n = int(SR * DUR)
     out = np.zeros(n, np.float32)
     tt = np.arange(n) / SR
@@ -425,13 +551,17 @@ def synth_audio(path):
             s = np.random.default_rng(int(t0 * 1000)).normal(0, 1, m)
             s = np.diff(np.concatenate([[0], s]))
             env = np.exp(-x * 40)
+        elif kind == 'whoosh':  # 낫이 돌며 날아오는 휙: 노이즈를 회전 박자로 떨며 점점 크게
+            s = np.random.default_rng(int(t0 * 1000) + 1).normal(0, 1, m)
+            s = np.convolve(s, np.ones(6) / 6, 'same')            # 거친 고음을 깎는다
+            env = (x / d) ** 1.5 * (0.6 + 0.4 * np.sin(2 * np.pi * (8 + 14 * x / d) * x)) * np.minimum(1, (d - x) / 0.01).clip(0, 1)
         out[i0:i0 + m] += (s * env * v).astype(np.float32)
 
     # 코드 진행 (F - C - Dm - Bb), 한 마디 = 4박 = 2초
     hz = lambda midi: 440 * 2 ** ((midi - 69) / 12)
     prog = [(53, [65, 69, 72]), (48, [64, 67, 72]), (50, [65, 69, 74]), (46, [65, 70, 74])]
     mel = [77, 76, 72, 74, 76, 72, 69, 72, 74, 72, 69, 67, 65, 67, 69, 72]
-    for bar in range(15):
+    for bar in range(0 if sfx_only else 15):
         t0 = bar * 2.0
         root, ch = prog[bar % 4]
         quiet = 18.5 <= t0 < 21.5      # 보스 등장: 음악을 비우고 긴장
@@ -451,10 +581,14 @@ def synth_audio(path):
             note(t0, hz(root - 24), 2.0, 0.35, 'bass')
             note(t0, hz(ch[0] - 12), 2.0, 0.06, 'pad'); note(t0, hz(ch[0] - 11), 2.0, 0.05, 'pad')
     # 보스 쿵 (19.5)·글자 팝
-    note(19.5, 70, 0.8, 0.9, 'thud'); note(20.0, 60, 0.8, 0.7, 'thud')
-    pops = [0.5, 1.0, 1.5, 2.55, 4.5, 5.5, 6.5, 7.0, 7.33, 7.66, 11.05, 13.0, 14.6, 15.0, 20.0, 25.5, 26.0, 26.5, 27.0, 27.8]
+    if not sfx_only: note(19.5, 70, 0.8, 0.9, 'thud'); note(20.0, 60, 0.8, 0.7, 'thud')
+    pops = [0.5, 1.0, 1.5, 2.55, 4.5, 5.5, 6.5, 7.0, 7.33, 7.66, 11.05, 13.0, 14.6, 15.0, 20.0, 25.5, 26.0, 26.5, 27.8]
     for i, p in enumerate(pops):
         note(p, 520 + (i % 4) * 130, 0.12, 0.35, 'pop')
+    # 엔드카드: 낫이 휙 날아와(27.0) 로고를 쾅(27.3) — 큰 bonk = 낮은 thud + 높은 pop
+    note(27.0, 0, 0.3, 1.3 if sfx_only else 0.55, 'whoosh')
+    note(27.3, 95, 0.7, 1.1, 'thud'); note(27.3, 60, 0.9, 0.6, 'thud')
+    note(27.3, 640, 0.18, 0.7, 'pop'); note(27.31, 960, 0.14, 0.4, 'pop')
     # 인게임 구간엔 잔잔한 수확 틱
     rnd = random.Random(5)
     for a, b in [(4.0, 7.0), (8.0, 11.0), (21.5, 25.5)]:
@@ -464,7 +598,7 @@ def synth_audio(path):
     # 끝: 페이드아웃
     fade = np.clip((DUR - tt) / 0.8, 0, 1)
     out *= fade
-    out /= max(1e-6, np.abs(out).max()) / 0.8
+    out /= max(1e-6, np.abs(out).max()) / (1.0 if sfx_only else 0.8)
     st = np.stack([out, out], 1)
     # 아주 짧은 스테레오 지연으로 넓게
     d = int(0.012 * SR); st[d:, 1] = st[:-d, 1] * 0.9 + st[d:, 1] * 0.1
@@ -473,6 +607,18 @@ def synth_audio(path):
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
         w.writeframes((st * 32767).astype('<i2').tobytes())
 
+def make_audio(wav):
+    """곡이 있으면 곡(MUSIC_START부터, 끝 1.1초 페이드아웃) + 효과음을 섞고, 없으면 합성 음악"""
+    if not os.path.exists(MUSIC):
+        synth_audio(wav); return
+    sfx = os.path.join(OUT, 'pv_sfx.wav'); synth_audio(sfx, sfx_only=True)
+    # bonk가 묻히지 않게 낫이 날아올 때(27.0) 곡을 살짝, 쾅(27.3) 직후엔 크게 낮췄다가 되돌린다
+    duck = "if(between(t,27.0,27.3),0.7,if(between(t,27.3,27.55),0.45,if(between(t,27.55,27.85),0.45+0.55*(t-27.55)/0.3,1)))"
+    fc = (f"[0:a]atrim=0:{DUR},asetpts=PTS-STARTPTS,afade=t=out:st={DUR - 1.1}:d=1.1,volume={MUSIC_VOL},volume='{duck}':eval=frame[m];"
+          f"[1:a]volume={SFX_VOL}[s];[m][s]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[o]")
+    subprocess.run(['ffmpeg', '-y', '-v', 'error', '-ss', str(MUSIC_START), '-i', MUSIC, '-i', sfx,
+                    '-filter_complex', fc, '-map', '[o]', '-ar', str(SR), '-ac', '2', wav], check=True)
+
 # ---------- 출력 ----------
 def main():
     ap = argparse.ArgumentParser()
@@ -480,15 +626,21 @@ def main():
     ap.add_argument('--stills', default='')
     ap.add_argument('--from', dest='t0', type=float, default=0)
     ap.add_argument('--to', dest='t1', type=float, default=DUR)
+    ap.add_argument('--audio-only', action='store_true', help='이미 만든 mp4의 소리만 새로 섞어 바꾼다 (영상은 그대로 복사)')
     a = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
     if a.stills:
         for s in a.stills.split(','):
             frame(float(s)).convert('RGB').save(os.path.join(OUT, f'still_{s}.jpg'), quality=88)
         return
-    wav = os.path.join(OUT, 'pv_audio.wav'); synth_audio(wav)
+    wav = os.path.join(OUT, 'pv_audio.wav'); make_audio(wav)
     ow, oh = (960, 540) if a.preview else (W, H)
     name = 'MoreMustMush_PV_30s_preview.mp4' if a.preview else 'MoreMustMush_PV_30s.mp4'
+    if a.audio_only:
+        src = os.path.join(OUT, name); tmp = src[:-4] + '_tmp.mp4'
+        subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', src, '-i', wav, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
+                        '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', tmp], check=True)
+        os.replace(tmp, src); print('->', src); return
     cmd = ['ffmpeg', '-y', '-v', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{ow}x{oh}', '-r', str(FPS), '-i', '-',
            '-ss', str(a.t0), '-i', wav, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
            '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', os.path.join(OUT, name)]
