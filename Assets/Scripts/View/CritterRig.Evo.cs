@@ -85,8 +85,37 @@ namespace MoreMush
             return t;
         }
 
+        // 계층에 이미 구워 둔 Evo 리그(에디터 메뉴 MoreMush/Art/Bake Critter Look)가 있으면 이름으로 찾아 이어 쓴다
+        bool BindEvo()
+        {
+            var r = footL.parent.Find("Evo");
+            if (r == null) return false;
+            SpriteRenderer S(string path) { var t = r.Find(path); return t != null ? t.GetComponent<SpriteRenderer>() : null; }
+            evoRoot = r;
+            evoBody = r.Find("Body"); evoHead = r.Find("Neck"); evoHeadInner = r.Find("Neck/Bounce");
+            evoBodySR = S("Body/BodySprite"); evoBodyFace = S("Body/BodySprite/BodyFace");
+            for (int i = 0; i < 2; i++)
+            {
+                string side = i == 0 ? "L" : "R";
+                evoShoulder[i] = r.Find("Body/Shoulder" + side); evoArmInner[i] = r.Find($"Body/Shoulder{side}/Arm");
+                evoUp[i] = S($"Body/Shoulder{side}/Arm/Upper"); evoElbow[i] = r.Find($"Body/Shoulder{side}/Arm/Elbow");
+                evoLo[i] = S($"Body/Shoulder{side}/Arm/Elbow/Lower");
+                evoHip[i] = r.Find("Body/Hip" + side); evoLeg[i] = S($"Body/Hip{side}/Leg");
+            }
+            evoCollar = S("Body/Collar");
+            evoHeadSR = S("Neck/Bounce/HeadSprite"); evoHeadFace = S("Neck/Bounce/HeadSprite/HeadFace");
+            evoHairBack = S("Neck/Bounce/HairBack"); evoHair = S("Neck/Hair");
+            bool ok = evoBody && evoHead && evoHeadInner && evoBodySR && evoBodyFace && evoCollar && evoHeadSR && evoHeadFace && evoHairBack && evoHair;
+            for (int i = 0; i < 2; i++) ok &= evoShoulder[i] && evoArmInner[i] && evoUp[i] && evoElbow[i] && evoLo[i] && evoHip[i] && evoLeg[i];
+            if (!ok) { Debug.LogWarning($"[CritterRig] '{name}'의 Evo 계층이 모자라 새로 만들어요"); r.name = "Evo (old)"; r.gameObject.SetActive(false); evoRoot = null; return false; }
+            renderers = GetComponentsInChildren<SpriteRenderer>(true);
+            shownSilhouette = !silhouette;
+            return true;
+        }
+
         void BuildEvo()
         {
+            if (BindEvo()) return;
             evoRoot = EvoT("Evo", footL.parent);          // 갓·발과 같은 부모 = 배치 표 좌표계
             evoBody = EvoT("Body", evoRoot);
             evoBodySR = EvoSR("BodySprite", evoBody, 0);

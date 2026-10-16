@@ -37,14 +37,16 @@ namespace MoreMush
         void WirePlaced(GameObject root, UnityAction onClose, Extra[] extras)
         {
             Root = root;
+            // 배치한 글자는 한국어 원문 그대로 두고 여기서 번역해 넣는다 (Title · 버튼 글자)
+            UIUtil.SetText(SceneUI.Find(root.transform, "Title")?.GetComponent<TMP_Text>(), Loc.T("설정"));
             var close = SceneUI.Find(root.transform, "Button_Close") ?? SceneUI.Find(root.transform, "Exit");
-            if (close != null) SceneUI.Bind(close, onClose);
+            if (close != null) { SceneUI.Bind(close, onClose); if (close.name == "Button_Close") UIUtil.SetText(SceneUI.TextIn(close), Loc.T("닫기")); }
             var mute = SceneUI.Find(root.transform, "Button_Mute");
             if (mute != null) { SceneUI.Bind(mute, ToggleMute); muteLabel = SceneUI.TextIn(mute); }
             foreach (var e in extras)
             {
                 var t = SceneUI.Find(root.transform, e.name);
-                if (t != null) SceneUI.Bind(t, e.action);
+                if (t != null) { SceneUI.Bind(t, e.action); UIUtil.SetText(SceneUI.TextIn(t), e.label); }
                 else Debug.LogWarning($"[Option] 배치된 OptionPanel 안에 '{e.name}' 버튼이 없어요");
             }
         }

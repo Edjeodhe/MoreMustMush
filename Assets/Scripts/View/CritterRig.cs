@@ -84,6 +84,7 @@ namespace MoreMush
             var sp = SpriteDB.Get(WholeKey(id, outfit, skinned)) ?? SpriteDB.Get(WholeKey(id, null, skinned)) ?? SpriteDB.Get(WholeKey(id, null, false));
             var l = Layout(id);
             WholeOn = sp != null && l != null;
+            if (whole == null) { var w = footL.parent.Find("Whole"); if (w != null) whole = w.GetComponent<SpriteRenderer>(); }   // 계층에 구워 둔 통짜 그림
             if (!WholeOn) { if (whole != null) whole.enabled = false; return; }
             if (whole == null)
             {
