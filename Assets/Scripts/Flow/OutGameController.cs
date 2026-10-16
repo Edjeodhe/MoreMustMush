@@ -13,7 +13,8 @@ namespace MoreMush
     //   UP_Panel/Gold·수확석 안의 글자 = 골드·균사석 · UP_Panel/Text (TMP) (1) = 보따리 보관 시간
     //   Button_Bag = 수확 보따리 받기 (쌓인 게 있을 때만 눌린다)
     //   Down_Panel(접힘) ↔ Down_hidden_Panel(펼침) = 누르면 서로 바뀐다. 펼침 안의 칸 = 꼬마 (합류 순서대로)
-    //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 (내용은 아직 없음, 고른 탭만 표시)
+    //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 (공방 탭 = Workshop_Panel, 나머지 내용은 아직 없음)
+    //   Workshop_Panel = 꼬마 공방 (WorkshopPanel 참고, 배치 전이면 건너뛴다)
     // 세계수 월드(FarmView)는 씬에 있으면 연다. Esc = MainGame으로.
     public class OutGameController : MonoBehaviour
     {
@@ -21,9 +22,11 @@ namespace MoreMush
         public FarmView farm;
 
         const float TICK = 1;   // 보따리·보관 시간 갱신 간격 (초)
+        const int TAB_CRAFT = 2;   // TAB_NAMES의 공방
         static readonly string[] TAB_NAMES = { "성장", "꼬마", "공방", "꾸미기" };
 
         CurrencyBar currency;
+        WorkshopPanel workshop;
         TMP_Text storeText, bagText;
         Button bag;
         GameObject fold, unfold;           // Down_Panel · Down_hidden_Panel
@@ -64,6 +67,8 @@ namespace MoreMush
                 tabs.Sort((a, b) => Order(a.transform, b.transform, false));   // 위 → 아래
                 for (int i = 0; i < tabs.Count; i++) { int k = i; tabs[i].onClick.AddListener(() => { Snd.Ui(); tab = k; RenderTabs(); }); }
             }
+            var ws = SceneUI.Find(scene, "Workshop_Panel");
+            if (ws != null) workshop = new WorkshopPanel(ws.gameObject, () => currency.Tick());
             SetFolded(true, false);
         }
 
@@ -84,8 +89,8 @@ namespace MoreMush
 
         void Update()
         {
-            currency.Tick();
-            if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); }
+            if (currency.Tick()) workshop?.Render();   // 재화가 바뀌면 제작 가능 여부도
+            if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); workshop?.Tick(); }
             var kb = Keyboard.current;
             if (kb != null && kb.escapeKey.wasPressedThisFrame) ToMainGame();
         }
@@ -128,6 +133,7 @@ namespace MoreMush
                 tabs[i].interactable = i != tab;
                 if (i < TAB_NAMES.Length) UIUtil.SetText(SceneUI.TextIn(tabs[i].transform), Loc.T(TAB_NAMES[i]));
             }
+            if (workshop != null) { UIUtil.Show(workshop.root, tab == TAB_CRAFT); workshop.Render(); }
         }
 
         void SetFolded(bool folded, bool sound = true)
