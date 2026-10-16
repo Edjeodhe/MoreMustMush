@@ -5,6 +5,7 @@
   r3b_rare0_rows.json   : db_write.py rows   — 새 노드 ed_rare0 (Upgrade·Upgrade_Cost·String) — 사용자 결정 ① 채택
   r3b_code.json         : 코드 상수·식 (파일·식별자·값) — 관리자가 손으로
   r3b_migration.json    : 옛 저장 레벨 옮김 표 (SaveMigration v8)
+  r3b_apply_boss.json   : db_write.py set    — [사용자 결정] Boss king Hp_Mul 0.63 → 0.10 (첫 보스 10, R3-22)
 실행: python BalanceData/theory/r3b_apply.py   (r3b_model.LADDER·LOOSE·STUMP_MUL_NEW와 r3_model 효과표를 그대로 쓴다)
 """
 import json
@@ -98,6 +99,7 @@ def main():
     }
     json.dump(rows, open(os.path.join(HERE, "r3b_rare0_rows.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     json.dump(code_constants(), open(os.path.join(HERE, "r3b_code.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    json.dump({"Boss": {"king": {"Hp_Mul": 0.1}}}, open(os.path.join(HERE, "r3b_apply_boss.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     mig = migration()
     json.dump(mig, open(os.path.join(HERE, "r3b_migration.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps(upg_set, ensure_ascii=False))
