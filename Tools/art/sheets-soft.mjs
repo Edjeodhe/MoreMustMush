@@ -1,5 +1,5 @@
 // "Soft watercolor" art set (resource_test branch) for Tools/art/build-art.mjs --set soft.
-// Raw sheets: Art/Raw_Soft/<id>.png. Sliced sprites: Assets/Art/Soft/<same keys as Assets/Art/Generated>.
+// Raw sheets: Art/Raw_Soft/<id>.png. Sliced sprites: Assets/Resources/Art/Soft/<same keys as Assets/Resources/Art/Generated>.
 // SpriteDB prefers Soft over Generated, so every key drawn here replaces the old sprite in game.
 // Item names may hold a sub path ("Farm/Icons/req_water") so one sheet can feed several folders (out: "").
 

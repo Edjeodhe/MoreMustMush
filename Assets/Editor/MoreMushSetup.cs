@@ -12,7 +12,7 @@ namespace MoreMush.EditorTools
     public static class MoreMushSetup
     {
         // Art sets, later ones win: a sprite in Soft (watercolor set) replaces the Generated sprite with the same key.
-        public static readonly string[] ArtRoots = { "Assets/Art/Generated", "Assets/Art/Soft" };
+        public static readonly string[] ArtRoots = { "Assets/Resources/Art/Generated", "Assets/Resources/Art/Soft" };
 
         // key ("Icons/gold") → asset path of the sprite the game uses for it
         public static SortedDictionary<string, string> ResolvedArt()

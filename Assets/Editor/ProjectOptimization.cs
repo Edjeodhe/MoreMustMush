@@ -17,7 +17,7 @@ namespace MoreMush.EditorTools
     public static class ProjectOptimization
     {
         static string[] ArtRoots => MoreMushSetup.ArtRoots.Where(AssetDatabase.IsValidFolder).ToArray();
-        public const string AtlasRoot = "Assets/Art/Atlases";
+        public const string AtlasRoot = "Assets/Resources/Art/Atlases";
 
         public static int TextureLimit(string path)
         {

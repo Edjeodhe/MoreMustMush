@@ -8,7 +8,7 @@ namespace MoreMush
     {
         public const int CURRENT = 7;
 
-        // 이번 로드에서 플레이어에게 알릴 문장 (GameFlow가 토스트로 띄우고 비운다)
+        // 이번 로드에서 플레이어에게 알릴 문장 (App.FlushMigrationNotice가 알리고 비운다)
         public static string Notice;
 
         // v3에서 지운 노드(시간 증가·숲 장치 생성 스킬)의 레벨별 가격. 지운 가격표를 여기에 남겨 환불에 쓴다

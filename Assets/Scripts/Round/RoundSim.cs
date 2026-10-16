@@ -8,7 +8,7 @@ using static MoreMush.Game;
 namespace MoreMush
 {
     // Harvest round simulation, ported from the prototype's "수확 라운드 시뮬레이션" section.
-    // Pure state + rules; RoundView draws it and RoundController drives input and timing.
+    // Pure state + rules; RoundView draws it and StageController drives input and timing.
     public partial class RoundSim
     {
         public static RoundSim R;
@@ -26,7 +26,7 @@ namespace MoreMush
             LAUNCH = new Vector2(WW / 2, WH - 150);
         }
 
-        // Visual-only destinations supplied by RoundHUD from the actual scene layout.
+        // Visual-only destinations supplied by the Stage HUD (StageController.Started) from the actual scene layout.
         public readonly Dictionary<string, Vector2> harvestTargets = new Dictionary<string, Vector2>();
 
         // ===== 상태 =====

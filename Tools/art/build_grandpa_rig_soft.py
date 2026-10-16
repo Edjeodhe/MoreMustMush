@@ -1,4 +1,4 @@
-"""Cut the soft-watercolor grandpa (Assets/Art/Soft/Characters/Grandpa/grandpa_ref.png) into rig parts.
+"""Cut the soft-watercolor grandpa (Assets/Resources/Art/Soft/Characters/Grandpa/grandpa_ref.png) into rig parts.
 
 Same part names and rig.json layout as build_grandpa_rig.py, so GrandpaRig and its prefab work unchanged:
   body.png         whole character minus the scythe; where the handle crossed the sleeve the hole is filled
@@ -17,8 +17,8 @@ from PIL import Image, ImageDraw
 from scipy import ndimage
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC = os.path.join(ROOT, "Assets/Art/Soft/Characters/Grandpa/grandpa_ref.png")
-OUT = os.path.join(ROOT, "Assets/Art/Soft/Characters/Grandpa/Rig")
+SRC = os.path.join(ROOT, "Assets/Resources/Art/Soft/Characters/Grandpa/grandpa_ref.png")
+OUT = os.path.join(ROOT, "Assets/Resources/Art/Soft/Characters/Grandpa/Rig")
 
 FEET = (505, 1200)          # rig root (bottom centre between the boots)
 WRIST = (235, 690)          # scythe joint (inside the fist)

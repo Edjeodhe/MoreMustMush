@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image
 from scipy.signal import fftconvolve
 
-DIR = "Assets/Art/Generated/Characters/Critters/Build"
+DIR = "Assets/Resources/Art/Generated/Characters/Critters/Build"
 IDS = ["fire", "spark", "dew", "coin", "star", "leaf", "moon", "wind", "rock", "chest"]
 ALPHA = 128
 WORK = 0.5          # search on half-size masks

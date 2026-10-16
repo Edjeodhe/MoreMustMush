@@ -48,6 +48,14 @@ namespace MoreMush
             Changed?.Invoke();
         }
 
+        // 다음 언어로 (지구본 버튼, LANGS 순서대로 돈다)
+        public static void NextLang()
+        {
+            EnsureLoaded();
+            int i = Array.IndexOf(LANGS, Lang);
+            SetLang(LANGS[(i + 1) % LANGS.Length]);
+        }
+
         public static string T(string ko)
         {
             if (string.IsNullOrEmpty(ko)) return ko;

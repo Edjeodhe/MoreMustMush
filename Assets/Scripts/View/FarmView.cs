@@ -10,7 +10,7 @@ namespace MoreMush
 {
     // 꼬마버섯 세계수 화면(월드): 나무와, 배치된 구역의 나무버섯 사이를 오가며 따는 꼬마, 쉬는 꼬마는 나무 앞 땅을 산책한다.
     // 따는 모습·떠오르는 골드는 보여 주기용 (실제 수확은 Game.BagRate → 수확 보따리).
-    // 누르기: 꼬마 → 꼬마 탭에서 그 꼬마 · 나무 밑동 → 성장 탭 · 장식 → 꾸미기 탭 (FarmScreen이 연다).
+    // 누르기: 꼬마 → 꼬마 탭에서 그 꼬마 · 나무 밑동 → 성장 탭 · 장식 → 꾸미기 탭 (onPick을 받은 OutGame UI가 연다).
     public class FarmView : MonoBehaviour
     {
         public static FarmView I;
@@ -42,7 +42,7 @@ namespace MoreMush
         readonly List<Part> parts = new List<Part>();
         readonly List<Float> floats = new List<Float>();
         Critter hover; int hoverSlot = -1;
-        public bool dirty;                                // HUD를 다시 그려야 함 (FarmScreen이 본다)
+        public bool dirty;                                // HUD를 다시 그려야 함 (OutGame UI가 본다)
         public System.Action<string, string> onPick;      // (탭, 인자): 월드를 눌러 패널을 연다
 
         Pool<FarmCritter> critPool;
@@ -311,7 +311,7 @@ namespace MoreMush
         {
             var p = Pointer.current;
             hover = null; hoverSlot = -1;
-            if (p == null || GameFlow.I.ModalOpen) return;
+            if (p == null || App.ModalOpen) return;
             // -1 = 지금 쓰는 포인터. 손을 뗀 프레임에는 터치 기록이 이미 없을 수 있어, 누를 때 UI 위였는지를 기억해 둔다.
             bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
             if (p.press.wasPressedThisFrame) pressOverUI = overUI;

@@ -62,6 +62,8 @@ namespace MoreMush
             if (n < 10000) return n.ToString("#,0", Inv);
             int i = -1; double v = n;
             while (v >= 1000 && i < Units.Length - 1) { v /= 1000; i++; }
+            // 반올림으로 1000이 되면(999,999 → "1000K") 다음 단위로 올린다
+            if (v >= 999.5 && i < Units.Length - 1) { v /= 1000; i++; }
             string s = v < 10 ? v.ToString("F2", Inv) : v < 100 ? v.ToString("F1", Inv) : v.ToString("F0", Inv);
             return s + Units[i];
         }

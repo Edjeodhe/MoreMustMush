@@ -1,9 +1,9 @@
 using UnityEditor;
 
-// Images dropped into Assets/Art/Generated or Assets/Art/Soft (Tools/art/build-art.mjs) import as ready-to-use 2D sprites.
+// Images dropped into Assets/Resources/Art/Generated or Assets/Resources/Art/Soft (Tools/art/build-art.mjs) import as ready-to-use 2D sprites.
 public class GeneratedArtPostprocessor : AssetPostprocessor
 {
-    private static readonly string[] k_ArtFolders = { "Assets/Art/Generated/", "Assets/Art/Soft/" };
+    private static readonly string[] k_ArtFolders = { "Assets/Resources/Art/Generated/", "Assets/Resources/Art/Soft/" };
 
     private void OnPreprocessTexture()
     {

@@ -29,7 +29,7 @@ namespace MoreMush
         [AssetPath("Assets/Prefabs/Round/FieldText.prefab")] public TextMeshProUGUI textPrefab;
 
         [Header("Field text layer (UI)")]
-        [ScenePath("Canvas/RoundUI/FieldText")] public RectTransform textLayer;         // same size as the 1920×1080 canvas, top-left anchored
+        public RectTransform textLayer;         // same size as the 1920×1080 canvas, top-left anchored
 
         Pool<ShroomView> shrooms; Pool<BallView> balls; Pool<DeviceView> devices; Pool<CloudView> clouds;
         Pool<SpriteRenderer> parts, flyers; Pool<LineRenderer> lines;
@@ -72,7 +72,7 @@ namespace MoreMush
             Vector2 shake = live && R.shake > 0 ? new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * R.shake * 8 : Vector2.zero;
             field.localPosition = Art.P(shake.x, shake.y);
             field.localScale = new Vector3(z, z, 1);
-            textLayer.anchoredPosition = new Vector2(shake.x, -shake.y);
+            if (textLayer != null) textLayer.anchoredPosition = new Vector2(shake.x, -shake.y);
 
             if (bgTheme != R.themeId)
             {
@@ -194,7 +194,7 @@ namespace MoreMush
             }
             flyers.Trim(nf);
 
-            DrawTexts(R, z);
+            if (textLayer != null) DrawTexts(R, z);   // 필드 글자 층(캔버스)이 없으면 글자만 건너뛴다
         }
 
         LineRenderer Circle(int i, float x, float y, float r, float width) => Ellipse(i, x, y, r, r, 0, width);
