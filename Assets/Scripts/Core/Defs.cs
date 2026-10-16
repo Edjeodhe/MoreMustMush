@@ -102,8 +102,8 @@ namespace MoreMush
 
         public static void LoadPreset() => ApplyPreset(PlayerPrefs.GetString(PresetKey, "tuned"), false);
 
-        // 라운드 시간: 처음 15초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다
-        public const float BASE_TIME = 15;
+        // 라운드 시간: 처음 10초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다 (밸런스 3회차: 15 → 10, 줄어든 5초는 ps_dur 4레벨로 되찾는다)
+        public const float BASE_TIME = 10;
         public static double StageTime(int stage) => Math.Min(10, 0.5 * (stage - 1));
 
         // 초반 스테이지 (사용자 요청 2026-10-16): 스테이지 N까지는 버섯 종을 N종으로 고정한다 (1스테이지 1종 → 6스테이지 6종).
@@ -111,16 +111,16 @@ namespace MoreMush
         public const int EARLY_STAGES = 6;
         public static readonly string[] EARLY_SPECIES = { "양송이", "구름버섯", "무당버섯", "느타리", "치마버섯", "노란다발" };
         public static bool EarlyStage(int stage) => stage >= 1 && stage <= EARLY_STAGES;
-        // 초반 스폰: 군락 최대 수 배율 · 재생 간격 배율 (스테이지 1~6). 가안 — 밸런스 팀(3회차)이 정한다
-        public static readonly double[] EARLY_COL_MUL = { 0.4, 0.45, 0.5, 0.6, 0.7, 0.85 };
-        public static readonly double[] EARLY_REGEN_MUL = { 1.6, 1.5, 1.4, 1.3, 1.2, 1.1 };
+        // 초반 낱개 버섯: 스테이지 1~6 판 시작 때 군락이 아닌 버섯을 이만큼 흩뿌린다 (다시 생기지 않음, 맵이 비어 보이지 않게 — 밸런스 3회차).
+        // 군락 수는 스테이지가 아니라 ed_cols 구매로만 는다. [0](1스테이지)은 튜토리얼 판이 아닐 때만 (튜토리얼은 TUTORIAL_LOOSE를 첫 발사 때)
+        public static readonly int[] EARLY_LOOSE = { 6, 6, 5, 4, 3, 2 };
         // 초반 라운드 시간: 이 스테이지까지는 기본 EARLY_SEC초 (시간 노드는 더해진다)
         public const int EARLY_TIME_STAGES = 4;
         public const float EARLY_SEC = 10;
         public const float INCOME_MUL = 3;
         public const float SCORE_GOLD = 1;
         public const float COST_MUL = 1;
-        public static int ColCount(int L) => Mathf.CeilToInt(TUNE.col0 + TUNE.colStep * L);
+        public static int ColCount(int L) => (int)Math.Round(V("ed_cols", L));   // DB Efx 4·6·10·17·27 (지역·지도 배율 전)
 
         // ===== 도감 75종 =====
         public class Species

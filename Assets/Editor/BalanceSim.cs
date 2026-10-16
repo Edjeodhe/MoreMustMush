@@ -303,6 +303,8 @@ namespace MoreMush.EditorTools
             (new[] { "ed_score", "ed_score1p", "ed_score2", "ed_score2p", "ed_score3", "ed_score3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
             (new[] { "ed_bonus", "ed_bonus1p", "ed_bonus2", "ed_bonus2p", "ed_bonus3", "ed_bonus3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
         };
+        // 1단계 형제(I → I+)는 줄 규칙에서 뺀다: 1단계 가격은 밸런스 3회차 사다리(DB)로 고정했고, I의 끝이 싸서 I+ 첫 레벨이 ×4를 넘는다 (verify#12 안 a)
+        public static bool FreeSibling(double[] per, int t) => t == 1 && per[1] == per[0];
         public const double CROSS = 0.66;   // 조사 원칙 P7(다음 단계 효율 ≥ ×1.5) + 반올림 여유. 0.7(×1.43)은 I→II 세 곳이 ×1.5에 못 미쳤다(검증 2026-10-08)
         // 같은 노드 안에서 다음 레벨은 앞 레벨의 NODE_STEP_MAX배를 넘지 않는다 (한 노드 가격이 한 번에 크게 뛰지 않게)
         public const double NODE_STEP_MAX = 4;
@@ -477,6 +479,7 @@ namespace MoreMush.EditorTools
                 else if (ENFORCE_TIER_RULES) foreach (var (ids, per, cross) in TIER_LINES)
                     for (int t = ids.Length - 1; t >= 1; t--)
                     {
+                        if (FreeSibling(per, t)) continue;
                         var pa = price[ids[t - 1]]; var pb = price[ids[t]];
                         // 같은 단계 형제(I → I+)는 한 노드가 이어지는 것처럼 NODE_STEP_MAX배, 단계가 오를 때(I+ → II)는 효율 넘김
                         double need = per[t] == per[t - 1] ? pb[0] / NODE_STEP_MAX : pb[0] / per[t] * per[t - 1] / cross;
@@ -495,6 +498,7 @@ namespace MoreMush.EditorTools
             foreach (var (ids, per, cross) in TIER_LINES)
                 for (int t = 1; t < ids.Length; t++)
                 {
+                    if (FreeSibling(per, t)) continue;
                     var pa = price[ids[t - 1]]; var pb = price[ids[t]];
                     double last = pa[pa.Length - 1];
                     double cap = per[t] == per[t - 1] ? last * NODE_STEP_MAX : last * per[t] / per[t - 1] * cross;
@@ -563,6 +567,7 @@ namespace MoreMush.EditorTools
             foreach (var (ids, per, cross) in TIER_LINES)
                 for (int t = 1; t < ids.Length; t++)
                 {
+                    if (FreeSibling(per, t)) continue;
                     var a = NODE[ids[t - 1]]; var b = NODE[ids[t]];
                     if (per[t] == per[t - 1]) { nodeStep = Math.Max(nodeStep, NodeCost(b, 0).gold / Math.Max(1, NodeCost(a, a.max - 1).gold)); continue; }
                     total++;

@@ -106,6 +106,7 @@ namespace MoreMush
             foreach (var d in st.devTypes) r.PlaceDevice(d, null);
             r.barLen = Mathf.Min(r.barLen, WW / 3);   // 슬라이드 바 최대 길이: 화면의 1/3
             if (st.boss == null) for (int i = 0; i < r.MaxCol; i++) r.SpawnColony(true);
+            if (st.boss == null && !r.tutorial && EarlyStage(st.stage)) { r.looseSpawned = true; r.SpawnLoose(EARLY_LOOSE[st.stage - 1]); }   // 초반 낱개 버섯 (판 시작 때 한 번)
             for (int i = 0; i < st.permBalls; i++) r.balls.Add(r.MakeBall(LAUNCH.x, LAUNCH.y, true, st.hvs[i % st.hvs.Count]));
             r.RebuildGrid();
             return r;
@@ -275,7 +276,7 @@ namespace MoreMush
             return false;
         }
 
-        // 튜토리얼 판의 첫 발사 때 맵에 흩뿌리는 낱개 버섯 (군락에 속하지 않는다. 수확해도 다시 생기지 않는다)
+        // 낱개 버섯 (군락에 속하지 않는다. 수확해도 다시 생기지 않는다): 튜토리얼 판은 첫 발사 때 TUTORIAL_LOOSE개, 초반 판은 시작 때 EARLY_LOOSE
         public const int TUTORIAL_LOOSE = 8;
         bool looseSpawned;
 
