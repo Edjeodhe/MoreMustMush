@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+25 different real medicinal mushroom species as CUTE CHIBI TOY-LIKE watercolor icons, drawn EXACTLY like the 4 attached sample mushrooms (same chunky proportions, same simple flat washes, same low detail). Each species must stay recognizable only by its BIG traits (cap profile, real colors, one signature marking such as spots / net / ink rim / ring / volva, clustering habit). Strong deformation: 2 heads tall at most, the cap is about 2/3 of the whole figure, the stem is shorter than half the cap width and thick and soft, everything is a round squishy blob like a jelly toy or a soft plush. Detail budget: only 3 to 6 big simple markings per mushroom, NO fine texture, NO scales drawn one by one, NO gill lines more than 5, NO bark or dirt texture, NO realistic shading. Flat matte watercolor, no outlines, no faces. One mushroom or its natural small group (max 3-5 chubby caps) per cell, seen slightly from the side.
+
+Assets in reading order (left to right, top to bottom):
+1. Trametes versicolor (구름버섯): turkey tail: thin overlapping fans with concentric grey, blue and tan bands
+2. Schizophyllum commune (치마버섯): small fuzzy white fan with split grey gills
+3. Pycnoporus cinnabarinus (간버섯): bright cinnabar-orange bracket shelf
+4. Tremella fuciformis (흰목이): snow fungus: white translucent jelly with ruffled petal lobes
+5. Grifola frondosa (잎새버섯): maitake: rosette of overlapping grey-brown leaf-like caps
+6. Cryptoporus volvatus (한입버섯): round chestnut-like orange-tan ball with a small pore hole
+7. Wolfiporia cocos (복령): brown bark-covered lump, one cut face showing white flesh
+8. Polyporus umbellatus (저령): many small round light-brown caps on branching stems like a bouquet
+9. Sparassis crispa (꽃송이버섯): cauliflower fungus: cream ruffled mass of curly lobes
+10. Hericium erinaceus (노루궁뎅이): lion's mane: white shaggy mass of hanging icicle spines
+11. Fomes fomentarius (말굽버섯): grey hoof-shaped hard bracket with concentric growth rings
+12. Ganoderma applanatum (잔나비걸상버섯): large flat brown semicircle shelf with a white rim
+13. Geastrum triplex (목도리방귀버섯): collared earthstar: brown star rays with a collar holding a round spore ball, a little spore puff
+14. Fomitopsis pinicola (소나무잔나비버섯): dark brown bracket with a red-orange and yellow banded edge
+15. Ganoderma lucidum (영지버섯): reishi: glossy lacquered red-brown kidney-shaped cap with a yellow rim and side stem
+16. Phellinus linteus (상황버섯): hard brown shelf with a bright yellow rim
+17. Inonotus obliquus (차가버섯): chaga: black cracked charcoal-like lump with rusty orange showing inside
+18. Phellinus igniarius (말똥진흙버섯): dark grey-brown hoof bracket with a finely cracked surface and brown rim
+19. Cordyceps militaris (동충하초): bright orange club-shaped fruiting bodies sprouting from a small pupa, soft glow (legendary)
+20. Isaria japonica (눈꽃동충하초): white powdery snowflake-like branches sprouting from a silkworm pupa, soft glow (legendary)
+21. Fomitopsis betulina (자작나무버섯): birch polypore: smooth white rounded shelf with a rolled edge on a strip of birch bark
+22. fantasy variant of Cordyceps militaris (달빛동충하초): pale blue glowing club-shaped fruiting bodies
+23. Marasmius oreades (선녀낙엽버섯): fairy ring mushroom: a small ring of tan caps with center bumps on thin stems
+24. fantasy variant of Ramaria coral fungus (산호버섯): pink coral-shaped branches with sea water droplets
+25. fantasy variant of Ganoderma lucidum (녹슨영지): reishi with a rusty iron-brown metallic cap and a bolt stuck in it

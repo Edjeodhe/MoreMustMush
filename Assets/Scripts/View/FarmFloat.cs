@@ -12,7 +12,7 @@ namespace MoreMush
 
         public void Draw(float x, float y, string s, bool withGem, Color col, float alpha)
         {
-            if (shown != s) { shown = s; text.text = s; text.ForceMeshUpdate(); }
+            if (shown != s) { shown = s; text.text = DmgDigits.Numbers(s) ?? s; text.ForceMeshUpdate(); }   // 숫자만 그림 글자
             float w = text.preferredWidth * Art.PPU;
             float tx = withGem ? x + 18 : x;
             transform.localPosition = Art.P(tx, y);

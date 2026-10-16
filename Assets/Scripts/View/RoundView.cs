@@ -11,6 +11,7 @@ namespace MoreMush
         [Header("Field (world)")]
         public Transform field;                 // field root: scaled by ZOOM, shaken
         public SpriteRenderer background;
+        [ScenePath("World/Round/Field/Decor")] public Transform decor;   // 지역별 테두리 장식 묶음 (자식 이름 = 지역 id, 없으면 forest)
         public Transform deviceRoot, shroomRoot, fxRoot, ballRoot, flyerRoot;
         public SpriteRenderer bar;
         public SpriteRenderer giantWarn;
@@ -34,6 +35,14 @@ namespace MoreMush
         Pool<ShroomView> shrooms; Pool<BallView> balls; Pool<DeviceView> devices; Pool<CloudView> clouds;
         Pool<SpriteRenderer> parts, flyers; Pool<LineRenderer> lines;
         Pool<LineRenderer> aimLines;
+        Pool<SpriteRenderer> ringFx;            // 수채 고리·물감 튐 (dream FX가 있을 때 선 대신)
+        Sprite ringSp, ringThinSp, splashSp, leafSp, dotSp;
+        Pool<SpriteRenderer> fxPool;            // one-shot effects (R.fxs): hit bursts, spawn puffs, bar dust
+        Sprite[] fxSp;                          // by FxShape
+        Sprite[] hitFrames;                     // flipbook burst FX/hit_0..4 (FxShape.HitAnim)
+        // the FX slicer fits every frame to the same canvas, so the burst's growth is put back here
+        static readonly float[] HitFrameScale = { 0.5f, 0.82f, 1f, 1.12f, 1.2f };
+        Material brushMat;                      // 번개·회오리·베기 선에 붓 결 (FX/brush)
         Pool<SpriteRenderer> extraBars;         // 분신 바 (씬의 바를 템플릿으로 복제)            // 조준 화살표 전용 (화살촉의 뾰족한 굵기 곡선이 공용 선 풀에 남지 않게)
         string bgTheme;
 
@@ -70,12 +79,49 @@ namespace MoreMush
             lines = new Pool<LineRenderer>(linePrefab, fxRoot);
             aimLines = new Pool<LineRenderer>(linePrefab, fxRoot);
             extraBars = new Pool<SpriteRenderer>(bar, bar.transform.parent);
+            ringFx = new Pool<SpriteRenderer>(partPrefab, fxRoot);
+            // dream watercolor effects (Tools/art sheets fx): without them the old line rings stay
+            splashSp = SpriteDB.Get("FX/splash"); leafSp = SpriteDB.Get("FX/leaf");
+            ringSp = splashSp != null ? SpriteDB.Get("FX/ring") : null; ringThinSp = splashSp != null ? SpriteDB.Get("FX/ring_thin") : null;
+            dotSp = partPrefab.sprite;
+            fxPool = new Pool<SpriteRenderer>(partPrefab, fxRoot);
+            string[] fxKeys = { null, "FX/chip", "FX/leaf", "FX/impact", "FX/impact_ring", "FX/puff", "FX/dust", "FX/streak", "FX/sprout", "FX/drop", "FX/hit_0", "FX/twinkle", "FX/dot_ring" };
+            hitFrames = new Sprite[5];
+            for (int i = 0; i < 5; i++) hitFrames[i] = SpriteDB.Get("FX/hit_" + i);
+            fxSp = new Sprite[fxKeys.Length];
+            for (int i = 0; i < fxKeys.Length; i++) fxSp[i] = fxKeys[i] != null ? SpriteDB.Get(fxKeys[i]) : null;
+            fxSp[0] = dotSp;
+            var brush = SpriteDB.Get("FX/brush");
+            if (brush != null) brushMat = new Material(linePrefab.sharedMaterial) { mainTexture = brush.texture };
+        }
+
+        // a line of the shared pool, painted with the brush texture when the dream set has one
+        LineRenderer Line(int i)
+        {
+            var l = lines.Get(i);
+            if (brushMat != null && l.sharedMaterial != brushMat) { l.sharedMaterial = brushMat; l.textureMode = LineTextureMode.Stretch; }
+            return l;
+        }
+
+        static float EaseOut(float k) { k = 1 - Mathf.Clamp01(k); return 1 - k * k * k; }
+
+        // one watercolor sprite of the ring pool: FX sprites are one world unit wide, so scale = diameter in units
+        SpriteRenderer Blot(ref int n, Sprite sp, float x, float y, float diameter, Color c, float rot, int order)
+        {
+            var s = ringFx.Get(n++);
+            s.sprite = sp;
+            s.transform.localPosition = Art.P(x, y);
+            s.transform.localScale = Vector3.one * (diameter / Art.PPU);
+            s.transform.localRotation = Quaternion.Euler(0, 0, rot);
+            s.color = c;
+            s.sortingOrder = order;
+            return s;
         }
 
         public void Clear()
         {
             bossStr.Clear();
-            shrooms.Trim(0); balls.Trim(0); extraBars.Trim(0); devices.Trim(0); clouds.Trim(0); parts.Trim(0); flyers.Trim(0); lines.Trim(0); aimLines.Trim(0);
+            shrooms.Trim(0); balls.Trim(0); extraBars.Trim(0); devices.Trim(0); clouds.Trim(0); parts.Trim(0); flyers.Trim(0); lines.Trim(0); aimLines.Trim(0); ringFx.Trim(0); fxPool.Trim(0);
             ReleaseTexts(true);
         }
 
@@ -85,7 +131,8 @@ namespace MoreMush
             float now = Time.time;
             var st = R.st;
             float z = RoundSim.ZOOM;
-            Vector2 shake = live && R.shake > 0 ? new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * R.shake * 8 : Vector2.zero;
+            // shake grows with its square (after NKK): taps stay subtle, big pops really kick
+            Vector2 shake = live && R.shake > 0 ? new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * R.shake * (0.4f + R.shake) * 16 : Vector2.zero;
             field.localPosition = Art.P(shake.x, shake.y);
             field.localScale = new Vector3(z, z, 1);
             if (textLayer != null) textLayer.anchoredPosition = new Vector2(shake.x, -shake.y);
@@ -94,6 +141,11 @@ namespace MoreMush
             {
                 bgTheme = R.themeId;
                 background.sprite = SpriteDB.Get("Backgrounds/bg_" + bgTheme) ?? SpriteDB.Get("Backgrounds/bg_forest");
+                if (decor != null)
+                {
+                    bool any = decor.Find(bgTheme) != null;
+                    foreach (Transform g in decor) g.gameObject.SetActive(g.name == (any ? bgTheme : "forest"));
+                }
             }
             background.transform.localPosition = Art.P(RoundSim.WW / 2, RoundSim.WH / 2) + bgOffset;
             Art.SizePx(background.transform, background.sprite, RoundSim.WW * bgMul.x, RoundSim.WH * bgMul.y);
@@ -126,19 +178,46 @@ namespace MoreMush
             for (int i = 0; i < R.clouds.Count; i++) clouds.Get(i).Show(R.clouds[i], now);
             clouds.Trim(R.clouds.Count);
 
-            int nl = 0;
-            for (int ri = Mathf.Max(0, R.rings.Count - MAX_RINGS); ri < R.rings.Count; ri++)   // 가장 최근 것만
+            int nl = 0, nr = 0;
+            if (ringSp != null)
             {
-                var r = R.rings[ri];
-                float k = r.t / r.dur;
-                var l = Circle(nl++, r.x, r.y, r.r * (0.3f + 0.7f * Mathf.Sqrt(k)), r.quiet ? 3 : 8 * (1 - k) + 2);
-                var c = U.Hex(r.col); c.a = 1 - k; l.startColor = l.endColor = c;
+                // watercolor: the ring bursts out fast and settles (ease-out), a paint splash pops at the hit for an
+                // instant and fades; quiet rings (every bell hit) stay thin and small
+                for (int ri = Mathf.Max(0, R.rings.Count - MAX_RINGS); ri < R.rings.Count; ri++)
+                {
+                    var r = R.rings[ri];
+                    float k = r.t / r.dur, e = EaseOut(k);
+                    var c = U.Hex(r.col); c.a = (1 - k) * (1 - k) * (r.quiet ? 0.7f : 0.95f);
+                    float rot = (r.x * 7 + r.y * 3) % 360;
+                    Blot(ref nr, r.quiet ? ringThinSp : ringSp, r.x, r.y, 2 * r.r * (0.35f + 0.75f * e), c, rot, 3040);
+                    if (!r.quiet && k < 0.3f)
+                    {
+                        float p = k / 0.3f;
+                        var sc = c; sc.a = (1 - p) * 0.75f;
+                        Blot(ref nr, splashSp, r.x, r.y, r.r * (0.7f + 0.9f * EaseOut(p)), sc, rot + 40, 3041);
+                    }
+                }
+                foreach (var w in R.waves)
+                {
+                    float k = w.t / 0.4f;
+                    Blot(ref nr, ringSp, w.x, w.y, 2 * w.r, new Color(1, 0.9f, 0.76f, (1 - k) * 0.9f), w.x % 360, 3040);
+                }
             }
-            foreach (var w in R.waves)
+            else
             {
-                float k = w.t / 0.4f;
-                var l = Circle(nl++, w.x, w.y, w.r, 10 * (1 - k) + 2);
-                var c = U.Hex("#ffd9a8"); c.a = 1 - k; l.startColor = l.endColor = c;
+                for (int ri = Mathf.Max(0, R.rings.Count - MAX_RINGS); ri < R.rings.Count; ri++)   // 가장 최근 것만
+                {
+                    var r = R.rings[ri];
+                    float k = r.t / r.dur;
+                    var l = Circle(nl++, r.x, r.y, r.r * (0.3f + 0.7f * Mathf.Sqrt(k)), r.quiet ? 3 : 8 * (1 - k) + 2);
+                    var c = U.Hex(r.col); c.a = 1 - k; l.startColor = l.endColor = c;
+                }
+                foreach (var w in R.waves)
+                {
+                    float k = w.t / 0.4f;
+                    var l = Circle(nl++, w.x, w.y, w.r, 10 * (1 - k) + 2);
+                    var c = U.Hex("#ffd9a8"); c.a = 1 - k; l.startColor = l.endColor = c;
+                }
             }
             foreach (var tn in R.tornados)
                 for (int i = 0; i < 5; i++)
@@ -148,7 +227,7 @@ namespace MoreMush
                 }
             foreach (var bo in R.bolts)
             {
-                var l = lines.Get(nl++);
+                var l = Line(nl++);
                 l.loop = false;
                 var pts = PosBuf(1 + (bo.pts.Count - 1) * 4); int np = 0;
                 pts[np++] = Art.P(bo.pts[0].x, bo.pts[0].y);
@@ -174,14 +253,27 @@ namespace MoreMush
             lines.Trim(nl);
 
             // 파티클
+            // dream: one in four bigger bits is a spinning leaf; every bit pops big for a moment, then shrinks away
             for (int i = 0; i < R.parts.Count; i++)
             {
                 var p = R.parts[i]; var s = parts.Get(i);
+                float k = p.t / p.life;
+                int h = System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(p);
+                bool chip = p.shape == (byte)FxShape.Chip && fxSp[(int)FxShape.Chip] != null;
+                bool twinkle = p.shape == (byte)FxShape.Twinkle && fxSp[(int)FxShape.Twinkle] != null;
+                bool leaf = !chip && !twinkle && leafSp != null && p.size >= 4 && (h & 3) == 0;
+                var want = twinkle ? fxSp[(int)FxShape.Twinkle] : chip ? fxSp[(int)FxShape.Chip] : leaf ? leafSp : dotSp;
+                if (twinkle) s.sortingOrder = 4140; else if (s.sortingOrder == 4140) s.sortingOrder = partPrefab.sortingOrder;
+                if (s.sprite != want) s.sprite = want;
+                float pop = splashSp == null ? 1 : k < 0.12f ? 0.6f + k / 0.12f * 0.65f : 1.25f - 0.65f * (k - 0.12f) / 0.88f;
                 s.transform.localPosition = Art.P(p.x, p.y);
-                s.transform.localScale = Vector3.one * (p.size * 2 / Art.PPU);
-                var c = p.col; c.a *= 1 - p.t / p.life; s.color = c;
+                s.transform.localScale = Vector3.one * (p.size * 2 / Art.PPU * pop * (leaf ? 1.9f : chip ? 1.6f : twinkle ? 2.6f : 1));
+                s.transform.localRotation = leaf || chip ? Quaternion.Euler(0, 0, (h % 360) + p.t * ((h & 8) != 0 ? 420 : -420)) : Quaternion.identity;
+                var c = p.col; c.a *= 1 - k * k; s.color = c;
             }
             parts.Trim(R.parts.Count);
+            ringFx.Trim(nr);
+            DrawFx(R);
 
             weather.Show(R, now);
 
@@ -217,7 +309,7 @@ namespace MoreMush
 
         LineRenderer Ellipse(int i, float x, float y, float rx, float ry, float rot, float width)
         {
-            var l = lines.Get(i);
+            var l = Line(i);
             const int N = 40;
             l.loop = true; l.positionCount = N;
             float cr = Mathf.Cos(rot), sr = Mathf.Sin(rot);
@@ -236,8 +328,12 @@ namespace MoreMush
         void DrawBar(RoundSim R, float now)
         {
             float x0 = R.barX - R.barLen / 2, y = RoundSim.BAR_Y - BAR_T / 2;
-            bar.transform.localPosition = Art.P(R.barX, y + BAR_T / 2);
-            bar.size = new Vector2(R.barLen / Art.PPU, (BAR_T + 10) / Art.PPU);
+            // landing: the bar dips, squashes flat and tilts a little toward where the harvester hit, then springs back
+            float kick = R.barKick, spring = kick * kick * Mathf.Cos((1 - kick) * 14f);
+            float tilt = R.barLen > 0 ? Mathf.Clamp((R.barHitX - R.barX) / (R.barLen / 2), -1, 1) : 0;
+            bar.transform.localPosition = Art.P(R.barX, y + BAR_T / 2 + spring * 7);
+            bar.transform.localRotation = Quaternion.Euler(0, 0, tilt * spring * 3.5f);
+            bar.size = new Vector2(R.barLen * (1 + spring * 0.04f) / Art.PPU, (BAR_T + 10) * (1 - spring * 0.28f) / Art.PPU);
             float k = Mathf.Min(1, R.feverK);
             if (k > 0.03f)
             {
@@ -245,7 +341,7 @@ namespace MoreMush
                 bar.color = Color.Lerp(Color.white, F.mid, k * Mathf.Min(1, 0.55f + 0.4f * R.flameInt));
             }
             else bar.color = Color.white;
-            Art.SetFx(bar, 0, 0, R.barFx > 0 ? 0.6f : 0);
+            Art.SetFx(bar, 0, 0, R.barFx > 0 ? R.barFx / 0.15f * 0.4f : 0);   // a quick light flash; full white read as the bar vanishing
             // 분신 바: 반투명 하늘색
             for (int i = 0; i < R.extraBars.Count; i++)
             {
@@ -318,12 +414,14 @@ namespace MoreMush
             l.widthMultiplier = width / Art.PPU;
         }
 
-        static readonly string[] TierCols = { "#ffffff", "#9fd8ff", "#e6b3ff", "#ffc94a" };
-        static readonly float[] TierSizes = { 18, 21, 26, 32 };
+        // damage numbers on the pale field: cream / sky / violet / gold, muted to the watercolour field (the painted
+        // glyphs multiply these, so full-strength colours read as glossy stickers)
+        static readonly string[] TierCols = { "#f7efe0", "#a9cfe8", "#cfb8e6", "#f0d07c" };
+        static readonly float[] TierSizes = { 22, 25, 30, 38 };
 
         // 필드 글자: 글자 하나는 사라질 때까지 같은 TMP 칸을 쓴다. 예전처럼 목록 순서로 칸을 맡기면 앞 글자가 사라질 때마다
         // 뒤 글자들의 칸이 바뀌어 메시를 다시 만들었다. 투명도는 canvasRenderer 알파, 튀어나오는 크기는 scale로 바꿔 메시를 건드리지 않는다.
-        class TextSlot { public TextMeshProUGUI tmp; public object key; public int seen; public string s, col; public float size = -1; }
+        class TextSlot { public TextMeshProUGUI tmp; public UnityEngine.UI.Image letter; public object key; public int seen; public string s, col; public float size = -1; public int style = -1; }
         readonly List<TextSlot> textSlots = new List<TextSlot>();
         readonly Dictionary<object, TextSlot> slotOf = new Dictionary<object, TextSlot>();
         readonly Dictionary<int, string> comboStr = new Dictionary<int, string>();
@@ -336,17 +434,22 @@ namespace MoreMush
             foreach (var t in R.texts)
             {
                 float life = t.tier >= 2 ? 1.2f : 0.8f, k = t.t / life;
-                float size = TierSizes[t.tier] * (t.crit ? 1.1f : 1), pop = t.t < 0.1f ? 0.6f + t.t * 4 : 1;
-                string col = t.coin ? "#ffd23a" : t.golden ? "#ffd23a" : t.crit ? "#ff5a4a" : TierCols[t.tier];
-                t.view ??= t.coin ? $"+{U.FmtN(t.v, 1)}G" : (t.crit ? Loc.T("치명!") + " " : "+") + U.Fmt(t.v);   // 값이 바뀌지 않으니 한 번만 만든다
+                float size = TierSizes[t.tier] * (t.crit ? 1.2f : 1);
+                // pop: easeOutBack from small over 0.18 s (after NKK popups), crits overshoot harder; shrinks a little at the end
+                float c = t.crit ? 3.4f : 2.4f, e = Mathf.Clamp01(t.t / 0.18f) - 1;
+                float pop = Mathf.Max(0.05f, 1 + (c + 1) * e * e * e + c * e * e) * (k > 0.75f ? 1 - (k - 0.75f) * 0.8f : 1);
+                string col = t.coin || t.golden ? "#efcb6a" : t.crit ? "#e8705c" : TierCols[t.tier];
+                // 값이 바뀌지 않으니 한 번만 만든다. 그림 숫자(DmgDigits)가 있으면 치명타는 "치명!" 글자 대신 숫자 뒤 느낌표
+                t.view ??= t.coin ? DmgDigits.Spell($"+{U.FmtN(t.v, 1)}G") ?? $"+{U.FmtN(t.v, 1)}G"
+                    : DmgDigits.Spell(t.crit ? U.Fmt(t.v) + "!" : "+" + U.Fmt(t.v)) ?? (t.crit ? Loc.T("치명!") + " " : "+") + U.Fmt(t.v);
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
             foreach (var l in R.labels)
-                Text(l, l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
+                Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
             foreach (var b in R.balls)
                 if (b.combo >= 3 && b.perm)
                 {
-                    if (!comboStr.TryGetValue(b.combo, out var cs)) comboStr[b.combo] = cs = "x" + b.combo;
+                    if (!comboStr.TryGetValue(b.combo, out var cs)) comboStr[b.combo] = cs = DmgDigits.Spell("x" + b.combo) ?? "x" + b.combo;
                     Text(b, cs, b.x, b.y - b.r - 14, 16, 1, "#fff3b0", 1, z);
                 }
             // 보스 이름·남은 체력 (체력 막대 위)
@@ -356,7 +459,7 @@ namespace MoreMush
                 if (bm.dead) continue;
                 int pct = Mathf.CeilToInt((float)(bm.hp / bm.maxHp) * 100);
                 if (!bossStr.TryGetValue(bm, out var bs) || bs.pct != pct || bs.lang != Loc.Lang)
-                    bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + $"  {pct}%");
+                    bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + "  " + (DmgDigits.Numbers(pct + "%") ?? pct + "%"));
                 Text(bm, bs.s, bm.x, bm.y + bm.r * 1.2f + 30, bm.bossClone ? 20 : 26, 1, R.Boss.col, 1, z);
             }
             ReleaseTexts(false);
@@ -372,6 +475,9 @@ namespace MoreMush
                 {
                     sl = new TextSlot { tmp = Instantiate(textPrefab, textLayer) };
                     sl.tmp.name = textPrefab.name + " " + textSlots.Count;
+                    // the prefab picked up auto-size (max 20) from the localisation pass, which capped every number and
+                    // label at one small size; the field sets its own sizes per tier
+                    sl.tmp.enableAutoSizing = false;
                     textSlots.Add(sl);
                 }
                 sl.key = key; slotOf[key] = sl;
@@ -379,13 +485,85 @@ namespace MoreMush
             }
             sl.seen = textFrame;
             var t = sl.tmp;
-            if (!ReferenceEquals(sl.s, s)) { sl.s = s; t.text = s; }
             float fs = size * z;
+            bool sChanged = !ReferenceEquals(sl.s, s);
+            if (sChanged) { sl.s = s; t.text = s; }
             if (fs != sl.size) { sl.size = fs; t.fontSize = fs; }
+            // fixed headline words (거대 버섯 수확! · 분신 소환! · 황금!) show their hand-lettered image instead
+            if (sChanged || (sl.letter != null && sl.letter.rectTransform.sizeDelta.y != fs * 1.4f)) sl.letter = Lettering.Apply(t, FieldLetter(s), 1.4f);
             if (!ReferenceEquals(sl.col, col)) { sl.col = col; t.color = U.Hex(col); }
+            int style = key is FloatText ? 1 : 0;
+            if (sl.style != style)
+            {
+                // numbers get a thicker outline than labels so they read over mushrooms and the light ground
+                sl.style = style;
+                t.outlineWidth = style == 1 ? 0.3f : 0.2f;
+                t.outlineColor = new Color32(0x3a, 0x26, 0x1c, 255);
+            }
             t.canvasRenderer.SetAlpha(Mathf.Clamp01(alpha));
+            if (sl.letter != null) sl.letter.canvasRenderer.SetAlpha(Mathf.Clamp01(alpha));
             t.rectTransform.localScale = new Vector3(pop, pop, 1);
             t.rectTransform.anchoredPosition = new Vector2(x * z, -y * z);
+            // numbers tilt a little each way as they pop (crits more); labels stay level
+            t.rectTransform.localRotation = key is FloatText ft ? Quaternion.Euler(0, 0, (ft.crit ? 11 : 6) * Mathf.Sin(ft.y * 0.37f + ft.v.GetHashCode()) * Mathf.Clamp01(ft.t / 0.18f)) : Quaternion.identity;
+        }
+
+        // One-shot effects: they burst open fast and fade while they finish growing (ease-out), so hits read as a
+        // short sharp pop rather than a slow bloom. Order: dust and puffs under the mushrooms' feet stay low, bursts on top.
+        void DrawFx(RoundSim R)
+        {
+            int n = 0;
+            foreach (var f in R.fxs)
+            {
+                var sp = fxSp[(int)f.shape];
+                float fk = f.t / f.dur, frameK = 1;
+                if (f.shape == FxShape.HitAnim && hitFrames[0] != null)
+                {
+                    // flipbook: holds the bright first frames a touch longer, then breaks apart fast
+                    int fi = Mathf.Min(4, (int)(Mathf.Pow(fk, 0.8f) * 5));
+                    sp = hitFrames[fi] ?? sp;
+                    frameK = HitFrameScale[fi];
+                }
+                if (sp == null) continue;
+                var s = fxPool.Get(n++);
+                if (s.sprite != sp) s.sprite = sp;
+                float k = f.t / f.dur, e = EaseOut(k);
+                float scale;
+                switch (f.shape)
+                {
+                    case FxShape.Impact: scale = 0.45f + 0.75f * e; break;              // snaps open
+                    case FxShape.HitAnim: scale = frameK; break;                        // the frames do the growing
+                    case FxShape.ImpactRing: scale = 0.35f + 0.9f * e; break;
+                    case FxShape.Puff: scale = 0.6f + 0.55f * e; break;                 // swells softly
+                    case FxShape.Dust: scale = 0.55f + 0.6f * e; break;
+                    case FxShape.Streak: scale = 0.7f + 0.5f * e; break;
+                    case FxShape.Sprout: scale = k < 0.35f ? EaseOut(k / 0.35f) * 1.15f : 1.15f - 0.15f * (k - 0.35f) / 0.65f; break;   // pops up
+                    default: scale = 1; break;
+                }
+                float sx = f.size * scale / Art.PPU / Mathf.Max(0.01f, sp.bounds.size.x);
+                float sy = f.shape == FxShape.Dust || f.shape == FxShape.Streak ? sx : sx;
+                s.transform.localPosition = Art.P(f.x, f.y);
+                s.transform.localScale = new Vector3(f.flip ? -sx : sx, sy, 1);
+                s.transform.localRotation = Quaternion.Euler(0, 0, f.shape == FxShape.Sprout || f.shape == FxShape.Dust ? f.rot * 0.2f : -f.rot);
+                float a = f.shape == FxShape.Sprout ? (k < 0.7f ? 1 : (1 - k) / 0.3f) : f.shape == FxShape.HitAnim ? (k < 0.6f ? 1 : (1 - k) / 0.4f) : (1 - k) * (1 - k);
+                var c = f.col; c.a *= a; s.color = c;
+                // hit bursts and streaks draw over the harvesters for their few frames, or the disc hides the contact point
+                s.sortingOrder = f.shape == FxShape.Dust || f.shape == FxShape.Sprout ? 900 : f.shape == FxShape.Puff ? 3030 : f.shape == FxShape.Impact || f.shape == FxShape.Streak || f.shape == FxShape.HitAnim ? 4150 : 3045;
+            }
+            fxPool.Trim(n);
+        }
+
+        static string letterLang;
+        static readonly Dictionary<string, string> letterOf = new Dictionary<string, string>();
+        // field label text (already translated) → lettering id
+        static string FieldLetter(string s)
+        {
+            if (letterLang != Loc.Lang)
+            {
+                letterLang = Loc.Lang; letterOf.Clear();
+                letterOf[Loc.T("거대 버섯 수확!")] = "giant"; letterOf[Loc.T("분신 소환!")] = "clone"; letterOf[Loc.T("황금!")] = "golden";
+            }
+            return s != null && letterOf.TryGetValue(s, out var id) ? id : null;
         }
 
         // 이번 프레임에 그리지 않은 글자 칸을 비운다 (all = 전부)

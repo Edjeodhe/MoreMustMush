@@ -1,0 +1,12 @@
+Sprite sheet: a 2x3 grid holding 6 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+More EMPTY 9-sliceable UI pieces (no icons, no text) in the same style as the attached kit, uniform rounded borders on all sides.
+
+Assets in reading order (left to right, top to bottom):
+1. a secondary button: vivid saturated warm-orange fill, thin dark orange outline, darker bottom lip, small top highlight
+2. an info button: vivid saturated sky-blue fill, thin dark blue outline, darker bottom lip, small top highlight
+3. a slim long horizontal top bar: pastel oatmeal-beige fill with a thin soft brown bottom edge (very wide and short)
+4. a navigation rail entry background: light pastel beige rounded rectangle with a thin soft edge
+5. the same navigation rail entry but active: saturated leaf-green fill with a thin dark green edge
+6. a window title strip: slightly darker pastel beige rounded rectangle with a thin soft edge (wide and short)

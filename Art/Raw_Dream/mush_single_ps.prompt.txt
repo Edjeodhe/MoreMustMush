@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+25 different real poisonous mushroom species as CUTE CHIBI TOY-LIKE watercolor icons, drawn EXACTLY like the 4 attached sample mushrooms (same chunky proportions, same simple flat washes, same low detail). Each species must stay recognizable only by its BIG traits (cap profile, real colors, one signature marking such as spots / net / ink rim / ring / volva, clustering habit). Strong deformation: 2 heads tall at most, the cap is about 2/3 of the whole figure, the stem is shorter than half the cap width and thick and soft, everything is a round squishy blob like a jelly toy or a soft plush. Detail budget: only 3 to 6 big simple markings per mushroom, NO fine texture, NO scales drawn one by one, NO gill lines more than 5, NO bark or dirt texture, NO realistic shading. Flat matte watercolor, no outlines, no faces. One mushroom or its natural small group (max 3-5 chubby caps) per cell, seen slightly from the side.
+
+Assets in reading order (left to right, top to bottom):
+1. Russula emetica (무당버섯): bright red smooth cap, white gills and stem
+2. Hypholoma fasciculare (노란다발): cluster of small sulfur-yellow caps
+3. Leucocoprinus birnbaumii (노란각시버섯): lemon-yellow powdery bell cap on a slender yellow stem
+4. Mycena pura (맑은애주름버섯): small delicate lilac-purple cap on a thin stem
+5. Gliophorus psittacinus (이끼꽃버섯): parrot waxcap: slimy glossy dark-green small caps
+6. Clitocybe dealbata (비단빛깔때기버섯): pure silky white funnel shape
+7. Inocybe fastigiata (땀버섯): brown conical fibrous cap with a split edge
+8. Gymnopilus junonius (갈황색미치광이버섯): cluster of orange-gold caps
+9. Amanita muscaria (광대버섯): fly agaric: red cap with white warts, white stem with a skirt ring
+10. Amanita spissacea (뱀껍질광대버섯): grey-brown cap with snakeskin scale pattern, snake-patterned stem
+11. Ramaria formosa (붉은싸리버섯): salmon pink-orange coral fungus
+12. Amanita phalloides (알광대버섯): death cap: olive-green cap, white skirt ring, white egg sac at the base
+13. Gyromitra esculenta (마귀곰보버섯): false morel: brain-like wrinkled reddish-brown cap
+14. Paralepistopsis acromelalga (독깔때기버섯): tan-orange funnel cap
+15. Omphalotus japonicus (화경버섯): orange-brown fan with gills glowing green
+16. Amanita subjunquillea (개나리광대버섯): forsythia-yellow cap, white ring and egg sac
+17. Amanita pantherina (마귀광대버섯): panther cap: brown cap scattered with white warts
+18. Amanita virosa (독우산광대버섯): destroying angel: all-white umbrella with ring and egg sac, faint eerie glow
+19. Trichoderma cornu-damae (붉은사슴뿔버섯): poison fire coral: red finger-like horns (legendary)
+20. Lepiota brunneoincarnata (갈색고리갓버섯): small cap with brown scales and a ring, faint glow (legendary)
+21. Amanita echinocephala (흰가시광대버섯): white cap covered in spiky warts, ring
+22. fantasy variant of Mycena chlorophos (달빛애주름버섯): small mycena glowing soft green
+23. Panaeolus semiovatus (말똥버섯): grey-brown bell cap on a thin stem growing from a small dung pat
+24. fantasy variant of a jelly fungus (해파리버섯): translucent purple jellyfish-like cap with dangling tendrils
+25. fantasy variant of Amanita (콘크리트광대버섯): grey concrete-textured cracked amanita cap with a ring, bursting from a concrete chunk (legendary)

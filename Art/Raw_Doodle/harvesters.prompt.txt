@@ -1,0 +1,24 @@
+Sprite sheet: a 4x5 grid holding 17 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Pinball harvester weapon TOKENS for a mushroom-harvesting pinball game, all seen from directly above, all the SAME round size: each token is a chunky round disc that spins while it flies, with a soft wooden or metal rim and the weapon motif forming or filling the disc, so they read as one family at 40 px. Skins (hs_) are exact recolors of the matching base token, same shape. The last two cells are small soft effect puffs, not tokens.
+
+Assets in reading order (left to right, top to bottom):
+1. scythe token: a curved steel scythe blade wrapping around a round wooden hub
+2. shuriken token: four rounded gunmetal blades in a round silhouette around a red gem hub
+3. herb hoe token: a black-iron hoe blade with an awl-sharp tip curled around a round wooden hub
+4. circular saw token: a steel disc with rounded teeth and a hole in the middle
+5. spore token: a round red mushroom cap seen from above with cream spots
+6. bell token: a round brass acorn bell seen from above with its acorn-cap top
+7. coin token: a big old brass coin (yeopjeon) with a square hole
+8. golden scythe token: the scythe token made of shining gold with two sparkles
+9. cherry-blossom scythe token: pink blade, pale wood hub
+10. obsidian shuriken token: near-black blades with violet edges and a purple hub
+11. ice saw token: pale icy blue disc with white teeth
+12. galaxy spore token: deep indigo cap with yellow star dots
+13. golden bell token: shining gold bell with a dark gold cap
+14. jade coin token: jade green coin with a darker green ring
+15. dragon scythe token: red blade with a gold edge and a dark hub
+16. a soft puffy violet spore cloud (effect)
+17. a small soft white dust puff (effect)
+Leave the remaining 3 cell(s) empty.

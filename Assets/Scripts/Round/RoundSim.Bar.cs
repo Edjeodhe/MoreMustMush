@@ -65,7 +65,14 @@ namespace MoreMush
             b.y = y - BAR_T / 2 - b.r;
             b.spd = Mathf.Max(b.spd, (float)(st.launch * st.barSpd));
             b.combo++;
-            if (main) barFx = 0.15f;
+            if (main)
+            {
+                barFx = 0.15f; barKick = 1; barHitX = b.x;
+                // landing dust and a small burst: the bar takes the hit
+                AddFx(FxShape.Dust, b.x, y - 2, 70, 0.32f, new Color(1, 0.95f, 0.82f, 0.85f), 0, 20);
+                AddFx(FxShape.ImpactRing, b.x, y - 6, 54, 0.22f, new Color(1, 0.93f, 0.7f, 0.9f), FxR(0, 360), 0);
+                if (b.perm) shake = Mathf.Max(shake, 0.06f);
+            }
             Snd.Bar();
             SawBounce(b);
             for (int i = 0; i < 5; i++) AddPart(b.x, y - 8, U.Rand(-120, 120), U.Rand(-200, -60), 0.35f, U.Hex("#ffe9a8"), 3);

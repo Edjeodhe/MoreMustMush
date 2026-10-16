@@ -15,66 +15,66 @@ MonoBehaviour:
   sets:
   - lang: ko
     title:
-      font: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+      font: {fileID: 11400000, guid: 01c4dab6d260f764e86f62df2a5b4da1, type: 2}
       presets:
-      - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
-      - {fileID: 2100000, guid: 3c422943476e89043bfc8c0e64c730d8, type: 2}
-      - {fileID: 2100000, guid: 5d68d0ce7b59d9d4e9564ae91649c1b6, type: 2}
+      - {fileID: 2100000, guid: dae9b5a0fa214e14b8267f2ef937596f, type: 2}
+      - {fileID: 2100000, guid: 8bc8be46a827f9a45ac53cf274a19cbe, type: 2}
+      - {fileID: 2100000, guid: f070a5509d1728742881c49cb8c0def6, type: 2}
     body:
-      font: {fileID: 11400000, guid: 1858953a4d8fee74188f368f8ca7c645, type: 2}
+      font: {fileID: 11400000, guid: c369fe97a7cc19f4a8c10ad2a0b931f4, type: 2}
       presets:
-      - {fileID: 2100000, guid: a7e0ac25b3963ad46a197c1cbb07779f, type: 2}
-      - {fileID: 2100000, guid: 3c0d1515c1363634e8e7ac85e3c0e6dc, type: 2}
-      - {fileID: 2100000, guid: f39e657e95cd72441b6cf2d2663fbc3e, type: 2}
+      - {fileID: 2100000, guid: ca68e1598573e8f43bd13ac841e4160e, type: 2}
+      - {fileID: 2100000, guid: 488ad15a175570a47bb93be4c73107aa, type: 2}
+      - {fileID: 2100000, guid: 29a76de84d00bf04f9600ee889185ff7, type: 2}
   - lang: en
     title:
-      font: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+      font: {fileID: 11400000, guid: b31f5852f81a028498a2c7b8f412692d, type: 2}
       presets:
-      - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
-      - {fileID: 2100000, guid: 3c422943476e89043bfc8c0e64c730d8, type: 2}
-      - {fileID: 2100000, guid: 5d68d0ce7b59d9d4e9564ae91649c1b6, type: 2}
+      - {fileID: 2100000, guid: 6b5265d67e0df904f87b1b97b280441d, type: 2}
+      - {fileID: 2100000, guid: fd52d873a3a884b4d98edf70e125e7c8, type: 2}
+      - {fileID: 2100000, guid: 2025b19e6e9eaf04b8264b13c0c65eac, type: 2}
     body:
-      font: {fileID: 11400000, guid: c0448b3cc8b872640ba01688f14753d0, type: 2}
+      font: {fileID: 11400000, guid: 8ac937bcddac1b44abae0781aaf2160d, type: 2}
       presets:
-      - {fileID: 2100000, guid: 077f9485970fa2f489aa1c1505271676, type: 2}
-      - {fileID: 2100000, guid: 4df2a05ecc505a54abe34ef0b32eff88, type: 2}
-      - {fileID: 2100000, guid: 8f5d0b97ddbc7c842b807b25dc7b63ee, type: 2}
+      - {fileID: 2100000, guid: b88768834d115bf4da057a2bc4fc150e, type: 2}
+      - {fileID: 2100000, guid: c32fa84a52a521c4b9ff7fef00c02d3b, type: 2}
+      - {fileID: 2100000, guid: dd409a37470503b4783ee192bfe35e5c, type: 2}
   - lang: ja
     title:
-      font: {fileID: 11400000, guid: 02b1d91fa9f603040adb9296f68d4ef8, type: 2}
+      font: {fileID: 11400000, guid: f32134f2280e15f4c8579bc123efb49d, type: 2}
       presets:
-      - {fileID: 2100000, guid: 3ac88cf8cba689844b1884102db500e8, type: 2}
-      - {fileID: 2100000, guid: 053f22f46c3233a48978b4d9a3085ee7, type: 2}
-      - {fileID: 2100000, guid: 8686c919557ff7f4bba45d68686dd275, type: 2}
+      - {fileID: 2100000, guid: 4d67af01d9e7e19449062427ea29e157, type: 2}
+      - {fileID: 2100000, guid: 2b129e760d6cd904c84d4cf91affa395, type: 2}
+      - {fileID: 2100000, guid: a96c07adfeaf1464e804b039149b970f, type: 2}
     body:
-      font: {fileID: 11400000, guid: 4078fe70134c88242b38298b1c55d77d, type: 2}
+      font: {fileID: 11400000, guid: b0d9d9de5f597194a90995ce0acf44d9, type: 2}
       presets:
-      - {fileID: 2100000, guid: 7c16977420e34744d9bec6cb4a3b2131, type: 2}
-      - {fileID: 2100000, guid: 73ee07c683edafb419c9c23d7f585f7a, type: 2}
-      - {fileID: 2100000, guid: 070e088714b3347409e1094e422eb4d3, type: 2}
+      - {fileID: 2100000, guid: 8de1fd51e3d701b4bbde660297617408, type: 2}
+      - {fileID: 2100000, guid: 25af742a2bdb65642a244d28e9954a49, type: 2}
+      - {fileID: 2100000, guid: e368838079522404bb548c999ac6c8ab, type: 2}
   - lang: ru
     title:
-      font: {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
+      font: {fileID: 11400000, guid: b31f5852f81a028498a2c7b8f412692d, type: 2}
       presets:
-      - {fileID: 2100000, guid: d9408a823825a3246a3ffb3bf9a85071, type: 2}
-      - {fileID: 2100000, guid: 3c422943476e89043bfc8c0e64c730d8, type: 2}
-      - {fileID: 2100000, guid: 5d68d0ce7b59d9d4e9564ae91649c1b6, type: 2}
+      - {fileID: 2100000, guid: 6b5265d67e0df904f87b1b97b280441d, type: 2}
+      - {fileID: 2100000, guid: fd52d873a3a884b4d98edf70e125e7c8, type: 2}
+      - {fileID: 2100000, guid: 2025b19e6e9eaf04b8264b13c0c65eac, type: 2}
     body:
-      font: {fileID: 11400000, guid: 1858953a4d8fee74188f368f8ca7c645, type: 2}
+      font: {fileID: 11400000, guid: 8ac937bcddac1b44abae0781aaf2160d, type: 2}
       presets:
-      - {fileID: 2100000, guid: a7e0ac25b3963ad46a197c1cbb07779f, type: 2}
-      - {fileID: 2100000, guid: 3c0d1515c1363634e8e7ac85e3c0e6dc, type: 2}
-      - {fileID: 2100000, guid: f39e657e95cd72441b6cf2d2663fbc3e, type: 2}
+      - {fileID: 2100000, guid: b88768834d115bf4da057a2bc4fc150e, type: 2}
+      - {fileID: 2100000, guid: c32fa84a52a521c4b9ff7fef00c02d3b, type: 2}
+      - {fileID: 2100000, guid: dd409a37470503b4783ee192bfe35e5c, type: 2}
   - lang: uk
     title:
-      font: {fileID: 11400000, guid: 02b1d91fa9f603040adb9296f68d4ef8, type: 2}
+      font: {fileID: 11400000, guid: b31f5852f81a028498a2c7b8f412692d, type: 2}
       presets:
-      - {fileID: 2100000, guid: 3ac88cf8cba689844b1884102db500e8, type: 2}
-      - {fileID: 2100000, guid: 053f22f46c3233a48978b4d9a3085ee7, type: 2}
-      - {fileID: 2100000, guid: 8686c919557ff7f4bba45d68686dd275, type: 2}
+      - {fileID: 2100000, guid: 6b5265d67e0df904f87b1b97b280441d, type: 2}
+      - {fileID: 2100000, guid: fd52d873a3a884b4d98edf70e125e7c8, type: 2}
+      - {fileID: 2100000, guid: 2025b19e6e9eaf04b8264b13c0c65eac, type: 2}
     body:
-      font: {fileID: 11400000, guid: 4078fe70134c88242b38298b1c55d77d, type: 2}
+      font: {fileID: 11400000, guid: 8ac937bcddac1b44abae0781aaf2160d, type: 2}
       presets:
-      - {fileID: 2100000, guid: 7c16977420e34744d9bec6cb4a3b2131, type: 2}
-      - {fileID: 2100000, guid: 73ee07c683edafb419c9c23d7f585f7a, type: 2}
-      - {fileID: 2100000, guid: 070e088714b3347409e1094e422eb4d3, type: 2}
+      - {fileID: 2100000, guid: b88768834d115bf4da057a2bc4fc150e, type: 2}
+      - {fileID: 2100000, guid: c32fa84a52a521c4b9ff7fef00c02d3b, type: 2}
+      - {fileID: 2100000, guid: dd409a37470503b4783ee192bfe35e5c, type: 2}

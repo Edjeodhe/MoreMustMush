@@ -1,0 +1,16 @@
+Sprite sheet: a 2x5 grid holding 10 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Character skin parts for a soft dreamy watercolor game, same flat matte watercolor as the attached style references (paper grain, soft painted edges, no hard black lines, no gloss). The FIRST attached image is a reference sheet with the same 2x5 layout: in EVERY cell, redraw EXACTLY the part shown in that cell of the reference sheet (same shape, same proportions, same colours and pattern, same orientation and same open underside) and add the listed accessory worn on it naturally: it wraps around, sits on or tucks into the part with a soft contact shadow, sized to fit that part, painted in the same watercolor style. Do not change, crop or restyle the part itself, do not add faces to caps, do not add stems, bodies or limbs.
+
+Assets in reading order (left to right, top to bottom):
+1. the lava cap wearing a red pirate bandana with white dots tied around the cap like a headscarf, the knot and two short tails at its right side
+2. the coral-shaped neon cap wearing big round lilac-and-teal headphones: the band arching over the top, the ear cups on the left and right ends of the cap rim
+3. the wide green rich cap with a small black top hat with a gold band sitting on the centre of its crown, slightly tilted
+4. the starry wizard-hat cap with a soft glowing golden halo ring floating just above its curled tip
+5. the cherry-blossom cap with a pink cherry-blossom hairpin (two flowers and a little leaf) tucked on its upper right side
+6. the cloud cap with a small fluffy white cloud resting on top of its crown
+7. the gem cap with a small golden jeweled crown sitting on top of its crown
+8. the strawberry-chocolate cap with a big pink ribbon bow on its upper left side
+9. the white face body wearing a cozy cream knitted scarf around its lower neck/chest area, below the mouth, one tail hanging down at the side; the face stays fully visible
+10. the lilac face body (keep its brown strap and lantern) wearing small round black sunglasses exactly over its eyes, the smile still visible

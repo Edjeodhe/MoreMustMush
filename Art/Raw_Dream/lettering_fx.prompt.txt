@@ -1,0 +1,11 @@
+Sprite sheet: a 5x1 grid holding 5 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines and no extra words: only the exact lettering listed for each cell, spelled exactly as written. All assets share one consistent lettering style.
+Hand-lettered storybook headline words for a dreamy watercolor mushroom-forest game, each word on ONE line, centered in its own wide cell. Chunky soft rounded letters painted in flat matte watercolor, slight playful baseline bounce, letters touching nothing else. No glow, no 3D, no gloss, no drop shadow, no hard black outline. PALE letters: near-white cream fill with light grey watercolor shading and a soft mid-grey edge, so the game can tint them any colour. Spell every letter exactly.
+
+Assets in reading order (left to right, top to bottom):
+1. the word "FEVER!"
+2. the words "SUPER FEVER!!"
+3. the words "SUPER COMBO!"
+4. the word "COMBO"
+5. the word "NEW"

@@ -1,0 +1,20 @@
+Sprite sheet: a 4x4 grid holding 13 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Cut-out animation PARTS of the old human mushroom-hunter grandpa in the attached reference (same design, colors, outline and scale for every part), front view facing slightly right. Each part is drawn COMPLETE and whole, including the areas that would be hidden behind other parts, with rounded joint ends so parts can overlap and rotate without gaps.
+
+Assets in reading order (left to right, top to bottom):
+1. the brown wide-brim hat with the gold buckle band and the red-white feather, alone
+2. the head without hat and without beard: face with skin, big round nose, eyebrows, OPEN eyes, ears, grey hair at the sides
+3. the big fluffy white-grey beard with the braid, alone
+4. a small patch of the face skin with the two eyes closed as happy curves, same size and spacing as on the head
+5. a small open happy mouth with a pink tongue, sized for the beard
+6. the body only: green coat with fur collar, belt with buckle and the potion bandolier, NO arms, NO legs, NO head
+7. the brown leather backpack alone
+8. his left arm: green coat sleeve with fur cuff and an OPEN waving hand, straight, shoulder at the top
+9. his right arm: green coat sleeve with fur cuff ending in a closed fist (as if holding a stick), straight, shoulder at the top
+10. the scythe alone: long wooden handle with the curved steel blade at the top
+11. one short leg: dark brown trousers and a brown boot, hip at the top
+12. the other short leg: dark brown trousers and a brown boot, hip at the top
+13. the whole grandpa fully assembled from these parts, standing, holding the scythe upright in his right fist, left hand waving
+Leave the remaining 3 cell(s) empty.

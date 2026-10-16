@@ -1,0 +1,26 @@
+Sprite sheet: a 4x5 grid holding 20 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Two-frame hammering animation for the ten mushroom critters in the attached design sheets, working as tiny builders, flat matte watercolor, no outlines. Keep each critter's cap, body, face and accessory exactly as designed, same scale for all. Every critter: three-quarter side view facing RIGHT, a small yellow hard hat worn tilted on the back of the cap. Rows 1-2 (frame A, critters in the order leaf, dew, wind, fire, rock, spark, moon, star, coin, chest): a wooden hammer held RAISED HIGH above and behind the head. Rows 3-4 (frame B, same order): the SAME critter in the same cell position and size, hammer SWUNG DOWN to the right, hammer head at foot level. Nothing else: no ground, no planks, no effects.
+
+Assets in reading order (left to right, top to bottom):
+1. leaf critter, hammer raised
+2. dew critter, hammer raised
+3. wind critter, hammer raised
+4. fire critter, hammer raised
+5. rock critter, hammer raised
+6. spark critter, hammer raised
+7. moon critter, hammer raised
+8. star critter, hammer raised
+9. coin critter, hammer raised
+10. chest critter, hammer raised
+11. leaf critter, hammer swung down
+12. dew critter, hammer swung down
+13. wind critter, hammer swung down
+14. fire critter, hammer swung down
+15. rock critter, hammer swung down
+16. spark critter, hammer swung down
+17. moon critter, hammer swung down
+18. star critter, hammer swung down
+19. coin critter, hammer swung down
+20. chest critter, hammer swung down

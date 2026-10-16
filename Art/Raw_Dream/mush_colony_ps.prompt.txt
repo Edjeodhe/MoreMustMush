@@ -1,0 +1,31 @@
+Sprite sheet: a 5x5 grid holding 25 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+25 mushroom colonies, each the SAME real species as the same cell of the attached single-mushroom sheet (same colors and shape): many of that species growing together in their real habit (tufted cluster, ring, shelf brackets on a small log, scattered group) on a small mound of moss and soil. Same chibi toy-like proportions and low detail as the attached singles: round chunky heap silhouette, 3-6 big markings per cap, no fine texture, flat matte watercolor, no faces.
+
+Assets in reading order (left to right, top to bottom):
+1. colony of Russula emetica (무당버섯)
+2. colony of Hypholoma fasciculare (노란다발)
+3. colony of Leucocoprinus birnbaumii (노란각시버섯)
+4. colony of Mycena pura (맑은애주름버섯)
+5. colony of Gliophorus psittacinus (이끼꽃버섯)
+6. colony of Clitocybe dealbata (비단빛깔때기버섯)
+7. colony of Inocybe fastigiata (땀버섯)
+8. colony of Gymnopilus junonius (갈황색미치광이버섯)
+9. colony of Amanita muscaria (광대버섯)
+10. colony of Amanita spissacea (뱀껍질광대버섯)
+11. colony of Ramaria formosa (붉은싸리버섯)
+12. colony of Amanita phalloides (알광대버섯)
+13. colony of Gyromitra esculenta (마귀곰보버섯)
+14. colony of Paralepistopsis acromelalga (독깔때기버섯)
+15. colony of Omphalotus japonicus (화경버섯)
+16. colony of Amanita subjunquillea (개나리광대버섯)
+17. colony of Amanita pantherina (마귀광대버섯)
+18. colony of Amanita virosa (독우산광대버섯)
+19. colony of Trichoderma cornu-damae (붉은사슴뿔버섯)
+20. colony of Lepiota brunneoincarnata (갈색고리갓버섯)
+21. colony of Amanita echinocephala (흰가시광대버섯)
+22. colony of fantasy variant of Mycena chlorophos (달빛애주름버섯)
+23. colony of Panaeolus semiovatus (말똥버섯)
+24. colony of fantasy variant of a jelly fungus (해파리버섯)
+25. colony of fantasy variant of Amanita (콘크리트광대버섯)

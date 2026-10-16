@@ -8,9 +8,13 @@ namespace MoreMush
     {
         public SpriteRenderer background;
         public SpriteRenderer harvester;
+        // the prototype's harvester flying around the screen kept ducking behind the buttons and the settle card,
+        // and the dream title concept has none: off unless turned on
+        public bool showHarvester;
 
         void Update()
         {
+            if (harvester.enabled != showHarvester) harvester.enabled = showHarvester;
             float now = Time.time;
             if (background.sprite != null)
             {

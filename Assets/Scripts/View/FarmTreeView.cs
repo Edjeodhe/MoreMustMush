@@ -73,7 +73,9 @@ namespace MoreMush
         public IEnumerable<int> SlotsIn(string zone) { Layout(); for (int i = 0; i < slots.Count; i++) if (slots[i].zone == zone) yield return i; }
         public Vector2 DecoPos(int i) { Layout(); return i >= 0 && i < decoPos.Count ? decoPos[i] : new Vector2(WT.x, WT.y); }
 
-        float FruitPx => 34 + 20f * WT.Picture(Stage()) / (WT.stages - 1);
+        // fruits and decor grow with the camera zoom so they keep their size on screen next to the much bigger tree
+        float ZoomK => WT.zoom[WT.Picture(Stage())];
+        float FruitPx => (34 + 20f * WT.Picture(Stage()) / (WT.stages - 1)) * ZoomK;
 
         // 자라는 정도 0~1 (1 = 다 자라 빛난다). 일하는 꼬마가 있는 구역은 다 자라면 바로 따여 다시 자란다
         public float Growth(int i, double now)
@@ -95,7 +97,7 @@ namespace MoreMush
         public int DecoAt(float x, float y)
         {
             Layout();
-            for (int i = 0; i < decoPos.Count; i++) if (Mathf.Abs(x - decoPos[i].x) < 50 && y < decoPos[i].y + 10 && y > decoPos[i].y - 100) return i;
+            for (int i = 0; i < decoPos.Count; i++) if (Mathf.Abs(x - decoPos[i].x) < 50 * ZoomK && y < decoPos[i].y + 10 && y > decoPos[i].y - 100 * ZoomK) return i;
             return -1;
         }
         public bool TrunkAt(float x, float y) { Layout(); return Mathf.Abs(x - WT.x) < widthPx * 0.22f && y < WT.y + 10 && y > WT.y - heightPx * 0.6f; }
@@ -134,8 +136,10 @@ namespace MoreMush
                 if (g.enabled)
                 {
                     g.transform.localPosition = f.transform.localPosition;
-                    float gs = px * 1.6f / Art.PPU * (1 + 0.08f * Mathf.Sin(now * 5 + i));
+                    // a small faint halo: 24 big ones at 0.55 fogged the whole grown tree
+                    float gs = px * 1.15f / Art.PPU * (1 + 0.08f * Mathf.Sin(now * 5 + i));
                     g.transform.localScale = new Vector3(gs, gs, 1);
+                    var gc = g.color; gc.a = 0.28f; g.color = gc;
                     g.sortingOrder = WT.order + 1;
                 }
             }
@@ -156,7 +160,7 @@ namespace MoreMush
                 r.enabled = true;
                 var spr = SpriteDB.Get("Farm/Props/", d.art);
                 if (r.sprite != spr) r.sprite = spr;
-                Art.FitPx(r, d.hang ? 70 : 96);
+                Art.FitPx(r, (d.hang ? 70 : 96) * ZoomK);
                 var p = decoPos[i];
                 r.transform.localPosition = new Vector3((p.x - WT.x) / Art.PPU, (WT.y - p.y + (d.hang ? 35 : 48)) / Art.PPU, 0);
                 r.color = Color.white;

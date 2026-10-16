@@ -301,6 +301,9 @@ namespace MoreMush
             m.hp -= amt * (crit ? st.critMul : 1);
             RecordDamage(src ?? kind, b, Math.Min(hpBefore, hpBefore - m.hp), m.hp <= 0);
             m.squish = 1;
+            if (m.hpLag < 0 || m.hitT > 0.5f) m.hpLag = hpBefore;   // the trail starts where the bar was before this burst
+            m.hitT = 0;
+            if (crit && m.hp > 0) { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.HitAnim, m.x, m.y, m.r * 2.6f, 0.18f, new Color(1, 0.72f, 0.6f, 1), FxR(0, 360), 0); AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 2.4f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }
             // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
             double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
             AddScore(sc, m.x, m.y - m.r, m.giant || m.boss ? 3 : m.sp.t, crit, m.golden);
@@ -334,6 +337,7 @@ namespace MoreMush
                 if (texts.Count < 20) texts.Add(new FloatText { x = m.x + U.Rand(-10, 10), y = m.y - m.r - 18, v = g, coin = true });
                 Snd.Tone(1200, 0.05f, Snd.Wave.Triangle, 0.25f, 1.3f, "coin", 0.05f);
             }
+            HitFx(m, b);
             Damage(m, amt, b, "direct", 1, null, hv == "hoe" && (m.sp.t >= 1 || m.boss) && U.Chance((float)a["p"]), "direct");
             Snd.Hit();
             // 분열로 나온 소형 수확기는 정해진 횟수만큼 부딪히면 사라진다
@@ -427,8 +431,30 @@ namespace MoreMush
             }
             if (m.golden && !e.gold) { e.gold = true; newGolden.Add(sp.id); AddLabel(Loc.F("황금 {0}!", sp.n), m.x, m.y - 80, "#ffd23a", 30); }
             if (m.giant) e.giant = true;
-            // 연출
+            // 연출: 버섯이 퐁 터지며 구름·조각·고리 (색은 갈래 색과 그 버섯의 갓 색)
             var col = U.Hex(CATS[sp.c].color);
+            var cap = m.golden ? U.Hex("#ffd23a") : U.Hex(sp.c1);
+            float big = m.giant ? 2.2f : m.cluster ? 1.5f : 1;
+            AddFx(FxShape.Puff, m.x, m.y, m.r * 2.6f * big, 0.45f, new Color(cap.r * 0.5f + 0.5f, cap.g * 0.5f + 0.5f, cap.b * 0.5f + 0.5f, 0.9f), FxR(0, 360), 40);
+            AddFx(FxShape.Impact, m.x, m.y, m.r * 2.2f * big, 0.22f, new Color(cap.r, cap.g, cap.b, 0.95f), FxR(0, 360), 0);
+            AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 3f * big, 0.32f, new Color(col.r, col.g, col.b, 0.95f), FxR(0, 360), 0);
+            // the pop: a flipbook burst, a spray of twinkles (white to the cap colour), a beat of hitstop and a kick
+            AddFx(FxShape.HitAnim, m.x, m.y - m.r * 0.2f, m.r * 3.4f * big, 0.2f, new Color(1, 0.97f, 0.86f, 1), FxR(0, 360), 0);
+            int nt = m.giant ? 16 : m.cluster ? 9 : 5 + sp.t;
+            for (int i = 0; i < nt; i++)
+            {
+                float ta = FxR(0, U.TAU), ts = FxR(160, m.giant ? 560 : 360);
+                var tc = Color.Lerp(Color.white, cap, FxR(0.2f, 0.8f));
+                AddPart(m.x, m.y, Mathf.Cos(ta) * ts, Mathf.Sin(ta) * ts - 220, FxR(0.4f, 0.7f), tc, FxR(5, 9), FxShape.Twinkle);
+            }
+            if (!m.giant && popStopCd <= 0) { hitstop = Mathf.Max(hitstop, m.cluster ? 0.05f : 0.025f); popStopCd = 0.22f; }
+            if (!m.giant && balls.Count < 8) shake = Mathf.Max(shake, m.cluster ? 0.3f : 0.14f);
+            int nc = m.giant ? 14 : m.cluster ? 8 : 4 + sp.t;
+            for (int i = 0; i < nc; i++)
+            {
+                float ca = FxR(0, U.TAU), cs = FxR(140, m.giant ? 520 : 300);
+                AddPart(m.x, m.y, Mathf.Cos(ca) * cs, Mathf.Sin(ca) * cs - 140, FxR(0.45f, 0.75f), cap, m.giant ? 9 : 6, FxShape.Chip);
+            }
             int np = m.giant ? 60 : m.cluster ? 28 : 8 + sp.t * 4;
             for (int i = 0; i < np; i++)
             {
@@ -481,13 +507,46 @@ namespace MoreMush
             score += v; scoreBump = 1;
             if (texts.Count > 25 && tier < 2 && !golden) return;
             if (texts.Count > 45) return;
-            texts.Add(new FloatText { x = x + U.Rand(-8, 8), y = y, v = v, tier = tier, crit = crit, golden = golden });
+            texts.Add(new FloatText { x = x + U.Rand(-8, 8), y = y, vx = FxR(-40, 40), vy = crit ? -170 : -130, v = v, tier = tier, crit = crit, golden = golden });
         }
 
-        public void AddPart(float x, float y, float vx, float vy, float life, Color col, float size)
+        public void AddPart(float x, float y, float vx, float vy, float life, Color col, float size, FxShape shape = FxShape.Dot)
         {
             if (parts.Count > 260) return;
-            parts.Add(new Part { x = x, y = y, vx = vx, vy = vy, life = life, col = col, size = size });
+            parts.Add(new Part { x = x, y = y, vx = vx, vy = vy, life = life, col = col, size = size, shape = (byte)shape });
+        }
+
+        // Effects draw from their own random stream: UnityEngine.Random is the gameplay stream that BalanceSim seeds,
+        // so adding or tuning effects never changes simulated results.
+        static readonly System.Random fxRng = new System.Random(12345);
+        public float popStopCd;   // spacing between the small harvest hitstops, so many quick pops don't stutter
+        static float FxR(float a, float b) => a + (float)fxRng.NextDouble() * (b - a);
+        static bool FxChance(float p) => fxRng.NextDouble() < p;
+
+        // size: px across; rise: px/s it drifts up
+        public void AddFx(FxShape shape, float x, float y, float size, float dur, Color col, float rot, float rise)
+        {
+            if (fxs.Count > 90) return;
+            fxs.Add(new Fx { shape = shape, x = x, y = y, size = size, dur = dur, col = col, rot = rot, rise = rise, spin = FxR(-40, 40), flip = FxChance(0.5f) });
+        }
+
+        // a harvester hits a mushroom: a punchy burst at the contact point, tinted by the mushroom, bigger for rarer ones
+        void HitFx(Shroom m, Ball b)
+        {
+            float dx = b.x - m.x, dy = b.y - m.y, d = Mathf.Max(1, Mathf.Sqrt(dx * dx + dy * dy));
+            float cx = m.x + dx / d * m.r * 0.8f, cy = m.y + dy / d * m.r * 0.8f;
+            m.kx = -dx / d; m.ky = -dy / d;   // pushed away from the harvester
+            float k = 1 + m.sp.t * 0.18f + (m.giant || m.boss ? 0.6f : 0);
+            // the pale field swallows white bursts: the outer burst takes the mushroom's own cap colour, a small warm
+            // cream core sits on top, the streak is butter yellow
+            var cap = U.Hex(m.sp.c1);
+            AddFx(FxShape.Impact, cx, cy, 58 * k, 0.2f, new Color(cap.r, cap.g, cap.b, 0.95f), FxR(0, 360), 0);
+            AddFx(FxShape.Impact, cx, cy, 32 * k, 0.15f, new Color(1, 0.96f, 0.82f, 1f), FxR(0, 360), 0);
+            float ang = Mathf.Atan2(-dy, -dx) * Mathf.Rad2Deg;   // streak points away from the harvester
+            AddFx(FxShape.Streak, cx, cy, 60 * k, 0.16f, new Color(1, 0.9f, 0.55f, 0.9f), ang, 0);
+            if (parts.Count < 200)
+                for (int i = 0; i < 2; i++)
+                    AddPart(cx, cy, -dx / d * FxR(80, 200) + FxR(-60, 60), -dy / d * FxR(80, 200) - 80, 0.4f, U.Hex(m.sp.c1), 4, FxShape.Chip);
         }
 
         public void AddLabel(string text, float x, float y, string col, float size)

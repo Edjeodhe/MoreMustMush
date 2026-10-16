@@ -1,0 +1,42 @@
+Sprite sheet: a 6x6 grid holding 36 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Scenery objects for a dreamy misty watercolor forest game scene, each drawn alone on its own base so it can be placed separately to build depth. Flat matte watercolor shapes, no outlines, no glow. Same scale family. Forest set: rows 1-2 are MID-distance objects in normal colors (moss green, blue-teal, warm brown); rows 3-4 are FAR-distance versions, pale and hazy (desaturated lavender-blue fog colors, very low contrast, almost silhouettes); rows 5-6 are NEAR foreground framing pieces in deep dark teal, large and simple.
+
+Assets in reading order (left to right, top to bottom):
+1. a big tall forest tree with a round soft canopy and a thick trunk with roots
+2. a medium round tree
+3. a soft rounded fir tree
+4. a small young tree
+5. a big round bush
+6. a medium bush with a few muted red berries
+7. a small round bush
+8. a fern clump
+9. a tuft of tall grass
+10. a big rounded mossy boulder
+11. a cut tree stump with a small sprout
+12. a fallen mossy log
+13. FAR: a very tall slim tree silhouette, pale hazy lavender-blue
+14. FAR: a group of three tall tree silhouettes, pale hazy blue
+15. FAR: a wide round tree silhouette, pale hazy sage
+16. FAR: a giant mushroom silhouette taller than a tree, pale hazy rose-lavender
+17. FAR: a tall rock spire silhouette, pale hazy blue-grey
+18. FAR: a long low bush line silhouette, pale hazy sage (wide)
+19. FAR: an old stone bridge arch silhouette, pale hazy lavender
+20. FAR: a soft forest hill silhouette, very pale fog blue (wide)
+21. a long soft horizontal fog band, pale cream-lavender watercolor wash with soft edges (wide and short)
+22. a round soft fog puff, pale blue-white watercolor wash with soft edges
+23. a soft oval patch of pale warm light on the ground, very faint apricot wash with soft edges
+24. FAR: two soft fir silhouettes, pale hazy blue
+25. NEAR: a big cluster of dark teal broad leaves and ferns growing from the bottom-left corner, cut flat along its left and bottom edges
+26. NEAR: a big cluster of dark teal leaves and a curled fern, cut flat along its right and bottom edges
+27. NEAR: a huge dark tree trunk with roots, tall, cut flat at the top
+28. NEAR: a dark leafy branch hanging down from the top, cut flat at the top (wide)
+29. NEAR: a big dark-toned real fly agaric silhouette with muted red cap, cut flat at the bottom
+30. NEAR: a long strip of dark grass and small ferns along the bottom, cut flat at the bottom (very wide and short)
+31. a curved exposed mossy tree root arching out of the ground
+32. a small patch of white wood anemones
+33. a small patch of pale yellow flowers
+34. a small patch of dusty pink flowers
+35. a clump of wood sorrel leaves
+36. a tiny cluster of three small real brown wild mushrooms
