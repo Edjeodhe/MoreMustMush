@@ -407,6 +407,9 @@ namespace MoreMush
         {
             if (m.dead) return;
             m.dead = true; m.hp = 0;
+            // HUD 콤보: 직접 타격은 DirectHit에서 셌다. 폭발·번개 등 효과로 거둔 버섯도 그 수확기의 콤보로 센다
+            // (강해질수록 효과가 필드를 비워 직접 때릴 버섯이 없어 콤보가 오히려 느리게 올랐다)
+            if (b != null && kind != "direct") b.hits++;
             var sp = m.sp;
             double drop = m.dropMul * st.harvestMul * (m.golden ? 5 : 1) * (m.giant ? 30 : 1) * (sp.c == "ps" ? st.poisonMul : 1) * (festOn ? st.festMul : 1);
             if (st.multiP > 0 && U.Chance((float)st.multiP)) { drop *= 3; AddLabel(Loc.T("×3 배수 획득!"), m.x, m.y - m.r - 34, "#ffe36e", 24); }
