@@ -6,6 +6,7 @@ import { MushRig, MUSH_DEFAULTS, MUSH_DESC, MUSH_POSE_KEYS, MushRestPose } from 
 
 const RIG_URL = "/Assets/Resources/Rig/spirit_rig2.json";
 const FIXED = 1 / 60;
+const LOAD_T = Date.now();
 const $ = (id) => document.getElementById(id);
 const canvas = $("stage"), ctx = canvas.getContext("2d");
 
@@ -24,7 +25,7 @@ function sprite(name) {
   if (!info) { S.cache[key] = null; return null; }
   const img = new Image();
   img.onload = () => requestDraw();
-  img.src = info.url;
+  img.src = info.url.startsWith("data:") ? info.url : info.url + (info.url.includes("?") ? "&" : "?") + "t=" + LOAD_T;   // 새로고침마다 새 그림 (브라우저 캐시 무시)
   return (S.cache[key] = { img, w: info.w, h: info.h, px: info.px, py: info.py, ppu: info.ppu, key });
 }
 
@@ -265,8 +266,8 @@ function handles(v) {
   if ($("chkParts").checked) {
     const P = (name, sr) => { if (!sr || !sr.sprite || !sr.transform.activeInHierarchy) return; const q = sr.transform.localToWorld.point(0, 0); out.push({ kind: "part", key: name, at: v.point(q.x, q.y), sr }); };
     if (rig.headed) {
-      P("chest", rig.chestSR); P("skirt", rig.skirtSR); P("collar", rig.collarSR); P("head", rig.headSR); P("hair", rig.hairSR);
-      P("arm", rig.upperSR[0]); P("leg", rig.legSR[0]);
+      P("chest", rig.chestSR); P("skirt", rig.skirtSR); P("collar", rig.collarSR); P("head", rig.headSR); P("hair", rig.hairSkin ? rig.hairSkinSR : rig.hairSR);
+      P("arm", rig.upperSR[0]); P("sleeve", rig.sleeveSR[0]); P("leg", rig.legSR[0]);
     } else { P("cap", rig.capSR); P("stem", rig.stemSR); P("footL", rig.shoeSR[0]); P("footR", rig.shoeSR[1]); if (rig.nubSR) { P("nubL", rig.nubSR[0]); P("nubR", rig.nubSR[1]); } }
   }
   return out;
@@ -325,15 +326,17 @@ function editTarget() {
 }
 function addArr(a, dx, dy) { if (!a) return; a[0] = R4(a[0] + dx); a[1] = R4(a[1] + dy); }
 function addPart(p, dx, dy) { if (!p) return; p.x = R4(p.x + dx); p.y = R4(p.y + dy); }
+function addBones(l, from, d) { if (l.hairBones) for (let i = from; i < l.hairBones.length; i++) addArr(l.hairBones[i], d.x, d.y); }
 
 // 손잡이 → 고칠 값. d = 부모 공간 이동량 (팔·다리 오른쪽은 뒤집힌 공간이라 왼쪽 값과 같은 뜻)
 function applyDrag(h, d, shift) {
   const l = editTarget(), mir = $("chkMirror").checked && rig.viewKey !== "side";
   const k = h.key;
   if (h.kind === "part") {
-    const parts = { chest: ["chest"], skirt: ["skirt"], collar: ["collar"], head: ["head"], hair: ["hair"], arm: ["upperArm", "foreArm", "hand"], leg: ["leg", "shoe"],
+    const parts = { chest: ["chest"], skirt: ["skirt"], collar: ["collar"], head: ["head"], hair: ["hair"], arm: ["upperArm", "foreArm", "hand"], sleeve: ["sleeve"], leg: ["leg", "shoe"],
       cap: ["cap"], stem: ["stem"], footL: ["footL"], footR: ["footR"], nubL: ["nubL"], nubR: ["nubR"] }[k];
     for (const p of parts) addPart(l[p], d.x, d.y);
+    if (k === "hair") { addArr(l.hairRoot, d.x, d.y); addBones(l, 0, d); }   // 머리카락 뼈는 그림과 같이
     if (k === "arm" && shift) { addArr(l.elbow, d.x, d.y); addArr(l.wrist, d.x, d.y); }
     if (k === "leg" && shift) addArr(l.ankle, d.x, d.y);
     return;
@@ -343,9 +346,13 @@ function applyDrag(h, d, shift) {
     case "waist": addArr(l.waist, d.x, d.y); break;
     case "neck":
       addArr(l.neck, d.x, d.y);
-      if (shift) { addPart(l.head, d.x, d.y); addPart(l.hair, d.x, d.y); addArr(l.hairRoot, d.x, d.y); addArr(l.capTop, d.x, d.y); }
+      if (shift) { addPart(l.head, d.x, d.y); addPart(l.hair, d.x, d.y); addArr(l.hairRoot, d.x, d.y); addBones(l, 0, d); addArr(l.capTop, d.x, d.y); }
       break;
-    case "hairRoot": addArr(l.hairRoot, d.x, d.y); if (shift) addPart(l.hair, d.x, d.y); break;
+    // 머리카락 뿌리 = 뼈 0. 뼈 사슬이 있으면 hairBones[0]도 같이 (Shift = 그림·아래 뼈까지)
+    case "hairRoot": addArr(l.hairRoot, d.x, d.y); if (l.hairBones) addArr(l.hairBones[0], d.x, d.y); if (shift) { addPart(l.hair, d.x, d.y); addBones(l, 1, d); } break;
+    case "hairB1": case "hairB2": case "hairB3": case "hairB4": case "hairB5": {   // 머리카락 뼈 (그림은 그대로, Shift = 아래 뼈까지)
+      const i = Number(k.slice(5)); if (l.hairBones) addArr(l.hairBones[i], d.x, d.y); if (shift) addBones(l, i + 1, d); break;
+    }
     case "capTop": addArr(l.capTop, d.x, d.y); break;
     case "capJoint": addArr(l.capJoint, d.x, d.y); if (shift) addPart(l.cap, d.x, d.y); break;
     case "shoulderL": case "shoulderR": {
@@ -376,7 +383,7 @@ function dragNode(h) {
   if (h.kind === "part") return h.sr.transform;
   const k = h.key;
   const map = rig.headed ? {
-    waist: rig.hips, neck: rig.neck, hairRoot: rig.hairT, capTop: rig.bounce, shoulderL: rig.shoulder[0], shoulderR: rig.shoulder[1],
+    waist: rig.hips, neck: rig.neck, hairRoot: rig.hairT, hairB1: rig.hairBone[1], hairB2: rig.hairBone[2], hairB3: rig.hairBone[3], hairB4: rig.hairBone[4], hairB5: rig.hairBone[5], capTop: rig.bounce, shoulderL: rig.shoulder[0], shoulderR: rig.shoulder[1],
     elbowL: rig.elbow[0], elbowR: rig.elbow[1], wristL: rig.wrist[0], wristR: rig.wrist[1], hipL: rig.hip[0], hipR: rig.hip[1],
     ankleL: rig.root.children[0], ankleR: rig.root.children[0], kneeL: rig.root.children[0], kneeR: rig.root.children[0],
   } : { capJoint: rig.capT, capTop: rig.capT, ankleL: rig.root.children[0], ankleR: rig.root.children[0],
@@ -420,7 +427,7 @@ canvas.addEventListener("wheel", (e) => {
 // ───── 모두 보기 ─────
 function buildGrid(on) {
   if (!on) { S.grid = null; return; }
-  S.grid = S.doc.looks.map((l) => { const r = makeRig(l); r.M = motionConsts(r); r.Apply(l, S.outfit); r.motion = S.motion; r.flip = rig.flip; return { look: l, rig: r }; });
+  S.grid = S.doc.looks.map((l) => { const r = makeRig(l); r.M = motionConsts(r); r.Apply(l, S.outfit); r.motion = S.motion; r.flip = rig.flip; r.scale = l.gradeScale || 1; return { look: l, rig: r }; });   // 모두 보기: 같은 등급 키 맞춤(gradeScale)으로
 }
 function drawGrid(w, h, dpr) {
   const n = S.grid.length, cols = Math.ceil(Math.sqrt(n * w / h)), rows = Math.ceil(n / cols);
@@ -466,8 +473,8 @@ function buildLookTab() {
 const MOTION_GROUPS = [
   ["돌아서기·방향", ["turnTime", "turnPinch", "turnPinchW", "maxResYaw", "armSwingSide"]],
   ["오르기 (사다리 뒤 · 줄기 옆)", ["rungGap", "ladderSpeed", "ladderReachUp", "ladderArmStretch", "ladderHalfW", "trunkGap", "trunkSpeed", "trunkReach"]],
-  ["섞기·스프링", ["blend", "armK", "armZ", "elbowK", "elbowZ", "bodyK", "bodyZ", "headK", "headZ", "squashK", "squashZ", "headStab"]],
-  ["2차 움직임 (진자)", ["hairK", "hairZ", "hairInertia", "hairGravity", "hairDrag", "hairStretch", "skirtK", "skirtZ", "skirtInertia", "skirtGravity", "skirtFlare", "handK", "handZ", "handInertia", "capK", "capZ", "capInertia", "capSquash"]],
+  ["섞기·스프링", ["blend", "armK", "armZ", "elbowK", "elbowZ", "bodyK", "bodyZ", "headK", "headZ", "squashK", "squashZ", "headStab", "sleeveFollow"]],
+  ["2차 움직임 (진자)", ["hairK", "hairZ", "hairInertia", "hairGravity", "hairDrag", "hairStretch", "hairSegK", "hairSegZ", "hairSegInertia", "hairSegMax", "hairSegRootMax", "hairSkinHeadBand", "hairSkinTail", "hairSplitUp", "skirtK", "skirtZ", "skirtInertia", "skirtGravity", "skirtFlare", "handK", "handZ", "handInertia", "capK", "capZ", "capInertia", "capSquash"]],
   ["고개 돌림", ["headTurnShift", "headTurnSquash", "headTurnTilt", "faceShift", "hairParallax"]],
   ["대기", ["armRest", "elbowRest", "breathPeriod", "breathAmt", "shiftPeriod", "shiftX", "shiftTilt", "idleHead", "fidgetMin", "fidgetMax"]],
   ["걷기·나르기", ["walkSpeed", "strideMax", "cadenceMin", "cadenceMax", "stance", "liftH", "walkDip", "walkSway", "walkTilt", "walkCounter", "walkLean", "walkTurn", "walkYaw", "depthK", "footIn", "toeOff", "toeUp", "heelLift", "kneeSoft", "liftPeak", "kneeOut", "armSwing", "armBendFwd", "armFore", "carrySpeed", "carryLean", "carryDip", "carryRaise", "carryBend"]],

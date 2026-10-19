@@ -1359,6 +1359,1042 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6c711d3f7b35971478ad95463e92a361, type: 3}
   - key: Characters/NPC/smith
     sprite: {fileID: 21300000, guid: 58beb341733a5be44b57f74c770135e3, type: 3}
+  - key: Characters/Rig2/gen_dew_2_arm_fore
+    sprite: {fileID: 21300000, guid: b752a831baf74208a248a082f412b69c, type: 3}
+  - key: Characters/Rig2/gen_dew_2_arm_hand
+    sprite: {fileID: 21300000, guid: 4d6ffecb07a94e87bda788b30705dd63, type: 3}
+  - key: Characters/Rig2/gen_dew_2_arm_upper
+    sprite: {fileID: 21300000, guid: 0da3b9470e2b4c17aa05b17a432e6b54, type: 3}
+  - key: Characters/Rig2/gen_dew_2_back_chest
+    sprite: {fileID: 21300000, guid: e81dc7e1d32e44dfb662ead91e6efd4c, type: 3}
+  - key: Characters/Rig2/gen_dew_2_back_head
+    sprite: {fileID: 21300000, guid: 471ee675535a43718ae2079046f6fb8a, type: 3}
+  - key: Characters/Rig2/gen_dew_2_back_head_cap
+    sprite: {fileID: 21300000, guid: 508a521d23dd46b08e722e48a3387531, type: 3}
+  - key: Characters/Rig2/gen_dew_2_back_shin
+    sprite: {fileID: 21300000, guid: 3d12bb2fce7645d4999398fde5eac9e4, type: 3}
+  - key: Characters/Rig2/gen_dew_2_back_shoe
+    sprite: {fileID: 21300000, guid: 9f342785576643bba9be2e6e311065b2, type: 3}
+  - key: Characters/Rig2/gen_dew_2_back_skirt
+    sprite: {fileID: 21300000, guid: 429ebbf6d2064fb890d2e0187e859cf3, type: 3}
+  - key: Characters/Rig2/gen_dew_2_back_thigh
+    sprite: {fileID: 21300000, guid: 18f7e37f51104bf2a5f80dd57eb02a51, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_face_blink
+    sprite: {fileID: 21300000, guid: 1c25742186f642279f85c7dc80493283, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_face_effort
+    sprite: {fileID: 21300000, guid: 75439c68e3624bfd8b70d23aa8470376, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_face_happy
+    sprite: {fileID: 21300000, guid: 5a4638d39745460d8f15491f526bbdf0, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_face_normal
+    sprite: {fileID: 21300000, guid: c2d33394a3604dbaac9a7796b04d9ca5, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_face_surprise
+    sprite: {fileID: 21300000, guid: 4163a00f15bc4381bdb9b72b09e7494d, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_head
+    sprite: {fileID: 21300000, guid: 6076925b07214913ad17027e00528791, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_shin
+    sprite: {fileID: 21300000, guid: 774a9d93a1e941ca977746c6da38a992, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_shoe
+    sprite: {fileID: 21300000, guid: 427383b1b12c4e0dab61c8a62e9a2ab3, type: 3}
+  - key: Characters/Rig2/gen_dew_2_front_thigh
+    sprite: {fileID: 21300000, guid: d1490d1d78b7491785552010b977f438, type: 3}
+  - key: Characters/Rig2/gen_dew_2_side_chest
+    sprite: {fileID: 21300000, guid: cc0a1754aaf04e6aa250faa1feccbb77, type: 3}
+  - key: Characters/Rig2/gen_dew_2_side_head
+    sprite: {fileID: 21300000, guid: 6ee820aeaa26439b9800f67b43746ae4, type: 3}
+  - key: Characters/Rig2/gen_dew_2_side_head_cap
+    sprite: {fileID: 21300000, guid: 09706216b1aa47809f15e9c33286fc50, type: 3}
+  - key: Characters/Rig2/gen_dew_2_side_shin
+    sprite: {fileID: 21300000, guid: 6da9fdf7ae6e4b318a7608675586117d, type: 3}
+  - key: Characters/Rig2/gen_dew_2_side_shoe
+    sprite: {fileID: 21300000, guid: f7c7364cf3214cbbba46b4b183a6edb6, type: 3}
+  - key: Characters/Rig2/gen_dew_2_side_skirt
+    sprite: {fileID: 21300000, guid: 664a86bd80504ff3ba685fcaddbe8233, type: 3}
+  - key: Characters/Rig2/gen_dew_2_side_thigh
+    sprite: {fileID: 21300000, guid: ea45acecd9644e43b96add787028105d, type: 3}
+  - key: Characters/Rig2/gen_dew_2_sleeve
+    sprite: {fileID: 21300000, guid: 6bf3783fc5704df3930224a221487f44, type: 3}
+  - key: Characters/Rig2/gen_dew_3_arm_fore
+    sprite: {fileID: 21300000, guid: 7e0e4f86d6f946b596c559e8b43cf0c1, type: 3}
+  - key: Characters/Rig2/gen_dew_3_arm_hand
+    sprite: {fileID: 21300000, guid: 0e6552f91d874e1d9b30045397357187, type: 3}
+  - key: Characters/Rig2/gen_dew_3_arm_upper
+    sprite: {fileID: 21300000, guid: def4352ad17e447db2661a9bbfa5cf7d, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_chest
+    sprite: {fileID: 21300000, guid: 954c30f892f74b3c8d444d40ce4894a1, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_hair
+    sprite: {fileID: 21300000, guid: 322b6cc47e8243fb83f49f3627621274, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_head
+    sprite: {fileID: 21300000, guid: 3531a3f3b794470abb8352ac1b3434f4, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_head_cap
+    sprite: {fileID: 21300000, guid: b10f2289cebb4258a16e0985050c8eb1, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_shin
+    sprite: {fileID: 21300000, guid: d688012a7d0143b6901f1a13596bfe87, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_shoe
+    sprite: {fileID: 21300000, guid: 75f03bc96dcd49aaba9955ebb4573930, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_skirt
+    sprite: {fileID: 21300000, guid: 2fe016a0b5c848f99c42efec65cc3f19, type: 3}
+  - key: Characters/Rig2/gen_dew_3_back_thigh
+    sprite: {fileID: 21300000, guid: 71faedec09b54f3ab0dac95f01a6d63b, type: 3}
+  - key: Characters/Rig2/gen_dew_3_front_shin
+    sprite: {fileID: 21300000, guid: 2938e6ed6a4844d7a64759337e523df0, type: 3}
+  - key: Characters/Rig2/gen_dew_3_front_shoe
+    sprite: {fileID: 21300000, guid: 054a78df957c4652a5524068f2df83fe, type: 3}
+  - key: Characters/Rig2/gen_dew_3_front_thigh
+    sprite: {fileID: 21300000, guid: 600ab67ad7bd4f0b8b3f975fef0b8f67, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_chest
+    sprite: {fileID: 21300000, guid: 8c37dce044694b77a8097a323a0b0653, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_hair
+    sprite: {fileID: 21300000, guid: 88cb60fe106543eaabdd57e375dcc82b, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_head
+    sprite: {fileID: 21300000, guid: 7e84a10980fc4bf89dd5a91f0e13a3a0, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_head_cap
+    sprite: {fileID: 21300000, guid: 2d6d33fa878f4c3d86182d1d41eca623, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_shin
+    sprite: {fileID: 21300000, guid: 2c37fa141ba446f29157a8a4f0de3b72, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_shoe
+    sprite: {fileID: 21300000, guid: 663887855183480d8422a589a417f6b8, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_skirt
+    sprite: {fileID: 21300000, guid: 13175f420cd244e28606f41d57612dbc, type: 3}
+  - key: Characters/Rig2/gen_dew_3_side_thigh
+    sprite: {fileID: 21300000, guid: 88a793c3874d4a65ba0ede94429663f2, type: 3}
+  - key: Characters/Rig2/gen_dew_3_sleeve
+    sprite: {fileID: 21300000, guid: d806d2e9ab7e4d7b96e13fe3e0cbcc9f, type: 3}
+  - key: Characters/Rig2/gen_fire_1_cap
+    sprite: {fileID: 21300000, guid: d4ca51a31bea490fbb78d8dd9a2c4f6f, type: 3}
+  - key: Characters/Rig2/gen_fire_1_face_blink
+    sprite: {fileID: 21300000, guid: 72751efa66654d61a006aad47020c383, type: 3}
+  - key: Characters/Rig2/gen_fire_1_face_effort
+    sprite: {fileID: 21300000, guid: dde4181a12a045c5b7723a2758bbc229, type: 3}
+  - key: Characters/Rig2/gen_fire_1_face_happy
+    sprite: {fileID: 21300000, guid: b2da61f8a09545ea9b0345511698cf4d, type: 3}
+  - key: Characters/Rig2/gen_fire_1_face_normal
+    sprite: {fileID: 21300000, guid: 77d1ced307ca440cb0ba2a4c77d92d03, type: 3}
+  - key: Characters/Rig2/gen_fire_1_face_surprise
+    sprite: {fileID: 21300000, guid: b72e940c9ffb4dceb7a620a49942e159, type: 3}
+  - key: Characters/Rig2/gen_fire_1_footL
+    sprite: {fileID: 21300000, guid: a0efb223ea8c42d2b72c70429f3e3f36, type: 3}
+  - key: Characters/Rig2/gen_fire_1_footR
+    sprite: {fileID: 21300000, guid: c9df2b9e8c744a6aac40108814f8ed06, type: 3}
+  - key: Characters/Rig2/gen_fire_1_nubL
+    sprite: {fileID: 21300000, guid: acfeab5620ca45f7b18ab7f70dd665b1, type: 3}
+  - key: Characters/Rig2/gen_fire_1_nubR
+    sprite: {fileID: 21300000, guid: 9d8d35339d1246119f498f9b40d5c0ee, type: 3}
+  - key: Characters/Rig2/gen_fire_1_stem
+    sprite: {fileID: 21300000, guid: fa31ac74dfc74a51a00b283b342f6608, type: 3}
+  - key: Characters/Rig2/gen_fire_2_arm_fore
+    sprite: {fileID: 21300000, guid: 87ba777d230444dc8c7978c82c0d541d, type: 3}
+  - key: Characters/Rig2/gen_fire_2_arm_hand
+    sprite: {fileID: 21300000, guid: 67d170bd26ea451f99b7d1704de94a51, type: 3}
+  - key: Characters/Rig2/gen_fire_2_arm_upper
+    sprite: {fileID: 21300000, guid: ba7b8d05b73f408498166af6763617ae, type: 3}
+  - key: Characters/Rig2/gen_fire_2_back_chest
+    sprite: {fileID: 21300000, guid: 599f1e4133cd4789af93a4955d3ab434, type: 3}
+  - key: Characters/Rig2/gen_fire_2_back_head
+    sprite: {fileID: 21300000, guid: 8306a9ec743346f6994c0f5481ac3ba1, type: 3}
+  - key: Characters/Rig2/gen_fire_2_back_head_cap
+    sprite: {fileID: 21300000, guid: c7e0e9329c7141539c087538700cf2c9, type: 3}
+  - key: Characters/Rig2/gen_fire_2_back_shin
+    sprite: {fileID: 21300000, guid: b138112619d641ae97ec8559f46ff4ac, type: 3}
+  - key: Characters/Rig2/gen_fire_2_back_shoe
+    sprite: {fileID: 21300000, guid: dae7165e92ab4ef0a7f5be5d8736a366, type: 3}
+  - key: Characters/Rig2/gen_fire_2_back_skirt
+    sprite: {fileID: 21300000, guid: b7cf627f71cc497e96d460f48241b6a0, type: 3}
+  - key: Characters/Rig2/gen_fire_2_back_thigh
+    sprite: {fileID: 21300000, guid: 48aef57458ef4d809ff7ae979f7ff8c1, type: 3}
+  - key: Characters/Rig2/gen_fire_2_front_shin
+    sprite: {fileID: 21300000, guid: 6e76449f4c724a58917095ac077830a6, type: 3}
+  - key: Characters/Rig2/gen_fire_2_front_shoe
+    sprite: {fileID: 21300000, guid: 7ece4d88f5c74c9380d8d00294ac60e8, type: 3}
+  - key: Characters/Rig2/gen_fire_2_front_thigh
+    sprite: {fileID: 21300000, guid: dc7b308add25419b90d7973de088c2a6, type: 3}
+  - key: Characters/Rig2/gen_fire_2_side_chest
+    sprite: {fileID: 21300000, guid: 4f7692c631f843798a4a3759f6524973, type: 3}
+  - key: Characters/Rig2/gen_fire_2_side_head
+    sprite: {fileID: 21300000, guid: e99aaf77f13c497bafd6d47ff63b97a0, type: 3}
+  - key: Characters/Rig2/gen_fire_2_side_head_cap
+    sprite: {fileID: 21300000, guid: 8e281dad957c4e55b78ad4b1301e90ca, type: 3}
+  - key: Characters/Rig2/gen_fire_2_side_shin
+    sprite: {fileID: 21300000, guid: 4e63cd69bb3f40d9a0365ea7abf72c62, type: 3}
+  - key: Characters/Rig2/gen_fire_2_side_shoe
+    sprite: {fileID: 21300000, guid: 098f0d0817834fa6bcab0831f63c1947, type: 3}
+  - key: Characters/Rig2/gen_fire_2_side_skirt
+    sprite: {fileID: 21300000, guid: adf749db66914be3ab2ae3737236af02, type: 3}
+  - key: Characters/Rig2/gen_fire_2_side_thigh
+    sprite: {fileID: 21300000, guid: 235352de6119419083756c74587bcffa, type: 3}
+  - key: Characters/Rig2/gen_fire_2_sleeve
+    sprite: {fileID: 21300000, guid: 1e5115326c0f435f93165c771b54b34d, type: 3}
+  - key: Characters/Rig2/gen_fire_3_arm_fore
+    sprite: {fileID: 21300000, guid: 8e3281f62e16483aabfa046fac2887a2, type: 3}
+  - key: Characters/Rig2/gen_fire_3_arm_hand
+    sprite: {fileID: 21300000, guid: 0c91839857144f229bfa7c0c17652998, type: 3}
+  - key: Characters/Rig2/gen_fire_3_arm_upper
+    sprite: {fileID: 21300000, guid: ca3a9036a14142e0bb0abb765c6170de, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_chest
+    sprite: {fileID: 21300000, guid: 84b55d3fef9b4bfea391829660b11bc7, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_hair
+    sprite: {fileID: 21300000, guid: 1d9625fa3e004a30b1e163e22a768492, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_head
+    sprite: {fileID: 21300000, guid: 12a96b7ce3f040b19ffd1db07b107c6f, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_head_cap
+    sprite: {fileID: 21300000, guid: 5305c07856df43a3b7b962e63a699c8e, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_shin
+    sprite: {fileID: 21300000, guid: 90a94f61a2f14143b9d88a5aaf63379c, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_shoe
+    sprite: {fileID: 21300000, guid: d3a8b91410d548bc8947e2ce588d0d90, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_skirt
+    sprite: {fileID: 21300000, guid: 776d372498b5421d8ec351890fb4df90, type: 3}
+  - key: Characters/Rig2/gen_fire_3_back_thigh
+    sprite: {fileID: 21300000, guid: 91b1f6ce0df3451abe9f11eb56610715, type: 3}
+  - key: Characters/Rig2/gen_fire_3_front_shin
+    sprite: {fileID: 21300000, guid: a7864a11a43e4f92b4c28d6d0fa026ea, type: 3}
+  - key: Characters/Rig2/gen_fire_3_front_shoe
+    sprite: {fileID: 21300000, guid: 3bc73968612844509bb7fe3aa3ad26c5, type: 3}
+  - key: Characters/Rig2/gen_fire_3_front_thigh
+    sprite: {fileID: 21300000, guid: 2c282fc697fb49a793c23ddbd49ca3cf, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_chest
+    sprite: {fileID: 21300000, guid: f2e1798bbfbe4ecdaf57582a818654a1, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_hair
+    sprite: {fileID: 21300000, guid: 66815b4a990a4ffc903c21dbc80332d6, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_head
+    sprite: {fileID: 21300000, guid: 7fc921b25c324e88a0481fe50e50af4f, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_head_cap
+    sprite: {fileID: 21300000, guid: 68fcb45bbe1649feb44c6c9449ab5334, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_shin
+    sprite: {fileID: 21300000, guid: 5e7d70adc0304ae3820176779e485349, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_shoe
+    sprite: {fileID: 21300000, guid: 93e99523d6b14708890c8d20c4aa59d1, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_skirt
+    sprite: {fileID: 21300000, guid: 8b2dd7d872da4fb7b9eae5d1b211bc29, type: 3}
+  - key: Characters/Rig2/gen_fire_3_side_thigh
+    sprite: {fileID: 21300000, guid: ebaa561a072c4199a4adedc2acaa352f, type: 3}
+  - key: Characters/Rig2/gen_fire_3_sleeve
+    sprite: {fileID: 21300000, guid: a7b0622f3cf24a16a1d21c02ec05e951, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_arm_fore
+    sprite: {fileID: 21300000, guid: b343a4f3595f4e51bfcc232210f04c23, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_arm_hand
+    sprite: {fileID: 21300000, guid: 30056d5b997946009b410dc7e1271d83, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_arm_upper
+    sprite: {fileID: 21300000, guid: ab2bdd82cff649ed912befdede3d4b22, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_back_chest
+    sprite: {fileID: 21300000, guid: 98eb80f9d9ff4967a2a2f7a730f5349c, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_back_head
+    sprite: {fileID: 21300000, guid: 1a926f25030142338dfdcd1dacc8e39d, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_back_head_cap
+    sprite: {fileID: 21300000, guid: dd980fba657f40b7a6b7fc6522af4e0c, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_back_shin
+    sprite: {fileID: 21300000, guid: 47aa6100e3e146a0b8c1095b92372fb0, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_back_shoe
+    sprite: {fileID: 21300000, guid: 15539af7fd464faea4ca9dcb7dea6611, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_back_skirt
+    sprite: {fileID: 21300000, guid: a59f22b3bacd4c47b2f9815121a873bc, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_back_thigh
+    sprite: {fileID: 21300000, guid: dc9f9c4f6e184d60aa955c49504a35bd, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_face_blink
+    sprite: {fileID: 21300000, guid: d2da60e058e94fd19dac3a632b439b26, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_face_effort
+    sprite: {fileID: 21300000, guid: 3cf1a679e1c743f2b7cb956c0359e1ae, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_face_happy
+    sprite: {fileID: 21300000, guid: ade15aed0a904cc5906fffc8e3dce875, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_face_normal
+    sprite: {fileID: 21300000, guid: b4b72c62b5d94a108441c9fc969d1ddd, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_face_surprise
+    sprite: {fileID: 21300000, guid: 966f623752e04ffd96a3cc4eeeae5dc5, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_head
+    sprite: {fileID: 21300000, guid: 7b271cbf2f6748b19bd12cf61a2e5265, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_shin
+    sprite: {fileID: 21300000, guid: 6d4c514ee74d41d39c2536ebcb31b8f3, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_shoe
+    sprite: {fileID: 21300000, guid: c431a5b8335d4ad997ce49590c559094, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_front_thigh
+    sprite: {fileID: 21300000, guid: d4dfbfce58a7449793088b5c82db173d, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_side_chest
+    sprite: {fileID: 21300000, guid: 692f09a6c82a4eb59eb3605250ae88e4, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_side_head
+    sprite: {fileID: 21300000, guid: 6bf6c7cead8943b18e80cf071d2636dd, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_side_head_cap
+    sprite: {fileID: 21300000, guid: 01bd35c1780b40e28d9861655bde012c, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_side_shin
+    sprite: {fileID: 21300000, guid: d80606e1d7814ee8adf1861be4acb653, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_side_shoe
+    sprite: {fileID: 21300000, guid: dbd5f496878b4517b2c209bb92188eb0, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_side_skirt
+    sprite: {fileID: 21300000, guid: 2315f69ae3024449a14e57e612b8f04a, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_side_thigh
+    sprite: {fileID: 21300000, guid: f6dd3f1e23af43eaa02c41387d552b96, type: 3}
+  - key: Characters/Rig2/gen_leaf_2_sleeve
+    sprite: {fileID: 21300000, guid: 86cd382703cc497babca6332f99f9da3, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_arm_fore
+    sprite: {fileID: 21300000, guid: ecf1ccc0cf314b7e9e0a5ee836313372, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_arm_hand
+    sprite: {fileID: 21300000, guid: 8bc687a8a8fd4d61ae521cce5316dbdc, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_arm_upper
+    sprite: {fileID: 21300000, guid: 0f652a4947664604b20748122a750028, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_back_chest
+    sprite: {fileID: 21300000, guid: e7b181b1d3fe43aa8729ce3315ac5c64, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_back_head
+    sprite: {fileID: 21300000, guid: f93fe4dc85664b719ce9a2ed47741795, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_back_head_cap
+    sprite: {fileID: 21300000, guid: c84bc387fe584d59b961570dcbe60c3b, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_back_shin
+    sprite: {fileID: 21300000, guid: 48eba65e696b4ac8baae599598400281, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_back_shoe
+    sprite: {fileID: 21300000, guid: d3417deee5034b0a8e233bdae58e2a99, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_back_skirt
+    sprite: {fileID: 21300000, guid: 59ee623e720c4640a0823a6b214211c1, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_back_thigh
+    sprite: {fileID: 21300000, guid: 2378d0188b5b46c399fddad68f4d2bcb, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_front_shin
+    sprite: {fileID: 21300000, guid: 0c5632759ce0440cb54cab5cbff3ded4, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_front_shoe
+    sprite: {fileID: 21300000, guid: 0e592b59a76540efbd1a923b791259e1, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_front_thigh
+    sprite: {fileID: 21300000, guid: 69ec389a154943ed9431f3673a7ee829, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_side_chest
+    sprite: {fileID: 21300000, guid: 259f8464e86d4fd6a2eb6fd8f6f32e23, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_side_head
+    sprite: {fileID: 21300000, guid: 44637432f1a64eff85244aed20baa489, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_side_head_cap
+    sprite: {fileID: 21300000, guid: b9a752ecfe904acabc40e41d3cb82f6d, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_side_shin
+    sprite: {fileID: 21300000, guid: f303dc45e9fd4d09ad90f1b3e10b43c5, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_side_shoe
+    sprite: {fileID: 21300000, guid: cbe7d0d06388448f8feed9d5e62affa6, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_side_skirt
+    sprite: {fileID: 21300000, guid: 881cbd0ec00d465aa3ae501866407595, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_side_thigh
+    sprite: {fileID: 21300000, guid: 5e04ea6d134e437aa8a07c314f856bbb, type: 3}
+  - key: Characters/Rig2/gen_leaf_3_sleeve
+    sprite: {fileID: 21300000, guid: 2dd060a48e704db7b8a23e7eb57a4048, type: 3}
+  - key: Characters/Rig2/prop_basket
+    sprite: {fileID: 21300000, guid: 90d2dae24795487fa0b0a15ad7efa462, type: 3}
+  - key: Characters/Rig2/r2_dew_0_cap
+    sprite: {fileID: 21300000, guid: 8c46611f49024c089d245c4834d703cd, type: 3}
+  - key: Characters/Rig2/r2_dew_0_face_blink
+    sprite: {fileID: 21300000, guid: 395a40c392dc4350b931dc67878d28b9, type: 3}
+  - key: Characters/Rig2/r2_dew_0_face_effort
+    sprite: {fileID: 21300000, guid: e6d11ce5b5ed413182afae2ae02204e4, type: 3}
+  - key: Characters/Rig2/r2_dew_0_face_happy
+    sprite: {fileID: 21300000, guid: 11c5fd64d5ab4f2386ca66f920e46afb, type: 3}
+  - key: Characters/Rig2/r2_dew_0_face_normal
+    sprite: {fileID: 21300000, guid: 7208e0ce26ef4ebb9f3f0aab96b4f6db, type: 3}
+  - key: Characters/Rig2/r2_dew_0_face_surprise
+    sprite: {fileID: 21300000, guid: 8e59185a3ca94c399182f9265e378bfc, type: 3}
+  - key: Characters/Rig2/r2_dew_0_footL
+    sprite: {fileID: 21300000, guid: c2e8964eb8334bb9ad0afdb78ceb52ba, type: 3}
+  - key: Characters/Rig2/r2_dew_0_footR
+    sprite: {fileID: 21300000, guid: 4f6ea70a41ca4b32b9ec38028a06dd5d, type: 3}
+  - key: Characters/Rig2/r2_dew_0_stem
+    sprite: {fileID: 21300000, guid: 32b86c54b2f14074a6a1d84e555226ec, type: 3}
+  - key: Characters/Rig2/r2_dew_1_cap
+    sprite: {fileID: 21300000, guid: 3ee685d7858b4f19bd01de78dc183688, type: 3}
+  - key: Characters/Rig2/r2_dew_1_face_blink
+    sprite: {fileID: 21300000, guid: 463712c5a3394346abd895e738210c58, type: 3}
+  - key: Characters/Rig2/r2_dew_1_face_effort
+    sprite: {fileID: 21300000, guid: 98e6e399285745ef85b6b8515032586c, type: 3}
+  - key: Characters/Rig2/r2_dew_1_face_happy
+    sprite: {fileID: 21300000, guid: 8196fc3cf8134a4da65a95412578c845, type: 3}
+  - key: Characters/Rig2/r2_dew_1_face_normal
+    sprite: {fileID: 21300000, guid: 1bd5893617ce49a684acdf6372c81ded, type: 3}
+  - key: Characters/Rig2/r2_dew_1_face_surprise
+    sprite: {fileID: 21300000, guid: 86a477bb80bb423d87e7399b3904c402, type: 3}
+  - key: Characters/Rig2/r2_dew_1_footL
+    sprite: {fileID: 21300000, guid: 4c8498ce188b466f83ac5aa22b999274, type: 3}
+  - key: Characters/Rig2/r2_dew_1_footR
+    sprite: {fileID: 21300000, guid: 8d83916d2c85456ca53b6d13fd1904c9, type: 3}
+  - key: Characters/Rig2/r2_dew_1_nubL
+    sprite: {fileID: 21300000, guid: fe3c6ccaa3ec470180397c0f77343305, type: 3}
+  - key: Characters/Rig2/r2_dew_1_nubR
+    sprite: {fileID: 21300000, guid: 089f54572091499baea5a0a56b5c4a63, type: 3}
+  - key: Characters/Rig2/r2_dew_1_stem
+    sprite: {fileID: 21300000, guid: e2c9b9d502e8458598469543d174fca5, type: 3}
+  - key: Characters/Rig2/r2_dew_2_chest
+    sprite: {fileID: 21300000, guid: 4ceddd60aea74ae78865a3d32d737b05, type: 3}
+  - key: Characters/Rig2/r2_dew_2_chest_climb
+    sprite: {fileID: 21300000, guid: 9dfd5fa20a884c278f06c9bf79138e2f, type: 3}
+  - key: Characters/Rig2/r2_dew_2_chest_pick
+    sprite: {fileID: 21300000, guid: a99efd9f108143ea8aedda1eb8e07ea3, type: 3}
+  - key: Characters/Rig2/r2_dew_2_face_blink
+    sprite: {fileID: 21300000, guid: 7c4f601616b94cf59b74784a05a42a3a, type: 3}
+  - key: Characters/Rig2/r2_dew_2_face_effort
+    sprite: {fileID: 21300000, guid: c96cc74cfb6b441eba6530f1c11a4f10, type: 3}
+  - key: Characters/Rig2/r2_dew_2_face_happy
+    sprite: {fileID: 21300000, guid: 312118c13c534bff9efca0c33b1e7bc7, type: 3}
+  - key: Characters/Rig2/r2_dew_2_face_normal
+    sprite: {fileID: 21300000, guid: e3c4255393f3450792a158e5c9fa6c16, type: 3}
+  - key: Characters/Rig2/r2_dew_2_face_surprise
+    sprite: {fileID: 21300000, guid: 3de3c5a3009c4ef39611bef4cb31862c, type: 3}
+  - key: Characters/Rig2/r2_dew_2_forearm
+    sprite: {fileID: 21300000, guid: ce52612d398c4fc2b9e35faecf08021f, type: 3}
+  - key: Characters/Rig2/r2_dew_2_hand
+    sprite: {fileID: 21300000, guid: b4e2718f764c460790dd24f8d86dd403, type: 3}
+  - key: Characters/Rig2/r2_dew_2_leg
+    sprite: {fileID: 21300000, guid: a41d870b501c46f997f6548df97d07ff, type: 3}
+  - key: Characters/Rig2/r2_dew_2_shin
+    sprite: {fileID: 21300000, guid: a1dba63b69d44e059d419625a119096d, type: 3}
+  - key: Characters/Rig2/r2_dew_2_shoe
+    sprite: {fileID: 21300000, guid: 1a41169fbdda452a8d8dada2f055f2af, type: 3}
+  - key: Characters/Rig2/r2_dew_2_skirt
+    sprite: {fileID: 21300000, guid: 5ec178604e9e4b98a18778d3c5610ff0, type: 3}
+  - key: Characters/Rig2/r2_dew_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 146c6bb3b6cc419a9242fba191d7cad4, type: 3}
+  - key: Characters/Rig2/r2_dew_2_skirt_pick
+    sprite: {fileID: 21300000, guid: b28c667d519546d19a84a85b0057a39c, type: 3}
+  - key: Characters/Rig2/r2_dew_2_thigh
+    sprite: {fileID: 21300000, guid: f5876117beef48a3b375d5f9835a769e, type: 3}
+  - key: Characters/Rig2/r2_dew_3_chest
+    sprite: {fileID: 21300000, guid: e494cc4637024927b936b71d234210b7, type: 3}
+  - key: Characters/Rig2/r2_dew_3_chest_pick
+    sprite: {fileID: 21300000, guid: 8c535617d41544f78657b467b9488c21, type: 3}
+  - key: Characters/Rig2/r2_dew_3_face_blink
+    sprite: {fileID: 21300000, guid: 18c866d149a8452898722638eba17ed4, type: 3}
+  - key: Characters/Rig2/r2_dew_3_face_effort
+    sprite: {fileID: 21300000, guid: 4b92692db9b54c18b7ce5677a5e139e3, type: 3}
+  - key: Characters/Rig2/r2_dew_3_face_happy
+    sprite: {fileID: 21300000, guid: 2582be9525da4a18947f6c5172b56c23, type: 3}
+  - key: Characters/Rig2/r2_dew_3_face_normal
+    sprite: {fileID: 21300000, guid: 3cf3745d06fd434699a0dfa4d2e0d91a, type: 3}
+  - key: Characters/Rig2/r2_dew_3_face_surprise
+    sprite: {fileID: 21300000, guid: f8895725e940417fbf6f42a314ee2edd, type: 3}
+  - key: Characters/Rig2/r2_dew_3_forearm
+    sprite: {fileID: 21300000, guid: d3f39c15b12848f7b15c0f8ccb22b48a, type: 3}
+  - key: Characters/Rig2/r2_dew_3_hand
+    sprite: {fileID: 21300000, guid: fe207b1c913a40e49c0cf17ffbfd3b3b, type: 3}
+  - key: Characters/Rig2/r2_dew_3_leg
+    sprite: {fileID: 21300000, guid: 1a64784c547a4684bf2dc851762b8b71, type: 3}
+  - key: Characters/Rig2/r2_dew_3_shin
+    sprite: {fileID: 21300000, guid: 3553d7f368294d80aca1dd947e032d44, type: 3}
+  - key: Characters/Rig2/r2_dew_3_shoe
+    sprite: {fileID: 21300000, guid: 700616e8e84c4e8b8460ba89ef874bba, type: 3}
+  - key: Characters/Rig2/r2_dew_3_skirt
+    sprite: {fileID: 21300000, guid: d8a6dc3bf6534e4cae9633294d8323d0, type: 3}
+  - key: Characters/Rig2/r2_dew_3_skirt_pick
+    sprite: {fileID: 21300000, guid: e4965d4cf64a45239b30022e8f326818, type: 3}
+  - key: Characters/Rig2/r2_dew_3_thigh
+    sprite: {fileID: 21300000, guid: be29bdeb56c94315ad0a6d8af6cfb776, type: 3}
+  - key: Characters/Rig2/r2_fire_0_cap
+    sprite: {fileID: 21300000, guid: a5b13cf6151540e0a2c81d2614e6ce28, type: 3}
+  - key: Characters/Rig2/r2_fire_0_face_blink
+    sprite: {fileID: 21300000, guid: 263d18b96e264e68b21e0aa6f86c6ba5, type: 3}
+  - key: Characters/Rig2/r2_fire_0_face_effort
+    sprite: {fileID: 21300000, guid: b94afcd1045046d49ed630fed7b65533, type: 3}
+  - key: Characters/Rig2/r2_fire_0_face_happy
+    sprite: {fileID: 21300000, guid: 80c67f1bab2f4e18bd36b3843b100557, type: 3}
+  - key: Characters/Rig2/r2_fire_0_face_normal
+    sprite: {fileID: 21300000, guid: 5ab95ac052294947af7e02c6ca2baec1, type: 3}
+  - key: Characters/Rig2/r2_fire_0_face_surprise
+    sprite: {fileID: 21300000, guid: ac5087a4de6d4429a20811f2231b1403, type: 3}
+  - key: Characters/Rig2/r2_fire_0_footL
+    sprite: {fileID: 21300000, guid: 9440a6d2fea346e7af400a162c7d2930, type: 3}
+  - key: Characters/Rig2/r2_fire_0_footR
+    sprite: {fileID: 21300000, guid: b1c0f28761ea40ddb1230a4589cb0e0e, type: 3}
+  - key: Characters/Rig2/r2_fire_0_stem
+    sprite: {fileID: 21300000, guid: 82d22c9f96554a8580313f29de54bb92, type: 3}
+  - key: Characters/Rig2/r2_fire_1_cap
+    sprite: {fileID: 21300000, guid: 3a780cc7b486486db8ef3fc7aed10e48, type: 3}
+  - key: Characters/Rig2/r2_fire_1_face_blink
+    sprite: {fileID: 21300000, guid: ac61b5e9a1e143ffaa783b4266ae1ecd, type: 3}
+  - key: Characters/Rig2/r2_fire_1_face_effort
+    sprite: {fileID: 21300000, guid: 884f520cfd5545b9a1b3dd7c9fe6eb79, type: 3}
+  - key: Characters/Rig2/r2_fire_1_face_happy
+    sprite: {fileID: 21300000, guid: 514efce9c6ed406680eade2322600c12, type: 3}
+  - key: Characters/Rig2/r2_fire_1_face_normal
+    sprite: {fileID: 21300000, guid: 62aa2e3993bc42749d064cb55016d20d, type: 3}
+  - key: Characters/Rig2/r2_fire_1_face_surprise
+    sprite: {fileID: 21300000, guid: a98660c07e9c46d5a81e18de47a24e5d, type: 3}
+  - key: Characters/Rig2/r2_fire_1_footL
+    sprite: {fileID: 21300000, guid: 6e6dcb2ddcfe4e95aedc27a4456f72c2, type: 3}
+  - key: Characters/Rig2/r2_fire_1_footR
+    sprite: {fileID: 21300000, guid: ea23e41e9b8f429794f0b7d84f2ce781, type: 3}
+  - key: Characters/Rig2/r2_fire_1_nubL
+    sprite: {fileID: 21300000, guid: 5d078de2b89a42b286b3d88ded8b42cf, type: 3}
+  - key: Characters/Rig2/r2_fire_1_nubR
+    sprite: {fileID: 21300000, guid: ce3f49938c2f48d298f7bf05e2121fd9, type: 3}
+  - key: Characters/Rig2/r2_fire_1_stem
+    sprite: {fileID: 21300000, guid: 29880b85c28440898940083174411590, type: 3}
+  - key: Characters/Rig2/r2_fire_2_chest
+    sprite: {fileID: 21300000, guid: ce51530093dd4b959cc05f7b2612e34c, type: 3}
+  - key: Characters/Rig2/r2_fire_2_chest_climb
+    sprite: {fileID: 21300000, guid: 6ded2dde7ed745cfa4180cfb9a1bc525, type: 3}
+  - key: Characters/Rig2/r2_fire_2_chest_pick
+    sprite: {fileID: 21300000, guid: df5644e5a27f45c094e5bd068251d924, type: 3}
+  - key: Characters/Rig2/r2_fire_2_face_blink
+    sprite: {fileID: 21300000, guid: 67cf65f6bd7749999443c032bc0aa8c3, type: 3}
+  - key: Characters/Rig2/r2_fire_2_face_effort
+    sprite: {fileID: 21300000, guid: e5e509f8b0734005b5785d8175734d7b, type: 3}
+  - key: Characters/Rig2/r2_fire_2_face_happy
+    sprite: {fileID: 21300000, guid: c53ec66d567e422885432a2552e4ef5c, type: 3}
+  - key: Characters/Rig2/r2_fire_2_face_normal
+    sprite: {fileID: 21300000, guid: 88de9f0153c24351bfb2f3ac8b8ef575, type: 3}
+  - key: Characters/Rig2/r2_fire_2_face_surprise
+    sprite: {fileID: 21300000, guid: f5c2c1b7853647a48f8a47357f875cb5, type: 3}
+  - key: Characters/Rig2/r2_fire_2_forearm
+    sprite: {fileID: 21300000, guid: dc2b912cc19e4e1bb6c1c3f39a6cbdbd, type: 3}
+  - key: Characters/Rig2/r2_fire_2_hand
+    sprite: {fileID: 21300000, guid: 8fb9bb2352274a9899e0e6a44bcc9b44, type: 3}
+  - key: Characters/Rig2/r2_fire_2_leg
+    sprite: {fileID: 21300000, guid: 235cf5e432b84b61a0e62144e89f6b16, type: 3}
+  - key: Characters/Rig2/r2_fire_2_shin
+    sprite: {fileID: 21300000, guid: f7ffffae0ee7491881b26f34d594237a, type: 3}
+  - key: Characters/Rig2/r2_fire_2_shoe
+    sprite: {fileID: 21300000, guid: 259bcdaeb72840f6b3798e29c3183881, type: 3}
+  - key: Characters/Rig2/r2_fire_2_skirt
+    sprite: {fileID: 21300000, guid: 19a782c291c74443ae582a3aaa2af8e2, type: 3}
+  - key: Characters/Rig2/r2_fire_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 39ea1028f45940a68a256ad776cd3412, type: 3}
+  - key: Characters/Rig2/r2_fire_2_skirt_pick
+    sprite: {fileID: 21300000, guid: c2de3cd67c764c88996328dc488af2fd, type: 3}
+  - key: Characters/Rig2/r2_fire_2_thigh
+    sprite: {fileID: 21300000, guid: adbec0c069aa4452a5357bc5337d8586, type: 3}
+  - key: Characters/Rig2/r2_fire_3_chest
+    sprite: {fileID: 21300000, guid: 856c1939f76f47179f184f9869e58d73, type: 3}
+  - key: Characters/Rig2/r2_fire_3_chest_pick
+    sprite: {fileID: 21300000, guid: d0d96c20213f4e31a8937295096c41b7, type: 3}
+  - key: Characters/Rig2/r2_fire_3_face_blink
+    sprite: {fileID: 21300000, guid: 6ca1c6e3a5394c3c9651c3f50b1ec8e3, type: 3}
+  - key: Characters/Rig2/r2_fire_3_face_effort
+    sprite: {fileID: 21300000, guid: 926e0d739981478186592af3faa4aab7, type: 3}
+  - key: Characters/Rig2/r2_fire_3_face_happy
+    sprite: {fileID: 21300000, guid: 12dbed1d03bc425ea6cae4dccae15875, type: 3}
+  - key: Characters/Rig2/r2_fire_3_face_normal
+    sprite: {fileID: 21300000, guid: 409c2b3cc85e48818dc5111d3b6322e0, type: 3}
+  - key: Characters/Rig2/r2_fire_3_face_surprise
+    sprite: {fileID: 21300000, guid: 70f670828bc84a3db977a6753e8ea6ef, type: 3}
+  - key: Characters/Rig2/r2_fire_3_forearm
+    sprite: {fileID: 21300000, guid: 1295b0f91c7644cb848ef7183cf18a52, type: 3}
+  - key: Characters/Rig2/r2_fire_3_hand
+    sprite: {fileID: 21300000, guid: 6d85d8b1a3284eaca23a8a4cc3fc0946, type: 3}
+  - key: Characters/Rig2/r2_fire_3_leg
+    sprite: {fileID: 21300000, guid: c47169f3ec7943dd84d7249655e4a202, type: 3}
+  - key: Characters/Rig2/r2_fire_3_shin
+    sprite: {fileID: 21300000, guid: 4773e3d4b248474aa9fc363792dcfb19, type: 3}
+  - key: Characters/Rig2/r2_fire_3_shoe
+    sprite: {fileID: 21300000, guid: c3929a73500b4e37af0641742cd3d11b, type: 3}
+  - key: Characters/Rig2/r2_fire_3_skirt
+    sprite: {fileID: 21300000, guid: c0b02e3940174bd38e97116d2a231714, type: 3}
+  - key: Characters/Rig2/r2_fire_3_skirt_pick
+    sprite: {fileID: 21300000, guid: afa1dece700a49cf8a4cb085b499c5a0, type: 3}
+  - key: Characters/Rig2/r2_fire_3_thigh
+    sprite: {fileID: 21300000, guid: 0996a5482684488bba2ba21279a734cc, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_cap
+    sprite: {fileID: 21300000, guid: bc066d2f1e4a4190912bbf0518640656, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_face_blink
+    sprite: {fileID: 21300000, guid: c0e5ecc722d84b16bbae94337fcaa145, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_face_effort
+    sprite: {fileID: 21300000, guid: e0bb04bbec4c46388306a3131307f720, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_face_happy
+    sprite: {fileID: 21300000, guid: 12cab4b612bf499390ec91f9a657876a, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_face_normal
+    sprite: {fileID: 21300000, guid: 12b71acb408a42b9997f423c23bad2b8, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_face_surprise
+    sprite: {fileID: 21300000, guid: 02837cfd27074901827b84adea8ebabe, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_footL
+    sprite: {fileID: 21300000, guid: 4bfce15859cf44e29171b989ee3f5788, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_footR
+    sprite: {fileID: 21300000, guid: d7cd3e8244c34c4a9aa03d7ec0fe0311, type: 3}
+  - key: Characters/Rig2/r2_leaf_0_stem
+    sprite: {fileID: 21300000, guid: a20ec220c6f54ae689c34914d92349c6, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_cap
+    sprite: {fileID: 21300000, guid: c05244bfc88c4d038ec051183db81cd8, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_face_blink
+    sprite: {fileID: 21300000, guid: 75d54e609f3d4cc18af1790122e2dbf2, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_face_effort
+    sprite: {fileID: 21300000, guid: aabf0aaea60945ecb785737aaf541dc3, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_face_happy
+    sprite: {fileID: 21300000, guid: 88335913ad74460f98372a92aed74863, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_face_normal
+    sprite: {fileID: 21300000, guid: c00d00cae3f347c9928cd3e77e93b0da, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_face_surprise
+    sprite: {fileID: 21300000, guid: 9510c76fb68f4ca3ad30d548d143b7bf, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_footL
+    sprite: {fileID: 21300000, guid: 0220fb95de6440058a22021de3e1c2d2, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_footR
+    sprite: {fileID: 21300000, guid: 045fabb679bb4bea950a345c53917508, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_nubL
+    sprite: {fileID: 21300000, guid: 2a35f760a6d34242b459b4eb2c0eb131, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_nubR
+    sprite: {fileID: 21300000, guid: a966266402c74aa4bcbb5fb970dcff85, type: 3}
+  - key: Characters/Rig2/r2_leaf_1_stem
+    sprite: {fileID: 21300000, guid: ec269214bdd0463999e1b5cd159a7d17, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_chest
+    sprite: {fileID: 21300000, guid: f6a2968b72c6470fb7e34e75d550945a, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_chest_climb
+    sprite: {fileID: 21300000, guid: 1e3e2ebdfe974c73985188bce68fd423, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_chest_pick
+    sprite: {fileID: 21300000, guid: d862824315674a0a8d7e7fbc1d91b321, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_face_blink
+    sprite: {fileID: 21300000, guid: 37619fc9d1f94eb39547ca279419316e, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_face_effort
+    sprite: {fileID: 21300000, guid: b3b39027573a4efbae1f6a5dc3b2f6d4, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_face_happy
+    sprite: {fileID: 21300000, guid: 49938476b235494da2471de76c3f4e98, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_face_normal
+    sprite: {fileID: 21300000, guid: 49aea93e0eb546a0aa37af9ec3c4e8c9, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_face_surprise
+    sprite: {fileID: 21300000, guid: ffc5508f87f34c23b705d5d8c401a9b9, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_forearm
+    sprite: {fileID: 21300000, guid: 4230b33cefb74435973a21c57926792b, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_hand
+    sprite: {fileID: 21300000, guid: 7a915773f2a2431495f42e2127f11cc6, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_leg
+    sprite: {fileID: 21300000, guid: ec88e4db6bc349da89d4fbcccba53f6d, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_shin
+    sprite: {fileID: 21300000, guid: 9aa742aa8b074825a99b77589f31d217, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_shoe
+    sprite: {fileID: 21300000, guid: 97f0ead1ec524add96ca821f5be5aa37, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_skirt
+    sprite: {fileID: 21300000, guid: 6ac56a3a835d4251899d986598e7613b, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 7c87dc2c196c437ea7311a3ea7528058, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_skirt_pick
+    sprite: {fileID: 21300000, guid: c95615d8253a423694517f8b635b6440, type: 3}
+  - key: Characters/Rig2/r2_leaf_2_thigh
+    sprite: {fileID: 21300000, guid: 467dfb7faed04635b20a08d40bfcf895, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_chest
+    sprite: {fileID: 21300000, guid: 5823c7316f8b4d67808d88dcf97133f7, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_chest_pick
+    sprite: {fileID: 21300000, guid: 30a03816d714431cb4e9eba1c6aba343, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_face_blink
+    sprite: {fileID: 21300000, guid: 93da6136007541239bd503f76408772a, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_face_effort
+    sprite: {fileID: 21300000, guid: f9e8f03a3d784d7aab278a2a13fc6e27, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_face_happy
+    sprite: {fileID: 21300000, guid: 447fe684556a4a4fba6e3a2efd5e53cf, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_face_normal
+    sprite: {fileID: 21300000, guid: 674028e129a547bc85416ee8a7901b14, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_face_surprise
+    sprite: {fileID: 21300000, guid: a06c35cd94ed4186a2bd4d3608ad371b, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_forearm
+    sprite: {fileID: 21300000, guid: e2f415dc85464ddfb6b8f9d9c521a0cd, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_hand
+    sprite: {fileID: 21300000, guid: e7e79e2f16b74955bcdc4162123cc60d, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_leg
+    sprite: {fileID: 21300000, guid: fe017ed045e348868ece563daf078f57, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_shin
+    sprite: {fileID: 21300000, guid: 6e861199421c4e149c3ad448c22578f0, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_shoe
+    sprite: {fileID: 21300000, guid: 4e66ab0af83b40b1a0abb2d1ea5d25c8, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_skirt
+    sprite: {fileID: 21300000, guid: 932ff8efad4b42f5b2423ab2d1f32fc2, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_skirt_pick
+    sprite: {fileID: 21300000, guid: ad006bf104eb4c53ac718f9d7f3e7012, type: 3}
+  - key: Characters/Rig2/r2_leaf_3_thigh
+    sprite: {fileID: 21300000, guid: 6892e2ef9659410fb5090931abf9f2cf, type: 3}
+  - key: Characters/Rig2/r2_moon_2_chest
+    sprite: {fileID: 21300000, guid: 1651d9f39e384f029d93f9c72245f8f4, type: 3}
+  - key: Characters/Rig2/r2_moon_2_chest_climb
+    sprite: {fileID: 21300000, guid: 5125f721810a4db6942ac42946e412ca, type: 3}
+  - key: Characters/Rig2/r2_moon_2_chest_pick
+    sprite: {fileID: 21300000, guid: b023baad19934786881c94cf5ee4f093, type: 3}
+  - key: Characters/Rig2/r2_moon_2_face_blink
+    sprite: {fileID: 21300000, guid: c55d799bd243488e831a1f212e6f87f4, type: 3}
+  - key: Characters/Rig2/r2_moon_2_face_effort
+    sprite: {fileID: 21300000, guid: 5a70053565df4a6e86acd69657836655, type: 3}
+  - key: Characters/Rig2/r2_moon_2_face_happy
+    sprite: {fileID: 21300000, guid: b38ef6d28d4947f5aec41389061dcb1f, type: 3}
+  - key: Characters/Rig2/r2_moon_2_face_normal
+    sprite: {fileID: 21300000, guid: 46d9b67f537a4c0d8c72c2f04a666158, type: 3}
+  - key: Characters/Rig2/r2_moon_2_face_surprise
+    sprite: {fileID: 21300000, guid: 89f0651815fd4f84966bccc6c55c8fdd, type: 3}
+  - key: Characters/Rig2/r2_moon_2_forearm
+    sprite: {fileID: 21300000, guid: 591a29e0b574473782150d14157458fa, type: 3}
+  - key: Characters/Rig2/r2_moon_2_hand
+    sprite: {fileID: 21300000, guid: 6a38798ec995430bb50e5113ba00d399, type: 3}
+  - key: Characters/Rig2/r2_moon_2_leg
+    sprite: {fileID: 21300000, guid: a6038720fb7d4c9d8f2eb7494e693d19, type: 3}
+  - key: Characters/Rig2/r2_moon_2_shin
+    sprite: {fileID: 21300000, guid: c0020487eec84a3db0f1c5da880a1405, type: 3}
+  - key: Characters/Rig2/r2_moon_2_shoe
+    sprite: {fileID: 21300000, guid: 16c8ccb64ac0451e9d4f34b90098831c, type: 3}
+  - key: Characters/Rig2/r2_moon_2_skirt
+    sprite: {fileID: 21300000, guid: 0c658428d38d41ad9375ea342af295c8, type: 3}
+  - key: Characters/Rig2/r2_moon_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 3603f10150dd4159b3ffc36e2c31a03f, type: 3}
+  - key: Characters/Rig2/r2_moon_2_skirt_pick
+    sprite: {fileID: 21300000, guid: 60468ba00d424d869a20311415b245e2, type: 3}
+  - key: Characters/Rig2/r2_moon_2_thigh
+    sprite: {fileID: 21300000, guid: c6232a63ee324bc2846f997d6ee4618b, type: 3}
+  - key: Characters/Rig2/r2_moon_3_chest
+    sprite: {fileID: 21300000, guid: 40ee1dae25b04490bc182a22de5898c1, type: 3}
+  - key: Characters/Rig2/r2_moon_3_chest_pick
+    sprite: {fileID: 21300000, guid: a68652376d04425fbc79d89b19945962, type: 3}
+  - key: Characters/Rig2/r2_moon_3_face_blink
+    sprite: {fileID: 21300000, guid: 27cc2e7a98ef4aa4be4255ce5205e3a2, type: 3}
+  - key: Characters/Rig2/r2_moon_3_face_effort
+    sprite: {fileID: 21300000, guid: 665baf62270a4e3885e9fba289036bb8, type: 3}
+  - key: Characters/Rig2/r2_moon_3_face_happy
+    sprite: {fileID: 21300000, guid: 807d6d8f942848bbbc43b6af53c708b1, type: 3}
+  - key: Characters/Rig2/r2_moon_3_face_normal
+    sprite: {fileID: 21300000, guid: 2206ffdddbbe4478850ab412257c9747, type: 3}
+  - key: Characters/Rig2/r2_moon_3_face_surprise
+    sprite: {fileID: 21300000, guid: 8328a8426ab0491f9686990eb7699aff, type: 3}
+  - key: Characters/Rig2/r2_moon_3_forearm
+    sprite: {fileID: 21300000, guid: 659da3d2fa584da69c1a6ee2d71d3658, type: 3}
+  - key: Characters/Rig2/r2_moon_3_hand
+    sprite: {fileID: 21300000, guid: 3ef998b0e29849b98f17df0a379dcaca, type: 3}
+  - key: Characters/Rig2/r2_moon_3_leg
+    sprite: {fileID: 21300000, guid: 23a7ba37745c43aea4c3d63289839809, type: 3}
+  - key: Characters/Rig2/r2_moon_3_shin
+    sprite: {fileID: 21300000, guid: 63e4eefe05494b7eb39a15cd9403c3c3, type: 3}
+  - key: Characters/Rig2/r2_moon_3_shoe
+    sprite: {fileID: 21300000, guid: 2d92fc1b868a483886ecf683d1edf05c, type: 3}
+  - key: Characters/Rig2/r2_moon_3_skirt
+    sprite: {fileID: 21300000, guid: 4641589079a14785ad40e850e1843b46, type: 3}
+  - key: Characters/Rig2/r2_moon_3_skirt_pick
+    sprite: {fileID: 21300000, guid: 84511f5ab02d4172a3bb2249e227d638, type: 3}
+  - key: Characters/Rig2/r2_moon_3_thigh
+    sprite: {fileID: 21300000, guid: 67478841e8a840019e4724d38bd5ab23, type: 3}
+  - key: Characters/Rig2/r2_rock_0_cap
+    sprite: {fileID: 21300000, guid: 2df478a08a5646d6a4b1881692cf9eb9, type: 3}
+  - key: Characters/Rig2/r2_rock_0_face_blink
+    sprite: {fileID: 21300000, guid: d8e251d1290d401ab99af291aed2f5e3, type: 3}
+  - key: Characters/Rig2/r2_rock_0_face_effort
+    sprite: {fileID: 21300000, guid: 64cb64d0c85f493bafa94861401d6018, type: 3}
+  - key: Characters/Rig2/r2_rock_0_face_happy
+    sprite: {fileID: 21300000, guid: 1e0f91956d55476e92466f06e4a6a505, type: 3}
+  - key: Characters/Rig2/r2_rock_0_face_normal
+    sprite: {fileID: 21300000, guid: 63a397ff20774d6b9aaa71f2e5985e20, type: 3}
+  - key: Characters/Rig2/r2_rock_0_face_surprise
+    sprite: {fileID: 21300000, guid: fb361ace4a534f0cba708c78f7deb255, type: 3}
+  - key: Characters/Rig2/r2_rock_0_footL
+    sprite: {fileID: 21300000, guid: 1fe91c3998dd41ef99bde3e85ae10420, type: 3}
+  - key: Characters/Rig2/r2_rock_0_footR
+    sprite: {fileID: 21300000, guid: 07ba56bb002049c983f0b6a9a290e174, type: 3}
+  - key: Characters/Rig2/r2_rock_0_stem
+    sprite: {fileID: 21300000, guid: 7e5d5f65863b47868dc3acde5faf24c6, type: 3}
+  - key: Characters/Rig2/r2_rock_1_cap
+    sprite: {fileID: 21300000, guid: 0a0350820ea6423583a17673f7989b07, type: 3}
+  - key: Characters/Rig2/r2_rock_1_face_blink
+    sprite: {fileID: 21300000, guid: 64a82fe9530346f49ebe6bbede0a0f5c, type: 3}
+  - key: Characters/Rig2/r2_rock_1_face_effort
+    sprite: {fileID: 21300000, guid: a42f750c7659483d9d91c58d8980c4ff, type: 3}
+  - key: Characters/Rig2/r2_rock_1_face_happy
+    sprite: {fileID: 21300000, guid: 9f97bde2bc9048c783036d43f72e4d27, type: 3}
+  - key: Characters/Rig2/r2_rock_1_face_normal
+    sprite: {fileID: 21300000, guid: 2bc96b18d4664a03b7d65a4c789f5d03, type: 3}
+  - key: Characters/Rig2/r2_rock_1_face_surprise
+    sprite: {fileID: 21300000, guid: f7607680712341fdb14a297ba44fecd3, type: 3}
+  - key: Characters/Rig2/r2_rock_1_footL
+    sprite: {fileID: 21300000, guid: 94e18e1870984a84b40c63f624142d55, type: 3}
+  - key: Characters/Rig2/r2_rock_1_footR
+    sprite: {fileID: 21300000, guid: ffa311d4743c47e28d7ecea99d748491, type: 3}
+  - key: Characters/Rig2/r2_rock_1_nubL
+    sprite: {fileID: 21300000, guid: ee357339aec7414d8df873e65938d9ea, type: 3}
+  - key: Characters/Rig2/r2_rock_1_nubR
+    sprite: {fileID: 21300000, guid: 0d0dbedf753f46ed88c8704c0a7c92f4, type: 3}
+  - key: Characters/Rig2/r2_rock_1_stem
+    sprite: {fileID: 21300000, guid: a386b3b0612e4d15ac47018d4d69da29, type: 3}
+  - key: Characters/Rig2/r2_rock_2_chest
+    sprite: {fileID: 21300000, guid: 2e182435f2a04533b7e6d0ad0cdf817d, type: 3}
+  - key: Characters/Rig2/r2_rock_2_chest_climb
+    sprite: {fileID: 21300000, guid: d65dbd960e9843e0b29889ccc8e7293c, type: 3}
+  - key: Characters/Rig2/r2_rock_2_chest_pick
+    sprite: {fileID: 21300000, guid: 3e4dc62e01ef49309f40ce4b23c29c8f, type: 3}
+  - key: Characters/Rig2/r2_rock_2_face_blink
+    sprite: {fileID: 21300000, guid: c2f670c824aa49ebbd9149c4fe7ed473, type: 3}
+  - key: Characters/Rig2/r2_rock_2_face_effort
+    sprite: {fileID: 21300000, guid: 911a42cada804b3e8ced47656f68a5be, type: 3}
+  - key: Characters/Rig2/r2_rock_2_face_happy
+    sprite: {fileID: 21300000, guid: 286f7aaba73345a48f1a89dc761048da, type: 3}
+  - key: Characters/Rig2/r2_rock_2_face_normal
+    sprite: {fileID: 21300000, guid: 6704a3e0cb4141509441476820019d6d, type: 3}
+  - key: Characters/Rig2/r2_rock_2_face_surprise
+    sprite: {fileID: 21300000, guid: de9c05e1c1634fb7ad39303a18f0cd90, type: 3}
+  - key: Characters/Rig2/r2_rock_2_forearm
+    sprite: {fileID: 21300000, guid: d8ca4fc9fdc642369fb6052a0a6c72af, type: 3}
+  - key: Characters/Rig2/r2_rock_2_hand
+    sprite: {fileID: 21300000, guid: c58ba8fe6ce14f3489b65d435f8441f0, type: 3}
+  - key: Characters/Rig2/r2_rock_2_leg
+    sprite: {fileID: 21300000, guid: 06a53a17941b47fba0488f1ff39ee1cf, type: 3}
+  - key: Characters/Rig2/r2_rock_2_shin
+    sprite: {fileID: 21300000, guid: 834cb1291b424d86b8db5889809d908e, type: 3}
+  - key: Characters/Rig2/r2_rock_2_shoe
+    sprite: {fileID: 21300000, guid: d132e2e3197f449180b16fa7185cfe4a, type: 3}
+  - key: Characters/Rig2/r2_rock_2_skirt
+    sprite: {fileID: 21300000, guid: f9b46a7228ef405cb6c6d87f1b3b81ed, type: 3}
+  - key: Characters/Rig2/r2_rock_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 1e9e5f7e641a4746ac37d9f451f2c481, type: 3}
+  - key: Characters/Rig2/r2_rock_2_skirt_pick
+    sprite: {fileID: 21300000, guid: 3bf76c3855014116b6fe58bcbe90270e, type: 3}
+  - key: Characters/Rig2/r2_rock_2_thigh
+    sprite: {fileID: 21300000, guid: dd5032f1ee96472783658b491828385f, type: 3}
+  - key: Characters/Rig2/r2_rock_3_chest
+    sprite: {fileID: 21300000, guid: 8d39388486ac45d3b5959ca02a796d8c, type: 3}
+  - key: Characters/Rig2/r2_rock_3_chest_pick
+    sprite: {fileID: 21300000, guid: 708ea7d8ef4d47a8984b27a94df31c50, type: 3}
+  - key: Characters/Rig2/r2_rock_3_face_blink
+    sprite: {fileID: 21300000, guid: 6da37740583e4d93b8e8cecf178726c0, type: 3}
+  - key: Characters/Rig2/r2_rock_3_face_effort
+    sprite: {fileID: 21300000, guid: d0951ddf548d4f40a8e81fc1dd009571, type: 3}
+  - key: Characters/Rig2/r2_rock_3_face_happy
+    sprite: {fileID: 21300000, guid: 4301781a4a3d420aaaca19039b5ba563, type: 3}
+  - key: Characters/Rig2/r2_rock_3_face_normal
+    sprite: {fileID: 21300000, guid: dc3dea302bdc44af842c6d6573121025, type: 3}
+  - key: Characters/Rig2/r2_rock_3_face_surprise
+    sprite: {fileID: 21300000, guid: e88a3ba403a14e02b372071fc9977b1a, type: 3}
+  - key: Characters/Rig2/r2_rock_3_forearm
+    sprite: {fileID: 21300000, guid: d97d0817a9934d3d9d916336bc4ce291, type: 3}
+  - key: Characters/Rig2/r2_rock_3_hand
+    sprite: {fileID: 21300000, guid: 8649b6c8d41641ba89647f2e4120a825, type: 3}
+  - key: Characters/Rig2/r2_rock_3_leg
+    sprite: {fileID: 21300000, guid: 9fb1ef6529134a7aae0b801d99565036, type: 3}
+  - key: Characters/Rig2/r2_rock_3_shin
+    sprite: {fileID: 21300000, guid: 7adabf3118f5478fb443f2927281a841, type: 3}
+  - key: Characters/Rig2/r2_rock_3_shoe
+    sprite: {fileID: 21300000, guid: dd0627e7cc2042449a50d6ffdce4a655, type: 3}
+  - key: Characters/Rig2/r2_rock_3_skirt
+    sprite: {fileID: 21300000, guid: 5e277d75e37d419bb03b02020a5cc6c2, type: 3}
+  - key: Characters/Rig2/r2_rock_3_skirt_pick
+    sprite: {fileID: 21300000, guid: a50a9bbe7d3748ad8d7b57daa4c7c30b, type: 3}
+  - key: Characters/Rig2/r2_rock_3_thigh
+    sprite: {fileID: 21300000, guid: 45a28a3ac1c443399f4649a52acc9321, type: 3}
+  - key: Characters/Rig2/r2_spark_0_cap
+    sprite: {fileID: 21300000, guid: 80d40834998e465fa26cfd7739c1823f, type: 3}
+  - key: Characters/Rig2/r2_spark_0_face_blink
+    sprite: {fileID: 21300000, guid: 088196c738e246d4afdb02b04b84f109, type: 3}
+  - key: Characters/Rig2/r2_spark_0_face_effort
+    sprite: {fileID: 21300000, guid: cdafe4564d3a42fba6aa788618a8e983, type: 3}
+  - key: Characters/Rig2/r2_spark_0_face_happy
+    sprite: {fileID: 21300000, guid: 27039efeaa9647d7a65e8e5e892cabf2, type: 3}
+  - key: Characters/Rig2/r2_spark_0_face_normal
+    sprite: {fileID: 21300000, guid: 614a7b3b77824d24a5449e2a3efcb069, type: 3}
+  - key: Characters/Rig2/r2_spark_0_face_surprise
+    sprite: {fileID: 21300000, guid: 273de1756eff4d46b3920fcc2dc25bd4, type: 3}
+  - key: Characters/Rig2/r2_spark_0_footL
+    sprite: {fileID: 21300000, guid: 6da4f8119e1347288e23128287401303, type: 3}
+  - key: Characters/Rig2/r2_spark_0_footR
+    sprite: {fileID: 21300000, guid: 5f5168d7913241c4bdcffb6f209c7e14, type: 3}
+  - key: Characters/Rig2/r2_spark_0_stem
+    sprite: {fileID: 21300000, guid: 309b0b9253154c12a7dc82109dade769, type: 3}
+  - key: Characters/Rig2/r2_spark_1_cap
+    sprite: {fileID: 21300000, guid: 17314f77db9541dba3e12b38531ed16a, type: 3}
+  - key: Characters/Rig2/r2_spark_1_face_blink
+    sprite: {fileID: 21300000, guid: 225dda432b774713b7ccbf3c3be6ecd1, type: 3}
+  - key: Characters/Rig2/r2_spark_1_face_effort
+    sprite: {fileID: 21300000, guid: 297139b111ed4407b204eb594dfc5dac, type: 3}
+  - key: Characters/Rig2/r2_spark_1_face_happy
+    sprite: {fileID: 21300000, guid: a8e7743f53bf4185b805c7aae9369f25, type: 3}
+  - key: Characters/Rig2/r2_spark_1_face_normal
+    sprite: {fileID: 21300000, guid: eb0d65a932584c14abcff5d9e7b8baec, type: 3}
+  - key: Characters/Rig2/r2_spark_1_face_surprise
+    sprite: {fileID: 21300000, guid: 8a3ca46f83b8494cb086a9622e2d3ff6, type: 3}
+  - key: Characters/Rig2/r2_spark_1_footL
+    sprite: {fileID: 21300000, guid: 7b08d61a6a1a49cb8d83940a8356e845, type: 3}
+  - key: Characters/Rig2/r2_spark_1_footR
+    sprite: {fileID: 21300000, guid: bbe3519e19f6428b8c21b640a7e95b18, type: 3}
+  - key: Characters/Rig2/r2_spark_1_nubL
+    sprite: {fileID: 21300000, guid: 9cba1bfca7014ffb999a6db6e9a4a661, type: 3}
+  - key: Characters/Rig2/r2_spark_1_nubR
+    sprite: {fileID: 21300000, guid: cdbbb67482324417b2ce82c2737215c8, type: 3}
+  - key: Characters/Rig2/r2_spark_1_stem
+    sprite: {fileID: 21300000, guid: 3aab9f3314684cc3bee604e9b9c0f41d, type: 3}
+  - key: Characters/Rig2/r2_spark_2_chest
+    sprite: {fileID: 21300000, guid: fae41b14a23c46aaa7ce6c03908205d9, type: 3}
+  - key: Characters/Rig2/r2_spark_2_chest_climb
+    sprite: {fileID: 21300000, guid: e4e48f4cb79b49ecb5ba744bf12fd9d0, type: 3}
+  - key: Characters/Rig2/r2_spark_2_chest_pick
+    sprite: {fileID: 21300000, guid: 9a21460c52d44473800db9e348cb213a, type: 3}
+  - key: Characters/Rig2/r2_spark_2_face_blink
+    sprite: {fileID: 21300000, guid: 246940b6d67945278c988659e85106c0, type: 3}
+  - key: Characters/Rig2/r2_spark_2_face_effort
+    sprite: {fileID: 21300000, guid: f5a2f94c053c4e3b8c7cc578dfe0f8b7, type: 3}
+  - key: Characters/Rig2/r2_spark_2_face_happy
+    sprite: {fileID: 21300000, guid: dd1adbda5d2c475b8eb3a81f4cd78e49, type: 3}
+  - key: Characters/Rig2/r2_spark_2_face_normal
+    sprite: {fileID: 21300000, guid: 3acc44dc3d024bb484b42b30b34456c8, type: 3}
+  - key: Characters/Rig2/r2_spark_2_face_surprise
+    sprite: {fileID: 21300000, guid: 54bb23e0828d4f398378433e6862212e, type: 3}
+  - key: Characters/Rig2/r2_spark_2_forearm
+    sprite: {fileID: 21300000, guid: a0810761bf614afba73293e82185cfb0, type: 3}
+  - key: Characters/Rig2/r2_spark_2_hand
+    sprite: {fileID: 21300000, guid: dc6d4ceb1e6f485c9f5451810a502eea, type: 3}
+  - key: Characters/Rig2/r2_spark_2_leg
+    sprite: {fileID: 21300000, guid: 68561cf09a54466bacfdef8136b9ce59, type: 3}
+  - key: Characters/Rig2/r2_spark_2_shin
+    sprite: {fileID: 21300000, guid: 7d876f970c614c5ea30c547d24750af1, type: 3}
+  - key: Characters/Rig2/r2_spark_2_shoe
+    sprite: {fileID: 21300000, guid: aee611cb5924469f8b9fa59902e3cf02, type: 3}
+  - key: Characters/Rig2/r2_spark_2_skirt
+    sprite: {fileID: 21300000, guid: 7a406409cfc24dcf99964a6932843bb3, type: 3}
+  - key: Characters/Rig2/r2_spark_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 0e3f8797445a40359fe1e59573f88252, type: 3}
+  - key: Characters/Rig2/r2_spark_2_skirt_pick
+    sprite: {fileID: 21300000, guid: 34b0ddb042ed4fa490b729db5fb8cb9c, type: 3}
+  - key: Characters/Rig2/r2_spark_2_thigh
+    sprite: {fileID: 21300000, guid: db6226ae09fb4b55ad4207ce29b6bc3b, type: 3}
+  - key: Characters/Rig2/r2_spark_3_chest
+    sprite: {fileID: 21300000, guid: 5effba6674ab4759832af44ec632cc32, type: 3}
+  - key: Characters/Rig2/r2_spark_3_chest_pick
+    sprite: {fileID: 21300000, guid: da2655c2a9cf4151a154e39982ce3c1d, type: 3}
+  - key: Characters/Rig2/r2_spark_3_face_blink
+    sprite: {fileID: 21300000, guid: 182a1f93aaee4349b709fc4112be4061, type: 3}
+  - key: Characters/Rig2/r2_spark_3_face_effort
+    sprite: {fileID: 21300000, guid: c230f4ba7c78425787466cabc2fde8d3, type: 3}
+  - key: Characters/Rig2/r2_spark_3_face_happy
+    sprite: {fileID: 21300000, guid: ce31ec0cdb1d4191b9cb82618a03c537, type: 3}
+  - key: Characters/Rig2/r2_spark_3_face_normal
+    sprite: {fileID: 21300000, guid: ba10495677444abd91b0e3ba4e1d6db7, type: 3}
+  - key: Characters/Rig2/r2_spark_3_face_surprise
+    sprite: {fileID: 21300000, guid: 52e58298fe504162b911433f53d8fc6e, type: 3}
+  - key: Characters/Rig2/r2_spark_3_forearm
+    sprite: {fileID: 21300000, guid: 7227eeb7c24a487a93644b8b1f505600, type: 3}
+  - key: Characters/Rig2/r2_spark_3_hand
+    sprite: {fileID: 21300000, guid: 6e7e20a9c7b140bc87578a8f0f898740, type: 3}
+  - key: Characters/Rig2/r2_spark_3_leg
+    sprite: {fileID: 21300000, guid: f60b490af9ad4f50adb757239160c744, type: 3}
+  - key: Characters/Rig2/r2_spark_3_shin
+    sprite: {fileID: 21300000, guid: 04e22eaabbb249e38a4e19584847c505, type: 3}
+  - key: Characters/Rig2/r2_spark_3_shoe
+    sprite: {fileID: 21300000, guid: f6f1b681bfab41a3b85abb53031ab104, type: 3}
+  - key: Characters/Rig2/r2_spark_3_skirt
+    sprite: {fileID: 21300000, guid: ce70b386b289406b9e49866ad10637b6, type: 3}
+  - key: Characters/Rig2/r2_spark_3_skirt_pick
+    sprite: {fileID: 21300000, guid: dc144a105b99445ba42ff9db3cf2d26c, type: 3}
+  - key: Characters/Rig2/r2_spark_3_thigh
+    sprite: {fileID: 21300000, guid: e13f4cfa90004ba5a62b6414888024ab, type: 3}
+  - key: Characters/Rig2/r2_star_2_chest
+    sprite: {fileID: 21300000, guid: 227da574a64e445598c000865f2e5876, type: 3}
+  - key: Characters/Rig2/r2_star_2_chest_climb
+    sprite: {fileID: 21300000, guid: d0796610f29443d3a8eeac024f18bab5, type: 3}
+  - key: Characters/Rig2/r2_star_2_chest_pick
+    sprite: {fileID: 21300000, guid: 3ba7aa61c14b4a2c95f8ce1c033801e4, type: 3}
+  - key: Characters/Rig2/r2_star_2_face_normal
+    sprite: {fileID: 21300000, guid: c9211fd3397a4f438ed0fb6d031d8571, type: 3}
+  - key: Characters/Rig2/r2_star_2_forearm
+    sprite: {fileID: 21300000, guid: 0447d97177b9469e983528dbe500064a, type: 3}
+  - key: Characters/Rig2/r2_star_2_hand
+    sprite: {fileID: 21300000, guid: 2a18d0998ff84cf6a6592845578a1e07, type: 3}
+  - key: Characters/Rig2/r2_star_2_leg
+    sprite: {fileID: 21300000, guid: d99bdcb9d3364b75978efbf990d7ea95, type: 3}
+  - key: Characters/Rig2/r2_star_2_shin
+    sprite: {fileID: 21300000, guid: b41f31a41f8c4f638dc516fe8c2e067b, type: 3}
+  - key: Characters/Rig2/r2_star_2_shoe
+    sprite: {fileID: 21300000, guid: 1589cc8ab69c4b67b42d82827ed6af86, type: 3}
+  - key: Characters/Rig2/r2_star_2_skirt
+    sprite: {fileID: 21300000, guid: 8a3fa3d9842b460aa53fcbd17e508681, type: 3}
+  - key: Characters/Rig2/r2_star_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 9057d44800984d10be6fc92928816b68, type: 3}
+  - key: Characters/Rig2/r2_star_2_skirt_pick
+    sprite: {fileID: 21300000, guid: 703273397f2f4a4481e681b8ebde0a8f, type: 3}
+  - key: Characters/Rig2/r2_star_2_thigh
+    sprite: {fileID: 21300000, guid: 1be2eccb06f44fc9a676e498c3620e15, type: 3}
+  - key: Characters/Rig2/r2_star_3_chest
+    sprite: {fileID: 21300000, guid: f566335793a5464cbf66ee0e64e09c11, type: 3}
+  - key: Characters/Rig2/r2_star_3_chest_pick
+    sprite: {fileID: 21300000, guid: 1e8ec23449794ca39eb0bbfa9528d5e5, type: 3}
+  - key: Characters/Rig2/r2_star_3_face_blink
+    sprite: {fileID: 21300000, guid: 03ee99e9be974d3098ac4c7d35e5b6c3, type: 3}
+  - key: Characters/Rig2/r2_star_3_face_effort
+    sprite: {fileID: 21300000, guid: 0bc78154de99403fa72631092d4ad6ad, type: 3}
+  - key: Characters/Rig2/r2_star_3_face_happy
+    sprite: {fileID: 21300000, guid: 7930da9aea5a402c948b47920cd6b2de, type: 3}
+  - key: Characters/Rig2/r2_star_3_face_normal
+    sprite: {fileID: 21300000, guid: a917a3656e964f5a8b814bed3f3bea7f, type: 3}
+  - key: Characters/Rig2/r2_star_3_face_surprise
+    sprite: {fileID: 21300000, guid: 4ecd0077b0ec445d8358a146c42e7a50, type: 3}
+  - key: Characters/Rig2/r2_star_3_forearm
+    sprite: {fileID: 21300000, guid: daf3d11137874d0ba25ffe91e6a610e4, type: 3}
+  - key: Characters/Rig2/r2_star_3_hand
+    sprite: {fileID: 21300000, guid: 6dffac5311bf49fabd181ee95f8d1796, type: 3}
+  - key: Characters/Rig2/r2_star_3_leg
+    sprite: {fileID: 21300000, guid: 802f2ec3530d41e4ba7bb5e7e7830382, type: 3}
+  - key: Characters/Rig2/r2_star_3_shin
+    sprite: {fileID: 21300000, guid: 5f6513d2369143f883e89cba0b3ff93e, type: 3}
+  - key: Characters/Rig2/r2_star_3_shoe
+    sprite: {fileID: 21300000, guid: 20dc151db38e47d0a8ba7d3a97a1af86, type: 3}
+  - key: Characters/Rig2/r2_star_3_skirt
+    sprite: {fileID: 21300000, guid: 99669bdb6f6544fab5540f579101f2fd, type: 3}
+  - key: Characters/Rig2/r2_star_3_skirt_pick
+    sprite: {fileID: 21300000, guid: aa7006f78866458a96ed0bded5797bf2, type: 3}
+  - key: Characters/Rig2/r2_star_3_thigh
+    sprite: {fileID: 21300000, guid: 31a6f8000b1e4074beac5a82201e5e77, type: 3}
+  - key: Characters/Rig2/r2_wind_0_cap
+    sprite: {fileID: 21300000, guid: 742059093f214661ab1c9122c2cef0d2, type: 3}
+  - key: Characters/Rig2/r2_wind_0_face_blink
+    sprite: {fileID: 21300000, guid: 068bf44f2f264a1a9bc36c2fbf0c7f28, type: 3}
+  - key: Characters/Rig2/r2_wind_0_face_effort
+    sprite: {fileID: 21300000, guid: c4661705cad24845a8b7e97c6efb8837, type: 3}
+  - key: Characters/Rig2/r2_wind_0_face_happy
+    sprite: {fileID: 21300000, guid: 31a4f9276ead474d9f106b62826f511d, type: 3}
+  - key: Characters/Rig2/r2_wind_0_face_normal
+    sprite: {fileID: 21300000, guid: 1280c8ac6a5e4050b03fa4ff655e3526, type: 3}
+  - key: Characters/Rig2/r2_wind_0_face_surprise
+    sprite: {fileID: 21300000, guid: e679d7ab5c854d9685cbfe247a83071c, type: 3}
+  - key: Characters/Rig2/r2_wind_0_footL
+    sprite: {fileID: 21300000, guid: 4caa1514243649b69e3a4940b4115310, type: 3}
+  - key: Characters/Rig2/r2_wind_0_footR
+    sprite: {fileID: 21300000, guid: bdf8d7fb56354a31b8d5327c1baeec72, type: 3}
+  - key: Characters/Rig2/r2_wind_0_stem
+    sprite: {fileID: 21300000, guid: 0114b1867d044a809a2c1eeaae733a35, type: 3}
+  - key: Characters/Rig2/r2_wind_1_cap
+    sprite: {fileID: 21300000, guid: 16f3d61969a54cf990323b9110152de6, type: 3}
+  - key: Characters/Rig2/r2_wind_1_face_blink
+    sprite: {fileID: 21300000, guid: c8915e97253646acb67b3200675fe0ef, type: 3}
+  - key: Characters/Rig2/r2_wind_1_face_effort
+    sprite: {fileID: 21300000, guid: f0b30b2b2bcd426b926d9a7084346564, type: 3}
+  - key: Characters/Rig2/r2_wind_1_face_happy
+    sprite: {fileID: 21300000, guid: 3d928aa32510452ea810dcee1332d7f9, type: 3}
+  - key: Characters/Rig2/r2_wind_1_face_normal
+    sprite: {fileID: 21300000, guid: d2509740d8e4414094575926862548f3, type: 3}
+  - key: Characters/Rig2/r2_wind_1_face_surprise
+    sprite: {fileID: 21300000, guid: a31166165fc941d288956f4a56400587, type: 3}
+  - key: Characters/Rig2/r2_wind_1_footL
+    sprite: {fileID: 21300000, guid: 268f230c5faa44eaaaa9e87de84eb301, type: 3}
+  - key: Characters/Rig2/r2_wind_1_footR
+    sprite: {fileID: 21300000, guid: 7d28cea00030436d81d2844ab0ab57fb, type: 3}
+  - key: Characters/Rig2/r2_wind_1_nubL
+    sprite: {fileID: 21300000, guid: 186fb4e9e8b44bc2869bfd3a08838319, type: 3}
+  - key: Characters/Rig2/r2_wind_1_nubR
+    sprite: {fileID: 21300000, guid: cdf33f0ce85a42f1be089697e6e9acbb, type: 3}
+  - key: Characters/Rig2/r2_wind_1_stem
+    sprite: {fileID: 21300000, guid: f24b46b5a25345dba49c4a6c89d90829, type: 3}
+  - key: Characters/Rig2/r2_wind_2_chest
+    sprite: {fileID: 21300000, guid: 2296826292e8447597208284d89f292f, type: 3}
+  - key: Characters/Rig2/r2_wind_2_chest_climb
+    sprite: {fileID: 21300000, guid: 1e61189712b543cb8d00edf63a84d296, type: 3}
+  - key: Characters/Rig2/r2_wind_2_chest_pick
+    sprite: {fileID: 21300000, guid: 0cf415178e1f4ffe8e4c5f3517fb8a6a, type: 3}
+  - key: Characters/Rig2/r2_wind_2_face_normal
+    sprite: {fileID: 21300000, guid: 3dee2072095e48cb80f15c5cf35062f0, type: 3}
+  - key: Characters/Rig2/r2_wind_2_forearm
+    sprite: {fileID: 21300000, guid: c1b9510f0d154627b586f68f025f9b16, type: 3}
+  - key: Characters/Rig2/r2_wind_2_hand
+    sprite: {fileID: 21300000, guid: f947114215dd4102abf6d05fd4c712c1, type: 3}
+  - key: Characters/Rig2/r2_wind_2_leg
+    sprite: {fileID: 21300000, guid: 88c4003c9e994a7fb15afb26bf350473, type: 3}
+  - key: Characters/Rig2/r2_wind_2_shin
+    sprite: {fileID: 21300000, guid: cc0128ba0f6b4d70aae9c0b5907d0fd4, type: 3}
+  - key: Characters/Rig2/r2_wind_2_shoe
+    sprite: {fileID: 21300000, guid: c30e0163811647d9b578ab1d6cb2eb59, type: 3}
+  - key: Characters/Rig2/r2_wind_2_skirt
+    sprite: {fileID: 21300000, guid: 4d909a6332954ddb9f7df4a44a55b302, type: 3}
+  - key: Characters/Rig2/r2_wind_2_skirt_climb
+    sprite: {fileID: 21300000, guid: 151bd3242e4143d386c62e5302591f34, type: 3}
+  - key: Characters/Rig2/r2_wind_2_skirt_pick
+    sprite: {fileID: 21300000, guid: 8487dd2710b340a09fe4db8009a14350, type: 3}
+  - key: Characters/Rig2/r2_wind_2_thigh
+    sprite: {fileID: 21300000, guid: 160b12d333c849cb819c81fe8e9a75d7, type: 3}
+  - key: Characters/Rig2/r2_wind_3_chest
+    sprite: {fileID: 21300000, guid: 2cc90fa76c1e4bcca57a2476ea815a10, type: 3}
+  - key: Characters/Rig2/r2_wind_3_chest_pick
+    sprite: {fileID: 21300000, guid: c6ccd4d45ebc46f7ac5343789c38d5d9, type: 3}
+  - key: Characters/Rig2/r2_wind_3_face_normal
+    sprite: {fileID: 21300000, guid: f74dbdbd31ee4cc1951b5a20937e8f6b, type: 3}
+  - key: Characters/Rig2/r2_wind_3_forearm
+    sprite: {fileID: 21300000, guid: 0b25fbcaa5144f22837f3dbc57d033d4, type: 3}
+  - key: Characters/Rig2/r2_wind_3_hand
+    sprite: {fileID: 21300000, guid: ee17e93849294fb18adbe489e1a3980a, type: 3}
+  - key: Characters/Rig2/r2_wind_3_leg
+    sprite: {fileID: 21300000, guid: 79ffefeb7e024f9e912f20ee9efe9611, type: 3}
+  - key: Characters/Rig2/r2_wind_3_shin
+    sprite: {fileID: 21300000, guid: 91647d391add4634bd0023836c0be500, type: 3}
+  - key: Characters/Rig2/r2_wind_3_shoe
+    sprite: {fileID: 21300000, guid: 2c471788e03c464eb6bed1933b4ea283, type: 3}
+  - key: Characters/Rig2/r2_wind_3_skirt
+    sprite: {fileID: 21300000, guid: 1c820c83fcbf4cb8ad5292d163fa9067, type: 3}
+  - key: Characters/Rig2/r2_wind_3_skirt_pick
+    sprite: {fileID: 21300000, guid: 9773957c48ee4d1c8827dde138e07411, type: 3}
+  - key: Characters/Rig2/r2_wind_3_thigh
+    sprite: {fileID: 21300000, guid: 5008bbf436174e5199c94a82db579d5c, type: 3}
   - key: Characters/Spirits/p_dew_arm
     sprite: {fileID: 21300000, guid: 05b950fd5e4c0124b8eb28350745bbd9, type: 3}
   - key: Characters/Spirits/p_dew_arm_lo

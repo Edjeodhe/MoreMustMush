@@ -96,9 +96,31 @@ export function collectRenderers(root) {
 }
 
 // sprite = {img, w, h, px, py, ppu}: 이미지 픽셀 → 스프라이트 단위 (피벗 원점, y 위)
+// 스킨 (뼈로 휘는 그림, Unity SpriteSkin 흉내): sr.skin = { space: Transform, prepare(), at(row, sprite) → space 안 변형 M2 }
+//   렌더러는 space의 바로 아래 자식. 그림을 가로 띠(SKIN_STRIP px)로 나눠 띠마다 그 줄의 변형으로 그린다 (1px 겹쳐 틈 없게).
+const SKIN_STRIP = 3, SKIN_PAD = 2;
+function drawSkinned(ctx, view, sr, s) {
+  const sk = sr.skin;
+  sk.prepare();
+  const pre = view.mul(sk.space.localToWorld), loc = sr.transform.localMatrix;
+  const pix = new M2(1 / s.ppu, 0, 0, -1 / s.ppu, -s.px * s.w / s.ppu, (1 - s.py) * s.h / s.ppu);
+  ctx.globalAlpha = sr.color;
+  // 띠는 위아래로 SKIN_PAD px씩 겹쳐 그린다: 띠가 서로 조금 다르게 돌아도 사이에 가는 틈 선이 안 보이게
+  const [lo, hi] = sr.skinRows || [0, s.h];          // 이 줄 범위만 그린다 (같은 그림을 층 나눠 그릴 때)
+  for (let r = lo - (lo % SKIN_STRIP); r < hi; r += SKIN_STRIP) {
+    const r0 = Math.max(lo, r - SKIN_PAD), r1 = Math.min(hi, r + SKIN_STRIP + SKIN_PAD);
+    if (r1 <= r0) continue;
+    const m = pre.mul(sk.at(r + SKIN_STRIP / 2, s)).mul(loc).mul(pix);
+    ctx.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
+    ctx.drawImage(s.img, 0, r0, s.w, r1 - r0, 0, r0, s.w, r1 - r0);
+  }
+  ctx.globalAlpha = 1;
+}
+
 export function drawSprite(ctx, view, sr) {
   const s = sr.sprite;
   if (!s || !s.img || !s.img.complete) return;
+  if (sr.skin) { drawSkinned(ctx, view, sr, s); return; }
   const m = view.mul(sr.transform.localToWorld).mul(new M2(1 / s.ppu, 0, 0, -1 / s.ppu, -s.px * s.w / s.ppu, (1 - s.py) * s.h / s.ppu));
   ctx.setTransform(m.a, m.b, m.c, m.d, m.e, m.f);
   ctx.globalAlpha = sr.color;

@@ -57,7 +57,7 @@ namespace MoreMush.EditorTools
             if (EditorUserBuildSettings.activeBuildTarget != t) EditorUserBuildSettings.SwitchActiveBuildTarget(g, t);
         }
 
-        public static string WebGL()
+        public static string WebGL(bool dev = false)
         {
             var sb = new StringBuilder("[WebGL 빌드]\n");
             var origTarget = EditorUserBuildSettings.activeBuildTarget;

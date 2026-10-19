@@ -241,6 +241,30 @@ namespace MoreMush
         public static bool Climbing(Critter p) => p.state == "climb" && p.edge == "climb" && p.pathI > 0;
         public static bool Hopping(Critter p) => p.state == "climb" && p.edge == "hop" && p.pathI > 0;
 
+        // 리그2 동작 이름 (SpiritRig2 · MushRig: Tools/rig-web MOTIONS). 놀이 동작(anim)이 먼저, 그다음 상태.
+        // 나무 길의 climb(사다리·줄기·밧줄)은 거의 곧게 서 있으면 사다리(뒷모습), 비스듬하면 줄기(옆모습)로 오른다. 내려가면 Down
+        public string RigMotion(Critter p)
+        {
+            if (p.anim != null) return p.anim;
+            switch (p.state)
+            {
+                case "held": return "held";
+                case "fall": return "fall";
+                case "pick": case "work": return "work";
+                case "carry": return "carry";
+                case "walk": return "walk";
+                case "perch": return "idle";
+                case "climb":
+                    if (p.pathI <= 0 || p.path == null || p.pathI >= p.path.Count || p.edge == "walk") return "walk";
+                    if (p.edge == "hop") return "hop";
+                    var to = tree.NavPos(p.path[p.pathI]);
+                    float dx = to.x - p.x, dy = to.y - p.y;            // 농장 px (y 아래로 +)
+                    bool down = dy > 0;
+                    return Mathf.Abs(dx) < Mathf.Abs(dy) * 0.3f ? (down ? "ladderDown" : "ladder") : (down ? "climbDown" : "climb");
+            }
+            return p.landT > 0 ? "land" : "idle";
+        }
+
         // 들기·떨어지기·나무 위 놀이. true = 이번 프레임은 여기서 다 했다
         bool UpdateTreePlay(Critter p, float dt)
         {

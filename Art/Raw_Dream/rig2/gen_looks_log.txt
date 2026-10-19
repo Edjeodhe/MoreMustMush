@@ -1,0 +1,537 @@
+[dew_3 sleeve] ok 59s {"out":"Art/Raw_Dream/rig2/dew_3/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15351-8cb0-7560-b793-0d955a62a115\\exec-758593f8-59b8-4897-ab3f-527dec5dbde9.png","rgba":true} 
+[dew_3 body_back] ok 67s {"out":"Art/Raw_Dream/rig2/dew_3/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15351-8cb0-7880-8839-8d6bb4beb8c6\\exec-9ba68d2a-8965-48eb-b120-354ae656e8b2.png","rgba":true} 
+[dew_3 head_back] ok 71s {"out":"Art/Raw_Dream/rig2/dew_3/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15351-8c92-77e0-8650-6c008dab51d7\\exec-1f2d5157-9428-4a65-a7ee-e69fb1910a2f.png","rgba":true} 
+[dew_3 body_side] ok 76s {"out":"Art/Raw_Dream/rig2/dew_3/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15351-8c9c-7593-92bd-e76090da7ae0\\exec-11853a25-2b73-4285-9b0c-2377ee2bf585.png","rgba":true} 
+[dew_3 head_side] ok 86s {"out":"Art/Raw_Dream/rig2/dew_3/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15351-8cad-74b2-9430-00436eebe399\\exec-e4653c62-5fac-4d14-b451-2f984986a500.png","rgba":true} 
+[dew_2 head_back] ok 66s {"out":"Art/Raw_Dream/rig2/dew_2/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15353-8a13-7bd2-a666-40e3685028fd\\exec-960c771f-d437-43b3-81f6-fa0860c3f7e9.png","rgba":true} 
+[dew_2 body_side] ok 72s {"out":"Art/Raw_Dream/rig2/dew_2/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15353-8a29-75b0-904b-5ddb6759ae67\\exec-f15315b4-2cc5-445a-9c44-c1cab907bb92.png","rgba":true} 
+[dew_2 body_back] ok 81s {"out":"Art/Raw_Dream/rig2/dew_2/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15353-8a2a-75c0-896c-61f88f41a247\\exec-f73486af-47c2-4288-bd79-8fa61c2f0f19.png","rgba":true} 
+[dew_2 head_side] ok 88s {"out":"Art/Raw_Dream/rig2/dew_2/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15353-8a06-78a1-b50c-6ea5cfcfec99\\exec-1038e153-9daf-4c3a-8bf4-fad39b539b8c.png","rgba":true} 
+[fire_2 head_side] ok 77s {"out":"Art/Raw_Dream/rig2/fire_2/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15354-a19e-7972-9254-0545234a9fa6\\exec-0d1f8016-e522-46cb-a3f5-f9c7d7e76df7.png","rgba":true} 
+[dew_2 sleeve] ok 84s {"out":"Art/Raw_Dream/rig2/dew_2/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15354-8d1f-7a20-960f-d6a8b6536520\\exec-f81744ba-3a9f-4777-99ee-06f5b5e3ca8c.png","rgba":true} 
+[fire_2 head_back] ok 83s {"out":"Art/Raw_Dream/rig2/fire_2/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15354-c6d3-7620-bf05-635baefbb167\\exec-834378c8-5f85-402c-8674-5ba77df6ffb2.png","rgba":true} 
+[dew_3 hair_side_full] ok 72s {"out":"Art/Raw_Dream/rig2/dew_3/gen_hair_side_full.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15354-f56b-7902-bf24-5df74e833ba5\\exec-7ab167c8-b1e1-4dc5-90c4-d41f42af6810.png","rgba":true} 
+[fire_2 body_side] ok 86s {"out":"Art/Raw_Dream/rig2/fire_2/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15354-e143-7223-872c-e187aa00e551\\exec-ac33719d-7a03-43f2-a477-41c349f85c23.png","rgba":true} 
+[dew_3 hair_back_full] ok 100s {"out":"Art/Raw_Dream/rig2/dew_3/gen_hair_back_full.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15354-f56b-7491-a9bd-29c10b972cf3\\exec-5443c6b0-7d65-4bbe-a64f-d47496456cfc.png","rgba":true} 
+[fire_2 body_back] ok 75s {"out":"Art/Raw_Dream/rig2/fire_2/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15355-cdea-7bd3-a38d-ea4f7ff66067\\exec-e98ccc1e-bf53-4050-8488-981c8bff7231.png","rgba":true} 
+[fire_2 sleeve] ok 74s {"out":"Art/Raw_Dream/rig2/fire_2/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15355-d72e-71b2-abe3-20e412778fda\\exec-c56f893e-0b2d-4c94-87b4-60022d9e343b.png","rgba":true} 
+[leaf_2 head_side] ok 81s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15356-09d4-7190-946d-24d62a88272c\\exec-72a3293c-6a17-40b0-b6ee-ab2a5d9bde72.png","rgba":true} 
+[leaf_2 head_back] ok 83s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15356-3225-70d1-a3a5-0467b1c79852\\exec-24a45715-2d13-4917-92be-aafc615e3ea3.png","rgba":true} 
+[leaf_2 body_back] ok 75s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15356-f6f4-7323-9d1c-09f9ec97ccc0\\exec-5392a493-7177-4df3-920e-610bdb3076c4.png","rgba":true} 
+[leaf_2 body_side] ok 95s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15356-f1dd-7793-b069-aba2ce12a920\\exec-c456cb37-72b4-496e-a5fa-27c196f733ab.png","rgba":true} 
+[leaf_3 head_side] ok 75s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15357-75d9-73e0-94dd-7c927735ed42\\exec-663f4c08-8a4e-40a8-90ee-5d777681efa2.png","rgba":true} 
+[leaf_2 sleeve] ok 96s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15357-4510-7442-acff-f317e6033b73\\exec-7572beee-41da-41fa-954e-cec2559d6288.png","rgba":true} 
+[fire_1 m_foot] ok 58s {"out":"Art/Raw_Dream/rig2/fire_1/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15357-f72f-7050-9aba-e2432e0c31a7\\exec-0580e7cc-eba1-4d79-9658-2657c63ee3c0.png","rgba":true} 
+[fire_1 m_nub] ok 64s {"out":"Art/Raw_Dream/rig2/fire_1/gen_m_nub.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15357-f72d-79e3-8c8f-d4813c63e010\\exec-9b3bd91a-cb66-4a74-a62b-3cf27b1c4f30.png","rgba":true} 
+[fire_1 m_cap] ok 69s {"out":"Art/Raw_Dream/rig2/fire_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15357-f711-7a11-bf19-08ba7f7f07ed\\exec-fd93d090-6d1e-4e64-b6a6-a0b869358877.png","rgba":true} 
+[leaf_3 head_back] ok 62s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15358-1b74-71d1-a184-ed13a44af4f8\\exec-9032dd70-a047-49b9-849e-aa5c2352348d.png","rgba":true} 
+[fire_1 m_stem] ok 94s {"out":"Art/Raw_Dream/rig2/fire_1/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15357-f72d-7630-9fde-cc5a57d7d181\\exec-9dfc5697-b60a-403a-8680-6068d1de7f22.png","rgba":true} 
+[leaf_3 sleeve] ok 67s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15358-bac5-7100-989b-f0b3d248a322\\exec-ea763777-269e-4409-8620-71f300ac4757.png","rgba":true} 
+[leaf_3 body_side] ok 94s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15358-65b8-7180-829b-f4851e726e48\\exec-4ed4233b-e2ac-4e3b-b7e4-a776eafa40d6.png","rgba":true} 
+[leaf_3 body_back] ok 90s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15358-9b2a-7790-98c7-a1183d42b74e\\exec-7dadf1f4-d0d7-449b-9e71-ebee086812b2.png","rgba":true} 
+[moon_2 head_side] ok 68s {"out":"Art/Raw_Dream/rig2/moon_2/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15359-0c62-7bd0-b67e-dc0699314a0e\\exec-bdaacecf-d0fe-4a2b-976a-695334cc6425.png","rgba":true} 
+[dew_2 body_side] ok 59s {"out":"Art/Raw_Dream/rig2/dew_2/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c2-8615-7081-bd79-5e8895f740e1\\exec-1e8fd81f-af2c-4a6a-98f2-763d925989b7.png","rgba":true} 
+[dew_2 body_back] ok 61s {"out":"Art/Raw_Dream/rig2/dew_2/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c2-860b-7852-8191-9fc1a44b7bf3\\exec-72ee662b-5e87-454f-936b-65f39a9243ae.png","rgba":true} 
+[dew_3 body_side] ok 64s {"out":"Art/Raw_Dream/rig2/dew_3/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c2-861b-7241-8ac3-3530172b903d\\exec-a09b7ef2-983e-4786-9eb1-899b4cce3e16.png","rgba":true} 
+[dew_2 sleeve] ok 75s {"out":"Art/Raw_Dream/rig2/dew_2/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c2-861b-7f82-a776-bb693e06f612\\exec-c9b4b612-bad8-4e06-aa1a-3d2def42fe19.png","rgba":true} 
+[dew_3 sleeve] ok 65s {"out":"Art/Raw_Dream/rig2/dew_3/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c3-72d4-7d82-bfa6-bcbdeb893951\\exec-67604b48-2e8f-4495-828e-827ba10c99a4.png","rgba":true} 
+[fire_2 body_back] ok 53s {"out":"Art/Raw_Dream/rig2/fire_2/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c3-a8a8-7ac1-b8dd-42ad67785fc4\\exec-233effa3-1abd-4626-bb81-69a8c00be272.png","rgba":true} 
+[fire_2 body_side] ok 65s {"out":"Art/Raw_Dream/rig2/fire_2/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c3-805f-73c2-8af9-ed3963434456\\exec-992e5ed9-7856-407c-9e56-7a147f5c91b2.png","rgba":true} 
+[dew_3 body_back] ok 74s {"out":"Art/Raw_Dream/rig2/dew_3/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c3-6a5b-7422-bd22-8234c9046f3d\\exec-9d11c433-aa87-4458-86a3-7fe348ea2a2d.png","rgba":true} 
+[leaf_2 body_back] ok 47s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c4-7c90-72f3-8baf-6001d89049f9\\exec-a23a66da-f7cc-4b12-9b07-d516d8e21612.png","rgba":true} 
+[fire_2 sleeve] ok 56s {"out":"Art/Raw_Dream/rig2/fire_2/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c4-6f3a-7380-9bca-11877afa43b6\\exec-a28312e0-937e-4ffe-a417-91aca2832470.png","rgba":true} 
+[leaf_2 sleeve] ok 66s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c4-8a22-73c1-ab58-eda6da316e67\\exec-feddf474-5290-4d17-b671-9309d1c2df3e.png","rgba":true} 
+[leaf_2 body_side] ok 75s {"out":"Art/Raw_Dream/rig2/leaf_2/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c4-7814-7d51-8f81-c8e90607edf5\\exec-ce78e1e4-f7fe-4962-923a-a599554b0b72.png","rgba":true} 
+[moon_2 body_side] FAIL 9s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[moon_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[moon_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[leaf_3 body_side] ok 49s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c5-3592-7d82-82d9-23c21816217f\\exec-abcb2e16-557c-4e2f-aa3d-be1b364ef185.png","rgba":true} 
+[moon_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[moon_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[leaf_3 body_back] ok 52s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a153c5-4848-7713-84cf-43ee78c91202\\exec-f5b3c11e-42b4-4d06-a921-e8015105b486.png","rgba":true} 
+[moon_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_2 sleeve] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[leaf_3 sleeve] FAIL 48s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_3 body_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_3 sleeve] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_3 body_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_2 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[moon_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[moon_2 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[moon_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_2 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_2 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[rock_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_3 head_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[spark_2 head_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_2 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_2 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[star_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_2 head_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_2 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[wind_3 head_side] FAIL 8s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[dew_0 m_stem] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at 8:49 PM."}}
+Reading prompt from stdin...
+[dew_1 m_cap] FAIL 13s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T10:48:56.963747Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[dew_1 m_foot] FAIL 0s  
+[dew_1 m_nub] FAIL 0s  
+[fire_0 m_cap] FAIL 0s  
+[fire_0 m_stem] FAIL 0s  
+[fire_0 m_foot] FAIL 0s  
+[leaf_0 m_cap] FAIL 0s  
+[leaf_0 m_stem] FAIL 0s  
+[leaf_0 m_foot] FAIL 0s  
+[leaf_1 m_cap] FAIL 0s  
+[leaf_1 m_stem] FAIL 0s  
+[leaf_1 m_foot] FAIL 0s  
+[leaf_1 m_nub] FAIL 0s  
+[rock_0 m_cap] FAIL 0s  
+[rock_0 m_stem] FAIL 0s  
+[rock_0 m_foot] FAIL 0s  
+[rock_1 m_cap] FAIL 0s  
+[rock_1 m_stem] FAIL 0s  
+[rock_1 m_foot] FAIL 0s  
+[rock_1 m_nub] FAIL 0s  
+[spark_0 m_cap] FAIL 0s  
+[spark_0 m_stem] FAIL 0s  
+[spark_0 m_foot] FAIL 0s  
+[dew_0 m_cap] FAIL 14s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T10:48:57.175640Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_1 m_cap] FAIL 0s  
+[spark_1 m_stem] FAIL 0s  
+[dew_0 m_foot] FAIL 14s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T10:48:57.136337Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_1 m_nub] FAIL 0s  
+[spark_1 m_foot] FAIL 0s  
+[wind_0 m_stem] FAIL 0s  
+[wind_0 m_cap] FAIL 0s  
+[wind_1 m_cap] FAIL 0s  
+[wind_0 m_foot] FAIL 0s  
+[wind_1 m_foot] FAIL 0s  
+[wind_1 m_stem] FAIL 0s  
+[wind_1 m_nub] FAIL 0s  
+[dew_1 m_stem] FAIL 8s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T10:48:59.114388Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[dew_0 m_foot] ok 58s {"out":"Art/Raw_Dream/rig2/dew_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-3afb-71c3-94f2-33832879e023\\exec-af349dab-a6f9-4459-b84d-94a4f400ca37.png","rgba":true} 
+[dew_0 m_stem] ok 58s {"out":"Art/Raw_Dream/rig2/dew_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-3af5-7e40-a7a9-22a687126e1d\\exec-67bc4b24-2344-4b0f-99a9-efc757431293.png","rgba":true} 
+[dew_0 m_cap] ok 60s {"out":"Art/Raw_Dream/rig2/dew_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-3aef-7bf1-b93d-dbc8a0294946\\exec-fd8e2bdc-2777-419a-823d-207e9b5daba8.png","rgba":true} 
+[dew_1 m_cap] ok 61s {"out":"Art/Raw_Dream/rig2/dew_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-3afe-77a2-af16-86b47047e466\\exec-84945fdb-1dd6-4ae7-801c-cd3aed40a3f8.png","rgba":true} 
+[dew_1 m_cap] ok 50s {"out":"Art/Raw_Dream/rig2/dew_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-8257-7ea0-be87-32236ae3a472\\exec-68e544cd-1a19-45dd-892a-3a47e7174d80.png","rgba":true} 
+[dew_0 m_cap] ok 57s {"out":"Art/Raw_Dream/rig2/dew_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-8245-7b41-9095-99914750044a\\exec-f9d58a7b-6f74-4e56-94dd-35852ecc4efb.png","rgba":true} 
+[dew_0 m_foot] ok 67s {"out":"Art/Raw_Dream/rig2/dew_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-8254-7640-8167-bd3b2db27fb0\\exec-3dc29ffd-d786-4ae9-8228-62fdbdd38046.png","rgba":true} 
+[dew_1 m_foot] ok 38s {"out":"Art/Raw_Dream/rig2/dew_1/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-1db9-7a93-b07f-58b6004be6a4\\exec-bf166d39-0204-4e34-b584-cb4fac5bb5ac.png","rgba":true} 
+[dew_0 m_stem] ok 80s {"out":"Art/Raw_Dream/rig2/dew_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15400-824c-7ca3-94d2-eb0f91735bb6\\exec-5daa94f3-e594-45d3-84e4-32d2a83cba2c.png","rgba":true} 
+[dew_1 m_stem] ok 56s {"out":"Art/Raw_Dream/rig2/dew_1/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-4596-7280-979b-479675dc6277\\exec-228ea1b4-0b07-4f47-8caf-06b93182a9b0.png","rgba":true} 
+[dew_1 m_stem] ok 70s {"out":"Art/Raw_Dream/rig2/dew_1/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-1c19-7a92-9640-f7a0b8844023\\exec-a3c3f5fd-b3b9-43c0-881d-6128a5d64ab9.png","rgba":true} 
+[dew_1 m_nub] ok 70s {"out":"Art/Raw_Dream/rig2/dew_1/gen_m_nub.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-23a0-71d0-b446-cc71d543c297\\exec-5e28deea-4c27-4e5a-93c3-b9bc143a1e72.png","rgba":true} 
+[fire_0 m_cap] ok 70s {"out":"Art/Raw_Dream/rig2/fire_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-2887-7930-9019-af5161a3af2b\\exec-b558d847-6ae6-439c-8ae9-30e37b02cf2a.png","rgba":true} 
+[dew_1 m_foot] ok 59s {"out":"Art/Raw_Dream/rig2/dew_1/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-6090-7830-b3c9-25710568571b\\exec-e49b67ca-27d3-4263-813c-928e0f49e27a.png","rgba":true} 
+[dew_1 m_nub] FAIL 73s  ae4-e9e7bb374346. safety_violations=[sexual].\",\n    \"type\": \"image_generation_user_error\",\n    \"param\": null,\n    \"code\": \"moderation_blocked\",\n    \"moderation_details\": {\n      \"moderation_stage\": \"output\",\n      \"categories\": [\n        \"sexual\"\n      ]\n    }\n  }\n}")
+[fire_0 m_stem] ok 70s {"out":"Art/Raw_Dream/rig2/fire_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-b29b-7883-be19-3afe766e74f8\\exec-8042290c-d88e-4189-bdfa-af54eefdbdb4.png","rgba":true} 
+[fire_0 m_cap] ok 82s {"out":"Art/Raw_Dream/rig2/fire_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15401-b93d-7fd2-9978-d35ff482b7ca\\exec-22b511ee-2b74-435c-a681-ba53e80cdeb1.png","rgba":true} 
+[fire_0 m_stem] FAIL 57s  e86-d64d0b63ae25. safety_violations=[sexual].\",\n    \"type\": \"image_generation_user_error\",\n    \"param\": null,\n    \"code\": \"moderation_blocked\",\n    \"moderation_details\": {\n      \"moderation_stage\": \"output\",\n      \"categories\": [\n        \"sexual\"\n      ]\n    }\n  }\n}")
+[fire_0 m_foot] ok 57s {"out":"Art/Raw_Dream/rig2/fire_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-2d34-7231-a757-1f2f402a36b6\\exec-6ff59516-8ed9-4999-860e-5cd984e43cc1.png","rgba":true} 
+[fire_0 m_foot] ok 62s {"out":"Art/Raw_Dream/rig2/fire_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-455c-7dc3-98bd-b96498a0c492\\exec-a45d8adf-54ed-499e-9d95-25bbadcd9d16.png","rgba":true} 
+[leaf_0 m_stem] ok 71s {"out":"Art/Raw_Dream/rig2/leaf_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-3b6a-7912-975e-6d9d59ed8ec1\\exec-3de3f3ad-d4ff-48ed-aeb0-30aab060c338.png","rgba":true} 
+[leaf_0 m_cap] ok 76s {"out":"Art/Raw_Dream/rig2/leaf_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-3405-7dd1-a99e-8ae8f50e0263\\exec-a67524c2-fdc6-47bc-b2a5-4658b51ccd92.png","rgba":true} 
+[leaf_0 m_cap] ok 72s {"out":"Art/Raw_Dream/rig2/leaf_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-a4e9-71a0-aa12-8f3678a19651\\exec-648eecf0-3580-4488-a656-f46e60b0efef.png","rgba":true} 
+[leaf_0 m_foot] ok 65s {"out":"Art/Raw_Dream/rig2/leaf_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-c565-7021-88a2-8fba2caa7744\\exec-d5fcad7e-f56a-40d8-9629-fc5d5dc7562d.png","rgba":true} 
+[leaf_0 m_stem] ok 63s {"out":"Art/Raw_Dream/rig2/leaf_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-f9f2-77b3-91e6-5602826aa590\\exec-759e58d9-87d9-497f-b006-986d24e6af97.png","rgba":true} 
+[leaf_0 m_foot] ok 64s {"out":"Art/Raw_Dream/rig2/leaf_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15402-fc97-7061-86c5-e1433317a1fa\\exec-d694aeb0-7f47-4c82-902b-95ba27822192.png","rgba":true} 
+[leaf_1 m_cap] ok 68s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-09f8-7342-bedc-5c2595bfe236\\exec-a6128fbf-0995-42ca-a91e-61fe6b913925.png","rgba":true} 
+[leaf_1 m_foot] ok 52s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-5bab-7f23-b199-3318a9206865\\exec-72f7c1b1-974a-49cb-8fb4-bcadf246d2fb.png","rgba":true} 
+[leaf_1 m_cap] ok 71s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-38a6-7792-9917-424c21ee2eb2\\exec-485ab312-92f4-4901-9c42-49c9e5a3a539.png","rgba":true} 
+[leaf_1 m_stem] ok 80s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-4f24-7d63-b02e-632c3314d8f9\\exec-5c52251e-fbd1-4590-b28c-77889b099695.png","rgba":true} 
+[moon_0 m_foot] FAIL 0s  
+[moon_1 m_cap] FAIL 0s  
+[moon_1 m_stem] FAIL 0s  
+[moon_1 m_foot] FAIL 0s  
+[moon_1 m_nub] FAIL 0s  
+[rock_0 m_cap] FAIL 0s  
+[rock_0 m_stem] FAIL 0s  
+[rock_0 m_foot] FAIL 0s  
+[rock_1 m_cap] FAIL 0s  
+[rock_1 m_stem] FAIL 0s  
+[rock_1 m_foot] FAIL 0s  
+[rock_1 m_nub] FAIL 0s  
+[spark_0 m_cap] FAIL 0s  
+[spark_0 m_stem] FAIL 0s  
+[spark_0 m_foot] FAIL 0s  
+[spark_1 m_cap] FAIL 0s  
+[spark_1 m_stem] FAIL 0s  
+[spark_1 m_foot] FAIL 0s  
+[spark_1 m_nub] FAIL 0s  
+[star_0 m_cap] FAIL 0s  
+[star_0 m_stem] FAIL 0s  
+[star_0 m_foot] FAIL 0s  
+[star_1 m_cap] FAIL 0s  
+[star_1 m_stem] FAIL 0s  
+[star_1 m_foot] FAIL 0s  
+[star_1 m_nub] FAIL 0s  
+[wind_0 m_cap] FAIL 0s  
+[wind_0 m_stem] FAIL 0s  
+[wind_0 m_foot] FAIL 0s  
+[wind_1 m_cap] FAIL 0s  
+[wind_1 m_stem] FAIL 0s  
+[wind_1 m_foot] FAIL 0s  
+[wind_1 m_nub] FAIL 0s  
+[leaf_1 m_nub] ok 67s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_nub.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-c210-72d3-a51a-e16029be5572\\exec-ae510d01-c2f6-465a-9c0a-356b162b2d4e.png","rgba":true} 
+[leaf_1 m_nub] ok 60s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_nub.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-f787-7422-a998-4c84ce84bfbe\\exec-512e29fd-0eae-4f95-a79f-10824b63ee1d.png","rgba":true} 
+[leaf_1 m_stem] ok 77s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-bc42-75a1-adc6-8a65b17ad98d\\exec-cf145f3d-1a40-472c-b8bd-dd185c844078.png","rgba":true} 
+[leaf_1 m_foot] ok 68s {"out":"Art/Raw_Dream/rig2/leaf_1/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15403-f1bc-7e22-b82f-967910cc0ef8\\exec-45951d6f-8fcc-4590-a094-de37493a2ad2.png","rgba":true} 
+[moon_0 m_cap] ok 61s {"out":"Art/Raw_Dream/rig2/moon_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15404-11bd-7de2-88af-5dd168697ba4\\exec-bb7ade4c-a063-45d0-ba2e-8aa55692b03c.png","rgba":true} 
+[moon_0 m_stem] ok 66s {"out":"Art/Raw_Dream/rig2/moon_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15404-2630-77c1-ac8e-d016e298b17c\\exec-86416a78-1480-43ff-b25d-3b8c2578db1a.png","rgba":true} 
+[moon_0 m_cap] ok 61s {"out":"Art/Raw_Dream/rig2/moon_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15404-4dca-73c3-a518-5720c8bb46ee\\exec-03991934-d44d-40eb-b8ff-4a16a2511fa2.png","rgba":true} 
+[moon_0 m_stem] ok 45s {"out":"Art/Raw_Dream/rig2/moon_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15404-e06d-7dc1-8eb0-fd1dffb691ef\\exec-76fd2bd8-a602-4d89-a5f5-1c641c6cac1c.png","rgba":true} 
+[moon_0 m_foot] ok 60s {"out":"Art/Raw_Dream/rig2/moon_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15404-e8ac-7372-8460-4a4f9fe833dd\\exec-7c3a8e15-0d73-4212-934c-6e720f1d7336.png","rgba":true} 
+[moon_1 m_cap] ok 63s {"out":"Art/Raw_Dream/rig2/moon_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15404-fd09-7c00-8af5-35c98d489720\\exec-9d0e6455-b343-4082-be72-22943ddd0f78.png","rgba":true} 
+[dew_3 head_back] ok 63s {"out":"Art/Raw_Dream/rig2/dew_3/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-5460-7131-b87b-27f20630738d\\exec-4ef2eb8d-ac80-48a6-ad57-2df5925d03bd.png","rgba":true} 
+[dew_3 body_back] ok 69s {"out":"Art/Raw_Dream/rig2/dew_3/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-546f-70d3-a2d6-45efa2ab2ad3\\exec-e36fc739-c665-48c0-b84b-d7573d1c09ea.png","rgba":true} 
+[moon_1 m_stem] ok 75s {"out":"Art/Raw_Dream/rig2/moon_1/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-3bb1-7a30-ad46-9a0d35803ff5\\exec-9e8151d5-dc3c-49d1-85fe-1e787c29c8c1.png","rgba":true} 
+[dew_3 body_side] ok 73s {"out":"Art/Raw_Dream/rig2/dew_3/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-5471-77d2-9343-e096958d455c\\exec-09b7440d-3655-4679-9048-876f4369c825.png","rgba":true} 
+[moon_1 m_foot] ok 64s {"out":"Art/Raw_Dream/rig2/moon_1/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-8ef3-7032-a464-363118bfae76\\exec-6e090c1b-91ab-48c8-beaf-6ea8cf9e09d8.png","rgba":true} 
+[dew_3 head_side] ok 81s {"out":"Art/Raw_Dream/rig2/dew_3/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-5457-7020-8664-36d80e907b38\\exec-81dcfff9-3e8e-4392-aea4-2e4bcacd2d1d.png","rgba":true} 
+[rock_0 m_cap] ok 53s {"out":"Art/Raw_Dream/rig2/rock_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-f158-78e3-b5cb-6dd0d856c853\\exec-3f94c410-2fa9-420c-bd8d-cc0b30eb2ad4.png","rgba":true} 
+[moon_1 m_nub] ok 66s {"out":"Art/Raw_Dream/rig2/moon_1/gen_m_nub.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15405-d244-7af3-9c2b-35200f3fdc4a\\exec-f095471a-3006-4385-ab26-bca5269a7c67.png","rgba":true} 
+[rock_0 m_foot] ok 43s {"out":"Art/Raw_Dream/rig2/rock_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-8a3b-7c20-82ef-9a3acc1debf8\\exec-5debb874-5dee-4285-bfe0-594ad0ab3b6b.png","rgba":true} 
+[dew_3 sleeve] ok 63s {"out":"Art/Raw_Dream/rig2/dew_3/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-49c1-78d0-af56-c5279dbde3ee\\exec-3e941503-4a74-4e08-a47a-d1591ff080c1.png","rgba":true} 
+[rock_0 m_stem] ok 62s {"out":"Art/Raw_Dream/rig2/rock_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-61f8-7261-87fc-14fe4de81f6a\\exec-e8683f5c-32c1-407c-a0ac-30998749a9f3.png","rgba":true} 
+[leaf_3 body_side] ok 65s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_body_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-8ef9-7b71-a5f9-47e653c1a273\\exec-881b68ee-88ad-4b20-98bf-d687f8c9b92d.png","rgba":true} 
+[leaf_3 head_back] ok 74s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-7236-78b2-849c-247d7892e916\\exec-717b4a12-8cec-484c-9140-97af73816737.png","rgba":true} 
+[leaf_3 head_side] ok 81s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-5ffd-76e3-9723-0a1b20463b6f\\exec-c2d6b6f3-4404-4ebb-b81a-d6b389221079.png","rgba":true} 
+[rock_1 m_cap] ok 61s {"out":"Art/Raw_Dream/rig2/rock_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-c0c0-7b60-a3b3-3c7ba5900dbb\\exec-64986088-faad-425e-ace1-f3d8b94fef22.png","rgba":true} 
+[rock_1 m_stem] ok 65s {"out":"Art/Raw_Dream/rig2/rock_1/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15406-d265-7e62-8b47-fed1aab68af3\\exec-93ae708d-a9f5-4363-84ba-7461c57ee1f7.png","rgba":true} 
+[rock_1 m_foot] ok 49s {"out":"Art/Raw_Dream/rig2/rock_1/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-33d7-7c50-9cb2-1a038227130b\\exec-bd42d7f8-db64-467f-9200-dcf184f81f07.png","rgba":true} 
+[leaf_3 body_back] ok 63s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-4053-7902-bb20-5707a06a015a\\exec-338ae11a-f01e-4291-b56e-3396f5c56a72.png","rgba":true} 
+[rock_1 m_nub] ok 64s {"out":"Art/Raw_Dream/rig2/rock_1/gen_m_nub.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-532b-7041-9788-ac9d7c2d1156\\exec-d5d8346a-7fb8-4a52-a1a7-87046e3eaeb5.png","rgba":true} 
+[spark_0 m_cap] ok 50s {"out":"Art/Raw_Dream/rig2/spark_0/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-adab-7921-aab8-3f904953a2ab\\exec-7d54e862-8aac-4dcb-90f0-750f737758fd.png","rgba":true} 
+[leaf_3 sleeve] ok 66s {"out":"Art/Raw_Dream/rig2/leaf_3/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-8bdb-7a23-8cae-22c949ef56e7\\exec-acb68e1f-09f5-4f10-b2b2-920980e3fed7.png","rgba":true} 
+[moon_3 head_side] ok 65s {"out":"Art/Raw_Dream/rig2/moon_3/gen_head_side.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-925e-7f61-869a-8fb84b8dc6ed\\exec-065145c7-5053-490f-af70-95a794f2e851.png","rgba":true} 
+[moon_3 head_back] ok 72s {"out":"Art/Raw_Dream/rig2/moon_3/gen_head_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-9d27-7021-912f-aeec8a958e31\\exec-47645340-ab85-4db5-9124-c51d51776ad3.png","rgba":true} 
+[spark_0 m_foot] ok 58s {"out":"Art/Raw_Dream/rig2/spark_0/gen_m_foot.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-f157-7651-a379-56eb4872de71\\exec-67d25824-897c-40c3-b8bc-6655d264e0a3.png","rgba":true} 
+[moon_3 body_side] FAIL 52s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_1 m_cap] ok 53s {"out":"Art/Raw_Dream/rig2/spark_1/gen_m_cap.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15408-4bf7-7a60-99c9-e8f9e7a8d086\\exec-87b2c1b8-539a-460f-8619-e7b567348a78.png","rgba":true} 
+[rock_3 head_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_1 m_stem] FAIL 45s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_0 m_stem] ok 91s {"out":"Art/Raw_Dream/rig2/spark_0/gen_m_stem.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15407-ce74-7532-92f4-3c72e8a69dea\\exec-72018146-9872-4efa-82f1-e94c616f7682.png","rgba":true} 
+[rock_3 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_0 m_cap] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_1 m_nub] FAIL 8s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_0 m_stem] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_0 m_foot] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_1 m_cap] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_1 m_stem] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_1 m_foot] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_1 m_nub] FAIL 8s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_3 head_side] FAIL 49s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_0 m_cap] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_1 m_foot] FAIL 45s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_0 m_stem] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_3 sleeve] ok 62s {"out":"Art/Raw_Dream/rig2/moon_3/gen_sleeve.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15408-9071-7cd1-907a-f11b5a7d039c\\exec-68d82e0f-4151-4928-90ed-b6da66411a14.png","rgba":true} 
+[wind_0 m_foot] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_1 m_cap] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_1 m_stem] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_3 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_1 m_foot] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_3 body_back] FAIL 8s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_1 m_nub] FAIL 8s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_3 sleeve] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_3 body_back] ok 75s {"out":"Art/Raw_Dream/rig2/moon_3/gen_body_back.png","source":"C:\\Users\\user\\.codex\\generated_images\\01a15408-8d69-7a13-ac8b-2356cf7bdf5a\\exec-0a29f39c-6b7f-40c0-9f26-c5b91a508467.png","rgba":true} 
+[star_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_3 body_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[dew_3 body_back] FAIL 7s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:39.025967Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_3 body_back] FAIL 14s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:38.090407Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[dew_3 body_side] FAIL 8s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:39.705449Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_3 head_side] FAIL 18s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:37.085801Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[dew_3 head_side] FAIL 9s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:39.670038Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[dew_3 head_back] FAIL 9s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:39.885355Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_3 head_back] FAIL 18s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:38.742728Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_3 body_side] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:01:39.580770Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[dew_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[leaf_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[leaf_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[leaf_3 head_back] FAIL 8s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[leaf_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[leaf_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_2 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_3 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 body_back] FAIL 8s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_3 head_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_3 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_2 body_back] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:18.178530Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[star_2 body_side] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:17.657831Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_2 sleeve] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:18.601916Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[star_2 sleeve] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:19.015901Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[rock_3 sleeve] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:19.244889Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_3 head_side] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:23.123144Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_3 head_back] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:22.676155Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_3 body_side] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:24.806591Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_2 body_back] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:33.909998Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_2 body_side] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:34.218389Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_2 sleeve] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:33.992931Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_3 body_back] FAIL 19s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:38.313414Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[star_3 head_side] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:38.813961Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_3 sleeve] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:38.921771Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[star_3 head_back] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:39.999423Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[rock_2 head_side] FAIL 8s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:39.951816Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[moon_2 head_back] FAIL 9s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:40.271497Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_2 head_side] FAIL 9s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:40.173599Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[rock_2 head_back] FAIL 9s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:02:40.198945Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[star_3 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_3 body_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_3 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_3 head_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_2 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_2 head_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_2 head_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_2 head_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_3 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_3 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_3 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_3 sleeve] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_2 head_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[moon_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 sleeve] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_2 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_2 body_back] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[spark_2 sleeve] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[star_2 body_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_2 body_side] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_2 sleeve] FAIL 6s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[wind_2 body_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 head_back] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:03:35.365365Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[rock_2 head_side] FAIL 16s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:03:35.702020Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_2 head_side] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:03:36.444638Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[moon_2 head_back] FAIL 17s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:03:36.850401Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[star_2 head_back] FAIL 6s  om/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+2026-10-19T12:03:39.510404Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[spark_2 head_back] FAIL 7s  om/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+2026-10-19T12:03:38.333345Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_2 head_side] FAIL 6s  om/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+2026-10-19T12:03:40.166368Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[star_2 head_side] FAIL 7s  ket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+2026-10-19T12:03:40.755552Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 403 Forbidden, url: wss://chatgpt.com/backend-api/codex/responses
+[wind_2 head_back] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...
+[rock_2 head_side] FAIL 7s  codex-image: no image produced (exit 1). {"type":"turn.failed","error":{"message":"You’ve hit your usage limit. Upgrade to Pro (https://chatgpt.com/explore/pro), visit https://chatgpt.com/settings/usage to purchase more credits or try again at Oct 20th, 2026 1:51 AM."}}
+Reading prompt from stdin...

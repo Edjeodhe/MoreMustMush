@@ -13,7 +13,7 @@ export const MUSH_DEFAULTS = {
   // 몸 젤리 (찌그러짐 스프링: 감쇠가 낮을수록 출렁) · 기울기 · 공중
   squashK: 260, squashZ: 0.28, leanK: 180, leanZ: 0.55, volume: 0.8,
   // 갓: 진자(옆 흔들림) · 세로 출렁(눌림) — 몸보다 늦게
-  capK: 70, capZ: 0.24, capInertia: 4, capFollow: 0.55, capBobK: 220, capBobZ: 0.24, capBobInertia: 0.01, capSquash: 0.8,
+  capK: 70, capZ: 0.24, capInertia: 2, capFollow: 0.92, capMaxRot: 4, capBobK: 220, capBobZ: 0.24, capBobInertia: 0.01, capSquash: 0.8,   // 갓은 몸에 거의 붙어 돈다 (capMaxRot: 몸에 대한 갓 자기 회전 최대 각. 크면 걸을 때 몸이 갓 밑에서 미끄러져 머리가 떨어져 보임)
   // 손 (★1): 늦게 따라옴
   nubK: 260, nubZ: 0.45,
   // 대기
@@ -433,7 +433,7 @@ export class MushRig {
     const ax = Mathf.Clamp(a.x, -80, 80), ay = Mathf.Clamp(a.y, -80, 80);
     // 갓의 기울기(세상 기준)는 몸 기울기를 늦게 따라간다 → 몸에 붙은 갓의 자기 회전 = (늦은 기울기 - 몸 기울기). capFollow = 따라가는 정도
     this.capP.Step(this.sLean.x * M.capFollow + p.capRot, M.capK, M.capZ, ax * M.capInertia * 10, dt);   // + = 오른쪽으로 (시계 방향)
-    this.capT.localRotation = -Mathf.Clamp(this.capP.a - this.sLean.x, -18, 18);
+    this.capT.localRotation = -Mathf.Clamp(this.capP.a - this.sLean.x, -M.capMaxRot, M.capMaxRot);
     this.capBob.Step(0, M.capBobK, M.capBobZ, dt);
     this.capBob.v += -ay * M.capBobInertia * dt * 60;
     const bob = Mathf.Clamp(this.capBob.x, -0.25, 0.25);
