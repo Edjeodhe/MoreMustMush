@@ -50,7 +50,8 @@ namespace MoreMush
             optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); CloseOption(); },
                 new OptionWindow.Extra("Button_EndNow", "지금 끝내기", () => { Snd.Ui(); optionWin.Close(); EndNow(); }));
         }
-        void OnDestroy() { if (I == this) I = null; Time.timeScale = 1; }
+        // 씬을 떠날 때 이전 씬은 먼저 꺼지고 나중에 비동기로 내려진다 → 끌 때 배속·I를 돌려놓는다 (다음 씬이 x4로 움직이지 않게)
+        void OnDisable() { if (I == this) I = null; Time.timeScale = 1; }
 
         // 플레이 시작 때 이전 플레이의 배속을 지운다 (도메인 리로드를 끈 플레이 모드 대비)
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]

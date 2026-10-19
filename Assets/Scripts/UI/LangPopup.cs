@@ -49,11 +49,12 @@ namespace MoreMush
             if (a != null) b.onClick.AddListener(a);
         }
 
-        // 창이 사는 동안 모달 한 칸 (씬이 바뀌어 사라져도 OnDestroy로 돌려놓는다)
+        // 창이 켜져 있는 동안 모달 한 칸 (씬이 바뀌면 이전 씬은 새 씬이 모달 수를 0으로 되돌리기 전에 꺼지므로 OnDisable로 돌려놓는다.
+        // OnDestroy는 비동기로 씬을 내릴 때 늦게 와서, 새 씬에서 연 창의 칸을 빼 버린다)
         class ModalHold : MonoBehaviour
         {
-            void Awake() => App.ModalPush();
-            void OnDestroy() => App.ModalPop();
+            void OnEnable() => App.ModalPush();
+            void OnDisable() => App.ModalPop();
         }
     }
 }
