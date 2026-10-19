@@ -372,7 +372,7 @@ EN은 버튼도 Title Case지만 PT는 **pt-BR 관례(문장형)**를 따른다.
 | 변종 / 출현율 | variant / spawn rate | 変種 / 出現率 | вариант / шанс | різновид / частота | **variante / taxa** | `Taxa de Variantes` |
 | 에픽 이상 | Epic+ | エピック以上 | эпический и выше | епічний і вище | **Épico+** | `Chance de Épico+` |
 | 등급 | rarity | レアリティ | редкость | рідкість | **raridade** | Comum / Épico / Único / Lendário |
-| 식용 / 약용 / 독 | Edible / Medicinal / Poison | 食用 / 薬用 / 毒 | Съедобный / Лекарственный / Ядовитый | Їстівний / Лікарський / Отруйний | **Comestível / Medicinal / Veneno(so)** | 분류 태그 `Veneno`, 버섯 `Cogumelo Venenoso` |
+| 식용 / 약용 / 독 | Edible / Medicinal / Poison | 食用 / 薬用 / 毒 | Съедобный / Лекарственный / Ядовитый | Їстівний / Лікарський / Отруйний | **Comestível / Medicinal / Veneno(so)** | 분류 태그 `Veneno`, 도감 탭 `Venenoso`(독버섯) — 짧아야 탭에 들어간다 |
 | 버섯 | mushroom | キノコ | гриб | гриб | **cogumelo** | 문장 속 소문자 |
 | 갓 | cap | 傘 | шляпка | капелюшок | **chapéu** |  |
 | 나무버섯 | Tree Mushroom | ツリーキノコ | древесный гриб | деревний гриб | **cogumelo da Árvore** | 세계수에 나는 버섯. 4종 이름은 부록 A |
@@ -773,7 +773,7 @@ EN은 버튼도 Title Case지만 PT는 **pt-BR 관례(문장형)**를 따른다.
 | 200002 | 속도형 | Speed | スピード型 | Скоростной | Швидкість | **Veloz** | 번역 |
 | 100003 | 약초 괭이 | Herb Hoe | 薬草のくわ | Мотыга травника | Мотика трав'яра | **Enxada de Ervas** | 번역 |
 | 200003 | 치명타형 | Critical | クリティカル型 | Критический | Критичний | **Crítico** | 번역 |
-| 100004 | 회전칼날 수확기 | Spinning Blade Harvester | 回転ブレード収穫機 | Сборщик с вращающимся лезвием | Збирач з обертовим лезом | **Coletor de Lâmina Giratória** | 번역 |
+| 100004 | 회전칼날 수확기 | Spinning Blade Harvester | 回転ブレード収穫機 | Сборщик с вращающимся лезвием | Збирач з обертовим лезом | **Coletor-Lâmina** | 번역 |
 | 200004 | 범위형 | Area | 範囲型 | Площадной | Область | **Área** | 번역 |
 | 100005 | 분열 수확기 | Splitting Harvester | 分裂収穫機 | Делящийся сборщик | Збирач-розділювач | **Coletor Divisor** | 번역 |
 | 200005 | 분열형 | Splitting | 分裂型 | Делящийся | Розділення | **Divisor** | 번역 |
@@ -871,15 +871,15 @@ EN은 버튼도 Title Case지만 PT는 **pt-BR 관례(문장형)**를 따른다.
 | 900276 | 독 | Poison | 毒 | Ядовитый | Отруйний | **Veneno** | 번역 |
 | 900091 | 식용 버섯 | Edible Mushroom | 食用キノコ | Съедобный гриб | Їстівний гриб | **Cogumelo Comestível** | 번역 |
 | 900092 | 약용 버섯 | Medicinal Mushroom | 薬用キノコ | Лекарственный гриб | Лікарський гриб | **Cogumelo Medicinal** | 번역 |
-| 900093 | 독버섯 | Poisonous Mushroom | 毒キノコ | Ядовитый гриб | Отруйний гриб | **Cogumelo Venenoso** | 번역 |
-| 900868 | 독 버섯 | Poisonous Mushrooms | 毒キノコ | Ядовитые грибы | Отруйні гриби | **Cogumelos Venenosos** | 번역 |
-| 900869 | 특수 버섯 | Special Mushrooms | 特別キノコ | Особые грибы | Особливі гриби | **Cogumelos Especiais** | 번역 |
+| 900093 | 독버섯 | Poisonous Mushroom | 毒キノコ | Ядовитый гриб | Отруйний гриб | **Venenoso** | 번역 |
+| 900868 | 독 버섯 | Poisonous Mushrooms | 毒キノコ | Ядовитые грибы | Отруйні гриби | **Venenosos** | 번역 |
+| 900869 | 특수 버섯 | Special Mushrooms | 特別キノコ | Особые грибы | Особливі гриби | **Especiais** | 번역 |
 | 900862 | 식용 균사 | Edible Mycelium | 食用菌糸 | Съедобный мицелий | Їстівний міцелій | **Micélio Comestível** | 번역 |
 | 900863 | 약용 균사 | Medicinal Mycelium | 薬用菌糸 | Лекарственный мицелий | Лікарський міцелій | **Micélio Medicinal** | 번역 |
 | 900864 | 독 균사 | Poison Mycelium | 毒菌糸 | Ядовитый мицелий | Отруйний міцелій | **Micélio Venenoso** | 번역 |
 | 900111 | 초반 | Early | 序盤 | Начало | Початок | **Início** | 번역 |
 | 900112 | 중반 | Mid | 中盤 | Середина | Середина | **Meio** | 번역 |
-| 900113 | 후반 | Late | 終盤 | Поздняя игра | Кінець | **Final** | 번역 |
+| 900113 | 후반 | Late | 終盤 | Поздняя игра | Кінець | **Fim** | 번역 |
 
 ### 5a 노드 (87) — 기존 언어 최장 29자
 
