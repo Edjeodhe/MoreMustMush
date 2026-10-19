@@ -38,6 +38,7 @@ namespace MoreMush
         OptionWindow optionWin;   // Esc = 옵션 창 (열린 동안 라운드가 멈춘다: App.ModalOpen)
         RoundSim finishedR;   // 이미 정산을 넘긴 라운드 (정산 중 예외가 나도 다시 정산하지 않게)
         RoundSim begun;       // 이 씬에서 시작한 라운드
+        public RoundSim Round => begun;   // 개발자 패널이 읽는다
         System.Action<RoundSim> started;
 
         void Awake()

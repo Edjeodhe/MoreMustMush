@@ -18,6 +18,9 @@ namespace MoreMush.EditorTools
 
         [MenuItem("MoreMush/Build/WebGL (itch.io)")]
         public static void MenuWebGL() => Log(WebGL());
+        // 개발자 패널(` 키)이 들어간 테스트용. 출시 메뉴는 Build Settings의 Development Build 체크를 따르지 않는다 (늘 출시 빌드)
+        [MenuItem("MoreMush/Build/WebGL (개발용)")]
+        public static void MenuWebGLDev() => Log(WebGL(true));
         [MenuItem("MoreMush/Build/Windows (exe)")]
         public static void MenuWindows() => Log(Windows());
         [MenuItem("MoreMush/Build/All")]
@@ -72,7 +75,7 @@ namespace MoreMush.EditorTools
                 PlayerSettings.defaultWebScreenHeight = 540;
                 sb.AppendLine($"템플릿={PlayerSettings.WebGL.template} 기본해상도={PlayerSettings.defaultWebScreenWidth}x{PlayerSettings.defaultWebScreenHeight} 예외지원={PlayerSettings.WebGL.exceptionSupport} 압축={PlayerSettings.WebGL.compressionFormat} fallback={PlayerSettings.WebGL.decompressionFallback}");
 
-                string dir = Out("Builds/WebGL");
+                string dir = Out(dev ? "Builds/WebGL_Dev" : "Builds/WebGL");
                 if (Directory.Exists(dir)) Directory.Delete(dir, true);
                 Directory.CreateDirectory(dir);
 
@@ -82,13 +85,13 @@ namespace MoreMush.EditorTools
                     locationPathName = dir,
                     target = BuildTarget.WebGL,
                     targetGroup = BuildTargetGroup.WebGL,
-                    options = BuildOptions.None,
+                    options = dev ? BuildOptions.Development : BuildOptions.None,
                 };
                 var rep = BuildPipeline.BuildPlayer(opt);
                 bool ok = Report(sb, rep);
                 if (ok)
                 {
-                    string zip = Out("Builds/MoreMustMush_WebGL.zip");
+                    string zip = Out(dev ? "Builds/MoreMustMush_WebGL_Dev.zip" : "Builds/MoreMustMush_WebGL.zip");
                     Zip(dir, zip, null);
                     sb.AppendLine($"zip: {zip} ({new FileInfo(zip).Length / 1048576.0:F1} MB)");
                 }
