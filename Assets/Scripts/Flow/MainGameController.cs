@@ -171,7 +171,12 @@ namespace MoreMush
                 float anchorY = Mathf.Lerp(prt.rect.yMin, prt.rect.yMax, brt.anchorMin.y);
                 brt.anchoredPosition = new Vector2(srt.anchoredPosition.x, prt.rect.yMax + BOSS_GAP - BOSS_SPRITE_PAD + brt.rect.height * brt.pivot.y - anchorY);
                 var lbl = SceneUI.TextIn(b);
-                if (lbl != null) { lbl.enableAutoSizing = true; lbl.fontSizeMin = Mathf.Min(lbl.fontSizeMin, 18); }
+                // 두 줄이 알약 모양 둥근 끝·아래 투명 여백 밖으로 나가지 않게: 좌우 60, 위 12·아래 20 비우고 출발 버튼 글자(40)보다 커지지 않게
+                if (lbl != null)
+                {
+                    lbl.enableAutoSizing = true; lbl.fontSizeMin = Mathf.Min(lbl.fontSizeMin, 18); lbl.fontSizeMax = 40;
+                    lbl.margin = new Vector4(60, 12, 60, 20); lbl.lineSpacing = -8;
+                }
             }
             if (b == null) { Debug.LogWarning("[MainGame] 보스 도전 버튼(Button_Boss)을 만들 수 없어요"); return; }
             SceneUI.Bind(b, ToggleBoss);
