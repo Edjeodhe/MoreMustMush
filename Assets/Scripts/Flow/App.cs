@@ -82,6 +82,7 @@ namespace MoreMush
         void Awake()
         {
             Telemetry.Init();   // 개인 ID·session_start (지난 실행이 비정상 종료였으면 crash 먼저)
+            Ads.Init();         // 광고 SDK 시작 + 보상형 광고 미리 불러오기 (모바일만)
 #if !UNITY_WEBGL || UNITY_EDITOR
             Application.targetFrameRate = 60;   // WebGL은 브라우저 requestAnimationFrame에 맡긴다
 #endif
