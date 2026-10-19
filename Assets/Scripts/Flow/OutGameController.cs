@@ -83,7 +83,7 @@ namespace MoreMush
             SetFolded(true, false);
             tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
-                new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
+                new OptionWindow.Extra("Button_Back", "돌아가기", ToMainGame));
             BackButton(scene);
         }
 

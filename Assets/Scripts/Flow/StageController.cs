@@ -44,7 +44,7 @@ namespace MoreMush
         {
             I = this;
             optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); CloseOption(); },
-                new OptionWindow.Extra("Button_EndNow", Loc.T("지금 끝내기"), () => { Snd.Ui(); optionWin.Close(); EndNow(); }));
+                new OptionWindow.Extra("Button_EndNow", "지금 끝내기", () => { Snd.Ui(); optionWin.Close(); EndNow(); }));
         }
         void OnDestroy() { if (I == this) I = null; Time.timeScale = 1; }
 

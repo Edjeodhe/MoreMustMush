@@ -25,7 +25,6 @@ namespace MoreMush
         // 팝업보다 위에 그리고 눌리게 할 이동 버튼 (팝업 위 정렬 순서)
         static readonly string[] NAV = { "Button_MushTree", "Button_MushDex", "Button_Harvesters" };
         const int NAV_SORT_ABOVE = 1;   // 팝업(루트 캔버스) 바로 위 — 너무 높으면 옵션·로딩 같은 다른 UI까지 덮는다
-        static readonly System.Text.RegularExpressions.Regex STAGE_MARK = new System.Text.RegularExpressions.Regex(@"\bN\b");   // Stage_Text에 적어 둔 자리 표시 ("N Stage" → "12 Stage", 낱말 N 하나만)
 
         CurrencyBar currency;
         HarvesterShop shop;
@@ -43,7 +42,6 @@ namespace MoreMush
         int shownClaimable = -1;
         GameObject[] popups = new GameObject[0];
         TMP_Text stageText;
-        string stageFormat;
 
         void Awake()
         {
@@ -53,7 +51,6 @@ namespace MoreMush
             currency = new CurrencyBar(SceneUI.TextIn(goldImg?.transform), SceneUI.TextIn(gemImg?.transform));
 
             stageText = SceneUI.Need(scene, "Stage_Text")?.GetComponent<TMP_Text>();
-            stageFormat = stageText != null ? stageText.text : null;
 
             startButton = SceneUI.Need(scene, "Button_StageStart")?.transform;
             WireBossButton(scene);
@@ -120,7 +117,7 @@ namespace MoreMush
         {
             if (stageText == null || G == null) return;
             string n = StageNow().ToString();
-            UIUtil.SetText(stageText, STAGE_MARK.IsMatch(stageFormat) ? STAGE_MARK.Replace(stageFormat, n, 1) : n);
+            UIUtil.SetText(stageText, Loc.F("스테이지 {0}", n));
         }
 
         // 1스테이지(튜토리얼) 클리어 뒤 처음 오면 첫 노드를 살 골드를 보장한다 (기획서: "첫 노드만 해금 가능한 재화").

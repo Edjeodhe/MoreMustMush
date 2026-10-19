@@ -248,12 +248,16 @@ namespace MoreMush.EditorTools
             void Add(string k) { if (ContainsHangul(k) && seen.Add(k)) keys.Add(k); }
             var interp = new List<string>();
             foreach (string path in Directory.GetFiles("Assets/Scripts", "*.cs", SearchOption.AllDirectories).OrderBy(p => p, StringComparer.Ordinal))
-                foreach (var (lit, isInterp, line) in Literals(File.ReadAllText(path)))
+            {
+                string src = File.ReadAllText(path);
+                foreach (var (lit, isInterp, line) in Literals(src))
                 {
                     if (!ContainsHangul(lit)) continue;
                     if (isInterp) { interp.Add($"{path}:{line}"); continue; }
                     Add(lit);
                 }
+                foreach (var k in LocCallKeys(src)) Add(k);
+            }
             foreach (var k in SceneKeys()) Add(k);
             Db.Reload();
             var db = Db.Data;
@@ -338,6 +342,24 @@ namespace MoreMush.EditorTools
                 string body = m.Groups[2].Value;
                 string lit = verbatim ? body.Replace("\"\"", "\"") : Unescape(body);
                 yield return (lit, interp, interp ? src.Take(m.Index).Count(c => c == '\n') + 1 : 0);   // 줄 번호는 보고할 때만 센다
+            }
+        }
+
+        // Loc.T("…")·Loc.F("…", …)의 첫 인자. TOKEN은 보간 문자열 구멍($"{Loc.T("…")}") 안의 따옴표를 문자열 끝으로 봐서 이 키를 놓치므로 따로 줍는다
+        static readonly Regex LOC_CALL = new Regex(@"\bLoc\.[TF]\(\s*""((?:\\.|[^""\\\r\n])*)""", RegexOptions.Compiled);
+
+        static IEnumerable<string> LocCallKeys(string src)
+        {
+            foreach (Match m in LOC_CALL.Matches(src))
+            {
+                int lineStart = src.LastIndexOf('\n', m.Index) + 1, lineEnd = src.IndexOf('\n', m.Index);
+                string line = src.Substring(lineStart, (lineEnd < 0 ? src.Length : lineEnd) - lineStart);
+                if (line.Contains("Debug.Log") || line.Contains("Exception(")) continue;
+                string before = src.Substring(lineStart, m.Index - lineStart);
+                if (before.TrimStart().StartsWith("*")) continue;   // /* … */ 주석 줄
+                int slash = before.IndexOf("//", StringComparison.Ordinal);
+                if (slash >= 0 && before.Take(slash).Count(c => c == '"') % 2 == 0) continue;   // // 주석 뒤
+                yield return Unescape(m.Groups[1].Value);
             }
         }
 

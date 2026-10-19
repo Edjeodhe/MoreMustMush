@@ -53,7 +53,9 @@ namespace MoreMush
             if (canvas == null) { Debug.LogWarning("[Lang] 캔버스가 없어 언어 창을 만들 수 없어요"); return; }
             var btns = new (string, UnityAction)[Loc.LANGS.Length];
             for (int i = 0; i < btns.Length; i++) { string code = Loc.LANGS[i]; btns[i] = (Loc.LANG_NAME[code], () => Pick(code)); }
-            Root = TempDialog.Build(canvas, "LangPanel", "Language", btns);
+            Root = TempDialog.Build(canvas, "LangPanel", "언어", btns);
+            // 제목은 LocText에 맡겨 언어를 고르면 바로 그 언어로 바뀐다 (언어 이름 버튼은 Refresh가 각 언어 글자로 쓴다)
+            foreach (var t in Root.GetComponentsInChildren<TMP_Text>(true)) if (t.name == "Title") TempDialog.Localize(t, "언어");
             for (int i = 0; i < btns.Length; i++)
             {
                 var b = Root.transform.Find("Box/Row/Btn" + i);

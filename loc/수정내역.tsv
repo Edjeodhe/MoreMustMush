@@ -1,0 +1,224 @@
+ID	언어	이전	이후
+201005	RU	Замедление и ослабление от спорных облаков действуют короче.	Замедление и ослабление от споровых облаков действуют короче.
+201006	EN	Increases the time limit of a round. Rounds start at 15 seconds and get 0.5 seconds longer each stage (up to +10 seconds), and this is added on top.	Increases a round's time limit. Rounds last 10 seconds in Stages 1-4, then get 0.5 seconds longer each stage after that (up to +10 seconds). This bonus is added on top.
+201006	JA	1ラウンドの制限時間を延ばします。ラウンドは15秒から始まり、ステージごとに0.5秒ずつ(最大+10秒)長くなり、そこにこの分が加わります。	1ラウンドの制限時間を延ばします。ラウンドはステージ1〜4は10秒、それ以降は10秒からステージごとに0.5秒ずつ(最大+10秒)長くなり、そこにこの分が加わります。
+201006	RU	Увеличивает лимит времени раунда. Раунд начинается с 15 секунд и с каждой стадией становится на 0,5 с длиннее (максимум +10 с); это добавляется сверху.	Увеличивает лимит времени раунда. На этапах 1-4 раунд длится 10 с, дальше - 10 с плюс 0,5 с за каждый этап (максимум +10 с); бонус добавляется сверху.
+201006	UK	Збільшує ліміт часу раунду. Раунд починається з 15 секунд і з кожним етапом довшає на 0,5 с (максимум +10 с), а це додається зверху.	Збільшує ліміт часу раунду. На етапах 1-4 раунд триває 10 с, далі - 10 с плюс 0,5 с за кожен етап (макс. +10 с); цей бонус додається зверху.
+201021	RU	Добавляет больше всего. Прокачай до максимума, чтобы открыть Бесконечный боевой дух.	Добавляет больше всего. Прокачай до максимума, чтобы открыть Неукротимый дух.
+201021	UK	Додає найбільше з усіх. Якщо прокачати до кінця, відкриється Нескінченний бойовий дух.	Додає найбільше з усіх. Якщо прокачати до кінця, відкриється «Незламний дух».
+201024	RU	Особый узел за камни мицелия. Ядовитые грибы выпускают меньше спорных облаков, а замедление и ослабление действуют короче.	Особый узел за камни мицелия. Ядовитые грибы выпускают меньше споровых облаков, а замедление и ослабление действуют короче.
+201027	RU	Навыки от ударов о планку (Прилив сил, Чистая спорная завеса, Пронзание, Наведение, Двойник-планка) действуют дольше.	Навыки от ударов о планку (Прилив сил, Очищающая завеса, Пронзание, Наведение, Двойник-планка) действуют дольше.
+201029	EN	Further boosts the attack increase and skill trigger rate increase of the Power Up buff.	Further boosts the attack increase and skill trigger chance increase of the Power Up buff.
+202002	UK	Розширює грибне поле. Спершу поле вузьке, тож екран наближений і збирачі з грибами здаються великими. Чим ширше, тим більше колоній і лісових пристроїв (більше доходу). На 4 рівні розмір початковий.	Розширює грибне поле. Спершу поле вузьке, тож екран наближений і збирачі з грибами здаються великими. Чим ширше, тим більше колоній і лісових пристроїв (більше доходу). На 4 рівні поле має звичайний (повний) розмір.
+202005	JA	世界樹でちびたちが建物を建てる時間を短くします。	世界樹でちびっこたちが建物を建てる時間を短くします。
+202008	JA	分裂・分身・ちび収穫機で生まれる一時収穫機が長く残ります。	分裂・分身・ちびっこ収穫機で生まれる一時収穫機が長く残ります。
+202021	RU	Каждый раз, когда постоянный сборщик ударяется о планку, снимает дебаффы спорных облаков и ненадолго защищает от них.	Каждый раз, когда постоянный сборщик ударяется о планку, снимает дебаффы споровых облаков и ненадолго защищает от них.
+202024	RU	При ударе по грибу есть шанс, что на месте произойдёт спорный взрыв, наносящий урон по площади соседним грибам.	При ударе по грибу есть шанс, что на месте произойдёт споровый взрыв, наносящий урон по площади соседним грибам.
+202052	RU	Увеличивает длительность Ускорения и Чистой спорной завесы среди баффов планки, а также число усиленных ударов от Заточки.	Увеличивает длительность Ускорения и Очищающей завесы среди баффов планки, а также число усиленных ударов от Заточки.
+202056	EN	A special Mycelium Stone skill. At regular intervals during a round, Mycelium Stones fall from the sky and deal big damage to mushrooms around where they land. Always triggers, with no trigger rate.	A special Mycelium Stone skill. At regular intervals during a round, Mycelium Stones fall from the sky and deal big damage to mushrooms around where they land. Always triggers, with no trigger chance.
+202059	RU	Открывает лесное устройство Жёлудёвый переключатель. В каждом раунде ставится один; если включить все три жёлудя, очки ×2 на 5 с (раз за раунд).	Открывает лесное устройство Желудёвый переключатель. В каждом раунде ставится один; если включить все три жёлудя, очки ×2 на 5 с (раз за раунд).
+202061	EN	Each time a permanent harvester hits the bar, Attack and skill trigger rate briefly go up. A key early-game buff that makes you stronger the more you play.	Each time a permanent harvester hits the bar, Attack and skill trigger chance briefly go up. A key early-game buff that makes you stronger the more you play.
+203023	EN	Max out the Settlement Bonus first, then raise the gold you get at round end even more.	Max out the Payout Bonus first, then raise the gold you get at round end even more.
+203031	EN	A special node unlocked with Mycelium Stones. Multiplies settlement gold.	A special node unlocked with Mycelium Stones. Multiplies payout gold.
+203032	UK	Навіть після максимуму Очок за удар III+ золото виплати (золото за очки) продовжує рости. Максимуму немає.	Навіть після максимуму «Бали за удар III+» золото виплати (золото за бали) продовжує рости. Максимуму немає.
+203033	EN		Epic-or-higher mushrooms sprout more often. Max it out to reach the forest's natural rate.
+203033	JA		エピック以上のキノコがよく生えるようになります。最大まで上げると、森本来の頻度になります。
+203033	RU		Эпические и более редкие грибы появляются чаще. На максимуме частота станет естественной для леса.
+203033	UK		Епічні й рідкісніші гриби з'являються частіше. На максимумі - природна частота лісу.
+300006	RU	Большой жёлудёвый колокольчик	Большой желудёвый колокольчик
+301004	EN	Attack Speed	Harvester Speed
+301028	EN	Bar Skill Proc Rate	Bar Skill Trigger Chance
+301029	EN	Boost Enhancement	Power Up Boost
+301032	JA	どこまでも闘志	果てなき闘志
+302005	JA	ちび大工	ちびっこ大工
+302007	JA	ちび収穫機	ちびっこ収穫機
+302021	RU	Чистая спорная завеса	Очищающая завеса
+302024	RU	Спорный взрыв	Споровый взрыв
+302053	EN	Combo Multiplier II	Combo Factor II
+302054	EN	Auto-Harvest Expansion	Auto Harvest Expansion
+302059	RU	Жёлудёвый переключатель	Желудёвый переключатель
+303003	EN	Settlement Bonus	Payout Bonus
+303023	EN	Settlement Bonus II	Payout Bonus II
+303031	EN	Mycelium Settlement	Mycelium Payout
+303032	JA	どこまでも豊作	果てなき豊作
+303033	EN		Rare Spores
+303033	JA		希少な胞子
+303033	RU		Редкие споры
+303033	UK		Рідкісні спори
+900002	EN	Fairy Leaf Mushroom	Fairy Ring Mushroom
+900061	EN	When Ember Kid picks mushrooms, Mycelium Stone +{0}	When Little Ember picks mushrooms, Mycelium Stone +{0}
+900061	JA	火種ちびがキノコを採ると菌糸石 +{0}	ほのおちびっこがキノコを採ると菌糸石 +{0}
+900061	UK	Коли Іскринка зриває гриб: міцелієвий камінь +{0}	Коли Жаринка зриває гриб: міцелієвий камінь +{0}
+900068	JA	すべてのちびのキノコ採り速度 +{0}	すべてのちびっこのキノコ採り速度 +{0}
+900069	EN	Construction time −{0} when Pebble Kid builds	Construction time −{0} when Little Pebble builds
+900069	JA	小石ちびが建てると建設時間 −{0}	こいしちびっこが建てると建設時間 −{0}
+900077	JA	ちびのお願い間隔 −{0}	ちびっこのお願い間隔 −{0}
+900081	JA	ちびのブランコ	ちびっこのブランコ
+900094	EN	Lava Kid	Little Lava
+900094	JA	溶岩ちび	溶岩ちびっこ
+900095	EN	Neon Kid	Little Neon
+900095	JA	ネオンちび	ネオンちびっこ
+900096	EN	Snowflake Kid	Little Snowflake
+900096	JA	雪ちび	雪ちびっこ
+900097	EN	Rich Kid	Little Moneybags
+900097	JA	お金持ちちび	お金持ちちびっこ
+900098	EN	Galaxy Kid	Little Galaxy
+900098	JA	銀河ちび	銀河ちびっこ
+900099	EN	Cherry Blossom Kid	Little Cherry Blossom
+900099	JA	桜ちび	桜ちびっこ
+900100	EN	Sunny Kid	Little Sunny
+900100	JA	おひさまちび	おひさまちびっこ
+900101	EN	Cloud Kid	Little Cloud
+900101	JA	雲ちび	雲ちびっこ
+900102	EN	Gem Kid	Little Gem
+900102	JA	宝石ちび	宝石ちびっこ
+900103	EN	Strawberry Choco Kid	Little Strawberry Choco
+900103	JA	いちごチョコちび	いちごチョコちびっこ
+900126	EN	On every bar hit, for {0} sec Attack +{1}% · Skill trigger rate +{2}%p	On every bar hit, for {0} sec Attack +{1}% · Skill trigger chance +{2}%p
+900132	EN	Settlement gold {0}	Payout gold {0}
+900135	EN	Settlement gold +{0}%	Payout gold +{0}%
+900138	RU	{0} с каждого гриба	Шанс {0} для каждого гриба
+900153	EN	Unlock to start using {0}	Unlocks the skill{0}
+900153	JA	解放すると{0}を使えます	解放すると{0}使用開始
+900153	RU	После открытия начнёшь использовать: {0}	Открывает навык{0}
+900153	UK	Відкрий, щоб почати користуватися: {0}	Відкриває навичку{0}
+900154	EN	At 10% proc rate, 	: 10% trigger chance
+900154	JA	発動率10%で 	発動率10%で
+900154	RU	При шансе срабатывания 10%, 	: шанс срабатывания 10%
+900154	UK	При шансі 10% 	: шанс спрацювання 10%
+900155	EN	Proc Rate {0} · 	Trigger Chance {0} · 
+900156	EN	Haste and Clear Spore Veil last {0}, Blade Sharpening {1} hits	Speed Up and Clear Spore Veil last {0}, Sharpen {1} hits
+900156	RU	Ускорение и Чистая спорная завеса держатся {0}, Заточка: {1} уд.	Ускорение и Очищающая завеса держатся {0}, Заточка: {1} уд.
+900171	EN	Bar Skill proc rate +{0}%p	Bar Skill trigger chance +{0}%p
+900172	EN	Vigor Boost Attack +{0}%p · proc rate +{1}%p	Power Up: Attack +{0}% · trigger chance +{1}%
+900184	EN	Settlement Gold x{0}	Payout Gold ×{0}
+900186	EN	All Skill proc rates x{0}	All Skill trigger chances x{0}
+900190	EN	Lv2 proc rate · Lv3 power · Lv4 proc rate and power	Lv2 trigger chance · Lv3 power · Lv4 trigger chance and power
+900203	EN	Complete {n} daily requests	Complete {n} daily quests
+900204	RU	Навозник	Навозник белый
+900222	EN	Tinder Bracket	Artist's Conk
+900222	RU	Трутовик настоящий	Трутовик плоский
+900247	EN	Liver Mushroom	Cinnabar Polypore
+900247	JA	肝キノコ	ヒイロタケ
+900247	RU	Печёночный гриб	Трутовик киноварный
+900257	RU	Радиус спорного взрыва +30	Радиус спорового взрыва +30
+900327	EN	Coral Mushroom	Yellow Coral Mushroom
+900385	EN	Coral Mushroom	Sea Coral Mushroom
+900433	RU	Навозник	Панеолус
+900433	UK	Гнойовик	Панеолус
+900443	EN	Skill Proc Rate	Skill Trigger Chance
+900447	UK	Очки за удар	Бали за удар
+900452	EN	Ember Little One	Little Ember
+900453	EN	Owned bonus: When the Ember Little One picks a mushroom, Mycelium Stone +20%	Owned bonus: When Little Ember picks a mushroom, Mycelium Stone +20%
+900454	EN	Zappy Little One	Little Zappy
+900456	EN	Dew Little One	Little Dew
+900458	EN	Coin Little One	Little Coin
+900460	EN	Stardrop Little One	Little Stardrop
+900462	EN	Sprout Little One	Little Sprout
+900464	EN	Moonlight Little One	Little Moonlight
+900466	EN	Breeze Little One	Little Breeze
+900468	EN	Pebble Little One	Little Pebble
+900469	EN	Owned bonus: Construction time −20% when the Pebble Little One builds	Owned bonus: Construction time −20% when Little Pebble builds
+900470	EN	Chestnut Little One	Little Chestnut
+900496	UK	Мандрівник: колонія блукає полем (очки ×1.5)	Мандрівник: колонія блукає полем (бали ×1,5)
+900497	UK	Найбільше очок за раунд	Найбільше балів за раунд
+900506	RU	Все {0} ×{1}	{0}: все ×{1}
+900520	UK	Жолудь світиться! Очки ×2	Жолудь світиться! Бали ×2
+900527	RU	Золотой {0}!	Золотой вариант: {0}!
+900527	UK	Золотий {0}!	Золотий різновид: {0}!
+900538	RU	Появился гигантский {0}!	Появился гигант: {0}!
+900538	UK	З'явився гігантський {0}!	З'явився гігант: {0}!
+900554	EN	Skill · Auto-triggers by proc rate when hitting mushrooms	Skill · Chance to trigger when hitting mushrooms
+900555	EN	Skill · Auto-triggers by proc rate when picking mushrooms	Skill · Chance to trigger when picking mushrooms
+900556	EN	Skill · Auto-triggers by proc rate when bouncing off walls	Skill · Chance to trigger when bouncing off walls
+900557	EN	Skill · Pierces by proc rate when hitting hard mushrooms	Skill · Chance to pierce when hitting hard mushrooms
+900580	EN	{0}{1} per hour  {2}{3} <size=80%><color=#8a6a4a>(Increased by Stage, Mushroom Cabin, Little One bonuses, and 'Auto Harvest Expansion')</color></size>	{0}{1} per hour  {2}{3} <size=80%><color=#8a6a4a>(Increased by Stage, Mushroom Cottage, Little One bonuses, and 'Auto Harvest Expansion')</color></size>
+900589	RU	Малышей на работе: {0}/{1}	Свободных малышей: {0}/{1}
+900615	UK	{0} Очки ×{1}	{0} бали ×{1}
+900628	RU	Малышей на работе <b>{0}/{1}</b>	Свободных малышей <b>{0}/{1}</b>
+900641	EN	EXP {0}/{1}  <size=70%>Earn it through requests</size>	EXP {0}/{1}  <size=70%>Earn it through Quests</size>
+900729	UK	{0} Щедрий урожай! Очки й збір ×{1}	{0} Щедрий урожай! Бали й збір ×{1}
+900746	UK	Отримані очки → золото <size=70%><color=#8a6a4a>(×{0})</color></size>	Отримані бали → золото <size=70%><color=#8a6a4a>(×{0})</color></size>
+900747	RU	Бонусное золото <size=70%><color=#8a6a4a>(золотой сборщик)</color></size>	Бонусное золото <size=70%><color=#8a6a4a>(сборщик-монета)</color></size>
+900747	UK	Бонусне золото <size=70%><color=#8a6a4a>(золотий збирач)</color></size>	Бонусне золото <size=70%><color=#8a6a4a>(Монетний збирач)</color></size>
+900752	RU	Золотой {0}	Золото: {0}
+900752	UK	Золотий {0}	Золотий: {0}
+900760	RU	Вызов боссу выключен. Пофармите на этом этапе, а потом снова бросьте вызов кнопкой "Вызов боссу" в Древе мицелия	Вызов боссу выключен. Пофарми на этом этапе, а потом снова брось вызов кнопкой "Вызов боссу" в Древе мицелия
+900773	UK	Кожен збирач має свою <color=#3a8a2a>унікальну здатність</color>. Кожен постійний збирач займає один <color=#3a8a2a>слот</color>, і кожен увімкнений збирач займає один слот (лише по одному кожного виду). Решту слотів заповнює Базовий збирач, а збирачі від Поділу чи Клона є клонами Базового збирача (20% атаки).	Кожен збирач має свою <color=#3a8a2a>унікальну здатність</color>. На кожного постійного збирача припадає один <color=#3a8a2a>слот</color>, а кожен увімкнений збирач займає один слот (лише по одному кожного виду). Решту слотів заповнює Базовий збирач, а збирачі від Розділення чи Двійника є двійниками Базового збирача (20% атаки).
+900802	UK	Заголовок	Головне меню
+900830	UK	Очки ×1.5	Бали ×1,5
+900833	UK	Золото виплати за раунд <size=60%><color=#8a6a4a>(золото за очки + бонус)</color></size>	Золото виплати за раунд <size=60%><color=#8a6a4a>(золото за бали + бонус)</color></size>
+900834	UK	Отримані очки → золото	Отримані бали → золото
+900872	RU	* Никогда не ешьте и не трогайте их в реальной жизни	* Никогда не ешь и не трогай их в реальной жизни
+900882	RU	Стройте за камни мицелия. Свободный малыш пойдёт строить и не сможет работать в полях, пока не закончит. У каждого здания свой размер и максимальное число, а каждая постройка немного и навсегда усиливает параметры.	Строй за камни мицелия. Свободный малыш пойдёт строить и не сможет работать в полях, пока не закончит. У каждого здания свой размер и максимальное число, а каждая постройка немного и навсегда усиливает параметры.
+900893	UK	До заголовка	У головне меню
+900946	EN	Skill trigger rate +5%	Skill trigger chance +5%
+900973	JA	オーラ:すべてのちびの収穫量 +15%	オーラ:すべてのちびっこの収穫量 +15%
+900977	EN	Round Pinball speed +{0}	Round Harvester speed +{0}
+900982	EN	Round all skill trigger rate +{0}	Round all skill trigger chance +{0}
+901007	JA	ちびの王冠	ちびっこの王冠
+901014	JA	ちびの移動速度 +{0}	ちびっこの移動速度 +{0}
+901015	JA	ちびの収穫時間 −{0}	ちびっこの収穫時間 −{0}
+901017	JA	根っこエリアのちびの運搬量 +{0}	根っこエリアのちびっこの運搬量 +{0}
+901023	JA	すべてのちびの収穫量 +{0}	すべてのちびっこの収穫量 +{0}
+901026	JA	すべてのちびの収穫量 +10%	すべてのちびっこの収穫量 +10%
+901036	JA	ちび工房の制作時間 ×{0}	ちびっこ工房の制作時間 ×{0}
+901041	JA	第2弾アップデートのちび	第2弾アップデートのちびっこ
+901042	JA	農場がちびキノコの世界樹に変わりました! ちびをエリアに送ってツリーキノコを集めましょう	農場がちびっこキノコの世界樹に変わりました! ちびっこをエリアに送ってツリーキノコを集めましょう
+901043	JA	建物・ちびの星に使った菌糸石 {0}・ゴールド {1}が戻ってきました	建物・ちびっこの星に使った菌糸石 {0}・ゴールド {1}が戻ってきました
+901049	JA	世界樹が進化するたびに、ちびが1匹ずつ仲間入りします	世界樹が進化するたびに、ちびっこが1匹ずつ仲間入りします
+901049	RU	С каждой эволюцией Мирового древа к вам присоединяется ещё один малыш	С каждой эволюцией Мирового древа к тебе присоединяется ещё один малыш
+901068	JA	倉庫のキノコはラウンドで採ったキノコです。ちびへのプレゼントやお願いにも使います	倉庫のキノコはラウンドで採ったキノコです。ちびっこへのプレゼントやお願いにも使います
+901068	RU	Грибы в кладовой — те, что вы собрали в раундах. Они нужны и для подарков малышам, и для просьб	Грибы в кладовой — те, что ты собрал в раундах. Они нужны и для подарков малышам, и для просьб
+901076	JA	ちび {0}/{1}・Lv合計 {2}	ちびっこ {0}/{1}・Lv合計 {2}
+901078	JA	エリアボタンでちびを送ります。好きなエリアなら収穫量 +50%。ちびがいないエリアのキノコは採りません	エリアボタンでちびっこを送ります。好きなエリアなら収穫量 +50%。ちびっこがいないエリアのキノコは採りません
+901080	EN	Zone Garden +1	Zone Capacity +1
+901080	JA	エリアの庭 +1	エリアの定員 +1
+901080	RU	Сад зоны +1	Мест в зоне +1
+901080	UK	Сад зони +1	Місткість зони +1
+901081	JA	称号「ちび隊長」	称号「ちびっこ隊長」
+901082	JA	称号 <b>「ちび隊長」</b>・Lv合計のほうびをすべて受け取りました	称号 <b>「ちびっこ隊長」</b>・Lv合計のほうびをすべて受け取りました
+901098	JA	ちびのお願い	ちびっこのお願い
+901099	JA	ラウンドでキノコを採ってくると、ちびたちがお願いしてきます	ラウンドでキノコを採ってくると、ちびっこたちがお願いしてきます
+901105	JA	<b>ちびの箱</b>・今週のお願い {0}/{1}	<b>ちびっこの箱</b>・今週のお願い {0}/{1}
+901110	JA	ちび工房	ちびっこ工房
+901111	JA	図鑑を{0}/{1}種集めると、ちび工房が開きます	図鑑を{0}/{1}種集めると、ちびっこ工房が開きます
+901113	JA	ちび工房・制作 {0}/{1}・即完了 今日 {2}回	ちびっこ工房・制作 {0}/{1}・即完了 今日 {2}回
+901127	RU	<b>Очки красоты</b> (все ваши украшения)	<b>Очки красоты</b> (все твои украшения)
+901136	JA	<b>セット効果</b>・同じちびの飾り3種をすべて置くと、そのちびの収穫量 +{0}・特別ボーナス +1段階	<b>セット効果</b>・同じちびっこの飾り3種をすべて置くと、そのちびっこの収穫量 +{0}・特別ボーナス +1段階
+901142	EN	{0} World Tree Tier {1} {2} <size=60%><color=#f0d8a8>Growth Ring Lv.{3}/{4}</color></size>	{0} World Tree Tier {1} {2} <size=60%><color=#f0d8a8>Tree Rings Lv.{3}/{4}</color></size>
+901150	JA	ちびたちが収穫ふろしきをいっぱいにしておきました! {0}{1}	ちびっこたちが収穫ふろしきをいっぱいにしておきました! {0}{1}
+901153	JA	ふろしきが空っぽです。ちびをエリアに送ってツリーキノコを採らせましょう	ふろしきが空っぽです。ちびっこをエリアに送ってツリーキノコを採らせましょう
+901155	EN	Growth Ring Lv.{0}! Tree Mushrooms grow faster	Tree Rings Lv.{0}! Tree Mushrooms grow faster
+901156	EN	Grow the Growth Ring to Lv.{0} first	Grow your Tree Rings to Lv.{0} first
+901157	EN	Not enough EXP (offer Granary mushrooms or grant Favors)	Not enough EXP (offer Granary mushrooms or complete Quests)
+901163	RU	Вы принесли грибы Мировому древу! Опыт +{0}	Ты принёс грибы Мировому древу! Опыт +{0}
+901177	JA	ちびの箱! {0}+{1}	ちびっこの箱! {0}+{1}
+901191	JA	まだ仲間入りしていないちび	まだ仲間入りしていないちびっこ
+901193	EN	A village covered in giant mushrooms: the pinball Harvester of a seasoned mushroom hunter	A village covered in giant mushrooms: the Harvester of a seasoned mushroom hunter
+901194	EN	Grab the pinball, pull back, and release to launch!	Grab the Harvester, pull back, and release to launch!
+901195	EN	Use Mycelium Stones to change how Little Ones and Harvesters look. Skins you buy can be worn or taken off anytime. Little One skins show on the ranch · fields · diner; Harvester skins show on the pinball in a round. (Stats stay the same)	Use Mycelium Stones to change how Little Ones and Harvesters look. Skins you buy can be worn or taken off anytime. Little One skins show on the ranch · fields · diner; Harvester skins show on your Harvesters in a round. (Stats stay the same)
+901195	JA	菌糸石でちびと収穫機の見た目を変えます。買ったスキンはいつでも着たり脱いだりできます。ちびスキンは牧場・畑・食堂に、収穫機スキンはラウンドのピンボールに表示されます。(能力は変わりません)	菌糸石でちびっこと収穫機の見た目を変えます。買ったスキンはいつでも着たり脱いだりできます。ちびっこスキンは牧場・畑・食堂に、収穫機スキンはラウンドのピンボールに表示されます。(能力は変わりません)
+901196	UK	Покращення дерева грибниці	Покращення Дерева міцелію
+901259	JA	<b>ちびの箱</b>  {0}	<b>ちびっこの箱</b>  {0}
+901297	JA	同じちびの飾り3種:収穫 +{0}・特別ボーナス +1段階	同じちびっこの飾り3種:収穫 +{0}・特別ボーナス +1段階
+901322	UK	Очки	Бали
+901324	(새 줄)		언어
+901325	(새 줄)		소리 설정
+901326	(새 줄)		효과음
+901327	(새 줄)		배경음
+901328	(새 줄)		메인 메뉴
+901329	(새 줄)		음소거: 켜짐
+901330	(새 줄)		음소거: 꺼짐
+901331	(새 줄)		에픽 이상 가중치 ×{0}
+901332	(새 줄)		얻은 점수 → 골드 (×{0})
+901333	(새 줄)		신기록! {0} {1}
+901334	(새 줄)		보스 {0} 처치! 스테이지 {1} 열림
+901335	(새 줄)		보스 {0}에게 졌어요… 골드 −{1}
+901336	(새 줄)		보스 {0}에게 졌어요… 골드 −{1} (−{2}%)
+901337	(새 줄)		눌러서 확인해 보세요
+901338	(새 줄)		{0} 완성! 강화 재료로 보관했어요
+901339	(새 줄)		오늘 즉시 완료를 다 썼어요
+901340	(새 줄)		꼬마가 합류하면 열려요
+901341	(새 줄)		{0} 합류 시 해금
+901342	(새 줄)		빈 칸
