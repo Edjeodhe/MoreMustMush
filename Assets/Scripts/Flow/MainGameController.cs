@@ -12,10 +12,10 @@ namespace MoreMush
     // MainGame 씬 (업그레이드). 사람이 배치한 캔버스에 기능만 잇는다 — UI를 코드로 만들지 않는다.
     // 이름으로 찾는 것:
     //   Gold_UI_BG/Gold_Img·Ston_Img 안의 글자 = 골드·균사석
-    //   Button_Option · Button_Lang · Button_StageStart · Stage_Text
+    //   Button_Option · Button_Lang(언어 선택 창 LangPanel, LangWindow) · Button_StageStart · Stage_Text
     //   Button_MushTree(세계수 씬) · Button_MushDex(도감 팝업) · Button_Harvesters(공방 팝업)
     //   Button_Quest(의뢰 창, 지금 배치된 이름은 Quset — 둘 다 찾는다, 글자 = "의뢰" + 받을 수 있는 수)
-    //   Button_Boss(보스 도전 켜고 끄기, 보스에게 처음 지면 보인다). 배치 전이면 Button_StageStart를 복제해 그 위에 임시로 둔다
+    //   Button_Boss(보스 도전 켜고 끄기, 보스에게 처음 지면 보인다). 배치 전이면 Button_StageStart를 복제해 스테이지 패널 위에 임시로 둔다
     //   팝업: Harvesters(공방, HarvesterShop) · MushDex(도감, MushDexPopup) (각 팝업 안의 Exit = 닫기) · 옵션 팝업 OptionPanel(있으면) · 의뢰 QuestPanel(있으면, QuestWindow)
     // 팝업이 떠 있어도 아래쪽 이동 버튼(MushTree·MushDex·Harvesters)은 눌린다. 다른 곳으로 가면 열린 팝업은 닫힌다.
     // 업그레이드 트리: 임시로 옛 월드 트리(TreeWorld, TreeView)를 씬에 둔다. 트리 UI가 배치되면 바꾼다.
@@ -33,6 +33,7 @@ namespace MoreMush
         GameObject option, current;   // current = 지금 열린 팝업
         OptionWindow optionWin;       // 옵션 창 (배치 전이면 임시 창)
         QuestWindow quest;            // 의뢰 창 (배치 전이면 임시 창)
+        LangWindow langWin;           // 언어 선택 창 (배치 전이면 임시 창)
         GameObject tree, dexButton, treeButton, questButton, bossButton;   // 해금 전엔 숨긴다
         TMP_Text questLabel, bossLabel;
         Image bossFrame;
@@ -60,7 +61,7 @@ namespace MoreMush
             SceneUI.Bind(scene, "Button_MushDex", () => Toggle(dex != null ? dex.root : null));
             SceneUI.Bind(scene, "Button_Harvesters", () => Toggle(shop != null ? shop.root : null));
             SceneUI.Bind(scene, "Button_Option", () => Toggle(option));
-            SceneUI.Bind(scene, "Button_Lang", () => { Snd.Ui(); Loc.NextLang(); });
+            SceneUI.Bind(scene, "Button_Lang", () => Toggle(langWin != null ? langWin.Root : null));
 
             var shopRoot = SceneUI.Need(scene, "Harvesters");
             if (shopRoot != null) shop = new HarvesterShop(shopRoot, () => currency.Tick());
@@ -72,7 +73,8 @@ namespace MoreMush
             var qb = SceneUI.Find(scene, "Button_Quest") ?? SceneUI.Find(scene, "Quset");
             if (qb == null) Debug.LogWarning("[MainGame] 의뢰 버튼(Button_Quest)이 씬에 없어요");
             else { SceneUI.Bind(qb, () => Toggle(quest.Root)); questButton = qb.gameObject; questLabel = SceneUI.TextIn(qb); }
-            popups = new[] { shopRoot, dexRoot, option, quest.Root };
+            langWin = LangWindow.For(scene, CloseAll);   // 고르거나 바깥을 누르면 닫힌다
+            popups = new[] { shopRoot, dexRoot, option, quest.Root, langWin.Root };
             foreach (var p in new[] { shopRoot, dexRoot }) BindExit(p);   // 옵션·의뢰 창은 OptionWindow·QuestWindow가 닫기를 잇는다
 
             foreach (var n in NAV) LiftAbovePopups(SceneUI.Find(scene, n));
@@ -150,6 +152,9 @@ namespace MoreMush
         }
 
         // ===== 보스 도전 =====
+        // 임시 보스 버튼과 스테이지 패널 사이: 눈에 보이는 테두리끼리 6px.
+        // 그림 가장자리의 투명한 여백(btn_go 아래 8px + panel_wood 위 6px)만큼 사각형끼리는 겹친다
+        const float BOSS_GAP = 6, BOSS_SPRITE_PAD = 8 + 6;
         // 보스에게 지면 보스 도전이 꺼지고(그 스테이지에서 파밍) 이 버튼으로 다시 켠다. 켜짐이면 보스 스테이지에서 보스와 싸운다
         void WireBossButton(Scene scene)
         {
@@ -161,7 +166,10 @@ namespace MoreMush
                 b.name = "Button_Boss";
                 b.SetSiblingIndex(startButton.GetSiblingIndex());
                 var srt = (RectTransform)startButton; var brt = (RectTransform)b;
-                brt.anchoredPosition = srt.anchoredPosition + new Vector2(0, srt.rect.height + 20);
+                // 출발 버튼이 놓인 스테이지 패널(부모)의 위쪽 가장자리에서 BOSS_GAP만큼 띄운다 (패널 안의 "N Stage" 글자와 겹치지 않게)
+                var prt = (RectTransform)startButton.parent;
+                float anchorY = Mathf.Lerp(prt.rect.yMin, prt.rect.yMax, brt.anchorMin.y);
+                brt.anchoredPosition = new Vector2(srt.anchoredPosition.x, prt.rect.yMax + BOSS_GAP - BOSS_SPRITE_PAD + brt.rect.height * brt.pivot.y - anchorY);
                 var lbl = SceneUI.TextIn(b);
                 if (lbl != null) { lbl.enableAutoSizing = true; lbl.fontSizeMin = Mathf.Min(lbl.fontSizeMin, 18); }
             }
@@ -218,6 +226,7 @@ namespace MoreMush
             if (dex != null && popup == dex.root) dex.Open();
             if (popup == option) optionWin.Refresh();
             if (popup == quest.Root) quest.Open();
+            if (popup == langWin.Root) langWin.Refresh();
         }
 
         void CloseAll()
