@@ -3327,7 +3327,7 @@
       "Cat": "ed",
       "Look": "송이버섯",
       "Color": "#c9a27a",
-      "Hp_Mul": 0.15
+      "Hp_Mul": 0.35
     },
     {
       "Boss_ID": 6002,
@@ -3337,7 +3337,7 @@
       "Cat": "md",
       "Look": "선녀낙엽버섯",
       "Color": "#7ad07a",
-      "Hp_Mul": 1.0
+      "Hp_Mul": 2.33
     },
     {
       "Boss_ID": 6003,
@@ -3347,7 +3347,7 @@
       "Cat": "ps",
       "Look": "독우산광대버섯",
       "Color": "#b48cff",
-      "Hp_Mul": 40.0
+      "Hp_Mul": 93.33
     },
     {
       "Boss_ID": 6004,
@@ -3357,7 +3357,7 @@
       "Cat": "ps",
       "Look": "광대버섯",
       "Color": "#ff6b6b",
-      "Hp_Mul": 55.0
+      "Hp_Mul": 128.33
     },
     {
       "Boss_ID": 6005,
@@ -3367,7 +3367,7 @@
       "Cat": "md",
       "Look": "동충하초",
       "Color": "#f2a64a",
-      "Hp_Mul": 70.0
+      "Hp_Mul": 163.33
     }
   ],
   "Const": [
