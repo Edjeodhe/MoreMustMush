@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>정령 리그2 작업장</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <b>정령 리그2</b>
+  <button id="btnViewer" class="big" title="편집 패널을 숨기고 캐릭터와 동작 단추만 크게">▶ 모션 보기</button>
+  <span class="grow" id="status">불러오는 중…</span>
+  <button id="btnSave" title="Assets/Resources/Rig/spirit_rig2.json 에 저장 (Temp에 백업)">프로젝트에 저장</button>
+  <button id="btnDownload">JSON 다운로드</button>
+  <button id="btnRevertLook" title="이 모습만 처음 불러온 값으로">이 모습 되돌리기</button>
+  <button id="btnShot" title="Logs/Screens/rig2_<동작>.png">스크린샷</button>
+</header>
+<main>
+  <aside id="left">
+    <section>
+      <h3>모습</h3>
+      <label>정령 <select id="selKind"></select></label>
+      <label>모습 <select id="selForm"></select></label>
+      <label>복장 <select id="selOutfit"><option value="">평상복</option><option value="pick">pick (따기)</option><option value="climb">climb (오르기)</option><option value="carry">carry (나르기)</option></select></label>
+      <label>표정 <select id="selFace"><option value="">자동 (동작·깜빡임)</option><option>normal</option><option>blink</option><option>happy</option><option>surprise</option><option>effort</option></select></label>
+      <label class="chk"><input type="checkbox" id="chkFlip"> 왼쪽 보기 (face −1)</label>
+    </section>
+    <section>
+      <h3>동작</h3>
+      <div id="motions" class="grid2"></div>
+      <label class="chk"><input type="checkbox" id="chkLoopOne" checked> 한 번 동작 되풀이</label>
+      <label class="chk"><input type="checkbox" id="chkFidget" checked> 대기 중 짧은 행동 (자동)</label>
+      <label>손 흔드는 손 <select id="selWave"><option value="R">오른손</option><option value="L">왼손</option></select></label>
+      <button id="btnPoke">톡 누르기 (갓 통통)</button>
+    </section>
+    <section>
+      <h3>재생</h3>
+      <div class="row"><button id="btnPlay">일시정지</button><button id="btnStep" title="한 프레임 (1/60초)">▶|</button><button id="btnRestart">처음</button></div>
+      <label>속도 <input type="range" id="rngSpeed" min="0.05" max="2" step="0.05" value="1"><span id="txtSpeed">1.00×</span></label>
+      <label>시간 <input type="range" id="rngTime" min="0" max="6" step="0.01" value="0"><span id="txtTime">0.00s</span></label>
+      <div class="small" id="walkInfo"></div>
+    </section>
+    <section>
+      <h3>보기</h3>
+      <label class="chk"><input type="checkbox" id="chkBones" checked> 뼈·관절</label>
+      <label class="chk"><input type="checkbox" id="chkParts"> 부품 손잡이 (그림 옮기기)</label>
+      <label class="chk"><input type="checkbox" id="chkChecker" checked> 체크 배경</label>
+      <label class="chk"><input type="checkbox" id="chkGround" checked> 땅·사다리 (발 고정 확인)</label>
+      <label class="chk"><input type="checkbox" id="chkTravel"> 실제로 이동하며 보기</label>
+      <label class="chk"><input type="checkbox" id="chkAll"> 모두 보기 (모든 정령·모습)</label>
+      <label>확대 <input type="range" id="rngZoom" min="20" max="400" step="1" value="90"><span id="txtZoom"></span></label>
+      <label class="chk"><input type="checkbox" id="chkMirror" checked> 좌우 관절 같이 옮기기 (대칭)</label>
+      <div class="small">드래그: 관절 = 축만 옮김 · <b>Shift</b>+드래그 = 축과 그 아래 그림 같이 · 빈 곳 드래그 = 화면 이동(들림이면 정령을 들고 흔들기) · 휠 = 확대</div>
+    </section>
+  </aside>
+  <div id="stageWrap"><canvas id="stage"></canvas><div id="hover" class="small"></div>
+    <div id="viewerCap"></div>
+    <div id="viewerBar">
+      <div class="row vrow"><button id="btnDemo" class="big">▶ 데모 (동작 차례로 보기)</button>
+        <label class="chk big"><input type="checkbox" id="chkFaceWalk"> 걸을 때 정면 유지 (끄면 가는 쪽으로 돌아섬)</label>
+        <label class="big">속도 <input type="range" id="rngSpeed2" min="0.1" max="1.5" step="0.05" value="1"></label></div>
+      <div id="viewerMotions"></div>
+    </div>
+  </div>
+  <aside id="right">
+    <nav id="tabs">
+      <button data-tab="look" class="on">부위·관절</button><button data-tab="motion">동작 상수</button><button data-tab="pose">수동 포즈</button><button data-tab="diff">바뀐 것</button><button data-tab="cs">C#</button>
+    </nav>
+    <div id="tab-look" class="tab on"></div>
+    <div id="tab-motion" class="tab"></div>
+    <div id="tab-pose" class="tab"></div>
+    <div id="tab-diff" class="tab"></div>
+    <div id="tab-cs" class="tab">
+      <p class="small">동작 상수는 JSON("motion")에 같이 저장되어 Unity가 그대로 읽는다. 아래는 JSON이 없을 때 쓸 C# 기본값 (SpiritRig2.Motion.cs의 Rig2Motion).</p>
+      <button id="btnCopyCs">복사</button> <button id="btnCopyCsChanged">바뀐 줄만 복사</button>
+      <pre id="csOut"></pre>
+    </div>
+  </aside>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>

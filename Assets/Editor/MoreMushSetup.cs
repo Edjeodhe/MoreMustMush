@@ -83,7 +83,8 @@ namespace MoreMush.EditorTools
                 ["UI/tooltip"] = (w, h) => Uniform(w, h, 0.25f),
                 ["UI/progress_back"] = (w, h) => Uniform(w, h, 0.45f),
                 ["UI/progress_fill"] = (w, h) => Uniform(w, h, 0.45f),
-                ["UI/bar_log"] = (w, h) => new Vector4(Mathf.Min(w * 0.2f, h * 1.6f), 0, Mathf.Min(w * 0.2f, h * 1.6f), 0),
+                // watercolor log (867×156, PPU 400 = RoundView.BAR_VIS_H 39px): left end with the leaves, right cut end; the middle stretches
+                ["UI/bar_log"] = (w, h) => new Vector4(Mathf.Round(w * 0.134f), 0, Mathf.Round(w * 0.067f), 0),
                 ["Props/moss"] = (w, h) => Uniform(w, h, 0.3f),
                 // dream gauge pills: round ends (half the height) stay round, the middle stretches
                 ["UI/bar_fill"] = (w, h) => new Vector4(h / 2, 0, h / 2, 0),

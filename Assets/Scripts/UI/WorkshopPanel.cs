@@ -126,7 +126,7 @@ namespace MoreMush
                 var b = SceneUI.Need(t, "Button_Craft");
                 btn = SceneUI.Bind(b, () => p.Craft(d.id));
                 btnText = SceneUI.TextIn(b);
-                if (icon != null) icon.sprite = Art(d);
+                if (icon != null) { icon.sprite = Art(d); icon.preserveAspect = true; }
             }
 
             public void Render(bool open)
@@ -177,7 +177,7 @@ namespace MoreMush
                 var c = i < G.farm.crafts.Count ? G.farm.crafts[i] : null;
                 var d = c != null ? DECO[c.deco] : null;
                 bool done = CraftDone(c);
-                if (icon != null) { icon.enabled = d != null; if (d != null) icon.sprite = Art(d); }
+                if (icon != null) { icon.enabled = d != null; icon.preserveAspect = true; if (d != null) icon.sprite = Art(d); }
                 UIUtil.SetText(name, d != null ? d.n : Loc.T("빈 칸"));
                 double left = c != null ? System.Math.Max(0, (c.at - Now()) / 1000) : 0;
                 UIUtil.SetText(time, d == null ? "" : done ? Loc.T("완성!") : Mmss((long)System.Math.Ceiling(left)));

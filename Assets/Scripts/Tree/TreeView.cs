@@ -43,7 +43,9 @@ namespace MoreMush
         public Vector2 W2S(Vector2 p) => new Vector2((p.x - camX) * camZ + 960, (p.y - camY) * camZ + 560);
         public Vector2 S2W(Vector2 s) => new Vector2((s.x - 960) / camZ + camX, (s.y - 560) / camZ + camY);
 
-        Vector2 ParentPos(Node n) => n.parent != null ? byId[n.parent].TreePos : Vector2.zero;   // 시작 노드는 부모 줄을 그리지 않는다
+        // 부모 줄 끝점. 시작 노드, 부모가 트리에서 숨은 노드(세이브에 부모보다 자식 레벨이 먼저 있는 경우 등)는 줄을 그리지 않는다
+        // (예전엔 숨은 부모 자리까지 줄이 그려져 빈 곳에서 끊긴 것처럼 보였다)
+        Vector2? ParentPos(Node n) => n.parent != null && byId.TryGetValue(n.parent, out var p) && !Hidden(p.Node) ? p.TreePos : (Vector2?)null;
 
         void Update()
         {
@@ -181,7 +183,8 @@ namespace MoreMush
         {
             var n = nv.Node;
             string st = NodeState(n);
-            if (st == "locked") { Snd.Err(); App.Notify(n.needMax ? Loc.T("앞 단계를 최대 레벨까지 올려야 열려요") : Loc.T("선행 노드를 먼저 사야 열려요")); return; }
+            // hidden: 레벨 있는 자손 때문에 보이는 조상
+            if (st == "locked" || st == "hidden") { Snd.Err(); App.Notify(n.needMax ? Loc.T("앞 단계를 최대 레벨까지 올려야 열려요") : Loc.T("선행 노드를 먼저 사야 열려요")); return; }
             if (st == "max") return;
             int before = Lv(n.id);
             int k = max ? BuyMax(n) : BuyNode(n) ? 1 : 0;
@@ -198,11 +201,30 @@ namespace MoreMush
             }
         }
 
-        // 트리 화면에서 숨기는 노드: 게임 규칙상 숨김 + 잠긴 노드("?"). 살 수 있게 되면(부모를 사거나 최대 레벨로) 나타난다
+        // 트리 화면에서 숨기는 노드: 게임 규칙상 숨김 + 잠긴 노드("?"). 살 수 있게 되면(부모를 사거나 최대 레벨로) 나타난다.
+        // 단 레벨 있는 자손이 있으면(세이브에 부모보다 자식 레벨이 먼저 있는 경우) 잠긴 채로 보여 줘 줄이 끊기지 않게 한다 (사용자 결정 2026-10-16)
         public static bool Hidden(Node n)
         {
             string s = NodeState(n);
-            return s == "hidden" || s == "locked";
+            return (s == "hidden" || s == "locked") && !HasOwnedDescendant(n.id);
+        }
+
+        // 레벨 있는 노드의 조상 집합. 노드마다 매 프레임 불리므로 한 프레임에 한 번만 다시 센다 (노드 90개 × 깊이 정도)
+        static readonly HashSet<string> ownedAnc = new HashSet<string>();
+        static int ownedAncFrame = -1;
+        static bool HasOwnedDescendant(string id)
+        {
+            if (ownedAncFrame != Time.frameCount)
+            {
+                ownedAncFrame = Time.frameCount;
+                ownedAnc.Clear();
+                foreach (var kv in G.nodes)
+                {
+                    if (kv.Value <= 0 || !NODE.TryGetValue(kv.Key, out var c)) continue;
+                    for (var p = c.parent; p != null && ownedAnc.Add(p); p = NODE[p].parent) { }   // 이미 넣은 조상에서 멈춘다
+                }
+            }
+            return ownedAnc.Contains(id);
         }
 
         public void MarkGrown(IEnumerable<string> ids) { foreach (var id in ids) if (byId.TryGetValue(id, out var nv)) nv.growAnim = 0; }

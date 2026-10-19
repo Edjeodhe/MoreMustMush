@@ -18,7 +18,7 @@ namespace MoreMush
 
         public void Show(Node n, Vector2 at)
         {
-            if (n == null || NodeState(n) == "hidden") { Hide(); return; }
+            if (n == null || TreeView.Hidden(n)) { Hide(); return; }
             int L = Lv(n.id); string s = NodeState(n);
             bool more = !AtMax(n, L);
             var cc = more ? NodeCost(n, L) : default;
@@ -30,7 +30,7 @@ namespace MoreMush
             lv.text = n.inf ? $"LVL {L} / ∞" : $"LVL {L} / {n.max}";
             desc.text = Iconize(n.d);
             string costTxt = "", noteTxt = "";
-            if (s == "locked")
+            if (s == "locked" || s == "hidden")   // hidden: 레벨 있는 자손 때문에 보이는 조상
                 eff.text = n.req != null && Lv(n.req) < NODE[n.req].max ? Loc.F("선행: {0} 최대 레벨 ({1}/{2})", NODE[n.req].n, Lv(n.req), NODE[n.req].max) : Loc.F("선행: {0}", NODE[n.parent].n);
             else
             {

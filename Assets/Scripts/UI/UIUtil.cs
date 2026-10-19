@@ -16,6 +16,13 @@ namespace MoreMush
 
         public static Color Col(string hex) => U.Hex(hex);
 
+        // 정령 얼굴 그림 = 세계수에서 보이는 지금 진화 모습 (Characters/Evo/evo_<id>_<각성 ★>, CritterRig.Evo와 같은 그림).
+        // 진화 그림이 없을 때만 예전 통짜 정령(Characters/Kids) → 옛 꼬마 참고 그림 순서로 대신 쓴다
+        public static Sprite KidPortrait(string id)
+            => SpriteDB.Get("Characters/Evo/evo_" + id + "_" + Mathf.Clamp(Game.Awaken(id), 0, 3))
+               ?? SpriteDB.Get("Characters/Evo/evo_" + id + "_0")
+               ?? SpriteDB.Get("Characters/Kids/" + id) ?? SpriteDB.Get("Characters/Critters/" + id + "_ref");
+
         // Inline icon tag for TMP text (sprite asset "Icons"). 같은 태그를 매번 새로 만들지 않게 기억해 둔다
         static readonly System.Collections.Generic.Dictionary<string, string> icTags = new System.Collections.Generic.Dictionary<string, string>();
         public static string Ic(string name)

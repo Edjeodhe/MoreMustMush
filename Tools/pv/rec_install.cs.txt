@@ -1,0 +1,46 @@
+// PV 녹화 도우미 (execute_code 본문, 플레이 모드에서). 씬·에셋은 건드리지 않는다.
+// - 바 자동 추적: InputSystem.onAfterUpdate에서 마우스 위치를 바꿔 넣는다 (플레이어 업데이트에서만)
+//   mode "bar": 바에 가장 먼저 닿을 공의 x를 따라감(프레임당 70px까지). 조준 단계면 바로 발사
+//   mode "point": pv_pt 위치에 마우스를 둔다 (트리 노드 툴팁용)
+// - 프레임 캡처: WaitForEndOfFrame 코루틴(Enumerable.Select로 만든 IEnumerator) + Time.captureFramerate 30
+//   Temp/pvcap/<이름>/00000.jpg …
+var dom = System.AppDomain.CurrentDomain;
+var old = dom.GetData("pv_ai") as System.Action;
+if (old != null) UnityEngine.InputSystem.InputSystem.onAfterUpdate -= old;
+dom.SetData("pv_mode", "bar"); dom.SetData("pv_mx", 960f); dom.SetData("pv_pt", new Vector2(960, 540));
+System.Action ai = () => {
+  if (UnityEngine.InputSystem.LowLevel.InputState.currentUpdateType == UnityEngine.InputSystem.LowLevel.InputUpdateType.Editor) return;
+  var mouse = UnityEngine.InputSystem.Mouse.current; if (mouse == null) return;
+  var mode = dom.GetData("pv_mode") as string;
+  if (mode == "bar") {
+    var R = MoreMush.RoundSim.R; if (R == null) return;
+    if (R.phase == "aim") R.Launch(-Mathf.PI / 2 + 0.3f);
+    float best = 1e9f, tx = R.barX;
+    float L = MoreMush.RoundSim.FX0, Rr = MoreMush.RoundSim.FX1, w = Rr - L;
+    foreach (var b in R.balls) {
+      if (b.dead || b.dy <= 0.02f) continue;
+      float t = (MoreMush.RoundSim.BAR_Y - b.y) / b.dy; if (t < 0 || t >= best) continue;
+      best = t; float x = b.x + b.dx * t; float u = (x - L) % (2 * w); if (u < 0) u += 2 * w;
+      tx = u < w ? L + u : L + 2 * w - u;
+    }
+    float cur = (float)dom.GetData("pv_mx");
+    cur += Mathf.Clamp(tx * MoreMush.RoundSim.ZOOM - cur, -70, 70); dom.SetData("pv_mx", cur);
+    UnityEngine.InputSystem.LowLevel.InputState.Change(mouse.position, new Vector2(cur, 80));
+  } else if (mode == "point") {
+    UnityEngine.InputSystem.LowLevel.InputState.Change(mouse.position, (Vector2)dom.GetData("pv_pt"));
+  }
+};
+UnityEngine.InputSystem.InputSystem.onAfterUpdate += ai; dom.SetData("pv_ai", ai);
+return "installed";
+
+// ---- 녹화 시작 (따로 부름) ----
+// string name = "round"; int skip = 30, n = 540;
+// string dir = "C:/Project/MoreMustMush/Temp/pvcap/" + name; System.IO.Directory.CreateDirectory(dir);
+// var go = new GameObject("PV_RecHost"); UnityEngine.Object.DontDestroyOnLoad(go);
+// var host = go.AddComponent<UnityEngine.UI.Image>(); host.enabled = false;
+// Time.captureFramerate = 30;
+// host.StartCoroutine(System.Linq.Enumerable.Range(0, skip + n + 1).Select(i => {
+//   int k = i - skip - 1;
+//   if (k >= 0) { var tex = ScreenCapture.CaptureScreenshotAsTexture(); System.IO.File.WriteAllBytes(dir + "/" + k.ToString("D5") + ".jpg", tex.EncodeToJPG(92)); UnityEngine.Object.Destroy(tex); }
+//   if (i == skip + n) { Time.captureFramerate = 0; UnityEngine.Object.Destroy(go); }
+//   return (object)new WaitForEndOfFrame(); }).GetEnumerator());

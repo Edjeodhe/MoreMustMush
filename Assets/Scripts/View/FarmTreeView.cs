@@ -128,7 +128,7 @@ namespace MoreMush
                 var f = Grow(fruitR, fruits, i); var g = Grow(glowR, glows, i);
                 var s = slots[i];
                 float k = Growth(i, t0); bool ripe = k >= 0.97f;
-                var spr = SpriteDB.Get("Farm/Tree/", s.mush.icon);
+                var spr = SpriteDB.Get(s.mush.icon) ?? SpriteDB.Get("Farm/Tree/", s.mush.icon);
                 if (f.sprite != spr) f.sprite = spr;
                 f.enabled = true;
                 float size = px * (0.3f + 0.7f * Mathf.Min(1, k * 1.15f)) * (hover == i ? 1.15f : 1);

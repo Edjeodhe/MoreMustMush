@@ -36,7 +36,7 @@ namespace MoreMush
         // 지난 프레임에 그린 상태. 이것이 같고 자라는 애니메이션도 없으면 선·레벨 칸·속 그림·이름표를 다시 만들지 않는다
         // (노드 108개가 매 프레임 LineRenderer 점 수천 개와 이름표 문자열을 새로 만들고 있었다)
         bool? shownHidden;
-        string shownS, shownSt; int shownL = -1; bool shownHover, shownLabel; string shownLang;
+        string shownS, shownSt; int shownL = -1; bool shownHover, shownLabel; string shownLang; Vector2? shownParent; Vector2 shownMe;
         static readonly Vector3[] linkBuf = new Vector3[21], arcBuf = new Vector3[11];   // SetPositions가 복사하므로 노드끼리 같이 써도 된다
 
         static void Show(Component c, bool on) => UIUtil.Show(c, on);
@@ -67,7 +67,7 @@ namespace MoreMush
         }
 
 
-        public void Draw(Vector2 parentPos, float now, bool hover, float camZ, float dt)
+        public void Draw(Vector2? parentPos, float now, bool hover, float camZ, float dt)
         {
             var n = Node;
             string s = NodeState(n);
@@ -79,7 +79,8 @@ namespace MoreMush
             bool more = !AtMax(n, L);
             var cost = more ? NodeCost(n, L) : default;
             bool afford = more && CanAfford(cost);
-            string st = s == "locked" ? "locked" : s == "max" ? "max" : afford ? "buy" : "poor";
+            // hidden인데 보이면 = 레벨 있는 자손 때문에 드러난 조상 → 잠김 '?'
+            string st = s == "locked" || s == "hidden" ? "locked" : s == "max" ? "max" : afford ? "buy" : "poor";
             Color col = st == "buy" ? BUY : st == "poor" ? POOR : MAX;
             var brc = U.Hex(CATS[n.br].color);
             float r = Radius(n);
@@ -89,14 +90,18 @@ namespace MoreMush
             bool labelOn = !locked && (!n.sub || hover || camZ > 0.8f || n.core);
             bool dirty = growAnim >= 0 || s != shownS || st != shownSt || L != shownL || hover != shownHover || labelOn != shownLabel || shownLang != Loc.Lang;
             shownS = s; shownSt = st; shownL = L; shownHover = hover; shownLabel = labelOn; shownLang = Loc.Lang;
+            // 줄은 부모가 나타나거나 숨거나 어느 쪽이든 자리가 바뀌어도 다시 그린다 (내 상태만 보면 옛 줄이 남는다)
+            bool linkDirty = dirty || parentPos != shownParent || me != shownMe;
+            shownParent = parentPos; shownMe = me;
 
             // 연결 균사 (부모 → 나)
             bool owned = L > 0;
-            bool hasLink = !n.core && n.parent != null;   // 시작 노드는 부모 줄이 없다
+            bool hasLink = !n.core && parentPos.HasValue;   // 시작 노드·부모가 숨은 노드는 부모 줄이 없다
             Show(link, hasLink);
-            if (hasLink && dirty)
+            if (!hasLink) growAnim = -1;   // 자랄 줄이 없으면 애니메이션도 끝 (안 그러면 매 프레임 dirty)
+            if (hasLink && linkDirty)
             {
-                Vector2 p = parentPos;
+                Vector2 p = parentPos.Value;
                 float mx = (p.x + me.x) / 2 - (me.y - p.y) * bend, my = (p.y + me.y) / 2 + (me.x - p.x) * bend;
                 float k = 1;
                 if (growAnim >= 0) { growAnim += dt; k = Mathf.Min(1, growAnim / 0.6f); if (k >= 1) growAnim = -1; }
