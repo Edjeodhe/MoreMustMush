@@ -82,7 +82,7 @@ namespace MoreMush
         public bool perm, inJelly, dead, noSplit;
         public float statMul = 1;   // 분신(스킬로 생긴 임시 수확기)은 기본 수확기의 CLONE_STAT 배 공격력
         public int combo, sharpen;
-        public int hits;            // HUD 콤보: 바닥에 떨어지기 전까지 버섯을 때린 수 (combo는 바 튕김 수, 점수 배율용)
+        public int hits;            // HUD 콤보: 바닥에 떨어지기 전까지 버섯을 때린 수 + 효과로 거둔 수 (combo는 바 튕김 수, 점수 배율용)
         public float accel, accelMul = 1, moss, slow, weak, clear, sharpMul = 1, magnet, magRate, stumpAtk;
         public float jf = 1, jTick, bladeT, bladeFx, ang, lastHitT, stumpT;
         public float pierceT, homeT, powT; public int powLv;
