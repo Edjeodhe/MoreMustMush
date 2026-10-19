@@ -383,7 +383,11 @@ namespace MoreMush
             G.gem += bossGem;
             // 중간에 끝낸 판: 스테이지를 완료하지 않는다. 보스 처치 보상 기준(직전 일반 판 골드)도 짧은 판으로 덮지 않는다
             bool aborted = earlyExitSec >= 0 && !(BossRound && bossCleared);
-            if (!BossRound && !aborted) G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
+            if (!BossRound && !aborted)
+            {
+                G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
+                if (!DBG.infinite) BagBaseUpdate(scoreGold + bonus, timeMax);   // 수확 보따리 골드 기준 (정산 뒤 갱신)
+            }
             var s = new Summary { aborted = aborted, score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage, dmgBySrc = Copy(dmgBySrc), dmgByHv = Copy(dmgByHv) };
             LogDamage(G.stage); LastSummary = s;
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }

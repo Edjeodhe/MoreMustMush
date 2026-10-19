@@ -24,6 +24,15 @@ namespace MoreMush
             // 나이테 Lv.L → L+1 골드: 다음 진화 골드 ÷ 20 × 1.35^(L−1) (마지막 단계는 7→8 진화 골드 × 2.4 기준)
             public static double RingCost(int stage, int lv) => (stage < stages ? evoGold[stage] : evoGold[stages - 1] * lastRingMul) / ringDiv * System.Math.Pow(ringK, lv - 1);
             public const double ringGrow = 0.03;                  // 나이테 레벨마다 나무버섯 성장 속도 +3%
+            // 단계별 수확 보따리(방치 보상) 균사석·개수 배율 (이론.md "세계수 보따리 단계 강화" B-4)
+            public static readonly double[] bagMul = { 1, 1, 1.2, 1.4, 1.6, 2.2, 2.6, 3 };
+            // 수확 보따리 골드 = 일반 판 골드/초(평활) × bagRatio × 효율항. 초반은 직접 플레이가 훨씬 낫고, 단계가 오를수록 방치 비중이 커지되
+            // 최대(8단계·강화 최대)에서도 플레이 시간당의 20% 아래 (이론.md "보따리 골드 판 수입 연동(Z2)", 검증.md 조건부 통과)
+            public static readonly double[] bagRatio = { 0.004, 0.0054, 0.0106, 0.0134, 0.018, 0.025, 0.037, 0.05 };
+            public static readonly double[] bagRefGoldH = { 30364, 22773, 62991, 72739, 90829, 82246, 134055, 156570 };   // 기준 배치 나무버섯 골드/시간 (bag_z2.py)
+            public const double bagEffMax = 4;                    // 효율항 상한 (기준 배치 대비, 1 위로는 제곱근)
+            public const double bagRoundGap = 30;                 // 판 사이 시간 (초): 판 골드/초 = 판 골드 ÷ (제한시간 + 이것)
+            public const double bagBaseKeep = 0.7;                // 판 골드/초 평활: 이전 × 0.7 + 이번 × 0.3 (운 좋은 한 판에 튀지 않게)
             public static int Picture(int stage) => System.Math.Max(1, System.Math.Min(stages, stage)) - 1;   // tree_0~7 (단계마다 그림 하나)
             // 그림(단계)별 나무 너비 (px, 1920×1080 무대 기준). 단계마다 확 커지고 마지막 단계는 훨씬 크게 (2026-10-16)
             // 나무가 화각보다 빨리 커져서 꼭대기가 화면에서 단계마다 확실히 올라간다 (사용자: 위로 커지는 느낌):
