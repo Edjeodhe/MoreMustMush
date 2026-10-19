@@ -85,6 +85,8 @@ namespace MoreMush
             public Card(HarvesterShop shop, Transform t, string id)
             {
                 this.id = id;
+                FixSquashedLayout(t as RectTransform);
+                SquareBoxes(t);
                 icon = SceneUI.Need(t, "Image")?.GetComponent<Image>();
                 title = SceneUI.TextIn(SceneUI.Need(t, "Panel"));
                 desc = SceneUI.TextIn(SceneUI.Need(t, "Panel (1)"));
@@ -94,6 +96,75 @@ namespace MoreMush
                 upg = SceneUI.Bind(u, () => shop.Upgrade(id));
                 buyText = SceneUI.TextIn(b);
                 upgText = SceneUI.TextIn(u);
+            }
+
+            // 씬의 카드는 가로 배율(0.34)로 줄여 배치돼 있어 글자가 납작하고, 이름 나무바(Panel)는 배율 2.37로 옆 카드까지 넘친다.
+            // 카드 배율을 1로 펴고 같은 화면 크기로 자식을 다시 놓는다 (씬을 고쳐 배율이 1이면 아무것도 안 한다)
+            static void FixSquashedLayout(RectTransform card)
+            {
+                if (card == null || card.localScale.x > 0.99f) return;
+                float k = card.localScale.x;
+                card.localScale = Vector3.one;
+                card.sizeDelta = new Vector2(card.sizeDelta.x * k, card.sizeDelta.y);
+                float w = card.sizeDelta.x;   // 화면 폭 (약 313)
+
+                var icon = card.Find("Image") as RectTransform;
+                if (icon != null) { icon.localScale = Vector3.one; icon.anchoredPosition = new Vector2(icon.anchoredPosition.x * k, icon.anchoredPosition.y); icon.sizeDelta = new Vector2(110, 110); }
+
+                var bar = card.Find("Panel") as RectTransform;
+                if (bar != null)
+                {
+                    bar.localScale = Vector3.one;
+                    bar.anchoredPosition = new Vector2(0, bar.anchoredPosition.y);
+                    bar.sizeDelta = new Vector2(-16, bar.sizeDelta.y);   // 카드 폭 − 16
+                    FitText(SceneUI.TextIn(bar), new Vector2(w - 50, 50), 18, 34);
+                }
+
+                var desc = card.Find("Panel (1)") as RectTransform;
+                if (desc != null)
+                {
+                    desc.anchoredPosition = new Vector2(0, desc.anchoredPosition.y);
+                    desc.sizeDelta = new Vector2(-20, desc.sizeDelta.y);
+                    FitText(SceneUI.TextIn(desc), new Vector2(w - 44, desc.rect.height - 8), 14, 22);
+                }
+
+                foreach (var (name, x) in new[] { ("Button_Buy", -72f), ("Button_Upg", 72f) })
+                {
+                    var b = card.Find(name) as RectTransform;
+                    if (b == null) continue;
+                    b.anchoredPosition = new Vector2(x, b.anchoredPosition.y);
+                    b.sizeDelta = new Vector2(132, 58);
+                    var bt = SceneUI.TextIn(b);
+                    if (bt != null) { bt.enableAutoSizing = true; bt.fontSizeMin = 12; bt.fontSizeMax = 22; }
+                }
+            }
+
+            // 설명 바탕(초록)과 해금·★ 버튼을 둥근 그림 대신 테두리 있는 네모로
+            static readonly Color DescBg = new Color(0.80f, 0.89f, 0.72f), DescLine = new Color(0.42f, 0.58f, 0.36f),
+                                  BuyBg = new Color(0.47f, 0.69f, 0.36f), UpgBg = new Color(0.87f, 0.73f, 0.58f), BtnLine = new Color(0.45f, 0.30f, 0.18f);
+            static void SquareBoxes(Transform card)
+            {
+                Square(card.Find("Panel (1)"), DescBg, DescLine);
+                Square(card.Find("Button_Buy"), BuyBg, BtnLine);
+                Square(card.Find("Button_Upg"), UpgBg, BtnLine);
+            }
+
+            static void Square(Transform t, Color bg, Color line)
+            {
+                if (t == null || !t.TryGetComponent<Image>(out var im)) return;
+                im.sprite = null; im.type = Image.Type.Simple; im.color = bg;
+                if (!t.TryGetComponent<Outline>(out var o)) o = t.gameObject.AddComponent<Outline>();
+                o.effectColor = line; o.effectDistance = new Vector2(3, -3);
+            }
+
+            // "이름: 설명" → "설명" (콜론이 없으면 그대로)
+            static string DescOnly(string s) { int c = s.IndexOf(": "); return c >= 0 ? s.Substring(c + 2) : s; }
+
+            static void FitText(TMP_Text t, Vector2 size, float min, float max)
+            {
+                if (t == null) return;
+                t.rectTransform.sizeDelta = size;
+                t.enableAutoSizing = true; t.fontSizeMin = min; t.fontSizeMax = max;
             }
 
             public void Render()
@@ -113,12 +184,9 @@ namespace MoreMush
                 // 이름 칸은 짧아서 이름만. 별·미보유는 설명 첫 줄에
                 UIUtil.SetText(title, h.n);
 
-                string trait = (S > 0 ? $"<color=#e8a900>{U.Stars(S)}</color>" : Loc.T("<color=#8a6a4a>미보유</color>")) + "\n" + h.text(System.Math.Max(1, S));
-                if (S > 0 && S < 5)
-                {
-                    string t = h.text(S + 1); int c = t.IndexOf(": ");
-                    trait += "\n" + Loc.F("다음 ★{0}: {1}", S + 1, c >= 0 ? t.Substring(c + 2) : t);
-                }
+                // 설명만 (능력 이름 "황금 손길: " 같은 앞머리는 뺀다)
+                string trait = (S > 0 ? $"<color=#e8a900>{U.Stars(S)}</color>" : Loc.T("<color=#8a6a4a>미보유</color>")) + "\n" + DescOnly(h.text(System.Math.Max(1, S)));
+                if (S > 0 && S < 5) trait += "\n" + Loc.F("다음 ★{0}: {1}", S + 1, DescOnly(h.text(S + 1)));
                 UIUtil.SetText(desc, trait);
 
                 // 구매 / 장착

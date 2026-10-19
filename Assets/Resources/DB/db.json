@@ -1118,9 +1118,9 @@
       "Icon": "",
       "Color": "",
       "Efx_Lv0": 0.0,
-      "Efx_Lv1": 1.0,
-      "Efx_Lv2": 2.0,
-      "Efx_Lv3": 3.0,
+      "Efx_Lv1": 1.5,
+      "Efx_Lv2": 2.5,
+      "Efx_Lv3": 3.5,
       "Efx_Lv4": 4.0
     },
     {
@@ -2535,10 +2535,10 @@
     },
     {
       "Cost_ID": 90051,
-      "Cost_Lv1": 370.0,
-      "Cost_Lv2": 1400.0,
-      "Cost_Lv3": 5200.0,
-      "Cost_Lv4": 20000.0,
+      "Cost_Lv1": 65.0,
+      "Cost_Lv2": 240.0,
+      "Cost_Lv3": 920.0,
+      "Cost_Lv4": 3500.0,
       "Gem_Lv1": 0.0,
       "Gem_Lv2": 0.0,
       "Gem_Lv3": 0.0,
@@ -3327,7 +3327,7 @@
       "Cat": "ed",
       "Look": "송이버섯",
       "Color": "#c9a27a",
-      "Hp_Mul": 0.8
+      "Hp_Mul": 0.35
     },
     {
       "Boss_ID": 6002,
@@ -3337,7 +3337,7 @@
       "Cat": "md",
       "Look": "선녀낙엽버섯",
       "Color": "#7ad07a",
-      "Hp_Mul": 1.0
+      "Hp_Mul": 2.33
     },
     {
       "Boss_ID": 6003,
@@ -3347,7 +3347,7 @@
       "Cat": "ps",
       "Look": "독우산광대버섯",
       "Color": "#b48cff",
-      "Hp_Mul": 10.0
+      "Hp_Mul": 93.33
     },
     {
       "Boss_ID": 6004,
@@ -3357,7 +3357,7 @@
       "Cat": "ps",
       "Look": "광대버섯",
       "Color": "#ff6b6b",
-      "Hp_Mul": 25.0
+      "Hp_Mul": 128.33
     },
     {
       "Boss_ID": 6005,
@@ -3367,7 +3367,7 @@
       "Cat": "md",
       "Look": "동충하초",
       "Color": "#f2a64a",
-      "Hp_Mul": 21.0
+      "Hp_Mul": 163.33
     }
   ],
   "Const": [
@@ -3473,7 +3473,7 @@
     },
     {
       "Const_Key": "BOSS_LOOP_HP_MUL",
-      "Value": 5.5,
+      "Value": 220.0,
       "Desc": "보스가 한 바퀴 돈 뒤(스테이지 60~) 보스 체력 배율 (움직이는 버섯 Hp_Mul과 분리)"
     }
   ],

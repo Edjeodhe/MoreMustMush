@@ -41,7 +41,9 @@ namespace MoreMush
             gimmick = SceneUI.Find(scene, "StageGimmick")?.gameObject;
             gimmickName = SceneUI.TextIn(SceneUI.Find(scene, "GimmickName"));
             gimmickDesc = SceneUI.TextIn(SceneUI.Find(scene, "GimmickDescription"));
-            Click(SceneUI.Find(scene, "Speed"), () => StageController.NextSpeed());
+            var speedBtn = SceneUI.Find(scene, "Speed");
+            Click(speedBtn, () => StageController.NextSpeed());
+            HotkeyHint(speedBtn, "F");
             Click(SceneUI.Find(scene, "Pause"), () => { Snd.Ui(); stage.TogglePause(); });
             var end = SceneUI.Find(scene, "Harvest_End") ?? BuildHarvestEnd(timerT);
             if (end != null) { endDim = end.GetComponent<Image>(); endTitle = SceneUI.TextIn(end); end.gameObject.SetActive(false); }
@@ -69,6 +71,18 @@ namespace MoreMush
             t.fontSize = 110; t.color = U.Hex("#fff3b0"); t.alignment = TextAlignmentOptions.Center; t.raycastTarget = false;
             t.textWrappingMode = TextWrappingModes.NoWrap;
             return drt;
+        }
+
+        // 버튼 위에 단축키 글자 (배치한 Hotkey가 있으면 그대로 둔다)
+        static void HotkeyHint(Transform t, string key)
+        {
+            if (t == null || t.Find("Hotkey") != null) return;
+            var tx = TempDialog.MakeText(t, "Hotkey", key, Vector2.zero, new Vector2(60, 36), 28);
+            var rt = tx.rectTransform;
+            rt.anchorMin = rt.anchorMax = new Vector2(0, 1); rt.pivot = new Vector2(0, 0);
+            rt.anchoredPosition = new Vector2(6, 2);   // 시계 아이콘 바로 위
+            tx.color = Color.white; tx.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+            tx.fontStyle = TMPro.FontStyles.Bold;
         }
 
         // 배치한 그림에 Button이 없으면 붙여서 누를 수 있게 한다
@@ -112,7 +126,7 @@ namespace MoreMush
             DrawTimeBar(R, now);
             if (timer != null && tenths != shownTenths) { shownTenths = tenths; UIUtil.SetText(timer, Game.DBG.infinite ? "∞" : Loc.F("{0:F1}초", Mathf.Max(0, R.timeLeft))); }
             int c = 0;
-            foreach (var b in R.balls) if (b.combo > c) c = b.combo;
+            foreach (var b in R.balls) if (b.hits > c) c = b.hits;   // 콤보 = 떨어지기 전까지 버섯 타격 수
             if (combo != null && c != shownCombo) { shownCombo = c; UIUtil.SetText(combo, c.ToString()); }
             if (speed != null && StageController.Speed != shownSpeed) { shownSpeed = StageController.Speed; UIUtil.SetText(speed, "x" + shownSpeed); }
         }

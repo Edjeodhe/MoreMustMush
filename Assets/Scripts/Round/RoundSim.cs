@@ -213,6 +213,9 @@ namespace MoreMush
             return new Cand { x = xx, y = yy, R = half, offs = offs, wall = true, side = side, shape = Shape.Rect(xx - rc, yy - half, xx + rc, yy + half) };
         }
 
+        // 벽(위·좌·우 가장자리)에 길게 늘어선 군락. 화면 바깥 띠에 버섯이 줄지어 보여서 끈다 (사용자 지시 2026-10-19). 낱개 버섯은 그대로 가장자리에도 나온다
+        const bool WALL_COLONIES = false;
+
         public int lone;                       // 군락을 자리 고정으로 만드는 수 (튜토리얼 판만 1, 그 밖은 0 = 보통 스폰)
         public bool tutorial;                  // 1스테이지 튜토리얼 판: 첫 군락을 수확기 바로 위에 움직이지 않게 둔다 (Tutorial이 길을 밝혀 준다)
         public Colony TutorialColony;
@@ -223,7 +226,7 @@ namespace MoreMush
         {
             if (colonies.Count >= MaxCol) return true;
             if (lone > 0) return SpawnLone(instant);
-            bool wall = U.Chance(0.3f);
+            bool wall = U.Chance(0.3f) && WALL_COLONIES;   // 난수 순서는 그대로 두고 벽 군락만 끈다
             var sp = PickSpecies(wall);
             if (sp == null) return false;
             if (sp.wander) wall = false;

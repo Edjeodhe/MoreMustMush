@@ -140,7 +140,13 @@ namespace MoreMush
             if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); workshop?.Tick(); }
             var kb = Keyboard.current;
             tabWin?.Tick();
-            if (kb != null && kb.escapeKey.wasPressedThisFrame) { if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); } else optionWin.Toggle(); }
+            // Esc: 열린 탭 창 → 닫기, 옵션 창 → 닫기, 아무것도 없으면 업그레이드 화면(MainGame)으로
+            if (kb != null && kb.escapeKey.wasPressedThisFrame)
+            {
+                if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); }
+                else if (optionWin.IsOpen) optionWin.Toggle();
+                else ToMainGame();
+            }
         }
 
         void Render()
@@ -270,7 +276,7 @@ namespace MoreMush
             if (r == null) { Snd.Err(); App.Notify(Loc.T("보따리가 비어 있어요. 꼬마를 구역에 보내 나무버섯을 따게 해요")); return; }
             Snd.Record();
             if (farm != null) farm.BagBurst(r.Value.gold, r.Value.gem);
-            App.Notify(Loc.F("수확 보따리! 나무버섯 {0}개 · {1}+{2}", r.Value.n, UIUtil.Ic("gold"), U.Fmt(r.Value.gold)) + (r.Value.gem > 0 ? $" {UIUtil.Ic("gem")}+{r.Value.gem}" : ""));
+            App.Notify(ReturnPopup.ClaimText(r.Value));
             currency.Tick();   // BagClaim이 이미 저장했다
             RenderBag();
         }

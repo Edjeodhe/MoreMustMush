@@ -39,6 +39,7 @@ namespace MoreMush
         Image bossFrame;
         Transform startButton;
         TreeView treeView;
+        UnlockGuide guide;            // 새 기능 안내 (배치 전이면 알림만)
         int shownClaimable = -1;
         GameObject[] popups = new GameObject[0];
         TMP_Text stageText;
@@ -81,6 +82,7 @@ namespace MoreMush
             treeView = FindFirstObjectByType<TreeView>(FindObjectsInactive.Include);
             tree = treeView != null ? treeView.gameObject : null;
             if (tree == null) Debug.LogWarning("[MainGame] 업그레이드 트리(TreeView)가 씬에 없어요");
+            guide = SceneUI.Find(scene, "UnlockGuide")?.GetComponent<UnlockGuide>();
             dexButton = SceneUI.Find(scene, "Button_MushDex")?.gameObject;
             treeButton = SceneUI.Find(scene, "Button_MushTree")?.gameObject;
             CloseAll();
@@ -90,11 +92,12 @@ namespace MoreMush
         {
             App.EnsureSave();
             App.FlushMigrationNotice();
-            Progress();
+            var opened = Progress();
             ApplyUnlocks();
             RenderStage();
             currency.Tick();
             Tutorial.ForMain(gameObject.scene, treeView, startButton);
+            AnnounceUnlocks(opened);
         }
 
         void OnEnable() => Loc.Changed += OnLang;
@@ -124,9 +127,11 @@ namespace MoreMush
         // 새로 열린 기능은 알림으로 알린다. 지금 이 씬에 버튼이 있는 기능만 (강화는 트리가 나타나는 것으로 안다)
         static readonly string[] NOTIFY_FEATS = { Unlock.CODEX, Unlock.WORLDTREE, Unlock.QUEST };
 
-        static void Progress()
+        // 새로 열린 기능 (알릴 것만) 을 돌려준다
+        static System.Collections.Generic.List<string> Progress()
         {
-            if (G == null) return;
+            var shown = new System.Collections.Generic.List<string>();
+            if (G == null) return shown;
             bool changed = false;
             if (G.tut == 0 && G.stage > 1)
             {
@@ -135,9 +140,21 @@ namespace MoreMush
                 changed = true;
             }
             var opened = Unlock.Newly();
-            var shown = opened.Where(k => NOTIFY_FEATS.Contains(k)).ToList();
-            if (shown.Count > 0) App.Notify(Loc.F("새 기능이 열렸어요: {0}", string.Join(" · ", shown.Select(Unlock.Name))));
+            shown = opened.Where(k => NOTIFY_FEATS.Contains(k)).ToList();
             if (changed || opened.Count > 0) SaveGame();
+            return shown;
+        }
+
+        // 새 기능은 버튼을 밝혀 안내한다 (UnlockGuide가 씬에 없으면 알림 문구만)
+        void AnnounceUnlocks(System.Collections.Generic.List<string> feats)
+        {
+            if (feats.Count == 0) return;
+            if (guide == null) { App.Notify(Loc.F("새 기능이 열렸어요: {0}", string.Join(" · ", feats.Select(Unlock.Name)))); return; }
+            foreach (var k in feats)
+            {
+                var button = k == Unlock.CODEX ? dexButton : k == Unlock.WORLDTREE ? treeButton : k == Unlock.QUEST ? questButton : null;
+                guide.Show(k, button != null ? button.transform : null);
+            }
         }
 
         void ApplyUnlocks()

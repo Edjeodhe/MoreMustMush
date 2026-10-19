@@ -53,6 +53,8 @@ namespace MoreMush
             Snd.Ui();
             G = null;   // 메뉴로 돌아왔다 다시 시작해도 저장된 것을 새로 읽는다
             App.EnsureSave();
+            // 처음 하는 게임(한 판도 안 함)은 바로 1스테이지 튜토리얼 판으로
+            if (G.tut == 0 && G.rounds == 0 && RoundFlow.Request()) return;
             App.Go(Scenes.MainGame);
         }
 

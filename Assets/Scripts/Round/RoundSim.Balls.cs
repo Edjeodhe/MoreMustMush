@@ -157,7 +157,7 @@ namespace MoreMush
             if (b.x - b.r < FX0) { b.x = FX0 + b.r; b.dx = Mathf.Abs(b.dx); FixDir(b); WallHit(b, "l"); }
             else if (b.x + b.r > FX1) { b.x = FX1 - b.r; b.dx = -Mathf.Abs(b.dx); FixDir(b); WallHit(b, "r"); }
             if (b.y - b.r < FY0) { b.y = FY0 + b.r; b.dy = Mathf.Abs(b.dy); FixDir(b); WallHit(b, "t"); }
-            else if (b.y + b.r > FY1) { b.y = FY1 - b.r; b.dy = -Mathf.Abs(b.dy); FixDir(b); b.combo = 0; WallHit(b, "b"); }
+            else if (b.y + b.r > FY1) { b.y = FY1 - b.r; b.dy = -Mathf.Abs(b.dy); FixDir(b); b.combo = 0; b.hits = 0; WallHit(b, "b"); }
             // 슬라이드 바·분신 바 (RoundSim.Bar)
             BarCollide(b, py);
             // 버섯
@@ -319,6 +319,7 @@ namespace MoreMush
         // procs: 타격 때 발동하는 수확기 능력·스킬(종·분열·스파크·폭발·자석·번개)을 굴릴지 (관통 타격은 안 굴린다)
         void DirectHit(Shroom m, Ball b, double mul, bool procs = true)
         {
+            b.hits++;
             double amt = st.atk * Wk(b) * mul * (st.fire ? 1.3 : 1) * (runT < 3 ? st.rushMul : 1);
             if (b.sharpen > 0) { amt *= b.sharpMul; b.sharpen--; }
             if (b.sawStk > 0) { amt *= 1 + HV["saw"].ab(b.hs)["k"] * b.sawStk; b.sawStk = 0; }

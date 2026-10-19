@@ -139,7 +139,7 @@ namespace MoreMush
         {
             var sum = RoundFlow.Finish();
             if (Finished != null) Finished(sum);
-            else LeaveSettle();   // 정산 창이 아직 없으면 바로 돌아간다
+            else StageSettle.Show(gameObject.scene, sum, ToMainGame);   // 씬에 정산 UI가 없으면 임시 정산 창
         }
 
         void HandleInput(RoundSim R)

@@ -39,8 +39,10 @@ namespace MoreMush.EditorTools
         public static string Start(Plan plan, int seeds = 3)
         {
             if (Running) return "이미 돌고 있음";
+            if (BossTune.Running) return "BossTune이 돌고 있음 (같은 Temp 상태 파일을 씀)";
             File.WriteAllText(LogPath, "");
             Defs.ApplyPreset(BalanceSim.PRESET, false);
+            BalanceSim.ClearCkpts(); ResumedRounds = PlayedRounds = 0;
             job = Run(plan, seeds);
             EditorApplication.update -= Tick;
             EditorApplication.update += Tick;
@@ -55,6 +57,7 @@ namespace MoreMush.EditorTools
         {
             File.WriteAllText(LogPath, "");
             Log($"시작(배치): R{plan.a}~R{plan.b} · 시드 {seeds}개 · 프리셋 {Defs.TUNE.id} · 지역 램프 {Defs.ZONE_RAMP}판 · 판매 {(BalanceSim.SELL ? "전부" : "안 함")} · 지역 이동 {(BalanceSim.GAME_ZONE ? "게임(해금 즉시)" : "봇(공격력 기준)")}");
+            BalanceSim.ClearCkpts(); ResumedRounds = PlayedRounds = 0;
             var e = Run(plan, seeds);
             while (e.MoveNext()) { }
         }
@@ -66,16 +69,33 @@ namespace MoreMush.EditorTools
             catch (Exception e) { Log("오류: " + e); Stop(); }
         }
 
+        // 에디터 업데이트 한 번에 돌릴 시간(초). 한 판씩만 돌면 창이 뒤에 있을 때 업데이트가 느려져 작업이 거의 멈춘다
+        public const double TICK_SEC = 1.0;
+        public static int ResumedRounds, PlayedRounds;   // 이번 작업에서 체크포인트로 건너뛴 판 · 실제로 돈 판
+
         // 시드마다 새 게임부터 R b까지 (스테이지 모드: 스테이지 b에서 멈춤 · 판 단위 모드: b판)
+        // 지금 가격으로도 결과가 같은 체크포인트가 있으면 거기서 이어 돈다 (BalanceSim.Ckpt)
         static IEnumerator RunAll(Plan p, int seeds, int rounds = 0)
         {
             if (rounds <= 0) rounds = p.b;
+            int stop = p.tierEnds != null ? 0 : p.b;
+            double tick = Application.isBatchMode ? 1e9 : TICK_SEC;
             for (int sd = 1; sd <= seeds; sd++)
-                for (int st = 1; st <= rounds; st++)
+            {
+                int done = BalanceSim.ResumeFromCkpt(sd, rounds);
+                ResumedRounds += done;
+                while (done < rounds)
                 {
-                    BalanceSim.Progression(1, st > 1, sd, BalanceSim.SKILL, 1e9, 1, p.tierEnds != null ? 0 : p.b);
+                    BalanceSim.Progression(rounds - done, done > 0, sd, BalanceSim.SKILL, tick, 1, stop);
+                    if (BalanceSim.LastPlayed == 0)
+                    {
+                        if (!BalanceSim.LastHitStop) Log($"   시드 {sd}: {done}판에서 한 판도 못 돌고 멈춤 (멈출 스테이지가 아님)");
+                        break;   // 멈출 스테이지에 닿음
+                    }
+                    done += BalanceSim.LastPlayed; PlayedRounds += BalanceSim.LastPlayed;
                     yield return null;
                 }
+            }
         }
 
         // 판 단위 모드의 판정: (수렴, 너무 쌈, 너무 비쌈, 로그 한 줄)
@@ -169,7 +189,7 @@ namespace MoreMush.EditorTools
             while (fin.MoveNext()) yield return null;
             Log("최종: " + Muls(m) + " · " + JudgeTiers(p, seeds).log);
             for (int t = 1; t <= 3; t++) { JudgeTier(p, t, seeds, out var line); Log("   " + line); }
-            Log("끝 · " + BalanceSim.WritePriceFile());
+            Log($"끝 · 돈 판 {PlayedRounds} · 체크포인트로 건너뛴 판 {ResumedRounds} · " + BalanceSim.WritePriceFile());
         }
 
         static IEnumerator Run(Plan p, int seeds)
@@ -225,7 +245,7 @@ namespace MoreMush.EditorTools
                 yield return null;
             }
             if (!converged && best != null) { BalanceSim.RestorePrices(best); Log($"수렴 못 함: 완료 시점이 맞은 가격표 중 가격 뜀이 가장 작은 것(×{bestStep:F2})을 씀"); var again = RunAll(p, seeds); while (again.MoveNext()) yield return null; }
-            Log("끝 · " + BalanceSim.WritePriceFile());
+            Log($"끝 · 돈 판 {PlayedRounds} · 체크포인트로 건너뛴 판 {ResumedRounds} · " + BalanceSim.WritePriceFile());
         }
     }
 }
