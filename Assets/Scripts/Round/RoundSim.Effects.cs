@@ -32,7 +32,7 @@ namespace MoreMush
         {
             int P = st.sk["bolt"].P, n = 2 + P;
             double dmg = st.atk * st.sk["bolt"].pm * st.skillDmg * Wk(b);
-            var hit = new HashSet<Shroom> { m0 };
+            var hit = RentSet(); hit.Add(m0);   // 맞힌 버섯 (끝나면 돌려준다. 번개가 수확으로 다른 번개를 부를 수 있어 공용 하나를 쓰지 않는다)
             var pts = new List<Vector2> { new Vector2(m0.x, m0.y) };
             float cx = m0.x, cy = m0.y;
             for (int i = 0; i < n; i++)
@@ -47,8 +47,28 @@ namespace MoreMush
                 Damage(best, dmg, b, "skill", src: src);
                 cx = tx; cy = ty;
             }
+            ReturnSet(hit);
             bolts.Add(new Bolt { pts = pts, t = 0.3f });
             Snd.Skill(900);
+        }
+
+        // ===== 할당 줄이기: 프레임마다 생기고 사라지는 작은 객체·집합을 다시 쓴다 (시뮬 결과와 무관한 그릇만) =====
+        readonly Stack<HashSet<Shroom>> setPool = new Stack<HashSet<Shroom>>();
+        HashSet<Shroom> RentSet() => setPool.Count > 0 ? setPool.Pop() : new HashSet<Shroom>();
+        void ReturnSet(HashSet<Shroom> s) { if (s == null) return; s.Clear(); setPool.Push(s); }
+        readonly List<Queued> readyBuf = new List<Queued>();
+        readonly Stack<Part> partFree = new Stack<Part>();
+        readonly Stack<Fx> fxFree = new Stack<Fx>();
+        // RemoveAll과 같은 결과(남는 항목의 순서 유지)에 빠진 항목을 free에 돌려준다
+        static void Recycle<T>(List<T> list, Stack<T> free, Predicate<T> gone)
+        {
+            int w = 0;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var it = list[i];
+                if (gone(it)) free.Push(it); else list[w++] = it;
+            }
+            if (w < list.Count) list.RemoveRange(w, list.Count - w);
         }
 
         void SpawnTornado(Ball b, string side)
@@ -63,7 +83,7 @@ namespace MoreMush
         void MakeWave(float x, float y, int depth, Ball b)
         {
             var sk = st.sk["shock"];
-            waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b });
+            waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b, hit = RentSet() });
             if (depth > maxChain) maxChain = depth;
             if (depth > 1) AddLabel(Loc.F("연쇄 {0}", depth), x, y - 30, "#ffd0a0", 18 + depth);
             Snd.Skill(260 + depth * 40);
@@ -129,6 +149,7 @@ namespace MoreMush
                 }
                 FreeQuery(q);
             }
+            for (int wi = 0; wi < waves.Count; wi++) if (waves[wi].t >= 0.4f) { ReturnSet(waves[wi].hit); waves[wi].hit = null; }
             waves.RemoveAll(w => w.t >= 0.4f);
             // 회오리
             for (int ti = 0, tnN = tornados.Count; ti < tnN; ti++)
@@ -147,9 +168,11 @@ namespace MoreMush
             foreach (var q in queue) q.t -= h;
             if (queue.Count > 0)   // 비어 있으면 Where/ToList를 만들지 않는다
             {
-                var ready = queue.Where(q => q.t <= 0).ToList();
+                var ready = readyBuf; ready.Clear();   // 예전 Where().ToList()와 같은 항목·순서 (프레임마다 새 리스트를 만들지 않는다)
+                foreach (var q in queue) if (q.t <= 0) ready.Add(q);
                 queue.RemoveAll(q => q.t <= 0);
                 foreach (var q in ready) q.f();
+                ready.Clear();
             }
             // 거대 버섯
             if (giantState == "pending" && runT >= 4)
@@ -179,9 +202,9 @@ namespace MoreMush
         void UpdateFx(float h)
         {
             foreach (var p in parts) { p.t += h; p.x += p.vx * h; p.y += p.vy * h; p.vy += (p.shape == (byte)FxShape.Chip ? 900 : 500) * h; p.vx *= 0.97f; }
-            parts.RemoveAll(p => p.t >= p.life);
+            Recycle(parts, partFree, p => p.t >= p.life);
             foreach (var f in fxs) { f.t += h; f.y -= f.rise * h; f.rot += f.spin * h; }
-            fxs.RemoveAll(f => f.t >= f.dur);
+            Recycle(fxs, fxFree, f => f.t >= f.dur);
             barKick = Mathf.Max(0, barKick - h * 4);
             if (popStopCd > 0) popStopCd -= h;
             // numbers jump up, slow down and drift aside instead of sliding up at a constant speed

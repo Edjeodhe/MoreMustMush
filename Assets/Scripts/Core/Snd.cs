@@ -98,7 +98,24 @@ namespace MoreMush
             return c;
         }
 
-        public static void Hit() => Tone(Random.Range(560f, 680f), 0.05f, Wave.Triangle, 0.45f, 1.35f, "hit");
+        // 타격음 높이는 10Hz 단위로 묶는다: 클립은 높이마다 처음 한 번 합성하는데 1Hz 단위면 120종이 라운드 초반에 하나씩 만들어져 끊겼다.
+        // Random.Range는 예전처럼 한 번 부른다 (게임 난수 순서를 바꾸지 않게)
+        const float HIT_STEP = 10;
+        public static void Hit() => Tone(Mathf.Round(Random.Range(560f, 680f) / HIT_STEP) * HIT_STEP, 0.05f, Wave.Triangle, 0.45f, 1.35f, "hit");
+
+        // 라운드에서 자주 나는 소리의 클립을 미리 만든다 (프레임마다 예산 안에서 조금씩, 첫 타격·수확 때 합성으로 멈칫하지 않게)
+        public static void WarmRound() { if (I != null) I.StartCoroutine(WarmCo()); }
+        static System.Collections.IEnumerator WarmCo()
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            for (int i = 0; i < 40; i++)
+            {
+                if (i <= 12) Clip(560 + i * HIT_STEP, 0.05f, Wave.Triangle, 1.35f);
+                if (i <= 24) Clip(Mathf.Round(420 * Mathf.Pow(2, i / 12f)), 0.09f, Wave.Sine, 1.7f);
+                if (sw.Elapsed.TotalMilliseconds > 1.5) { yield return null; sw.Restart(); }
+            }
+            Clip(240, 0.08f, Wave.Square, 1.6f); Clip(150, 0.04f, Wave.Triangle, 0.8f); Clip(900, 0.06f, Wave.Square, 0.5f);
+        }
         public static void Harvest(int combo) => Tone(420 * Mathf.Pow(2, Mathf.Min(combo, 24) / 12f), 0.09f, Wave.Sine, 0.75f, 1.7f, "harv", 0.03f);
         public static void Bar() => Tone(240, 0.08f, Wave.Square, 0.25f, 1.6f, "bar");
         public static void Wall() => Tone(150, 0.04f, Wave.Triangle, 0.25f, 0.8f, "wall", 0.06f);

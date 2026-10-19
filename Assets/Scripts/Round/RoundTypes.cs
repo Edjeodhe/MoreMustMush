@@ -94,7 +94,7 @@ namespace MoreMush
     }
 
     public class Cloud { public float x, y, r, t, max; public bool slow, weak; }
-    public class Wave { public float x, y, r, max, t; public double dmg; public int depth; public HashSet<Shroom> hit = new HashSet<Shroom>(); public bool child; public Ball b; }
+    public class Wave { public float x, y, r, max, t; public double dmg; public int depth; public HashSet<Shroom> hit; public bool child; public Ball b; }   // hit: RoundSim이 빌려주고 파도가 끝나면 돌려받는다
     public class Tornado { public float y, h, x, dir; public double dmg; public HashSet<Shroom> hit = new HashSet<Shroom>(); public Ball b; }
     public class Bolt { public List<Vector2> pts; public float t; public bool slash, big; public string col; public float jitterSeed; }
     public class Ring { public float x, y, r, t, dur; public string col; public bool quiet; }

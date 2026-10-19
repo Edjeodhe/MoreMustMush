@@ -42,6 +42,13 @@ namespace MoreMush
         static readonly int GoldId = Shader.PropertyToID("_Gold"), DarkId = Shader.PropertyToID("_Dark"), FlashId = Shader.PropertyToID("_Flash");
         public static void SetFx(Renderer r, float gold = 0, float dark = 0, float flash = 0)
         {
+            // 효과가 없으면 속성 블록을 지운다: 블록이 붙은 렌더러는 묶어 그리지(배칭) 못해 그림마다 그리기 호출이 따로 생겼다.
+            // 셰이더 기본값이 0이라 보이는 것은 같다 (버섯 휨은 바로 뒤 SetBend가 다시 넣는다)
+            if (gold == 0 && dark == 0 && flash == 0)
+            {
+                if (r.HasPropertyBlock()) r.SetPropertyBlock(null);
+                return;
+            }
             r.GetPropertyBlock(mpb);
             mpb.SetFloat(GoldId, gold); mpb.SetFloat(DarkId, dark); mpb.SetFloat(FlashId, flash);
             r.SetPropertyBlock(mpb);
