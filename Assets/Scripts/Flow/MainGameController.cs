@@ -2,6 +2,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static MoreMush.Defs;
 using static MoreMush.Game;
@@ -14,6 +15,7 @@ namespace MoreMush
     //   Button_Option · Button_Lang · Button_StageStart · Stage_Text
     //   Button_MushTree(세계수 씬) · Button_MushDex(도감 팝업) · Button_Harvesters(공방 팝업)
     //   Button_Quest(의뢰 창, 지금 배치된 이름은 Quset — 둘 다 찾는다, 글자 = "의뢰" + 받을 수 있는 수)
+    //   Button_Boss(보스 도전 켜고 끄기, 보스에게 처음 지면 보인다). 배치 전이면 Button_StageStart를 복제해 그 위에 임시로 둔다
     //   팝업: Harvesters(공방, HarvesterShop) · MushDex(도감, MushDexPopup) (각 팝업 안의 Exit = 닫기) · 옵션 팝업 OptionPanel(있으면) · 의뢰 QuestPanel(있으면, QuestWindow)
     // 팝업이 떠 있어도 아래쪽 이동 버튼(MushTree·MushDex·Harvesters)은 눌린다. 다른 곳으로 가면 열린 팝업은 닫힌다.
     // 업그레이드 트리: 임시로 옛 월드 트리(TreeWorld, TreeView)를 씬에 둔다. 트리 UI가 배치되면 바꾼다.
@@ -31,8 +33,11 @@ namespace MoreMush
         GameObject option, current;   // current = 지금 열린 팝업
         OptionWindow optionWin;       // 옵션 창 (배치 전이면 임시 창)
         QuestWindow quest;            // 의뢰 창 (배치 전이면 임시 창)
-        GameObject tree, dexButton, treeButton, questButton;   // 해금 전엔 숨긴다
-        TMP_Text questLabel;
+        GameObject tree, dexButton, treeButton, questButton, bossButton;   // 해금 전엔 숨긴다
+        TMP_Text questLabel, bossLabel;
+        Image bossFrame;
+        Transform startButton;
+        TreeView treeView;
         int shownClaimable = -1;
         GameObject[] popups = new GameObject[0];
         TMP_Text stageText;
@@ -48,7 +53,9 @@ namespace MoreMush
             stageText = SceneUI.Need(scene, "Stage_Text")?.GetComponent<TMP_Text>();
             stageFormat = stageText != null ? stageText.text : null;
 
-            SceneUI.Bind(scene, "Button_StageStart", StartRound);
+            startButton = SceneUI.Need(scene, "Button_StageStart")?.transform;
+            WireBossButton(scene);
+            SceneUI.Bind(startButton, StartRound);
             SceneUI.Bind(scene, "Button_MushTree", ToOutGame);
             SceneUI.Bind(scene, "Button_MushDex", () => Toggle(dex != null ? dex.root : null));
             SceneUI.Bind(scene, "Button_Harvesters", () => Toggle(shop != null ? shop.root : null));
@@ -69,8 +76,8 @@ namespace MoreMush
             foreach (var p in new[] { shopRoot, dexRoot }) BindExit(p);   // 옵션·의뢰 창은 OptionWindow·QuestWindow가 닫기를 잇는다
 
             foreach (var n in NAV) LiftAbovePopups(SceneUI.Find(scene, n));
-            var tv = FindFirstObjectByType<TreeView>(FindObjectsInactive.Include);
-            tree = tv != null ? tv.gameObject : null;
+            treeView = FindFirstObjectByType<TreeView>(FindObjectsInactive.Include);
+            tree = treeView != null ? treeView.gameObject : null;
             if (tree == null) Debug.LogWarning("[MainGame] 업그레이드 트리(TreeView)가 씬에 없어요");
             dexButton = SceneUI.Find(scene, "Button_MushDex")?.gameObject;
             treeButton = SceneUI.Find(scene, "Button_MushTree")?.gameObject;
@@ -85,12 +92,13 @@ namespace MoreMush
             ApplyUnlocks();
             RenderStage();
             currency.Tick();
+            Tutorial.ForMain(gameObject.scene, treeView, startButton);
         }
 
         void OnEnable() => Loc.Changed += OnLang;
         void OnDisable() { Loc.Changed -= OnLang; if (current != null) CloseAll(); }   // 열린 팝업의 모달 카운트를 남기지 않는다
 
-        void OnLang() { RenderStage(); shop?.Render(); dex?.LangChanged(); quest.Render(); shownClaimable = -1; RenderQuestButton(); }
+        void OnLang() { RenderStage(); shop?.Render(); dex?.LangChanged(); quest.Render(); shownClaimable = -1; RenderQuestButton(); RenderBoss(); }
 
         void Update()
         {
@@ -136,7 +144,51 @@ namespace MoreMush
             UIUtil.Show(dexButton, Unlock.On(Unlock.CODEX));
             UIUtil.Show(treeButton, Unlock.On(Unlock.WORLDTREE));
             UIUtil.Show(questButton, Unlock.On(Unlock.QUEST));
+            UIUtil.Show(bossButton, Unlock.On(Unlock.BOSS));
             RenderQuestButton();
+            RenderBoss();
+        }
+
+        // ===== 보스 도전 =====
+        // 보스에게 지면 보스 도전이 꺼지고(그 스테이지에서 파밍) 이 버튼으로 다시 켠다. 켜짐이면 보스 스테이지에서 보스와 싸운다
+        void WireBossButton(Scene scene)
+        {
+            var b = SceneUI.Find(scene, "Button_Boss");
+            if (b == null && startButton != null)
+            {
+                // 임시: 출발 버튼을 복제해 바로 위에 둔다 (복제는 코드로 건 클릭을 가져가지 않는다)
+                b = Instantiate(startButton.gameObject, startButton.parent).transform;
+                b.name = "Button_Boss";
+                b.SetSiblingIndex(startButton.GetSiblingIndex());
+                var srt = (RectTransform)startButton; var brt = (RectTransform)b;
+                brt.anchoredPosition = srt.anchoredPosition + new Vector2(0, srt.rect.height + 20);
+                var lbl = SceneUI.TextIn(b);
+                if (lbl != null) { lbl.enableAutoSizing = true; lbl.fontSizeMin = Mathf.Min(lbl.fontSizeMin, 18); }
+            }
+            if (b == null) { Debug.LogWarning("[MainGame] 보스 도전 버튼(Button_Boss)을 만들 수 없어요"); return; }
+            SceneUI.Bind(b, ToggleBoss);
+            bossButton = b.gameObject;
+            bossLabel = SceneUI.TextIn(b);
+            bossFrame = b.GetComponent<Image>();
+        }
+
+        void ToggleBoss()
+        {
+            if (G == null) return;
+            G.bossOn = !G.bossOn; SaveGame(); Snd.Ui();
+            App.Notify(G.bossOn ? Loc.F("보스 도전 켬 · 스테이지 {0}에서 보스와 싸워요", NextBossStage(StageNow())) : Loc.T("보스 도전 끔 · 보스 스테이지에서는 파밍만 해요"));
+            RenderBoss();
+        }
+
+        void RenderBoss()
+        {
+            if (bossLabel == null || G == null) return;
+            int bs = NextBossStage(StageNow());
+            var b = BossAt(bs);
+            string where = b == null ? "" : bs == StageNow() ? Loc.F("지금 스테이지 {0} · {1}", bs, b.n) : Loc.F("스테이지 {0} · {1}", bs, b.n);
+            string state = G.bossOn ? "<color=#b8321e>ON</color>" : "<color=#2a5a9a>OFF</color>";
+            UIUtil.SetText(bossLabel, $"{Loc.T("보스 도전 버튼")} {state}\n<size=70%>{where}</size>");
+            if (bossFrame != null) bossFrame.color = G.bossOn ? U.Hex("#fff0e6") : U.Hex("#eef7ff");
         }
 
         // 의뢰 버튼 글자: 받을 수 있는 보상이 있으면 수를 붙인다

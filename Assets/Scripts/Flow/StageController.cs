@@ -60,6 +60,7 @@ namespace MoreMush
             begun = RoundFlow.Begin();
             view.Clear();
             started?.Invoke(begun);
+            Tutorial.ForStage(this);   // 1스테이지 첫 판: 조준 안내
         }
 
         // ===== 버튼에서 부르는 것 =====

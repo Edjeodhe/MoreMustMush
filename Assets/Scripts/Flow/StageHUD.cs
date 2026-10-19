@@ -6,7 +6,7 @@ namespace MoreMush
 {
     // Stage 씬 HUD. 사람이 배치한 글자에 라운드 값만 넣는다 — UI를 코드로 만들지 않는다.
     // 이름으로 찾는 것 (Stage_BG 아래, 없으면 그 칸만 건너뛴다):
-    //   Cur_Score(점수)와 그 옆 Score(“점수” 라벨, 번역만) · Stage_Gold(옛 Earned_Gold) 안의 글자(예상 골드) · Stage_Timer 안의 글자(남은 시간)
+    //   Cur_Score(점수)와 그 옆 Score(“점수” 라벨, 번역만) · Stage_Gold(옛 Earned_Gold) 안의 글자(예상 골드) · Stage_Timer 안의 글자(남은 시간)·Timer_Fill(남은 시간 막대)
     //   Stage_Info/WeatherText·WeatherIcon(날씨) · StageText(스테이지 번호) · Cur_Combo(지금 가장 큰 콤보) · SpeedText(배속, Speed 누르면 바뀜)
     //   Pause(누르면 일시정지) · StageGimmick/GimmickName·GimmickDescription(보스 스테이지에만 보임)
     [RequireComponent(typeof(StageController))]
@@ -15,7 +15,8 @@ namespace MoreMush
         StageController stage;
         TMP_Text score, scoreLabel, gold, timer, info, stageNo, combo, speed, gimmickName, gimmickDesc;
         GameObject gimmick;
-        Image weatherIcon;
+        Image weatherIcon, timeFill;
+        static readonly Color TimeOk = U.Hex("#8cc47a"), TimeMid = U.Hex("#e8c25e"), TimeLow = U.Hex("#dd6a52"), TimeLow2 = U.Hex("#e8946a");   // 옛 RoundHUD와 같은 수채 색
         double shownScore = -1, shownGold = -1;
         int shownTenths = -1, shownCombo = -1, shownSpeed = -1;
 
@@ -27,7 +28,9 @@ namespace MoreMush
             score = SceneUI.TextIn(cur);
             if (cur != null && cur.parent != null) scoreLabel = SceneUI.TextIn(cur.parent.Find("Score"));   // Stage 씬엔 LocText가 없어 여기서 번역한다
             gold = SceneUI.TextIn(SceneUI.Find(scene, "Stage_Gold") ?? SceneUI.Need(scene, "Earned_Gold")?.transform);
-            timer = SceneUI.TextIn(SceneUI.Need(scene, "Stage_Timer")?.transform);
+            var timerT = SceneUI.Need(scene, "Stage_Timer")?.transform;
+            timer = SceneUI.TextIn(timerT);
+            timeFill = SceneUI.Find(timerT, "Timer_Fill")?.GetComponent<Image>();
             info = SceneUI.TextIn(SceneUI.Find(scene, "WeatherText") ?? SceneUI.Need(scene, "Stage_Info")?.transform);
             stageNo = SceneUI.TextIn(SceneUI.Find(scene, "StageText"));
             weatherIcon = SceneUI.Find(scene, "WeatherIcon")?.GetComponent<Image>();
@@ -77,11 +80,28 @@ namespace MoreMush
             double g = R.GoldSoFar;
             if (gold != null && g != shownGold) { shownGold = g; UIUtil.SetText(gold, U.Fmt(g)); }
             int tenths = Game.DBG.infinite ? int.MaxValue : Mathf.RoundToInt(Mathf.Max(0, R.timeLeft) * 10);
+            DrawTimeBar(R, now);
             if (timer != null && tenths != shownTenths) { shownTenths = tenths; UIUtil.SetText(timer, Game.DBG.infinite ? "∞" : Loc.F("{0:F1}초", Mathf.Max(0, R.timeLeft))); }
             int c = 0;
             foreach (var b in R.balls) if (b.combo > c) c = b.combo;
             if (combo != null && c != shownCombo) { shownCombo = c; UIUtil.SetText(combo, c.ToString()); }
             if (speed != null && StageController.Speed != shownSpeed) { shownSpeed = StageController.Speed; UIUtil.SetText(speed, "x" + shownSpeed); }
+        }
+
+        // 남은 시간 막대: 9슬라이스 막대는 오른쪽 끝을 옮겨 둥근 끝을 지키고, 채움(Filled) 그림이면 잘라 낸다. 5초·10초 아래로 색이 바뀐다
+        void DrawTimeBar(RoundSim R, float now)
+        {
+            if (timeFill == null) return;
+            float frac = Game.DBG.infinite || R.timeMax <= 0 ? 1 : Mathf.Clamp01(R.timeLeft / R.timeMax);
+            if (timeFill.type == Image.Type.Filled) timeFill.fillAmount = frac;
+            else
+            {
+                var ft = timeFill.rectTransform;
+                float fx = Mathf.Max(frac, 0.04f);
+                if (ft.anchorMax.x != fx) ft.anchorMax = new Vector2(fx, 1);
+                timeFill.enabled = frac > 0;
+            }
+            timeFill.color = Game.DBG.infinite ? TimeOk : R.timeLeft <= 5 ? (Mathf.Sin(now * 12) > 0 ? TimeLow : TimeLow2) : R.timeLeft <= 10 ? TimeMid : TimeOk;
         }
     }
 }
