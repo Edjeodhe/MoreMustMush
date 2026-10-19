@@ -7,7 +7,7 @@
 
   python BalanceData/db/db_write.py set     <xlsx> <json>   # 아무 시트의 칸 값을 바꿈 (밸런스 수치안: Const·Boss·Upgrade 효과값 등)
   python BalanceData/db/db_write.py rows    <xlsx> <json>   # 시트 맨 아래에 새 행을 더함 (새 노드: Upgrade·Upgrade_Cost·String)
-  python BalanceData/db/db_write.py addcols <xlsx> <json>   # 시트 오른쪽 끝에 새 열을 더함 (새 언어: String의 Str_RU·Str_UK)
+  python BalanceData/db/db_write.py addcols <xlsx> <json>   # 시트 오른쪽 끝에 새 열을 더함 (새 언어: String의 Str_RU·Str_UK·Str_PT)
 
 strings json = ["한국어 문구", ...]  ·  prices json = {"노드 키": [1레벨 가격, 2레벨 가격, ...]}
 set json = {"Const": {"BOSS_HP_K": {"Value": 2}}, "Boss": {"king": {"Hp_Mul": 1.4}}}  (행은 그 시트의 *_Key 열로 찾음, 없으면 첫 열 ID — String: {"String": {"201015": {"Str_KR": "…"}}})
@@ -81,7 +81,7 @@ def add_strings(wb, items):
         row[c["Str_KR"] - 1] = safe_text(s)
         row[c["Str_EN"] - 1] = ""
         row[c["Str_JA"] - 1] = ""
-        for extra in ("Str_RU", "Str_UK"):
+        for extra in ("Str_RU", "Str_UK", "Str_PT"):
             if extra in c:
                 row[c[extra] - 1] = ""
         rows.append(row)
@@ -194,7 +194,7 @@ def set_cells(wb, data):
                 if col not in c:
                     missing.append("%s:%s.%s" % (sheet, key, col))
                     continue
-                ws.Cells(where[key], c[col]).Value = v
+                ws.Cells(where[key], c[col]).Value = safe_text(v) if isinstance(v, str) else v   # =·+·-·@ 로 시작하는 글이 수식으로 읽히지 않게
                 n += 1
         if missing:
             break

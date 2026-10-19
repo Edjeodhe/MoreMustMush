@@ -1,0 +1,481 @@
+﻿구분	범주	Str_ID	KR	EN	JA	RU	UK	PT	비고
+용어	재화·성장		골드	Gold	ゴールド	золото	золото	ouro	문장 속 소문자. 기호 `G`는 코드 고정
+용어	재화·성장		균사석	Mycelium Stone(s)	菌糸石	камни мицелия	міцелієвий камінь	Pedra de Micélio / Pedras de Micélio	고유 명사 → 항상 대문자. 수량 문구는 `Pedras de Micélio: {0}`
+용어	재화·성장		균사	Mycelium	菌糸	мицелий	міцелій	Micélio	식용/약용/독 균사 = Micélio Comestível/Medicinal/Venenoso
+용어	재화·성장		균사 트리	Mycelium Tree	菌糸ツリー	Древо мицелия	Дерево міцелію	Árvore de Micélio	노드 트리 화면
+용어	재화·성장		균사석 노드	Mycelium Stone Node	菌糸石ノード	узел камней мицелия	вузол міцелієвого каменя	nó de Pedra de Micélio	특수 노드 설명 머리: `Nó especial desbloqueado com Pedras de Micélio.`
+용어	재화·성장		노드	node	ノード	узел	вузол	nó (pl. nós)	핵심 코어 = Núcleo
+용어	재화·성장		세계수	World Tree	世界樹	Мировое древо	Світове дерево	Árvore do Mundo	세계수 나무(JA 世界樹の木)도 같은 말. 짧은 칸 `Árvore`
+용어	재화·성장		세계수 단계	Tier	段階	стадия	ярус	Estágio	`Estágio {0}` (명사 앞). 스테이지 Fase와 구분
+용어	재화·성장		진화 단계	Evolution Stage	進化段階	стадия эволюции	ступінь	Estágio de evolução	
+용어	재화·성장		나이테	Tree Rings	年輪	годовые кольца	річні кільця	Anéis da Árvore	세계수 레벨 재화. 고유 명사 대문자
+용어	재화·성장		경험치	EXP	経験値	опыт	досвід	XP	`XP da Árvore` (세계수 경험치)
+용어	재화·성장		레벨	Lv. / Level	Lv. / レベル	ур. / уровень	рів. / рівень	Lv. / nível	라벨 `Lv. {0}`(트리의 코드 고정 `Lv`와 맞춤), 문장 속 `nível`
+용어	재화·성장		최대	Max	最大	макс.	макс.	máx. / máximo	`Lv. máx.`, `Nível máximo`
+용어	재화·성장		강화	Upgrade	強化	улучшение	покращення	melhoria / melhorar	버튼 `Melhorar`. 노드명의 `강화`(숲 장치 강화 등)는 `+` 또는 `Reforço`
+용어	재화·성장		한 번에 강화	Bulk Upgrade	まとめて強化	Улучшить всё сразу	Масове покращення	Melhorar tudo	
+용어	재화·성장		정산	Payout / Cash Out	精算	итоговое золото / итоги	виплата	Lucro / receber	라운드 끝 골드. `Bônus de Lucro`, 버튼 `Encerrar e receber`
+용어	재화·성장		정산 골드	Payout Gold	精算ゴールド	Итоговое золото	Золото виплати	Lucro	능력치 이름. 문장 속 `o lucro da rodada`
+용어	재화·성장		점수	Score	スコア	очки	бали	pontos / pontuação	약어 `pts`. 아름다움 점수 = `Pontos de Beleza`
+용어	재화·성장		타격 점수	Hit Score	ヒットスコア	Очки за удар	Бали за удар	Pontos de Acerto	노드·능력치 같은 말
+용어	재화·성장		수확량	Yield	収穫量	урожай	врожай	Rendimento	능력치·노드. 문장 속 `rendimento` (EN Yield/Harvest 혼재를 PT는 하나로)
+용어	재화·성장		획득량	yield	獲得量	урожай	врожай	rendimento	
+용어	재화·성장		수확 / 수확하다	harvest	収穫	сбор / собрать	збір / зібрати	colheita / colher	따다(EN pick) = `colher` 같은 동사
+용어	재화·성장		풍년	Bountiful Harvest	豊作	Богатый урожай	Щедрий урожай	Colheita Farta	스킬 이름·외침 `Colheita farta!`
+용어	재화·성장		자동 수확	Auto Harvest	自動収穫	автосбор	автозбір	Colheita Automática	‘오프라인 보상’ 역할. 노드 `자동 수확 확장` = `Colheita Automática+`
+용어	재화·성장		수확 보따리	Harvest Basket	収穫ふろしき	корзина урожая	кошик урожаю	Cesta de Colheita	단독 `보따리` = `cesta`
+용어	재화·성장		확률	chance	確率	шанс	шанс	chance	여성 명사 `a chance`
+용어	재화·성장		발동률	trigger chance	発動率	шанс срабатывания	шанс спрацювання	chance de ativação	짧은 칸 `Ativação`
+용어	재화·성장		즉시 완료	Instant finish	即完了	мгновенное завершение	миттєве завершення	Concluir agora	버튼. 남은 횟수 문구는 `Conclusões instantâneas: {0}`
+용어	재화·성장		일일 / 주간	Daily / Weekly	デイリー / ウィークリー	Ежедневный / Еженедельный	Щоденний / Тижневий	Diária(s) / Semanal(is)	`Missões diárias`, `Missões semanais`
+용어	재화·성장		보상	Reward	ほうび / 報酬	награда	нагорода	Recompensa	보상 받기 = `Receber recompensa`
+용어	재화·성장		재화	resources	通貨	ресурсы	ресурси	recursos	`Recursos insuficientes`
+용어	재화·성장		엽전	Coin	銭	монета	монета	moeda (antiga)	수확기 `Coletor-Moeda`, 스킨 `Moeda de Jade`
+용어	재화·성장		단골 손님	Regular Customer	常連さん	Постоянный клиент	Постійний покупець	Freguês Fiel	노드 이름
+용어	전투·라운드·수확기		라운드 / 판	Round	ラウンド	раунд	раунд	rodada	
+용어	전투·라운드·수확기		스테이지	Stage	ステージ	этап	етап	fase	`Fase {0}`. 세계수 단계(Estágio)와 구분
+용어	전투·라운드·수확기		보스	Boss	ボス	босс	бос	chefe	`Chefe à vista: {0}!`, 보스 도전 = `Desafio do chefe`
+용어	전투·라운드·수확기		파밍	Farming	ファーミング	фарм	фарм	colheita livre	보스 실패 뒤 스테이지 반복
+용어	전투·라운드·수확기		처치	defeat / Kills	倒す / 撃破	победить	перемогти	derrotar / abates	통계 열 `Abates`
+용어	전투·라운드·수확기		수확기	Harvester	収穫機	сборщик	збирач	coletor	문장 속 소문자. 옛 용어 핀볼(pinball)도 모두 `coletor`
+용어	전투·라운드·수확기		영구 수확기	permanent harvester	恒久収穫機	постоянный сборщик	постійний збирач	coletor permanente	
+용어	전투·라운드·수확기		임시 수확기	temporary harvester	一時収穫機	временный сборщик	тимчасовий збирач	coletor temporário	짧은 칸 `coletor temp.`
+용어	전투·라운드·수확기		분신	clone	分身	двойник	двійник	clone	분신 수확기 = `Coletor Clone`, 분신 바 = `Barra Clone`
+용어	전투·라운드·수확기		분열	Split	分裂	раздвоение	розділення	Divisão / dividir	세포 분열 = `Divisão Celular`. 분열형(유형) = `Divisor`
+용어	전투·라운드·수확기		공격력	Attack	攻撃力	атака	атака	Ataque	`Ataque ×{1}`
+용어	전투·라운드·수확기		공속 (노드)	Harvester Speed	スピード	Скорость сборщика	Швидкість атаки	Vel. do Coletor	실제 효과는 날아가는 속도 (UK의 '공격 속도'는 따르지 않는다)
+용어	전투·라운드·수확기		이동 속도	Move Speed	移動速度	Скорость движения	Швидкість руху	Velocidade	
+용어	전투·라운드·수확기		배속	Speed	倍速	скорость (×)	швидкість	velocidade	`Velocidade ×2`
+용어	전투·라운드·수확기		피해	damage	ダメージ	урон	шкода	dano	데미지 통계 = `Estatísticas de dano`
+용어	전투·라운드·수확기		치명타	Critical Hit / Crit	クリティカル	критический удар / крит	критичний удар / крит	Golpe Crítico / Crítico	외침 `Crítico!`, 확률 `Chance de Crítico`, 피해 `Dano Crítico`
+용어	전투·라운드·수확기		스킬	Skill	スキル	навык	навичка	habilidade	짧은 칸 `Hab.`
+용어	전투·라운드·수확기		바 (슬라이드 바)	bar	バー	планка	планка	barra	바 스킬 = `habilidade da barra`
+용어	전투·라운드·수확기		버프 / 디버프	buff / debuff	バフ / デバフ	бафф / дебафф	баф / дебаф	buff / debuff	pt-BR 게임 통용어, 소문자, 복수 `buffs`
+용어	전투·라운드·수확기		지속시간	Duration	持続時間	Длительность	Тривалість	Duração	
+용어	전투·라운드·수확기		제한시간	Time Limit	制限時間	лимит времени	ліміт часу	Tempo Limite	문장 속 `tempo limite`
+용어	전투·라운드·수확기		콤보 / 콤보 계수	Combo / Combo Factor	コンボ / コンボ係数	комбо / Коэффициент комбо	комбо / Коефіцієнт комбо	combo / Fator de Combo	
+용어	전투·라운드·수확기		연쇄	Chain	連鎖	цепь	ланцюг	cadeia	연쇄 번개 = `Relâmpago em Cadeia`
+용어	전투·라운드·수확기		느림 / 약화	slow / weaken	鈍足 / 弱体	замедление / ослабление	сповільнення / ослаблення	lentidão / fraqueza	디버프 이름
+용어	전투·라운드·수확기		관통 / 통과	Pierce / pass-through	貫通 / 通過	Пронзание / сквозной	Пробиття / наскрізь	Perfuração / atravessar	관통은 스킬, 통과는 젤리 특성
+용어	전투·라운드·수확기		유도	Homing	誘導	Наведение	Наведення	Teleguiado	
+용어	전투·라운드·수확기		포자	spore	胞子	спора	спора	esporo	포자 구름 = `nuvem de esporos`, 포자 뿜기 = `Sopro de Esporos`
+용어	전투·라운드·수확기		체력	HP	体力	здоровье	здоров'я	vida	숫자 줄은 `HP`도 허용
+용어	전투·라운드·수확기		군락 / 군락지	colony	群落	колония	колонія	colônia	pt-BR 철자 `colônia`(ô)
+용어	전투·라운드·수확기		무더기	cluster	塊	куча	купка	monte	무더기 파쇄 = `Esmaga-Montes`
+용어	전투·라운드·수확기		거대 버섯	Giant Mushroom	巨大キノコ	гигантский гриб	гігантський гриб	Cogumelo Gigante	등장 팝업 `Gigante à vista: {0}!`
+용어	전투·라운드·수확기		대왕 (버섯)	King	大王	Король / Гриб-великан	Король / Велетень	Rei	`Matsutake-Rei`, `Cogumelo-Rei Brasa` (RU·UK의 великан은 따르지 않고 EN·JA처럼 '왕')
+용어	전투·라운드·수확기		황금 변종	Golden Variant	黄金変種	золотой вариант	золотий різновид	Variante Dourada	외침 `Dourado!`(900523은 변종 감탄)
+용어	전투·라운드·수확기		변종 / 출현율	variant / spawn rate	変種 / 出現率	вариант / шанс	різновид / частота	variante / taxa	`Taxa de Variantes`
+용어	전투·라운드·수확기		에픽 이상	Epic+	エピック以上	эпический и выше	епічний і вище	Épico+	`Chance de Épico+`
+용어	전투·라운드·수확기		등급	rarity	レアリティ	редкость	рідкість	raridade	Comum / Épico / Único / Lendário
+용어	전투·라운드·수확기		식용 / 약용 / 독	Edible / Medicinal / Poison	食用 / 薬用 / 毒	Съедобный / Лекарственный / Ядовитый	Їстівний / Лікарський / Отруйний	Comestível / Medicinal / Veneno(so)	분류 태그 `Veneno`, 도감 탭 `Venenoso`(독버섯) — 짧아야 탭에 들어간다
+용어	전투·라운드·수확기		버섯	mushroom	キノコ	гриб	гриб	cogumelo	문장 속 소문자
+용어	전투·라운드·수확기		갓	cap	傘	шляпка	капелюшок	chapéu	
+용어	전투·라운드·수확기		나무버섯	Tree Mushroom	ツリーキノコ	древесный гриб	деревний гриб	cogumelo da Árvore	세계수에 나는 버섯. 4종 이름은 부록 A
+용어	전투·라운드·수확기		숲 장치	Forest Gadget	森のしかけ	лесное устройство	лісовий пристрій	Engenhoca da Floresta	노드 `숲 장치 강화` = `Engenhocas+`
+용어	전투·라운드·수확기		필드 / 벽	field / wall	フィールド / 壁	поле / стена	поле / стіна	campo / parede	바닥 벽 = `parede de baixo`
+용어	세계수·꼬마·농장		꼬마	Little One(s)	ちびっこ	малыш	малюк	Pequenino(s)	고유 명사 → 문장 속에서도 대문자. 남성 명사
+용어	세계수·꼬마·농장		꼬마 이름	Little + 이름	이름+ちびっこ	Малыш + 이름	Малюк + 이름	Pequenino + 이름	`Pequenino Brasa` 등 (부록 A)
+용어	세계수·꼬마·농장		할아버지 (플레이어)	Grandpa	おじいちゃん	дедушка	дідусь	Vovô	꼬마가 부르는 호칭
+용어	세계수·꼬마·농장		허수아비 아저씨	Mr. Scarecrow	かかしさん	дядя Пугало	пане опудало	Seu Espantalho	어른 NPC. 꼬마가 공손하게 인사 (`Olá, Seu Espantalho!`)
+용어	세계수·꼬마·농장		부탁	Favor	お願い	просьба	прохання	pedido	꼬마의 부탁. 의뢰(missão)와 절대 혼용 금지
+용어	세계수·꼬마·농장		부탁을 들어주다	Grant (a favor)	かなえる	исполнить	виконати	atender (um pedido)	
+용어	세계수·꼬마·농장		의뢰	Quest(s)	依頼	задание	завдання	Missão / Missões	일일·주간 과제. 화면 이름은 대문자
+용어	세계수·꼬마·농장		합류	join	仲間入り	присоединиться	приєднатися	chegar / entrar	`{0} chegou!`, `{0} pode entrar`
+용어	세계수·꼬마·농장		호감도	Affection	好感度	привязанность	прихильність	Afeto	`Afeto +{0}`
+용어	세계수·꼬마·농장		진화 / 각성	Evolve / Awakening	進化 / 覚醒	эволюция / Пробуждение	еволюція / Пробудження	Evoluir · Evolução / Despertar	
+용어	세계수·꼬마·농장		가호	Blessing	加護	благословение	благословення	Bênção	세계수의 가호 = `Bênção da Árvore do Mundo`
+용어	세계수·꼬마·농장		공물 / 바치다	Offering / Offer	お供え	подношение	дар	Oferenda / oferecer	모두 바치기 = `Oferecer tudo`
+용어	세계수·꼬마·농장		창고	Granary	倉庫	кладовая	комора	Celeiro	고유 명사 대문자
+용어	세계수·꼬마·농장		장식	Decor / decoration	飾り	украшение	декор	enfeite	물건. 장식 완성 알림만 `Decoração pronta: {0}!`
+용어	세계수·꼬마·농장		꾸미기	Decorate	飾りつけ	Украшение	Декор	Decorar	탭 이름
+용어	세계수·꼬마·농장		장식 슬롯 / 칸	slot	枠	слот	слот	espaço	빈 칸 = `Espaço vazio`. 격자 칸(tile) = `quadrado`
+용어	세계수·꼬마·농장		아름다움	Beauty	美しさ	красота	краса	Beleza	`Beleza: {0}`
+용어	세계수·꼬마·농장		세트	Set	セット	набор	набір	conjunto	도감 세트 이름은 부록 A
+용어	세계수·꼬마·농장		공방	Workshop	工房	Мастерская	Майстерня	Oficina	꼬마 공방 = `Oficina dos Pequeninos`
+용어	세계수·꼬마·농장		제작	Craft	制作	изготовление	виготовлення	Fabricar / fabricação	버튼 `Fabricar`
+용어	세계수·꼬마·농장		레시피 / 재료	Recipe / Materials	レシピ / 材料	рецепт / материалы	рецепт / матеріали	receita / materiais	
+용어	세계수·꼬마·농장		건물 / 건설	building / construction	建物 / 建設	здание / стройка	споруда / будівництво	construção / construir	건설 완료 = `Construção concluída!`
+용어	세계수·꼬마·농장		구역	Zone	エリア	зона	зона	zona	뿌리·줄기·가지·수관. 구역 정원 = `vagas na zona`
+용어	세계수·꼬마·농장		지역	Area / Region	エリア	местность	локація	região	숲·달빛 밤·들판·바다·폐허 도시 (구역과 구분)
+용어	세계수·꼬마·농장		날씨	Weather	天気	погода	погода	Clima	좋은/나쁜 날씨 = `Clima bom` / `Clima ruim`, 오늘의 날씨 = `Clima de hoje`
+용어	세계수·꼬마·농장		별 능력	Star Bonus	星パワー	Звёздный бонус	Зоряний бонус	Bônus Estelar	`★ Bônus Estelar: {0} ({1} por estrela)`
+용어	세계수·꼬마·농장		능력치	stats	能力値	характеристики	характеристики	atributos	
+용어	세계수·꼬마·농장		보유 효과	Owned Bonus	所持効果	Бонус	Бонус	Bônus de posse	보유 중 = `Obtido`, 미보유 = `Não obtido`
+용어	세계수·꼬마·농장		도감	Collection	図鑑	Атлас	Колекція	Coleção	고유 명사 대문자. `Coleção: {0}/{1}`
+용어	세계수·꼬마·농장		황금 도감	Golden Collection	黄金図鑑	золотой атлас	Золота колекція	Coleção Dourada	
+용어	세계수·꼬마·농장		종 (도감 종수)	species	種	вид	вид	espécie(s)	`Espécies: {0}`
+용어	세계수·꼬마·농장		선물	Gift	プレゼント	подарок	подарунок	presente	`Presente ({0}): {1} ×{2}`
+용어	세계수·꼬마·농장		칭호	Title	称号	титул	титул	Título	`Título: “…”`
+용어	세계수·꼬마·농장		상자	Box	箱	ящик	скринька	Caixa	꼬마의 상자 = `Caixa do Pequenino`
+용어	세계수·꼬마·농장		떠돌이	Wanderer	さすらい	бродячий	мандрівник	andarilho	버섯 특성 `sempre andarilho`
+용어	세계수·꼬마·농장		엔딩 / 기록 / 신기록	Ending / Records / New record	エンディング / 記録 / 新記録	Концовка / Рекорды	Фінал / Рекорди	Final / Recordes / Novo recorde	`Novo recorde! {0}`
+용어	세계수·꼬마·농장		목장 / 농장 / 식당	Ranch / Farm / Diner	牧場 / 農場 / 食堂	ферма / ферма / закусочная	ранчо / ферма / закусочна	Rancho / Fazenda / Lanchonete	옛 건물 문구
+용어	UI 공통어		해금 / 해금하다	Unlock	解放	Открыть	Відкрити	Desbloquear / desbloqueio	버튼 `Desbloquear {0}{1}`, 알림 `Desbloqueio: {0}`
+용어	UI 공통어		열림 (스테이지·지역)	Open / unlocked	開く	Открыто	Відкрито	Liberado / liberar	`Fase {1} liberada`
+용어	UI 공통어		시작하기	Start	はじめる	Начать	Почати	Jogar	메인 메뉴. 라운드 시작 버튼도 같은 키 (`Jogar`)
+용어	UI 공통어		이어하기 / 계속하기	Continue / Resume	つづきから / つづける	Продолжить	Продовжити	Continuar / Retomar	5-1절
+용어	UI 공통어		일시정지	Pause	一時停止	Пауза	Пауза	Pausar	
+용어	UI 공통어		옵션 / 설정	Options / Settings	オプション / 設定	Настройки	Налаштування	Opções / Configurações	5-1절
+용어	UI 공통어		초기화	Reset	初期化	Сброс	Скинути	Redefinir	저장 초기화. 타이머 `초기화까지` = `Renova em`
+용어	UI 공통어		게임 종료	Quit Game	ゲーム終了	Выйти из игры	Вийти з гри	Sair do jogo	
+용어	UI 공통어		메인 메뉴 / 타이틀	Main Menu	メインメニュー	Главное меню	Головне меню	Menu principal	
+용어	UI 공통어		예 / 아니오	Yes / No	はい / いいえ	Да / Нет	Так / Ні	Sim / Não	
+용어	UI 공통어		닫기 / 취소 / 돌아가기	Close / Cancel / Back	閉じる / キャンセル / もどる	Закрыть / Отмена / Назад	Закрити / Скасувати / Назад	Fechar / Cancelar / Voltar	
+용어	UI 공통어		켜짐 / 꺼짐	On / Off	オン / オフ	Вкл. / Выкл.	Увімк. / Вимк.	Ligado / Desligado	`Mudo: ligado`, 소리 켬/끔 = `Som: ligado/desligado`
+용어	UI 공통어		소리 설정 / 효과음 / 배경음	Sound Settings / Sound Effects / Music	サウンド設定 / 効果音 / BGM	Настройки звука / Звуковые эффекты / Музыка	Налаштування звуку / Звукові ефекти / Музика	Som / Efeitos sonoros / Música	
+용어	UI 공통어		언어	Language	言語	Язык	Мова	Idioma	
+용어	UI 공통어		받기 / 받음	Claim / Claimed	受け取る / 受取済み	Забрать / Получено	Забрати / Отримано	Receber / Recebido	
+용어	UI 공통어		구입	Buy	購入	Купить	Купити	Comprar	
+용어	UI 공통어		장착 / 착용	Equip / Wear	装備 / 着用	Надеть	Одягнути	Equipar / Vestir	수확기는 equipar, 꼬마 스킨은 vestir
+용어	UI 공통어		없음 / 미보유	None / Not Owned	なし / 未所持	Нет	Немає	Nenhum / Não obtido	5-1절
+용어	UI 공통어		부족	Not enough X	Xが足りません	Не хватает X	Бракує X	X insuficiente	`Ouro insuficiente`, `Pedras de Micélio insuficientes`
+용어	UI 공통어		필요 / 선행	need / Requires	必要 / 前提	нужно	потрібно	Requer / necessário	`Requer: {0}`
+용어	UI 공통어		전체 / 모두	All	すべて	Все	Усі	Tudo / Todos	`Colher tudo`, `Cuidar de todos`
+용어	UI 공통어		다음 / 이전 / 지금	Next / Previous / Now	次の / これまで / いま	Далее / раньше / сейчас	Далі / раніше / зараз	Próximo / anterior / agora	`(agora: {0})`, `(antes: {0})`
+용어	UI 공통어		남은 시간 / 남음	Time left / left	残り時間 / 残り	Осталось	Залишилось	Tempo restante / restante(s)	`({0} restantes)` 대신 `(restam: {0})`
+용어	UI 공통어		완료 / 완성	Done / Complete	完了 / できあがり	Готово	Готово / Завершено	Feito / Pronto	5-1절
+용어	UI 공통어		비우기	Clear	空にする	Очистить	Очистити	Esvaziar	날씨 맑음(Céu Limpo)과 구분
+용어	UI 공통어		튜토리얼 / 업그레이드 / 오프라인 보상	—	—	—	—	(새로 만들지 않는다)	KR 원문에 없는 말. 각각 안내 문장, `melhoria`(강화), `Colheita Automática`로
+이름	1a 도감 버섯	900228	양송이	Button Mushroom	マッシュルーム	Шампиньон	Печериця	Champignon	확립
+이름	1a 도감 버섯	900220	느타리	Oyster Mushroom	ヒラタケ	Вешенка	Глива	Cogumelo-ostra	확립
+이름	1a 도감 버섯	900219	표고	Shiitake	シイタケ	Шиитаке	Шиітаке	Shiitake	차용
+이름	1a 도감 버섯	900287	팽이버섯	Enoki	エノキタケ	Эноки	Енокі	Enoki	차용
+이름	1a 도감 버섯	900206	목이버섯	Wood Ear	キクラゲ	Древесное ухо	Деревне вухо	Orelha-de-judas	확립
+이름	1a 도감 버섯	900292	새송이버섯	King Oyster Mushroom	エリンギ	Королевская вешенка	Королівська глива	Cogumelo-ostra-rei	확립
+이름	1a 도감 버섯	900204	먹물버섯	Inky Cap	ササクレヒトヨタケ	Навозник белый	Гнойовик	Cogumelo-tinta	확립
+이름	1a 도감 버섯	900211	말불버섯	Puffball	ホコリタケ	Дождевик	Дощовик	Bufa-de-lobo	확립
+이름	1a 도감 버섯	900299	꾀꼬리버섯	Chanterelle	アンズタケ	Лисичка	Лисичка	Cantarelo	확립
+이름	1a 도감 버섯	900246	덕다리버섯	Chicken of the Woods	アイカワタケ	Трутовик серно-жёлтый	Лісова курка	Frango-do-mato	확립
+이름	1a 도감 버섯	900229	큰갓버섯	Parasol Mushroom	カラカサタケ	Зонтик пёстрый	Гриб-парасолька	Cogumelo-parasol	확립
+이름	1a 도감 버섯	900305	민자주방망이버섯	Wood Blewit	ムラサキシメジ	Рядовка фиолетовая	Рядовка фіолетова	Pé-azul	확립
+이름	1a 도감 버섯	900308	기와버섯	Green-Cracking Russula	アイタケ	Сыроежка зеленоватая	Сироїжка зеленувата	Rússula-verde	번역
+이름	1a 도감 버섯	900311	만가닥버섯	Beech Mushroom	ブナシメジ	Шимеджи	Шимеджі	Shimeji-buna	차용
+이름	1a 도감 버섯	900314	곰보버섯	Morel	アミガサタケ	Сморчок	Зморшок	Morchela	확립
+이름	1a 도감 버섯	900317	달걀버섯	Caesar's Mushroom	タマゴタケ	Цезарский гриб	Цезарів гриб	Amanita-dos-césares	확립
+이름	1a 도감 버섯	900235	소혀버섯	Beefsteak Fungus	カンゾウタケ	Печёночница	Печіночниця	Língua-de-boi	확립
+이름	1a 도감 버섯	900321	능이버섯	Neungi Mushroom	コウタケ	Нынги	Саркодон	Neungi	차용
+이름	1a 도감 버섯	900001	송이버섯	Matsutake	マツタケ	Мацутакэ	Мацутаке	Matsutake	차용
+이름	1a 도감 버섯	900209	송로버섯	Truffle	トリュフ	Трюфель	Трюфель	Trufa	확립
+이름	1a 도감 버섯	900327	싸리버섯	Yellow Coral Mushroom	ホウキタケ	Рогатик	Рогатик	Coral-amarelo	번역
+이름	1a 도감 버섯	900329	달빛표고	Moonlight Shiitake	月光シイタケ	Лунный шиитаке	Місячне шиітаке	Shiitake do Luar	판타지
+이름	1a 도감 버섯	900331	주름버섯	Meadow Mushroom	ハラタケ	Шампиньон луговой	Печериця лучна	Cogumelo-do-campo	확립
+이름	1a 도감 버섯	900333	바다송이	Sea Matsutake	ウミマツタケ	Морской мацутакэ	Морське мацутаке	Matsutake-do-mar	판타지
+이름	1a 도감 버섯	900335	벽돌먹물버섯	Brick Inky Cap	レンガヒトヨタケ	Кирпичный навозник	Цегляний гнойовик	Cogumelo-tinta-tijolo	판타지
+이름	1a 도감 버섯	900221	구름버섯	Turkey Tail	カワラタケ	Траметес разноцветный	Індичий хвіст	Cauda-de-peru	확립
+이름	1a 도감 버섯	900338	치마버섯	Split Gill	スエヒロタケ	Щелелистник	Щілинник	Cogumelo-leque	번역
+이름	1a 도감 버섯	900247	간버섯	Cinnabar Polypore	ヒイロタケ	Трутовик киноварный	Кіноварний трутовик	Orelha-de-pau-vermelha	확립
+이름	1a 도감 버섯	900207	흰목이	Snow Fungus	シロキクラゲ	Снежный гриб	Сніговий гриб	Fungo-da-neve	확립
+이름	1a 도감 버섯	900344	잎새버섯	Maitake	マイタケ	Майтакэ	Майтаке	Maitake	차용
+이름	1a 도감 버섯	900347	한입버섯	Veiled Polypore	ヒトクチタケ	Гриб на один укус	Грибок-шматочок	Poliporo-velado	번역
+이름	1a 도감 버섯	900350	복령	Poria	ブクリョウ	Пория	Порія	Poria	차용
+이름	1a 도감 버섯	900353	저령	Zhuling	チョレイマイタケ	Трутовик зонтичный	Парасольковий трутовик	Zhuling	차용
+이름	1a 도감 버섯	900236	꽃송이버섯	Cauliflower Mushroom	ハナビラタケ	Спарассис	Грибна цвітна капуста	Cogumelo-couve-flor	확립
+이름	1a 도감 버섯	900358	노루궁뎅이	Lion's Mane	ヤマブシタケ	Ежовик гребенчатый	Їжовик гребінчастий	Juba-de-leão	확립
+이름	1a 도감 버섯	900240	말굽버섯	Hoof Fungus	ツリガネタケ	Трутовик копытный	Копитний трутовик	Casco-de-cavalo	확립
+이름	1a 도감 버섯	900222	잔나비걸상버섯	Artist's Conk	コフキサルノコシカケ	Трутовик плоский	Плаский трутовик	Cogumelo-do-artista	확립
+이름	1a 도감 버섯	900212	목도리방귀버섯	Collared Earthstar	エリマキツチグリ	Звездовик	Земляна зірка	Estrela-da-terra	확립
+이름	1a 도감 버섯	900248	소나무잔나비버섯	Red-Belted Conk	ツガサルノコシカケ	Трутовик окаймлённый	Сосновий трутовик	Orelha-de-pinheiro	번역
+이름	1a 도감 버섯	900368	영지버섯	Reishi	霊芝	Рейши	Рейші	Reishi	차용
+이름	1a 도감 버섯	900241	상황버섯	Sanghwang Mushroom	メシマコブ	Санхван	Санхван	Sanghwang	차용
+이름	1a 도감 버섯	900372	차가버섯	Chaga	カバノアナタケ	Чага	Чага	Chaga	차용
+이름	1a 도감 버섯	900249	말똥진흙버섯	Willow Bracket	キコブタケ	Трутовик ложный	Несправжній трутовик	Casco-de-salgueiro	번역
+이름	1a 도감 버섯	900005	동충하초	Cordyceps	冬虫夏草	Кордицепс	Кордицепс	Cordyceps	차용
+이름	1a 도감 버섯	900252	눈꽃동충하초	Snowflake Cordyceps	ハナサナギタケ	Снежный кордицепс	Сніжинка-кордицепс	Cordyceps-da-neve	번역
+이름	1a 도감 버섯	900380	자작나무버섯	Birch Polypore	カンバタケ	Берёзовый трутовик	Березова губка	Poliporo-da-bétula	확립
+이름	1a 도감 버섯	900382	달빛동충하초	Moonlight Cordyceps	月光冬虫夏草	Лунный кордицепс	Місячний кордицепс	Cordyceps do Luar	판타지
+이름	1a 도감 버섯	900002	선녀낙엽버섯	Fairy Ring Mushroom	シバフタケ	Опёнок луговой	Опеньок луговий	Anel-de-fada	확립
+이름	1a 도감 버섯	900385	산호버섯	Sea Coral Mushroom	サンゴタケ	Рогатик коралловый	Коралівка	Coral-do-mar	판타지
+이름	1a 도감 버섯	900387	녹슨영지	Rusty Reishi	さびた霊芝	Ржавый рейши	Іржаве рейші	Reishi Enferrujado	판타지
+이름	1a 도감 버섯	900389	무당버섯	Russula	ドクベニタケ	Сыроежка	Сироїжка	Rússula-vermelha	번역
+이름	1a 도감 버섯	900223	노란다발	Sulphur Tuft	ニガクリタケ	Ложноопёнок	Сірчаний опеньок	Tufo-de-enxofre	확립
+이름	1a 도감 버섯	900230	노란각시버섯	Flowerpot Parasol	コガネキヌカラカサタケ	Лейкокопринус жёлтый	Горщиковий жовтик	Cogumelo-de-vaso	확립
+이름	1a 도감 버섯	900394	맑은애주름버섯	Lilac Bonnet	サクラタケ	Мицена чистая	Міцена чиста	Micena-lilás	번역
+이름	1a 도감 버섯	900205	이끼꽃버섯	Parrot Waxcap	ワカクサタケ	Мохоцветный гриб	Мохоцвіт	Cogumelo-papagaio	번역
+이름	1a 도감 버섯	900399	비단빛깔때기버섯	Silky Funnel Cap	キヌジョウゴタケ	Говорушка шелковистая	Шовкова говорушка	Funil-sedoso	번역
+이름	1a 도감 버섯	900231	땀버섯	Fiber Cap	アセタケ	Волоконница	Волоконниця	Chapéu-fibroso	번역
+이름	1a 도감 버섯	900239	갈황색미치광이버섯	Laughing Gym	オオワライタケ	Гимнопил	Сміхотливий гімнопіл	Cogumelo-risonho	번역
+이름	1a 도감 버섯	900004	광대버섯	Fly Agaric	ベニテングタケ	Мухомор	Червоний мухомор	Mata-moscas	확립
+이름	1a 도감 버섯	900213	뱀껍질광대버섯	Snakeskin Grisette	ヘビキノコモドキ	Мухомор змеиный	Зміїний мухомор	Amanita-pele-de-cobra	번역
+이름	1a 도감 버섯	900234	붉은싸리버섯	Red Coral Mushroom	ハナホウキタケ	Рогатик красный	Червоний корал	Coral-vermelho	번역
+이름	1a 도감 버섯	900214	알광대버섯	Death Cap	タマゴテングタケ	Бледная поганка	Бліда поганка	Chapéu-da-morte	확립
+이름	1a 도감 버섯	900413	마귀곰보버섯	False Morel	シャグマアミガサタケ	Строчок обыкновенный	Диявольський строчок	Falsa-morchela	확립
+이름	1a 도감 버섯	900416	독깔때기버섯	Poison Funnel Cap	ドクササコ	Говорушка ядовитая	Отруйна говорушка	Funil-venenoso	번역
+이름	1a 도감 버섯	900208	화경버섯	Jack-o'-Lantern Mushroom	ツキヨタケ	Омфалот	Гарбузовий ліхтар	Cogumelo-lanterna	번역
+이름	1a 도감 버섯	900215	개나리광대버섯	Yellow Amanita	タマゴテングタケモドキ	Мухомор жёлтый	Жовтий мухомор	Amanita-amarela	번역
+이름	1a 도감 버섯	900216	마귀광대버섯	Panther Cap	テングタケ	Мухомор пантерный	Пантерний мухомор	Amanita-pantera	확립
+이름	1a 도감 버섯	900003	독우산광대버섯	Destroying Angel	ドクツルタケ	Белая поганка	Смердючий мухомор	Anjo-destruidor	확립
+이름	1a 도감 버섯	900261	붉은사슴뿔버섯	Poison Fire Coral	カエンタケ	Красный олений рог	Червоний оленячий ріг	Coral-de-fogo	번역
+이름	1a 도감 버섯	900210	갈색고리갓버섯	Deadly Dapperling	キツネノカラカサ	Лепиота бурокрасная	Гриб-парасолька бурий	Lepiota-mortal	번역
+이름	1a 도감 버섯	900429	흰가시광대버섯	White Spiny Amanita	シロオニタケ	Мухомор белый колючий	Білий колючий мухомор	Amanita-espinhosa	번역
+이름	1a 도감 버섯	900431	달빛애주름버섯	Moonlit Bonnet	月光クヌギタケ	Мицена лунная	Місячна міцена	Micena do Luar	판타지
+이름	1a 도감 버섯	900433	말똥버섯	Dung Cap	ヒカゲタケ	Панеолус	Панеолус	Cogumelo-do-esterco	번역
+이름	1a 도감 버섯	900435	해파리버섯	Jellyfish Mushroom	クラゲタケ	Гриб-медуза	Гриб-медуза	Cogumelo-água-viva	판타지
+이름	1a 도감 버섯	900437	콘크리트광대버섯	Concrete Amanita	コンクリートテングタケ	Бетонный мухомор	Бетонний мухомор	Amanita de Concreto	판타지
+이름	1b 특수 버섯	900472	불씨 버섯	Ember Mushroom	ほのおキノコ	Гриб Уголёк	Гриб Жаринка	Cogumelo Brasa	판타지
+이름	1b 특수 버섯	900473	불씨 대왕버섯	King Ember Mushroom	ほのお大王キノコ	Гриб-великан Уголёк	Велетень Жаринка	Cogumelo-Rei Brasa	판타지
+이름	1b 특수 버섯	900474	찌릿 버섯	Zappy Mushroom	ビリビリキノコ	Гриб Искорка	Гриб Іскринка	Cogumelo Faísca	판타지
+이름	1b 특수 버섯	900475	찌릿 대왕버섯	King Zappy Mushroom	ビリビリ大王キノコ	Гриб-великан Искорка	Велетень Іскринка	Cogumelo-Rei Faísca	판타지
+이름	1b 특수 버섯	900476	이슬 버섯	Dew Mushroom	しずくキノコ	Гриб Росинка	Гриб Росинка	Cogumelo Orvalho	판타지
+이름	1b 특수 버섯	900477	이슬 대왕버섯	King Dew Mushroom	しずく大王キノコ	Гриб-великан Росинка	Велетень Росинка	Cogumelo-Rei Orvalho	판타지
+이름	1b 특수 버섯	900478	동전 버섯	Coin Mushroom	コインキノコ	Гриб Монетка	Гриб Монетка	Cogumelo Moeda	판타지
+이름	1b 특수 버섯	900479	동전 대왕버섯	King Coin Mushroom	コイン大王キノコ	Гриб-великан Монетка	Велетень Монетка	Cogumelo-Rei Moeda	판타지
+이름	1b 특수 버섯	900480	별똥 버섯	Stardrop Mushroom	ほしくずキノコ	Гриб Звёздочка	Гриб Зорепадик	Cogumelo Estrela	판타지
+이름	1b 특수 버섯	900481	별똥 대왕버섯	King Stardrop Mushroom	ほしくず大王キノコ	Гриб-великан Звёздочка	Велетень Зорепадик	Cogumelo-Rei Estrela	판타지
+이름	1b 특수 버섯	900482	새싹 버섯	Sprout Mushroom	めばえキノコ	Гриб Росток	Гриб Паросток	Cogumelo Broto	판타지
+이름	1b 특수 버섯	900483	새싹 대왕버섯	King Sprout Mushroom	めばえ大王キノコ	Гриб-великан Росток	Велетень Паросток	Cogumelo-Rei Broto	판타지
+이름	1b 특수 버섯	900484	달빛 버섯	Moonlight Mushroom	つきあかりキノコ	Гриб Лунник	Гриб Місячко	Cogumelo Luar	판타지
+이름	1b 특수 버섯	900485	달빛 대왕버섯	King Moonlight Mushroom	つきあかり大王キノコ	Гриб-великан Лунник	Велетень Місячко	Cogumelo-Rei Luar	판타지
+이름	1b 특수 버섯	900486	바람 버섯	Breeze Mushroom	かぜキノコ	Гриб Ветерок	Гриб Вітерець	Cogumelo Brisa	판타지
+이름	1b 특수 버섯	900487	바람 대왕버섯	King Breeze Mushroom	かぜ大王キノコ	Гриб-великан Ветерок	Велетень Вітерець	Cogumelo-Rei Brisa	판타지
+이름	1b 특수 버섯	900488	조약돌 버섯	Pebble Mushroom	こいしキノコ	Гриб Камешек	Гриб Камінчик	Cogumelo Pedrinha	판타지
+이름	1b 특수 버섯	900489	조약돌 대왕버섯	King Pebble Mushroom	こいし大王キノコ	Гриб-великан Камешек	Велетень Камінчик	Cogumelo-Rei Pedrinha	판타지
+이름	1b 특수 버섯	900490	꿀밤 버섯	Chestnut Mushroom	どんぐりキノコ	Гриб Каштанчик	Гриб Каштанчик	Cogumelo Castanha	판타지
+이름	1b 특수 버섯	900491	꿀밤 대왕버섯	King Chestnut Mushroom	どんぐり大王キノコ	Гриб-великан Каштанчик	Велетень Каштанчик	Cogumelo-Rei Castanha	판타지
+이름	2a 꼬마	900452	불씨 꼬마	Little Ember	ほのおちびっこ	Малыш Уголёк	Малюк Жаринка	Pequenino Brasa	번역
+이름	2a 꼬마	900454	찌릿 꼬마	Little Zappy	ビリビリちびっこ	Малыш Искорка	Малюк Іскринка	Pequenino Faísca	번역
+이름	2a 꼬마	900456	이슬 꼬마	Little Dew	しずくちびっこ	Малыш Росинка	Малюк Росинка	Pequenino Orvalho	번역
+이름	2a 꼬마	900458	동전 꼬마	Little Coin	コインちびっこ	Малыш Монетка	Малюк Монетка	Pequenino Moeda	번역
+이름	2a 꼬마	900460	별똥 꼬마	Little Stardrop	ほしくずちびっこ	Малыш Звёздочка	Малюк Зорепадик	Pequenino Estrela	번역
+이름	2a 꼬마	900462	새싹 꼬마	Little Sprout	めばえちびっこ	Малыш Росток	Малюк Паросток	Pequenino Broto	번역
+이름	2a 꼬마	900464	달빛 꼬마	Little Moonlight	つきあかりちびっこ	Малыш Лунник	Малюк Місячко	Pequenino Luar	번역
+이름	2a 꼬마	900466	바람 꼬마	Little Breeze	かぜちびっこ	Малыш Ветерок	Малюк Вітерець	Pequenino Brisa	번역
+이름	2a 꼬마	900468	조약돌 꼬마	Little Pebble	こいしちびっこ	Малыш Камешек	Малюк Камінчик	Pequenino Pedrinha	번역
+이름	2a 꼬마	900470	꿀밤 꼬마	Little Chestnut	どんぐりちびっこ	Малыш Каштанчик	Малюк Каштанчик	Pequenino Castanha	번역
+이름	2b 꼬마 스킨	900094	용암 꼬마	Little Lava	溶岩ちびっこ	Малыш-лава	Лавовий малюк	Pequenino Lava	번역
+이름	2b 꼬마 스킨	900095	네온 꼬마	Little Neon	ネオンちびっこ	Малыш-неон	Неоновий малюк	Pequenino Neon	번역
+이름	2b 꼬마 스킨	900096	눈송이 꼬마	Little Snowflake	雪ちびっこ	Малыш-снежинка	Сніжинка-малюк	Pequenino Neve	번역
+이름	2b 꼬마 스킨	900097	부자 꼬마	Little Moneybags	お金持ちちびっこ	Малыш-богач	Багатенький малюк	Pequenino Ricaço	번역
+이름	2b 꼬마 스킨	900098	은하 꼬마	Little Galaxy	銀河ちびっこ	Малыш-галактика	Галактичний малюк	Pequenino Galáxia	번역
+이름	2b 꼬마 스킨	900099	벚꽃 꼬마	Little Cherry Blossom	桜ちびっこ	Малыш-сакура	Сакура-малюк	Pequenino Cerejeira	번역
+이름	2b 꼬마 스킨	900100	햇님 꼬마	Little Sunny	おひさまちびっこ	Малыш-солнышко	Сонячний малюк	Pequenino Solzinho	번역
+이름	2b 꼬마 스킨	900101	구름 꼬마	Little Cloud	雲ちびっこ	Малыш-облачко	Хмаринка-малюк	Pequenino Nuvem	번역
+이름	2b 꼬마 스킨	900102	보석 꼬마	Little Gem	宝石ちびっこ	Малыш-самоцвет	Самоцвітний малюк	Pequenino Joia	번역
+이름	2b 꼬마 스킨	900103	딸기초코 꼬마	Little Strawberry Choco	いちごチョコちびっこ	Малыш-шоколадка	Полунично-шоколадний малюк	Pequenino Choco-Morango	번역
+이름	2d 세계수 단계	900933	새싹	Sprout	新芽	Росток	Паросток	Broto	번역
+이름	2d 세계수 단계	900934	묘목	Sapling	若木	Саженец	Саджанець	Muda	번역
+이름	2d 세계수 단계	900935	어린 나무	Young Tree	若い木	Молодое дерево	Молоде дерево	Árvore Jovem	번역
+이름	2d 세계수 단계	900936	버섯 나무	Mushroom Tree	キノコの木	Грибное дерево	Грибне дерево	Árvore-Cogumelo	번역
+이름	2d 세계수 단계	900937	이끼 고목	Mossy Elder	苔むす古木	Замшелое древо	Мшистий старець	Ancião Musgoso	번역
+이름	2d 세계수 단계	900938	룬 신목	Sacred Rune Tree	ルーンの神木	Рунное древо	Рунне дерево	Árvore Rúnica	번역
+이름	2d 세계수 단계	900939	고대수	Ancient Tree	古代樹	Древнее древо	Прадавнє дерево	Árvore Ancestral	번역
+이름	2d 세계수 단계	900940	아르카나 세계수	Arcana World Tree	アルカナ世界樹	Мировое древо Аркана	Світове дерево Аркани	Árvore do Mundo Arcana	번역
+이름	2e 나무버섯·구역	900949	선반 나무버섯	Shelf Tree Mushroom	棚ツリーキノコ	Полочный древесный гриб	Полицевий деревний гриб	Cogumelo Prateleira	번역
+이름	2e 나무버섯·구역	900950	다발 나무버섯	Cluster Tree Mushroom	房ツリーキノコ	Пучковый древесный гриб	Гронистий деревний гриб	Cogumelo em Cacho	번역
+이름	2e 나무버섯·구역	900951	발광 나무버섯	Glowing Tree Mushroom	光るツリーキノコ	Светящийся древесный гриб	Сяйний деревний гриб	Cogumelo Luminoso	번역
+이름	2e 나무버섯·구역	900952	황금 나무버섯	Golden Tree Mushroom	黄金ツリーキノコ	Золотой древесный гриб	Золотий деревний гриб	Cogumelo Áureo	번역
+이름	2e 나무버섯·구역	900953	뿌리	Roots	根っこ	Корни	Коріння	Raízes	번역
+이름	2e 나무버섯·구역	900955	줄기	Trunk	幹	Ствол	Стовбур	Tronco	번역
+이름	2e 나무버섯·구역	900957	가지	Branches	枝	Ветви	Гілки	Galhos	번역
+이름	2e 나무버섯·구역	900959	수관	Canopy	樹冠	Крона	Крона	Copa	번역
+이름	3a 수확기	100001	오래된 낫	Old Sickle	古びた鎌	Старый серп	Старий серп	Foice Velha	번역
+이름	3a 수확기	200001	기본형	Basic	基本型	Базовый	Базовий	Básico	번역
+이름	3a 수확기	100002	절삭 수리검	Cutting Shuriken	切断手裏剣	Режущий сюрикэн	Різальний сюрікен	Shuriken Cortante	번역
+이름	3a 수확기	200002	속도형	Speed	スピード型	Скоростной	Швидкість	Veloz	번역
+이름	3a 수확기	100003	약초 괭이	Herb Hoe	薬草のくわ	Мотыга травника	Мотика трав'яра	Enxada de Ervas	번역
+이름	3a 수확기	200003	치명타형	Critical	クリティカル型	Критический	Критичний	Crítico	번역
+이름	3a 수확기	100004	회전칼날 수확기	Spinning Blade Harvester	回転ブレード収穫機	Сборщик с вращающимся лезвием	Збирач з обертовим лезом	Coletor-Lâmina	번역
+이름	3a 수확기	200004	범위형	Area	範囲型	Площадной	Область	Área	번역
+이름	3a 수확기	100005	분열 수확기	Splitting Harvester	分裂収穫機	Делящийся сборщик	Збирач-розділювач	Coletor Divisor	번역
+이름	3a 수확기	200005	분열형	Splitting	分裂型	Делящийся	Розділення	Divisor	번역
+이름	3a 수확기	100006	방울 수확기	Bell Harvester	鈴の収穫機	Сборщик-колокольчик	Дзвінковий збирач	Coletor-Sino	번역
+이름	3a 수확기	200006	울림형	Resonance	響き型	Звенящий	Резонанс	Ressonância	번역
+이름	3a 수확기	100007	엽전 수확기	Coin Harvester	銭の収穫機	Сборщик-монета	Монетний збирач	Coletor-Moeda	번역
+이름	3a 수확기	200007	재물형	Wealth	財宝型	Денежный	Багатство	Riqueza	번역
+이름	3a 수확기	100008	황금 수확기	Golden Harvester	黄金の収穫機	Золотой сборщик	Золотий збирач	Coletor Dourado	번역
+이름	3a 수확기	200008	보상	Reward	報酬型	Наградной	Нагорода	Recompensa	번역
+이름	3b 수확기 스킨	900104	벚꽃 낫	Cherry Blossom Sickle	桜の鎌	Серп сакуры	Серп сакури	Foice de Cerejeira	번역
+이름	3b 수확기 스킨	900105	흑요석 수리검	Obsidian Shuriken	黒曜石の手裏剣	Обсидиановый сюрикэн	Обсидіановий сюрікен	Shuriken de Obsidiana	번역
+이름	3b 수확기 스킨	900106	얼음 칼날	Ice Blade	氷の刃	Ледяное лезвие	Крижаний клинок	Lâmina de Gelo	번역
+이름	3b 수확기 스킨	900107	은하 포자	Galaxy Spore	銀河の胞子	Галактическая спора	Галактична спора	Esporo Galáctico	번역
+이름	3b 수확기 스킨	900108	황금 방울	Golden Bell	黄金の鈴	Золотой колокольчик	Золотий дзвоник	Sino Dourado	번역
+이름	3b 수확기 스킨	900109	옥 엽전	Jade Coin	翡翠の銭	Нефритовая монета	Нефритова монета	Moeda de Jade	번역
+이름	3b 수확기 스킨	900110	용의 낫	Dragon Sickle	竜の鎌	Серп дракона	Серп дракона	Foice do Dragão	번역
+이름	4a 보스	209001	대왕송이	King Matsutake	大王松茸	Король мацутакэ	Король мацутаке	Matsutake-Rei	번역
+이름	4a 보스	209002	숲 속의 청소부	Forest Cleaner	森の掃除屋	Лесной уборщик	Лісовий прибиральник	Faxineiro da Floresta	번역
+이름	4a 보스	209003	죽음의 천사	Angel of Death	死の天使	Ангел смерти	Ангел смерті	Anjo da Morte	번역
+이름	4a 보스	209004	환상 버섯	Phantom Mushroom	まぼろしキノコ	Гриб-призрак	Примарний гриб	Cogumelo Fantasma	번역
+이름	4a 보스	209005	움직이는 버섯	Wandering Mushroom	動くキノコ	Странствующий гриб	Мандрівний гриб	Cogumelo Andarilho	번역
+이름	4b 날씨	208001	맑음	Clear	晴れ	Ясно	Ясно	Céu Limpo	번역
+이름	4b 날씨	208002	보슬비	Drizzle	小雨	Морось	Мжичка	Garoa	번역
+이름	4b 날씨	208003	보름달 밤	Full Moon Night	満月の夜	Ночь полнолуния	Ніч повного місяця	Noite de Lua Cheia	번역
+이름	4b 날씨	208004	폭우	Downpour	大雨	Ливень	Злива	Temporal	번역
+이름	4b 날씨	208005	포자 바람	Spore Wind	胞子の風	Споровый ветер	Споровий вітер	Vento de Esporos	번역
+이름	4b 날씨	208006	한파	Cold Snap	寒波	Похолодание	Холоди	Onda de Frio	번역
+이름	4c 지역	900217	숲	Forest	森	Лес	Ліс	Floresta	번역
+이름	4c 지역	900224	달빛 밤	Moonlit Night	月夜	Лунная ночь	Місячна ніч	Noite de Luar	번역
+이름	4c 지역	900226	들판	Meadow	野原	Луг	Луг	Campina	번역
+이름	4c 지역	900232	바다	Sea	海	Море	Море	Mar	번역
+이름	4c 지역	900237	버섯 폐허 도시	Ruined Mushroom City	キノコ廃墟の街	Руины грибного города	Зруйноване грибне місто	Cidade-Cogumelo em Ruínas	번역
+이름	4d 숲 장치	900242	그루터기 범퍼	Stump Bumper	切り株バンパー	Пень-отбойник	Пеньковий відбивач	Toco Amortecedor	번역
+이름	4d 숲 장치	302057	그루터기	Stump	切り株	Пень	Пеньок	Toco	번역
+이름	4d 숲 장치	302058	이끼 길	Moss Path	苔の道	Моховая тропа	Моховий шлях	Trilha de Musgo	번역
+이름	4d 숲 장치	302059	도토리 스위치	Acorn Switch	どんぐりスイッチ	Желудёвый переключатель	Жолудевий перемикач	Botão de Bolota	번역
+이름	4e 도감 세트	900243	광대버섯 가문	Amanita Family	テングタケ一族	Род мухоморов	Родина мухоморів	Família Amanita	번역
+이름	4e 도감 세트	900245	선반 버섯	Shelf Mushroom	サルノコシカケのなかま	Полочный гриб	Полицевий гриб	Orelhas-de-Pau	번역
+이름	4e 도감 세트	900251	동충하초 형제	Cordyceps Brothers	冬虫夏草きょうだい	Братья кордицепсы	Брати-кордицепси	Irmãos Cordyceps	번역
+이름	4e 도감 세트	900254	젤리 친구들	Jelly Friends	ゼリーのなかまたち	Желейные друзья	Желейні друзі	Amigos Gelatinosos	번역
+이름	4e 도감 세트	900256	방구와 연기	Puffs and Smoke	けむりとおなら	Пыхи и дымок	Пуфи й дим	Puns e Fumaça	번역
+이름	4e 도감 세트	900258	빛나는 숲	Glowing Forest	光る森	Светящийся лес	Сяйний ліс	Floresta Brilhante	번역
+이름	4e 도감 세트	900260	산호와 뿔	Coral and Antlers	サンゴとツノ	Коралл и рога	Корал і роги	Corais e Chifres	번역
+이름	4e 도감 세트	900263	버섯 요리사	Mushroom Chef	キノコ料理人	Грибной повар	Грибний кухар	Chef de Cogumelos	번역
+이름	4e 도감 세트	900265	약초꾼	Herbalist	薬草つみ	Травник	Травник	Erveiro	번역
+이름	4e 도감 세트	900267	독 연구가	Poison Researcher	毒の研究家	Исследователь ядов	Дослідник отрут	Toxicologista	번역
+이름	4f 불꽃·등급·분류	900269	노란 불꽃	Yellow Flame	黄色い炎	Жёлтое пламя	Жовте полум'я	Chama Amarela	번역
+이름	4f 불꽃·등급·분류	900270	푸른 불꽃	Blue Flame	青い炎	Синее пламя	Синє полум'я	Chama Azul	번역
+이름	4f 불꽃·등급·분류	900271	보라 불꽃	Purple Flame	紫の炎	Фиолетовое пламя	Фіолетове полум'я	Chama Roxa	번역
+이름	4f 불꽃·등급·분류	900272	초록 불꽃	Green Flame	緑の炎	Зелёное пламя	Зелене полум'я	Chama Verde	번역
+이름	4f 불꽃·등급·분류	900273	하얀 불꽃	White Flame	白い炎	Белое пламя	Біле полум'я	Chama Branca	번역
+이름	4f 불꽃·등급·분류	900277	일반	Common	ノーマル	Обычный	Звичайний	Comum	번역
+이름	4f 불꽃·등급·분류	900278	에픽	Epic	エピック	Эпический	Епічний	Épico	번역
+이름	4f 불꽃·등급·분류	900279	유니크	Unique	ユニーク	Уникальный	Унікальний	Único	번역
+이름	4f 불꽃·등급·분류	900280	레전드리	Legendary	レジェンダリー	Легендарный	Легендарний	Lendário	번역
+이름	4f 불꽃·등급·분류	900983	고급	Uncommon	上質	Необычное	Добротний	Incomum	번역
+이름	4f 불꽃·등급·분류	900984	희귀	Rare	レア	Редкое	Рідкісний	Raro	번역
+이름	4f 불꽃·등급·분류	900274	식용	Edible	食用	Съедобный	Їстівний	Comestível	번역
+이름	4f 불꽃·등급·분류	900275	약용	Medicinal	薬用	Лекарственный	Лікарський	Medicinal	번역
+이름	4f 불꽃·등급·분류	900276	독	Poison	毒	Ядовитый	Отруйний	Veneno	번역
+이름	4f 불꽃·등급·분류	900091	식용 버섯	Edible Mushroom	食用キノコ	Съедобный гриб	Їстівний гриб	Cogumelo Comestível	번역
+이름	4f 불꽃·등급·분류	900092	약용 버섯	Medicinal Mushroom	薬用キノコ	Лекарственный гриб	Лікарський гриб	Cogumelo Medicinal	번역
+이름	4f 불꽃·등급·분류	900093	독버섯	Poisonous Mushroom	毒キノコ	Ядовитый гриб	Отруйний гриб	Venenoso	번역
+이름	4f 불꽃·등급·분류	900868	독 버섯	Poisonous Mushrooms	毒キノコ	Ядовитые грибы	Отруйні гриби	Venenosos	번역
+이름	4f 불꽃·등급·분류	900869	특수 버섯	Special Mushrooms	特別キノコ	Особые грибы	Особливі гриби	Especiais	번역
+이름	4f 불꽃·등급·분류	900862	식용 균사	Edible Mycelium	食用菌糸	Съедобный мицелий	Їстівний міцелій	Micélio Comestível	번역
+이름	4f 불꽃·등급·분류	900863	약용 균사	Medicinal Mycelium	薬用菌糸	Лекарственный мицелий	Лікарський міцелій	Micélio Medicinal	번역
+이름	4f 불꽃·등급·분류	900864	독 균사	Poison Mycelium	毒菌糸	Ядовитый мицелий	Отруйний міцелій	Micélio Venenoso	번역
+이름	4f 불꽃·등급·분류	900111	초반	Early	序盤	Начало	Початок	Início	번역
+이름	4f 불꽃·등급·분류	900112	중반	Mid	中盤	Середина	Середина	Meio	번역
+이름	4f 불꽃·등급·분류	900113	후반	Late	終盤	Поздняя игра	Кінець	Fim	번역
+이름	5a 노드	303002	타격 점수 I	Hit Score I	ヒットスコア I	Очки за удар I	Бали за удар I	Pontos de Acerto I	
+이름	5a 노드	303006	군락지 수	Colony Count	群落数	Число колоний	Кількість колоній	Nº de Colônias	
+이름	5a 노드	303007	군락 재생 속도	Colony Regrowth Speed	群落再生速度	Возрождение колоний	Швидкість відновлення колоній	Regeneração de Colônias	
+이름	5a 노드	303003	정산 보너스	Payout Bonus	精算ボーナス	Бонус итогов	Бонус виплати	Bônus de Lucro	
+이름	5a 노드	303012	수확량 I	Yield I	収穫量 I	Урожай I	Врожай I	Rendimento I	
+이름	5a 노드	303016	타격 점수 I+	Hit Score I+	ヒットスコア I+	Очки за удар I+	Бали за удар I+	Pontos de Acerto I+	
+이름	5a 노드	303017	수확량 I+	Yield I+	収穫量 I+	Урожай I+	Врожай I+	Rendimento I+	
+이름	5a 노드	303018	타격 점수 II	Hit Score II	ヒットスコア II	Очки за удар II	Бали за удар II	Pontos de Acerto II	
+이름	5a 노드	303019	수확량 II	Yield II	収穫量 II	Урожай II	Врожай II	Rendimento II	
+이름	5a 노드	303020	타격 점수 II+	Hit Score II+	ヒットスコア II+	Очки за удар II+	Бали за удар II+	Pontos de Acerto II+	
+이름	5a 노드	303021	수확량 II+	Yield II+	収穫量 II+	Урожай II+	Врожай II+	Rendimento II+	
+이름	5a 노드	303022	군락지 수 II	Colony Count II	群落数 II	Число колоний II	Кількість колоній II	Nº de Colônias II	
+이름	5a 노드	303023	정산 보너스 II	Payout Bonus II	精算ボーナス II	Бонус итогов II	Бонус виплати II	Bônus de Lucro II	
+이름	5a 노드	303008	변종 출현율	Rare Spawn Rate	変種出現率	Шанс редких грибов	Частота різновидів	Taxa de Variantes	
+이름	5a 노드	303014	군락지 버섯 수	Mushrooms per Colony	群落のキノコ数	Грибов в колонии	Грибів у колонії	Cogumelos por Colônia	
+이름	5a 노드	303024	타격 점수 III	Hit Score III	ヒットスコア III	Очки за удар III	Бали за удар III	Pontos de Acerto III	
+이름	5a 노드	303025	수확량 III	Yield III	収穫量 III	Урожай III	Врожай III	Rendimento III	
+이름	5a 노드	303026	타격 점수 III+	Hit Score III+	ヒットスコア III+	Очки за удар III+	Бали за удар III+	Pontos de Acerto III+	
+이름	5a 노드	303027	수확량 III+	Yield III+	収穫量 III+	Урожай III+	Врожай III+	Rendimento III+	
+이름	5a 노드	303005	단골 손님	Regular Customer	常連さん	Постоянный клиент	Постійний покупець	Freguês Fiel	
+이름	5a 노드	303009	황금 변종	Golden Variant	黄金変種	Золотой вариант	Золотий різновид	Variante Dourada	
+이름	5a 노드	303010	거대 버섯	Giant Mushroom	巨大キノコ	Гигантский гриб	Гігантський гриб	Cogumelo Gigante	
+이름	5a 노드	303013	배수 획득	Triple Harvest	3倍収穫	Множитель урожая	Множник збору	Colheita Tripla	
+이름	5a 노드	302002	필드 넓히기	Widen Field	フィールド拡張	Расширить поле	Розширення поля	Ampliar Campo	
+이름	5a 노드	302003	바 넓이	Bar Width	バー幅	Ширина планки	Ширина планки	Largura da Barra	
+이름	5a 노드	302004	콤보 계수	Combo Factor	コンボ係数	Коэффициент комбо	Коефіцієнт комбо	Fator de Combo	
+이름	5a 노드	302007	꼬마 수확기	Little Harvester	ちびっこ収穫機	Маленький сборщик	Малий збирач	Coletor Mirim	
+이름	5a 노드	302053	콤보 계수 II	Combo Factor II	コンボ係数 II	Коэффициент комбо II	Коефіцієнт комбо II	Fator de Combo II	
+이름	5a 노드	302008	임시 수확기 수명	Temp Harvester Lifespan	一時収穫機の寿命	Жизнь врем. сборщиков	Життя тимчасових збирачів	Vida do Coletor Temp.	
+이름	5a 노드	302005	꼬마 건축가	Little Builder	ちびっこ大工	Малыш-строитель	Малий будівельник	Construtor Mirim	
+이름	5a 노드	302006	숲 장치 강화	Forest Gadget Boost	森のしかけ強化	Усиление лесных устройств	Посилення лісових пристроїв	Engenhocas+	
+이름	5a 노드	302009	가속	Speed Up	加速	Ускорение	Прискорення	Acelerar	스킬
+이름	5a 노드	302012	날 갈기	Sharpen	刃研ぎ	Заточка	Гостріння	Afiar	스킬
+이름	5a 노드	302015	분열	Split	分裂	Раздвоение	Розділення	Divisão	스킬
+이름	5a 노드	302021	맑은 포자막	Clear Spore Veil	澄んだ胞子膜	Очищающая завеса	Чиста спорова завіса	Véu de Esporos Puro	스킬
+이름	5a 노드	302024	포자 폭발	Spore Burst	胞子爆発	Споровый взрыв	Споровий вибух	Explosão de Esporos	스킬
+이름	5a 노드	302030	분신 수확기	Clone Harvester	分身収穫機	Сборщик-двойник	Збирач-двійник	Coletor Clone	스킬
+이름	5a 노드	302033	버섯 자석	Mushroom Magnet	キノコ磁石	Грибной магнит	Грибний магніт	Ímã de Cogumelos	스킬
+이름	5a 노드	302036	연쇄 번개	Chain Lightning	連鎖雷	Цепная молния	Ланцюгова блискавка	Relâmpago em Cadeia	스킬
+이름	5a 노드	302039	회오리	Tornado	竜巻	Торнадо	Смерч	Tornado	스킬
+이름	5a 노드	302042	충격파	Shockwave	衝撃波	Ударная волна	Ударна хвиля	Onda de Choque	스킬
+이름	5a 노드	302047	관통	Pierce	貫通	Пронзание	Пробиття	Perfuração	스킬
+이름	5a 노드	302060	유도	Homing	誘導	Наведение	Наведення	Teleguiado	스킬
+이름	5a 노드	302061	기운 북돋기	Power Up	気力アップ	Прилив сил	Підбадьорення	Dar Ânimo	스킬
+이름	5a 노드	302062	분신 바	Clone Bar	分身バー	Двойник-планка	Планка-двійник	Barra Clone	스킬
+이름	5a 노드	302050	풍년	Bountiful Harvest	豊作	Урожайный год	Щедрий урожай	Colheita Farta	스킬
+이름	5a 노드	302052	버프 지속	Buff Duration	バフ持続	Длительность баффов	Тривалість бафів	Duração dos Buffs	
+이름	5a 노드	301002	공격력 I	Attack I	攻撃力 I	Атака I	Атака I	Ataque I	
+이름	5a 노드	301003	수확기 크기	Harvester Size	収穫機のサイズ	Размер сборщика	Розмір збирача	Tamanho do Coletor	
+이름	5a 노드	301004	공속	Harvester Speed	スピード	Скорость сборщика	Швидкість атаки	Vel. do Coletor	
+이름	5a 노드	301006	지속시간	Duration	持続時間	Длительность	Тривалість	Duração	
+이름	5a 노드	301010	수확기 +1	Harvester +1	収穫機 +1	Сборщик +1	Збирач +1	Coletor +1	
+이름	5a 노드	301015	공격력 II	Attack II	攻撃力 II	Атака II	Атака II	Ataque II	
+이름	5a 노드	301016	수확기 +1 (II)	Harvester +1 (II)	収穫機 +1 (II)	Сборщик +1 (II)	Збирач +1 (II)	Coletor +1 (II)	
+이름	5a 노드	301017	공격력 II+	Attack II+	攻撃力 II+	Атака II+	Атака II+	Ataque II+	
+이름	5a 노드	301018	지속시간 II	Duration II	持続時間 II	Длительность II	Тривалість II	Duração II	
+이름	5a 노드	301008	치명타	Critical Hit	クリティカル	Критический удар	Критичний удар	Golpe Crítico	
+이름	5a 노드	301005	포자 저항	Spore Resistance	胞子耐性	Стойкость к спорам	Стійкість до спор	Resistência a Esporos	
+이름	5a 노드	301007	선제 공격	First Strike	先制攻撃	Первый удар	Перший удар	Primeiro Golpe	
+이름	5a 노드	301011	회전 칼날	Spinning Blade	回転ブレード	Вращающееся лезвие	Обертове лезо	Lâmina Giratória	
+이름	5a 노드	301025	바 넓이 II	Bar Width II	バー幅 II	Ширина планки II	Ширина планки II	Largura da Barra II	
+이름	5a 노드	301026	바 반사 속도	Bar Rebound Speed	バー反射速度	Скорость отскока от планки	Швидкість відбиття від планки	Rebote da Barra	
+이름	5a 노드	301027	바 스킬 지속	Bar Skill Duration	バースキル持続	Длительность навыков планки	Тривалість навичок планки	Duração Hab. da Barra	
+이름	5a 노드	301028	바 스킬 발동률	Bar Skill Trigger Chance	バースキル発動率	Шанс навыков планки	Шанс навичок планки	Chance Hab. da Barra	
+이름	5a 노드	301029	북돋기 강화	Power Up Boost	気力アップ強化	Усиление «Прилива сил»	Посилення підбадьорення	Reforço do Ânimo	
+이름	5a 노드	301019	공격력 III	Attack III	攻撃力 III	Атака III	Атака III	Ataque III	
+이름	5a 노드	301020	공격력 III+	Attack III+	攻撃力 III+	Атака III+	Атака III+	Ataque III+	
+이름	5a 노드	301021	공격력 IV	Attack IV	攻撃力 IV	Атака IV	Атака IV	Ataque IV	
+이름	5a 노드	301022	수확기 +2 (III)	Harvester +2 (III)	収穫機 +2 (III)	Сборщик +2 (III)	Збирач +2 (III)	Coletor +2 (III)	
+이름	5a 노드	301023	치명타 피해	Critical Damage	クリティカルダメージ	Критический урон	Критична шкода	Dano Crítico	
+이름	5a 노드	301009	무더기 파쇄	Cluster Crusher	塊くだき	Крушитель куч	Розтрощувач купок	Esmaga-Montes	
+이름	5a 노드	303028	균사 공명	Mycelium Resonance	菌糸の共鳴	Резонанс мицелия	Резонанс міцелію	Ressonância do Micélio	
+이름	5a 노드	303029	균사 감응	Mycelium Attunement	菌糸の感応	Отклик мицелия	Налаштування на міцелій	Sintonia do Micélio	
+이름	5a 노드	303030	풍요의 손길	Touch of Plenty	実りの手	Рука изобилия	Дотик достатку	Toque da Fartura	
+이름	5a 노드	302054	자동 수확 확장	Auto Harvest Expansion	自動収穫の拡張	Расширение автосбора	Розширення автозбору	Colheita Automática+	
+이름	5a 노드	302055	대지의 축복	Blessing of the Earth	大地の祝福	Благословение земли	Благословення землі	Bênção da Terra	
+이름	5a 노드	302056	균사석 낙하	Mycelium Stone Fall	菌糸石落下	Падение камней мицелия	Падіння міцелієвих каменів	Chuva de Pedras	
+이름	5a 노드	301024	독성 내성	Toxin Resistance	毒への耐性	Стойкость к токсинам	Стійкість до токсинів	Resistência a Toxinas	
+이름	5a 노드	301030	균사 투지	Mycelium Grit	菌糸の闘志	Боевой дух мицелия	Міцелієвий бойовий дух	Garra do Micélio	
+이름	5a 노드	301031	보스 파쇄	Boss Crusher	ボスくだき	Крушитель боссов	Розтрощувач босів	Esmaga-Chefes	
+이름	5a 노드	303031	균사 정산	Mycelium Payout	菌糸の精算	Итоги мицелия	Міцелієва виплата	Lucro de Micélio	
+이름	5a 노드	302063	보스의 전리품	Boss Spoils	ボスの戦利品	Трофеи босса	Трофеї боса	Espólio do Chefe	
+이름	5a 노드	302064	균사 술법	Mycelium Arts	菌糸の術	Искусство мицелия	Мистецтво міцелію	Artes do Micélio	
+이름	5a 노드	302065	균사 바	Mycelium Bar	菌糸バー	Планка мицелия	Міцелієва планка	Barra de Micélio	
+이름	5a 노드	301032	끝없는 투지	Endless Grit	果てなき闘志	Неукротимый дух	Незламний дух	Garra Infinita	무한
+이름	5a 노드	303032	끝없는 풍년	Endless Bounty	果てなき豊作	Неиссякаемый урожай	Нескінченний урожай	Fartura Infinita	무한
+이름	5a 노드	303033	희귀 포자	Rare Spores	希少な胞子	Редкие споры	Рідкісні спори	Esporos Raros	
+이름	5b 능력치	900439	공격력	Attack	攻撃力	Атака	Атака	Ataque	
+이름	5b 능력치	900440	이동 속도	Move Speed	移動速度	Скорость	Швидкість руху	Velocidade	
+이름	5b 능력치	900441	치명타 확률	Crit Chance	クリティカル率	Шанс крита	Шанс криту	Chance de Crítico	
+이름	5b 능력치	900442	스킬 피해	Skill Damage	スキルダメージ	Урон навыков	Шкода навичок	Dano de Habilidade	
+이름	5b 능력치	900443	스킬 발동률	Skill Trigger Chance	スキル発動率	Шанс навыков	Шанс навичок	Ativação de Habilidade	
+이름	5b 능력치	900444	제한시간	Time Limit	制限時間	Время	Ліміт часу	Tempo Limite	
+이름	5b 능력치	900446	바 길이	Bar Length	バーの長さ	Длина планки	Довжина планки	Tamanho da Barra	
+이름	5b 능력치	900447	타격 점수	Hit Score	ヒットスコア	Очки за удар	Бали за удар	Pontos de Acerto	
+이름	5b 능력치	900448	수확량	Yield	収穫量	Урожай	Врожай	Rendimento	
+이름	5b 능력치	900449	정산 골드	Payout Gold	精算ゴールド	Итоговое золото	Золото виплати	Lucro	
+이름	5b 능력치	900450	에픽 이상 출현	Epic+ Spawn	エピック以上の出現	Эпик и выше	Епічні+ частіше	Chance de Épico+	
+이름	5b 능력치	900451	황금 변종 확률	Golden Variant Chance	黄金変種の確率	Шанс золотого	Шанс золотого різновиду	Chance de Dourado	
+이름	6a 장식	900985	잎사귀 등불	Leaf Lantern	葉っぱのランタン	Фонарик из листьев	Листяний ліхтарик	Lanterna de Folhas	
+이름	6a 장식	900986	꽃 화관	Flower Wreath	花のかんむり	Цветочный венок	Квітковий вінок	Coroa de Flores	
+이름	6a 장식	900987	나무 새집	Wooden Birdhouse	木の巣箱	Деревянный скворечник	Дерев'яна шпаківня	Casinha de Passarinho	
+이름	6a 장식	900988	물방울 풍경	Dewdrop Wind Chime	しずくの風鈴	Росяные колокольчики	Росяний передзвін	Sininho de Orvalho	
+이름	6a 장식	900989	이끼 샘물	Mossy Spring	苔の泉	Моховой родник	Мшисте джерельце	Fonte Musgosa	
+이름	6a 장식	900990	수련 연못	Lily Pond	スイレンの池	Пруд с кувшинками	Ставок з лататтям	Lago de Lírios	
+이름	6a 장식	900991	깃털 드림캐처	Feather Dreamcatcher	羽根のドリームキャッチャー	Ловец снов с перьями	Пір'їновий ловець снів	Filtro dos Sonhos	
+이름	6a 장식	900992	바람개비	Pinwheel	かざぐるま	Вертушка	Вітрячок	Cata-Vento	
+이름	6a 장식	900993	덩굴 그네	Vine Swing	つるのブランコ	Качели из лозы	Ліанова гойдалка	Balanço de Cipó	
+이름	6a 장식	900994	돌 화로	Stone Hearth	石のたき火台	Каменный очаг	Кам'яне вогнище	Fogareiro de Pedra	
+이름	6a 장식	900995	불꽃 등롱	Flame Lantern	炎のランタン	Огненный фонарь	Вогняний ліхтар	Lanterna de Chamas	
+이름	6a 장식	900996	버섯 촛불	Mushroom Candle	キノコのろうそく	Грибная свеча	Грибна свічка	Vela de Cogumelo	
+이름	6a 장식	900997	버섯 돌탁자	Mushroom Stone Table	キノコの石テーブル	Грибной каменный стол	Грибний кам'яний столик	Mesa de Pedra Cogumelo	
+이름	6a 장식	900998	이끼 바위	Mossy Rock	苔むす岩	Замшелый валун	Мшистий валун	Rocha Musgosa	
+이름	6a 장식	900999	자수정 정동	Amethyst Geode	アメジストのジオード	Аметистовая жеода	Аметистова жеода	Geodo de Ametista	
+이름	6a 장식	901000	피뢰침 오브	Lightning Rod Orb	避雷針オーブ	Шар-громоотвод	Куля-блискавковідвід	Orbe Para-Raios	
+이름	6a 장식	901001	황금 수정등	Golden Crystal Lamp	黄金のクリスタルランプ	Золотая хрустальная лампа	Золота кришталева лампа	Luminária Dourada	
+이름	6a 장식	901002	놋쇠 종	Brass Bell	真鍮のベル	Латунный колокол	Латунний дзвіночок	Sino de Latão	
+이름	6a 장식	901003	초승달 장식	Crescent Moon Charm	三日月の飾り	Подвеска-месяц	Оберіг-півмісяць	Lua Crescente	
+이름	6a 장식	901004	별빛 가랜드	Starlight Garland	星明かりのガーランド	Гирлянда из звёздного света	Зоряна гірлянда	Guirlanda de Estrelas	
+이름	6a 장식	901005	부엉이 목각	Carved Wooden Owl	フクロウの木彫り	Резная деревянная сова	Різьблена сова	Coruja Entalhada	
+이름	6a 장식	901006	룬 비석	Rune Monument	ルーンの石碑	Рунная стела	Рунний монумент	Monumento Rúnico	
+이름	6a 장식	901007	꼬마 왕관	Little One's Crown	ちびっこの王冠	Корона малыша	Корона малюка	Coroa de Pequenino	
+이름	6a 장식	901008	빛의 구슬	Orb of Light	光の玉	Шар света	Куля світла	Orbe de Luz	
+이름	6b 건물	900546	공방	Workshop	工房	Мастерская	Майстерня	Oficina	
+이름	6b 건물	901110	꼬마 공방	Little One Workshop	ちびっこ工房	Мастерская малышей	Майстерня малюків	Oficina dos Pequeninos	
+이름	6b 건물	900085	버섯 오두막	Mushroom Cottage	キノコの小屋	Грибной домик	Грибна хатка	Chalé de Cogumelo	옛
+이름	6b 건물	900078	버섯 화로	Mushroom Brazier	キノコのたき火台	Грибная жаровня	Грибна жаровня	Braseiro de Cogumelo	옛
+이름	6b 건물	900071	버섯 탁자	Mushroom Table	キノコのテーブル	Грибной стол	Грибний столик	Mesa de Cogumelo	옛
+이름	6b 건물	900073	포자 등불	Spore Lantern	胞子ランタン	Фонарь из спор	Спорова лампа	Lanterna de Esporos	옛
+이름	6b 건물	900075	꽃 화단	Flower Bed	花壇	Клумба	Клумба	Canteiro de Flores	옛
+이름	6b 건물	900081	꼬마 그네	Kids' Swing	ちびっこのブランコ	Качели малышей	Гойдалка для малюків	Balanço dos Pequeninos	옛
+이름	6b 건물	900083	버섯 분수	Mushroom Fountain	キノコの噴水	Грибной фонтан	Грибний фонтан	Fonte de Cogumelo	옛
+이름	6b 건물	900088	균사석 조각상	Mycelium Stone Statue	菌糸石の彫像	Статуя из камня мицелия	Статуя з міцелієвого каменя	Estátua de Pedra de Micélio	옛
