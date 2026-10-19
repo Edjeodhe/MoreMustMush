@@ -29,6 +29,7 @@ namespace MoreMush
                 case SystemLanguage.Japanese: return "ja";
                 case SystemLanguage.Russian: return "ru";
                 case SystemLanguage.Ukrainian: return "uk";
+                case SystemLanguage.Portuguese: return "pt";
                 default: return DefaultLang;
             }
         }
