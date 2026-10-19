@@ -352,8 +352,11 @@ namespace MoreMush
             int i = Math.Min(Stage(), WT.bagRatio.Length) - 1;
             double x = raw * 3600 / WT.bagRefGoldH[i];
             double eff = x <= 1 ? x : Math.Min(WT.bagEffMax, Math.Sqrt(x));
-            return G.bagGoldPerSec * WT.bagRatio[i] * eff;
+            return G.bagGoldPerSec * WT.bagRatio[i] * eff * BagCodexMul();
         }
+
+        // 도감 보너스 (골드만): 모은 종 비율만큼, 도감을 다 채우면 ×(1 + bagCodexMax)
+        public static double BagCodexMul() => SP_TOTAL <= 0 ? 1 : 1 + WT.bagCodexMax * SPECIES.Count(sp => Harvested(sp.id)) / SP_TOTAL;
 
         // 일반 판이 끝날 때 보따리 골드 기준을 갱신한다. 그때까지 쌓인 몫은 먼저 옛 기준으로 넣는다
         public static void BagBaseUpdate(double roundGold, double timeMax)

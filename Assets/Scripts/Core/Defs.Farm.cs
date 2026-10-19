@@ -27,11 +27,12 @@ namespace MoreMush
             // 단계별 수확 보따리(방치 보상) 균사석·개수 배율 (이론.md "세계수 보따리 단계 강화" B-4)
             public static readonly double[] bagMul = { 1, 1, 1.2, 1.4, 1.6, 2.2, 2.6, 3 };
             // 수확 보따리 골드 = 일반 판 골드/초(평활) × bagRatio × 효율항. 초반은 직접 플레이가 훨씬 낫고, 단계가 오를수록 방치 비중이 커지되
-            // 최대(8단계·강화 최대)에서도 플레이 시간당의 20% 아래 (이론.md "보따리 골드 판 수입 연동(Z2)", 검증.md 조건부 통과)
+            // 최대(8단계·강화 최대, 도감 보너스 전)에서 플레이 시간당의 20% (이론.md "보따리 골드 판 수입 연동(Z2)", 검증.md 조건부 통과)
             public static readonly double[] bagRatio = { 0.004, 0.0054, 0.0106, 0.0134, 0.018, 0.025, 0.037, 0.05 };
             public static readonly double[] bagRefGoldH = { 30364, 22773, 62991, 72739, 90829, 82246, 134055, 156570 };   // 기준 배치 나무버섯 골드/시간 (bag_z2.py)
             public const double bagEffMax = 4;                    // 효율항 상한 (기준 배치 대비, 1 위로는 제곱근)
             public const double bagRoundGap = 30;                 // 판 사이 시간 (초): 판 골드/초 = 판 골드 ÷ (제한시간 + 이것)
+            public const double bagCodexMax = 0.5;                // 도감 보너스: 모은 종 비율 × 50% (골드만). 8단계 강화 최대 + 도감 완성이면 방치 = 플레이 시간당의 30%
             public const double bagBaseKeep = 0.7;                // 판 골드/초 평활: 이전 × 0.7 + 이번 × 0.3 (운 좋은 한 판에 튀지 않게)
             public static int Picture(int stage) => System.Math.Max(1, System.Math.Min(stages, stage)) - 1;   // tree_0~7 (단계마다 그림 하나)
             // 그림(단계)별 나무 너비 (px, 1920×1080 무대 기준). 단계마다 확 커지고 마지막 단계는 훨씬 크게 (2026-10-16)
