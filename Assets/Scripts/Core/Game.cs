@@ -288,7 +288,7 @@ namespace MoreMush
             foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= (1 + ab["skill"] + tb.skill) * NF.gm_skill(Lv("gm_skill")); st.sk[id] = si; }
             st.burstR = NF.burst_r(st.sk["burst"].P) + (SetDone("fart") ? 30 : 0);
             st.festMul = 2 * st.sk["fest"].pm;
-            st.shroomHp = st.zoneMul;
+            st.shroomHp = st.zoneMul * EarlyHpMul(st.stage);   // 초반 스테이지는 버섯 체력을 낮춘다 (Defs.EarlyHpMul)
             // 보스 체력은 고른 지역이 아니라 그 스테이지의 최신 지역 기준 (예전 지역을 골라 쉽게 잡지 못하게)
             st.boss = boss;
             if (boss != null) st.bossHp = BossHp(boss, LatestTheme().id, st.stage);
