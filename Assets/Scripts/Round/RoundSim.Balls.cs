@@ -517,7 +517,9 @@ namespace MoreMush
         public void AddPart(float x, float y, float vx, float vy, float life, Color col, float size, FxShape shape = FxShape.Dot)
         {
             if (parts.Count > 260) return;
-            parts.Add(new Part { x = x, y = y, vx = vx, vy = vy, life = life, col = col, size = size, shape = (byte)shape });
+            var p = partFree.Count > 0 ? partFree.Pop() : new Part();   // 사라진 조각을 다시 쓴다 (모든 칸을 새로 채운다)
+            p.x = x; p.y = y; p.vx = vx; p.vy = vy; p.t = 0; p.life = life; p.col = col; p.size = size; p.shape = (byte)shape;
+            parts.Add(p);
         }
 
         // Effects draw from their own random stream: UnityEngine.Random is the gameplay stream that BalanceSim seeds,
@@ -531,7 +533,9 @@ namespace MoreMush
         public void AddFx(FxShape shape, float x, float y, float size, float dur, Color col, float rot, float rise)
         {
             if (fxs.Count > 90) return;
-            fxs.Add(new Fx { shape = shape, x = x, y = y, size = size, dur = dur, col = col, rot = rot, rise = rise, spin = FxR(-40, 40), flip = FxChance(0.5f) });
+            var f = fxFree.Count > 0 ? fxFree.Pop() : new Fx();   // 효과 난수(FxR·FxChance)는 예전과 같은 순서로 뽑는다
+            f.shape = shape; f.x = x; f.y = y; f.t = 0; f.size = size; f.dur = dur; f.col = col; f.rot = rot; f.rise = rise; f.spin = FxR(-40, 40); f.flip = FxChance(0.5f);
+            fxs.Add(f);
         }
 
         // a harvester hits a mushroom: a punchy burst at the contact point, tinted by the mushroom, bigger for rarer ones

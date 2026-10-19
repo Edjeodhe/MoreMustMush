@@ -32,6 +32,10 @@ namespace MoreMush
         public event System.Action<RoundSim.Summary> Finished;        // 정산 창. 받는 UI가 없으면 바로 MainGame으로
 
         const float MAX_DT = 0.05f, SIM_STEP = 1 / 60f;
+        // 한 프레임의 시뮬 시간 상한(ms): 넘으면 남은 시간을 버린다. 느린 프레임 다음에 시뮬을 몰아서 돌려 더 느려지는 되먹임을 끊는다
+        // (평소 x4에서도 한 프레임 1ms 안팎이라 걸리지 않는다)
+        const double SIM_BUDGET_MS = 8;
+        readonly System.Diagnostics.Stopwatch simWatch = new System.Diagnostics.Stopwatch();
         const float GRAB_R = 160, MIN_PULL = 20;   // 수확기를 잡는 반경 · 발사로 치는 최소 당김 (필드 px)
 
         Vector2 mouse = StageSpace.SIZE / 2;
@@ -61,6 +65,7 @@ namespace MoreMush
             view.Clear();
             started?.Invoke(begun);
             Tutorial.ForStage(this);   // 1스테이지 첫 판: 조준 안내
+            Snd.WarmRound();
         }
 
         // ===== 버튼에서 부르는 것 =====
@@ -126,7 +131,12 @@ namespace MoreMush
                 else
                 {
                     float total = dt * Speed * Game.DBG.speed;
-                    while (total > 1e-6f && RoundSim.R != null) { float h = Mathf.Min(total, SIM_STEP); R.SimFrame(h); total -= h; }
+                    simWatch.Restart();
+                    while (total > 1e-6f && RoundSim.R != null)
+                    {
+                        float h = Mathf.Min(total, SIM_STEP); R.SimFrame(h); total -= h;
+                        if (simWatch.Elapsed.TotalMilliseconds > SIM_BUDGET_MS) break;
+                    }
                 }
             }
             if (RoundSim.R == null) return;

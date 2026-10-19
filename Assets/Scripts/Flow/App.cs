@@ -134,10 +134,14 @@ namespace MoreMush
             }
         }
 
+        // 씬을 떠나기 직전 (아직 씬 오브젝트가 살아 있을 때). RoundView가 풀을 씬 밖에 맡긴다
+        public static event System.Action Leaving;
+
         // 저장하고 씬을 옮긴다
         public static void Go(string scene)
         {
             if (G != null) SaveGame();
+            try { Leaving?.Invoke(); } catch (System.Exception e) { Debug.LogException(e); }
             SceneManager.LoadScene(scene);
         }
 

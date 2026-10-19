@@ -69,6 +69,92 @@ namespace MoreMush
             bgOffset = background.transform.localPosition - Art.P(Defs.W / 2, Defs.H / 2);   // z는 그대로 둔다 (깊이)
         }
 
+        // ===== 라운드 간 풀 유지 =====
+        // 풀 항목은 Stage 씬 밑에 있어 라운드가 끝나면 씬과 함께 버려졌다. 다음 라운드는 시작·첫 발사 때 GameObject 약 1,500개를
+        // 다시 Instantiate해 끊겼다 → 씬을 떠날 때(App.Leaving) 씬 밖 보관소로 옮겨 두고 다음 RoundView가 그대로 다시 쓴다.
+        // 처음 라운드는 아래 Prewarm이 프레임마다 조금씩 미리 채운다.
+        static Transform stashRoot;
+        static readonly Dictionary<string, object> stash = new Dictionary<string, object>();
+        static Material brushShared;            // 붓 결 선 재질: 라운드마다 새로 만들지 않는다 (보관한 선이 같은 재질을 쓴다)
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStash() { stashRoot = null; stash.Clear(); brushShared = null; }
+
+        static Transform StashRoot()
+        {
+            if (stashRoot == null)
+            {
+                var go = new GameObject("~RoundPoolStash");
+                go.SetActive(false);   // 맡긴 항목이 보이거나 Update되지 않게
+                DontDestroyOnLoad(go);
+                stashRoot = go.transform;
+            }
+            return stashRoot;
+        }
+
+        void Keep<T>(string key, Pool<T> pool) where T : Component
+        {
+            var list = pool.Detach(StashRoot());
+            if (stash.TryGetValue(key, out var o) && o is List<T> had) had.AddRange(list);   // 이미 맡긴 것이 있으면 합친다 (잃어버리지 않게)
+            else stash[key] = list;
+        }
+        void Take<T>(string key, Pool<T> pool) where T : Component { if (stash.TryGetValue(key, out var o)) { pool.Adopt(o as List<T>); stash.Remove(key); } }
+
+        void OnEnable() { App.Leaving += StashPools; Loc.Changed += ApplyTextFonts; }
+        void OnDisable() { App.Leaving -= StashPools; Loc.Changed -= ApplyTextFonts; }
+
+        void StashPools()
+        {
+            Keep("shroom", shrooms); Keep("ball", balls); Keep("device", devices); Keep("cloud", clouds);
+            Keep("part", parts); Keep("flyer", flyers); Keep("line", lines); Keep("aim", aimLines); Keep("ring", ringFx); Keep("fx", fxPool);
+            // 필드 글자 칸 (UI): 빈 칸으로 돌려 맡긴다
+            var tmps = new List<TextMeshProUGUI>(textSlots.Count);
+            foreach (var sl in textSlots)
+            {
+                if (sl.tmp == null) continue;
+                sl.tmp.gameObject.SetActive(false);
+                sl.tmp.transform.SetParent(StashRoot(), false);
+                tmps.Add(sl.tmp);
+            }
+            textSlots.Clear(); slotOf.Clear();
+            if (stash.TryGetValue("text", out var o) && o is List<TextMeshProUGUI> had) had.AddRange(tmps);
+            else stash["text"] = tmps;
+        }
+
+        void AdoptStash()
+        {
+            Take("shroom", shrooms); Take("ball", balls); Take("device", devices); Take("cloud", clouds);
+            Take("part", parts); Take("flyer", flyers); Take("line", lines); Take("aim", aimLines); Take("ring", ringFx); Take("fx", fxPool);
+            if (stash.TryGetValue("text", out var o) && o is List<TextMeshProUGUI> tmps)
+            {
+                foreach (var t in tmps) if (t != null) { t.transform.SetParent(textLayer, false); LocFonts.Apply(t, fieldRole, fieldPreset); textSlots.Add(new TextSlot { tmp = t, letter = t.transform.Find("Lettering")?.GetComponent<UnityEngine.UI.Image>() }); }
+                stash.Remove("text");
+            }
+        }
+
+        // 첫 라운드: 한 판에 필요한 만큼 프레임마다 시간 예산(ms) 안에서 꺼진 채로 미리 만든다 (조준하는 동안 끝난다)
+        const float PREWARM_MS = 2f;
+        System.Collections.IEnumerator Prewarm()
+        {
+            yield return null;   // 첫 프레임(씬 진입)은 건드리지 않는다
+            var sw = new System.Diagnostics.Stopwatch();
+            var steps = new (System.Func<int> count, int target, System.Action grow)[]
+            {
+                (() => balls.Count, 60, balls.Grow), (() => textSlots.Count, 45, () => NewTextSlot()), (() => shrooms.Count, 200, shrooms.Grow),
+                (() => fxPool.Count, 90, fxPool.Grow), (() => parts.Count, 260, parts.Grow), (() => ringFx.Count, MAX_RINGS, ringFx.Grow),
+                (() => flyers.Count, 40, flyers.Grow), (() => lines.Count, 24, lines.Grow),
+            };
+            foreach (var st in steps)
+                while (st.count() < st.target)
+                {
+                    sw.Restart();
+                    while (st.count() < st.target && sw.Elapsed.TotalMilliseconds < PREWARM_MS) st.grow();
+                    if (st.count() < st.target) yield return null;
+                }
+        }
+
+        void Start() => StartCoroutine(Prewarm());
+
         void Awake()
         {
             CaptureBackgroundLayout();
@@ -90,6 +176,7 @@ namespace MoreMush
             ringSp = splashSp != null ? SpriteDB.Get("FX/ring") : null; ringThinSp = splashSp != null ? SpriteDB.Get("FX/ring_thin") : null;
             dotSp = partPrefab.sprite;
             fxPool = new Pool<SpriteRenderer>(partPrefab, fxRoot);
+            AdoptStash();
             string[] fxKeys = { null, "FX/chip", "FX/leaf", "FX/impact", "FX/impact_ring", "FX/puff", "FX/dust", "FX/streak", "FX/sprout", "FX/drop", "FX/hit_0", "FX/twinkle", "FX/dot_ring" };
             hitFrames = new Sprite[5];
             for (int i = 0; i < 5; i++) hitFrames[i] = SpriteDB.Get("FX/hit_" + i);
@@ -97,7 +184,7 @@ namespace MoreMush
             for (int i = 0; i < fxKeys.Length; i++) fxSp[i] = fxKeys[i] != null ? SpriteDB.Get(fxKeys[i]) : null;
             fxSp[0] = dotSp;
             var brush = SpriteDB.Get("FX/brush");
-            if (brush != null) brushMat = new Material(linePrefab.sharedMaterial) { mainTexture = brush.texture };
+            if (brush != null) brushMat = brushShared != null ? brushShared : brushShared = new Material(linePrefab.sharedMaterial) { mainTexture = brush.texture };
         }
 
         // a line of the shared pool, painted with the brush texture when the dream set has one
@@ -476,17 +563,9 @@ namespace MoreMush
             {
                 sl = null;
                 foreach (var f in textSlots) if (f.key == null) { sl = f; break; }
-                if (sl == null)
-                {
-                    sl = new TextSlot { tmp = Instantiate(textPrefab, textLayer) };
-                    sl.tmp.name = textPrefab.name + " " + textSlots.Count;
-                    // the prefab picked up auto-size (max 20) from the localisation pass, which capped every number and
-                    // label at one small size; the field sets its own sizes per tier
-                    sl.tmp.enableAutoSizing = false;
-                    textSlots.Add(sl);
-                }
+                if (sl == null) sl = NewTextSlot();
                 sl.key = key; slotOf[key] = sl;
-                sl.tmp.gameObject.SetActive(true);
+                if (!sl.tmp.gameObject.activeSelf) sl.tmp.gameObject.SetActive(true);   // 한 번 켠 칸은 끄지 않는다 (ReleaseTexts 참고)
             }
             sl.seen = textFrame;
             var t = sl.tmp;
@@ -571,6 +650,24 @@ namespace MoreMush
             return s != null && letterOf.TryGetValue(s, out var id) ? id : null;
         }
 
+        // 글자 칸의 언어 폰트: 프리팹의 LocText는 칸을 켜고 끌 때마다 Loc.Changed 구독·해제로 할당이 생겨 떼어 내고, 같은 역할로 여기서 맞춘다
+        static LocFonts.Role fieldRole = LocFonts.Role.Title; static int fieldPreset = -1;
+        void ApplyTextFonts() { foreach (var sl in textSlots) LocFonts.Apply(sl.tmp, fieldRole, fieldPreset); }
+
+        TextSlot NewTextSlot()
+        {
+            var sl = new TextSlot { tmp = Instantiate(textPrefab, textLayer) };
+            sl.tmp.name = textPrefab.name + " " + textSlots.Count;
+            if (sl.tmp.TryGetComponent<LocText>(out var lt)) { fieldRole = lt.role; fieldPreset = lt.preset; Destroy(lt); }
+            LocFonts.Apply(sl.tmp, fieldRole, fieldPreset);
+            // the prefab picked up auto-size (max 20) from the localisation pass, which capped every number and
+            // label at one small size; the field sets its own sizes per tier
+            sl.tmp.enableAutoSizing = false;
+            sl.tmp.gameObject.SetActive(false);
+            textSlots.Add(sl);
+            return sl;
+        }
+
         // 이번 프레임에 그리지 않은 글자 칸을 비운다 (all = 전부)
         void ReleaseTexts(bool all)
         {
@@ -578,7 +675,9 @@ namespace MoreMush
             {
                 if (sl.key == null || (!all && sl.seen == textFrame)) continue;
                 slotOf.Remove(sl.key); sl.key = null; sl.s = null;
-                sl.tmp.gameObject.SetActive(false);
+                // 끄지도 비우지도 않고 크기 0으로 숨긴다: SetActive를 오가면 TMP·서브메시가 OnEnable/OnDisable로, 글자를 비우면
+                // 다시 채울 때 TMP 배열을 매번 새로 할당했다 (숫자가 초당 수십 개 뜨고 진다). 다시 쓰면 Text()가 크기를 되돌린다
+                sl.tmp.rectTransform.localScale = Vector3.zero;
             }
         }
     }
