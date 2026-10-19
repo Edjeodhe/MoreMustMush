@@ -19157,6 +19157,136 @@
       "Str_JA": "空き枠",
       "Str_RU": "Пустой слот",
       "Str_UK": "Порожній слот"
+    },
+    {
+      "Str_ID": 901343,
+      "Str_Group_ID": 91343,
+      "Str_Name": "ui",
+      "Str_KR": "콤보",
+      "Str_EN": "Combo",
+      "Str_JA": "コンボ",
+      "Str_RU": "Комбо",
+      "Str_UK": "Комбо"
+    },
+    {
+      "Str_ID": 901344,
+      "Str_Group_ID": 91344,
+      "Str_Name": "ui",
+      "Str_KR": "NEW",
+      "Str_EN": "NEW",
+      "Str_JA": "NEW",
+      "Str_RU": "НОВОЕ",
+      "Str_UK": "НОВЕ"
+    },
+    {
+      "Str_ID": 901345,
+      "Str_Group_ID": 91345,
+      "Str_Name": "ui",
+      "Str_KR": "Lv {0}",
+      "Str_EN": "Lv {0}",
+      "Str_JA": "Lv {0}",
+      "Str_RU": "Ур. {0}",
+      "Str_UK": "Рів. {0}"
+    },
+    {
+      "Str_ID": 901346,
+      "Str_Group_ID": 91346,
+      "Str_Name": "ui",
+      "Str_KR": "Lv {0}/{1}",
+      "Str_EN": "Lv {0}/{1}",
+      "Str_JA": "Lv {0}/{1}",
+      "Str_RU": "Ур. {0}/{1}",
+      "Str_UK": "Рів. {0}/{1}"
+    },
+    {
+      "Str_ID": 901347,
+      "Str_Group_ID": 91347,
+      "Str_Name": "ui",
+      "Str_KR": "MAX",
+      "Str_EN": "MAX",
+      "Str_JA": "MAX",
+      "Str_RU": "МАКС",
+      "Str_UK": "МАКС"
+    },
+    {
+      "Str_ID": 901348,
+      "Str_Group_ID": 91348,
+      "Str_Name": "ui",
+      "Str_KR": "MAX {0}",
+      "Str_EN": "MAX {0}",
+      "Str_JA": "MAX {0}",
+      "Str_RU": "МАКС {0}",
+      "Str_UK": "МАКС {0}"
+    },
+    {
+      "Str_ID": 901349,
+      "Str_Group_ID": 91349,
+      "Str_Name": "ui",
+      "Str_KR": "MAX {0}/{1}",
+      "Str_EN": "MAX {0}/{1}",
+      "Str_JA": "MAX {0}/{1}",
+      "Str_RU": "МАКС {0}/{1}",
+      "Str_UK": "МАКС {0}/{1}"
+    },
+    {
+      "Str_ID": 901350,
+      "Str_Group_ID": 91350,
+      "Str_Name": "ui",
+      "Str_KR": "LVL {0} / {1}",
+      "Str_EN": "LVL {0} / {1}",
+      "Str_JA": "Lv {0} / {1}",
+      "Str_RU": "УР. {0} / {1}",
+      "Str_UK": "РІВ. {0} / {1}"
+    },
+    {
+      "Str_ID": 901351,
+      "Str_Group_ID": 91351,
+      "Str_Name": "ui",
+      "Str_KR": "LVL {0} / ∞",
+      "Str_EN": "LVL {0} / ∞",
+      "Str_JA": "Lv {0} / ∞",
+      "Str_RU": "УР. {0} / ∞",
+      "Str_UK": "РІВ. {0} / ∞"
+    },
+    {
+      "Str_ID": 901352,
+      "Str_Group_ID": 91352,
+      "Str_Name": "ui",
+      "Str_KR": "{0} Lv.{1}",
+      "Str_EN": "{0} Lv.{1}",
+      "Str_JA": "{0} Lv.{1}",
+      "Str_RU": "{0} ур.{1}",
+      "Str_UK": "{0} рів.{1}"
+    },
+    {
+      "Str_ID": 901353,
+      "Str_Group_ID": 91353,
+      "Str_Name": "ui",
+      "Str_KR": "{0} {1} Lv.{2}",
+      "Str_EN": "{0} {1} Lv.{2}",
+      "Str_JA": "{0} {1} Lv.{2}",
+      "Str_RU": "{0} {1} ур.{2}",
+      "Str_UK": "{0} {1} рів.{2}"
+    },
+    {
+      "Str_ID": 901354,
+      "Str_Group_ID": 91354,
+      "Str_Name": "ui",
+      "Str_KR": "★{0} · Lv.{1}",
+      "Str_EN": "★{0} · Lv.{1}",
+      "Str_JA": "★{0} · Lv.{1}",
+      "Str_RU": "★{0} · ур.{1}",
+      "Str_UK": "★{0} · рів.{1}"
+    },
+    {
+      "Str_ID": 901355,
+      "Str_Group_ID": 91355,
+      "Str_Name": "ui",
+      "Str_KR": "<b>{0}</b> <color=#e8a900>{1}</color>  Lv.{2}/{3}",
+      "Str_EN": "<b>{0}</b> <color=#e8a900>{1}</color>  Lv.{2}/{3}",
+      "Str_JA": "<b>{0}</b> <color=#e8a900>{1}</color>  Lv.{2}/{3}",
+      "Str_RU": "<b>{0}</b> <color=#e8a900>{1}</color>  ур.{2}/{3}",
+      "Str_UK": "<b>{0}</b> <color=#e8a900>{1}</color>  рів.{2}/{3}"
     }
   ]
 }

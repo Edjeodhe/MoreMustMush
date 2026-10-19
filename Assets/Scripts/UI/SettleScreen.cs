@@ -115,9 +115,9 @@ namespace MoreMush
             Clear(unlockList); Clear(newsList);
             foreach (var id in s.unlocks) Card(unlockCards, unlockList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("해금"), "unlock");
             unlockBox.SetActive(unlockList.Count > 0);
-            foreach (var id in s.newSpecies) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "");
-            foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, Loc.F("황금 {0}", SP[id].n), "NEW", "gold");
-            foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "star");
+            foreach (var id in s.newSpecies) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("NEW"), "");
+            foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, Loc.F("황금 {0}", SP[id].n), Loc.T("NEW"), "gold");
+            foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("NEW"), "star");
             newsBox.SetActive(newsList.Count > 0);
             var recs = s.recs.Select(r => Loc.F("신기록! {0} <color=#3b2414>{1}</color>", RECORD_NAMES[r.k], U.Fmt(r.v)) + (r.old > 0 ? " <size=70%><color=#8a6a4a>" + Loc.F("(이전 {0})", U.Fmt(r.old)) + "</color></size>" : "")).ToList();
             var bossLine = BossLine(s);
