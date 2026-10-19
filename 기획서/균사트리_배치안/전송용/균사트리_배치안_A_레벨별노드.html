@@ -88,7 +88,7 @@ svg text{font-family:var(--f-body)}
       <button class="chip" data-f="ps" aria-pressed="false">독성</button>
       <button class="chip" data-f="inplace" aria-pressed="false">한 곳에서 레벨업</button>
       <span style="width:8px"></span>
-      <button class="chip" id="ringBtn" aria-pressed="true">배경 원 켜기/끄기</button>
+      <button class="chip" id="ringBtn" aria-pressed="true">배경 켜기/끄기</button>
     </div>
     <div class="frame" id="frame"><svg id="tree" role="img" aria-label="원형 균사 트리 배치도"></svg></div>
   </div>
@@ -210,9 +210,9 @@ const gBg=el("g",{});
 const gRing=el("g",{id:"rings"},gBg);
 for(let k=RINGS;k>=1;k--) el("circle",{r:(RR(k)+DATA.D/2)*S,fill:VC[k]},gRing);
 el("circle",{r:(RR(1)-DATA.D/2)*S,fill:VC[0]},gRing);
-(DATA.cells||[]).forEach(c=>el("circle",{cx:c[0]*S,cy:c[1]*S,r:7,fill:"#fff","fill-opacity":.4},gBg));
-[-150,-30,90].forEach(a=>{const r=a*Math.PI/180; el("line",{x1:0,y1:0,x2:Math.cos(r)*(RR(RINGS)+DATA.D/2)*S,y2:Math.sin(r)*(RR(RINGS)+DATA.D/2)*S,stroke:"#fff","stroke-width":5},gBg);});
-[-90,30,150].forEach(a=>{const r=a*Math.PI/180; el("line",{x1:0,y1:0,x2:Math.cos(r)*(RR(RINGS)+DATA.D/2)*S,y2:Math.sin(r)*(RR(RINGS)+DATA.D/2)*S,stroke:"var(--axis)","stroke-width":3,"stroke-dasharray":"14 12","stroke-opacity":.7},gBg);});
+(DATA.cells||[]).forEach(c=>el("circle",{cx:c[0]*S,cy:c[1]*S,r:7,fill:"#fff","fill-opacity":.4},gRing));
+[-150,-30,90].forEach(a=>{const r=a*Math.PI/180; el("line",{x1:0,y1:0,x2:Math.cos(r)*(RR(RINGS)+DATA.D/2)*S,y2:Math.sin(r)*(RR(RINGS)+DATA.D/2)*S,stroke:"#fff","stroke-width":5},gRing);});
+[-90,30,150].forEach(a=>{const r=a*Math.PI/180; el("line",{x1:0,y1:0,x2:Math.cos(r)*(RR(RINGS)+DATA.D/2)*S,y2:Math.sin(r)*(RR(RINGS)+DATA.D/2)*S,stroke:"var(--axis)","stroke-width":3,"stroke-dasharray":"14 12","stroke-opacity":.7},gRing);});
 // 갈래 이름
 const SUBL={"ed-1":[-120,"식용 1 · 획득률"],"ed1":[-60,"식용 2 · 스테이지"],"md-1":[0,"약용 1 · 바 버프"],"md1":[60,"약용 2 · 스킬·환경·저항"],"ps-1":[120,"독성 1 · 공격·치명"],"ps1":[180,"독성 2 · 바·이동·지속"]};
 Object.values(SUBL).forEach(([a,s])=>{const r=a*Math.PI/180, R=(DATA.R+0.55)*S, cx=Math.cos(r); const tx=el("text",{x:cx*R,y:Math.sin(r)*R+10,"text-anchor":cx>0.5?"end":cx<-0.5?"start":"middle","font-size":30,"font-weight":700,fill:"#fff","fill-opacity":.9,"paint-order":"stroke",stroke:"rgba(0,0,0,.35)","stroke-width":5},gBg); tx.textContent=s;});
