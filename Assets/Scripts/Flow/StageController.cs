@@ -28,14 +28,14 @@ namespace MoreMush
             remove => started -= value;
         }
         public event System.Action<RoundSim, float> Drawn;            // 매 프레임 HUD 갱신 (라운드, Time.time)
-        public event System.Action<bool> PauseChanged;                // 일시정지 창 열기/닫기 (구독자가 없으면 포커스를 잃어도 멈추지 않는다)
+        public event System.Action<bool> PauseChanged;                // 일시정지 켜기/끄기 (창은 이 컨트롤러가 옵션 창으로 연다)
         public event System.Action<RoundSim.Summary> Finished;        // 정산 창. 받는 UI가 없으면 바로 MainGame으로
 
         const float MAX_DT = 0.05f, SIM_STEP = 1 / 60f;
         const float GRAB_R = 160, MIN_PULL = 20;   // 수확기를 잡는 반경 · 발사로 치는 최소 당김 (필드 px)
 
         Vector2 mouse = StageSpace.SIZE / 2;
-        OptionWindow optionWin;   // Esc = 옵션 창 (열린 동안 라운드가 멈춘다: App.ModalOpen)
+        OptionWindow optionWin;   // 일시정지 창 = 옵션 창. 일시정지 버튼·Esc·포커스 잃음이 모두 이 창을 열고 게임을 멈춘다
         RoundSim finishedR;   // 이미 정산을 넘긴 라운드 (정산 중 예외가 나도 다시 정산하지 않게)
         RoundSim begun;       // 이 씬에서 시작한 라운드
         System.Action<RoundSim> started;
@@ -43,10 +43,10 @@ namespace MoreMush
         void Awake()
         {
             I = this;
-            optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); optionWin.Close(); },
+            optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); CloseOption(); },
                 new OptionWindow.Extra("Button_EndNow", Loc.T("지금 끝내기"), () => { Snd.Ui(); optionWin.Close(); EndNow(); }));
         }
-        void OnDestroy() { if (I == this) I = null; }
+        void OnDestroy() { if (I == this) I = null; Time.timeScale = 1; }
 
         // 플레이 시작 때 이전 플레이의 배속을 지운다 (도메인 리로드를 끈 플레이 모드 대비)
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -66,14 +66,23 @@ namespace MoreMush
         // ===== 버튼에서 부르는 것 =====
         public static void NextSpeed() { Speed = Speed == 1 ? 2 : Speed == 2 ? 4 : 1; Snd.Ui(); }
 
+        // 일시정지 = 옵션 창을 열고 게임 시간을 멈춘다 (라운드 중에만). 끝난 뒤에는 창만 연다
         public void SetPaused(bool on)
         {
             var R = RoundSim.R;
-            if (R == null || R.phase == "end" || R.paused == on) return;
-            R.paused = on;
-            PauseChanged?.Invoke(on);
+            if (R == null || R.phase == "end") { if (!on) optionWin.Close(); return; }
+            SetPausedRaw(R, on);
         }
-        public void TogglePause() => SetPaused(RoundSim.R != null && !RoundSim.R.paused);
+
+        // 일시정지 버튼·Esc: 라운드 중이면 일시정지 켜고 끄기, 끝났으면 옵션 창만 열고 닫기
+        public void TogglePause()
+        {
+            var R = RoundSim.R;
+            if (R != null && R.phase != "end") SetPaused(!R.paused);
+            else if (optionWin.IsOpen) optionWin.Close(); else optionWin.Open();
+        }
+
+        void CloseOption() { if (RoundSim.R != null && RoundSim.R.paused) SetPaused(false); else optionWin.Close(); }
 
         // 라운드를 지금 끝내고 정산 (스테이지는 오르지 않는다)
         public void EndNow()
@@ -89,7 +98,15 @@ namespace MoreMush
 
         static void LeaveSettle() { RoundFlow.AfterSettle(); App.Go(Scenes.MainGame); }
 
-        void SetPausedRaw(RoundSim R, bool on) { if (R.paused == on) return; R.paused = on; PauseChanged?.Invoke(on); }
+        // 시뮬은 R.paused로, 화면 연출(Time.time 흔들림·비·대기 동작)은 timeScale 0으로 멈춘다. 라운드 루프는 unscaledDeltaTime이라 영향 없다
+        void SetPausedRaw(RoundSim R, bool on)
+        {
+            if (R.paused == on) return;
+            R.paused = on;
+            Time.timeScale = on ? 0 : 1;
+            if (on) optionWin.Open(); else optionWin.Close();
+            PauseChanged?.Invoke(on);
+        }
 
         // ===== 루프 =====
         void Update()
@@ -131,7 +148,7 @@ namespace MoreMush
             if (kb != null)
             {
                 if (kb.fKey.wasPressedThisFrame) NextSpeed();
-                if (kb.escapeKey.wasPressedThisFrame && (optionWin.IsOpen || !App.ModalOpen)) optionWin.Toggle();
+                if (kb.escapeKey.wasPressedThisFrame && (optionWin.IsOpen || !App.ModalOpen)) { Snd.Ui(); TogglePause(); }
             }
             if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame) NextSpeed();
 
@@ -164,8 +181,8 @@ namespace MoreMush
         void OnApplicationFocus(bool focus)
         {
             var R = RoundSim.R;
-            // 일시정지 창이 없으면 멈추지 않는다 (안내 없이 멈춘 채로 남지 않게)
-            if (!focus && R != null && R.phase != "end" && PauseChanged != null) SetPaused(true);
+            // 창을 벗어나면 일시정지 창을 띄우고 멈춘다
+            if (!focus && R != null && R.phase != "end") SetPaused(true);
         }
     }
 }
