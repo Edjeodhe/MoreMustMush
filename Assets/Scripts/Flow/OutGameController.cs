@@ -276,7 +276,7 @@ namespace MoreMush
             if (r == null) { Snd.Err(); App.Notify(Loc.T("보따리가 비어 있어요. 꼬마를 구역에 보내 나무버섯을 따게 해요")); return; }
             Snd.Record();
             if (farm != null) farm.BagBurst(r.Value.gold, r.Value.gem);
-            App.Notify(Loc.F("수확 보따리! 나무버섯 {0}개 · {1}+{2}", r.Value.n, UIUtil.Ic("gold"), U.Fmt(r.Value.gold)) + (r.Value.gem > 0 ? $" {UIUtil.Ic("gem")}+{r.Value.gem}" : ""));
+            App.Notify(ReturnPopup.ClaimText(r.Value));
             currency.Tick();   // BagClaim이 이미 저장했다
             RenderBag();
         }
