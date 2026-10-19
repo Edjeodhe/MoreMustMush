@@ -56,6 +56,8 @@ namespace MoreMush
         // 실험(구조안 S1, 사용자 결정 전): 0이 아니면 새 지역의 ×10을 해금 뒤 ZONE_RAMP판에 나눠 올린다(판마다 ×10^(1/ZONE_RAMP)).
         // 기본 0 = 해금 즉시 ×10(지금 게임). 밸런스 시뮬에서만 명령줄 -ramp 10으로 켠다
         public static int ZONE_RAMP = 0;
+        // 시뮬 전용 실험(콤보 상한 원인 측정): true면 버섯 체력 배율(지역·스테이지·초반)을 1로 고정한다. 기본 false = 지금 게임. BalanceComboProbe에서만 켠다
+        public static bool SIM_HP1 = false;
         public static double ZoneMul(string themeId, int stage)
         {
             int i = ThemeIndex(themeId);

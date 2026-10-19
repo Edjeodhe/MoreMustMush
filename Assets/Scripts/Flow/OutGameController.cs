@@ -68,6 +68,7 @@ namespace MoreMush
                 kidSlots.Sort((a, b) => Order(a.transform, b.transform, true));
                 foreach (var s in kidSlots) kidBlank.Add(s.sprite);
                 for (int i = 0; i < kidSlots.Count; i++) { int k = i; Clickable(kidSlots[i].gameObject, () => KidSlot(k)); }
+                FoldButton(unfold.transform);   // 칸을 다 모은 뒤에 (닫기 버튼이 정령 칸으로 세어지지 않게)
             }
 
             var group = SceneUI.Need(scene, "Button_Group");
@@ -83,7 +84,7 @@ namespace MoreMush
             SetFolded(true, false);
             tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
-                new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
+                new OptionWindow.Extra("Button_Back", "돌아가기", ToMainGame));
             BackButton(scene);
         }
 
@@ -140,7 +141,13 @@ namespace MoreMush
             if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); workshop?.Tick(); }
             var kb = Keyboard.current;
             tabWin?.Tick();
-            if (kb != null && kb.escapeKey.wasPressedThisFrame) { if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); } else optionWin.Toggle(); }
+            // Esc: 열린 탭 창 → 닫기, 옵션 창 → 닫기, 아무것도 없으면 업그레이드 화면(MainGame)으로
+            if (kb != null && kb.escapeKey.wasPressedThisFrame)
+            {
+                if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); }
+                else if (optionWin.IsOpen) optionWin.Toggle();
+                else ToMainGame();
+            }
         }
 
         void Render()
@@ -257,6 +264,23 @@ namespace MoreMush
 
         bool TabOpen() => (tabWin != null && tabWin.IsOpen) || (workshop != null && workshop.IsOpen);
 
+        // 펼친 정령 목록의 닫기 버튼. 배치된 Button_Close가 있으면 그것을, 없으면 오른쪽 위 모서리에 걸친 btn_close를 만든다
+        // (목록 바탕을 눌러도 접히지만 보이는 닫기가 없어 닫는 법을 알기 어려웠다)
+        void FoldButton(Transform panel)
+        {
+            var placed = SceneUI.Find(panel, "Button_Close");
+            if (placed != null) { SceneUI.Bind(placed, () => SetFolded(true)); return; }
+            var go = new GameObject("Button_Close", typeof(RectTransform), typeof(Image), typeof(Button));
+            var rt = (RectTransform)go.transform;
+            rt.SetParent(panel, false);
+            rt.SetAsLastSibling();
+            rt.anchorMin = rt.anchorMax = Vector2.one; rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.anchoredPosition = new Vector2(-14, -14); rt.sizeDelta = new Vector2(80, 77);   // btn_close 96×92 비율
+            var img = go.GetComponent<Image>(); TempDialog.Skin(img, "btn_close", new Color(0.9f, 0.4f, 0.35f)); img.type = Image.Type.Simple;
+            var btn = go.GetComponent<Button>(); btn.targetGraphic = img;
+            btn.onClick.AddListener(() => SetFolded(true));
+        }
+
         void SetFolded(bool folded, bool sound = true)
         {
             if (sound) Snd.Ui();
@@ -270,7 +294,7 @@ namespace MoreMush
             if (r == null) { Snd.Err(); App.Notify(Loc.T("보따리가 비어 있어요. 꼬마를 구역에 보내 나무버섯을 따게 해요")); return; }
             Snd.Record();
             if (farm != null) farm.BagBurst(r.Value.gold, r.Value.gem);
-            App.Notify(Loc.F("수확 보따리! 나무버섯 {0}개 · {1}+{2}", r.Value.n, UIUtil.Ic("gold"), U.Fmt(r.Value.gold)) + (r.Value.gem > 0 ? $" {UIUtil.Ic("gem")}+{r.Value.gem}" : ""));
+            App.Notify(ReturnPopup.ClaimText(r.Value));
             currency.Tick();   // BagClaim이 이미 저장했다
             RenderBag();
         }

@@ -132,9 +132,10 @@ namespace MoreMush
             var rib = new GameObject("Ribbon", typeof(RectTransform), typeof(Image));
             rib.transform.SetParent(box.transform, false);
             var rr = rib.GetComponent<RectTransform>();
-            rr.anchoredPosition = new Vector2(0, 425); rr.sizeDelta = new Vector2(900, 140);
+            // 그림(328×132)이 가로로 너무 늘어나지 않게 짧게 (옛 900×140)
+            rr.anchoredPosition = new Vector2(0, 425); rr.sizeDelta = new Vector2(520, 130);
             var ri = rib.GetComponent<Image>(); Skin(ri, "ribbon", new Color(0.97f, 0.66f, 0.45f)); ri.type = Image.Type.Simple; ri.raycastTarget = false;
-            title = Txt(rib.transform, "Title", "", new Vector2(0, 14), new Vector2(640, 70), 40);
+            title = Txt(rib.transform, "Title", "", new Vector2(0, 12), new Vector2(400, 64), 40);
             title.color = Color.white; title.enableAutoSizing = true; title.fontSizeMin = 24; title.fontSizeMax = 40;
 
             var close = new GameObject("Exit", typeof(RectTransform), typeof(Image), typeof(Button));

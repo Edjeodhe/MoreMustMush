@@ -30,6 +30,7 @@ namespace MoreMush
             var why = CantStart();
             if (why != null) { Snd.Err(); App.Notify(why); return false; }
             pending = MakePlan();
+            if (G.tut == 2) G.tut = 3;   // 튜토리얼 마지막 단계: 첫 노드를 사고 출발했다 (Begin이 저장한다)
             App.Go(Scenes.Stage);
             return true;
         }

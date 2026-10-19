@@ -18,6 +18,7 @@ namespace MoreMush
         public GameObject resetConfirm;
 
         OptionWindow optionWin;
+        LangWindow langWin;
 
         void Awake()
         {
@@ -29,6 +30,7 @@ namespace MoreMush
             if (resetConfirm == null) resetConfirm = FindByName("ResetConfirm");
             WirePanel(resetConfirm, ("Button_Yes", OnResetYes), ("Button_No", CloseAll));
             optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); CloseAll(); });
+            langWin = LangWindow.For(gameObject.scene, CloseAll);
             CloseAll();
         }
 
@@ -51,6 +53,8 @@ namespace MoreMush
             Snd.Ui();
             G = null;   // 메뉴로 돌아왔다 다시 시작해도 저장된 것을 새로 읽는다
             App.EnsureSave();
+            // 처음 하는 게임(한 판도 안 함)은 바로 1스테이지 튜토리얼 판으로
+            if (G.tut == 0 && G.rounds == 0 && RoundFlow.Request()) return;
             App.Go(Scenes.MainGame);
         }
 
@@ -69,15 +73,15 @@ namespace MoreMush
 
         void OnExit() { Snd.Ui(); App.Quit(); }
 
-        // 지구본 버튼: 다음 언어로 돌린다 (Loc.LANGS 순서)
-        void OnLang() { Snd.Ui(); Loc.NextLang(); }
+        // 지구본 버튼: 언어 선택 창 (LangWindow)
+        void OnLang() { Snd.Ui(); CloseAll(); langWin.Open(); }
 
         void Update()
         {
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb == null || !kb.escapeKey.wasPressedThisFrame) return;
             // Esc: 열린 창이 있으면 닫고, 없으면 옵션 창
-            bool anyOpen = optionWin.IsOpen || (resetConfirm != null && resetConfirm.activeSelf);
+            bool anyOpen = optionWin.IsOpen || langWin.IsOpen || (resetConfirm != null && resetConfirm.activeSelf);
             if (anyOpen) { Snd.Ui(); CloseAll(); } else OnOption();
         }
 
@@ -94,6 +98,7 @@ namespace MoreMush
         {
             if (resetConfirm != null) resetConfirm.SetActive(false);
             optionWin?.Close();
+            langWin?.Close();
         }
 
         GameObject EnsureConfirm()

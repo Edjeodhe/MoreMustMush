@@ -113,7 +113,17 @@ namespace MoreMush
         public static bool EarlyStage(int stage) => stage >= 1 && stage <= EARLY_STAGES;
         // 초반 낱개 버섯: 스테이지 1~6 판 시작 때 군락이 아닌 버섯을 이만큼 흩뿌린다 (다시 생기지 않음, 맵이 비어 보이지 않게 — 밸런스 3회차).
         // 군락 수는 스테이지가 아니라 ed_cols 구매로만 는다. [0](1스테이지)은 튜토리얼 판이 아닐 때만 (튜토리얼은 TUTORIAL_LOOSE를 첫 발사 때)
-        public static readonly int[] EARLY_LOOSE = { 6, 6, 5, 4, 3, 2 };
+        public static readonly int[] EARLY_LOOSE = { 10, 10, 9, 8, 6, 4 };   // 군락이 ed_cols 2~3개뿐이라 맵이 비어 보여 늘렸다 (2026-10-19, 이전 6·6·5·4·3·2)
+        // 초반 버섯 체력 너프 (사용자 지시 2026-10-19): 스테이지 1~EARLY_HP_FLAT_TO는 체력이 EARLY_HP_MUL배라 몇 대 안 맞아도 부서지고,
+        // 그 뒤로 스테이지마다 일정하게 늘어 EARLY_HP_FULL_AT 스테이지에서 원래 체력이 된다. 군락·낱개 버섯 공통 (보스 체력은 따로)
+        public const double EARLY_HP_MUL = 0.5;
+        public const int EARLY_HP_FLAT_TO = 3, EARLY_HP_FULL_AT = 7;
+        public static double EarlyHpMul(int stage)
+        {
+            if (stage <= EARLY_HP_FLAT_TO) return EARLY_HP_MUL;
+            if (stage >= EARLY_HP_FULL_AT) return 1;
+            return EARLY_HP_MUL + (1 - EARLY_HP_MUL) * (stage - EARLY_HP_FLAT_TO) / (double)(EARLY_HP_FULL_AT - EARLY_HP_FLAT_TO);
+        }
         // 초반 라운드 시간: 이 스테이지까지는 기본 EARLY_SEC초 (시간 노드는 더해진다)
         public const int EARLY_TIME_STAGES = 4;
         public const float EARLY_SEC = 10;

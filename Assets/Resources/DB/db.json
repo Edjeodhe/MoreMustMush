@@ -1118,9 +1118,9 @@
       "Icon": "",
       "Color": "",
       "Efx_Lv0": 0.0,
-      "Efx_Lv1": 1.0,
-      "Efx_Lv2": 2.0,
-      "Efx_Lv3": 3.0,
+      "Efx_Lv1": 1.5,
+      "Efx_Lv2": 2.5,
+      "Efx_Lv3": 3.5,
       "Efx_Lv4": 4.0
     },
     {
@@ -2535,10 +2535,10 @@
     },
     {
       "Cost_ID": 90051,
-      "Cost_Lv1": 370.0,
-      "Cost_Lv2": 1400.0,
-      "Cost_Lv3": 5200.0,
-      "Cost_Lv4": 20000.0,
+      "Cost_Lv1": 65.0,
+      "Cost_Lv2": 240.0,
+      "Cost_Lv3": 920.0,
+      "Cost_Lv4": 3500.0,
       "Gem_Lv1": 0.0,
       "Gem_Lv2": 0.0,
       "Gem_Lv3": 0.0,
@@ -3327,7 +3327,7 @@
       "Cat": "ed",
       "Look": "송이버섯",
       "Color": "#c9a27a",
-      "Hp_Mul": 0.8
+      "Hp_Mul": 0.35
     },
     {
       "Boss_ID": 6002,
@@ -3337,7 +3337,7 @@
       "Cat": "md",
       "Look": "선녀낙엽버섯",
       "Color": "#7ad07a",
-      "Hp_Mul": 1.0
+      "Hp_Mul": 2.33
     },
     {
       "Boss_ID": 6003,
@@ -3347,7 +3347,7 @@
       "Cat": "ps",
       "Look": "독우산광대버섯",
       "Color": "#b48cff",
-      "Hp_Mul": 10.0
+      "Hp_Mul": 93.33
     },
     {
       "Boss_ID": 6004,
@@ -3357,7 +3357,7 @@
       "Cat": "ps",
       "Look": "광대버섯",
       "Color": "#ff6b6b",
-      "Hp_Mul": 25.0
+      "Hp_Mul": 128.33
     },
     {
       "Boss_ID": 6005,
@@ -3367,7 +3367,7 @@
       "Cat": "md",
       "Look": "동충하초",
       "Color": "#f2a64a",
-      "Hp_Mul": 21.0
+      "Hp_Mul": 163.33
     }
   ],
   "Const": [
@@ -3473,7 +3473,7 @@
     },
     {
       "Const_Key": "BOSS_LOOP_HP_MUL",
-      "Value": 5.5,
+      "Value": 220.0,
       "Desc": "보스가 한 바퀴 돈 뒤(스테이지 60~) 보스 체력 배율 (움직이는 버섯 Hp_Mul과 분리)"
     }
   ],
@@ -18967,6 +18967,196 @@
       "Str_JA": "",
       "Str_RU": "",
       "Str_UK": ""
+    },
+    {
+      "Str_ID": 901324,
+      "Str_Group_ID": 91324,
+      "Str_Name": "ui",
+      "Str_KR": "에픽 이상 가중치 ×{0}",
+      "Str_EN": "Epic and above weight ×{0}",
+      "Str_JA": "エピック以上の重み ×{0}",
+      "Str_RU": "Вес эпических и выше ×{0}",
+      "Str_UK": "Вага епічних і вище ×{0}"
+    },
+    {
+      "Str_ID": 901325,
+      "Str_Group_ID": 91325,
+      "Str_Name": "ui",
+      "Str_KR": "언어",
+      "Str_EN": "Language",
+      "Str_JA": "言語",
+      "Str_RU": "Язык",
+      "Str_UK": "Мова"
+    },
+    {
+      "Str_ID": 901326,
+      "Str_Group_ID": 91326,
+      "Str_Name": "ui",
+      "Str_KR": "세트 밖이지만 배치한 UI가 쓰는 한·영 전용 폰트 (ONEMobilePOP 등). 한국어·영어에서는 그대로 두고, 그 밖의 언어에서는 그 언어 폰트(koEnTitleFonts면 제목, 아니면 본문)로 바꾼다 (TextLangFont)",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901327,
+      "Str_Group_ID": 91327,
+      "Str_Name": "ui",
+      "Str_KR": "koEnFonts 가운데 다른 언어에서 제목 폰트(둥글고 굵은 글꼴)로 바꿀 것 (ONEMobilePOP). 나머지는 본문 폰트로",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901328,
+      "Str_Group_ID": 91328,
+      "Str_Name": "ui",
+      "Str_KR": "소리 설정",
+      "Str_EN": "Sound Settings",
+      "Str_JA": "サウンド設定",
+      "Str_RU": "Настройки звука",
+      "Str_UK": "Налаштування звуку"
+    },
+    {
+      "Str_ID": 901329,
+      "Str_Group_ID": 91329,
+      "Str_Name": "ui",
+      "Str_KR": "효과음",
+      "Str_EN": "Sound Effects",
+      "Str_JA": "効果音",
+      "Str_RU": "Звуковые эффекты",
+      "Str_UK": "Звукові ефекти"
+    },
+    {
+      "Str_ID": 901330,
+      "Str_Group_ID": 91330,
+      "Str_Name": "ui",
+      "Str_KR": "배경음",
+      "Str_EN": "Music",
+      "Str_JA": "BGM",
+      "Str_RU": "Музыка",
+      "Str_UK": "Музика"
+    },
+    {
+      "Str_ID": 901331,
+      "Str_Group_ID": 91331,
+      "Str_Name": "ui",
+      "Str_KR": "메인 메뉴",
+      "Str_EN": "Main Menu",
+      "Str_JA": "メインメニュー",
+      "Str_RU": "Главное меню",
+      "Str_UK": "Головне меню"
+    },
+    {
+      "Str_ID": 901332,
+      "Str_Group_ID": 91332,
+      "Str_Name": "ui",
+      "Str_KR": "음소거: 켜짐",
+      "Str_EN": "Mute: On",
+      "Str_JA": "ミュート:オン",
+      "Str_RU": "Без звука: вкл.",
+      "Str_UK": "Без звуку: увімк."
+    },
+    {
+      "Str_ID": 901333,
+      "Str_Group_ID": 91333,
+      "Str_Name": "ui",
+      "Str_KR": "음소거: 꺼짐",
+      "Str_EN": "Mute: Off",
+      "Str_JA": "ミュート:オフ",
+      "Str_RU": "Без звука: выкл.",
+      "Str_UK": "Без звуку: вимк."
+    },
+    {
+      "Str_ID": 901334,
+      "Str_Group_ID": 91334,
+      "Str_Name": "ui",
+      "Str_KR": "얻은 점수 → 골드 (×{0})",
+      "Str_EN": "Score Earned → Gold (×{0})",
+      "Str_JA": "獲得スコア→ゴールド(×{0})",
+      "Str_RU": "Очки → золото (×{0})",
+      "Str_UK": "Отримані очки → золото (×{0})"
+    },
+    {
+      "Str_ID": 901335,
+      "Str_Group_ID": 91335,
+      "Str_Name": "ui",
+      "Str_KR": "신기록! {0} {1}",
+      "Str_EN": "New record! {0} {1}",
+      "Str_JA": "新記録!{0} {1}",
+      "Str_RU": "Новый рекорд! {0} {1}",
+      "Str_UK": "Новий рекорд! {0} {1}"
+    },
+    {
+      "Str_ID": 901336,
+      "Str_Group_ID": 91336,
+      "Str_Name": "ui",
+      "Str_KR": "보스 {0} 처치! 스테이지 {1} 열림",
+      "Str_EN": "Boss {0} defeated! Stage {1} unlocked",
+      "Str_JA": "ボス{0}撃破!ステージ{1}解放",
+      "Str_RU": "Босс {0} повержен! Открыт этап {1}",
+      "Str_UK": "Боса {0} переможено! Відкрито етап {1}"
+    },
+    {
+      "Str_ID": 901337,
+      "Str_Group_ID": 91337,
+      "Str_Name": "ui",
+      "Str_KR": "눌러서 확인해 보세요",
+      "Str_EN": "Tap to check it out",
+      "Str_JA": "タップして確かめてみましょう",
+      "Str_RU": "Нажми, чтобы посмотреть",
+      "Str_UK": "Натисни, щоб подивитися"
+    },
+    {
+      "Str_ID": 901338,
+      "Str_Group_ID": 91338,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 완성! 강화 재료로 보관했어요",
+      "Str_EN": "{0} complete! Stored as an upgrade material",
+      "Str_JA": "{0}完成!強化素材として保管しました",
+      "Str_RU": "{0} готово! Сохранено как материал для улучшения",
+      "Str_UK": "{0} готово! Збережено як матеріал для покращення"
+    },
+    {
+      "Str_ID": 901339,
+      "Str_Group_ID": 91339,
+      "Str_Name": "ui",
+      "Str_KR": "오늘 즉시 완료를 다 썼어요",
+      "Str_EN": "You've used all instant finishes today",
+      "Str_JA": "今日の即完了は使い切りました",
+      "Str_RU": "Мгновенные завершения на сегодня закончились",
+      "Str_UK": "Миттєві завершення на сьогодні вичерпано"
+    },
+    {
+      "Str_ID": 901340,
+      "Str_Group_ID": 91340,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마가 합류하면 열려요",
+      "Str_EN": "Unlocks when a little one joins",
+      "Str_JA": "ちびっこが仲間入りすると解放",
+      "Str_RU": "Откроется, когда присоединится малыш",
+      "Str_UK": "Відкриється, коли приєднається малюк"
+    },
+    {
+      "Str_ID": 901341,
+      "Str_Group_ID": 91341,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 합류 시 해금",
+      "Str_EN": "Unlocks when {0} joins",
+      "Str_JA": "{0}が仲間入りすると解放",
+      "Str_RU": "Откроется, когда присоединится {0}",
+      "Str_UK": "Відкриється, коли приєднається {0}"
+    },
+    {
+      "Str_ID": 901342,
+      "Str_Group_ID": 91342,
+      "Str_Name": "ui",
+      "Str_KR": "빈 칸",
+      "Str_EN": "Empty Slot",
+      "Str_JA": "空きスロット",
+      "Str_RU": "Пустой слот",
+      "Str_UK": "Порожній слот"
     }
   ]
 }

@@ -1,0 +1,212 @@
+수입 중앙값(스테이지): {1: 18, 2: 32, 3: 43, 4: 84, 5: 98, 6: 121, 7: 298, 8: 356, 9: 370, 10: 932, 11: 6118, 12: 4685, 13: 12200, 14: 27400, 15: 67500, 16: 65100, 17: 83700, 18: 133000, 19: 161000}
+T3-3 관측: [{'attempts': 3, 'rounds_at_10': 5, 'levels_by_R9': 17, 'atk_disp_first_try': 1, 'atk_disp_kill': 2}, {'attempts': 4, 'rounds_at_10': 7, 'levels_by_R9': 16, 'atk_disp_first_try': 1, 'atk_disp_kill': 2}, {'attempts': 3, 'rounds_at_10': 6, 'levels_by_R9': 13, 'atk_disp_first_try': 1, 'atk_disp_kill': 2}]
+
+[S0_옛370] ladder {'global_max_step': 1.412, 'global_worst_pair': [['md_kid', 3], ['ed_bonus1p', 1]], 'max_step_touching_ps_atk': 1.308, 'ps_atk_intra': [3.78, 3.71, 3.85], 'ps_atk_L4_to_ps_atk2_L1': 0.7, 'gold_per_atk': [370.0, 1400.0, 5200.0, 20000.0, 5600.0], 'cross_gold_ratio(next/last)': 0.28, 'code_PriceCheck_cross_ok(per=1,0.53)': True}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 14, 'ps_atk': 0, 'ps_dur': 2, 'atk_flat': 1.0, 'spent': 1215.0}  ps_atk 구매: [(12, 1, 370.0), (16, 2, 1400.0), (18, 3, 5200.0), (20, 4, 20000.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.40 · 스테이지10 판 6.39
+  Hp_Mul 0.7 (체력 30.6): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 4.00
+  Hp_Mul 0.6 (체력 26.2): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 4.00
+  Hp_Mul 0.55 (체력 24.1): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 4.00
+  Hp_Mul 0.5 (체력 21.9): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 4.00
+  Hp_Mul 0.45 (체력 19.7): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 4.00
+  Hp_Mul 0.4 (체력 17.5): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 4.00
+  Hp_Mul 0.3 (체력 13.1): 1회 0.83 · ≤2회 1.00 · 평균 도전 1.17 · 스테이지10 판 1.51
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[S1_임시35] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.182, 'ps_atk_intra': [3.71, 3.69, 3.75], 'ps_atk_L4_to_ps_atk2_L1': 7.78, 'gold_per_atk': [35.0, 130.0, 480.0, 1800.0, 5600.0], 'cross_gold_ratio(next/last)': 3.11, 'code_PriceCheck_cross_ok(per=1,0.53)': False}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 16, 'ps_atk': 2, 'ps_dur': 2, 'atk_flat': 3.0, 'spent': 1380.0}  ps_atk 구매: [(4, 1, 35.0), (7, 2, 130.0), (11, 3, 480.0), (13, 4, 1800.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.7 (체력 30.6): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.6 (체력 26.2): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.55 (체력 24.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.5 (체력 21.9): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.45 (체력 19.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.4 (체력 17.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.3 (체력 13.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[S2_규칙밖] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.31, 'ps_atk_intra': [2.27, 4.0, 3.8], 'ps_atk_L4_to_ps_atk2_L1': 3.68, 'gold_per_atk': [220.0, 500.0, 1000.0, 1900.0, 5600.0], 'cross_gold_ratio(next/last)': 2.95, 'code_PriceCheck_cross_ok(per=1,0.53)': False}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 15, 'ps_atk': 1, 'ps_dur': 2, 'atk_flat': 1.5, 'spent': 1325.0}  ps_atk 구매: [(7, 1, 110.0), (10, 2, 250.0), (19, 3, 1000.0), (21, 4, 3800.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.00 · ≤2회 0.00 · 평균 도전 3.17 · 스테이지10 판 9.00
+  Hp_Mul 0.7 (체력 30.6): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.34 · 스테이지10 판 4.03
+  Hp_Mul 0.6 (체력 26.2): 1회 0.00 · ≤2회 0.83 · 평균 도전 2.17 · 스테이지10 판 3.03
+  Hp_Mul 0.55 (체력 24.1): 1회 0.68 · ≤2회 1.00 · 평균 도전 1.32 · 스테이지10 판 1.32
+  Hp_Mul 0.5 (체력 21.9): 1회 0.68 · ≤2회 1.00 · 평균 도전 1.32 · 스테이지10 판 1.32
+  Hp_Mul 0.45 (체력 19.7): 1회 0.83 · ≤2회 1.00 · 평균 도전 1.17 · 스테이지10 판 1.17
+  Hp_Mul 0.4 (체력 17.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.3 (체력 13.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[C1_효과그대로] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.167, 'ps_atk_intra': [3.82, 3.81, 3.75], 'ps_atk_L4_to_ps_atk2_L1': 1.17, 'gold_per_atk': [220.0, 840.0, 3200.0, 12000.0, 5600.0], 'cross_gold_ratio(next/last)': 0.47, 'code_PriceCheck_cross_ok(per=1,0.53)': True}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 14, 'ps_atk': 0, 'ps_dur': 2, 'atk_flat': 1.0, 'spent': 1215.0}  ps_atk 구매: [(10, 1, 220.0), (18, 2, 840.0), (21, 3, 3200.0), (22, 4, 12000.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.00 · ≤2회 0.00 · 평균 도전 3.17 · 스테이지10 판 9.00
+  Hp_Mul 0.7 (체력 30.6): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.34 · 스테이지10 판 4.03
+  Hp_Mul 0.6 (체력 26.2): 1회 0.00 · ≤2회 0.83 · 평균 도전 2.17 · 스테이지10 판 3.03
+  Hp_Mul 0.55 (체력 24.1): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.5 (체력 21.9): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.45 (체력 19.7): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.4 (체력 17.5): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.3 (체력 13.1): 1회 0.83 · ≤2회 1.00 · 평균 도전 1.17 · 스테이지10 판 1.17
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[C2_쪼갬0.5] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.167, 'ps_atk_intra': [3.82, 3.81, 3.75], 'ps_atk_L4_to_ps_atk2_L1': 1.17, 'gold_per_atk': [440.0, 840.0, 2133.3, 12000.0, 5600.0], 'cross_gold_ratio(next/last)': 0.47, 'code_PriceCheck_cross_ok(per=1,0.53)': True}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 14, 'ps_atk': 0, 'ps_dur': 2, 'atk_flat': 1.0, 'spent': 1215.0}  ps_atk 구매: [(10, 1, 220.0), (22, 2, 840.0), (27, 3, 3200.0), (28, 4, 12000.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.00 · ≤2회 0.00 · 평균 도전 4.00 · 스테이지10 판 14.00
+  Hp_Mul 0.7 (체력 30.6): 1회 0.00 · ≤2회 0.00 · 평균 도전 3.33 · 스테이지10 판 9.95
+  Hp_Mul 0.6 (체력 26.2): 1회 0.00 · ≤2회 0.00 · 평균 도전 3.17 · 스테이지10 판 9.00
+  Hp_Mul 0.55 (체력 24.1): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.34 · 스테이지10 판 4.03
+  Hp_Mul 0.5 (체력 21.9): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.34 · 스테이지10 판 4.03
+  Hp_Mul 0.45 (체력 19.7): 1회 0.00 · ≤2회 0.83 · 평균 도전 2.17 · 스테이지10 판 3.03
+  Hp_Mul 0.4 (체력 17.5): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.3 (체력 13.1): 1회 0.83 · ≤2회 1.00 · 평균 도전 1.17 · 스테이지10 판 1.17
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[C5_쪼갬0.75] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.167, 'ps_atk_intra': [3.82, 3.81, 3.75], 'ps_atk_L4_to_ps_atk2_L1': 1.17, 'gold_per_atk': [293.3, 1120.0, 2133.3, 12000.0, 5600.0], 'cross_gold_ratio(next/last)': 0.47, 'code_PriceCheck_cross_ok(per=1,0.53)': True}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 14, 'ps_atk': 0, 'ps_dur': 2, 'atk_flat': 1.0, 'spent': 1215.0}  ps_atk 구매: [(10, 1, 220.0), (18, 2, 840.0), (21, 3, 3200.0), (22, 4, 12000.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.00 · ≤2회 0.00 · 평균 도전 3.33 · 스테이지10 판 9.95
+  Hp_Mul 0.7 (체력 30.6): 1회 0.00 · ≤2회 0.00 · 평균 도전 3.17 · 스테이지10 판 9.00
+  Hp_Mul 0.6 (체력 26.2): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.34 · 스테이지10 판 4.03
+  Hp_Mul 0.55 (체력 24.1): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.34 · 스테이지10 판 4.03
+  Hp_Mul 0.5 (체력 21.9): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.45 (체력 19.7): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.4 (체력 17.5): 1회 0.00 · ≤2회 1.00 · 평균 도전 2.00 · 스테이지10 판 2.00
+  Hp_Mul 0.3 (체력 13.1): 1회 0.83 · ≤2회 1.00 · 평균 도전 1.17 · 스테이지10 판 1.17
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[C7_최소사슬] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.172, 'ps_atk_intra': [3.8, 3.82, 3.79], 'ps_atk_L4_to_ps_atk2_L1': 1.27, 'gold_per_atk': [400.0, 760.0, 1933.3, 11000.0, 5600.0], 'cross_gold_ratio(next/last)': 0.51, 'code_PriceCheck_cross_ok(per=1,0.53)': True}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 15, 'ps_atk': 1, 'ps_dur': 2, 'atk_flat': 1.5, 'spent': 1415.0}  ps_atk 구매: [(9, 1, 200.0), (20, 2, 760.0), (25, 3, 2900.0), (26, 4, 11000.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.00 · ≤2회 0.00 · 평균 도전 3.00 · 스테이지10 판 12.00
+  Hp_Mul 0.7 (체력 30.6): 1회 0.00 · ≤2회 0.66 · 평균 도전 2.34 · 스테이지10 판 8.69
+  Hp_Mul 0.6 (체력 26.2): 1회 0.00 · ≤2회 0.83 · 평균 도전 2.17 · 스테이지10 판 7.86
+  Hp_Mul 0.55 (체력 24.1): 1회 0.68 · ≤2회 1.00 · 평균 도전 1.32 · 스테이지10 판 2.95
+  Hp_Mul 0.5 (체력 21.9): 1회 0.68 · ≤2회 1.00 · 평균 도전 1.32 · 스테이지10 판 2.95
+  Hp_Mul 0.45 (체력 19.7): 1회 0.83 · ≤2회 1.00 · 평균 도전 1.17 · 스테이지10 판 2.02
+  Hp_Mul 0.4 (체력 17.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.3 (체력 13.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[C8_규칙그대로] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.172, 'ps_atk_intra': [3.8, 3.82, 3.79], 'ps_atk_L4_to_ps_atk2_L1': 1.27, 'gold_per_atk': [200.0, 760.0, 2900.0, 11000.0, 5600.0], 'cross_gold_ratio(next/last)': 0.51, 'code_PriceCheck_cross_ok(per=1,0.53)': True}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 15, 'ps_atk': 1, 'ps_dur': 2, 'atk_flat': 2.0, 'spent': 1415.0}  ps_atk 구매: [(9, 1, 200.0), (17, 2, 760.0), (20, 3, 2900.0), (21, 4, 11000.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.00 · ≤2회 0.83 · 평균 도전 2.17 · 스테이지10 판 7.86
+  Hp_Mul 0.7 (체력 30.6): 1회 0.68 · ≤2회 1.00 · 평균 도전 1.32 · 스테이지10 판 2.95
+  Hp_Mul 0.6 (체력 26.2): 1회 0.83 · ≤2회 1.00 · 평균 도전 1.17 · 스테이지10 판 2.02
+  Hp_Mul 0.55 (체력 24.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.5 (체력 21.9): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.45 (체력 19.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.4 (체력 17.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.3 (체력 13.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+[F_최종쪼갬] ladder {'global_max_step': 1.444, 'global_worst_pair': [['ps_barspd', 1], ['homing', 1]], 'max_step_touching_ps_atk': 1.292, 'ps_atk_intra': [3.69, 3.83, 3.8], 'ps_atk_L4_to_ps_atk2_L1': 4.0, 'gold_per_atk': [43.3, 240.0, 920.0, 7000.0, 5600.0], 'cross_gold_ratio(next/last)': 0.8, 'code_PriceCheck_cross_ok(per=1,0.53)': False}
+  도착(맑음, hp0.8): {'round': 10, 'levels': 15, 'ps_atk': 1, 'ps_dur': 2, 'atk_flat': 2.5, 'spent': 1280.0}  ps_atk 구매: [(6, 1, 65.0), (10, 2, 240.0), (12, 3, 920.0), (14, 4, 3500.0)]
+  Hp_Mul 0.8 (체력 35.0): 1회 0.67 · ≤2회 1.00 · 평균 도전 1.33 · 스테이지10 판 1.33
+  Hp_Mul 0.7 (체력 30.6): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.6 (체력 26.2): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.55 (체력 24.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.5 (체력 21.9): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.45 (체력 19.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.4 (체력 17.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.3 (체력 13.1): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.24 (체력 10.5): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  Hp_Mul 0.2 (체력 8.7): 1회 1.00 · ≤2회 1.00 · 평균 도전 1.00 · 스테이지10 판 1.00
+  (별 +5%, Hp_Mul 0.2) 1회 1.00 ≤2회 1.00
+
+제안 판 수 요약: {'median': 0.14, 'p10': 0.07, 'p90': 0.54, 'ps_atk': [0.54, 0.1, 0.2, 0.13]}
+옛 ps_atk 판 수: [{'round': 12, 'node': 'ps_atk', 'lv': 1, 'price': 370.0, 'inc': 931.5, 'rounds': 0.4}, {'round': 16, 'node': 'ps_atk', 'lv': 2, 'price': 1400.0, 'inc': 12200.0, 'rounds': 0.11}, {'round': 18, 'node': 'ps_atk', 'lv': 3, 'price': 5200.0, 'inc': 67500.0, 'rounds': 0.08}, {'round': 20, 'node': 'ps_atk', 'lv': 4, 'price': 20000.0, 'inc': 83700.0, 'rounds': 0.24}]
+{'round': 1, 'node': 'power', 'lv': 1, 'price': 12.0, 'inc': 18.0, 'rounds': 0.67}
+{'round': 2, 'node': 'ed_score', 'lv': 1, 'price': 16.0, 'inc': 32.0, 'rounds': 0.5}
+{'round': 2, 'node': 'ed_cols', 'lv': 1, 'price': 22.0, 'inc': 32.0, 'rounds': 0.69}
+{'round': 3, 'node': 'ps_dur', 'lv': 1, 'price': 30.0, 'inc': 43.0, 'rounds': 0.7}
+{'round': 4, 'node': 'ed_price', 'lv': 1, 'price': 40.0, 'inc': 84.0, 'rounds': 0.48}
+{'round': 4, 'node': 'power', 'lv': 2, 'price': 46.0, 'inc': 84.0, 'rounds': 0.55}
+{'round': 5, 'node': 'md_bar', 'lv': 1, 'price': 55.0, 'inc': 98.0, 'rounds': 0.56}
+{'round': 6, 'node': 'ed_score', 'lv': 2, 'price': 60.0, 'inc': 121.0, 'rounds': 0.5}
+{'round': 6, 'node': 'ps_atk', 'lv': 1, 'price': 65.0, 'inc': 121.0, 'rounds': 0.54}
+{'round': 7, 'node': 'ed_cols', 'lv': 2, 'price': 84.0, 'inc': 298.0, 'rounds': 0.28}
+{'round': 7, 'node': 'ps_dur', 'lv': 2, 'price': 110.0, 'inc': 298.0, 'rounds': 0.37}
+{'round': 7, 'node': 'ed_price', 'lv': 2, 'price': 150.0, 'inc': 298.0, 'rounds': 0.5}
+{'round': 8, 'node': 'power', 'lv': 3, 'price': 170.0, 'inc': 356.0, 'rounds': 0.48}
+{'round': 9, 'node': 'md_bar', 'lv': 2, 'price': 200.0, 'inc': 370.0, 'rounds': 0.54}
+{'round': 9, 'node': 'dev_stump', 'lv': 1, 'price': 220.0, 'inc': 370.0, 'rounds': 0.59}
+{'round': 10, 'node': 'ed_score', 'lv': 3, 'price': 230.0, 'inc': 2328.8, 'rounds': 0.1}
+{'round': 10, 'node': 'ps_atk', 'lv': 2, 'price': 240.0, 'inc': 2328.8, 'rounds': 0.1}
+{'round': 10, 'node': 'ed_cols', 'lv': 3, 'price': 250.0, 'inc': 2328.8, 'rounds': 0.11}
+{'round': 10, 'node': 'md_combo', 'lv': 1, 'price': 260.0, 'inc': 2328.8, 'rounds': 0.11}
+{'round': 10, 'node': 'ed_regen', 'lv': 1, 'price': 280.0, 'inc': 2328.8, 'rounds': 0.12}
+{'round': 10, 'node': 'ps_dur', 'lv': 3, 'price': 300.0, 'inc': 2328.8, 'rounds': 0.13}
+{'round': 10, 'node': 'ed_rare0', 'lv': 1, 'price': 320.0, 'inc': 2328.8, 'rounds': 0.14}
+{'round': 10, 'node': 'md_map', 'lv': 1, 'price': 340.0, 'inc': 2328.8, 'rounds': 0.15}
+{'round': 11, 'node': 'ed_price', 'lv': 3, 'price': 380.0, 'inc': 6118.0, 'rounds': 0.06}
+{'round': 11, 'node': 'dev_moss', 'lv': 1, 'price': 420.0, 'inc': 6118.0, 'rounds': 0.07}
+{'round': 11, 'node': 'md_bar', 'lv': 3, 'price': 440.0, 'inc': 6118.0, 'rounds': 0.07}
+{'round': 11, 'node': 'ps_size', 'lv': 1, 'price': 450.0, 'inc': 6118.0, 'rounds': 0.07}
+{'round': 11, 'node': 'ps_spd', 'lv': 1, 'price': 480.0, 'inc': 6118.0, 'rounds': 0.08}
+{'round': 11, 'node': 'power', 'lv': 4, 'price': 510.0, 'inc': 6118.0, 'rounds': 0.08}
+{'round': 11, 'node': 'ed_bonus', 'lv': 1, 'price': 550.0, 'inc': 6118.0, 'rounds': 0.09}
+{'round': 11, 'node': 'md_combo', 'lv': 2, 'price': 600.0, 'inc': 6118.0, 'rounds': 0.1}
+{'round': 11, 'node': 'ed_cols', 'lv': 4, 'price': 650.0, 'inc': 6118.0, 'rounds': 0.11}
+{'round': 11, 'node': 'ed_regen', 'lv': 2, 'price': 700.0, 'inc': 6118.0, 'rounds': 0.11}
+{'round': 11, 'node': 'accel', 'lv': 1, 'price': 700.0, 'inc': 6118.0, 'rounds': 0.11}
+{'round': 12, 'node': 'md_map', 'lv': 2, 'price': 750.0, 'inc': 4685.0, 'rounds': 0.16}
+{'round': 12, 'node': 'ps_dur', 'lv': 4, 'price': 800.0, 'inc': 4685.0, 'rounds': 0.17}
+{'round': 12, 'node': 'ed_rare0', 'lv': 2, 'price': 800.0, 'inc': 4685.0, 'rounds': 0.17}
+{'round': 12, 'node': 'dev_acorn', 'lv': 1, 'price': 900.0, 'inc': 4685.0, 'rounds': 0.19}
+{'round': 12, 'node': 'ps_size', 'lv': 2, 'price': 900.0, 'inc': 4685.0, 'rounds': 0.19}
+{'round': 12, 'node': 'ps_atk', 'lv': 3, 'price': 920.0, 'inc': 4685.0, 'rounds': 0.2}
+{'round': 13, 'node': 'ps_spd', 'lv': 2, 'price': 960.0, 'inc': 12200.0, 'rounds': 0.08}
+{'round': 13, 'node': 'pierce', 'lv': 1, 'price': 1000.0, 'inc': 12200.0, 'rounds': 0.08}
+{'round': 13, 'node': 'ed_bonus', 'lv': 2, 'price': 1300.0, 'inc': 12200.0, 'rounds': 0.11}
+{'round': 13, 'node': 'md_combo', 'lv': 3, 'price': 1300.0, 'inc': 12200.0, 'rounds': 0.11}
+{'round': 13, 'node': 'md_kid', 'lv': 1, 'price': 1300.0, 'inc': 12200.0, 'rounds': 0.11}
+{'round': 13, 'node': 'burst', 'lv': 1, 'price': 1600.0, 'inc': 12200.0, 'rounds': 0.13}
+{'round': 13, 'node': 'ed_regen', 'lv': 3, 'price': 1700.0, 'inc': 12200.0, 'rounds': 0.14}
+{'round': 13, 'node': 'md_map', 'lv': 3, 'price': 1700.0, 'inc': 12200.0, 'rounds': 0.14}
+{'round': 14, 'node': 'ps_size', 'lv': 3, 'price': 1800.0, 'inc': 27400.0, 'rounds': 0.07}
+{'round': 14, 'node': 'ps_spd', 'lv': 3, 'price': 1900.0, 'inc': 27400.0, 'rounds': 0.07}
+{'round': 14, 'node': 'ed_rare0', 'lv': 3, 'price': 2000.0, 'inc': 27400.0, 'rounds': 0.07}
+{'round': 14, 'node': 'accel', 'lv': 2, 'price': 2100.0, 'inc': 27400.0, 'rounds': 0.08}
+{'round': 14, 'node': 'ps_ball', 'lv': 1, 'price': 2400.0, 'inc': 27400.0, 'rounds': 0.09}
+{'round': 14, 'node': 'pierce', 'lv': 2, 'price': 2500.0, 'inc': 27400.0, 'rounds': 0.09}
+{'round': 14, 'node': 'ed_bonus', 'lv': 3, 'price': 2900.0, 'inc': 27400.0, 'rounds': 0.11}
+{'round': 14, 'node': 'md_kid', 'lv': 2, 'price': 3400.0, 'inc': 27400.0, 'rounds': 0.12}
+{'round': 14, 'node': 'ps_atk', 'lv': 4, 'price': 3500.0, 'inc': 27400.0, 'rounds': 0.13}
+{'round': 14, 'node': 'accel', 'lv': 3, 'price': 3700.0, 'inc': 27400.0, 'rounds': 0.14}
+{'round': 15, 'node': 'pierce', 'lv': 3, 'price': 3700.0, 'inc': 67500.0, 'rounds': 0.05}
+{'round': 15, 'node': 'md_map', 'lv': 4, 'price': 4000.0, 'inc': 67500.0, 'rounds': 0.06}
+{'round': 15, 'node': 'ed_score1p', 'lv': 1, 'price': 4500.0, 'inc': 67500.0, 'rounds': 0.07}
+{'round': 15, 'node': 'burst', 'lv': 2, 'price': 5000.0, 'inc': 67500.0, 'rounds': 0.07}
+{'round': 15, 'node': 'md_kid', 'lv': 3, 'price': 6800.0, 'inc': 67500.0, 'rounds': 0.1}
+{'round': 15, 'node': 'ed_bonus1p', 'lv': 1, 'price': 9600.0, 'inc': 67500.0, 'rounds': 0.14}
+{'round': 15, 'node': 'burst', 'lv': 3, 'price': 10000.0, 'inc': 67500.0, 'rounds': 0.15}
+{'round': 15, 'node': 'ps_bar', 'lv': 1, 'price': 11000.0, 'inc': 67500.0, 'rounds': 0.16}
+{'round': 15, 'node': 'accel', 'lv': 4, 'price': 14000.0, 'inc': 67500.0, 'rounds': 0.21}
+{'round': 16, 'node': 'pierce', 'lv': 4, 'price': 14000.0, 'inc': 65100.0, 'rounds': 0.22}
+{'round': 16, 'node': 'ps_atk2', 'lv': 1, 'price': 14000.0, 'inc': 65100.0, 'rounds': 0.22}
+{'round': 16, 'node': 'ed_score1p', 'lv': 2, 'price': 17000.0, 'inc': 65100.0, 'rounds': 0.26}
+{'round': 16, 'node': 'ps_barspd', 'lv': 1, 'price': 18000.0, 'inc': 65100.0, 'rounds': 0.28}
+{'round': 17, 'node': 'homing', 'lv': 1, 'price': 26000.0, 'inc': 83700.0, 'rounds': 0.31}
+{'round': 17, 'node': 'ps_bardur', 'lv': 1, 'price': 26000.0, 'inc': 83700.0, 'rounds': 0.31}
+{'round': 17, 'node': 'ps_bar', 'lv': 2, 'price': 28000.0, 'inc': 83700.0, 'rounds': 0.33}
+{'round': 18, 'node': 'ed_bonus1p', 'lv': 2, 'price': 32000.0, 'inc': 133000.0, 'rounds': 0.24}
+{'round': 18, 'node': 'burst', 'lv': 4, 'price': 38000.0, 'inc': 133000.0, 'rounds': 0.29}
+{'round': 18, 'node': 'ps_barspd', 'lv': 2, 'price': 43000.0, 'inc': 133000.0, 'rounds': 0.32}
+{'round': 19, 'node': 'homing', 'lv': 2, 'price': 52000.0, 'inc': 161000.0, 'rounds': 0.32}
+{'round': 19, 'node': 'ps_atk2', 'lv': 2, 'price': 52000.0, 'inc': 161000.0, 'rounds': 0.32}
+{'round': 19, 'node': 'ed_score1p', 'lv': 3, 'price': 64000.0, 'inc': 161000.0, 'rounds': 0.4}
+{"ps_atk0_dur2": {"clear": [true, 10.8, 18.5], "rain": [true, 10.8, 18.5], "moon": [true, 10.8, 18.5], "wind": [true, 10.8, 18.5], "storm": [true, 13.0, 18.5], "cold": [true, 10.8, 15.5]}, "ps_atk1_dur2": {"clear": [true, 5.5, 18.5], "rain": [true, 5.5, 18.5], "moon": [true, 5.5, 18.5], "wind": [true, 5.5, 18.5], "storm": [true, 6.4, 18.5], "cold": [true, 5.5, 15.5]}, "ps_atk2_dur2": {"clear": [true, 4.5, 18.5], "rain": [true, 4.5, 18.5], "moon": [true, 4.5, 18.5], "wind": [true, 4.5, 18.5], "storm": [true, 5.2, 18.5], "cold": [true, 4.5, 15.5]}, "ps_atk2_dur1": {"clear": [true, 4.5, 16.5], "rain": [true, 4.5, 16.5], "moon": [true, 4.5, 16.5], "wind": [true, 4.5, 16.5], "storm": [true, 5.2, 16.5], "cold": [true, 4.5, 13.5]}, "ps_atk1_dur3": {"clear": [true, 5.5, 21.5], "rain": [true, 5.5, 21.5], "moon": [true, 5.5, 21.5], "wind": [true, 5.5, 21.5], "storm": [true, 6.4, 21.5], "cold": [true, 5.5, 18.5]}, "ps_atk3_dur2": {"clear": [true, 4.0, 18.5], "rain": [true, 4.0, 18.5], "moon": [true, 4.0, 18.5], "wind": [true, 4.0, 18.5], "storm": [true, 4.5, 18.5], "cold": [true, 4.0, 15.5]}}
