@@ -17,8 +17,21 @@ namespace MoreMush
             ["ko"] = "한국어", ["en"] = "English", ["ja"] = "日本語", ["ru"] = "Русский", ["uk"] = "Українська",
         };
         const string PrefKey = "mmm_lang";
-        // 처음 실행(저장된 언어 없음)의 언어. 기기 언어와 상관없이 영어
+        // 처음 실행(저장된 언어 없음)의 언어: 브라우저·기기 언어가 LANGS에 있으면 그것, 없으면 영어
+        // (WebGL은 Application.systemLanguage가 navigator.language에서 온다)
         public const string DefaultLang = "en";
+
+        static string DetectSystemLang()
+        {
+            switch (Application.systemLanguage)
+            {
+                case SystemLanguage.Korean: return "ko";
+                case SystemLanguage.Japanese: return "ja";
+                case SystemLanguage.Russian: return "ru";
+                case SystemLanguage.Ukrainian: return "uk";
+                default: return DefaultLang;
+            }
+        }
 
         public static string Lang { get; private set; } = DefaultLang;
         public static bool IsKo => Lang == "ko";
@@ -33,7 +46,8 @@ namespace MoreMush
             if (loaded) return;
             loaded = true;
             string saved = PlayerPrefs.GetString(PrefKey, "");
-            Lang = Array.IndexOf(LANGS, saved) >= 0 ? saved : DefaultLang;
+            // 저장된 선택 > 브라우저(기기) 언어 > 영어
+            Lang = Array.IndexOf(LANGS, saved) >= 0 ? saved : DetectSystemLang();
             table = LoadTable(Lang);
         }
 
