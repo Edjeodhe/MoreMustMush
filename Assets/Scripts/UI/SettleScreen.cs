@@ -302,7 +302,7 @@ namespace MoreMush
                 foreach (var kv in d.OrderByDescending(x => x.Value.dmg))
                 {
                     double pct = total > 0 ? kv.Value.dmg / total * 100 : 0;
-                    sb.Append($"{name(kv.Key)}<pos=45%>{pct:0.0}%<pos=62%>{U.Fmt(kv.Value.dmg)}<pos=78%>{kv.Value.hits}<pos=89%>{kv.Value.kills}\n");
+                    sb.Append($"{name(kv.Key)}<pos=45%>{pct.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)}%<pos=62%>{U.Fmt(kv.Value.dmg)}<pos=78%>{kv.Value.hits}<pos=89%>{kv.Value.kills}\n");
                 }
                 sb.Append('\n');
             }
