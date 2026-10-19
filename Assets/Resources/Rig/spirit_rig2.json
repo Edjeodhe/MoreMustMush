@@ -603,19 +603,19 @@
     "y": 2.9698
    },
    "upperArm": {
-    "sprite": "Evo/k_fire_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_fire_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_fire_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_fire_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_fire_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_fire_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
     "sprite": "",
@@ -663,10 +663,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -691,7 +691,7 @@
    "side": {
     "head": {
      "sprite": "Rig2/gen_fire_3_side_head",
-     "x": -0.07,
+     "x": -0.32,
      "y": 4.0888
     },
     "face": "",
@@ -712,8 +712,8 @@
     },
     "hair": {
      "sprite": "Rig2/gen_fire_3_side_hair",
-     "x": -0.595,
-     "y": 2.9698
+     "x": -0.41,
+     "y": 3.1388
     },
     "waist": [
      0.0,
@@ -724,11 +724,29 @@
      2.631
     ],
     "hairRoot": [
-     0.05,
-     4.2698
+     -0.54,
+     3.7538
+    ],
+    "hairBones": [
+     [
+      -0.54,
+      3.7538
+     ],
+     [
+      -0.8,
+      3.2038
+     ],
+     [
+      -0.855,
+      2.6538
+     ],
+     [
+      -0.935,
+      2.1038
+     ]
     ],
     "capTop": [
-     0.0,
+     -0.25,
      5.5738
     ],
     "hipL": [
@@ -745,26 +763,26 @@
     ],
     "elbow": [
      0.07,
-     1.9115
+     1.9122
     ],
     "wrist": [
-     0.0725,
+     0.0694,
      1.6065
     ],
     "upperArm": {
-     "sprite": "Evo/k_fire_3_arm_up",
-     "x": 0.0325,
-     "y": 1.9115
+     "sprite": "Rig2/gen_fire_3_arm_upper",
+     "x": 0.0893,
+     "y": 1.8678
     },
     "foreArm": {
-     "sprite": "Rig2/r2_fire_3_forearm",
-     "x": 0.0325,
-     "y": 1.9115
+     "sprite": "Rig2/gen_fire_3_arm_fore",
+     "x": 0.0893,
+     "y": 1.8678
     },
     "hand": {
-     "sprite": "Rig2/r2_fire_3_hand",
-     "x": 0.0325,
-     "y": 1.9115
+     "sprite": "Rig2/gen_fire_3_arm_hand",
+     "x": 0.0893,
+     "y": 1.8678
     },
     "shoulderR": [
      0.12,
@@ -800,7 +818,12 @@
     ],
     "sole": -0.003,
     "legScale": 1.0,
-    "lift": 0.34
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_fire_3_sleeve",
+     "x": 0.08,
+     "y": 2.271
+    }
    },
    "back": {
     "head": {
@@ -824,6 +847,33 @@
      "x": 0.005,
      "y": 1.796
     },
+    "hair": {
+     "sprite": "Rig2/gen_fire_3_back_hair",
+     "x": 0.025,
+     "y": 3.1288
+    },
+    "hairRoot": [
+     0.025,
+     3.7888
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.7888
+     ],
+     [
+      0.025,
+      3.1988
+     ],
+     [
+      0.025,
+      2.6088
+     ],
+     [
+      0.025,
+      2.0088
+     ]
+    ],
     "waist": [
      0.0,
      2.131
@@ -838,26 +888,26 @@
     ],
     "elbow": [
      -0.375,
-     2.0315
+     2.0322
     ],
     "wrist": [
-     -0.3725,
+     -0.3756,
      1.7265
     ],
     "upperArm": {
-     "sprite": "Evo/k_fire_3_arm_up",
-     "x": -0.4125,
-     "y": 2.0315
+     "sprite": "Rig2/gen_fire_3_arm_upper",
+     "x": -0.3557,
+     "y": 1.9878
     },
     "foreArm": {
-     "sprite": "Rig2/r2_fire_3_forearm",
-     "x": -0.4125,
-     "y": 2.0315
+     "sprite": "Rig2/gen_fire_3_arm_fore",
+     "x": -0.3557,
+     "y": 1.9878
     },
     "hand": {
-     "sprite": "Rig2/r2_fire_3_hand",
-     "x": -0.4125,
-     "y": 2.0315
+     "sprite": "Rig2/gen_fire_3_arm_hand",
+     "x": -0.3557,
+     "y": 1.9878
     },
     "shoulderR": [
      0.385,
@@ -893,7 +943,12 @@
     ],
     "sole": -0.003,
     "legScale": 1.0,
-    "lift": 0.34
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_fire_3_sleeve",
+     "x": -0.365,
+     "y": 2.391
+    }
    }
   },
   {

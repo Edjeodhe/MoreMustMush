@@ -13,12 +13,13 @@
 //      └ hip[i](뒤집기만) ─ thigh[i](IK 각·길이)
 //   foot[i](root 공간, 발목 목표 위치) ─ footRot[i] ─ shoe      ← 발은 땅에 붙인다 (IK 목표)
 // 그리는 순서 (sortingOrder, 뒤→앞): 뒷머리 -80 · 먼 쪽 팔 -70~-50 · 다리 -30 · 신발 -20 · 치마 0 · 가슴 10 · 머리 40 · 얼굴 50 · 팔 80~100 · 목 프릴 120
+//   뒷모습: 팔 20~22 · 머리 40 · 머리카락 45 · 갓 덮개(<머리>_cap) 47
 // 계층 (★0·★1): root ─ body(발바닥 축 찌그러짐) ─ stem · face / capT(갓 테두리 축 진자·찌그러짐) ─ cap,  foot[i] (root 공간)
 //
 // 움직임 = ① 동작 함수가 목표 자세(Rig2Pose)를 만든다 → ② 동작이 바뀌면 이전 자세에서 섞는다(blend)
 //          → ③ 팔·몸은 스프링으로 부드럽게(팔꿈치는 조금 늦게 = 겹침) → ④ 2차 움직임(머리카락·치마·손·갓)은
 //          관절점의 실제 가속도로 흔들리는 진자 (무게감·관성·따라오는 동작) → ⑤ 다리는 IK로 발을 땅에 붙인다.
-import { Mathf, Rng, Vector2, Transform, SpriteRenderer } from "./unity.js";
+import { Mathf, Rng, Vector2, Transform, SpriteRenderer, M2 } from "./unity.js";
 
 // ───────────────────────── 동작 상수 (Rig2Motion, JSON "motion") ─────────────────────────
 // 단위: 각도 = 도, 길이 = ×다리 길이(L: 엉덩이~발바닥) 또는 ×키(H), 시간 = 초. 스프링 = k(강도) · z(감쇠비, 1 = 넘치지 않음)
@@ -29,11 +30,15 @@ export const MOTION_DEFAULTS = {
   // 스프링
   armK: 260, armZ: 0.9, elbowK: 170, elbowZ: 0.7, bodyK: 300, bodyZ: 0.9, headK: 120, headZ: 0.62,
   hairK: 38, hairZ: 0.32, hairInertia: 9, hairGravity: 0.8, hairDrag: 0.5, hairStretch: 0.015,
+  // 머리카락 뼈 사슬 (모습에 hairBones가 있을 때, 지금은 옆모습): 한 장짜리 머리카락 그림을 뼈 사슬로 휘게 한다(스킨).
+  // 아래 뼈일수록 무르게(늦게·크게) → 흔들림이 위에서 아래로 번진다. 정수리~뿌리 아래 조금(headBand, 음수 = 뿌리 아래)까지는 머리에 붙어 있다 → 얼굴 옆 머리카락이 얼굴에서 떨어지지 않는다
+  hairSegK: 0.72, hairSegZ: 0.34, hairSegInertia: 5, hairSegMax: 12, hairSegRootMax: 5, hairSkinHeadBand: -0.1, hairSkinTail: 0.45,
   skirtK: 85, skirtZ: 0.38, skirtInertia: 6, skirtGravity: 0.55, skirtFlare: 0.1,
   handK: 140, handZ: 0.45, handInertia: 0.05,
   capK: 160, capZ: 0.28, capInertia: 8, capSquash: 0.05,
   squashK: 320, squashZ: 0.32,
-  headStab: 0.7,          // 몸이 기울어도 머리는 이만큼 수평을 지킨다
+  sleeveFollow: 0.55,     // 소매가 위팔 회전을 따라 도는 비율 (1 = 같이, 0 = 어깨에 고정)
+  headStab: 0.7,         // 몸이 기울어도 머리는 이만큼 수평을 지킨다
   // 고개 돌림: 머리(갓·얼굴·앞머리) 전체를 돌리듯 = 기울이고 · 가로로 조금 좁히고 · 옆으로 조금 옮긴다.
   // 얼굴 층은 머리에 붙어 있고, 3/4 느낌으로 얼굴 폭의 5% 이내만 옮긴다 (예전 0.32는 눈이 얼굴 밖으로 나가 떨어져 보였다)
   faceShift: 0.04, hairParallax: 0.03, headTurnShift: 0.07, headTurnSquash: 0.07, headTurnTilt: 4,
@@ -143,7 +148,7 @@ export class SpiritRig2 {
     this.sAir = new Spring(); this.sSqX = new Spring(); this.sSqY = new Spring();
     this.sSqX.Snap(1); this.sSqY.Snap(1);
     for (let i = 0; i < 2; i++) { this.sRaise[i].Snap(M.armRest); this.sBend[i].Snap(M.elbowRest); }
-    this.hairP = new Pendulum(); this.skirtP = new Pendulum(); this.handP = [new Pendulum(), new Pendulum()]; this.capP = new Pendulum();
+    this.hairP = new Pendulum(); this.hairSegP = [new Pendulum(), new Pendulum(), new Pendulum(), new Pendulum(), new Pendulum()]; this.skirtP = new Pendulum(); this.handP = [new Pendulum(), new Pendulum()]; this.capP = new Pendulum();
     this.capSq = new Spring(); this.hang = new Pendulum();
     this.prevPts = null; this.prevVel = null; this.prevForeRot = [0, 0]; this.prevForeVel = [0, 0];
     this.blinkT = 2.2; this.blink2 = false; this.pokeT = 99; this.fidget = null; this.fidgetT = 0; this.fidgetWait = 2.5;
@@ -172,6 +177,12 @@ export class SpiritRig2 {
     this.faceSR = this.SR("Face", this.headSR.transform, 50);
     this.hairT = this.T("HairRoot", this.neck);
     this.hairSR = this.SR("Hair", this.hairT, -80);               // 뒷머리: 몸통·팔·다리보다 뒤
+    // 머리카락 뼈 사슬 (hairBones): HairRoot(뼈 0) ─ HairB1 ─ HairB2 ─ … 그림은 목(neck) 공간에 한 장, 줄마다 가까운 뼈들을 섞어 휜다 (C#: SpriteSkin)
+    this.hairBone = [this.hairT];
+    for (let i = 1; i < 6; i++) this.hairBone[i] = this.T("HairB" + i, this.hairBone[i - 1]);
+    this.hairSkinSR = this.SR("HairSkin", this.neck, 45);
+    this.capOverSR = this.SR("CapOver", this.headSR.transform, 47); // 갓만 오린 그림(<머리>_cap): 뒷모습에서 머리카락 위에 갓을 다시 덮는다
+    this.sleeveT = []; this.sleeveSR = [];
     this.shoulder = []; this.upper = []; this.elbow = []; this.wrist = []; this.upperSR = []; this.foreSR = []; this.handSR = [];
     this.hip = []; this.thigh = []; this.legSR = []; this.foot = []; this.footRot = []; this.shoeSR = [];
     this.thighT = []; this.thighSR = []; this.shinT = []; this.shinSR = [];
@@ -184,6 +195,9 @@ export class SpiritRig2 {
       this.foreSR[i] = this.SR("ForeSprite", this.elbow[i], 90);
       this.wrist[i] = this.T("Wrist", this.elbow[i]);
       this.handSR[i] = this.SR("HandSprite", this.wrist[i], 100);
+      // 소매 (모습에 sleeve가 있을 때, 지금은 옆·뒷모습): 어깨 축을 덮어 위팔 이음을 가린다. 위팔 회전의 일부만 따라 돈다
+      this.sleeveT[i] = this.T("Sleeve", this.shoulder[i]);
+      this.sleeveSR[i] = this.SR("SleeveSprite", this.sleeveT[i], 85);
       this.hip[i] = this.T("Hip" + n, this.hips);
       this.thigh[i] = this.T("Leg", this.hip[i]);
       this.legSR[i] = this.SR("LegSprite", this.thigh[i], -30);         // (무릎 없는 예전 다리: thigh·shin 그림이 없을 때만)
@@ -244,12 +258,27 @@ export class SpiritRig2 {
     this.bounce.set(0, 0, 0);
     this.headSR.sprite = this.Sprite(l.head.sprite);
     this.headSR.transform.set(l.head.x - N.x, l.head.y - N.y, 0);
+    this.capOverSR.sprite = l.head.sprite ? this.Sprite(l.head.sprite + "_cap") : null;   // 없으면 안 그림 (지금은 뒷모습만 있음)
+    this.capOverSR.transform.set(0, 0, 0);
     this.faceSR.sprite = l.face ? this.Sprite(l.face + "normal") : null;
     this.faceSR.transform.set(0, 0, 0);
     const HR0 = V(l.hairRoot);
     this.hairT.set(HR0.x - N.x, HR0.y - N.y, 0);
-    this.hairSR.sprite = this.Sprite(l.hair?.sprite);
+    // 머리카락: hairBones(2개 이상)가 있으면 뼈 사슬 스킨, 없으면 예전처럼 한 장을 뿌리 진자로
+    const hs = l.hair?.sprite, B = l.hairBones && l.hairBones.length >= 2 ? l.hairBones.slice(0, this.hairBone.length).map(V) : null;
+    this.hairSkin = !!(B && hs && this.Sprite(hs));
+    this.hairSR.sprite = this.hairSkin ? null : this.Sprite(hs);
     this.hairSR.transform.set((l.hair?.x ?? 0) - HR0.x, (l.hair?.y ?? 0) - HR0.y, 0);
+    this.hairSkinSR.sprite = this.hairSkin ? this.Sprite(hs) : null;
+    this.hairSkinSR.skin = null;
+    this.nBones = this.hairSkin ? B.length : 1;
+    for (let i = 1; i < this.hairBone.length; i++) this.hairBone[i].SetActive(i < this.nBones);
+    if (this.hairSkin) {
+      this.hairT.set(B[0].x - N.x, B[0].y - N.y, 0);
+      for (let i = 1; i < B.length; i++) this.hairBone[i].set(B[i].x - B[i - 1].x, B[i].y - B[i - 1].y, 0);
+      this.hairSkinSR.transform.set(l.hair.x - N.x, l.hair.y - N.y, 0);
+      this.hairSkinSR.skin = this.MakeHairSkin(B.map((b) => b.sub(N)), l.hair.y - N.y);
+    }
     // 길이 (IK)
     this.upperLen = E.sub(SL).magnitude; this.foreLen = Wr.sub(E).magnitude;
     // 무릎: 허벅지(엉덩이→무릎) · 정강이(무릎→발목).
@@ -280,6 +309,9 @@ export class SpiritRig2 {
       this.wrist[i].set(Wr.x - E.x, Wr.y - E.y, 0);
       this.handSR[i].sprite = this.Sprite(l.hand.sprite);
       this.handSR[i].transform.set(l.hand.x - Wr.x, l.hand.y - Wr.y, 0);
+      this.sleeveT[i].set(0, 0, 0);
+      this.sleeveSR[i].sprite = l.sleeve && l.sleeve.sprite ? this.OutfitSprite(l.sleeve.sprite) : null;
+      if (l.sleeve) this.sleeveSR[i].transform.set(l.sleeve.x - SL.x, l.sleeve.y - SL.y, 0);
       this.hip[i].set(Hp.x - W.x, Hp.y - W.y, 0, m, 1);
       this.thigh[i].set(0, 0, 0);
       this.legSR[i].sprite = this.kneeOn ? null : this.Sprite(l.leg.sprite);
@@ -829,8 +861,10 @@ export class SpiritRig2 {
     this.faceSR.transform.localPosition.x = turn * M.faceShift;
     this.faceSR.enabled = !back && vk !== "back";
     // 뒷머리: 정면 = 맨 뒤 · 옆 = 몸통·먼 팔 앞, 머리·가까운 팔 뒤 · 뒤 = 맨 위 (등을 덮음)
-    // (뒷모습에서 머리카락은 팔·몸 위, 갓 아래 = 갓 테두리 밑에서 머리카락이 나온다)
-    this.hairSR.sortingOrder = vk === "back" ? 35 : vk === "side" ? 15 : back ? 130 : -80;
+    // 뒷모습: 머리카락은 팔·몸·머리 그림(갓 밑 짧은 머리 포함) 위 45, 그 위에 갓만 오린 그림 47 → 머리카락이 갓 테두리 밑에서 나와 맨 앞에 보인다
+    this.hairSR.sortingOrder = vk === "back" ? 45 : vk === "side" ? 15 : back ? 130 : -80;
+    // 뼈 사슬 머리카락(한 장, 앞머리 옆 머리부터 등까지): 얼굴·몸통 위 45, 갓 덮개(<머리>_cap) 47 아래 → 갓 밑에서 나와 얼굴 뒤를 감싸고 등으로 흐른다
+    this.hairSkinSR.sortingOrder = 45;
 
     // 팔
     // 먼 쪽 팔다리는 몸 뒤로: 정면에서 가는 쪽으로 돌면 반대쪽, 옆모습은 오른쪽(i=1)이 먼 쪽, 뒷모습은 두 팔 다 몸 앞쪽(=화면에선 뒤)
@@ -844,6 +878,9 @@ export class SpiritRig2 {
       // 뒷모습 (뒤→앞): 사다리 · 다리 · 몸통/치마 · 팔 · 머리(뒤통수·갓) · 뒷머리 (머리카락에 가려지는 팔은 가려진다)
       if (vk === "back") { this.upperSR[i].sortingOrder = 20; this.foreSR[i].sortingOrder = 21; this.handSR[i].sortingOrder = 22; }
       else { this.upperSR[i].sortingOrder = far ? -70 : 80; this.foreSR[i].sortingOrder = far ? -60 : 90; this.handSR[i].sortingOrder = far ? -50 : 100; }
+      // 소매: 위팔 바로 위 (아래팔·손보다는 아래), 위팔 회전의 sleeveFollow만큼 따라 돈다 (어깨에 붙은 천이 팔을 따라 들림)
+      this.sleeveSR[i].sortingOrder = this.upperSR[i].sortingOrder + 5;
+      this.sleeveT[i].localRotation = this.upper[i].localRotation * M.sleeveFollow;
     }
 
     // ⑤ 다리 IK (무릎 2뼈, 3D → 화면): 발목 목표 = 쉬는 발목 + (옆 X, 높이 Y, 앞 Z). 무릎은 앞(+Z)으로 굽는다.
@@ -909,9 +946,25 @@ export class SpiritRig2 {
     const g = this.hang.a;                              // 들린 몸이 기운 만큼 머리카락·치마는 아래로
     const headWorld = chestWorld + this.sHead.x;
     this.hairP.Step(-headWorld * M.hairGravity - this.vel.x * M.hairDrag * 2, M.hairK, M.hairZ, -acc.hair.x * M.hairInertia * 10, dt);
-    this.hairT.localRotation = Mathf.Clamp(this.hairP.a, -35, 35);
+    // 뼈 사슬이면 뿌리는 조금만 돌고(정수리·목덜미가 머리에서 떨어지지 않게) 흔들림은 아래 뼈가 나눠 맡는다
+    const rootMax = this.hairSkin ? M.hairSegRootMax : 35;
+    this.hairT.localRotation = Mathf.Clamp(this.hairP.a, -rootMax, rootMax);
     this.hairT.localPosition.x = V(l.hairRoot).x - V(l.neck).x - turn * M.hairParallax;
-    this.hairT.localScale.y = 1 + Mathf.Clamp(-acc.hair.y * M.hairStretch, -0.08, 0.08);
+    this.hairT.localScale.y = this.hairSkin ? 1 : 1 + Mathf.Clamp(-acc.hair.y * M.hairStretch, -0.08, 0.08);
+    // 뼈 1… : 윗뼈의 세상 각도만큼 아래로 늘어지려 하고(중력), 그 관절의 가속도에 밀린다. 아래 뼈일수록 무르다(k × hairSegK^n)
+    if (this.hairSkin) {
+      const jp = {};
+      for (let i = 1; i < this.nBones; i++) jp["hb" + i] = this.RootSpace(this.hairBone[i]);
+      const bAcc = this.Accel(jp, dt);
+      let parentWorld = headWorld + this.hairT.localRotation;
+      for (let i = 1; i < this.nBones; i++) {
+        const k = M.hairK * Math.pow(M.hairSegK, i), a = bAcc["hb" + i];
+        this.hairSegP[i - 1].Step(-parentWorld * M.hairGravity - this.vel.x * M.hairDrag, k, M.hairSegZ, -a.x * M.hairSegInertia * 10, dt);
+        const r = Mathf.Clamp(this.hairSegP[i - 1].a, -M.hairSegMax, M.hairSegMax);
+        this.hairBone[i].localRotation = r;
+        parentWorld += r;
+      }
+    }
     const hipsWorld = this.sHip[2].x + rootRot;
     this.skirtP.Step(-hipsWorld * M.skirtGravity, M.skirtK, M.skirtZ, -acc.waist.x * M.skirtInertia * 10, dt);
     this.skirtT.localRotation = Mathf.Clamp(this.skirtP.a, -20, 20);
@@ -1001,6 +1054,36 @@ export class SpiritRig2 {
   RootLocalMatrix(t) { let m = t.localMatrix; for (let x = t.parent; x && x !== this.root; x = x.parent) m = x.localMatrix.mul(m); return m; }
   RootLocal(t) { return this.RootLocalMatrix(t).point(0, 0); }
 
+  // 머리카락 스킨 (C#: SpriteSkin 뼈 가중치와 같은 규칙). rest = 뼈 쉬는 자리(목 공간), hairY = 그림 중심 y(목 공간).
+  //  가중치는 줄(높이)마다: 정수리 띠(뼈 0 위 headBand)까지는 머리에 붙음(움직이지 않음),
+  //  그 아래는 "뼈 k 구간의 가운데"끼리 부드럽게 섞는다 (뼈 k 구간 = 뼈 k ~ 뼈 k+1, 마지막 뼈는 아래로 tail).
+  MakeHairSkin(rest, hairY) {
+    const rig = this, n = rest.length;
+    const sk = { space: this.neck, M: [], c: [] };
+    sk.prepare = () => {
+      const M = rig.M, inv = rig.neck.localToWorld.inverse();
+      sk.M = [new M2()]; sk.c = [rest[0].y + M.hairSkinHeadBand];
+      for (let k = 0; k < n; k++) {
+        sk.M.push(inv.mul(rig.hairBone[k].localToWorld).mul(new M2(1, 0, 0, 1, -rest[k].x, -rest[k].y)));
+        sk.c.push(k < n - 1 ? (rest[k].y + rest[k + 1].y) / 2 : rest[k].y - M.hairSkinTail);
+      }
+    };
+    // 그림의 픽셀 줄 row → 목 공간 변형 (rest → 지금)
+    sk.at = (row, s) => {
+      const y = hairY + (1 - s.py) * s.h / s.ppu - row / s.ppu, c = sk.c, Ms = sk.M;
+      if (y >= c[0]) return Ms[0];
+      for (let i = 0; i < c.length - 1; i++) {
+        if (y >= c[i + 1]) {
+          let t = (c[i] - y) / (c[i] - c[i + 1]); t = t * t * (3 - 2 * t);
+          const A = Ms[i], Bm = Ms[i + 1];
+          return new M2(A.a + (Bm.a - A.a) * t, A.b + (Bm.b - A.b) * t, A.c + (Bm.c - A.c) * t, A.d + (Bm.d - A.d) * t, A.e + (Bm.e - A.e) * t, A.f + (Bm.f - A.f) * t);
+        }
+      }
+      return Ms[Ms.length - 1];
+    };
+    return sk;
+  }
+
   Accel(pts, dt) {
     const out = {};
     const prev = this.prevPts || {};
@@ -1046,6 +1129,8 @@ export class SpiritRig2 {
       J.push({ key: "waist", at: P(this.hips), parent: null, space: this.root });
       J.push({ key: "neck", at: P(this.neck), parent: "waist" });
       J.push({ key: "hairRoot", at: P(this.hairT), parent: "neck" });
+      if (this.hairSkin)
+        for (let i = 1; i < this.nBones; i++) J.push({ key: "hairB" + i, at: P(this.hairBone[i]), parent: i === 1 ? "hairRoot" : "hairB" + (i - 1) });
       J.push({ key: "capTop", at: P(this.neck, V(l.capTop).x - V(l.neck).x, V(l.capTop).y - V(l.neck).y), parent: "neck" });
       for (let i = 0; i < 2; i++) {
         const n = i === 0 ? "L" : "R";
