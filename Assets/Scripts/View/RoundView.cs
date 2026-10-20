@@ -56,7 +56,7 @@ namespace MoreMush
         // 날아가는 버섯·시계 아이콘의 화면 크기 (스테이지 px, 가로 1920 기준). 필드(ZOOM 배율) 아래에 있어 배율로 나눠 화면 크기를 고정한다.
         // 예전 40·30은 배율을 곱해 화면에서 60~67px(필드 0레벨 1.68)로 너무 컸다 (2026-10-20 사용자)
         const float FLYER_PX = 36, FLYER_CLOCK_PX = 27;
-        float flyerZoom = -1;
+        readonly Dictionary<SpriteRenderer, float> flyerFit = new Dictionary<SpriteRenderer, float>();   // 칸 → 크기를 맞춘 필드 배율
         int MaxPartsDrawn = int.MaxValue, MaxFlyersDrawn = int.MaxValue;   // Awake에서 플랫폼 보고 정한다
 
         static bool IsMobile()
@@ -420,11 +420,6 @@ namespace MoreMush
             // 재질 SpriteFx: 황금은 정점 색으로 (속성 블록 없이 묶어 그린다)
             int nf = 0, flying = 0;
             foreach (var f in R.flyers) if (f.t >= 0) flying++;
-            if (flyerZoom != RoundSim.ZOOM)   // 필드 넓히기로 배율이 바뀌면 풀의 모든 칸이 크기를 다시 맞추게 그림을 비운다
-            {
-                flyerZoom = RoundSim.ZOOM;
-                foreach (var sr in flyerRoot.GetComponentsInChildren<SpriteRenderer>(true)) sr.sprite = null;
-            }
             int skip = Mathf.Max(0, flying - MaxFlyersDrawn);
             foreach (var f in R.flyers)
             {
@@ -432,7 +427,12 @@ namespace MoreMush
                 var s = flyers.Get(nf++);
                 s.transform.localPosition = Art.P(f.x, f.y);
                 var fsp = f.clock ? SpriteDB.Icon("clock") : SpriteDB.Single(f.sp.id);
-                if (!ReferenceEquals(s.sprite, fsp)) { s.sprite = fsp; Art.FitPx(s, (f.clock ? FLYER_CLOCK_PX : FLYER_PX) / RoundSim.ZOOM); }
+                // 칸마다 맞춘 배율을 기억한다: 프리팹 기본 그림이 양송이(ed0)라, 그림만 비교하면 튜토리얼 판(양송이뿐)에서 새 칸이 크기를 안 맞추고 프리팹 크기로 크게 나왔다
+                if (!ReferenceEquals(s.sprite, fsp) || !flyerFit.TryGetValue(s, out var fz) || fz != RoundSim.ZOOM)
+                {
+                    s.sprite = fsp; Art.FitPx(s, (f.clock ? FLYER_CLOCK_PX : FLYER_PX) / RoundSim.ZOOM);
+                    flyerFit[s] = RoundSim.ZOOM;
+                }
                 s.color = Art.FxColor(!f.clock && f.golden ? 1 : 0);
             }
             flyers.Trim(nf);
