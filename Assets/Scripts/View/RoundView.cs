@@ -53,6 +53,10 @@ namespace MoreMush
         // 모바일: 한 번에 그리는 조각·날아가는 버섯 수 상한 (시뮬 상한 parts 260 · flyers 220). 군락 하나를 거두면 조각 36개 + 날아가는 버섯
         // 13~16개가 한 점에서 겹쳐 나와 줄여도 차이가 작다. 넘치면 가장 최근 것만 그린다 (시뮬은 그대로라 밸런스 무관)
         const int MOBILE_MAX_PARTS = 140, MOBILE_MAX_FLYERS = 60;
+        // 날아가는 버섯·시계 아이콘의 화면 크기 (스테이지 px, 가로 1920 기준). 필드(ZOOM 배율) 아래에 있어 배율로 나눠 화면 크기를 고정한다.
+        // 예전 40·30은 배율을 곱해 화면에서 60~67px(필드 0레벨 1.68)로 너무 컸다 (2026-10-20 사용자)
+        const float FLYER_PX = 36, FLYER_CLOCK_PX = 27;
+        float flyerZoom = -1;
         int MaxPartsDrawn = int.MaxValue, MaxFlyersDrawn = int.MaxValue;   // Awake에서 플랫폼 보고 정한다
 
         static bool IsMobile()
@@ -416,6 +420,11 @@ namespace MoreMush
             // 재질 SpriteFx: 황금은 정점 색으로 (속성 블록 없이 묶어 그린다)
             int nf = 0, flying = 0;
             foreach (var f in R.flyers) if (f.t >= 0) flying++;
+            if (flyerZoom != RoundSim.ZOOM)   // 필드 넓히기로 배율이 바뀌면 풀의 모든 칸이 크기를 다시 맞추게 그림을 비운다
+            {
+                flyerZoom = RoundSim.ZOOM;
+                foreach (var sr in flyerRoot.GetComponentsInChildren<SpriteRenderer>(true)) sr.sprite = null;
+            }
             int skip = Mathf.Max(0, flying - MaxFlyersDrawn);
             foreach (var f in R.flyers)
             {
@@ -423,7 +432,7 @@ namespace MoreMush
                 var s = flyers.Get(nf++);
                 s.transform.localPosition = Art.P(f.x, f.y);
                 var fsp = f.clock ? SpriteDB.Icon("clock") : SpriteDB.Single(f.sp.id);
-                if (!ReferenceEquals(s.sprite, fsp)) { s.sprite = fsp; Art.FitPx(s, f.clock ? 30 : 40); }
+                if (!ReferenceEquals(s.sprite, fsp)) { s.sprite = fsp; Art.FitPx(s, (f.clock ? FLYER_CLOCK_PX : FLYER_PX) / RoundSim.ZOOM); }
                 s.color = Art.FxColor(!f.clock && f.golden ? 1 : 0);
             }
             flyers.Trim(nf);
