@@ -1,0 +1,4 @@
+(40, 4, 'p450') phantom n 18 atk 44.9 dur 39 hp 5.26e+05 net 12354.7 gross 12354.7 left med 11% kill 4/18 killT med 18.8
+(40, 4, 'p400') phantom n 18 atk 44.9 dur 39 hp 4.68e+05 net 11980.1 gross 11980.1 left med 5% kill 8/18 killT med 35.5
+(40, 8, 'p450') phantom n 18 atk 40.5 dur 39 hp 5.27e+05 net 10349.8 gross 10349.8 left med 26% kill 0/18 killT med -1.0
+(40, 8, 'p400') phantom n 18 atk 40.5 dur 39 hp 4.68e+05 net 9838.5 gross 9838.5 left med 19% kill 1/18 killT med 34.5

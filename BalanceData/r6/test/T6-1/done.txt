@@ -1,0 +1,1 @@
+restored heal=0.03 hp=king:1,cleaner:0.35,angel:65,phantom:720,mover:200

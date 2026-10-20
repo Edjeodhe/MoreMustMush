@@ -1,0 +1,1 @@
+{"action":"execute","code":"return string.Join(\",\", System.Linq.Enumerable.Select(MoreMush.Defs.BOSS.Values, b=>b.id+\":\"+b.hpMul))+\" heal=\"+MoreMush.Defs.CLEANER_HEAL+\" preset=\"+MoreMush.Defs.TUNE.id;"}

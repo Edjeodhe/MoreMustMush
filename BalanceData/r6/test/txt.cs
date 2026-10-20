@@ -1,0 +1,1 @@
+return "gimmick=" + MoreMush.Defs.BOSS["cleaner"].gimmick + " | label=" + MoreMush.Loc.F("+{0}% 회복", UnityEngine.Mathf.RoundToInt(MoreMush.Defs.CLEANER_HEAL * 100)) + " | heal=" + MoreMush.Defs.CLEANER_HEAL + " int=" + MoreMush.Defs.CLEANER_INT + " | play=" + UnityEngine.Application.isPlaying;
