@@ -155,7 +155,6 @@ namespace MoreMush
         // ===== 군락지 =====
         Species PickSpecies(bool wall)
         {
-            var w = st.weather;
             // 후보 목록은 예전 LINQ(Take/Select · Where)와 같은 순서로 재사용 버퍼에 채운다 (군락마다 새 리스트를 만들지 않게)
             var pool = spPool; pool.Clear();
             if (EarlyStage(st.stage) && st.boss == null)
@@ -163,16 +162,23 @@ namespace MoreMush
                 for (int i = 0; i < EARLY_SPECIES.Length && i < st.stage; i++) pool.Add(SP_BY_NAME[EARLY_SPECIES[i]]);   // 초반: 스테이지 수만큼의 종만
             }
             else foreach (var sp in SPECIES) if (IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)) pool.Add(sp);
-            return U.PickWeighted(pool, sp =>
-            {
-                double x = TIERS[sp.t].w;
-                if (st.theme.favIds.Contains(sp.id)) x *= THEME_FAV_MUL;
-                if (sp.t >= 1) x *= st.rareMul;
-                x *= Math.Pow(st.stageMul, sp.t);
-                if (wall && sp.t >= 2) x *= 3;
-                if (w.favIds.Contains(sp.id) || (w.favTier >= 0 && sp.t == w.favTier)) x *= w.favMul;
-                return x;
-            });
+            pickWall = wall;
+            return U.PickWeighted(pool, speciesWeight ??= SpeciesWeight);
+        }
+
+        // 종 가중치 (PickSpecies). 예전 람다와 같은 계산·순서. 대리자는 한 번만 만들어 둔다 (군락을 만들 때마다 클로저가 생기지 않게)
+        bool pickWall;
+        Func<Species, double> speciesWeight;
+        double SpeciesWeight(Species sp)
+        {
+            var w = st.weather;
+            double x = TIERS[sp.t].w;
+            if (st.theme.favIds.Contains(sp.id)) x *= THEME_FAV_MUL;
+            if (sp.t >= 1) x *= st.rareMul;
+            x *= Math.Pow(st.stageMul, sp.t);
+            if (pickWall && sp.t >= 2) x *= 3;
+            if (w.favIds.Contains(sp.id) || (w.favTier >= 0 && sp.t == w.favTier)) x *= w.favMul;
+            return x;
         }
 
         static float ClusterR(float r) => Mathf.Round(r * 1.9f);

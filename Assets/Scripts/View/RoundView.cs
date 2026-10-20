@@ -153,7 +153,7 @@ namespace MoreMush
             var sw = new System.Diagnostics.Stopwatch();
             var steps = new (System.Func<int> count, int target, System.Action grow)[]
             {
-                (() => balls.Count, 60, balls.Grow), (() => textSlots.Count, 45, () => NewTextSlot()), (() => shrooms.Count, 200, shrooms.Grow),
+                (() => balls.Count, 60, balls.Grow), (() => textSlots.Count, TEXT_SLOTS, () => WarmText(NewTextSlot())), (() => shrooms.Count, 200, shrooms.Grow),
                 (() => fxPool.Count, 90, fxPool.Grow), (() => parts.Count, 260, parts.Grow), (() => ringFx.Count, MAX_RINGS, ringFx.Grow),
                 (() => flyers.Count, 40, flyers.Grow), (() => lines.Count, 24, lines.Grow),
             };
@@ -167,6 +167,18 @@ namespace MoreMush
         }
 
         void Start() => StartCoroutine(Prewarm());
+
+        // 필드 글자 칸 수: 숫자 45 + 라벨 11 + 콤보(공마다) + 보스 이름이 한꺼번에 뜬다. 45개만 미리 만들었더니 판 중에 90개 가까이까지
+        // 새로 만들며(Instantiate) TMP 배열을 키웠다 (2026-10-20 할당 조사)
+        const int TEXT_SLOTS = 120;
+        // 미리 만든 칸에 긴 예시 글자(그림 숫자 + 한글)로 메시를 한 번 만들어 둔다: TMP 배열과 그림 숫자용 서브메시를 판 중이 아니라 여기서 만든다
+        static string warmText;
+        void WarmText(TextSlot sl)
+        {
+            warmText ??= (DmgDigits.Spell("+999.99Qa!") ?? "+999.99Qa!") + " " + (DmgDigits.Numbers("+12.3B") ?? "+12.3B") + " 새 버섯! 황금 버섯 배수 획득";
+            sl.tmp.text = warmText;
+            sl.tmp.ForceMeshUpdate(true, true);
+        }
 
         void Awake()
         {
@@ -280,11 +292,13 @@ namespace MoreMush
             shrooms.Trim(R.shrooms.Count);
 
             // 포자 구름
-            for (int i = 0; i < R.clouds.Count; i++) clouds.Get(i).Show(R.clouds[i], now);
-            clouds.Trim(R.clouds.Count);
+            bool noSkill = FxPrefs.Simple;   // 연출 간소화: 스킬 효과(구름·고리·충격파·회오리·번개)를 그리지 않는다 (판정은 그대로)
+            int ncl = noSkill ? 0 : R.clouds.Count;
+            for (int i = 0; i < ncl; i++) clouds.Get(i).Show(R.clouds[i], now);
+            clouds.Trim(ncl);
 
             int nl = 0, nr = 0;
-            if (ringSp != null)
+            if (!noSkill && ringSp != null)
             {
                 // watercolor: the ring bursts out fast and settles (ease-out), a paint splash pops at the hit for an
                 // instant and fades; quiet rings (every bell hit) stay thin and small
@@ -308,7 +322,7 @@ namespace MoreMush
                     Blot(ref nr, ringSp, w.x, w.y, 2 * w.r, new Color(1, 0.9f, 0.76f, (1 - k) * 0.9f), w.x % 360, 3040);
                 }
             }
-            else
+            else if (!noSkill)
             {
                 for (int ri = Mathf.Max(0, R.rings.Count - MAX_RINGS); ri < R.rings.Count; ri++)   // 가장 최근 것만
                 {
@@ -324,12 +338,14 @@ namespace MoreMush
                     var c = U.Hex("#ffd9a8"); c.a = 1 - k; l.startColor = l.endColor = c;
                 }
             }
+            if (!noSkill)
             foreach (var tn in R.tornados)
                 for (int i = 0; i < 5; i++)
                 {
                     var l = Ellipse(nl++, tn.x, tn.y + (i - 2) * tn.h / 5, 30 + i * 6, 8, now * 10 + i, 4);
                     l.startColor = l.endColor = new Color(230 / 255f, 1, 250 / 255f, 0.8f - i * 0.12f);
                 }
+            if (!noSkill)
             foreach (var bo in R.bolts)
             {
                 var l = Line(nl++);
@@ -403,7 +419,7 @@ namespace MoreMush
             int skip = Mathf.Max(0, flying - MaxFlyersDrawn);
             foreach (var f in R.flyers)
             {
-                if (f.t < 0 || skip-- > 0) continue;
+                if (f.t < 0 || FxPrefs.Simple || skip-- > 0) continue;   // 연출 간소화: 아이콘은 안 그리고 도착할 때 칸이 튀는 것은 그대로
                 var s = flyers.Get(nf++);
                 s.transform.localPosition = Art.P(f.x, f.y);
                 var fsp = f.clock ? SpriteDB.Icon("clock") : SpriteDB.Single(f.sp.id);
@@ -541,6 +557,7 @@ namespace MoreMush
         void DrawTexts(RoundSim R, float z)
         {
             textFrame++;
+            if (!FxPrefs.Simple)   // 연출 간소화: 대미지 숫자를 그리지 않는다
             foreach (var t in R.texts)
             {
                 float life = t.tier >= 2 ? 1.2f : 0.8f, k = t.t / life;
@@ -554,8 +571,9 @@ namespace MoreMush
                     : DmgDigits.Spell(t.crit ? U.Fmt(t.v) + "!" : "+" + U.Fmt(t.v)) ?? (t.crit ? Loc.T("치명!") + " " : "+") + U.Fmt(t.v);
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
+            bool noSkillLabel = FxPrefs.Simple;
             foreach (var l in R.labels)
-                Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
+                if (!(noSkillLabel && l.skill)) Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
             foreach (var b in R.balls)
                 if (b.combo >= 3 && b.perm)
                 {

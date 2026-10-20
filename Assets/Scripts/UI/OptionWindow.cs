@@ -21,7 +21,7 @@ namespace MoreMush
         public GameObject Root { get; private set; }
         public bool IsOpen => Root != null && Root.activeSelf;
 
-        TMP_Text muteLabel;
+        TMP_Text muteLabel, simpleLabel;
         bool counted;   // App 모달 수에 넣었나 (Open/Close를 직접 쓰는 씬)
 
         public static OptionWindow For(Scene scene, UnityAction onClose, params Extra[] extras)
@@ -55,7 +55,7 @@ namespace MoreMush
         {
             var canvas = TempDialog.RootCanvas(scene);
             if (canvas == null) { Debug.LogWarning("[Option] 캔버스가 없어 옵션 창을 만들 수 없어요"); return; }
-            // 위에서 아래로: 돌아가기 · 소리 설정(효과음·배경음·음소거) · 씬별 버튼 · 메인 메뉴 · 게임 종료
+            // 위에서 아래로: 돌아가기 · 소리 설정(효과음·배경음·음소거) · 연출 간소화 · 씬별 버튼 · 메인 메뉴 · 게임 종료
             // 글자는 한국어 원문을 키로 LocText에 맡긴다: 창은 씬을 열 때 한 번 만들어지므로, 언어가 바뀌면(Loc.Changed) LocText가 다시 번역한다
             Root = TempDialog.BuildColumn(canvas, "OptionPanel", "설정", out var col);
             foreach (var t in Root.GetComponentsInChildren<TMP_Text>(true)) if (t.name == "Title") TempDialog.Localize(t, "설정");
@@ -67,6 +67,8 @@ namespace MoreMush
             TempDialog.Localize(bgm.transform.parent.Find("Name")?.GetComponent<TMP_Text>(), "배경음");
             muteLabel = TempDialog.ColumnButton(col, MuteKey(), ToggleMute);
             TempDialog.Localize(muteLabel, MuteKey());
+            simpleLabel = TempDialog.ColumnButton(col, SimpleKey(), ToggleSimple);
+            TempDialog.Localize(simpleLabel, SimpleKey());
             foreach (var e in extras) if (e.name != "Button_Back") TempDialog.Localize(TempDialog.ColumnButton(col, e.label, e.action), e.label);
             if (scene.name != Scenes.MainMenu)
                 TempDialog.Localize(TempDialog.ColumnButton(col, "메인 메뉴", () => { Snd.Ui(); Close(); App.Go(Scenes.MainMenu); }), "메인 메뉴");
@@ -81,15 +83,23 @@ namespace MoreMush
 
         void ToggleMute() { Snd.muted = !Snd.muted; Snd.Ui(); Refresh(); }
 
+        static string SimpleKey() => FxPrefs.Simple ? "연출 간소화: 켜짐" : "연출 간소화: 꺼짐";
+
+        void ToggleSimple() { FxPrefs.Simple = !FxPrefs.Simple; Snd.Ui(); Refresh(); }
+
+        static void SetKey(TMP_Text label, string key)
+        {
+            if (label == null) return;
+            if (label.TryGetComponent<LocText>(out var lt)) { lt.key = key; lt.Apply(); }
+            else label.text = Loc.T(key);
+        }
+
         // 소리 글자·음량을 지금 상태로 (M 키로도 바뀌므로 열 때마다)
         public void Refresh()
         {
             // 음소거 글자는 상태에 따라 키가 바뀐다: LocText가 있으면 키만 바꿔 번역을 맡기고(언어가 바뀌어도 따라간다), 없으면 지금 언어로 넣는다
-            if (muteLabel != null)
-            {
-                if (muteLabel.TryGetComponent<LocText>(out var lt)) { lt.key = MuteKey(); lt.Apply(); }
-                else muteLabel.text = Loc.T(MuteKey());
-            }
+            SetKey(muteLabel, MuteKey());
+            SetKey(simpleLabel, SimpleKey());
             if (sfx != null) sfx.SetValueWithoutNotify(Snd.SfxVol);
             if (bgm != null) bgm.SetValueWithoutNotify(Snd.BgmVol);
         }

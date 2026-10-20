@@ -20923,6 +20923,28 @@
       "Str_RU": "Расширяет поле до исходного размера. Помещается больше колоний и лесных устройств.",
       "Str_UK": "Розширює поле до початкового розміру. Вміщується більше колоній і лісових пристроїв.",
       "Str_PT": "Amplia o campo até o tamanho original. Cabem mais colônias e engenhocas da floresta."
+    },
+    {
+      "Str_ID": 901356,
+      "Str_Group_ID": 91356,
+      "Str_Name": "ui",
+      "Str_KR": "연출 간소화: 켜짐",
+      "Str_EN": "Simple Effects: On",
+      "Str_JA": "演出簡略化:オン",
+      "Str_RU": "Упрощённые эффекты: вкл.",
+      "Str_UK": "Спрощені ефекти: увімк.",
+      "Str_PT": "Efeitos simplificados: ligado"
+    },
+    {
+      "Str_ID": 901357,
+      "Str_Group_ID": 91357,
+      "Str_Name": "ui",
+      "Str_KR": "연출 간소화: 꺼짐",
+      "Str_EN": "Simple Effects: Off",
+      "Str_JA": "演出簡略化:オフ",
+      "Str_RU": "Упрощённые эффекты: выкл.",
+      "Str_UK": "Спрощені ефекти: вимк.",
+      "Str_PT": "Efeitos simplificados: desligado"
     }
   ]
 }
