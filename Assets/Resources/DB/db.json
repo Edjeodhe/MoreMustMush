@@ -3360,7 +3360,7 @@
       "Cat": "ed",
       "Look": "송이버섯",
       "Color": "#c9a27a",
-      "Hp_Mul": 1.75
+      "Hp_Mul": 1.0
     },
     {
       "Boss_ID": 6002,
@@ -3370,7 +3370,7 @@
       "Cat": "md",
       "Look": "선녀낙엽버섯",
       "Color": "#7ad07a",
-      "Hp_Mul": 20.0
+      "Hp_Mul": 0.35
     },
     {
       "Boss_ID": 6003,
@@ -3380,7 +3380,7 @@
       "Cat": "ps",
       "Look": "독우산광대버섯",
       "Color": "#b48cff",
-      "Hp_Mul": 740.0
+      "Hp_Mul": 65.0
     },
     {
       "Boss_ID": 6004,
@@ -3390,7 +3390,7 @@
       "Cat": "ps",
       "Look": "광대버섯",
       "Color": "#ff6b6b",
-      "Hp_Mul": 1650.0
+      "Hp_Mul": 400.0
     },
     {
       "Boss_ID": 6005,
@@ -3400,7 +3400,7 @@
       "Cat": "md",
       "Look": "동충하초",
       "Color": "#f2a64a",
-      "Hp_Mul": 1100.0
+      "Hp_Mul": 200.0
     }
   ],
   "Const": [
@@ -3436,7 +3436,7 @@
     },
     {
       "Const_Key": "CLEANER_HEAL",
-      "Value": 0.0500000007451,
+      "Value": 0.03,
       "Desc": "숲 속의 청소부: 회복량(최대 체력 비율)"
     },
     {
@@ -3570,12 +3570,12 @@
       "Str_ID": 309002,
       "Str_Group_ID": 29002,
       "Str_Name": "boss:cleaner:gimmick",
-      "Str_KR": "3초마다 최대 체력의 5%를 회복해요",
-      "Str_EN": "Recovers 5% of max HP every 3 seconds",
-      "Str_JA": "3秒ごとに最大体力の5%を回復します",
-      "Str_RU": "Каждые 3 с восстанавливает 5% макс. здоровья",
-      "Str_UK": "Кожні 3 с відновлює 5% макс. здоров'я",
-      "Str_PT": "Recupera 5% da vida máxima a cada 3 segundos"
+      "Str_KR": "3초마다 최대 체력의 3%를 회복해요",
+      "Str_EN": "Recovers 3% of max HP every 3 seconds",
+      "Str_JA": "3秒ごとに最大体力の3%を回復します",
+      "Str_RU": "Каждые 3 с восстанавливает 3% макс. здоровья",
+      "Str_UK": "Кожні 3 с відновлює 3% макс. здоров'я",
+      "Str_PT": "Recupera 3% da vida máxima a cada 3 segundos"
     },
     {
       "Str_ID": 900003,
