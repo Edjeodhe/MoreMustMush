@@ -1,0 +1,18 @@
+Sprite sheet: a 3x4 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+A UI kit of EMPTY interface pieces copied from the attached cozy watercolor game window mockups (same colours, same soft parchment and honey-wood look, same leaf sprigs), flat front view, NO text, NO letters, NO numbers, NO icons inside. Flat matte watercolor with soft edges, warm cream parchment, honey-wood brown edges, moss-green leaves, tiny white five-petal flowers. Every frame keeps its decoration only near its edges and corners, with a large plain even centre and even borders, so it can be 9-sliced.
+
+Assets in reading order (left to right, top to bottom):
+1. the big WINDOW: wide landscape, warm cream parchment fill, a soft honey-wood rim with rounded corners and a thin darker brown outer edge, a few tiny pale nail dots in the rim corners
+2. the window TITLE SIGN: a very wide short light-wood signboard with rounded corners and a darker wood edge, a cluster of green leaves and two tiny white flowers on each short end, plain centre
+3. a small SECTION HEADER plaque: wide and short pale parchment-wood board with a thin brown edge, a small green leaf sprig sticking out at each short end, plain centre
+4. an inner CARD panel, portrait: cream parchment with a thin warm-brown edge and a faint inner line, softly rounded corners
+5. a wide inner ROW panel, landscape: cream parchment with a thin warm-brown edge, two tiny green leaves curling in each of the four corners
+6. a PICTURE mat, square: pale cream rounded rectangle with a soft deckled watercolor edge and a faint warm shadow line, plain centre
+7. a small MATERIAL slot, square: cream rounded square with a thin tan edge, plain centre
+8. a wide GREEN BUTTON: soft moss-green rounded pill button with a slightly darker green rim and a thin lighter inner line, a tiny pale leaf painted at each short end, plain centre
+9. a wide CREAM BUTTON: light cream rounded button with a thin tan edge and a soft darker band along the bottom, plain centre
+10. a NAME pill label: wide short cream pill with a thin tan edge and a soft inner line, plain centre
+11. a round NUMBER badge: a warm tan watercolor circle with a slightly darker rim and a pale cream inner ring, empty centre
+12. a DONE badge: a short orange-amber rounded pill with a slightly darker rim, a small white check mark painted at the left end, plain right part

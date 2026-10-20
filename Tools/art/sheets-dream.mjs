@@ -452,6 +452,48 @@ const icons = [
 ];
 
 // Upgrade-tree node slots (user 2026-10-16): one picture per state instead of stacked glow / ring / disc circles.
+// 2026-10-20 세계수 창 3종(공방·꼬마·성장) 새 디자인: 사용자가 보낸 시안(concept/ui_mock_*.png)과 같은 생김새의 빈 판·버튼·배지 (글자 없음).
+// 9-slice 경계는 MCP로 스프라이트에 넣는다. 그림 아이콘은 ui_window_icons.
+const MOCKS = ["Art/Raw_Dream/concept/ui_mock_workshop.png", "Art/Raw_Dream/concept/ui_mock_kids.png", "Art/Raw_Dream/concept/ui_mock_grow.png"];
+const uiWindow = [
+  {
+    id: "ui_window", rows: 3, cols: 4, grid: true, sliceAs: [4, 3], out: "UI/Window", refs: [...MOCKS, raw("ui_kit2")],
+    subject: "A UI kit of EMPTY interface pieces copied from the attached cozy watercolor game window mockups (same colours, same soft parchment and honey-wood look, same leaf sprigs), flat front view, NO text, NO letters, NO numbers, NO icons inside. Flat matte watercolor with soft edges, warm cream parchment, honey-wood brown edges, moss-green leaves, tiny white five-petal flowers. Every frame keeps its decoration only near its edges and corners, with a large plain even centre and even borders, so it can be 9-sliced.",
+    items: [
+      ["win_frame", "the big WINDOW: wide landscape, warm cream parchment fill, a soft honey-wood rim with rounded corners and a thin darker brown outer edge, a few tiny pale nail dots in the rim corners"],
+      ["title_plaque", "the window TITLE SIGN: a very wide short light-wood signboard with rounded corners and a darker wood edge, a cluster of green leaves and two tiny white flowers on each short end, plain centre"],
+      ["header_plaque", "a small SECTION HEADER plaque: wide and short pale parchment-wood board with a thin brown edge, a small green leaf sprig sticking out at each short end, plain centre"],
+      ["card_panel", "an inner CARD panel, portrait: cream parchment with a thin warm-brown edge and a faint inner line, softly rounded corners"],
+      ["row_panel", "a wide inner ROW panel, landscape: cream parchment with a thin warm-brown edge, two tiny green leaves curling in each of the four corners"],
+      ["pic_frame", "a PICTURE mat, square: pale cream rounded rectangle with a soft deckled watercolor edge and a faint warm shadow line, plain centre"],
+      ["mat_slot", "a small MATERIAL slot, square: cream rounded square with a thin tan edge, plain centre"],
+      ["btn_leaf", "a wide GREEN BUTTON: soft moss-green rounded pill button with a slightly darker green rim and a thin lighter inner line, a tiny pale leaf painted at each short end, plain centre"],
+      ["btn_cream", "a wide CREAM BUTTON: light cream rounded button with a thin tan edge and a soft darker band along the bottom, plain centre"],
+      ["name_pill", "a NAME pill label: wide short cream pill with a thin tan edge and a soft inner line, plain centre"],
+      ["num_badge", "a round NUMBER badge: a warm tan watercolor circle with a slightly darker rim and a pale cream inner ring, empty centre"],
+      ["done_badge", "a DONE badge: a short orange-amber rounded pill with a slightly darker rim, a small white check mark painted at the left end, plain right part"],
+    ],
+  },
+  {
+    id: "ui_window_icons", rows: 3, cols: 4, grid: true, sliceAs: [4, 3], out: "UI/Window", refs: [...MOCKS, raw("icons_farm"), OBJ],
+    subject: "Illustrated icons for the cozy World Tree windows of a mushroom-spirit idle game, painted exactly like the attached mockups (flat matte watercolor, soft edges, no outlines, no gloss, no text). Each icon = ONE chunky main object centered in its cell with empty space around it, soft low-saturation palette with one warm accent.",
+    items: [
+      ["ic_heart_full", "a plump pink watercolor HEART"],
+      ["ic_heart_empty", "an EMPTY heart: the same plump heart shape in pale greyish beige"],
+      ["ic_lock", "a grey-brown PADLOCK inside a faint pale laurel wreath"],
+      ["ic_blessing", "BLESSING: a green leaf resting in a golden crescent moon with two tiny sparkles"],
+      ["ic_tribute", "OFFERING: a small woven basket heaped with white button mushrooms and two green leaves"],
+      ["ic_ring", "TREE RINGS: a round tree trunk slice with concentric honey rings and a tiny green sprout on its bark"],
+      ["ic_evolve", "EVOLVE: a terracotta pot with a bright green two-leaf sprout and a soft green arrow pointing up beside it"],
+      ["ic_request", "REQUEST: a rolled parchment letter tied with twine and a small green leaf"],
+      ["ic_join", "JOIN: an open cream envelope with a little red-capped mushroom spirit peeking out"],
+      ["ic_affection", "AFFECTION: two small pink hearts over a little green clover"],
+      ["ic_mallet", "WORKSHOP: a wooden mallet with a small leaf tied to its handle"],
+      ["ic_grow", "GROWTH: a small terracotta pot with a sprout and a green up arrow"],
+    ],
+  },
+];
+
 // Every slot is the same perfectly round size so nodes line up; the icon sits on the flat inner face.
 // Tools/art/norm_slots.py centres and squares them after slicing.
 const slots = {
@@ -794,4 +836,4 @@ const kitHair2 = (id, kids) => ({
 });
 const kitHair2Sheets = [kitHair2("kit_hair2_a", ["fire", "dew", "leaf", "wind"]), kitHair2("kit_hair2_b", ["rock", "spark", "moon", "star"])];
 
-export const SHEETS = [...mushrooms, ...KEEP.map(fromDoodle), ...critters, grandpa, tree, slots, ...fx, ...icons, ...lettering, ...env, ...bgs, ...scenes, ...kids, ...spiritPartSheets, ...spiritFaceSheets, evoConcept, ...evoLines, ...evoPartSheets, evoFaces, ...kitSheets, ...kitOutfitSheets, ...kitHair2Sheets];
+export const SHEETS = [...mushrooms, ...KEEP.map(fromDoodle), ...critters, grandpa, tree, slots, ...fx, ...icons, ...lettering, ...env, ...bgs, ...scenes, ...kids, ...spiritPartSheets, ...spiritFaceSheets, evoConcept, ...evoLines, ...evoPartSheets, evoFaces, ...kitSheets, ...kitOutfitSheets, ...kitHair2Sheets, ...uiWindow];

@@ -19237,6 +19237,636 @@
       "Str_JA": "強化材料 {0}",
       "Str_RU": "Материал {0}",
       "Str_UK": "Матеріал {0}"
+    },
+    {
+      "Str_ID": 901351,
+      "Str_Group_ID": 91351,
+      "Str_Name": "ui",
+      "Str_KR": "세계수 성장",
+      "Str_EN": "World Tree Growth",
+      "Str_JA": "世界樹の成長",
+      "Str_RU": "Рост Мирового древа",
+      "Str_UK": "Ріст Світового дерева"
+    },
+    {
+      "Str_ID": 901352,
+      "Str_Group_ID": 91352,
+      "Str_Name": "ui",
+      "Str_KR": "현재 효과",
+      "Str_EN": "Current Effects",
+      "Str_JA": "現在の効果",
+      "Str_RU": "Текущие эффекты",
+      "Str_UK": "Поточні ефекти"
+    },
+    {
+      "Str_ID": 901353,
+      "Str_Group_ID": 91353,
+      "Str_Name": "ui",
+      "Str_KR": "나무버섯 슬롯 {0}개 · 장식 {1}칸",
+      "Str_EN": "Tree mushroom slots {0} · Decor {1}",
+      "Str_JA": "木きのこ枠 {0}・飾り {1}",
+      "Str_RU": "Мест для грибов {0} · Декор {1}",
+      "Str_UK": "Місць для грибів {0} · Декор {1}"
+    },
+    {
+      "Str_ID": 901354,
+      "Str_Group_ID": 91354,
+      "Str_Name": "ui",
+      "Str_KR": "세계수 진화 → {0}단계",
+      "Str_EN": "Evolve World Tree → Stage {0}",
+      "Str_JA": "世界樹の進化 → {0}段階",
+      "Str_RU": "Эволюция древа → этап {0}",
+      "Str_UK": "Еволюція дерева → етап {0}"
+    },
+    {
+      "Str_ID": 901355,
+      "Str_Group_ID": 91355,
+      "Str_Name": "ui",
+      "Str_KR": "최종 단계",
+      "Str_EN": "Final stage",
+      "Str_JA": "最終段階",
+      "Str_RU": "Последний этап",
+      "Str_UK": "Останній етап"
+    },
+    {
+      "Str_ID": 901356,
+      "Str_Group_ID": 91356,
+      "Str_Name": "ui",
+      "Str_KR": "나이테",
+      "Str_EN": "Tree Rings",
+      "Str_JA": "年輪",
+      "Str_RU": "Годичные кольца",
+      "Str_UK": "Річні кільця"
+    },
+    {
+      "Str_ID": 901357,
+      "Str_Group_ID": 91357,
+      "Str_Name": "ui",
+      "Str_KR": "공물",
+      "Str_EN": "Offering",
+      "Str_JA": "お供え",
+      "Str_RU": "Подношение",
+      "Str_UK": "Підношення"
+    },
+    {
+      "Str_ID": 901358,
+      "Str_Group_ID": 91358,
+      "Str_Name": "ui",
+      "Str_KR": "창고 버섯 {0}개 → 경험치 +{1}",
+      "Str_EN": "{0} stored mushrooms → EXP +{1}",
+      "Str_JA": "倉庫のきのこ {0}個 → 経験値 +{1}",
+      "Str_RU": "Грибов в запасе: {0} → опыт +{1}",
+      "Str_UK": "Грибів у запасі: {0} → досвід +{1}"
+    },
+    {
+      "Str_ID": 901359,
+      "Str_Group_ID": 91359,
+      "Str_Name": "ui",
+      "Str_KR": "바치기",
+      "Str_EN": "Offer",
+      "Str_JA": "お供えする",
+      "Str_RU": "Принести",
+      "Str_UK": "Піднести"
+    },
+    {
+      "Str_ID": 901360,
+      "Str_Group_ID": 91360,
+      "Str_Name": "ui",
+      "Str_KR": "다음 {0}단계: {1}",
+      "Str_EN": "Next, stage {0}: {1}",
+      "Str_JA": "次の{0}段階: {1}",
+      "Str_RU": "Этап {0}: {1}",
+      "Str_UK": "Етап {0}: {1}"
+    },
+    {
+      "Str_ID": 901361,
+      "Str_Group_ID": 91361,
+      "Str_Name": "ui",
+      "Str_KR": "모든 가호를 받았어요",
+      "Str_EN": "All blessings received",
+      "Str_JA": "すべての加護を受けました",
+      "Str_RU": "Все благословения получены",
+      "Str_UK": "Усі благословення отримано"
+    },
+    {
+      "Str_ID": 901362,
+      "Str_Group_ID": 91362,
+      "Str_Name": "ui",
+      "Str_KR": "받은 가호 {0}/{1}",
+      "Str_EN": "Blessings {0}/{1}",
+      "Str_JA": "受けた加護 {0}/{1}",
+      "Str_RU": "Благословения {0}/{1}",
+      "Str_UK": "Благословення {0}/{1}"
+    },
+    {
+      "Str_ID": 901363,
+      "Str_Group_ID": 91363,
+      "Str_Name": "ui",
+      "Str_KR": "확인",
+      "Str_EN": "View",
+      "Str_JA": "確認",
+      "Str_RU": "Смотреть",
+      "Str_UK": "Переглянути"
+    },
+    {
+      "Str_ID": 901364,
+      "Str_Group_ID": 91364,
+      "Str_Name": "ui",
+      "Str_KR": "세계수 {0}단계에 받아요",
+      "Str_EN": "Received at World Tree stage {0}",
+      "Str_JA": "世界樹{0}段階で受けられます",
+      "Str_RU": "Будет на этапе древа {0}",
+      "Str_UK": "Буде на етапі дерева {0}"
+    },
+    {
+      "Str_ID": 901365,
+      "Str_Group_ID": 91365,
+      "Str_Name": "ui",
+      "Str_KR": "다음 호감도까지 {0}",
+      "Str_EN": "{0} to next affection",
+      "Str_JA": "次の好感度まで {0}",
+      "Str_RU": "До следующего уровня симпатии: {0}",
+      "Str_UK": "До наступного рівня симпатії: {0}"
+    },
+    {
+      "Str_ID": 901366,
+      "Str_Group_ID": 91366,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마의 하루",
+      "Str_EN": "A Little One's Day",
+      "Str_JA": "ちびっこの一日",
+      "Str_RU": "День малыша",
+      "Str_UK": "День малюка"
+    },
+    {
+      "Str_ID": 901367,
+      "Str_Group_ID": 91367,
+      "Str_Name": "ui",
+      "Str_KR": "부탁 보기",
+      "Str_EN": "View Favors",
+      "Str_JA": "お願いを見る",
+      "Str_RU": "Просьбы",
+      "Str_UK": "Прохання"
+    },
+    {
+      "Str_ID": 901368,
+      "Str_Group_ID": 91368,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마 진화",
+      "Str_EN": "Little One Evolution",
+      "Str_JA": "ちびっこ進化",
+      "Str_RU": "Эволюция малышей",
+      "Str_UK": "Еволюція малюків"
+    },
+    {
+      "Str_ID": 901369,
+      "Str_Group_ID": 91369,
+      "Str_Name": "ui",
+      "Str_KR": "진화",
+      "Str_EN": "Evolve",
+      "Str_JA": "進化",
+      "Str_RU": "Эволюция",
+      "Str_UK": "Еволюція"
+    },
+    {
+      "Str_ID": 901370,
+      "Str_Group_ID": 91370,
+      "Str_Name": "ui",
+      "Str_KR": "{0} ×{1} 모아 줄래?",
+      "Str_EN": "Could you gather {0} ×{1}?",
+      "Str_JA": "{0}を{1}個集めてくれる?",
+      "Str_RU": "Соберёшь {0} ×{1}?",
+      "Str_UK": "Збереш {0} ×{1}?"
+    },
+    {
+      "Str_ID": 901371,
+      "Str_Group_ID": 91371,
+      "Str_Name": "ui",
+      "Str_KR": "오늘 남은 부탁 {0}",
+      "Str_EN": "Favors left today {0}",
+      "Str_JA": "今日の残りのお願い {0}",
+      "Str_RU": "Осталось просьб сегодня: {0}",
+      "Str_UK": "Залишилось прохань сьогодні: {0}"
+    },
+    {
+      "Str_ID": 901372,
+      "Str_Group_ID": 91372,
+      "Str_Name": "ui",
+      "Str_KR": "오늘 부탁은 다 들어줬어요!",
+      "Str_EN": "All of today's favors are done!",
+      "Str_JA": "今日のお願いはぜんぶかなえました!",
+      "Str_RU": "Все просьбы на сегодня выполнены!",
+      "Str_UK": "Усі прохання на сьогодні виконано!"
+    },
+    {
+      "Str_ID": 901373,
+      "Str_Group_ID": 91373,
+      "Str_Name": "ui",
+      "Str_KR": "지금 진화할 수 있는 꼬마 {0}",
+      "Str_EN": "Little Ones ready to evolve: {0}",
+      "Str_JA": "今すぐ進化できるちびっこ {0}",
+      "Str_RU": "Готовы к эволюции: {0}",
+      "Str_UK": "Готові до еволюції: {0}"
+    },
+    {
+      "Str_ID": 901374,
+      "Str_Group_ID": 91374,
+      "Str_Name": "ui",
+      "Str_KR": "한 단계 더 자라요!",
+      "Str_EN": "Grow one step further!",
+      "Str_JA": "もう一段階育ちます!",
+      "Str_RU": "Вырастем ещё на шаг!",
+      "Str_UK": "Підростемо ще на крок!"
+    },
+    {
+      "Str_ID": 901375,
+      "Str_Group_ID": 91375,
+      "Str_Name": "ui",
+      "Str_KR": "새로운 친구를 초대해요",
+      "Str_EN": "Invite a new friend",
+      "Str_JA": "新しい友だちを招待しよう",
+      "Str_RU": "Пригласи нового друга",
+      "Str_UK": "Запроси нового друга"
+    },
+    {
+      "Str_ID": 901376,
+      "Str_Group_ID": 91376,
+      "Str_Name": "ui",
+      "Str_KR": "세계수 {0}단계에 만나요",
+      "Str_EN": "Meet at World Tree stage {0}",
+      "Str_JA": "世界樹{0}段階で会えます",
+      "Str_RU": "Встреча на этапе древа {0}",
+      "Str_UK": "Зустріч на етапі дерева {0}"
+    },
+    {
+      "Str_ID": 901377,
+      "Str_Group_ID": 91377,
+      "Str_Name": "ui",
+      "Str_KR": "합류",
+      "Str_EN": "Join",
+      "Str_JA": "仲間にする",
+      "Str_RU": "Позвать",
+      "Str_UK": "Покликати"
+    },
+    {
+      "Str_ID": 901378,
+      "Str_Group_ID": 91378,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마 호감도",
+      "Str_EN": "Little One Affection",
+      "Str_JA": "ちびっこの好感度",
+      "Str_RU": "Симпатия малышей",
+      "Str_UK": "Симпатія малюків"
+    },
+    {
+      "Str_ID": 901379,
+      "Str_Group_ID": 91379,
+      "Str_Name": "ui",
+      "Str_KR": "아직 데려온 꼬마가 없어요",
+      "Str_EN": "No Little Ones have joined yet",
+      "Str_JA": "まだ仲間になったちびっこがいません",
+      "Str_RU": "Пока нет малышей",
+      "Str_UK": "Поки немає малюків"
+    },
+    {
+      "Str_ID": 901380,
+      "Str_Group_ID": 91380,
+      "Str_Name": "ui",
+      "Str_KR": "호감도 최대!",
+      "Str_EN": "Max affection!",
+      "Str_JA": "好感度MAX!",
+      "Str_RU": "Симпатия на максимуме!",
+      "Str_UK": "Симпатія на максимумі!"
+    },
+    {
+      "Str_ID": 901381,
+      "Str_Group_ID": 91381,
+      "Str_Name": "ui",
+      "Str_KR": "호감도 Lv.{0} → Lv.{1}까지 {2} 남음",
+      "Str_EN": "Affection Lv.{0} → Lv.{1}: {2} to go",
+      "Str_JA": "好感度 Lv.{0} → Lv.{1}まで あと{2}",
+      "Str_RU": "Симпатия ур.{0} → ур.{1}: ещё {2}",
+      "Str_UK": "Симпатія рів.{0} → рів.{1}: ще {2}"
+    },
+    {
+      "Str_ID": 901382,
+      "Str_Group_ID": 91382,
+      "Str_Name": "ui",
+      "Str_KR": "좋아하는 버섯: {0} · 부탁 +{1}",
+      "Str_EN": "Favorite mushrooms: {0} · Favor +{1}",
+      "Str_JA": "好きなきのこ: {0}・お願い +{1}",
+      "Str_RU": "Любимые грибы: {0} · просьба +{1}",
+      "Str_UK": "Улюблені гриби: {0} · прохання +{1}"
+    },
+    {
+      "Str_ID": 901383,
+      "Str_Group_ID": 91383,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마 친구들",
+      "Str_EN": "Little One Friends",
+      "Str_JA": "ちびっこの仲間たち",
+      "Str_RU": "Друзья-малыши",
+      "Str_UK": "Друзі-малюки"
+    },
+    {
+      "Str_ID": 901384,
+      "Str_Group_ID": 91384,
+      "Str_Name": "ui",
+      "Str_KR": "함께하는 중",
+      "Str_EN": "With you",
+      "Str_JA": "いっしょにいます",
+      "Str_RU": "С тобой",
+      "Str_UK": "З тобою"
+    },
+    {
+      "Str_ID": 901385,
+      "Str_Group_ID": 91385,
+      "Str_Name": "ui",
+      "Str_KR": "세계수 {0}단계 {1}가 되면 만나요",
+      "Str_EN": "Meet when the World Tree reaches stage {0} {1}",
+      "Str_JA": "世界樹が{0}段階 {1}になったら会えます",
+      "Str_RU": "Встреча, когда древо достигнет этапа {0} «{1}»",
+      "Str_UK": "Зустріч, коли дерево досягне етапу {0} «{1}»"
+    },
+    {
+      "Str_ID": 901386,
+      "Str_Group_ID": 91386,
+      "Str_Name": "ui",
+      "Str_KR": "오늘의 부탁",
+      "Str_EN": "Today's Favors",
+      "Str_JA": "今日のお願い",
+      "Str_RU": "Просьбы на сегодня",
+      "Str_UK": "Прохання на сьогодні"
+    },
+    {
+      "Str_ID": 901387,
+      "Str_Group_ID": 91387,
+      "Str_Name": "ui",
+      "Str_KR": "{0} ×{1} 모아 주기",
+      "Str_EN": "Gather {0} ×{1}",
+      "Str_JA": "{0}を{1}個集める",
+      "Str_RU": "Собрать {0} ×{1}",
+      "Str_UK": "Зібрати {0} ×{1}"
+    },
+    {
+      "Str_ID": 901388,
+      "Str_Group_ID": 91388,
+      "Str_Name": "ui",
+      "Str_KR": "이번 주 부탁",
+      "Str_EN": "This Week's Favors",
+      "Str_JA": "今週のお願い",
+      "Str_RU": "Просьбы недели",
+      "Str_UK": "Прохання тижня"
+    },
+    {
+      "Str_ID": 901389,
+      "Str_Group_ID": 91389,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마의 상자",
+      "Str_EN": "Little One's Box",
+      "Str_JA": "ちびっこの箱",
+      "Str_RU": "Коробка малышей",
+      "Str_UK": "Скринька малюків"
+    },
+    {
+      "Str_ID": 901390,
+      "Str_Group_ID": 91390,
+      "Str_Name": "ui",
+      "Str_KR": "부탁 {0}번 들어주면 {1}",
+      "Str_EN": "Grant {0} favors for {1}",
+      "Str_JA": "お願いを{0}回かなえると {1}",
+      "Str_RU": "Выполни {0} просьб: {1}",
+      "Str_UK": "Виконай {0} прохань: {1}"
+    },
+    {
+      "Str_ID": 901391,
+      "Str_Group_ID": 91391,
+      "Str_Name": "ui",
+      "Str_KR": "매주 월요일에 새로 시작해요",
+      "Str_EN": "Resets every Monday",
+      "Str_JA": "毎週月曜日にリセット",
+      "Str_RU": "Обновляется каждый понедельник",
+      "Str_UK": "Оновлюється щопонеділка"
+    },
+    {
+      "Str_ID": 901392,
+      "Str_Group_ID": 91392,
+      "Str_Name": "ui",
+      "Str_KR": "마지막 진화까지 마쳤어요",
+      "Str_EN": "Fully evolved",
+      "Str_JA": "最後の進化まで終えました",
+      "Str_RU": "Полностью эволюционировал",
+      "Str_UK": "Повністю еволюціонував"
+    },
+    {
+      "Str_ID": 901393,
+      "Str_Group_ID": 91393,
+      "Str_Name": "ui",
+      "Str_KR": "세계수 {0}단계",
+      "Str_EN": "World Tree stage {0}",
+      "Str_JA": "世界樹{0}段階",
+      "Str_RU": "Этап древа {0}",
+      "Str_UK": "Етап дерева {0}"
+    },
+    {
+      "Str_ID": 901394,
+      "Str_Group_ID": 91394,
+      "Str_Name": "ui",
+      "Str_KR": "진화하면",
+      "Str_EN": "When evolved:",
+      "Str_JA": "進化すると",
+      "Str_RU": "После эволюции:",
+      "Str_UK": "Після еволюції:"
+    },
+    {
+      "Str_ID": 901395,
+      "Str_Group_ID": 91395,
+      "Str_Name": "ui",
+      "Str_KR": "{0}단계 필요",
+      "Str_EN": "Needs stage {0}",
+      "Str_JA": "{0}段階が必要",
+      "Str_RU": "Нужен этап {0}",
+      "Str_UK": "Потрібен етап {0}"
+    },
+    {
+      "Str_ID": 901396,
+      "Str_Group_ID": 91396,
+      "Str_Name": "ui",
+      "Str_KR": "작은 제작소",
+      "Str_EN": "Little Workshop",
+      "Str_JA": "小さな工房",
+      "Str_RU": "Маленькая мастерская",
+      "Str_UK": "Маленька майстерня"
+    },
+    {
+      "Str_ID": 901397,
+      "Str_Group_ID": 91397,
+      "Str_Name": "ui",
+      "Str_KR": "제작 목록",
+      "Str_EN": "Recipes",
+      "Str_JA": "制作リスト",
+      "Str_RU": "Рецепты",
+      "Str_UK": "Рецепти"
+    },
+    {
+      "Str_ID": 901398,
+      "Str_Group_ID": 91398,
+      "Str_Name": "ui",
+      "Str_KR": "제작 슬롯",
+      "Str_EN": "Crafting Slots",
+      "Str_JA": "制作スロット",
+      "Str_RU": "Ячейки создания",
+      "Str_UK": "Комірки створення"
+    },
+    {
+      "Str_ID": 901399,
+      "Str_Group_ID": 91399,
+      "Str_Name": "ui",
+      "Str_KR": "제작 {0}/{1} · 즉시 완료 오늘 {2}회",
+      "Str_EN": "Crafting {0}/{1} · Instant finish today {2}",
+      "Str_JA": "制作 {0}/{1}・今日の即時完了 {2}回",
+      "Str_RU": "Создание {0}/{1} · мгновенно сегодня: {2}",
+      "Str_UK": "Створення {0}/{1} · миттєво сьогодні: {2}"
+    },
+    {
+      "Str_ID": 901400,
+      "Str_Group_ID": 91400,
+      "Str_Name": "ui",
+      "Str_KR": "필요 재료",
+      "Str_EN": "Materials",
+      "Str_JA": "必要な材料",
+      "Str_RU": "Материалы",
+      "Str_UK": "Матеріали"
+    },
+    {
+      "Str_ID": 901401,
+      "Str_Group_ID": 91401,
+      "Str_Name": "ui",
+      "Str_KR": "잠긴 제작 슬롯",
+      "Str_EN": "Locked Slot",
+      "Str_JA": "ロック中の制作スロット",
+      "Str_RU": "Закрытая ячейка",
+      "Str_UK": "Закрита комірка"
+    },
+    {
+      "Str_ID": 901402,
+      "Str_Group_ID": 91402,
+      "Str_Name": "ui",
+      "Str_KR": "세계수 {0}단계에 열려요",
+      "Str_EN": "Opens at World Tree stage {0}",
+      "Str_JA": "世界樹{0}段階で開きます",
+      "Str_RU": "Откроется на этапе древа {0}",
+      "Str_UK": "Відкриється на етапі дерева {0}"
+    },
+    {
+      "Str_ID": 901403,
+      "Str_Group_ID": 91403,
+      "Str_Name": "ui",
+      "Str_KR": "레시피를 골라 제작해요",
+      "Str_EN": "Pick a recipe to craft",
+      "Str_JA": "レシピを選んで制作しよう",
+      "Str_RU": "Выбери рецепт",
+      "Str_UK": "Обери рецепт"
+    },
+    {
+      "Str_ID": 901404,
+      "Str_Group_ID": 91404,
+      "Str_Name": "ui",
+      "Str_KR": "기다리던 장식이 완성됐어요.",
+      "Str_EN": "Your decoration is ready.",
+      "Str_JA": "待っていた飾りが完成しました。",
+      "Str_RU": "Украшение готово.",
+      "Str_UK": "Декор готовий."
+    },
+    {
+      "Str_ID": 901405,
+      "Str_Group_ID": 91405,
+      "Str_Name": "ui",
+      "Str_KR": "제작 중…",
+      "Str_EN": "Crafting…",
+      "Str_JA": "制作中…",
+      "Str_RU": "Создаётся…",
+      "Str_UK": "Створюється…"
+    },
+    {
+      "Str_ID": 901406,
+      "Str_Group_ID": 91406,
+      "Str_Name": "ui",
+      "Str_KR": "세계수가 {0}단계가 되면 제작 슬롯이 열려요",
+      "Str_EN": "Crafting slots open when the World Tree reaches stage {0}",
+      "Str_JA": "世界樹が{0}段階になると制作スロットが開きます",
+      "Str_RU": "Ячейки откроются на этапе древа {0}",
+      "Str_UK": "Комірки відкриються на етапі дерева {0}"
+    },
+    {
+      "Str_ID": 901407,
+      "Str_Group_ID": 91407,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마 {0}명",
+      "Str_EN": "{0} Little Ones",
+      "Str_JA": "ちびっこ {0}人",
+      "Str_RU": "Малышей: {0}",
+      "Str_UK": "Малюків: {0}"
+    },
+    {
+      "Str_ID": 901408,
+      "Str_Group_ID": 91408,
+      "Str_Name": "ui",
+      "Str_KR": "별 {0}/{1}",
+      "Str_EN": "Stars {0}/{1}",
+      "Str_JA": "星 {0}/{1}",
+      "Str_RU": "Звёзды {0}/{1}",
+      "Str_UK": "Зірки {0}/{1}"
+    },
+    {
+      "Str_ID": 901409,
+      "Str_Group_ID": 91409,
+      "Str_Name": "ui",
+      "Str_KR": "등급",
+      "Str_EN": "Grade",
+      "Str_JA": "ランク",
+      "Str_RU": "Ранг",
+      "Str_UK": "Ранг"
+    },
+    {
+      "Str_ID": 901410,
+      "Str_Group_ID": 91410,
+      "Str_Name": "ui",
+      "Str_KR": "매일 세 번, 함께하는 작은 일을 부탁할게요!",
+      "Str_EN": "Three times a day, I'll ask you for a little favor!",
+      "Str_JA": "毎日3回、いっしょにする小さなお願いをするね!",
+      "Str_RU": "Три раза в день я попрошу о маленькой услуге!",
+      "Str_UK": "Тричі на день я проситиму про маленьку послугу!"
+    },
+    {
+      "Str_ID": 901411,
+      "Str_Group_ID": 91411,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마 등급",
+      "Str_EN": "Little One Grades",
+      "Str_JA": "ちびっこのランク",
+      "Str_RU": "Ранги малышей",
+      "Str_UK": "Ранги малюків"
+    },
+    {
+      "Str_ID": 901412,
+      "Str_Group_ID": 91412,
+      "Str_Name": "ui",
+      "Str_KR": "아직 합류 전",
+      "Str_EN": "Not joined yet",
+      "Str_JA": "まだ仲間になっていません",
+      "Str_RU": "Ещё не с тобой",
+      "Str_UK": "Ще не з тобою"
+    },
+    {
+      "Str_ID": 901413,
+      "Str_Group_ID": 91413,
+      "Str_Name": "ui",
+      "Str_KR": "등급 ★{0}/{1} · Lv.{2}/{3}",
+      "Str_EN": "Grade ★{0}/{1} · Lv.{2}/{3}",
+      "Str_JA": "ランク ★{0}/{1}・Lv.{2}/{3}",
+      "Str_RU": "Ранг ★{0}/{1} · ур.{2}/{3}",
+      "Str_UK": "Ранг ★{0}/{1} · рів.{2}/{3}"
     }
   ]
 }

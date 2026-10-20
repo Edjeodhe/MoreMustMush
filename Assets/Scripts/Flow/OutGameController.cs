@@ -42,6 +42,8 @@ namespace MoreMush
         int tab;
         FarmTabWindow tabWin;
         DecoWindow decoWin;
+        // 2026-10-20 세계수 창 3종 + 꼬마 정보 카드 (프리팹 Resources/UI/*, 없으면 세계수 탭 창·배치된 공방으로)
+        GrowWindow growWin; KidWindow kidWin; WorkshopWindow craftWin; KidInfoCard kidInfo; FarmListPopup listPopup;
         int armed = -1; float armedT;      // 균사석을 쓰기 전 확인: 한 번 누른 칸과 그 시각
         const float ARM_SEC = 3;
         static readonly Color SILHOUETTE = new Color(0.08f, 0.09f, 0.14f, 0.85f);
@@ -86,6 +88,12 @@ namespace MoreMush
             SetFolded(true, false);
             tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             decoWin = DecoWindow.For(scene, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
+            System.Action onChange = () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); kidInfo?.Refresh(); };
+            listPopup = new FarmListPopup(FarmWin.Spawn(scene, "FarmListPopup"));
+            growWin = new GrowWindow(FarmWin.Spawn(scene, "GrowWindow"), listPopup, onChange);
+            kidWin = new KidWindow(FarmWin.Spawn(scene, "KidWindow"), listPopup, onChange);
+            craftWin = new WorkshopWindow(FarmWin.Spawn(scene, "WorkshopWindow"), onChange);
+            kidInfo = new KidInfoCard(FarmWin.Spawn(scene, "KidInfoCard"), kidWin, onChange);
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
                 new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
             BackButton(scene);
@@ -130,6 +138,7 @@ namespace MoreMush
             else Debug.LogWarning("[OutGame] FarmView가 씬에 없어요 (세계수 월드를 배치하면 연결돼요)");
             tabWin?.SetFarm(farm);
             decoWin?.SetFarm(farm);
+            growWin?.SetFarm(farm); kidWin?.SetFarm(farm); kidInfo?.SetFarm(farm);
             Render();
         }
 
@@ -142,13 +151,15 @@ namespace MoreMush
         void Update()
         {
             if (currency.Tick()) workshop?.Render();   // 재화가 바뀌면 제작 가능 여부도
-            if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); workshop?.Tick(); }
+            if ((tickT -= Time.unscaledDeltaTime) <= 0) { tickT = TICK; BagSettle(); RenderBag(); workshop?.Tick(); craftWin?.Tick(); }
             var kb = Keyboard.current;
             tabWin?.Tick();
             // Esc: 열린 탭 창 → 닫기, 옵션 창 → 닫기, 아무것도 없으면 업그레이드 화면(MainGame)으로
             if (kb != null && kb.escapeKey.wasPressedThisFrame)
             {
-                if (TabOpen()) { Snd.Ui(); tabWin?.Close(); decoWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); }
+                if (listPopup != null && listPopup.IsOpen) { Snd.Ui(); listPopup.Close(); }
+                else if (TabOpen()) { Snd.Ui(); CloseWindows(); RenderTabs(); }
+                else if (kidInfo != null && kidInfo.IsOpen) { Snd.Ui(); kidInfo.Close(); }
                 else if (optionWin.IsOpen) optionWin.Toggle();
                 else ToMainGame();
             }
@@ -162,7 +173,7 @@ namespace MoreMush
             RenderKids();
             RenderTabs();
             tabWin?.Refresh();
-            decoWin?.Refresh();
+            decoWin?.Refresh(); growWin?.Refresh(); kidWin?.Refresh(); craftWin?.Refresh(); kidInfo?.Refresh();
             UIUtil.SetText(backLabel, Loc.T("돌아가기"));
         }
 
@@ -193,6 +204,14 @@ namespace MoreMush
         {
             if (G?.farm == null || i >= CRITTER_JOIN.Length) return;
             string id = CRITTER_JOIN[i], name = SPC[id].n;
+            // 꼬마 정보 카드가 있으면: 데려온 꼬마 = 그 꼬마에게 다가가 정보 카드, 아직 아닌 꼬마 = 꼬마 창의 합류 목록
+            if (kidInfo?.root != null && kidWin?.root != null)
+            {
+                Snd.Ui();
+                if (HasSpecial(id)) { if (kidInfo.Kid == id) kidInfo.Close(); else { CloseWindows(); RenderTabs(); kidInfo.Show(id); } }
+                else { kidInfo.Close(); CloseWindows(); tab = 1; kidWin.Open(); kidWin.OpenJoin(id); RenderTabs(); }
+                return;
+            }
             bool confirm = armed == i && Time.unscaledTime - armedT < ARM_SEC;
             armed = -1;
             if (!HasSpecial(id))
@@ -244,13 +263,15 @@ namespace MoreMush
         {
             Snd.Ui();
             bool wasOpen = TabOpen() && tab == k;
-            tabWin?.Close();
-            decoWin?.Close();
-            UIUtil.Show(workshop?.root, false);
+            CloseWindows();
+            kidInfo?.Close();
             if (!wasOpen)
             {
                 tab = k;
-                if (k == TAB_CRAFT && workshop != null) UIUtil.Show(workshop.root, true);
+                if (k == 0 && growWin?.root != null) growWin.Open();
+                else if (k == 1 && kidWin?.root != null) kidWin.Open();
+                else if (k == TAB_CRAFT && craftWin?.root != null) craftWin.Open();
+                else if (k == TAB_CRAFT && workshop != null) UIUtil.Show(workshop.root, true);
                 else if (k == TAB_DECO && decoWin != null) decoWin.Open();
                 else tabWin?.Open((FarmTabWindow.Tab)Mathf.Clamp(k, 0, 3));
             }
@@ -269,7 +290,15 @@ namespace MoreMush
             workshop?.Render();
         }
 
-        bool TabOpen() => (tabWin != null && tabWin.IsOpen) || (decoWin != null && decoWin.IsOpen) || (workshop != null && workshop.IsOpen);
+        bool TabOpen() => (tabWin != null && tabWin.IsOpen) || (decoWin != null && decoWin.IsOpen) || (workshop != null && workshop.IsOpen)
+            || (growWin != null && growWin.IsOpen) || (kidWin != null && kidWin.IsOpen) || (craftWin != null && craftWin.IsOpen);
+
+        void CloseWindows()
+        {
+            listPopup?.Close();
+            tabWin?.Close(); decoWin?.Close(); growWin?.Close(); kidWin?.Close(); craftWin?.Close();
+            UIUtil.Show(workshop?.root, false);
+        }
 
         void SetFolded(bool folded, bool sound = true)
         {

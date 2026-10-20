@@ -104,8 +104,13 @@ namespace MoreMush
             return worked ? (float)(t - System.Math.Floor(t)) : 1;
         }
 
+        // 2026-10-20 사용자: 세계수에 걸린 나무버섯 그림이 안 어울려서 뺀다. 슬롯·수확 규칙(보따리에 쌓이고 "수확 보따리 받기"로 받는다)은 그대로,
+        // 그림과 짚기만 끈다. 꼬마들은 지금처럼 자기 구역으로 가서 나무에서 따 온다
+        public static bool ShowFruits = false;
+
         public int SlotAt(float x, float y)
         {
+            if (!ShowFruits) return -1;
             Layout();
             int best = -1; float bd = FruitPx * 0.8f; bd *= bd;
             for (int i = 0; i < slots.Count; i++) { float d = U.D2(x, y, slots[i].pos.x, slots[i].pos.y - FruitPx * 0.3f); if (d < bd) { bd = d; best = i; } }
@@ -141,7 +146,7 @@ namespace MoreMush
             transform.localPosition = Art.P(WT.x, WT.y);
             treeSprite.sortingOrder = WT.order; shadow.sortingOrder = WT.order - 1;
             double t0 = Now(); float px = FruitPx;
-            for (int i = 0; i < slots.Count; i++)
+            for (int i = 0; i < (ShowFruits ? slots.Count : 0); i++)
             {
                 var f = Grow(fruitR, fruits, i); var g = Grow(glowR, glows, i);
                 var s = slots[i];
@@ -166,7 +171,7 @@ namespace MoreMush
                     g.sortingOrder = WT.order + 1;
                 }
             }
-            for (int i = slots.Count; i < fruitR.Count; i++) { fruitR[i].enabled = false; glowR[i].enabled = false; }
+            for (int i = ShowFruits ? slots.Count : 0; i < fruitR.Count; i++) { fruitR[i].enabled = false; glowR[i].enabled = false; }
             for (int i = fruitR.Count; i < fruits.Length; i++) { if (fruits[i] != null) fruits[i].enabled = false; if (i < glows.Length && glows[i] != null) glows[i].enabled = false; }
             DrawDecos();
         }

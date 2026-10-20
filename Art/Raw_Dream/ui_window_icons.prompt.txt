@@ -1,0 +1,18 @@
+Sprite sheet: a 3x4 grid holding 12 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines, no labels, no numbers, no text anywhere. All assets share one consistent art style, line weight and lighting.
+Illustrated icons for the cozy World Tree windows of a mushroom-spirit idle game, painted exactly like the attached mockups (flat matte watercolor, soft edges, no outlines, no gloss, no text). Each icon = ONE chunky main object centered in its cell with empty space around it, soft low-saturation palette with one warm accent.
+
+Assets in reading order (left to right, top to bottom):
+1. a plump pink watercolor HEART
+2. an EMPTY heart: the same plump heart shape in pale greyish beige
+3. a grey-brown PADLOCK inside a faint pale laurel wreath
+4. BLESSING: a green leaf resting in a golden crescent moon with two tiny sparkles
+5. OFFERING: a small woven basket heaped with white button mushrooms and two green leaves
+6. TREE RINGS: a round tree trunk slice with concentric honey rings and a tiny green sprout on its bark
+7. EVOLVE: a terracotta pot with a bright green two-leaf sprout and a soft green arrow pointing up beside it
+8. REQUEST: a rolled parchment letter tied with twine and a small green leaf
+9. JOIN: an open cream envelope with a little red-capped mushroom spirit peeking out
+10. AFFECTION: two small pink hearts over a little green clover
+11. WORKSHOP: a wooden mallet with a small leaf tied to its handle
+12. GROWTH: a small terracotta pot with a sprout and a green up arrow

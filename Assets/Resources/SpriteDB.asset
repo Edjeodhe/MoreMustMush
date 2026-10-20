@@ -4905,6 +4905,74 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 966a8a1d50ab7b74ebee2f0fd06c994e, type: 3}
   - key: UI/Slots/slot_poor
     sprite: {fileID: 21300000, guid: 531438a378a69854fac6eb438f0ee043, type: 3}
+  - key: UI/Window/btn_cream
+    sprite: {fileID: 21300000, guid: bad8fb8494959c648a02c91eede17e81, type: 3}
+  - key: UI/Window/btn_leaf
+    sprite: {fileID: 21300000, guid: ea4447e22235ff6479aa4a772705a2de, type: 3}
+  - key: UI/Window/card_panel
+    sprite: {fileID: 21300000, guid: 2175c7a84a33b4d408a2990e72b86c0d, type: 3}
+  - key: UI/Window/done_badge
+    sprite: {fileID: 21300000, guid: 30fb2cc7d99aa734ab0de1cd7656e13e, type: 3}
+  - key: UI/Window/header_plaque
+    sprite: {fileID: 21300000, guid: 23e7071581aff79458678e3cbb93ce7b, type: 3}
+  - key: UI/Window/ic_affection
+    sprite: {fileID: 21300000, guid: fd0b8936a1d9a574986f92fff34eddad, type: 3}
+  - key: UI/Window/ic_blessing
+    sprite: {fileID: 21300000, guid: c315441ec8477564b8cb411865686dc5, type: 3}
+  - key: UI/Window/ic_evolve
+    sprite: {fileID: 21300000, guid: 27e7ebee446a3d94db7b3d9c461002cf, type: 3}
+  - key: UI/Window/ic_grow
+    sprite: {fileID: 21300000, guid: 74cf5375afea71643b4649bdd3da8398, type: 3}
+  - key: UI/Window/ic_heart_empty
+    sprite: {fileID: 21300000, guid: 56f2da95883fdc04d86c9dde34ce2e2f, type: 3}
+  - key: UI/Window/ic_heart_full
+    sprite: {fileID: 21300000, guid: 1e09874874b56a847b0c46f1ec8b6727, type: 3}
+  - key: UI/Window/ic_join
+    sprite: {fileID: 21300000, guid: 3ca1eba988ddf174d9b891a39bf7685f, type: 3}
+  - key: UI/Window/ic_lock
+    sprite: {fileID: 21300000, guid: 460b1603de52c3748822b76a870439df, type: 3}
+  - key: UI/Window/ic_mallet
+    sprite: {fileID: 21300000, guid: 4a94997787bb31041895682bb44539a3, type: 3}
+  - key: UI/Window/ic_request
+    sprite: {fileID: 21300000, guid: 351310229ddd05b4784b518bca369ce4, type: 3}
+  - key: UI/Window/ic_ring
+    sprite: {fileID: 21300000, guid: 0ea3ca2046583bd41b11abd3a2dd104c, type: 3}
+  - key: UI/Window/ic_tribute
+    sprite: {fileID: 21300000, guid: 4dcff7806123f7e4f82abaf883b6b9c1, type: 3}
+  - key: UI/Window/mat_slot
+    sprite: {fileID: 21300000, guid: cf0864e57fc7e0d428ae2785cf69826a, type: 3}
+  - key: UI/Window/mock_grow_bless
+    sprite: {fileID: 21300000, guid: c3f83174ae3b20f438f3b0cf8e7015a3, type: 3}
+  - key: UI/Window/mock_grow_evolve
+    sprite: {fileID: 21300000, guid: b6ded2c0b463f13408fe6d2c8ed12af9, type: 3}
+  - key: UI/Window/mock_grow_ring
+    sprite: {fileID: 21300000, guid: 0863a73533625e04ba477984b735e7be, type: 3}
+  - key: UI/Window/mock_grow_tribute
+    sprite: {fileID: 21300000, guid: 81520538b08c1ee49a0cb2dc3cafede7, type: 3}
+  - key: UI/Window/mock_kid_dew
+    sprite: {fileID: 21300000, guid: ba2b59034fc0d2540b31748b1688a48c, type: 3}
+  - key: UI/Window/mock_kid_evolve
+    sprite: {fileID: 21300000, guid: 2e0da17ae72103749a2916bbcac88312, type: 3}
+  - key: UI/Window/mock_kid_request
+    sprite: {fileID: 21300000, guid: bbe39e81de97b224fb605f1b95c4a37a, type: 3}
+  - key: UI/Window/mock_kid_sprout
+    sprite: {fileID: 21300000, guid: e64e314bf9812f347ae238b84c1b53a4, type: 3}
+  - key: UI/Window/mock_ws_lock
+    sprite: {fileID: 21300000, guid: 2fd0f2600cc20844d81ca47c137f94e4, type: 3}
+  - key: UI/Window/mock_ws_wash
+    sprite: {fileID: 21300000, guid: 3188e1c1776d2a3499404575e1f3c8e9, type: 3}
+  - key: UI/Window/name_pill
+    sprite: {fileID: 21300000, guid: 33c18850606e601458f3e1906d03bdae, type: 3}
+  - key: UI/Window/num_badge
+    sprite: {fileID: 21300000, guid: 22538571d0a2ca54eb209a79e48dcc0c, type: 3}
+  - key: UI/Window/pic_frame
+    sprite: {fileID: 21300000, guid: ad683679537c2ed43bb8d060e163d1b8, type: 3}
+  - key: UI/Window/row_panel
+    sprite: {fileID: 21300000, guid: c7dafe4ed9f170242a9f465287960bb1, type: 3}
+  - key: UI/Window/title_plaque
+    sprite: {fileID: 21300000, guid: fe797460b49004a47a3de69565e9761a, type: 3}
+  - key: UI/Window/win_frame
+    sprite: {fileID: 21300000, guid: 2f85f7af8f581a9438621f9715b6fa9f, type: 3}
   - key: UI/badge_round
     sprite: {fileID: 21300000, guid: b90a62faf8edf684491fdbffe2d407b2, type: 3}
   - key: UI/bar_back
