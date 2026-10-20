@@ -303,6 +303,7 @@ namespace MoreMush
             m.squish = 1;
             if (m.hpLag < 0 || m.hitT > 0.5f) m.hpLag = hpBefore;   // the trail starts where the bar was before this burst
             m.hitT = 0;
+            if (kind == "direct" && b != null) Combo(b, m, crit);
             if (crit && m.hp > 0) { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.HitAnim, m.x, m.y, m.r * 2.6f, 0.18f, new Color(1, 0.72f, 0.6f, 1), FxR(0, 360), 0); AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 2.4f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }
             // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
             double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
@@ -501,6 +502,17 @@ namespace MoreMush
             }
             else if (sk["shock"].on && Skillful(b) && U.Chance((float)SkP("shock", b))) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
             if (sk["clone"].on && Skillful(b) && U.Chance((float)SkP("clone", b))) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
+        }
+
+        // 콤보 숫자: 두 번째 타격부터 그 수확기의 콤보(b.hits)를 맞힌 버섯 오른쪽 위에 다시 띄운다
+        void Combo(Ball b, Shroom m, bool crit)
+        {
+            if (b.hits < 2) return;
+            ComboPop p = null;
+            foreach (var c in combos) if (c.b == b) { p = c; break; }
+            if (p == null) { if (combos.Count >= 12) return; combos.Add(p = new ComboPop { b = b }); }
+            p.n = b.hits; p.crit = crit; p.t = 0; p.view = null;
+            p.x = Mathf.Clamp(m.x + m.r * 0.5f + 24, 60, W - 90); p.y = Mathf.Max(70, m.y - m.r - 26);
         }
 
         void AddScore(double v, float x, float y, int tier, bool crit, bool golden)

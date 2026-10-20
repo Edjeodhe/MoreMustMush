@@ -248,6 +248,7 @@ namespace MoreMush.EditorTools
             void Add(string k) { if (ContainsHangul(k) && seen.Add(k)) keys.Add(k); }
             var interp = new List<string>();
             foreach (string path in Directory.GetFiles("Assets/Scripts", "*.cs", SearchOption.AllDirectories).OrderBy(p => p, StringComparer.Ordinal))
+                if (!DEV_ONLY_FILES.Contains(Path.GetFileName(path)))
                 foreach (var (lit, isInterp, line) in Literals(File.ReadAllText(path)))
                 {
                     if (!ContainsHangul(lit)) continue;
@@ -281,6 +282,9 @@ namespace MoreMush.EditorTools
             if (interp.Count > 0) msg += $"\n보간 문자열에 한국어 {interp.Count}곳 (Loc.F로 바꿔야 함):\n" + string.Join("\n", interp.Take(40));
             return msg;
         }
+
+        // 개발 빌드 전용 화면(개발자 패널·치트 키): 문구를 번역표에 넣지 않는다 (출시 빌드에는 없고, 개발자만 본다)
+        static readonly HashSet<string> DEV_ONLY_FILES = new HashSet<string> { "DebugPanel.cs" };
 
         // python 스크립트 실행 (엑셀 COM 쓰기). 끝날 때까지 기다린다
         static (bool ok, string output) RunPython(string script, params string[] args)
@@ -325,6 +329,8 @@ namespace MoreMush.EditorTools
         // C# 소스의 문자열 리터럴 (주석 제외, Debug.Log 줄 제외). 보간 문자열은 표시만 한다
         static readonly Regex TOKEN = new Regex(@"//[^\r\n]*|/\*[\s\S]*?\*/|(\$@|@\$|\$|@)?""((?:""""|\\.|[^""\\\r\n])*)""|'(?:\\.|[^'\\])'", RegexOptions.Compiled);
 
+        static readonly Regex INSPECTOR_ATTR = new Regex(@"^\s*\[(Header|Tooltip)\(", RegexOptions.Compiled);
+
         static IEnumerable<(string lit, bool interp, int line)> Literals(string src)
         {
             foreach (Match m in TOKEN.Matches(src))
@@ -333,6 +339,7 @@ namespace MoreMush.EditorTools
                 int lineStart = src.LastIndexOf('\n', m.Index) + 1, lineEnd = src.IndexOf('\n', m.Index);
                 string line = src.Substring(lineStart, (lineEnd < 0 ? src.Length : lineEnd) - lineStart);
                 if (line.Contains("Debug.Log") || line.Contains("Exception(")) continue;
+                if (INSPECTOR_ATTR.IsMatch(line)) continue;   // [Header("…")] · [Tooltip("…")]: 인스펙터 설명이라 게임 화면 문구가 아니다
                 string prefix = m.Groups[1].Value;
                 bool verbatim = prefix.Contains("@"), interp = prefix.Contains("$");
                 string body = m.Groups[2].Value;
@@ -388,6 +395,20 @@ namespace MoreMush.EditorTools
                 if (font == null) throw new InvalidOperationException("1 폰트 에셋 만들기를 먼저 실행하세요: " + ttf);
                 Bake(font, new string(chars.OrderBy(c => c).ToArray()));
                 log.AppendLine($"{font.name}: {font.characterTable.Count}자, 아틀라스 {font.atlasTextures.Length}장");
+            }
+            // 세트 밖 한·영 전용 폰트(LocFonts.koEnFonts: ONEMobilePOP 등)도 한국어·영어 글자로 굽는다.
+            // 빼먹으면 새 문구의 글자가 아틀라스에 없어 빠지거나 대체 폰트로 나온다 (2026-10-20 옵션 창 "메인 메뉴"의 '뉴')
+            var setPaths = new HashSet<string>(AllTtfs().Select(FontAssetPath));
+            var koEn = LocFonts.I != null ? LocFonts.I.koEnFonts : new TMP_FontAsset[0];
+            foreach (var font in koEn)
+            {
+                if (font == null || setPaths.Contains(AssetDatabase.GetAssetPath(font))) continue;
+                var chars = new HashSet<char>(basic);
+                chars.UnionWith(langChars["ko"]); chars.UnionWith(langChars["en"]);
+                foreach (var ch in font.characterTable) if (ch.unicode < 0x10000) chars.Add((char)ch.unicode);   // 이미 구운 글자(예전 키릴 등)는 그대로 둔다
+                chars.RemoveWhere(c => c < 32 && c != '\n');
+                Bake(font, new string(chars.OrderBy(c => c).ToArray()));
+                log.AppendLine($"{font.name} (한·영 전용): {font.characterTable.Count}자, 아틀라스 {font.atlasTextures.Length}장");
             }
             var fonts = AllTtfs().Select(t => AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath(t))).ToArray();
             string unsupported = new string(all.Where(c => c >= 32 && !fonts.Any(f => f.HasCharacter(c))).OrderBy(c => c).ToArray());

@@ -602,6 +602,101 @@ def stage_mush(data, look):
         if os.path.exists(f):
             MP.save(clean_face(np.asarray(Image.open(f).convert("RGBA"))), pre + "face_" + e)
     look["face"] = "Rig2/" + pre + "face_"
+    if os.path.exists(os.path.join(RAW, KID, "gen_m_body.png")):
+        fit_mush_body(look)
+
+
+def fit_mush_body(look):
+    """★0·★1 통 몸 (2026-10-20, 사용자: 갓·대를 나누지 말고 한 장으로): m_body 원본을 갓+대 자리(둘을 합친 크기)에 맞춰
+    gen_<모습>_body로 저장하고 look["body"]를 쓴다. 얼굴·발·손은 새 대 위치·폭에 맞춰 옮긴다 (예전 값은 mushOrig에 두어 다시 돌려도 같은 결과).
+    capJoint = 가운데 줄에서 대가 갓 밑으로 들어가는 높이 (MushRig 스킨이 이 근처를 휘게 한다)."""
+    CH = os.path.dirname(MP.OUT)
+    def spr(name):
+        return np.asarray(Image.open(os.path.join(CH, name + ".png")).convert("RGBA"))
+    O = look.setdefault("mushOrig", {k: (dict(look[k]) if isinstance(look[k], dict) else list(look[k]) if isinstance(look[k], list) else look[k])
+                                      for k in ("ankle", "ankleR", "footL", "footR", "nubPivotL", "nubPivotR", "nubL", "nubR", "capTop", "height") if k in look})
+    C, St = spr(look["cap"]["sprite"]), spr(look["stem"]["sprite"])
+    x0, y0, x1, y1 = bbox(np.maximum(C, St))
+    sx0, sy0, sx1, sy1 = bbox(St)
+    R = raw("m_body")
+    k = float(np.sqrt((y1 - y0 + 1) / R.shape[0] * (x1 - x0 + 1) / R.shape[1]))
+    R = scale(R, k)
+    pad = 60
+    H0, W0 = C.shape[:2]
+    can = np.zeros((H0 + 2 * pad, W0 + 2 * pad, 4), np.uint8)              # 같은 중심, 사방으로 넓힌 캔버스 (넓어진 갓이 잘리지 않게)
+    h, w = R.shape[:2]
+    px, py = int(round((x0 + x1) / 2 - w / 2)) + pad, y1 + pad - h + 1
+    ys0, xs0, ys1, xs1 = max(0, py), max(0, px), min(can.shape[0], py + h), min(can.shape[1], px + w)
+    can[ys0:ys1, xs0:xs1] = R[ys0 - py:ys1 - py, xs0 - px:xs1 - px]
+    cx, cy = look["cap"]["x"], look["cap"]["y"]
+    look["body"] = MP.part(MP.save(can, f"gen_{KID}_body"), cx, cy)
+    # 새 대: 아래쪽 가운데 색에 가까운 덩어리 중 바닥 가운데에 닿은 것
+    al = can[:, :, 3] > 40
+    bx0, by0, bx1, by1 = bbox(can)
+    bh, bw = by1 - by0, bx1 - bx0
+    ref = np.median(can[int(by1 - bh * 0.15):by1 - 2, int(bx0 + bw * 0.4):int(bx1 - bw * 0.4), :3].reshape(-1, 3), axis=0)
+    D = np.sqrt(((can[:, :, :3].astype(np.float32) - ref) ** 2).sum(axis=2))
+    ok = al & (ndimage.median_filter(D, 5) < 55)
+    mid = (bx0 + bx1) // 2
+    top, miss = by1, 0                                                      # 가운데 줄을 아래→위로: 대 색이 3줄 넘게 끊기면 갓(주름) 시작
+    for y in range(by1, by0, -1):
+        if ok[y, mid - 2:mid + 3].any():
+            top, miss = y, 0
+        else:
+            miss += 1
+            if miss > 3:
+                break
+    stem = np.zeros_like(ok)
+    for y in range(top, by1 + 1):                                          # 줄마다 가운데를 포함한 대 색 구간
+        row = ok[y]
+        if not row[mid]:
+            continue
+        l_, r_ = mid, mid
+        while l_ > 0 and row[l_ - 1]:
+            l_ -= 1
+        while r_ < len(row) - 1 and row[r_ + 1]:
+            r_ += 1
+        stem[y, l_:r_ + 1] = True
+    ys_, xs_ = np.nonzero(stem[int(top + (by1 - top) * 0.3):])                # 폭 = 대 아래 70%
+    nx0, nx1, ny0, ny1 = int(xs_.min()), int(xs_.max()), top, int(np.nonzero(stem.any(axis=1))[0][-1])
+    # 예전 대(캔버스 좌표, pad 없음) → 새 대: 대 바닥 기준으로 폭 비율만큼
+    s = float(np.clip((nx1 - nx0) / max(1, sx1 - sx0), 0.8, 1.25))
+    ocx, ncx = (sx0 + sx1) / 2 + pad, (nx0 + nx1) / 2
+    def mp(px_, py_):                                                       # 예전 캔버스 px → 새 캔버스 px
+        return ncx + (px_ + pad - ocx) * s, ny1 - (sy1 + pad - (py_ + pad)) * s
+    def rig2px(v):
+        return (v[0] - cx) * PPU + can.shape[1] / 2, can.shape[0] / 2 - (v[1] - cy) * PPU
+    def px2(px_, py_):
+        return MP.px2rig([cx, cy], can.shape, px_, py_)
+    def moved(v):                                                           # 리그 좌표 점을 같은 규칙으로
+        a, b = rig2px(v)
+        a, b = mp(a - pad, b - pad)
+        return px2(a, b)
+    # 얼굴: 대 바닥 기준으로 옮기고 폭 비율만큼 키움
+    for e in ("normal", "blink", "happy", "surprise", "effort"):
+        f = os.path.join(MP.OUT, f"gen_{KID}_face_{e}.png")
+        if not os.path.exists(f):
+            continue
+        F = np.asarray(Image.open(f).convert("RGBA"))
+        im = Image.fromarray(F).transform((can.shape[1], can.shape[0]), Image.AFFINE,
+                                          (1 / s, 0, ocx - pad - ncx / s, 0, 1 / s, sy1 - ny1 / s), Image.BICUBIC)
+        MP.save(np.asarray(im), f"gen_{KID}_bface_{e}")
+    look["face"] = f"Rig2/gen_{KID}_bface_"
+    # 발·손: 관절과 그림을 같이
+    for j, p in (("ankle", "footL"), ("ankleR", "footR"), ("nubPivotL", "nubL"), ("nubPivotR", "nubR")):
+        if j not in O:
+            continue
+        nj = moved(O[j])
+        d = (nj[0] - O[j][0], nj[1] - O[j][1])
+        look[j] = [MP.r4(nj[0]), MP.r4(nj[1])]
+        if p in O:
+            look[p]["x"], look[p]["y"] = MP.r4(O[p]["x"] + d[0]), MP.r4(O[p]["y"] + d[1])
+    # 갓 축 = 가운데 줄에서 대 덩어리 맨 위 · 갓 꼭대기 = 몸 그림 맨 위
+    look.setdefault("capJointOrig", list(look["capJoint"]))
+    look["capJoint"] = px2(ncx, top)
+    look["capTop"] = px2(ncx, by0)
+    look["height"] = MP.r4(look["capTop"][1] - look.get("sole", 0))
+    print(KID, "body k=%.3f stem s=%.3f capJoint" % (k, s), look["capJoint"], "capTop", look["capTop"])
 
 
 def collar_row(B):

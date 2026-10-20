@@ -2,10 +2,13 @@
 // 몸 = 갓 + 대(얼굴) + 작은 발 둘 (+ ★1 몸 옆 동그란 손 둘). 무릎·사람 걷기·옆/뒷모습은 쓰지 않는다 (정면 + 뒤집기).
 // 맛: 통통 튀며 이동(폴짝 걸음) + 뒤뚱(좌우 기울기), 찌그러짐/늘어남이 핵심, 갓은 몸보다 늦게 따라와 출렁(관성), 착지 때 갓이 눌렸다 튐.
 //
-// 계층: root(발바닥 가운데: 뒤집기·공중·들림 회전) ─ body(발바닥 축: 기울기·찌그러짐) ─ stem(+얼굴) · nubPivot[i] ─ nub[i] · capT(갓 테두리 축) ─ cap · prop(짐)
+// 계층: root(발바닥 가운데: 뒤집기·공중·들림 회전) ─ body(발바닥 축: 기울기·찌그러짐) ─ bodySkin(통 몸) · face · nubPivot[i] ─ nub[i] · capT(갓 뼈, 갓이 대에 붙는 곳) ─ prop(짐)
 //       foot[i] (root 공간: 땅에 붙는다)
-// 그리는 순서: 갓 -10 (대 뒤: 대 윗부분이 주름 속) · 발 -5 · 대 0 · 얼굴 10 · 손 20 · 짐 30
-import { Mathf, Rng, Vector2, Transform, SpriteRenderer } from "./unity.js";
+// 통 몸 (2026-10-20, 모습에 body가 있을 때): 갓과 대를 나누지 않은 그림 한 장을 줄마다 "몸 뼈(body) ↔ 갓 뼈(capT)"로 섞어 휜다 (C#: SpriteSkin 2뼈).
+//   capJoint 아래 skinBandLo ~ 위 skinBandHi 사이가 부드럽게 휘는 목 → 갓이 늦게 따라와도 대에서 떨어져 보이지 않는다. 얼굴 층도 같은 스킨.
+//   body가 없는 예전 모습은 갓·대 두 장 (갓 -10 · 대 0).
+// 그리는 순서: 발 -5 · 몸 0 · 얼굴 10 · 손 20 · 짐 30
+import { Mathf, Rng, Vector2, M2, Transform, SpriteRenderer } from "./unity.js";
 import { Spring, Pendulum, MOTIONS } from "./rig2.js";
 
 export const MUSH_DEFAULTS = {
@@ -14,8 +17,10 @@ export const MUSH_DEFAULTS = {
   squashK: 260, squashZ: 0.28, leanK: 180, leanZ: 0.55, volume: 0.8,
   // 갓: 진자(옆 흔들림) · 세로 출렁(눌림) — 몸보다 늦게
   capK: 70, capZ: 0.24, capInertia: 2, capFollow: 0.92, capMaxRot: 4, capBobK: 220, capBobZ: 0.24, capBobInertia: 0.01, capSquash: 0.8,   // 갓은 몸에 거의 붙어 돈다 (capMaxRot: 몸에 대한 갓 자기 회전 최대 각. 크면 걸을 때 몸이 갓 밑에서 미끄러져 머리가 떨어져 보임)
+  // 통 몸 스킨: 갓이 휘는 정도(capMaxRot 대신 skinMaxRot) · 갓이 옆으로 밀리는 정도 · 휘는 목 띠(capJoint 아래/위, 리그 단위)
+  skinMaxRot: 9, capShear: 0.35, skinBandLo: 0.45, skinBandHi: 0.25,
   // 손 (★1): 늦게 따라옴
-  nubK: 260, nubZ: 0.45,
+  nubK: 260, nubZ: 0.45, nubReach: 0.55,   // nubReach: 동작이 정한 손 이동량에 곱함 (짧은 동글 손은 몸 옆을 미끄러져 오르기보다 제자리에서 파닥이는 편이 자연스러움)
   // 대기
   breathPeriod: 2.6, breathAmt: 0.025, idleSway: 2, fidgetMin: 3, fidgetMax: 7,
   // 걷기 (폴짝 + 뒤뚱)
@@ -90,8 +95,9 @@ export class MushRig {
   Build() {
     const r = this.root; r.children = [];
     this.body = new Transform("Body", r);
+    this.bodySR = new SpriteRenderer("BodySkin", this.body, 0);
     this.stemSR = new SpriteRenderer("Stem", this.body, 0);
-    this.stemFace = new SpriteRenderer("Face", this.stemSR.transform, 10);
+    this.stemFace = new SpriteRenderer("Face", this.body, 10);
     this.capT = new Transform("Cap", this.body);
     this.capSR = new SpriteRenderer("CapSprite", this.capT, -10);
     this.propSR = new SpriteRenderer("Prop", this.capT, 30);
@@ -113,15 +119,25 @@ export class MushRig {
     this.look = look; this.lv = look; this.outfit = outfit || "";
     const l = look;
     this.body.set(0, 0, 0);
-    this.stemSR.sprite = this.Sprite(l.stem.sprite);
-    this.stemSR.transform.set(l.stem.x, l.stem.y, 0);
-    this.stemFace.sprite = this.Sprite(l.face + "normal");
-    this.stemFace.transform.set(0, 0, 0);
     const C = V(l.capJoint), T = V(l.capTop);
     this.capJ = C;
     this.capT.set(C.x, C.y, 0);
-    this.capSR.sprite = this.Sprite(l.cap.sprite);
-    this.capSR.transform.set(l.cap.x - C.x, l.cap.y - C.y, 0);
+    this.skinned = !!(l.body && this.Sprite(l.body.sprite));
+    this.bodySR.sprite = this.skinned ? this.Sprite(l.body.sprite) : null;
+    this.stemSR.sprite = this.skinned ? null : this.Sprite(l.stem && l.stem.sprite);
+    this.capSR.sprite = this.skinned ? null : this.Sprite(l.cap && l.cap.sprite);
+    const fp0 = this.skinned ? l.body : l.stem;                            // 얼굴 층 = 몸(또는 대) 그림과 같은 캔버스·자리
+    this.stemFace.sprite = this.Sprite(l.face + "normal");
+    this.stemFace.transform.set(fp0.x, fp0.y, 0);
+    this.bodySR.skin = this.stemFace.skin = null;
+    if (this.skinned) {
+      this.bodySR.transform.set(l.body.x, l.body.y, 0);
+      this.bodySR.skin = this.MakeBodySkin(l.body.y);
+      this.stemFace.skin = this.MakeBodySkin(fp0.y);
+    } else {
+      this.stemSR.transform.set(l.stem.x, l.stem.y, 0);
+      this.capSR.transform.set(l.cap.x - C.x, l.cap.y - C.y, 0);
+    }
     const prop = this.Sprite("Rig2/prop_basket");
     this.propSR.sprite = prop;
     const pw = prop ? prop.w / prop.ppu : 1, ps = (l.height * 0.32) / pw;
@@ -433,11 +449,14 @@ export class MushRig {
     const ax = Mathf.Clamp(a.x, -80, 80), ay = Mathf.Clamp(a.y, -80, 80);
     // 갓의 기울기(세상 기준)는 몸 기울기를 늦게 따라간다 → 몸에 붙은 갓의 자기 회전 = (늦은 기울기 - 몸 기울기). capFollow = 따라가는 정도
     this.capP.Step(this.sLean.x * M.capFollow + p.capRot, M.capK, M.capZ, ax * M.capInertia * 10, dt);   // + = 오른쪽으로 (시계 방향)
-    this.capT.localRotation = -Mathf.Clamp(this.capP.a - this.sLean.x, -M.capMaxRot, M.capMaxRot);
+    const maxRot = this.skinned ? M.skinMaxRot : M.capMaxRot;              // 통 몸은 목이 휘므로 더 크게 기울어도 떨어져 보이지 않는다
+    const lag = Mathf.Clamp(this.capP.a - this.sLean.x, -maxRot, maxRot);  // + = 갓이 오른쪽(시계 방향)으로
+    this.capT.localRotation = -lag;
     this.capBob.Step(0, M.capBobK, M.capBobZ, dt);
     this.capBob.v += -ay * M.capBobInertia * dt * 60;
     const bob = Mathf.Clamp(this.capBob.x, -0.25, 0.25);
-    this.capT.localPosition.x = this.capJ.x; this.capT.localPosition.y = this.capJ.y + bob * 0.4 * H * 0.1;
+    const shear = this.skinned ? Mathf.Sin(lag * Mathf.Deg2Rad) * this.capJ.y * M.capShear : 0;   // 갓이 기운 쪽으로 대가 휘며 밀림
+    this.capT.localPosition.x = this.capJ.x + shear; this.capT.localPosition.y = this.capJ.y + bob * 0.4 * H * 0.1;
     const cs = Mathf.Clamp(-bob * M.capSquash, -0.14, 0.14) + jig * 0.6;
     this.capT.localScale.x = (1 + cs) / sx; this.capT.localScale.y = (1 - cs) / sy;     // 갓은 몸 찌그러짐을 그대로 받지 않고 자기 출렁만 (단단한 갓)
     this.propSR.enabled = p.prop > 0.5;
@@ -445,7 +464,7 @@ export class MushRig {
     for (let i = 0; i < 2; i++) {
       if (!this.nubPivot[i].activeSelf) continue;
       const n = i === 0 ? "L" : "R", s = this.sNub[i];
-      s[0].Step(p["nub" + n + "X"], M.nubK, M.nubZ, dt); s[1].Step(p["nub" + n + "Y"], M.nubK, M.nubZ, dt); s[2].Step(p["nub" + n + "Rot"], M.nubK, M.nubZ, dt);
+      s[0].Step(p["nub" + n + "X"] * M.nubReach, M.nubK, M.nubZ, dt); s[1].Step(p["nub" + n + "Y"] * M.nubReach, M.nubK, M.nubZ, dt); s[2].Step(p["nub" + n + "Rot"], M.nubK, M.nubZ, dt);
       this.nubT[i].set(s[0].x / sx, s[1].x / sy, s[2].x, 1 / sx, 1 / sy);           // 손은 몸 찌그러짐을 덜 받는다
     }
     // 발: 땅에 붙는다 (몸이 찌그러지면 발 간격이 벌어짐). 공중이면 몸을 따라감
@@ -456,6 +475,22 @@ export class MushRig {
       this.foot[i].set(rest.x * sx + p["foot" + n + "X"] + this.sShift.x * 0.5, p.grounded ? y : y, p["foot" + n + "Rot"]);
     }
     this.legStretch = [1, 1];
+  }
+
+  // 통 몸 스킨 (C#: SpriteSkin 2뼈 가중치와 같은 규칙). sprY = 렌더러 그림 중심 y (몸 공간).
+  //  그림 줄 row의 높이 y가 capJoint - skinBandLo 아래면 몸 뼈(그대로), capJoint + skinBandHi 위면 갓 뼈, 그 사이는 부드럽게 섞는다.
+  //  갓 뼈 변형 = capT 지금 행렬 · (쉬는 자리 capJoint로 되돌림)
+  MakeBodySkin(sprY) {
+    const rig = this, sk = { space: this.body, cap: new M2() };
+    sk.prepare = () => { const J = rig.capJ; sk.cap = rig.capT.localMatrix.mul(new M2(1, 0, 0, 1, -J.x, -J.y)); };
+    sk.at = (row, s) => {
+      const M = rig.M, y = sprY + (1 - s.py) * s.h / s.ppu - row / s.ppu;
+      const lo = rig.capJ.y - M.skinBandLo, hi = rig.capJ.y + M.skinBandHi;
+      let t = Mathf.Clamp01((y - lo) / Math.max(1e-4, hi - lo)); t = t * t * (3 - 2 * t);
+      const A = sk.cap;
+      return new M2(1 + (A.a - 1) * t, A.b * t, A.c * t, 1 + (A.d - 1) * t, A.e * t, A.f * t);
+    };
+    return sk;
   }
 
   UpdateFace(p, dt) {

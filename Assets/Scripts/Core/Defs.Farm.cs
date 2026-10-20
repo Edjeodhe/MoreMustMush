@@ -25,13 +25,16 @@ namespace MoreMush
             public static double RingCost(int stage, int lv) => (stage < stages ? evoGold[stage] : evoGold[stages - 1] * lastRingMul) / ringDiv * System.Math.Pow(ringK, lv - 1);
             public const double ringGrow = 0.03;                  // 나이테 레벨마다 나무버섯 성장 속도 +3%
             public static int Picture(int stage) => System.Math.Max(1, System.Math.Min(stages, stage)) - 1;   // tree_0~7 (단계마다 그림 하나)
-            // 그림(단계)별 나무 너비 (px, 1920×1080 무대 기준). 단계마다 확 커지고 마지막 단계는 훨씬 크게 (2026-10-16)
-            // 나무가 화각보다 빨리 커져서 꼭대기가 화면에서 단계마다 확실히 올라간다 (사용자: 위로 커지는 느낌):
-            // 화면 아래에서 꼭대기까지 50→54→58→62→66→70→74%, 마지막 단계만 95%로 확 (키 ×1.44, 화각은 조금만 넓혀 상쇄하지 않는다)
-            public static readonly float[] width = { 220, 246, 388, 569, 670, 1012, 1556, 2883 };
+            // 그림(단계)별 나무 너비 (px, 1920×1080 무대 기준). 나무가 화각보다 빨리 커져서 꼭대기가 화면에서 단계마다 확실히 올라간다
+            // (2026-10-16 사용자: 위로 커지는 느낌)
+            // 2026-10-20 수채화 세계수 1~8단계 (5·6·7단계는 실루엣·대표 특징이 다르게 새로 그림): 크기와 화각이 함께 자연스럽게 커지도록
+            // 화각은 단계마다 약 13%씩 넓어지고, 꼭대기는 50→54→58→63→68→74→81→92%로 점점 빠르게 올라간다 (예전 7→8단계 74→95% 급점프 완화).
+            // 폭은 그림 비율에서 나온다 (Tools/art/install_tree_stages.py가 계산). 2026-10-20 도면 가이드로 1~8단계 다시 그림(v11)
+            public static readonly float[] width = { 270, 278, 415, 596, 923, 1079, 1416, 1907 };
             // 단계별 카메라 화각 배율: 땅(화면 아래)은 고정하고 위·양옆으로 넓어진다. 겹친 큰 배경(FarmView.BG_LAYERS)이 3.8배까지 덮는다
-            public static readonly float[] zoom = { 1f, 1.1f, 1.25f, 1.42f, 1.62f, 1.85f, 2.1f, 2.2f };
+            public static readonly float[] zoom = { 1f, 1.12f, 1.26f, 1.42f, 1.6f, 1.8f, 2.02f, 2.28f };
             public const float x = 820, y = 720;                  // 나무 밑동 (화면 좌표): 배경 빈터의 밝은 자리 (장식도 이 자리를 중심으로 놓였다)
+            public const int climbFrom = 4;                       // 정령이 나무에 오르는 단계 (2026-10-20 사용자). 그 전에는 땅에서 손 닿는 버섯만 딴다
             public const float camX = 960;                        // 화각이 넓어질 때 카메라 중심 x (무대 가운데, 큰 배경이 양옆을 덮는다)
             public const int order = 880;
             public const int craftBase = 2;                       // 동시 제작 슬롯 (4·6·8단계에 +1)

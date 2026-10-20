@@ -8,7 +8,9 @@
 <script>
 (async () => {
   const p = new URLSearchParams(location.hash.slice(1));
-  const name = p.get("name") || "recv", data = p.get("data") || "", back = p.get("back");
+  const name = p.get("name") || "recv", back = p.get("back");
+  // WebP 등 다른 형식도 받는다 (주소 길이 한도 2MB 때문에 큰 그림은 WebP로 넘어옴): 서버는 png 머리말만 떼므로 머리말을 바꿔 보냄. 파일 내용은 원래 형식
+  const data = "data:image/png;base64," + (p.get("data") || "").replace(/^data:[^,]*,/, "");
   const r = await fetch("/api/shot?name=" + encodeURIComponent(name), { method: "POST", body: data }).then((x) => x.json()).catch((e) => ({ ok: false, error: String(e) }));
   document.body.textContent = (r.ok ? "저장: " + r.file : "실패: " + r.error);
   document.title = r.ok ? "saved " + name : "save failed";

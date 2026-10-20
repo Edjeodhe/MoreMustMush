@@ -28,7 +28,7 @@ export const SPIRIT = {
 };
 const HAIRLEN = { 2: "a short soft chin-length bob", 3: "long soft wavy hair that flows down to her waist" };
 
-const STYLE = "PAINTING STYLE (most important): copy the attached spirit painting exactly: light transparent watercolor washes on paper, visible paper grain, soft faceted colour patches inside each area, a thin slightly darker pigment edge where a wash dried, exactly the same gentle pastel colours as this spirit in the attached pictures, flat soft lighting. NOT felt, NOT plush, NOT 3D rendered, no airbrush gradients, no hard black outlines, no glow, no shadow.";
+export const STYLE = "PAINTING STYLE (most important): copy the attached spirit painting exactly: light transparent watercolor washes on paper, visible paper grain, soft faceted colour patches inside each area, a thin slightly darker pigment edge where a wash dried, exactly the same gentle pastel colours as this spirit in the attached pictures, flat soft lighting. NOT felt, NOT plush, NOT 3D rendered, no airbrush gradients, no hard black outlines, no glow, no shadow.";
 const PART = "ONE single cut-out body part of the attached chibi mushroom-girl spirit (the FIRST attached picture of the whole character shows how she looks), for 2D puppet (cut-out) animation: alone, centered, on a FULLY TRANSPARENT background, nothing else in the picture, no ground, no text, no frame.";
 
 function partsFor(id, form) {
@@ -54,10 +54,13 @@ function partsFor(id, form) {
 }
 
 // ★0·★1 버섯 모습: 예전엔 통짜 그림을 잘라 써서 몸통에 손 자국·얼굴 조각이 남고 갓 안쪽이 메워져 있었다 → 부위마다 깨끗하게 새로 그린다
-function mushPartsFor(id, form) {
+export function mushPartsFor(id, form) {
   const s = SPIRIT[id];
   const MP = "ONE single cut-out body part of the attached little chibi mushroom creature (the FIRST attached picture shows the whole creature), for 2D puppet (cut-out) animation: alone, centered, on a FULLY TRANSPARENT background, nothing else in the picture, no ground, no text, no frame.";
   const out = [
+    // 통 몸 (2026-10-20): 갓과 대를 나누지 않은 한 장. 웹 MushRig가 줄마다 몸·갓 뼈를 섞어 휘게 한다(스킨). 얼굴·발·팔은 따로
+    { name: "m_body", phase: 1, refs: ["whole"],
+      prompt: `${MP} ONLY its WHOLE MUSHROOM BODY as ONE single continuous piece: the mushroom cap (${s.cap}) and the soft chubby round cream stem body under it, painted together as one mushroom exactly like in the attached picture (the same shape, proportions, size ratio between cap and stem, colours and pattern; the gill band under the cap rim; the top of the stem tucked naturally under the cap with a soft shadow). Front view. Two soft pink blush cheeks on the stem, but otherwise the stem is completely PLAIN: NO eyes, NO mouth, NO face. NO arms, NO hands, NO feet: the bottom of the stem is a smooth softly rounded base.` },
     { name: "m_cap", phase: 1, refs: ["whole"],
       prompt: `${MP} ONLY its mushroom CAP (${s.cap}), seen from the front and very slightly from below, exactly the same shape, colours and pattern as in the attached picture, with the whole underside gill band visible as a clean curved band under the rim, the middle of the underside is plain gills (nothing attached). NO stem, NO body, NO face, NO feet.` },
     { name: "m_stem", phase: 1, refs: ["whole"],
@@ -66,8 +69,9 @@ function mushPartsFor(id, form) {
       prompt: `${MP} ONLY ONE of its little stubby rounded BROWN FEET (a small soft oval nub foot), seen from the front, the same colour and size proportion as in the attached picture. Just one foot.` },
   ];
   if (form === 1)
+    // 2026-10-20: 예전 팔(강낭콩처럼 휜 모양)은 움직이면 사람 팔꿈치처럼 보여 불쾌함 → 곧고 동글한 지느러미 손
     out.push({ name: "m_nub", phase: 1, refs: ["whole"],
-      prompt: `${MP} ONLY ONE of its tiny round cream stubby ARMS (a small soft rounded nub hand like a little mitten, slightly longer than wide), the same colour and texture as its body in the attached picture. Just one arm, pointing down.` });
+      prompt: `${MP} ONLY ONE of its tiny stubby ARM NUBS: a very short, soft, rounded cream blob like a little penguin flipper or a small gumdrop, hanging straight down, slightly wider at the rounded bottom end and a little narrower at the top where it joins the body, about 1.4 times as long as it is wide, perfectly straight and symmetric. It is NOT a human arm: NO elbow, NO bend, NO wrist, NO thumb, NO fingers, NO hand shape, NO kidney-bean curve. The same cream colour and soft fuzzy watercolour texture as its body in the attached picture, with a slightly darker soft edge. Just one nub.` });
   return out;
 }
 

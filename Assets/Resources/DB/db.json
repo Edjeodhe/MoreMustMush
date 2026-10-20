@@ -18967,6 +18967,166 @@
       "Str_JA": "",
       "Str_RU": "",
       "Str_UK": ""
+    },
+    {
+      "Str_ID": 901324,
+      "Str_Group_ID": 91324,
+      "Str_Name": "ui",
+      "Str_KR": "에픽 이상 가중치 ×{0}",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901325,
+      "Str_Group_ID": 91325,
+      "Str_Name": "ui",
+      "Str_KR": "언어",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901326,
+      "Str_Group_ID": 91326,
+      "Str_Name": "ui",
+      "Str_KR": "소리 설정",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901327,
+      "Str_Group_ID": 91327,
+      "Str_Name": "ui",
+      "Str_KR": "효과음",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901328,
+      "Str_Group_ID": 91328,
+      "Str_Name": "ui",
+      "Str_KR": "배경음",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901329,
+      "Str_Group_ID": 91329,
+      "Str_Name": "ui",
+      "Str_KR": "메인 메뉴",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901330,
+      "Str_Group_ID": 91330,
+      "Str_Name": "ui",
+      "Str_KR": "음소거: 켜짐",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901331,
+      "Str_Group_ID": 91331,
+      "Str_Name": "ui",
+      "Str_KR": "음소거: 꺼짐",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901332,
+      "Str_Group_ID": 91332,
+      "Str_Name": "ui",
+      "Str_KR": "얻은 점수 → 골드 (×{0})",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901333,
+      "Str_Group_ID": 91333,
+      "Str_Name": "ui",
+      "Str_KR": "신기록! {0} {1}",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901334,
+      "Str_Group_ID": 91334,
+      "Str_Name": "ui",
+      "Str_KR": "보스 {0} 처치! 스테이지 {1} 열림",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901335,
+      "Str_Group_ID": 91335,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 완성! 강화 재료로 보관했어요",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901336,
+      "Str_Group_ID": 91336,
+      "Str_Name": "ui",
+      "Str_KR": "오늘 즉시 완료를 다 썼어요",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901337,
+      "Str_Group_ID": 91337,
+      "Str_Name": "ui",
+      "Str_KR": "꼬마가 합류하면 열려요",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901338,
+      "Str_Group_ID": 91338,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 합류 시 해금",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
+    },
+    {
+      "Str_ID": 901339,
+      "Str_Group_ID": 91339,
+      "Str_Name": "ui",
+      "Str_KR": "빈 칸",
+      "Str_EN": "",
+      "Str_JA": "",
+      "Str_RU": "",
+      "Str_UK": ""
     }
   ]
 }

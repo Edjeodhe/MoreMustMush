@@ -204,7 +204,6 @@ namespace MoreMush.EditorTools
         public static void BuildDigitSpriteAsset()
         {
             const float H = 128;   // digit height in the atlas
-            const int pad = 4;
             var src = ResolvedArt().Where(kv => kv.Key.StartsWith("UI/Digits/")).ToDictionary(kv => Path.GetFileName(kv.Key), kv => kv.Value);
             if (src.Count == 0) { Debug.LogWarning("[MoreMush] no UI/Digits art"); return; }
             var texs = src.ToDictionary(kv => kv.Key, kv => Bleach(LoadReadable(kv.Value)));
@@ -212,6 +211,46 @@ namespace MoreMush.EditorTools
             float k = H / (digitH.Count > 0 ? digitH[digitH.Count / 2] : texs.Values.Max(t => t.height));
             var names = texs.Keys.OrderBy(n => n, System.StringComparer.Ordinal).ToList();
             var scaled = names.ToDictionary(n => n, n => Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * k)));
+            // everything stands on the baseline at its painted height (lowercase keeps its smaller x-height),
+            // except + (centred on the digit middle), the comma and p (hang below it)
+            PackSpriteAsset("DmgDigits", names, scaled, H, (n, h) => n switch
+            {
+                "plus" => H * 0.5f + h * 0.5f,
+                "comma" => h * 0.55f,
+                "lp" => h * 0.72f,
+                _ => h,
+            });
+        }
+
+        // Combo counter skin (sheet "combo_skin" → UI/Combo/*): <sprite="ComboDigits" name="n7">, not tinted.
+        // n* = everyday gold set, c* = critical set; each set is scaled so its median digit is H tall (the crit
+        // digits carry sparkles and a wider rim, so they are measured on their own), the COMBO words keep their size
+        // next to their set's digits. critical / super_combo_* are shown as Images, not glyphs.
+        [MenuItem("MoreMush/Build Combo Digit Sprite Asset")]
+        public static void BuildComboSpriteAsset()
+        {
+            const float H = 128;
+            var src = ResolvedArt().Where(kv => kv.Key.StartsWith("UI/Combo/")).ToDictionary(kv => Path.GetFileName(kv.Key), kv => kv.Value)
+                .Where(kv => (kv.Key.Length == 2 && (kv.Key[0] == 'n' || kv.Key[0] == 'c')) || kv.Key == "combo_n" || kv.Key == "combo_c")
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+            if (src.Count == 0) { Debug.LogWarning("[MoreMush] no UI/Combo art"); return; }
+            var texs = src.ToDictionary(kv => kv.Key, kv => LoadReadable(kv.Value));
+            float K(char set)
+            {
+                var hs = texs.Where(kv => kv.Key.Length == 2 && kv.Key[0] == set).Select(kv => kv.Value.height).OrderBy(h => h).ToList();
+                return H / (hs.Count > 0 ? hs[hs.Count / 2] : H);
+            }
+            float kn = K('n'), kc = K('c');
+            var names = texs.Keys.OrderBy(n => n, System.StringComparer.Ordinal).ToList();
+            var scaled = names.ToDictionary(n => n, n => Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * (n[0] == 'n' || n == "combo_n" ? kn : kc))));
+            PackSpriteAsset("ComboDigits", names, scaled, H, (n, h) => h);
+        }
+
+        // Packs glyph textures into Assets/Fonts/<name>Atlas.png and the TMP sprite asset Resources/Sprite Assets/<name>.
+        // top(name, height) = how far above the baseline the glyph's top edge sits.
+        static void PackSpriteAsset(string name, List<string> names, Dictionary<string, Texture2D> scaled, float H, System.Func<string, float, float> top)
+        {
+            const int pad = 4;
             int cell = scaled.Values.Max(t => Mathf.Max(t.width, t.height)) + pad * 2;
             int cols = Mathf.CeilToInt(Mathf.Sqrt(names.Count)), rows = Mathf.CeilToInt(names.Count / (float)cols);
             var atlas = new Texture2D(cols * cell, rows * cell, TextureFormat.RGBA32, false);
@@ -225,7 +264,7 @@ namespace MoreMush.EditorTools
                 rects.Add(new GlyphRect(x, y, t.width, t.height));
             }
             atlas.Apply();
-            string atlasPath = "Assets/Fonts/DmgDigitsAtlas.png";
+            string atlasPath = $"Assets/Fonts/{name}Atlas.png";
             File.WriteAllBytes(atlasPath, atlas.EncodeToPNG());
             AssetDatabase.ImportAsset(atlasPath);
             var imp = (TextureImporter)AssetImporter.GetAtPath(atlasPath);
@@ -234,7 +273,7 @@ namespace MoreMush.EditorTools
             imp.SaveAndReimport();
             var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(atlasPath);
 
-            string assetPath = "Assets/Resources/Sprite Assets/DmgDigits.asset";
+            string assetPath = $"Assets/Resources/Sprite Assets/{name}.asset";
             var sa = AssetDatabase.LoadAssetAtPath<TMP_SpriteAsset>(assetPath);
             if (sa == null) { sa = ScriptableObject.CreateInstance<TMP_SpriteAsset>(); AssetDatabase.CreateAsset(sa, assetPath); }
             typeof(TMP_SpriteAsset).GetField("m_Version", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.SetValue(sa, "1.1.0");
@@ -248,27 +287,18 @@ namespace MoreMush.EditorTools
             {
                 var r = rects[i];
                 float w = r.width, h = r.height;
-                // everything stands on the baseline at its painted height (lowercase keeps its smaller x-height),
-                // except + (centred on the digit middle), the comma and p (hang below it)
-                float top = names[i] switch
-                {
-                    "plus" => H * 0.5f + h * 0.5f,
-                    "comma" => h * 0.55f,
-                    "lp" => h * 0.72f,
-                    _ => h,
-                };
                 // italic glyphs tuck into each other a little; the thick rims overlap instead of leaving gaps
-                var glyph = new TMP_SpriteGlyph { index = (uint)i, metrics = new GlyphMetrics(w, h, 0, top, w * 0.86f), glyphRect = r, scale = 1, atlasIndex = 0 };
+                var glyph = new TMP_SpriteGlyph { index = (uint)i, metrics = new GlyphMetrics(w, h, 0, top(names[i], h), w * 0.86f), glyphRect = r, scale = 1, atlasIndex = 0 };
                 sa.spriteGlyphTable.Add(glyph);
                 sa.spriteCharacterTable.Add(new TMP_SpriteCharacter(0xFFFE, glyph) { name = names[i] });
             }
             var shader = Shader.Find("TextMeshPro/Sprite");
-            if (sa.material == null) { sa.material = new Material(shader) { name = "DmgDigits Material" }; AssetDatabase.AddObjectToAsset(sa.material, sa); }
+            if (sa.material == null) { sa.material = new Material(shader) { name = name + " Material" }; AssetDatabase.AddObjectToAsset(sa.material, sa); }
             sa.material.SetTexture(ShaderUtilities.ID_MainTex, tex);
             sa.UpdateLookupTables();
             EditorUtility.SetDirty(sa);
             AssetDatabase.SaveAssets();
-            Debug.Log($"[MoreMush] damage digit sprite asset: {names.Count} glyphs ({string.Join(" ", names)})");
+            Debug.Log($"[MoreMush] {name} sprite asset: {names.Count} glyphs ({string.Join(" ", names)})");
         }
 
         // the painted fill can come out peach; tint=1 multiplies it, so blue/violet tiers turned muddy. Light pixels go to

@@ -16,6 +16,9 @@ namespace MoreMush
         public GameObject window;
         public TMP_Text info;
         public TMP_Text keys;   // 치트 키 안내 (CHEATS 표로 채운다)
+        // 치트 결과 알림 (화면 위 가운데, 몇 초 뒤 꺼진다). 게임 알림(App.Notify)을 그리는 UI가 씬에 없어도 보이게 패널이 직접 띄운다
+        public GameObject toast;
+        public TMP_Text toastText;
 
 #if MOREMUSH_DEV || DEVELOPMENT_BUILD || UNITY_EDITOR
         float fpsAcc; int fpsN; int fps = 60;
@@ -37,10 +40,28 @@ namespace MoreMush
             new Cheat(Key.K, "dbg-specials", null, "정령(꼬마) 모두 합류"),
             new Cheat(Key.S, "dbg-spd", "cycle", "라운드 배속 1→2→4→8"),
             new Cheat(Key.I, "dbg-inf", null, "라운드 시간 무한 켜기/끄기"),
+            new Cheat(Key.T, "dbg-grow", null, "세계수 한 단계 성장 (비용 없이 진화)"),
+            // 정령은 하나씩 키운다 (다른 정령은 1단계 모습 그대로 두고 비교할 수 있게)
+            new Cheat(Key.C, "dbg-kid", null, "키울 정령 고르기 (다음 정령)"),
+            new Cheat(Key.V, "dbg-kidup", "1", "고른 정령 별 +1 (없으면 합류부터)"),
+            new Cheat(Key.B, "dbg-kidup", "-1", "고른 정령 별 -1"),
         };
 
         const double RAIN_RATE = 0.1, RAIN_MIN = 1000, RAIN_SAVE_SEC = 5;   // 골드 자동 증가: 초당 지금 골드의 10% (적어도 1천), 5초마다 저장
         bool rain; float rainSave;
+        int kidSel;   // 정령 성장 치트가 고른 정령 (CheatKids 번호)
+        const float TOAST_SEC = 3;
+        float toastLeft;
+
+        // 치트 결과를 화면(toast)과 콘솔에 남긴다
+        void Say(string msg)
+        {
+            Debug.Log("[치트] " + msg);
+            if (toast == null || toastText == null) return;
+            toastText.text = msg;
+            toast.SetActive(true);
+            toastLeft = TOAST_SEC;
+        }
 
         void Awake()
         {
@@ -72,6 +93,7 @@ namespace MoreMush
                 foreach (var c in CHEATS)
                     if (kb[c.key].wasPressedThisFrame) { Debug.Log($"[치트] Shift+{KeyName(c.key)} {c.label}"); Do(c.act, c.arg); break; }
             Rain();
+            if (toastLeft > 0 && (toastLeft -= Time.unscaledDeltaTime) <= 0 && toast != null) toast.SetActive(false);
             if (!window.activeSelf) return;
 
             fpsAcc += Time.unscaledDeltaTime; fpsN++;
@@ -81,6 +103,7 @@ namespace MoreMush
                 + "\n" + Loc.F("배속 {0} · 해금 {1} · 무한 {2} · 밸런스 {3}", DBG.speed, DBG.allSeeds ? "ON" : "off", DBG.infinite ? "ON" : "off", TUNE.n)
                 + (G != null ? "\n" + Loc.F("스테이지 {0} · 골드 {1} · 균사석 {2}", StageNow(), U.Fmt(G.gold), U.Fmt(G.gem)) : "")
                 + (rain ? "\n골드 자동 증가 ON" : "")
+                + (G != null ? "\n고른 정령: " + KidText(SelKid()) : "")
                 + HarvesterSpeedText(R);
         }
 
@@ -134,27 +157,27 @@ namespace MoreMush
             Snd.Ui();
             // 세이브를 고치는 버튼은 게임에 들어간 뒤에만 (시작 화면에서는 세이브가 아직 없을 수 있다)
             bool needSave = act != "dbg-spd" && act != "dbg-inf" && act != "dbg-preset";
-            if (needSave && G == null) { App.Notify(Loc.T("게임에 들어간 뒤에 쓸 수 있어요")); return; }
+            if (needSave && G == null) { Say(Loc.T("게임에 들어간 뒤에 쓸 수 있어요")); return; }
             switch (act)
             {
                 // 골드·균사석은 화면이 매 프레임 읽으므로 씬을 다시 열지 않고 저장만 한다
                 case "dbg-res":
                     double mul = double.TryParse(arg, out var m) ? m : 1000;
-                    G.gold = System.Math.Max(G.gold, 100) * mul; SaveGame(); App.Notify($"골드 ×{mul} → {U.Fmt(G.gold)}");
+                    G.gold = System.Math.Max(G.gold, 100) * mul; SaveGame(); Say($"골드 ×{mul} → {U.Fmt(G.gold)}");
                     break;
                 case "dbg-gem":
                     int add = int.TryParse(arg, out var a) ? a : 100;
-                    G.gem += add; SaveGame(); App.Notify(Loc.F("균사석 +{0}", add) + $" → {U.Fmt(G.gem)}");
+                    G.gem += add; SaveGame(); Say(Loc.F("균사석 +{0}", add) + $" → {U.Fmt(G.gem)}");
                     break;
                 case "dbg-rain":
                     rain = !rain; rainSave = 0; if (!rain) SaveGame();
-                    App.Notify(rain ? "골드 자동 증가 켬" : "골드 자동 증가 끔");
+                    Say(rain ? "골드 자동 증가 켬" : "골드 자동 증가 끔");
                     break;
                 case "dbg-spd":
                     DBG.speed = arg == "cycle" ? (DBG.speed >= 8 ? 1 : DBG.speed * 2) : int.Parse(arg);
-                    App.Notify($"라운드 배속 ×{DBG.speed}");
+                    Say($"라운드 배속 ×{DBG.speed}");
                     break;
-                case "dbg-inf": DBG.infinite = !DBG.infinite; App.Notify(DBG.infinite ? "라운드 시간 무한 켬" : "라운드 시간 무한 끔"); break;
+                case "dbg-inf": DBG.infinite = !DBG.infinite; Say(DBG.infinite ? "라운드 시간 무한 켬" : "라운드 시간 무한 끔"); break;
                 case "dbg-seeds":
                     DBG.allSeeds = !DBG.allSeeds;
                     if (DBG.allSeeds) foreach (var s in SPECIES) if (!s.init) G.seeds[s.id] = true;
@@ -170,7 +193,7 @@ namespace MoreMush
                     break;
                 }
                 case "dbg-tree":
-                    if (StageMax()) { App.Notify("세계수가 이미 마지막 단계예요"); return; }
+                    if (StageMax()) { Say("세계수가 이미 마지막 단계예요"); return; }
                     G.farm.exp = System.Math.Max(G.farm.exp, TreeExpNeed());
                     Saved($"세계수 경험치 {U.Fmt(G.farm.exp)}/{U.Fmt(TreeExpNeed())}");
                     break;
@@ -195,15 +218,60 @@ namespace MoreMush
                     G.rounds += 10; G.stage += 10; G.theme = LatestTheme().id; CheckUnlocks();
                     Saved(Loc.F("스테이지 {0} · {1}", StageNow(), LatestTheme().n));
                     break;
+                case "dbg-grow":
+                {
+                    if (StageMax()) { Snd.Err(); Say("세계수가 이미 마지막 단계예요"); return; }
+                    // 진화 조건(나이테 최대·경험치·골드·균사석)을 채워 주고 실제 진화 규칙(Evolve)으로 올린다 → 무료 정령 합류·구역·장식 슬롯이 그대로 따라온다
+                    int st = Stage();
+                    G.gold += WT.evoGold[st]; G.gem += WT.evoGem[st];
+                    G.farm.ring = WT.ringMax; G.farm.exp = System.Math.Max(G.farm.exp, TreeExpNeed());
+                    if (!Evolve(out var opened)) { Snd.Err(); Saved("세계수가 자라지 않았어요 (" + CanEvolve() + ")"); return; }
+                    Saved($"세계수 {Stage()}단계" + (opened.Count > 0 ? " · 새로 열린 정령: " + string.Join(", ", System.Linq.Enumerable.Select(opened, o => o.n)) : ""));
+                    break;
+                }
+                case "dbg-kid":
+                {
+                    var ks = CheatKids();
+                    kidSel = (kidSel + 1) % ks.Length;
+                    Say("고른 정령: " + KidText(ks[kidSel]) + "  (Shift+V 별 올리기 · Shift+B 내리기)");
+                    break;
+                }
+                case "dbg-kidup":
+                {
+                    var kid = SelKid(); string id = kid.id; int d = arg == "-1" ? -1 : 1;
+                    if (!HasSpecial(id))
+                    {
+                        if (d < 0) { Snd.Err(); Say(SPC[id].n + "는 아직 합류하지 않았어요"); return; }
+                        BagSettle(); G.specials[id] = true;
+                        if (ZoneOpen(kid.zone) && ZoneRoom(kid.zone)) G.farm.zone[id] = kid.zone;   // 합류하면 선호 구역으로 (자리가 있을 때)
+                        Saved(SPC[id].n + " 합류 · " + KidText(kid));
+                        break;
+                    }
+                    int a0 = Awaken(id), a1 = System.Math.Max(0, System.Math.Min(KLV.awakenMax, a0 + d));
+                    if (a1 == a0) { Snd.Err(); Say(SPC[id].n + (d > 0 ? "는 이미 마지막 진화(별3)예요 · Shift+C로 다른 정령을 고르세요" : "는 이미 1단계(별0)예요")); return; }
+                    // 진화(각성)는 Lv.10·20·30에서 하므로 레벨도 맞춘다: 올리면 진화한 레벨까지, 내리면 그 단계의 상한까지
+                    BagSettle();
+                    G.farm.awaken[id] = a1;
+                    G.farm.klv[id] = d > 0 ? System.Math.Max(KLv(id), 10 * a1) : System.Math.Min(KLv(id), KLV.Cap(a1));
+                    DecoSlotsEnsure();
+                    Saved(KidText(kid));
+                    break;
+                }
                 case "dbg-specials": foreach (var k in SPECIALS) G.specials[k.id] = true; Saved(Loc.T("꼬마를 모두 합류시켰어요")); break;
                 case "dbg-bulk":
                     var res = BulkBuy(CAT_KEYS, 0, false);
-                    if (res.levels == 0) { Snd.Err(); App.Notify(Loc.T("강화할 수 있는 게 없어요")); return; }
+                    if (res.levels == 0) { Snd.Err(); Say(Loc.T("강화할 수 있는 게 없어요")); return; }
                     Snd.Buy(); Saved(Loc.F("{0}단계 강화 완료! (−{1}골드)", res.levels, U.Fmt(res.spent)));
                     break;
-                case "dbg-preset": ApplyPreset(arg); App.Notify(Loc.F("밸런스: {0} (다음 라운드부터)", TUNE.n)); break;
+                case "dbg-preset": ApplyPreset(arg); Say(Loc.F("밸런스: {0} (다음 라운드부터)", TUNE.n)); break;
             }
         }
+
+        // 정령 성장 치트 대상: 세계수 단계마다 합류하는 정령 (2차 정령은 뺀다)
+        static Kid[] cheatKids;
+        static Kid[] CheatKids() => cheatKids ??= System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Where(KIDS, k => JoinLv(k.id) > 0));
+        Kid SelKid() { var ks = CheatKids(); kidSel = (kidSel % ks.Length + ks.Length) % ks.Length; return ks[kidSel]; }
+        static string KidText(Kid k) => SPC[k.id].n + (HasSpecial(k.id) ? $" 별{Awaken(k.id)} Lv.{KLv(k.id)}" : " (합류 안 함)");
 
         // 시간 빨리 감기: 지금까지의 수확을 정산한 뒤, 보따리 시계와 공방 제작 시각을 sec만큼 과거로 옮기고 다시 정산한다
         // (그 시간 동안 자리를 비운 것과 같다. 보따리는 보관 시간까지만 쌓인다)
@@ -219,12 +287,12 @@ namespace MoreMush
 
         // 세이브를 고친 뒤: 저장하고, 라운드 밖이면 지금 씬을 다시 열어 트리·상점이 새 값으로 그려지게 한다
         // (라운드 중에 다시 열면 판이 처음부터 시작되므로 Stage는 그대로 둔다 — 골드는 화면이 매 프레임 읽는다)
-        static void Saved(string msg)
+        void Saved(string msg)
         {
             SaveGame();
             string scene = SceneManager.GetActiveScene().name;
             if (scene != Scenes.Stage && scene != Scenes.MainMenu) App.Go(scene);
-            if (msg != null) { Debug.Log("[치트] " + msg); App.Notify(msg); }
+            if (msg != null) Say(msg);
         }
 #else
         void Awake() => gameObject.SetActive(false);

@@ -126,8 +126,8 @@ namespace MoreMush
                 float w = Mathf.Min(420, sayText.preferredWidth * P + 34);
                 // sayRect is in stage px at the critter's scale (it is spread against the other bubbles); clamp it
                 // to the visible stage, which widens with the farm camera
-                float ws = w * zsc, half = W / 2 * FarmView.Zoom;
-                float bx = Mathf.Clamp(p.x - ws / 2, WT.camX - half + 10, WT.camX + half - ws - 10), by = (-R0 * 2 - 78) * zsc;
+                float ws = w * zsc, half = W / 2 * FarmView.Zoom * FarmView.ViewK, cx0 = FarmView.ViewCenter.x;   // 휠 확대(ViewK) 중에도 보이는 화면 안
+                float bx = Mathf.Clamp(p.x - ws / 2, cx0 - half + 10, cx0 + half - ws - 10), by = (-R0 * 2 - 78) * zsc;
                 sayRect = new Rect(bx, p.y + by, ws, 50 * zsc); sayFeetX = p.x; sayFeetY = p.y;
                 Art.SlicedPx(sayBack, w, 50);
                 PlaceSay(0, 0);

@@ -21,20 +21,24 @@ b.go(ROOT, {
 b.go(`${ROOT}/Window`, { RectTransform: { ...R(10, 10, 660, 840), ...ONE }, Image: panel(0.72) });
 b.go(`${ROOT}/Window/Info`, { RectTransform: { ...R(18, 14, 624, 330), ...ONE }, TextMeshProUGUI: text("FPS", 18, "#ffffff") });
 b.go(`${ROOT}/Window/Keys`, { RectTransform: { ...R(18, 356, 624, 470), ...ONE }, TextMeshProUGUI: text("치트 키", 21, "#ffe9a8") });
+// 치트 결과 알림 (위 가운데, 누를 때만 몇 초 보인다)
+b.go(`${ROOT}/Toast`, { RectTransform: { anchorMin: [0.5, 1], anchorMax: [0.5, 1], pivot: [0.5, 1], anchoredPosition: [0, -150], sizeDelta: [1240, 64], ...ONE }, Image: panel(0.7) });
+b.go(`${ROOT}/Toast/Text`, { RectTransform: { anchorMin: [0, 0], anchorMax: [1, 1], pivot: [0.5, 0.5], anchoredPosition: [0, 0], sizeDelta: [-24, 0], ...ONE },
+  TextMeshProUGUI: text("", 26, "#fff3c4", "Center") });
 await b.send("devpanel");
 
 // 씬에 만든 직후 id로 DebugPanel 참조를 잇는다
 const ids = {};
-for (const p of ["Window", "Window/Info", "Window/Keys"]) {
+for (const p of ["Window", "Window/Info", "Window/Keys", "Toast", "Toast/Text"]) {
   const r = await call("find_gameobjects", { search_term: `${ROOT}/${p}`, search_method: "by_path", include_inactive: true });
   ids[p] = r?.data?.instanceIDs?.[0] ?? r?.data?.items?.[0]?.instanceID ?? r?.data?.results?.[0]?.instanceID;
   if (!ids[p]) console.error("not found", p, JSON.stringify(r).slice(0, 300));
 }
-for (const [prop, p] of [["window", "Window"], ["info", "Window/Info"], ["keys", "Window/Keys"]]) {
+for (const [prop, p] of [["window", "Window"], ["info", "Window/Info"], ["keys", "Window/Keys"], ["toast", "Toast"], ["toastText", "Toast/Text"]]) {
   const r = await call("manage_components", { action: "set_property", target: ROOT, search_method: "by_path", component_type: "DebugPanel", property: prop, value: ids[p] });
   if (!r?.success) console.error("wire", prop, JSON.stringify(r).slice(0, 300));
 }
-await call("manage_gameobject", { action: "modify", target: `${ROOT}/Window`, search_method: "by_path", set_active: false });
+for (const p of ["Window", "Toast"]) await call("manage_gameobject", { action: "modify", target: `${ROOT}/${p}`, search_method: "by_path", set_active: false });
 
 const r = await call("manage_prefabs", { action: "create_from_gameobject", target: ROOT, prefab_path: PREFAB, allow_overwrite: true });
 console.log("prefab", r?.success, r?.message);

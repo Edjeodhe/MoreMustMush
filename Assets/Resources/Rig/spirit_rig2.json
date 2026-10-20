@@ -4,7 +4,7 @@
    "id": "dew_0",
    "kind": "dew",
    "form": 0,
-   "height": 3.1,
+   "height": 3.11,
    "k": 0.8097,
    "cap": {
     "sprite": "Rig2/gen_dew_0_cap",
@@ -18,34 +18,34 @@
     "y": 1.53,
     "orig": "Rig2/r2_dew_0_stem"
    },
-   "face": "Rig2/gen_dew_0_face_",
+   "face": "Rig2/gen_dew_0_bface_",
    "footL": {
     "sprite": "Rig2/gen_dew_0_footL",
-    "x": 0.025,
-    "y": 1.53,
+    "x": -0.0107,
+    "y": 1.5552,
     "orig": "Rig2/r2_dew_0_footL"
    },
    "footR": {
     "sprite": "Rig2/gen_dew_0_footR",
-    "x": 0.025,
-    "y": 1.53,
+    "x": 0.0297,
+    "y": 1.5552,
     "orig": "Rig2/r2_dew_0_footR"
    },
    "ankle": [
-    -0.5335,
-    0.33
+    -0.5692,
+    0.3552
    ],
    "ankleR": [
-    0.5469,
-    0.33
+    0.5516,
+    0.3552
    ],
    "capJoint": [
-    0.025,
-    1.21
+    0.005,
+    1.61
    ],
    "capTop": [
-    0.025,
-    3.05
+    0.005,
+    3.02
    ],
    "sole": -0.09,
    "gradeScale": 1.002,
@@ -53,7 +53,39 @@
     0.025,
     1.21
    ],
-   "faceOrig": "Rig2/r2_dew_0_face_"
+   "faceOrig": "Rig2/r2_dew_0_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5335,
+     0.33
+    ],
+    "ankleR": [
+     0.5469,
+     0.33
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_dew_0_footL",
+     "x": 0.025,
+     "y": 1.53,
+     "orig": "Rig2/r2_dew_0_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_dew_0_footR",
+     "x": 0.025,
+     "y": 1.53,
+     "orig": "Rig2/r2_dew_0_footR"
+    },
+    "capTop": [
+     0.025,
+     3.05
+    ],
+    "height": 3.1
+   },
+   "body": {
+    "sprite": "Rig2/gen_dew_0_body",
+    "x": 0.025,
+    "y": 1.53
+   }
   },
   {
    "id": "dew_1",
@@ -906,7 +938,7 @@
    "id": "fire_0",
    "kind": "fire",
    "form": 0,
-   "height": 3.44,
+   "height": 3.47,
    "k": 0.7413,
    "cap": {
     "sprite": "Rig2/gen_fire_0_cap",
@@ -920,34 +952,34 @@
     "y": 1.71,
     "orig": "Rig2/r2_fire_0_stem"
    },
-   "face": "Rig2/gen_fire_0_face_",
+   "face": "Rig2/gen_fire_0_bface_",
    "footL": {
     "sprite": "Rig2/gen_fire_0_footL",
-    "x": 0.01,
-    "y": 1.71,
+    "x": -0.0211,
+    "y": 1.7478,
     "orig": "Rig2/r2_fire_0_footL"
    },
    "footR": {
     "sprite": "Rig2/gen_fire_0_footR",
-    "x": 0.01,
-    "y": 1.71,
+    "x": 0.0311,
+    "y": 1.7483,
     "orig": "Rig2/r2_fire_0_footR"
    },
    "ankle": [
-    -0.5355,
-    0.41
+    -0.5666,
+    0.4478
    ],
    "ankleR": [
-    0.6659,
-    0.42
+    0.687,
+    0.4583
    ],
    "capJoint": [
-    0.01,
-    1.08
+    0.06,
+    1.69
    ],
    "capTop": [
-    0.01,
-    3.39
+    0.06,
+    3.4
    ],
    "sole": -0.07,
    "gradeScale": 0.903,
@@ -955,13 +987,45 @@
     0.01,
     1.08
    ],
-   "faceOrig": "Rig2/r2_fire_0_face_"
+   "faceOrig": "Rig2/r2_fire_0_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5355,
+     0.41
+    ],
+    "ankleR": [
+     0.6659,
+     0.42
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_fire_0_footL",
+     "x": 0.01,
+     "y": 1.71,
+     "orig": "Rig2/r2_fire_0_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_fire_0_footR",
+     "x": 0.01,
+     "y": 1.71,
+     "orig": "Rig2/r2_fire_0_footR"
+    },
+    "capTop": [
+     0.01,
+     3.39
+    ],
+    "height": 3.44
+   },
+   "body": {
+    "sprite": "Rig2/gen_fire_0_body",
+    "x": 0.01,
+    "y": 1.71
+   }
   },
   {
    "id": "fire_1",
    "kind": "fire",
    "form": 1,
-   "height": 3.68,
+   "height": 3.83,
    "k": 0.788,
    "cap": {
     "sprite": "Rig2/gen_fire_1_cap",
@@ -975,54 +1039,54 @@
     "y": 1.82,
     "orig": "Rig2/r2_fire_1_stem"
    },
-   "face": "Rig2/gen_fire_1_face_",
+   "face": "Rig2/gen_fire_1_bface_",
    "footL": {
     "sprite": "Rig2/gen_fire_1_footL",
-    "x": 0.02,
-    "y": 1.82,
+    "x": -0.028,
+    "y": 1.8592,
     "orig": "Rig2/r2_fire_1_footL"
    },
    "footR": {
     "sprite": "Rig2/gen_fire_1_footR",
-    "x": 0.02,
-    "y": 1.82,
+    "x": 0.1105,
+    "y": 1.87,
     "orig": "Rig2/r2_fire_1_footR"
    },
    "ankle": [
-    -0.5164,
-    0.38
+    -0.5644,
+    0.4192
    ],
    "ankleR": [
-    0.6375,
-    0.47
+    0.728,
+    0.52
    ],
    "nubL": {
     "sprite": "Rig2/gen_fire_1_nubL",
-    "x": 0.02,
-    "y": 1.82,
+    "x": -0.0525,
+    "y": 1.9164,
     "orig": "Rig2/r2_fire_1_nubL"
    },
    "nubPivotL": [
-    -0.7207,
-    0.8566
+    -0.7932,
+    0.953
    ],
    "nubR": {
     "sprite": "Rig2/gen_fire_1_nubR",
-    "x": 0.02,
-    "y": 1.82,
+    "x": 0.1385,
+    "y": 1.9191,
     "orig": "Rig2/r2_fire_1_nubR"
    },
    "nubPivotR": [
-    0.8712,
-    0.8789
+    0.9897,
+    0.978
    ],
    "capJoint": [
-    0.02,
-    1.15
+    0.07,
+    1.95
    ],
    "capTop": [
-    0.02,
-    3.64
+    0.07,
+    3.73
    ],
    "sole": -0.1,
    "faceOrig": "Rig2/r2_fire_1_face_",
@@ -1030,7 +1094,59 @@
    "capJointOrig": [
     0.02,
     1.15
-   ]
+   ],
+   "mushOrig": {
+    "ankle": [
+     -0.5164,
+     0.38
+    ],
+    "ankleR": [
+     0.6375,
+     0.47
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_fire_1_footL",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_fire_1_footR",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_footR"
+    },
+    "nubPivotL": [
+     -0.7207,
+     0.8566
+    ],
+    "nubPivotR": [
+     0.8712,
+     0.8789
+    ],
+    "nubL": {
+     "sprite": "Rig2/gen_fire_1_nubL",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_nubL"
+    },
+    "nubR": {
+     "sprite": "Rig2/gen_fire_1_nubR",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_nubR"
+    },
+    "capTop": [
+     0.02,
+     3.64
+    ],
+    "height": 3.68
+   },
+   "body": {
+    "sprite": "Rig2/gen_fire_1_body",
+    "x": 0.02,
+    "y": 1.82
+   }
   },
   {
    "id": "fire_2",
@@ -1794,7 +1910,7 @@
    "id": "leaf_0",
    "kind": "leaf",
    "form": 0,
-   "height": 3.38,
+   "height": 3.62,
    "k": 0.7515,
    "cap": {
     "sprite": "Rig2/gen_leaf_0_cap",
@@ -1808,34 +1924,34 @@
     "y": 1.67,
     "orig": "Rig2/r2_leaf_0_stem"
    },
-   "face": "Rig2/gen_leaf_0_face_",
+   "face": "Rig2/gen_leaf_0_bface_",
    "footL": {
     "sprite": "Rig2/gen_leaf_0_footL",
-    "x": 0.005,
-    "y": 1.67,
+    "x": -0.0235,
+    "y": 1.7066,
     "orig": "Rig2/r2_leaf_0_footL"
    },
    "footR": {
     "sprite": "Rig2/gen_leaf_0_footR",
-    "x": 0.005,
-    "y": 1.67,
+    "x": 0.1159,
+    "y": 1.7079,
     "orig": "Rig2/r2_leaf_0_footR"
    },
    "ankle": [
-    -0.5305,
-    0.31
+    -0.559,
+    0.3466
    ],
    "ankleR": [
-    0.5594,
-    0.32
+    0.6703,
+    0.3579
    ],
    "capJoint": [
-    0.005,
-    0.8
+    0.045,
+    1.57
    ],
    "capTop": [
-    0.005,
-    3.33
+    0.045,
+    3.53
    ],
    "sole": -0.09,
    "gradeScale": 0.919,
@@ -1843,13 +1959,45 @@
     0.005,
     0.8
    ],
-   "faceOrig": "Rig2/r2_leaf_0_face_"
+   "faceOrig": "Rig2/r2_leaf_0_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5305,
+     0.31
+    ],
+    "ankleR": [
+     0.5594,
+     0.32
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_leaf_0_footL",
+     "x": 0.005,
+     "y": 1.67,
+     "orig": "Rig2/r2_leaf_0_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_leaf_0_footR",
+     "x": 0.005,
+     "y": 1.67,
+     "orig": "Rig2/r2_leaf_0_footR"
+    },
+    "capTop": [
+     0.005,
+     3.33
+    ],
+    "height": 3.38
+   },
+   "body": {
+    "sprite": "Rig2/gen_leaf_0_body",
+    "x": 0.005,
+    "y": 1.67
+   }
   },
   {
    "id": "leaf_1",
    "kind": "leaf",
    "form": 1,
-   "height": 3.47,
+   "height": 3.45,
    "k": 0.879,
    "cap": {
     "sprite": "Rig2/gen_leaf_1_cap",
@@ -1863,54 +2011,54 @@
     "y": 1.72,
     "orig": "Rig2/r2_leaf_1_stem"
    },
-   "face": "Rig2/gen_leaf_1_face_",
+   "face": "Rig2/gen_leaf_1_bface_",
    "footL": {
     "sprite": "Rig2/gen_leaf_1_footL",
-    "x": 0.015,
-    "y": 1.72,
+    "x": -0.0009,
+    "y": 1.7316,
     "orig": "Rig2/r2_leaf_1_footL"
    },
    "footR": {
     "sprite": "Rig2/gen_leaf_1_footR",
-    "x": 0.015,
-    "y": 1.72,
+    "x": 0.011,
+    "y": 1.7318,
     "orig": "Rig2/r2_leaf_1_footR"
    },
    "ankle": [
-    -0.5097,
-    0.31
+    -0.5256,
+    0.3216
    ],
    "ankleR": [
-    0.5705,
-    0.32
+    0.5665,
+    0.3318
    ],
    "nubL": {
     "sprite": "Rig2/gen_leaf_1_nubL",
-    "x": 0.015,
-    "y": 1.72,
+    "x": -0.0023,
+    "y": 1.7359,
     "orig": "Rig2/r2_leaf_1_nubL"
    },
    "nubPivotL": [
-    -0.6358,
-    0.6999
+    -0.6531,
+    0.7158
    ],
    "nubR": {
     "sprite": "Rig2/gen_leaf_1_nubR",
-    "x": 0.015,
-    "y": 1.72,
+    "x": 0.0127,
+    "y": 1.7362,
     "orig": "Rig2/r2_leaf_1_nubR"
    },
    "nubPivotR": [
-    0.7228,
-    0.7244
+    0.7205,
+    0.7406
    ],
    "capJoint": [
     0.015,
-    0.94
+    1.56
    ],
    "capTop": [
     0.015,
-    3.42
+    3.37
    ],
    "sole": -0.08,
    "gradeScale": 0.9729,
@@ -1918,7 +2066,59 @@
     0.015,
     0.94
    ],
-   "faceOrig": "Rig2/r2_leaf_1_face_"
+   "faceOrig": "Rig2/r2_leaf_1_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5097,
+     0.31
+    ],
+    "ankleR": [
+     0.5705,
+     0.32
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_leaf_1_footL",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_leaf_1_footR",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_footR"
+    },
+    "nubPivotL": [
+     -0.6358,
+     0.6999
+    ],
+    "nubPivotR": [
+     0.7228,
+     0.7244
+    ],
+    "nubL": {
+     "sprite": "Rig2/gen_leaf_1_nubL",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_nubL"
+    },
+    "nubR": {
+     "sprite": "Rig2/gen_leaf_1_nubR",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_nubR"
+    },
+    "capTop": [
+     0.015,
+     3.42
+    ],
+    "height": 3.47
+   },
+   "body": {
+    "sprite": "Rig2/gen_leaf_1_body",
+    "x": 0.015,
+    "y": 1.72
+   }
   },
   {
    "id": "leaf_2",

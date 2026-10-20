@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>send</title>
+<!-- receive.html의 반대 방향: 참고 그림을 ChatGPT 페이지로 넘긴다. 클립보드가 막힌 미리보기 창용.
+     send.html?f=<경로> → 그림을 JPEG dataURL로 바꿔 https://chatgpt.com/#mmref=<dataURL> 로 이동한다.
+     그 페이지에서 location.hash를 읽어 입력칸의 파일 칸에 넣는다(웹 작업장 도구가 자바스크립트로). -->
+<body style="font:16px system-ui;padding:16px">보내는 중…
+<script>
+// &p=<키> 를 붙이면 Art/Raw_Dream/rig2/chatgpt_prompts.json 의 그 프롬프트도 #mmp= 로 같이 넘긴다
+const q = new URLSearchParams(location.search), f = q.get("f") || "", pk = q.get("p");
+const img = new Image();
+img.onload = async () => {
+  const c = document.createElement("canvas"); c.width = img.naturalWidth; c.height = img.naturalHeight;
+  const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0);
+  const pr = pk ? (await fetch("/Art/Raw_Dream/rig2/chatgpt_prompts.json?t=" + Date.now()).then((r) => r.json()))[pk] || "" : "";
+  location.href = "https://chatgpt.com/#mmref=" + encodeURIComponent(c.toDataURL("image/jpeg", 0.9)) + (pr ? "&mmp=" + encodeURIComponent(pr) : "");
+};
+img.onerror = () => (document.body.textContent = "그림 없음: " + f);
+img.src = "/" + f + "?t=" + Date.now();
+</script>
