@@ -149,6 +149,82 @@ def cap_red_only(H):
     out[:, :, 3] = (H[:, :, 3] * _blur(m, 0.8)).astype(np.uint8)
     return out
 
+def skull_mask(H):
+    """옆머리 그림의 머리통(얼굴·정수리 살 + 앞머리) 자리. 눈(아래쪽 가장 큰 어두운 점)에 붙은 살색 덩어리의 볼록 껍질을
+    눈~턱 거리 d로 잡은 타원(가로 눈-2.35d~+0.75d, 세로 눈-1.15d~턱)으로 자른다 (갓 안쪽이 살색과 비슷한 정령에서 갓까지 번지지 않게).
+    눈을 못 찾으면 None."""
+    from scipy.spatial import ConvexHull
+    from PIL import ImageDraw
+    al = H[:, :, 3] > 40
+    rgb = H[:, :, :3].astype(np.float32)
+    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+    mx = rgb.max(-1) / 255
+    mn = rgb.min(-1) / 255
+    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1e-6), 0)
+    h, w = al.shape
+    dark = al & (mx < 0.35)
+    dark[: h // 3] = False
+    lab, n = ndimage.label(dark)
+    if not n:
+        return None
+    sz = ndimage.sum(dark, lab, range(1, n + 1))
+    ey, ex = [v.mean() for v in np.nonzero(lab == 1 + int(np.argmax(sz)))]
+    col = al[:, max(0, int(ex) - 5):int(ex) + 5].any(axis=1)
+    chin = np.nonzero(col)[0].max()
+    d = max(10.0, chin - ey)
+    skin = al & (r >= g) & (g >= b - 4) & (r - b > 22) & (r - b < 95) & (mx > 0.78) & (sat > 0.08) & (sat < 0.42)
+    lab, n = ndimage.label(ndimage.binary_closing(ndimage.binary_opening(skin, iterations=2), iterations=3))
+    best, bd = 0, 1e18
+    for i in range(1, n + 1):
+        ys, xs = np.nonzero(lab == i)
+        if len(ys) < 200:
+            continue
+        dd = np.min((ys - ey) ** 2 + (xs - ex) ** 2)
+        if dd < bd:
+            bd, best = dd, i
+    if not best:
+        return None
+    ys, xs = np.nonzero(lab == best)
+    pts = np.stack([xs, ys], 1)
+    hv = ConvexHull(pts).vertices
+    im = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(im).polygon([tuple(map(float, pts[i])) for i in hv], fill=1)
+    hull = np.asarray(im).astype(bool)
+    yy, xx = np.mgrid[0:h, 0:w]
+    cx, rx = ex - 0.8 * d, 1.55 * d
+    cy0, ry = ey - 0.05 * d, 1.12 * d
+    ell = ((xx - cx) / rx) ** 2 + ((yy - cy0) / ry) ** 2 <= 1
+    neck = (yy > ey) & (np.abs(xx - ex + 0.7 * d) < 0.9 * d)          # 턱 아래 목 그루터기 쪽
+    return ((hull & ell) | (hull & neck)) & al
+
+
+def cap_over_side(H, mult=1.6):
+    """옆모습 갓 덮개 = 갓 겉면만 (불 ★3의 cap_red_only처럼: 긴 머리카락은 갓 안쪽 주름 위·겉면 아래로 나온다).
+    갓 = 머리 그림 - 머리통(skull_mask). 겉면 = 갓 맨 위 30% 색(대표색 5개)과 가까운 색 (그 30%의 95% 거리 × mult 안).
+    안쪽 주름 색은 갓 위쪽에 없으니 빠진다. 무늬(이끼·점) 구멍은 메운다. 머리통을 못 찾으면 None (불 기준 cap_red_only)."""
+    from scipy.cluster.vq import kmeans2
+    sk = skull_mask(H)
+    if sk is None:
+        return None
+    al = H[:, :, 3] > 40
+    cap = al & ~ndimage.binary_dilation(sk, iterations=3)
+    L = np.asarray(Image.fromarray(H[:, :, :3]).convert("LAB")).astype(np.float32)
+    ys = np.nonzero(cap.any(1))[0]
+    yy = np.arange(H.shape[0])[:, None]
+    X = L[cap & (yy < ys[0] + 0.3 * (ys[-1] - ys[0]))]
+    C, _ = kmeans2(X[::2], 5, seed=1, minit="++")
+    T = np.percentile(((X[:, None] - C[None]) ** 2).sum(-1).min(-1), 95) * mult
+    outer = cap & (((L[..., None, :] - C[None, None]) ** 2).sum(-1).min(-1) <= T)
+    outer = ndimage.binary_opening(outer, iterations=1)
+    lab, n = ndimage.label(outer)
+    sz = ndimage.sum(outer, lab, range(1, n + 1))
+    outer = np.isin(lab, 1 + np.nonzero(sz > 0.05 * sz.max())[0])
+    outer = ndimage.binary_fill_holes(ndimage.binary_closing(outer, iterations=3)) & cap
+    out = H.copy()
+    out[:, :, 3] = (H[:, :, 3] * _blur(outer, 1.0)).astype(np.uint8)
+    return out
+
+
 def side_head_without_hair(H, xb=((200, 228), (215, 242)), band=24, feather=12):
     """옆모습 머리 그림에서 얼굴 뒤 경계 xb(y)보다 뒤(왼쪽)의 머리카락을 지운 머리 바탕 (갓·얼굴·앞머리 + 얼굴 뒤 좁은 띠).
     새 머리카락 한 장(hair_side_full)이 그 자리를 덮는다. 얼굴 뒤 band px 띠의 옛 머리카락은 남겨 두어
@@ -389,6 +465,20 @@ def shoulder_row(B):
 OVR_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fit_overrides.json")
 # 머리카락 한 장 자리 (불 ★3에서 맞춘 값을 목 기준으로): 너비(리그 단위) · 윗끝 = 목 y + top · 가운데 x = 목 x + cx
 HAIR_FIT = {"side": {"w": 2.59, "top": 2.03, "cx": -0.41}, "back": {"w": 2.95, "top": 2.15, "cx": 0.025}}
+
+
+def write_rig(path, text):
+    """리그 JSON 저장. Unity·백신이 잠깐 잡고 있으면 OSError(22)가 나서 몇 번 다시 시도한다."""
+    import time
+    for i in range(10):
+        try:
+            with open(path, "w", encoding="utf-8", newline="\n") as f:
+                f.write(text)
+            return
+        except OSError:
+            if i == 9:
+                raise
+            time.sleep(0.5)
 
 
 def override(key, default):
@@ -679,7 +769,10 @@ def stage_body(data, look):
             H = MP.fade_rows(H, y - 2, y + 1, keep_above=True)
             if cut_side:
                 H = round_chin(H, y)                                           # 턱 뒤쪽 각진 계단(남은 목 옆선) 깎기
-        MP.save(cap_red_only(H), f"gen_{KID}_{view}_head_cap")               # 갓 겉만: 머리카락 위에 덮는다
+        # 머리카락 위에 다시 덮는 갓: 불 ★3 = 빨간 갓 겉만. 다른 정령 옆모습 = 머리통(살·앞머리)을 뺀 나머지 전부
+        #   (빨강 기준이라 초록·남색·갈색 갓은 거의 안 잡혀 긴 머리카락이 갓 위에 그려졌다, 사용자 2026-10-20)
+        capo = cap_over_side(H) if (view == "side" and KID != "fire_3") else None
+        MP.save(capo if capo is not None else cap_red_only(H), f"gen_{KID}_{view}_head_cap")
         if view == "side" and KID == "fire_3":
             H = side_head_without_hair(H)                                      # 불 ★3 원본만 귀 뒤 머리카락이 그려져 있다
         _, y0, _, _ = bbox(H)
@@ -789,7 +882,7 @@ def main():
             V["hair"] = MP.part("", V.get("hair", {}).get("x", 0), V.get("hair", {}).get("y", 0))
             V.pop("hairBones", None)
         out = json.dumps(data, ensure_ascii=False, indent=1) + ("\n" if src.endswith("\n") else "")
-        open(rig_path, "w", encoding="utf-8", newline="\n").write(out)
+        write_rig(rig_path, out)
         print(KID, stage)
         return
     if stage in ("layout", "front"):
@@ -803,7 +896,7 @@ def main():
         else:
             fit_front_hair(look)
             out = json.dumps(data, ensure_ascii=False, indent=1) + ("\n" if src.endswith("\n") else "")
-            open(rig_path, "w", encoding="utf-8", newline="\n").write(out)
+            write_rig(rig_path, out)
         print(KID, stage)
         return
     if KID == "fire_3" and "--force" not in sys.argv:
@@ -819,7 +912,7 @@ def main():
     if look["form"] >= 2 and stage in ("hair", "all"):
         stage_hair(data, look)
     out = json.dumps(data, ensure_ascii=False, indent=1) + ("\n" if src.endswith("\n") else "")
-    open(rig_path, "w", encoding="utf-8", newline="\n").write(out)
+    write_rig(rig_path, out)
     print("wrote", rig_path, KID, stage)
 
 
