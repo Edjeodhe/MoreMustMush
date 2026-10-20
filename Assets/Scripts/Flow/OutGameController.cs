@@ -123,6 +123,7 @@ namespace MoreMush
         {
             App.EnsureSave();
             Telemetry.Ftue(Telemetry.FTUE_FIRST_TREE);   // 세계수 첫 진입 (기기당 한 번)
+            Telemetry.TreeBegin();   // 여기서 나갈 때까지 세계수 로그를 모았다가 OnDestroy에서 한 번에 보낸다
             if (farm == null) farm = FindFirstObjectByType<FarmView>();
             if (farm != null) farm.Enter();
             else Debug.LogWarning("[OutGame] FarmView가 씬에 없어요 (세계수 월드를 배치하면 연결돼요)");
@@ -133,8 +134,8 @@ namespace MoreMush
         void OnEnable() => Loc.Changed += Render;
         void OnDisable() => Loc.Changed -= Render;
 
-        // 떠날 때까지의 수확을 보따리에 넣고 저장
-        void OnDestroy() { if (farm != null) farm.Flush(); }
+        // 떠날 때까지의 수확을 보따리에 넣고 저장, 모아 둔 세계수 로그를 보낸다
+        void OnDestroy() { if (farm != null) farm.Flush(); Telemetry.TreeEnd(); }
 
         void Update()
         {

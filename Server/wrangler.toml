@@ -3,8 +3,18 @@
 name = "moremustmush"
 main = "worker.js"
 compatibility_date = "2026-10-01"
+preview_urls = false   # 버전별 미리보기 주소를 열지 않는다 (받는 주소는 workers.dev 하나)
 
 [[d1_databases]]
 binding = "MMM_DB"
 database_name = "moremustmosh_itch-logs"
-database_id = "<대시보드 D1 > moremustmosh_itch-logs > Database ID>"
+database_id = "0e781c8b-7359-4e3c-bc89-c5b8f013c551"
+
+# IP당 요청 제한 (worker.js의 env.MMM_LIMIT). namespace_id는 계정 안에서 겹치지 않는 정수
+[[ratelimits]]
+name = "MMM_LIMIT"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 60
+  period = 60

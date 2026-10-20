@@ -102,6 +102,7 @@ namespace MoreMush
             G.gold -= c.gold; G.gem -= c.gem;
             if (DecoDup(id) > 1) F.decoDup[id] = DecoDup(id) - 1; else F.decoDup.Remove(id);
             F.decoStar[id] = DecoStar(id) + 1;
+            Telemetry.TreeUp("deco_" + id, F.decoStar[id], c.gold, c.gem);
             SaveGame();
             return true;
         }
@@ -181,6 +182,7 @@ namespace MoreMush
             long day = KstDay(Now());
             if (day > F.rushDay) { F.rushDay = day; F.rushUsed = 0; }   // 시계를 되돌려도 횟수가 초기화되지 않게
             G.gem -= cost; c.at = Now(); F.rushUsed++;
+            Telemetry.TreeAct("craft_rush", c.deco, 0, 0, cost);
             SaveGame();
             return true;
         }
