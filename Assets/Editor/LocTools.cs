@@ -30,6 +30,7 @@ namespace MoreMush.EditorTools
             ("ja", "MPLUSRounded1c-ExtraBold", "ZenMaruGothic-Medium"), // 가나·한자 다 있음 (鍮 하나만 본문 폰트로)
             ("ru", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 문자 있음
             ("uk", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 + ІЇЄҐ 모두 있음
+            ("pt", "Nunito-Black", "Nunito-SemiBold"),     // 라틴 + 악센트(á ã ç é ê í ó õ ú …) 모두 있음 (Jua는 악센트 글자가 없다)
         };
         // 어느 폰트에도 없는 글자가 나오면 이 폰트로 넘긴다 (한글·가나·한자·기호를 모두 가진 폰트)
         const string UniversalFallback = "ONEMobileRegular";
@@ -271,7 +272,7 @@ namespace MoreMush.EditorTools
             var have = new HashSet<string>(db.String.Select(r => r.Str_KR));
             var missing = keys.Where(k => !have.Contains(k)).ToList();
             int unused = db.String.Count(r => r.Str_Name == "ui" && !seen.Contains(r.Str_KR));
-            int filled = db.String.Sum(r => new[] { r.Str_EN, r.Str_JA, r.Str_RU, r.Str_UK }.Count(t => !string.IsNullOrEmpty(t)));
+            int filled = db.String.Sum(r => new[] { r.Str_EN, r.Str_JA, r.Str_RU, r.Str_UK, r.Str_PT }.Count(t => !string.IsNullOrEmpty(t)));
             string msg = $"문구 {keys.Count}개 · DB String {db.String.Count}줄 (번역 칸 {filled}/{db.String.Count * (Loc.LANGS.Length - 1)}) · 안 쓰는 UI 줄 {unused}";
             string xlsx = DbImport.LatestDb();
             if (missing.Count > 0 && xlsx == null) msg += $"\n새 문구 {missing.Count}개가 있지만 Assets/DB에 엑셀 DB가 없어요";
@@ -392,6 +393,7 @@ namespace MoreMush.EditorTools
                 langChars["ja"].UnionWith(r.Str_JA ?? "");
                 langChars["ru"].UnionWith(r.Str_RU ?? "");
                 langChars["uk"].UnionWith(r.Str_UK ?? "");
+                langChars["pt"].UnionWith(r.Str_PT ?? "");
             }
             var basic = new HashSet<char>(Enumerable.Range(32, 95).Select(i => (char)i));
             basic.UnionWith(SYMBOLS);
