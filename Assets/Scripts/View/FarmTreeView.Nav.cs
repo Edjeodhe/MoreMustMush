@@ -80,6 +80,32 @@ namespace MoreMush
             return pics.TryGetValue(pic, out var pl) ? pl : null;
         }
 
+        // 장식이 놓이는 구역 (꾸미기 창의 뿌리·줄기·가지·수관 탭). 설치형은 땅에 놓이니 뿌리, 걸이형은 지금 단계 도면의 걸이 자리를
+        // 높이 순으로 세 몫으로 나눠 아래부터 줄기·가지·수관 (도면의 걸이 자리는 나무 높이 33~65%에 몰려 있어 구역 높이 Zone.cy로 자르면
+        // 수관이 비었다). 도면에 자리가 없으면 가지
+        public static string DecoZone(Deco d)
+        {
+            if (!d.hang) return ZONES[0].id;
+            var at = PicData(WT.Picture(Stage()));
+            if (at == null || !at.deco.TryGetValue(d.id, out var s)) return "branch";
+            int below = 0, n = 0;
+            foreach (var x in DECOS)
+                if (x.hang && at.deco.TryGetValue(x.id, out var o)) { n++; if (o.v > s.v || (o.v == s.v && string.CompareOrdinal(x.id, d.id) < 0)) below++; }   // v가 클수록 아래
+            int k = Mathf.Min(2, below * 3 / Mathf.Max(1, n));
+            return ZONES[1 + k].id;
+        }
+
+        // 구역에 놓이는 장식 자리들의 평균 높이 (밑동 0 ~ 꼭대기 1). 꾸미기 창이 그 높이로 화면을 옮긴다. 자리가 없으면 Zone.cy
+        public static float DecoZoneHeight(string zone)
+        {
+            var at = PicData(WT.Picture(Stage()));
+            float sum = 0; int n = 0;
+            if (at != null && at.foot > 0)
+                foreach (var d in DECOS)
+                    if (at.deco.TryGetValue(d.id, out var s) && DecoZone(d) == zone) { sum += (at.foot - s.v) / at.foot; n++; }
+            return n > 0 ? sum / n : ZONE.TryGetValue(zone ?? "", out var z) ? z.cy : 0;
+        }
+
         // 나무 길: 정령은 WT.climbFrom(4)단계부터 나무에 오른다 (그 전 단계는 도면에 길이 있어도 없는 것으로)
         public Nav CurrentNav()
         {

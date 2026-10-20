@@ -18,6 +18,7 @@ namespace MoreMush
     //     균사석을 쓰는 일은 한 번 눌러 값을 보여 주고, 3초 안에 다시 누르면 한다
     //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 → 세계수 탭 창(FarmTabWindow, 배치된 FarmTabPanel 또는 임시 창). 같은 탭을 다시 누르면 닫힘
     //   Workshop_Panel = 꼬마 공방 (WorkshopPanel 참고). 배치돼 있으면 공방 탭은 세계수 탭 창 대신 이 창을 연다
+    //   꾸미기 탭 = 화면 아래 구역 탭 창 (DecoWindow, 프리팹 Resources/UI/DecoPanel). 프리팹이 없으면 세계수 탭 창의 꾸미기
     //   Button_Back = MainGame으로 돌아가기. 배치돼 있지 않으면 왼쪽 아래에 임시 나무 화살표 팻말(UI/sign_arrow)을 만든다
     // 세계수 월드(FarmView)는 씬에 있으면 연다. Esc = MainGame으로.
     public class OutGameController : MonoBehaviour
@@ -27,6 +28,7 @@ namespace MoreMush
 
         const float TICK = 1;   // 보따리·보관 시간 갱신 간격 (초)
         const int TAB_CRAFT = 2;   // TAB_NAMES의 공방
+        const int TAB_DECO = 3;    // 꾸미기 = 화면 아래 구역 탭 창 (DecoWindow)
         static readonly string[] TAB_NAMES = { "성장", "꼬마", "공방", "꾸미기" };
 
         CurrencyBar currency;
@@ -39,6 +41,7 @@ namespace MoreMush
         readonly List<Button> tabs = new List<Button>();
         int tab;
         FarmTabWindow tabWin;
+        DecoWindow decoWin;
         int armed = -1; float armedT;      // 균사석을 쓰기 전 확인: 한 번 누른 칸과 그 시각
         const float ARM_SEC = 3;
         static readonly Color SILHOUETTE = new Color(0.08f, 0.09f, 0.14f, 0.85f);
@@ -82,6 +85,7 @@ namespace MoreMush
             if (ws != null) { workshop = new WorkshopPanel(ws.gameObject, () => currency.Tick()); UIUtil.Show(workshop.root, false); }
             SetFolded(true, false);
             tabWin = FarmTabWindow.For(scene, null, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
+            decoWin = DecoWindow.For(scene, () => { currency.Tick(); RenderBag(); RenderKids(); RenderTabs(); });
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
                 new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
             BackButton(scene);
@@ -125,6 +129,7 @@ namespace MoreMush
             if (farm != null) farm.Enter();
             else Debug.LogWarning("[OutGame] FarmView가 씬에 없어요 (세계수 월드를 배치하면 연결돼요)");
             tabWin?.SetFarm(farm);
+            decoWin?.SetFarm(farm);
             Render();
         }
 
@@ -143,7 +148,7 @@ namespace MoreMush
             // Esc: 열린 탭 창 → 닫기, 옵션 창 → 닫기, 아무것도 없으면 업그레이드 화면(MainGame)으로
             if (kb != null && kb.escapeKey.wasPressedThisFrame)
             {
-                if (TabOpen()) { Snd.Ui(); tabWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); }
+                if (TabOpen()) { Snd.Ui(); tabWin?.Close(); decoWin?.Close(); UIUtil.Show(workshop?.root, false); RenderTabs(); }
                 else if (optionWin.IsOpen) optionWin.Toggle();
                 else ToMainGame();
             }
@@ -157,6 +162,7 @@ namespace MoreMush
             RenderKids();
             RenderTabs();
             tabWin?.Refresh();
+            decoWin?.Refresh();
             UIUtil.SetText(backLabel, Loc.T("돌아가기"));
         }
 
@@ -239,11 +245,13 @@ namespace MoreMush
             Snd.Ui();
             bool wasOpen = TabOpen() && tab == k;
             tabWin?.Close();
+            decoWin?.Close();
             UIUtil.Show(workshop?.root, false);
             if (!wasOpen)
             {
                 tab = k;
                 if (k == TAB_CRAFT && workshop != null) UIUtil.Show(workshop.root, true);
+                else if (k == TAB_DECO && decoWin != null) decoWin.Open();
                 else tabWin?.Open((FarmTabWindow.Tab)Mathf.Clamp(k, 0, 3));
             }
             RenderTabs();
@@ -261,7 +269,7 @@ namespace MoreMush
             workshop?.Render();
         }
 
-        bool TabOpen() => (tabWin != null && tabWin.IsOpen) || (workshop != null && workshop.IsOpen);
+        bool TabOpen() => (tabWin != null && tabWin.IsOpen) || (decoWin != null && decoWin.IsOpen) || (workshop != null && workshop.IsOpen);
 
         void SetFolded(bool folded, bool sound = true)
         {

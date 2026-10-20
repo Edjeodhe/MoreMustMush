@@ -19127,6 +19127,116 @@
       "Str_JA": "",
       "Str_RU": "",
       "Str_UK": ""
+    },
+    {
+      "Str_ID": 901340,
+      "Str_Group_ID": 91340,
+      "Str_Name": "ui",
+      "Str_KR": "아름다움 {0}점",
+      "Str_EN": "Beauty {0}",
+      "Str_JA": "美しさ {0}",
+      "Str_RU": "Красота {0}",
+      "Str_UK": "Краса: {0}"
+    },
+    {
+      "Str_ID": 901341,
+      "Str_Group_ID": 91341,
+      "Str_Name": "ui",
+      "Str_KR": "설치형 {0}/{1}",
+      "Str_EN": "Standing {0}/{1}",
+      "Str_JA": "置き型 {0}/{1}",
+      "Str_RU": "Напольное {0}/{1}",
+      "Str_UK": "Стоячий {0}/{1}"
+    },
+    {
+      "Str_ID": 901342,
+      "Str_Group_ID": 91342,
+      "Str_Name": "ui",
+      "Str_KR": "걸이형 {0}/{1}",
+      "Str_EN": "Hanging {0}/{1}",
+      "Str_JA": "吊り下げ型 {0}/{1}",
+      "Str_RU": "Подвесное {0}/{1}",
+      "Str_UK": "Підвісний {0}/{1}"
+    },
+    {
+      "Str_ID": 901343,
+      "Str_Group_ID": 91343,
+      "Str_Name": "ui",
+      "Str_KR": "{0}에 놓이는 장식이 없어요",
+      "Str_EN": "No decor goes on the {0}",
+      "Str_JA": "{0}に置ける飾りはありません",
+      "Str_RU": "Для зоны «{0}» нет украшений",
+      "Str_UK": "Для зони «{0}» немає декору"
+    },
+    {
+      "Str_ID": 901344,
+      "Str_Group_ID": 91344,
+      "Str_Name": "ui",
+      "Str_KR": "걸이형 자리가 꽉 찼어요 · 다른 장식을 빼 주세요",
+      "Str_EN": "Hanging spots are full · Take one down first",
+      "Str_JA": "吊り下げ型の枠がいっぱいです・ほかの飾りをはずしてください",
+      "Str_RU": "Места для подвесных заняты · Сначала уберите одно",
+      "Str_UK": "Місця для підвісних зайняті · Спершу зніміть один"
+    },
+    {
+      "Str_ID": 901345,
+      "Str_Group_ID": 91345,
+      "Str_Name": "ui",
+      "Str_KR": "설치형 자리가 꽉 찼어요 · 다른 장식을 빼 주세요",
+      "Str_EN": "Standing spots are full · Take one down first",
+      "Str_JA": "置き型の枠がいっぱいです・ほかの飾りをはずしてください",
+      "Str_RU": "Места для напольных заняты · Сначала уберите одно",
+      "Str_UK": "Місця для стоячих зайняті · Спершу зніміть один"
+    },
+    {
+      "Str_ID": 901346,
+      "Str_Group_ID": 91346,
+      "Str_Name": "ui",
+      "Str_KR": "{0} 세트",
+      "Str_EN": "{0} Set",
+      "Str_JA": "{0}セット",
+      "Str_RU": "Набор: {0}",
+      "Str_UK": "Набір: {0}"
+    },
+    {
+      "Str_ID": 901347,
+      "Str_Group_ID": 91347,
+      "Str_Name": "ui",
+      "Str_KR": "공방에서 제작",
+      "Str_EN": "Craft at the Workshop",
+      "Str_JA": "工房で制作",
+      "Str_RU": "Создай в Мастерской",
+      "Str_UK": "Створи в Майстерні"
+    },
+    {
+      "Str_ID": 901348,
+      "Str_Group_ID": 91348,
+      "Str_Name": "ui",
+      "Str_KR": "빼기",
+      "Str_EN": "Remove",
+      "Str_JA": "はずす",
+      "Str_RU": "Убрать",
+      "Str_UK": "Зняти"
+    },
+    {
+      "Str_ID": 901349,
+      "Str_Group_ID": 91349,
+      "Str_Name": "ui",
+      "Str_KR": "놓기",
+      "Str_EN": "Place",
+      "Str_JA": "置く",
+      "Str_RU": "Поставить",
+      "Str_UK": "Поставити"
+    },
+    {
+      "Str_ID": 901350,
+      "Str_Group_ID": 91350,
+      "Str_Name": "ui",
+      "Str_KR": "강화 재료 {0}",
+      "Str_EN": "Material {0}",
+      "Str_JA": "強化材料 {0}",
+      "Str_RU": "Материал {0}",
+      "Str_UK": "Матеріал {0}"
     }
   ]
 }

@@ -567,6 +567,22 @@ namespace MoreMush
         public static Vector2 ViewCenter = new Vector2(WT.camX, 540);   // 화면 가운데 (무대 px)
         const float VIEW_MIN = 0.4f, VIEW_MAX = 1.2f, VIEW_STEP = 0.88f;
         float viewTarget = 1; Vector2 viewFocus; bool viewFocusOn, viewPan;
+        Vector2? viewGoto;   // 꾸미기 창이 고른 구역 쪽으로 천천히 옮겨 가는 화면 가운데 (휠·끌기를 하면 그만둔다)
+
+        // 꾸미기 창에서 구역 탭을 고르면 그 구역(장식 자리들의 평균 높이)으로 다가가 본다. 창이 화면 아래 40%를 덮으니
+        // 구역이 화면 위쪽 30% 높이에 오게 하고, 그동안은 화면이 땅 아래로 그만큼 더 내려갈 수 있다(viewLift: 뿌리도 창 위에 보이게)
+        public void FocusZone(string zone, float k = 0.62f)
+        {
+            if (tree == null) return;
+            viewTarget = Mathf.Clamp(k, VIEW_MIN, VIEW_MAX); viewFocusOn = false;
+            float vh = 1080 * Zoom * viewTarget;
+            viewLift = 0.42f * vh;
+            viewGoto = new Vector2(WT.x, WT.y - FarmTreeView.DecoZoneHeight(zone) * (WT.y - tree.Top) + 0.2f * vh);
+        }
+
+        // 꾸미기 창을 닫으면 단계 기본 화면으로 돌아간다
+        public void Unfocus() { viewTarget = 1; viewFocusOn = false; viewLift = 0; viewGoto = new Vector2(WT.camX, 1080 - 540 * Zoom); }
+        static float viewLift;
 
         void UpdateView(float dt)
         {
@@ -577,7 +593,7 @@ namespace MoreMush
                 if (Mathf.Abs(sc) > 0.01f)
                 {
                     viewTarget = Mathf.Clamp(viewTarget * (sc > 0 ? VIEW_STEP : 1 / VIEW_STEP), VIEW_MIN, VIEW_MAX);
-                    viewFocus = ToStage(m.position.ReadValue()); viewFocusOn = true;
+                    viewFocus = ToStage(m.position.ReadValue()); viewFocusOn = true; viewGoto = null;
                 }
             }
             // 휠을 꾹 누른 채 끌면 화면을 옮긴다 (손으로 잡아 끄는 방향 그대로). 누르기는 무대 위에서만 시작, 끄는 중엔 UI 위로 가도 이어진다
@@ -590,16 +606,21 @@ namespace MoreMush
                     var d = m.delta.ReadValue();
                     float px = 1080 * Zoom * ViewK / Mathf.Max(1, Screen.height);   // 화면 1px = 무대 몇 px
                     ViewCenter += new Vector2(-d.x, d.y) * px;
-                    viewFocusOn = false;
+                    viewFocusOn = false; viewGoto = null;
                 }
             }
             float k = Mathf.Abs(ViewK - viewTarget) < 0.002f ? viewTarget : Mathf.Lerp(ViewK, viewTarget, 1 - Mathf.Exp(-dt * 12));
             if (viewFocusOn && k != ViewK) ViewCenter = viewFocus + (ViewCenter - viewFocus) * (k / ViewK);   // 마우스 아래 점을 붙잡고
             if (k == viewTarget) viewFocusOn = false;
             ViewK = k;
+            if (viewGoto != null)
+            {
+                ViewCenter = Vector2.Lerp(ViewCenter, viewGoto.Value, 1 - Mathf.Exp(-dt * 8));
+                if ((ViewCenter - viewGoto.Value).sqrMagnitude < 1) { ViewCenter = viewGoto.Value; viewGoto = null; }
+            }
         }
 
-        static void ResetView() { ViewK = 1; ViewCenter = new Vector2(WT.camX, 1080 - 540 * Zoom); }
+        static void ResetView() { viewLift = 0; ViewK = 1; ViewCenter = new Vector2(WT.camX, 1080 - 540 * Zoom); }
 
         static void ApplyCamera()
         {
@@ -609,7 +630,7 @@ namespace MoreMush
             float hh = 540 * Zoom * ViewK, hw = hh * cam.aspect, R = Mathf.Max(1, ViewK);
             float bx = 540 * Zoom * R * cam.aspect, top = 1080 - 1080 * Zoom * R;
             ViewCenter.x = Mathf.Clamp(ViewCenter.x, WT.camX - bx + hw, WT.camX + bx - hw);
-            ViewCenter.y = Mathf.Clamp(ViewCenter.y, top + hh, 1080 - hh);
+            ViewCenter.y = Mathf.Clamp(ViewCenter.y, top + hh, 1080 - hh + viewLift);
             cam.orthographicSize = CAM_SIZE * Zoom * ViewK;
             cam.transform.position = new Vector3(ViewCenter.x / Art.PPU, -ViewCenter.y / Art.PPU, cam.transform.position.z);
         }
