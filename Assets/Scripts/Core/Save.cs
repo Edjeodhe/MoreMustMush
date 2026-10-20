@@ -102,7 +102,10 @@ namespace MoreMush
 
     // 세이브: persistentDataPath/save.dat 에 암호화해 둔다 (SecureStore: AES + HMAC, 직전 정상본 .bak).
     // 웹은 persistentDataPath가 브라우저 IndexedDB라 템플릿의 autoSyncPersistentDataPath로 바로 반영된다.
-    // 예전 세이브(PlayerPrefs 평문 JSON, SAVE_KEY)는 읽을 수 있으면 읽고, 다음 저장 때 파일로 옮긴 뒤 지운다
+    // 예전 세이브(PlayerPrefs 평문 JSON, SAVE_KEY)는 읽을 수 있으면 읽고, 다음 저장 때 파일로 옮긴 뒤 지운다.
+    // 웹은 persistentDataPath가 페이지 URL마다 달라(itch.io는 올릴 때마다 주소가 바뀜) 새 버전에서 세이브가 안 보였다 (2026-10-20):
+    //   저장할 때 같은 암호 묶음을 브라우저 localStorage(BrowserStore)에도 두고, 불러올 때 파일·사본 가운데 더 진행한(플레이 시간) 것을 쓴다.
+    //   이 수정 전 버전에서 넘어온 경우를 위해 처음 한 번은 같은 브라우저 저장소의 다른 주소 폴더(예전 버전)에서 세이브를 찾는다
     public static class SaveIO
     {
         public const string SAVE_KEY = "mushroomPinball_save_v2";   // 예전 평문 세이브 (옮기기 전)
@@ -119,32 +122,92 @@ namespace MoreMush
             if (g == null || Suspended) return;
             try
             {
-                SecureStore.Save(SavePath, DeviceId.Get(), JsonConvert.SerializeObject(g));
+                string uid = DeviceId.Get(), json = JsonConvert.SerializeObject(g);
+                SecureStore.Save(SavePath, uid, json);
+                if (BrowserStore.Available && BrowserStore.Set(BrowserStore.SAVE, uid + ":" + Convert.ToBase64String(SecureStore.Pack(uid, json))))
+                    BrowserStore.Set(BrowserStore.LEGACY_SCANNED, "1");   // 사본이 생겼으니 예전 폴더는 더 찾지 않는다
                 if (PlayerPrefs.HasKey(SAVE_KEY)) { PlayerPrefs.DeleteKey(SAVE_KEY); PlayerPrefs.Save(); }   // 예전 평문 세이브는 옮겼으니 지운다
             }
             catch (Exception e) { Debug.LogError("Save failed: " + e); }   // 저장 실패가 라운드·버튼 처리 중간을 끊지 않게
         }
 
-        public static bool HasSave() => SecureStore.Exists(SavePath) || PlayerPrefs.HasKey(SAVE_KEY);
+        public static bool HasSave() => SecureStore.Exists(SavePath) || PlayerPrefs.HasKey(SAVE_KEY) || BrowserStore.Get(BrowserStore.SAVE) != null || LegacySaves().Count > 0;
 
         public static void Wipe()
         {
             try { SecureStore.Delete(SavePath); } catch (Exception e) { Debug.LogError("Save wipe failed: " + e); }
             PlayerPrefs.DeleteKey(SAVE_KEY); PlayerPrefs.Save();
+            BrowserStore.Delete(BrowserStore.SAVE);
+            BrowserStore.Set(BrowserStore.LEGACY_SCANNED, "1");   // 새로 시작했으니 예전 버전 세이브를 되살리지 않는다
         }
+
+        // 브라우저 사본 ("uid:base64 암호 묶음") → (json, uid). 없거나 못 읽으면 null
+        static (string json, string uid)? BrowserCopy()
+        {
+            var v = BrowserStore.Get(BrowserStore.SAVE);
+            int c = v?.IndexOf(':') ?? -1;
+            if (c <= 0) return null;
+            try
+            {
+                string uid = v.Substring(0, c);
+                if (SecureStore.Unpack(Convert.FromBase64String(v.Substring(c + 1)), uid, out _, out var json)) return (json, uid);
+            }
+            catch (Exception e) { Debug.LogWarning("browser save copy unreadable: " + e.Message); }
+            return null;
+        }
+
+        // 같은 브라우저 저장소의 다른 주소 폴더(예전 버전)에 남은 세이브: (세이브 경로, 그 폴더의 uid). 웹에서 처음 한 번만 찾는다
+        static List<(string path, string uid)> LegacySaves()
+        {
+            var o = new List<(string, string)>();
+            if (!BrowserStore.Available || BrowserStore.Get(BrowserStore.LEGACY_SCANNED) == "1") return o;
+            try
+            {
+                string mine = System.IO.Path.GetFullPath(Application.persistentDataPath).TrimEnd('/', '\\');
+                string root = System.IO.Path.GetDirectoryName(mine);
+                if (string.IsNullOrEmpty(root) || !System.IO.Directory.Exists(root)) return o;
+                foreach (var dir in System.IO.Directory.GetDirectories(root))
+                {
+                    if (System.IO.Path.GetFullPath(dir).TrimEnd('/', '\\') == mine) continue;
+                    string save = System.IO.Path.Combine(dir, "save.dat"), uidFile = System.IO.Path.Combine(dir, "uid.txt");
+                    if (!SecureStore.Exists(save) || !System.IO.File.Exists(uidFile)) continue;
+                    string uid = System.IO.File.ReadAllText(uidFile).Trim();
+                    if (DeviceId.Valid(uid)) o.Add((save, uid));
+                }
+            }
+            catch (Exception e) { Debug.LogWarning("legacy save scan failed: " + e.Message); }
+            return o;
+        }
+
+        // 더 진행한 세이브 (플레이 시간 → 판 수 → 마지막 접속 시각)
+        static bool Ahead(SaveData a, SaveData b) => b == null || a.play > b.play || (a.play == b.play && (a.rounds > b.rounds || (a.rounds == b.rounds && a.seenT > b.seenT)));
 
         public static SaveData Load()
         {
             LastLoadFailed = false;
+            // 이 주소의 파일보다 더 진행한 브라우저 사본·예전 버전 세이브가 있으면 그것을 쓴다 (웹에서만 있다)
+            SaveData other = null; string otherUid = null, from = null;
+            if (BrowserCopy() is var bc && bc != null && FromJson(bc.Value.json) is SaveData b) { other = b; from = "browser copy"; }
+            foreach (var (path, uid) in LegacySaves())
+                if (SecureStore.Load(path, uid, out _, out var lj) && FromJson(lj) is SaveData l && Ahead(l, other)) { other = l; otherUid = uid; from = path; }
+            if (BrowserStore.Available) BrowserStore.Set(BrowserStore.LEGACY_SCANNED, "1");
+            if (otherUid != null) DeviceId.Adopt(otherUid);   // 처음 들어온 새 주소면 예전 ID를 이어 쓴다 (로그 uid가 끊기지 않게)
+
             if (SecureStore.Exists(SavePath))
             {
-                if (SecureStore.Load(SavePath, DeviceId.Get(), out _, out var json) && FromJson(json) is SaveData g) return g;
+                if (SecureStore.Load(SavePath, DeviceId.Get(), out _, out var json) && FromJson(json) is SaveData g)
+                {
+                    if (other != null && Ahead(other, g)) { Debug.Log("Save restored from " + from); return other; }
+                    return g;
+                }
                 // 셋(.tmp·본·.bak) 다 못 읽음: 다음 저장이 덮기 전에 본 파일을 .bad로 남긴다 (처음 실패한 것만)
-                LastLoadFailed = true;
                 try { var bad = SavePath + ".bad"; if (!System.IO.File.Exists(bad) && System.IO.File.Exists(SavePath)) System.IO.File.Copy(SavePath, bad); }
                 catch (Exception e) { Debug.LogError("Save backup failed: " + e); }
+                if (other != null) { Debug.Log("Save restored from " + from); return other; }
+                LastLoadFailed = true;
                 return null;
             }
+            if (other != null) { Debug.Log("Save restored from " + from); return other; }
             string s = PlayerPrefs.GetString(SAVE_KEY, null);   // 예전 평문 세이브
             if (string.IsNullOrEmpty(s)) return null;
             var old = FromJson(s);
@@ -164,7 +227,7 @@ namespace MoreMush
             {
                 string j = null;
                 if (SecureStore.Exists(SavePath)) { if (!SecureStore.Load(SavePath, DeviceId.Get(), out _, out j)) return null; }
-                else j = PlayerPrefs.GetString(SAVE_KEY, null);
+                else j = BrowserCopy()?.json ?? PlayerPrefs.GetString(SAVE_KEY, null);
                 return string.IsNullOrEmpty(j) ? null : (double?)Newtonsoft.Json.Linq.JObject.Parse(j)["gold"];
             }
             catch { return null; }
