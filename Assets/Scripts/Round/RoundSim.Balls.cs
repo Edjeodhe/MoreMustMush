@@ -492,19 +492,23 @@ namespace MoreMush
                 m.col.alive--;
                 if (m.col.alive <= 0) { colonies.Remove(m.col); regen.Add((float)st.regen); }
             }
-            if (b != null && b.hv == "sam" && b.statMul >= 1 && kind != "skill" && U.Chance((float)HV["sam"].ab(b.hs)["p"])) queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
+            if (b != null && b.hv == "sam" && b.statMul >= 1 && kind != "skill" && U.Chance((float)HV["sam"].ab(b.hs)["p"])) QueueSam(m, b);
             var sk = st.sk;
             if (kind == "shock")
             {
                 if (wave != null && !wave.child && wave.depth < 8)
                 {
-                    wave.child = true; float x = m.x, y = m.y; int dp = wave.depth + 1; var wb = wave.b;
-                    queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, dp, wb) });
+                    wave.child = true;
+                    QueueWave(m.x, m.y, wave.depth + 1, wave.b);
                 }
             }
             else if (sk["shock"].on && Skillful(b) && U.Chance((float)SkP("shock", b))) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
             if (sk["clone"].on && Skillful(b) && U.Chance((float)SkP("clone", b))) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
         }
+
+        // 예약 효과는 따로 만든다: Harvest 안에서 람다가 m·b를 잡으면 클로저 객체가 Harvest를 부를 때마다(수확마다) 생겼다
+        void QueueSam(Shroom m, Ball b) => queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
+        void QueueWave(float x, float y, int depth, Ball b) => queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, depth, b) });
 
         void AddScore(double v, float x, float y, int tier, bool crit, bool golden)
         {

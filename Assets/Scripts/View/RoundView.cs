@@ -140,7 +140,7 @@ namespace MoreMush
             var sw = new System.Diagnostics.Stopwatch();
             var steps = new (System.Func<int> count, int target, System.Action grow)[]
             {
-                (() => balls.Count, 60, balls.Grow), (() => textSlots.Count, 45, () => NewTextSlot()), (() => shrooms.Count, 200, shrooms.Grow),
+                (() => balls.Count, 60, balls.Grow), (() => textSlots.Count, TEXT_SLOTS, () => WarmText(NewTextSlot())), (() => shrooms.Count, 200, shrooms.Grow),
                 (() => fxPool.Count, 90, fxPool.Grow), (() => parts.Count, 260, parts.Grow), (() => ringFx.Count, MAX_RINGS, ringFx.Grow),
                 (() => flyers.Count, 40, flyers.Grow), (() => lines.Count, 24, lines.Grow),
             };
@@ -154,6 +154,18 @@ namespace MoreMush
         }
 
         void Start() => StartCoroutine(Prewarm());
+
+        // 필드 글자 칸 수: 숫자 45 + 라벨 11 + 콤보(공마다) + 보스 이름이 한꺼번에 뜬다. 45개만 미리 만들었더니 판 중에 90개 가까이까지
+        // 새로 만들며(Instantiate) TMP 배열을 키웠다 (2026-10-20 할당 조사)
+        const int TEXT_SLOTS = 120;
+        // 미리 만든 칸에 긴 예시 글자(그림 숫자 + 한글)로 메시를 한 번 만들어 둔다: TMP 배열과 그림 숫자용 서브메시를 판 중이 아니라 여기서 만든다
+        static string warmText;
+        void WarmText(TextSlot sl)
+        {
+            warmText ??= (DmgDigits.Spell("+999.99Qa!") ?? "+999.99Qa!") + " " + (DmgDigits.Numbers("+12.3B") ?? "+12.3B") + " 새 버섯! 황금 버섯 배수 획득";
+            sl.tmp.text = warmText;
+            sl.tmp.ForceMeshUpdate(true, true);
+        }
 
         void Awake()
         {

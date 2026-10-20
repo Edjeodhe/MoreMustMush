@@ -32,16 +32,39 @@ namespace MoreMush
             _ => null,
         };
 
+        // 글자마다 완성된 sprite 태그 (그림이 없는 글자는 null). 예전에는 글자마다 "d" + c 같은 이름 문자열을 새로 만들었다
+        static string[] tags;
+        static string tagX;   // '×'
+        static string Tag(char c)
+        {
+            if (tags == null)
+            {
+                tags = new string[128];
+                for (int i = 0; i < tags.Length; i++) tags[i] = MakeTag((char)i);
+                tagX = MakeTag('×');
+            }
+            return c < 128 ? tags[c] : c == '×' ? tagX : null;
+        }
+        static string MakeTag(char c)
+        {
+            var g = Glyph(c);
+            return g != null && asset.GetSpriteIndexFromName(g) >= 0 ? "<sprite=\"DmgDigits\" name=\"" + g + "\" tint=1>" : null;
+        }
+
+        static void AppendSpell(StringBuilder dst, string s, int from, int to)
+        {
+            for (int i = from; i < to; i++)
+            {
+                var t = Tag(s[i]);
+                if (t != null) dst.Append(t); else dst.Append(s[i]);
+            }
+        }
+
         public static string Spell(string s)
         {
             if (s == null || !Ready) return null;
             sb.Clear();
-            foreach (char c in s)
-            {
-                var g = Glyph(c);
-                if (g != null && asset.GetSpriteIndexFromName(g) >= 0) sb.Append("<sprite=\"DmgDigits\" name=\"").Append(g).Append("\" tint=1>");
-                else sb.Append(c);
-            }
+            AppendSpell(sb, s, 0, s.Length);
             return sb.ToString();
         }
 
@@ -68,7 +91,7 @@ namespace MoreMush
                 if (j + 1 < n) foreach (var w in Units2) if (string.CompareOrdinal(s, j, w, 0, 2) == 0) { u = 2; break; }
                 if (u == 0 && j < n && "KMBTG".IndexOf(s[j]) >= 0) u = 1;
                 if (u > 0 && j + u < n && char.IsLetter(s[j + u])) u = 0;
-                nb.Append(Spell(s.Substring(i, j + u - i)));
+                AppendSpell(nb, s, i, j + u);   // 예전 Spell(s.Substring(…))과 같은 글자 (부분 문자열·중간 결과를 만들지 않게)
                 i = j + u;
             }
             return nb.ToString();
