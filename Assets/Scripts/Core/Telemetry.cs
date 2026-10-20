@@ -73,7 +73,7 @@ namespace MoreMush
 
             // 지난 실행이 "실행 중" 표시를 지우지 못하고 끝났으면 비정상 종료로 본다 (죽는 순간에는 못 보내므로 사후 전송)
             if (RunFlag)
-                Send("crash", new Dictionary<string, object> { ["stage"] = PlayerPrefs.GetInt(K_LAST, 0), ["ver"] = PlayerPrefs.GetString(K_RUN + "_ver", Application.version) });
+                Send("crash", new Dictionary<string, object> { ["stage"] = PlayerPrefs.GetInt(K_LAST, 0), ["ver"] = PlayerPrefs.GetString(K_RUN + "_ver", BuildTag.Version) });
             MarkRunning(true);
 
             var d = new Dictionary<string, object> { ["first"] = FirstRun, ["sessions"] = sessions };
@@ -111,7 +111,7 @@ namespace MoreMush
             MMM_RunSet(on ? 1 : 0);   // 웹 PlayerPrefs(IndexedDB) 저장은 탭이 닫히면 끝나지 못해 localStorage에 바로 쓴다
 #endif
             PlayerPrefs.SetInt(K_RUN, on ? 1 : 0);
-            if (on) PlayerPrefs.SetString(K_RUN + "_ver", Application.version);
+            if (on) PlayerPrefs.SetString(K_RUN + "_ver", BuildTag.Version);
             PlayerPrefs.Save();
         }
 
@@ -148,7 +148,7 @@ namespace MoreMush
             if (SaveIO.Suspended) return;   // 밸런스 시뮬(BalanceSim 샌드박스)은 보내지 않는다
             if (!inited && name != "crash" && name != "session_start") Init();
             string d = data == null ? "{}" : JsonConvert.SerializeObject(data, Formatting.None);
-            Enqueue(name, d, NowMs, T, SessionId, NextEid(), Application.version, true);
+            Enqueue(name, d, NowMs, T, SessionId, NextEid(), BuildTag.Version, true);
         }
 
         static long NowMs => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -166,7 +166,7 @@ namespace MoreMush
             if (d.Length > DATA_MAX) { Debug.LogWarning($"[Telemetry] {name} data {d.Length}자 > {DATA_MAX} — 잘라서 JSON이 깨지지 않게 표시만 남긴다"); d = JsonConvert.SerializeObject(new { truncated = d.Length }); }
             var entry = new JObject
             {
-                ["game"] = GAME, ["version"] = version ?? Application.version, ["platform"] = Platform, ["uid"] = Uid, ["session"] = session ?? SessionId,
+                ["game"] = GAME, ["version"] = version ?? BuildTag.Version, ["platform"] = Platform, ["uid"] = Uid, ["session"] = session ?? SessionId,
                 ["event"] = name, ["t"] = t, ["eid"] = eid ?? NextEid(),
                 ["ts"] = ts,   // 기기 시각 (큐에 오래 있다 가면 서버 시각과 다르다)
                 ["data"] = JObject.Parse(d),
@@ -292,7 +292,7 @@ namespace MoreMush
         // 모으기 시작: eid·세션·버전을 이때 정해 둔다 (탭이 닫혀 저장이 덜 끝나 다음 접속에 다시 보내도 같은 eid라 서버가 한 줄만 남긴다)
         static JObject StageStart(JObject d)
         {
-            d["_eid"] = NextEid(); d["_s"] = SessionId; d["_v"] = Application.version;
+            d["_eid"] = NextEid(); d["_s"] = SessionId; d["_v"] = BuildTag.Version;
             return d;
         }
 
@@ -333,7 +333,7 @@ namespace MoreMush
             EnqueueStage(pend);
         }
 
-        static void Enqueue(string name, JObject d) => Enqueue(name, d.ToString(Formatting.None), NowMs, T, SessionId, NextEid(), Application.version, true);
+        static void Enqueue(string name, JObject d) => Enqueue(name, d.ToString(Formatting.None), NowMs, T, SessionId, NextEid(), BuildTag.Version, true);
 
         // 모은 줄은 마지막 판의 시각, 모으기 시작할 때 정한 eid·세션·버전으로 넣는다
         static void EnqueueStage(JObject o)
@@ -341,7 +341,7 @@ namespace MoreMush
             long ts = (long?)o["_ts"] ?? NowMs; double t = (double?)o["_t"] ?? T;
             string eid = (string)o["_eid"], session = (string)o["_s"], version = (string)o["_v"];
             foreach (var k in new[] { "_ts", "_t", "_eid", "_s", "_v" }) o.Remove(k);
-            Enqueue("stage_end", o.ToString(Formatting.None), ts, t, session ?? SessionId, eid ?? NextEid(), version ?? Application.version, true);
+            Enqueue("stage_end", o.ToString(Formatting.None), ts, t, session ?? SessionId, eid ?? NextEid(), version ?? BuildTag.Version, true);
         }
 
         // 노드 키 → DB 숫자 ID (Upgrade 시트 Upg_ID). 없으면 0
@@ -415,7 +415,7 @@ namespace MoreMush
             var p = key == null ? null : tree.Find(x => x.key == key);
             if (p == null)
             {
-                tree.Add(new Pending { key = key, ev = ev, session = SessionId, eid = NextEid(), version = Application.version, ts = NowMs, t = T, d = d });
+                tree.Add(new Pending { key = key, ev = ev, session = SessionId, eid = NextEid(), version = BuildTag.Version, ts = NowMs, t = T, d = d });
                 while (tree.Count > QUEUE_MAX) tree.RemoveAt(0);
             }
             else Merge(p, d);
