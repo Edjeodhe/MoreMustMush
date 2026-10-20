@@ -413,6 +413,20 @@ namespace MoreMush.EditorTools
                 Bake(font, new string(chars.OrderBy(c => c).ToArray()));
                 log.AppendLine($"{font.name}: {font.characterTable.Count}자, 아틀라스 {font.atlasTextures.Length}장");
             }
+            // 세트 밖 한·영 전용 UI 폰트(LocFonts.koEnFonts: ONEMobilePOP 등)도 한·영 글자를 굽는다.
+            // 안 구우면 새 문구 글자(예: '잠김'의 '김')가 대체 폰트로 그려져 한 낱말 안에서 글꼴이 섞인다 (2026-10-20)
+            var lf = AssetDatabase.LoadAssetAtPath<LocFonts>(LocFontsPath);
+            if (lf != null)
+                foreach (var font in lf.koEnFonts.Where(f => f != null && !AllTtfs().Any(t => FontAssetPath(t) == AssetDatabase.GetAssetPath(f))).Distinct())
+                {
+                    var chars = new HashSet<char>(basic);
+                    chars.UnionWith(langChars["ko"]);
+                    chars.UnionWith(langChars["en"]);
+                    chars.UnionWith(font.characterTable.Where(c => c.unicode <= 0xFFFF).Select(c => (char)c.unicode));   // 배치 때 구운 글자(번역표 밖 문구)는 남긴다
+                    chars.RemoveWhere(c => c < 32 && c != '\n');
+                    Bake(font, new string(chars.OrderBy(c => c).ToArray()));
+                    log.AppendLine($"{font.name}: {font.characterTable.Count}자, 아틀라스 {font.atlasTextures.Length}장 (한·영 전용)");
+                }
             var fonts = AllTtfs().Select(t => AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath(t))).ToArray();
             string unsupported = new string(all.Where(c => c >= 32 && !fonts.Any(f => f.HasCharacter(c))).OrderBy(c => c).ToArray());
             if (unsupported.Length > 0) log.AppendLine("어느 폰트에도 없는 글자: " + unsupported);
