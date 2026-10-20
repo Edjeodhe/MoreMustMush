@@ -122,6 +122,7 @@ namespace MoreMush
         void Start()
         {
             App.EnsureSave();
+            Telemetry.Ftue(Telemetry.FTUE_FIRST_TREE);   // 세계수 첫 진입 (기기당 한 번)
             if (farm == null) farm = FindFirstObjectByType<FarmView>();
             if (farm != null) farm.Enter();
             else Debug.LogWarning("[OutGame] FarmView가 씬에 없어요 (세계수 월드를 배치하면 연결돼요)");
