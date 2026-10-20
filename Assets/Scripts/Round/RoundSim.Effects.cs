@@ -85,7 +85,7 @@ namespace MoreMush
             var sk = st.sk["shock"];
             waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b, hit = RentSet() });
             if (depth > maxChain) maxChain = depth;
-            if (depth > 1) AddLabel(Loc.F("연쇄 {0}", depth), x, y - 30, "#ffd0a0", 18 + depth);
+            if (depth > 1) AddLabel(Loc.F("연쇄 {0}", depth), x, y - 30, "#ffd0a0", 18 + depth, true);
             Snd.Skill(260 + depth * 40);
         }
 

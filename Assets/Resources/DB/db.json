@@ -20868,6 +20868,28 @@
       "Str_RU": "<b>{0}</b> <color=#e8a900>{1}</color>  ур.{2}/{3}",
       "Str_UK": "<b>{0}</b> <color=#e8a900>{1}</color>  рів.{2}/{3}",
       "Str_PT": "<b>{0}</b> <color=#e8a900>{1}</color>  Nv.{2}/{3}"
+    },
+    {
+      "Str_ID": 901356,
+      "Str_Group_ID": 91356,
+      "Str_Name": "ui",
+      "Str_KR": "연출 간소화: 켜짐",
+      "Str_EN": "Simple Effects: On",
+      "Str_JA": "演出簡略化:オン",
+      "Str_RU": "Упрощённые эффекты: вкл.",
+      "Str_UK": "Спрощені ефекти: увімк.",
+      "Str_PT": "Efeitos simplificados: ligado"
+    },
+    {
+      "Str_ID": 901357,
+      "Str_Group_ID": 91357,
+      "Str_Name": "ui",
+      "Str_KR": "연출 간소화: 꺼짐",
+      "Str_EN": "Simple Effects: Off",
+      "Str_JA": "演出簡略化:オフ",
+      "Str_RU": "Упрощённые эффекты: выкл.",
+      "Str_UK": "Спрощені ефекти: вимк.",
+      "Str_PT": "Efeitos simplificados: desligado"
     }
   ]
 }

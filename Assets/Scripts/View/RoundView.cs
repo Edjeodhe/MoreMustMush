@@ -267,11 +267,13 @@ namespace MoreMush
             shrooms.Trim(R.shrooms.Count);
 
             // 포자 구름
-            for (int i = 0; i < R.clouds.Count; i++) clouds.Get(i).Show(R.clouds[i], now);
-            clouds.Trim(R.clouds.Count);
+            bool noSkill = FxPrefs.Simple;   // 연출 간소화: 스킬 효과(구름·고리·충격파·회오리·번개)를 그리지 않는다 (판정은 그대로)
+            int ncl = noSkill ? 0 : R.clouds.Count;
+            for (int i = 0; i < ncl; i++) clouds.Get(i).Show(R.clouds[i], now);
+            clouds.Trim(ncl);
 
             int nl = 0, nr = 0;
-            if (ringSp != null)
+            if (!noSkill && ringSp != null)
             {
                 // watercolor: the ring bursts out fast and settles (ease-out), a paint splash pops at the hit for an
                 // instant and fades; quiet rings (every bell hit) stay thin and small
@@ -295,7 +297,7 @@ namespace MoreMush
                     Blot(ref nr, ringSp, w.x, w.y, 2 * w.r, new Color(1, 0.9f, 0.76f, (1 - k) * 0.9f), w.x % 360, 3040);
                 }
             }
-            else
+            else if (!noSkill)
             {
                 for (int ri = Mathf.Max(0, R.rings.Count - MAX_RINGS); ri < R.rings.Count; ri++)   // 가장 최근 것만
                 {
@@ -311,12 +313,14 @@ namespace MoreMush
                     var c = U.Hex("#ffd9a8"); c.a = 1 - k; l.startColor = l.endColor = c;
                 }
             }
+            if (!noSkill)
             foreach (var tn in R.tornados)
                 for (int i = 0; i < 5; i++)
                 {
                     var l = Ellipse(nl++, tn.x, tn.y + (i - 2) * tn.h / 5, 30 + i * 6, 8, now * 10 + i, 4);
                     l.startColor = l.endColor = new Color(230 / 255f, 1, 250 / 255f, 0.8f - i * 0.12f);
                 }
+            if (!noSkill)
             foreach (var bo in R.bolts)
             {
                 var l = Line(nl++);
@@ -386,7 +390,7 @@ namespace MoreMush
             int nf = 0;
             foreach (var f in R.flyers)
             {
-                if (f.t < 0) continue;
+                if (f.t < 0 || FxPrefs.Simple) continue;   // 연출 간소화: 아이콘은 안 그리고 도착할 때 칸이 튀는 것은 그대로
                 var s = flyers.Get(nf++);
                 s.transform.localPosition = Art.P(f.x, f.y);
                 if (f.clock) { s.sprite = SpriteDB.Icon("clock"); Art.FitPx(s, 30); Art.SetFx(s); }
@@ -523,6 +527,7 @@ namespace MoreMush
         void DrawTexts(RoundSim R, float z)
         {
             textFrame++;
+            if (!FxPrefs.Simple)   // 연출 간소화: 대미지 숫자를 그리지 않는다
             foreach (var t in R.texts)
             {
                 float life = t.tier >= 2 ? 1.2f : 0.8f, k = t.t / life;
@@ -536,8 +541,9 @@ namespace MoreMush
                     : DmgDigits.Spell(t.crit ? U.Fmt(t.v) + "!" : "+" + U.Fmt(t.v)) ?? (t.crit ? Loc.T("치명!") + " " : "+") + U.Fmt(t.v);
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
+            bool noSkillLabel = FxPrefs.Simple;
             foreach (var l in R.labels)
-                Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
+                if (!(noSkillLabel && l.skill)) Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
             foreach (var b in R.balls)
                 if (b.combo >= 3 && b.perm)
                 {

@@ -271,7 +271,7 @@ namespace MoreMush
             else if (NODE.TryGetValue(id, out var nd)) { n = nd.n; col = nd.col ?? "#ffffff"; }
             else if (id == "spark") { n = Loc.T("연쇄 번개"); col = "#ffe03a"; }
             else if (id == "hv_split") { n = Loc.T("세포 분열"); col = "#ff8a80"; }
-            if (n != null) AddLabel(n + "!", x, y - 30, col, 20);
+            if (n != null) AddLabel(n + "!", x, y - 30, col, 20, true);
         }
 
         // ===== 피해·점수·수확 =====
@@ -557,10 +557,10 @@ namespace MoreMush
                     AddPart(cx, cy, -dx / d * FxR(80, 200) + FxR(-60, 60), -dy / d * FxR(80, 200) - 80, 0.4f, U.Hex(m.sp.c1), 4, FxShape.Chip);
         }
 
-        public void AddLabel(string text, float x, float y, string col, float size)
+        public void AddLabel(string text, float x, float y, string col, float size, bool skill = false)   // skill: 스킬 이름 글자 (연출 간소화 때 안 그린다)
         {
             if (labels.Count > 10) labels.RemoveAt(0);
-            labels.Add(new Label { text = text, x = U.Clamp(x, 120, WW - 120), y = U.Clamp(y, 80, WH - 60), col = col, size = size });
+            labels.Add(new Label { text = text, x = U.Clamp(x, 120, WW - 120), y = U.Clamp(y, 80, WH - 60), col = col, size = size, skill = skill });
         }
     }
 }
