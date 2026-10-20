@@ -81,6 +81,7 @@ namespace MoreMush
             double exp = TributeAllValue();
             if (exp <= 0) return 0;
             F.store.Clear(); F.exp += exp;
+            Telemetry.TreeAct("tribute", null, exp, 0, 0);
             SaveGame();
             return exp;
         }
@@ -166,6 +167,7 @@ namespace MoreMush
             BagSettle();
             double c = KLvCost(kid);
             G.gold -= c; F.klv[kid] = KLv(kid) + 1;
+            Telemetry.TreeUp("klv_" + kid, F.klv[kid], c, 0);
             DecoSlotsEnsure();   // Lv 합계 보상 (장식 슬롯)
             SaveGame();
             return true;
@@ -213,6 +215,7 @@ namespace MoreMush
             if (!HasSpecial(kid) || !KID.ContainsKey(kid) || !SP.ContainsKey(sp ?? "") || !StoreTake(sp, n)) return -1;
             int lv0 = AffLv(kid);
             AffAdd(kid, GiftValue(kid, sp) * n);
+            Telemetry.TreeAct("gift", kid, GiftValue(kid, sp) * n, n, 0);
             SaveGame();
             return AffLv(kid) - lv0;
         }

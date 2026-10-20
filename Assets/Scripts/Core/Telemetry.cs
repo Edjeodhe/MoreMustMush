@@ -3,16 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
+using AOT;
 
 namespace MoreMush
 {
     // 분석용 로그 (로그 서버 인수인계 HANDOFF.md 4·5절). 웹·exe 공통. 게임 데이터는 서버에 올리지 않는다.
-    //  · 로그는 먼저 로컬 큐(persistentDataPath/logq.dat, SecureStore 암호화)에 쌓고, 접속 직후·스테이지 종료·창이 뒤로 갈 때 묶어서 보낸다
+    //  · 로그는 먼저 로컬 큐(persistentDataPath/logq.dat, SecureStore 암호화)에 쌓고, 접속 직후·첫 단계(FTUE 1·2)·스테이지 종료·세계수를 나갈 때 묶어서 보낸다.
+    //    앱이 뒤로 갈 때(모바일 홈·웹 탭 숨김·닫기)는 다음 프레임이 안 올 수 있어 그 자리에서 보낸다 (Background · SendNow, 웹은 sendBeacon)
     //  · 한 번에 최대 50건·20KB. 서버가 "ok"를 돌려준 것만 큐에서 지운다. 실패하면 15·30·60초 간격으로 3번 더, 그래도 안 되면 다음 전송 때 함께
     //  · 큐는 200건까지, 넘치면 오래된 것부터 버린다. 같은 로그가 두 번 갈 수 있어 eid(고유 번호)를 붙인다 (서버가 INSERT OR IGNORE)
     // 보내는 한 건: { game, version, platform, uid, session, event, t, eid, ts, data{...} }
@@ -31,14 +34,14 @@ namespace MoreMush
         public static bool SEND_IN_EDITOR = false;
 
         const string K_RUN = "tlm_running", K_LAST = "tlm_last_stage", K_SESS = "tlm_sessions", K_NETFAIL = "tlm_netfail",
-                     K_FTUE = "tlm_ftue", K_CLEAR = "tlm_clear_sent", K_SNAP = "tlm_snap", K_SEQ = "tlm_seq";
+                     K_FTUE = "tlm_ftue", K_CLEAR = "tlm_clear_sent", K_SNAP = "tlm_snap", K_SEQ = "tlm_seq", K_STAGE_PEND = "tlm_stage_pend", K_STAGE_POST = "tlm_stage_post";
 
         public static string Uid => DeviceId.Get();
         public static bool FirstRun { get; private set; }
         public static string SessionId { get; private set; }
         static string url, key;
         static float t0;
-        static bool inited, flushWanted, forbidden;
+        static bool inited, flushWanted, forbidden, background;
         static int errors;
         static List<string> queue = new List<string>();
 
@@ -64,11 +67,12 @@ namespace MoreMush
             FirstRun = DeviceId.Created;
             LoadConfig();
             LoadQueue();
+            LoadTree(); TreeCommit();   // 세계수에서 꺼져 못 보낸 묶음 → 이번 접속 전송에 함께
             int sessions = PlayerPrefs.GetInt(K_SESS, 0) + 1;
             PlayerPrefs.SetInt(K_SESS, sessions);
 
             // 지난 실행이 "실행 중" 표시를 지우지 못하고 끝났으면 비정상 종료로 본다 (죽는 순간에는 못 보내므로 사후 전송)
-            if (PlayerPrefs.GetInt(K_RUN, 0) == 1)
+            if (RunFlag)
                 Send("crash", new Dictionary<string, object> { ["stage"] = PlayerPrefs.GetInt(K_LAST, 0), ["ver"] = PlayerPrefs.GetString(K_RUN + "_ver", Application.version) });
             MarkRunning(true);
 
@@ -78,7 +82,11 @@ namespace MoreMush
             Send("session_start", d);
             Application.logMessageReceived -= OnLog;
             Application.logMessageReceived += OnLog;
+            StageCommitAll();   // 지난 실행에서 보내지 못한 스테이지 묶음
             TelemetryRunner.Ensure();
+#if UNITY_WEBGL && !UNITY_EDITOR
+            MMM_HookVisibility(OnPageHidden, OnPageShown);
+#endif
             Flush();
         }
 
@@ -99,32 +107,74 @@ namespace MoreMush
         // "실행 중" 표시. 앱이 뒤로 가거나 꺼질 때 지우고, 돌아오면 다시 켠다 (탭 닫기·강제 종료를 크래시로 오인하지 않게)
         public static void MarkRunning(bool on)
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            MMM_RunSet(on ? 1 : 0);   // 웹 PlayerPrefs(IndexedDB) 저장은 탭이 닫히면 끝나지 못해 localStorage에 바로 쓴다
+#endif
             PlayerPrefs.SetInt(K_RUN, on ? 1 : 0);
             if (on) PlayerPrefs.SetString(K_RUN + "_ver", Application.version);
             PlayerPrefs.Save();
         }
 
-        // 다음 프레임에 보낸다 (전송 시점: 접속 직후 · 스테이지 종료 · 창이 뒤로 갈 때)
+#if UNITY_WEBGL && !UNITY_EDITOR
+        static bool RunFlag => MMM_RunGet() == 1;
+#else
+        static bool RunFlag => PlayerPrefs.GetInt(K_RUN, 0) == 1;
+#endif
+
+        // 다음 프레임에 보낸다 (전송 시점: 접속 직후 · 첫 단계 · 스테이지 종료 · 세계수를 나갈 때)
         public static void Flush() => flushWanted = true;
+
+        // ===== 앱이 뒤로 갈 때 · 돌아올 때 =====
+        // 모바일 Pause·Focus, PC Focus, 웹 visibilitychange·pagehide가 겹쳐 오므로 상태가 바뀔 때 한 번만 처리한다
+        public static void Background()
+        {
+            if (!inited || background) return;
+            background = true;
+            TreeCommit();    // 세계수 묶음 (세계수 화면은 그대로라 돌아오면 다시 모은다)
+            StageCommitAll();   // 모으던 스테이지 구간 · 엔딩 뒤 합친 줄
+            MarkRunning(false);
+            SendNow();
+        }
+
+        public static void Foreground()
+        {
+            if (!inited || !background) return;
+            background = false;
+            MarkRunning(true);
+        }
 
         public static void Send(string name, Dictionary<string, object> data)
         {
             if (SaveIO.Suspended) return;   // 밸런스 시뮬(BalanceSim 샌드박스)은 보내지 않는다
             if (!inited && name != "crash" && name != "session_start") Init();
             string d = data == null ? "{}" : JsonConvert.SerializeObject(data, Formatting.None);
-            if (d.Length > DATA_MAX) { Debug.LogWarning($"[Telemetry] {name} data {d.Length}자 > {DATA_MAX} — 잘라서 JSON이 깨지지 않게 표시만 남긴다"); d = JsonConvert.SerializeObject(new { truncated = d.Length }); }
+            Enqueue(name, d, NowMs, T, SessionId, NextEid(), Application.version, true);
+        }
+
+        static long NowMs => DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        static string NextEid()
+        {
             long seq = PlayerPrefs.GetInt(K_SEQ, 0) + 1; PlayerPrefs.SetInt(K_SEQ, (int)(seq % int.MaxValue));
+            return SessionId + "-" + seq;
+        }
+
+        // 큐에 한 건 넣는다. ts·t·session·eid·version은 로그가 생긴 때의 값 (세계수 묶음은 나중에 넣으므로 따로 받는다.
+        // 같은 eid가 두 번 들어가도 서버가 INSERT OR IGNORE로 한 번만 남긴다)
+        static void Enqueue(string name, string d, long ts, double t, string session, string eid, string version, bool save)
+        {
+            if (d.Length > DATA_MAX) { Debug.LogWarning($"[Telemetry] {name} data {d.Length}자 > {DATA_MAX} — 잘라서 JSON이 깨지지 않게 표시만 남긴다"); d = JsonConvert.SerializeObject(new { truncated = d.Length }); }
             var entry = new JObject
             {
-                ["game"] = GAME, ["version"] = Application.version, ["platform"] = Platform, ["uid"] = Uid, ["session"] = SessionId,
-                ["event"] = name, ["t"] = T, ["eid"] = SessionId + "-" + seq,
-                ["ts"] = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),   // 기기 시각 (큐에 오래 있다 가면 서버 시각과 다르다)
+                ["game"] = GAME, ["version"] = version ?? Application.version, ["platform"] = Platform, ["uid"] = Uid, ["session"] = session ?? SessionId,
+                ["event"] = name, ["t"] = t, ["eid"] = eid ?? NextEid(),
+                ["ts"] = ts,   // 기기 시각 (큐에 오래 있다 가면 서버 시각과 다르다)
                 ["data"] = JObject.Parse(d),
             };
             if (Application.isEditor) { Debug.Log($"[Telemetry] {name} {d}"); if (!SEND_IN_EDITOR) return; }
             queue.Add(entry.ToString(Formatting.None));
             while (queue.Count > QUEUE_MAX) queue.RemoveAt(0);
-            SaveQueue();
+            if (save) SaveQueue();
         }
 
         static void LoadQueue()
@@ -194,10 +244,104 @@ namespace MoreMush
             data["gem"] = N(g.gem);
             if (result == "early_exit") data["sec"] = Math.Round(sec, 1);
             if (boss && result != "clear") data["boss_hp"] = Math.Round(bossHpPct, 1);
-            Send("stage_end", data);
+            StageSend(stage, result, boss, g.ending, data);
             PlayerPrefs.SetString(K_SNAP, JsonConvert.SerializeObject(new Snap { nodes = new Dictionary<string, int>(g.nodes), gold = g.gold, hasGold = true }));
             PlayerPrefs.Save();
             Flush();
+        }
+
+        // ===== 스테이지 구간 묶음 =====
+        // STAGE_SOLO_MAX 스테이지까지는 판마다 보낸다. 그 뒤로는 보스 구간(21~30, 31~40 …)의 클리어를 모아 두었다가
+        // 보스를 클리어하면 구간을 한 줄로 보낸다 (D1 행 절약). 보스 실패·중도 포기(early_exit)는 그 판만 바로 보낸다 (모으던 것은 계속 기다린다).
+        // 합친 줄: stage·result·boss·bal·gem·score = 마지막 판, stage0·score0 = 첫 판, in·out·etc·out_gem = 합계, up = 나중 레벨,
+        //   codex = 이어 붙임, c = 합친 판 수. 직전 잔액 + in − out + etc = bal 은 합친 줄에서도 맞는다.
+        // 모으는 중인 줄은 PlayerPrefs에 두고, 앱이 뒤로 갈 때·다음 접속 때 모은 만큼 보낸다. 시각(ts·t)은 마지막 판 기준.
+        // 엔딩을 본 유저(ending)는 판마다·구간마다 보내지 않고 세션 동안 한 줄에 모두 합쳐(post = 1, nf = 실패·중도 포기 수)
+        //   앱이 뒤로 갈 때·다음 접속 때만 보낸다 → 최종 스테이지와 그동안의 합계만 남는다
+        public const int STAGE_SOLO_MAX = 20;
+        static readonly string[] STAGE_SUM = { "in", "out", "etc", "out_gem" };
+
+        static void StageSend(int stage, string result, bool boss, bool ending, Dictionary<string, object> data)
+        {
+            var d = JObject.FromObject(data);
+            if (ending)
+            {
+                StageCommit();   // 엔딩 직전까지 모으던 구간
+                var post = LoadPend(K_STAGE_POST);
+                var m = post == null ? StageStart(d) : StageMerge(post, d);
+                int nf = (int)(post?["nf"] ?? 0) + (result == "clear" ? 0 : 1);
+                if (nf > 0) m["nf"] = nf;
+                m["post"] = 1; m["_ts"] = NowMs; m["_t"] = T;
+                PlayerPrefs.SetString(K_STAGE_POST, m.ToString(Formatting.None));
+                return;
+            }
+            // 보스 실패·중도 포기 전에 모으던 구간을 먼저 보낸다: 그 줄의 bal에는 모은 판이 이미 들어 있어서, 기기 시각 순서로 잔액 검사가 맞으려면 앞서야 한다
+            if (stage <= STAGE_SOLO_MAX || result != "clear") { StageCommit(); Enqueue("stage_end", d); Flush(); return; }
+            var pend = LoadPend(K_STAGE_PEND);
+            if (pend != null && Block((int)pend["stage"]) != Block(stage)) { StageCommit(); pend = null; }   // 구간이 바뀌었는데 남은 것 (새 게임 등)
+            var o = pend == null ? StageStart(d) : StageMerge(pend, d);
+            o["_ts"] = NowMs; o["_t"] = T;
+            if (!boss) { PlayerPrefs.SetString(K_STAGE_PEND, o.ToString(Formatting.None)); return; }
+            PlayerPrefs.DeleteKey(K_STAGE_PEND);
+            EnqueueStage(o);
+            Flush();
+        }
+
+        static int Block(int stage) => (stage - 1) / Math.Max(1, Defs.BOSS_EVERY);
+
+        // 모으기 시작: eid·세션·버전을 이때 정해 둔다 (탭이 닫혀 저장이 덜 끝나 다음 접속에 다시 보내도 같은 eid라 서버가 한 줄만 남긴다)
+        static JObject StageStart(JObject d)
+        {
+            d["_eid"] = NextEid(); d["_s"] = SessionId; d["_v"] = Application.version;
+            return d;
+        }
+
+        static JObject StageMerge(JObject a, JObject b)
+        {
+            var o = (JObject)b.DeepClone();
+            o["_eid"] = a["_eid"]; o["_s"] = a["_s"]; o["_v"] = a["_v"];
+            o["stage0"] = a["stage0"] ?? a["stage"]; o["score0"] = a["score0"] ?? a["score"];
+            o["c"] = (int)(a["c"] ?? 1) + 1;
+            foreach (var f in STAGE_SUM)
+                if (a[f] != null || b[f] != null) o[f] = JToken.FromObject(N((double)(a[f] ?? 0) + (double)(b[f] ?? 0)));
+            var up = new Dictionary<int, int>();
+            foreach (var u in ((JArray)a["up"] ?? new JArray()).Concat((JArray)b["up"] ?? new JArray())) up[(int)u[0]] = (int)u[1];
+            o["up"] = new JArray(up.Select(kv => new JArray(kv.Key, kv.Value)));
+            o["codex"] = new JArray(((JArray)a["codex"] ?? new JArray()).Concat((JArray)b["codex"] ?? new JArray()));
+            return o;
+        }
+
+        static JObject LoadPend(string key)
+        {
+            string js = PlayerPrefs.GetString(key, "");
+            if (js.Length == 0) return null;
+            try { return JObject.Parse(js); }
+            catch (Exception e) { Debug.LogWarning("[Telemetry] 스테이지 묶음을 읽지 못함: " + e.Message); PlayerPrefs.DeleteKey(key); return null; }
+        }
+
+        // 모으던 구간을 모은 만큼 보낸다
+        static void StageCommit() => StageCommit(K_STAGE_PEND);
+
+        // 앱이 뒤로 갈 때·다음 접속 때: 모으던 구간과 엔딩 뒤 합친 줄
+        static void StageCommitAll() { StageCommit(K_STAGE_PEND); StageCommit(K_STAGE_POST); }
+
+        static void StageCommit(string key)
+        {
+            var pend = LoadPend(key);
+            if (pend == null) return;
+            PlayerPrefs.DeleteKey(key);
+            EnqueueStage(pend);
+        }
+
+        static void Enqueue(string name, JObject d) => Enqueue(name, d.ToString(Formatting.None), NowMs, T, SessionId, NextEid(), Application.version, true);
+
+        // 모은 줄은 마지막 판의 시각, 모으기 시작할 때 정한 eid·세션·버전으로 넣는다
+        static void EnqueueStage(JObject o)
+        {
+            long ts = (long?)o["_ts"] ?? NowMs; double t = (double?)o["_t"] ?? T;
+            string eid = (string)o["_eid"], session = (string)o["_s"], version = (string)o["_v"];
+            foreach (var k in new[] { "_ts", "_t", "_eid", "_s", "_v" }) o.Remove(k);
+            Enqueue("stage_end", o.ToString(Formatting.None), ts, t, session ?? SessionId, eid ?? NextEid(), version ?? Application.version, true);
         }
 
         // 노드 키 → DB 숫자 ID (Upgrade 시트 Upg_ID). 없으면 0
@@ -218,14 +362,112 @@ namespace MoreMush
 
         // ===== 세계수 · 의뢰 =====
         // 세계수 성장(나이테·진화·꼬마 각성): 골드 out·bal, 균사석을 쓰면 out_gem·gem
-        public static void TreeUp(string id, int level, double gold, double gem) =>
-            Send("tree_up", Cost(new Dictionary<string, object> { ["id"] = id, ["lv"] = level }, gold, gem));
+        //   반복되는 레벨업(나이테 ring · 꼬마 klv_ · 장식 deco_)은 세계수 묶음에서 한 줄로 합친다 (TreeBegin 참고)
+        public static void TreeUp(string id, int level, double gold, double gem)
+        {
+            bool repeat = id == "ring" || id.StartsWith("klv_") || id.StartsWith("deco_");
+            Tree("tree_up", repeat ? "up:" + id : null, Cost(new Dictionary<string, object> { ["id"] = id, ["lv"] = level }, gold, gem));
+        }
         // 세계수 건축(장식 제작)
         public static void TreeBuild(string id, double gold, double gem) =>
-            Send("tree_build", Cost(new Dictionary<string, object> { ["id"] = id }, gold, gem));
+            Tree("tree_build", null, Cost(new Dictionary<string, object> { ["id"] = id }, gold, gem));
+        // 재화 소모가 없는 세계수 활동: 공물(in=경험치) · 선물(in=호감도 점수, n=개수) · 공방 즉시 완료(out_gem=균사석). 같은 활동·대상은 한 줄로 합친다
+        public static void TreeAct(string act, string id, double gain, int n, double gem)
+        {
+            var d = new Dictionary<string, object> { ["act"] = act, ["in"] = N(gain), ["n"] = n };
+            if (id != null) d["id"] = id;
+            Tree("tree_act", "act:" + act + ":" + id, Cost(d, 0, gem));
+        }
         // 의뢰 보상은 세계수 경험치 (cur = exp, bal = 세계수 경험치)
         public static void QuestClear(string id, string kind, int exp) =>
-            Send("quest_clear", new Dictionary<string, object> { ["id"] = id, ["kind"] = kind, ["cur"] = "exp", ["in"] = exp, ["bal"] = N(Game.G?.farm?.exp ?? 0) });
+            Tree("quest_clear", null, new Dictionary<string, object> { ["id"] = id, ["kind"] = kind, ["cur"] = "exp", ["in"] = exp, ["bal"] = N(Game.G?.farm?.exp ?? 0) });
+
+        // ===== 세계수 묶음 =====
+        // 세계수 화면에 있는 동안(TreeBegin ~ TreeEnd) 세계수 로그는 큐에 넣지 않고 모아 둔다. 같은 key는 한 줄로 합친다:
+        //   합계 out·out_gem·in·n, 마지막 값 lv·bal·gem, 첫 레벨 lv0, 합친 횟수 c. 세계수 화면을 벗어날 때 큐에 넣고 한 번에 보낸다.
+        //   모으는 동안 기기 파일(logtree.dat)에도 저장해, 세계수에서 앱이 꺼지면 다음 접속 때 큐에 넣어 접속 전송에 함께 보낸다
+        class Pending { public string key, ev, session, eid, version; public long ts; public double t; public JObject d; }
+        static readonly string[] SUM_FIELDS = { "out", "out_gem", "in", "n" }, LAST_FIELDS = { "lv", "bal", "gem" };
+        static List<Pending> tree = new List<Pending>();
+        static bool treeOpen;
+
+        public static void TreeBegin()
+        {
+            if (SaveIO.Suspended) return;
+            if (!inited) Init();
+            TreeCommit();
+            treeOpen = true;
+        }
+
+        public static void TreeEnd()
+        {
+            if (!treeOpen) return;
+            treeOpen = false;
+            TreeCommit();
+            Flush();
+        }
+
+        static void Tree(string ev, string key, Dictionary<string, object> data)
+        {
+            if (!treeOpen) { Send(ev, data); return; }
+            if (SaveIO.Suspended) return;
+            var d = JObject.FromObject(data);
+            var p = key == null ? null : tree.Find(x => x.key == key);
+            if (p == null)
+            {
+                tree.Add(new Pending { key = key, ev = ev, session = SessionId, eid = NextEid(), version = Application.version, ts = NowMs, t = T, d = d });
+                while (tree.Count > QUEUE_MAX) tree.RemoveAt(0);
+            }
+            else Merge(p, d);
+            SaveTree();
+        }
+
+        static void Merge(Pending p, JObject d)
+        {
+            var o = p.d;
+            if (o["lv"] != null && o["lv0"] == null) o["lv0"] = o["lv"];
+            foreach (var f in SUM_FIELDS)
+                if (d[f] != null) o[f] = JToken.FromObject(N((double)(o[f] ?? 0) + (double)d[f]));
+            foreach (var f in LAST_FIELDS)
+                if (d[f] != null) o[f] = d[f];
+            o["c"] = (int)(o["c"] ?? 1) + 1;
+            p.ts = NowMs; p.t = T;
+        }
+
+        static void TreeCommit()
+        {
+            if (tree.Count > 0)
+            {
+                foreach (var p in tree) Enqueue(p.ev, p.d.ToString(Formatting.None), p.ts, p.t, p.session, p.eid, p.version, false);
+                tree.Clear();
+                SaveQueue();
+            }
+            SaveTree();
+        }
+
+        static string TreePath => Path.Combine(Application.persistentDataPath, "logtree.dat");
+
+        static void SaveTree()
+        {
+            try
+            {
+                if (tree.Count == 0) { if (File.Exists(TreePath)) File.Delete(TreePath); }
+                else SecureStore.Save(TreePath, Uid, JsonConvert.SerializeObject(tree));
+            }
+            catch (Exception e) { Debug.LogWarning("[Telemetry] 세계수 묶음을 저장하지 못함: " + e.Message); }
+        }
+
+        // 지난 실행에서 세계수 화면에 있다가 꺼져 못 보낸 묶음
+        static void LoadTree()
+        {
+            tree = new List<Pending>();
+            try
+            {
+                if (SecureStore.Load(TreePath, Uid, out _, out var json))
+                    tree = JsonConvert.DeserializeObject<List<Pending>>(json) ?? new List<Pending>();
+            }
+            catch (Exception e) { Debug.LogWarning("[Telemetry] 세계수 묶음을 읽지 못함: " + e.Message); }
+        }
 
         static Dictionary<string, object> Cost(Dictionary<string, object> d, double gold, double gem)
         {
@@ -235,15 +477,20 @@ namespace MoreMush
         }
 
         // ===== 초반 구간 (FTUE) =====
-        // 단계마다 기기당 한 번만 보낸다. 번호는 FTUE_* 상수
+        // 단계마다 기기당 한 번만 보낸다. 번호는 FTUE_* 상수.
+        // 2단계부터는 이 기기에서 1단계(새 게임)를 보낸 경우만: 로그 도입 전부터 하던 유저가 퍼널 중간에 끼지 않게.
+        // 1·2단계는 바로 보낸다: 첫 판이 끝나기 전에 떠나는 유저도 퍼널에 잡히게 (3단계는 stage_end와 함께 간다)
         public const int FTUE_TITLE_START = 1, FTUE_FIRST_LAUNCH = 2, FTUE_FIRST_ROUND_END = 3, FTUE_FIRST_UPGRADE = 4, FTUE_FIRST_TREE = 5;
         public static void Ftue(int step)
         {
             if (SaveIO.Suspended) return;
             string done = PlayerPrefs.GetString(K_FTUE, ",");
             if (done.Contains("," + step + ",")) return;
+            if (step != FTUE_TITLE_START && !done.Contains("," + FTUE_TITLE_START + ",")) return;
             PlayerPrefs.SetString(K_FTUE, done + step + ",");
+            PlayerPrefs.Save();   // 저장 전에 꺼지면 다음 실행에서 같은 단계를 또 보낸다
             Send("ftue", new Dictionary<string, object> { ["step"] = step });
+            if (step <= FTUE_FIRST_LAUNCH) Flush();
         }
 
         // ===== 게임 클리어 (엔딩) — 기기당 한 번 =====
@@ -284,29 +531,18 @@ namespace MoreMush
                 int attempt = 0;
                 while (queue.Count > 0 && CanSend)
                 {
-                    // 앞에서부터 50건·20KB 안으로 묶는다
-                    var sb = new StringBuilder("[");
-                    int n = 0;
-                    for (; n < queue.Count && n < BATCH_MAX; n++)
+                    var sent = Batch(out string body);
+                    int n = sent.Count;
+                    using (var req = new UnityWebRequest(Target, "POST"))
                     {
-                        int len = Encoding.UTF8.GetByteCount(queue[n]) + 1;
-                        if (n > 0 && sb.Length + len + 1 > BATCH_BYTES) break;
-                        if (n > 0) sb.Append(',');
-                        sb.Append(queue[n]);
-                    }
-                    sb.Append(']');
-                    string target = url + (url.Contains("?") ? "&" : "?") + "k=" + UnityWebRequest.EscapeURL(key);
-                    using (var req = new UnityWebRequest(target, "POST"))
-                    {
-                        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(sb.ToString()));
+                        req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
                         req.downloadHandler = new DownloadHandlerBuffer();
                         req.SetRequestHeader("Content-Type", "application/json");
                         req.timeout = 15;
                         yield return req.SendWebRequest();
-                        string body = req.downloadHandler?.text?.Trim();
-                        if (req.result == UnityWebRequest.Result.Success && body == "ok")
+                        if (req.result == UnityWebRequest.Result.Success && req.downloadHandler?.text?.Trim() == "ok")
                         {
-                            queue.RemoveRange(0, n); SaveQueue(); attempt = 0;
+                            Remove(sent); attempt = 0;
                             // 연결 실패는 횟수만 모아 두었다가 연결되면 한 번 보낸다 (세션당 error 한도와 별개)
                             int fails = PlayerPrefs.GetInt(K_NETFAIL, 0);
                             if (fails > 0) { PlayerPrefs.SetInt(K_NETFAIL, 0); Send("error", new Dictionary<string, object> { ["msg"] = "net_fail", ["count"] = fails }); }
@@ -329,13 +565,73 @@ namespace MoreMush
             }
         }
 
+        static string Target => url + (url.Contains("?") ? "&" : "?") + "k=" + UnityWebRequest.EscapeURL(key);
+
+        // 앞에서부터 50건·20KB(바이트) 안으로 묶는다. 묶은 항목을 돌려준다
+        static List<string> Batch(out string body)
+        {
+            var sb = new StringBuilder("[");
+            var items = new List<string>();
+            int bytes = 2;
+            for (int i = 0; i < queue.Count && i < BATCH_MAX; i++)
+            {
+                int len = Encoding.UTF8.GetByteCount(queue[i]) + 1;
+                if (i > 0 && bytes + len > BATCH_BYTES) break;
+                if (i > 0) sb.Append(',');
+                sb.Append(queue[i]); bytes += len; items.Add(queue[i]);
+            }
+            body = sb.Append(']').ToString();
+            return items;
+        }
+
+        // 보낸 항목을 위치가 아니라 값으로 지운다 (보내는 사이 큐가 200을 넘어 앞이 밀려도 안 보낸 것을 지우지 않게)
+        static void Remove(List<string> sent)
+        {
+            var set = new HashSet<string>(sent);
+            queue.RemoveAll(set.Contains);
+            SaveQueue();
+        }
+
+        // 그 자리에서 한 묶음 보낸다 (뒤로 갈 때). 웹은 탭이 닫혀도 가는 sendBeacon이라 결과를 모르므로 큐에 남긴다
+        // (다음 전송 때 같은 eid로 다시 가도 서버가 한 줄만 남긴다). 그 밖에는 응답이 오면 큐에서 지운다
+        static void SendNow()
+        {
+            if (!CanSend || queue.Count == 0) return;
+            var sent = Batch(out string body);
+#if UNITY_WEBGL && !UNITY_EDITOR
+            MMM_Beacon(Target, body);
+#else
+            var req = new UnityWebRequest(Target, "POST")
+            {
+                uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body)),
+                downloadHandler = new DownloadHandlerBuffer(),
+                timeout = 15,
+            };
+            req.SetRequestHeader("Content-Type", "application/json");
+            req.SendWebRequest().completed += _ =>
+            {
+                if (req.result == UnityWebRequest.Result.Success && req.downloadHandler.text.Trim() == "ok") Remove(sent);
+                req.Dispose();
+            };
+#endif
+        }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // Assets/Plugins/WebGL/MMMTelemetry.jslib
+        [DllImport("__Internal")] static extern int MMM_Beacon(string url, string body);
+        [DllImport("__Internal")] static extern void MMM_HookVisibility(Action onHidden, Action onShown);
+        [DllImport("__Internal")] static extern void MMM_RunSet(int on);
+        [DllImport("__Internal")] static extern int MMM_RunGet();
+        [MonoPInvokeCallback(typeof(Action))] static void OnPageHidden() => Background();
+        [MonoPInvokeCallback(typeof(Action))] static void OnPageShown() => Foreground();
+#endif
+
         // 묶음이 400·413이면 앞의 n건을 한 건씩 보낸다 (깨진 한 건만 버리고 나머지는 살린다)
         static IEnumerator SendOneByOne(int n)
         {
             for (int i = 0; i < n && queue.Count > 0; i++)
             {
-                string target = url + (url.Contains("?") ? "&" : "?") + "k=" + UnityWebRequest.EscapeURL(key);
-                using (var req = new UnityWebRequest(target, "POST"))
+                using (var req = new UnityWebRequest(Target, "POST"))
                 {
                     req.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(queue[0]));
                     req.downloadHandler = new DownloadHandlerBuffer();
@@ -365,9 +661,9 @@ namespace MoreMush
             inst.StartCoroutine(Telemetry.Pump());
         }
 
-        // 창이 뒤로 갈 때(웹은 탭 숨김·포커스 잃음) 보낸다
-        void OnApplicationPause(bool paused) { Telemetry.MarkRunning(!paused); if (paused) Telemetry.Flush(); }
-        void OnApplicationFocus(bool focus) { Telemetry.MarkRunning(focus); if (!focus) Telemetry.Flush(); }
-        void OnApplicationQuit() => Telemetry.MarkRunning(false);
+        // 앱이 뒤로 가거나 꺼질 때 그 자리에서 보낸다 (웹 탭 숨김·닫기는 jslib의 visibilitychange·pagehide가 따로 부른다)
+        void OnApplicationPause(bool paused) { if (paused) Telemetry.Background(); else Telemetry.Foreground(); }
+        void OnApplicationFocus(bool focus) { if (focus) Telemetry.Foreground(); else Telemetry.Background(); }
+        void OnApplicationQuit() => Telemetry.Background();
     }
 }

@@ -44,8 +44,11 @@
 |---|---|
 | `session_start` | `first`, `sessions`, `bal`(세이브가 있으면) |
 | `stage_end` | `stage`, `result`(clear·fail·early_exit), `boss`, `score`, `in`, `out`, `bal`, `etc`, `up`[[Upg_ID, 레벨]], `codex`[버섯 번호], `gem`, `out_gem`, `boss_hp`(보스 fail·early_exit), `sec`(early_exit) |
-| `tree_up` | `id`(ring·stage·awaken_<꼬마>), `lv`, `out`, `bal`, 균사석을 쓰면 `out_gem`·`gem` |
+| (스테이지 묶음) | 1~20스테이지는 판마다. 21스테이지부터 보스 구간(21~30 …)의 클리어를 모아 보스 클리어 때 한 줄: `stage`·`result`·`boss`·`bal`·`gem`·`score`는 마지막 판, `stage0`·`score0`은 첫 판, `in`·`out`·`etc`·`out_gem`은 합계, `up`은 나중 레벨, `codex`는 이어 붙임, `c`(판 수). 보스 실패·중도 포기는 그 판만 바로. 엔딩 뒤에는 세션마다 한 줄(`post`:1, `nf` 실패·중도 포기 수). 모으던 것은 앱이 뒤로 갈 때·다음 접속 때 보낸다 |
+| `tree_up` | `id`(ring·stage·unlock_<꼬마>·klv_<꼬마>·awaken_<꼬마>·deco_<장식>), `lv`, `out`, `bal`, 균사석을 쓰면 `out_gem`·`gem` |
 | `tree_build` | `id`(장식), `out`, `bal`, `out_gem`·`gem` |
+| (세계수 묶음) | 세계수 화면에 있는 동안 `tree_up`·`tree_build`·`tree_act`·`quest_clear`는 모았다가 화면을 닫을 때 보낸다. 반복 레벨업(ring·klv_·deco_)과 같은 `tree_act`는 한 줄로 합친다: `c`(합친 횟수), `lv0`(첫 레벨), `out`·`out_gem`·`in`·`n`은 합계, `lv`·`bal`·`gem`은 마지막 값 |
+| `tree_act` | `act`(tribute 공물·gift 선물·craft_rush 공방 즉시 완료), `id`(꼬마·장식, 공물은 없음), `in`(경험치·호감도), `n`(개수), 즉시 완료는 `out_gem` |
 | `quest_clear` | `id`, `kind`(daily·weekly), `cur`:"exp", `in`(경험치), `bal`(세계수 경험치) |
 | `ftue` | `step` (1 새 게임 · 2 첫 발사 · 3 첫 판 끝 · 4 첫 업그레이드 · 5 첫 세계수) |
 | `crash` | `stage`, `ver` |

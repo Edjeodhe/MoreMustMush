@@ -192,6 +192,7 @@ namespace MoreMush
                 if (G == null)
                 {
                     G = new SaveData();
+                    Telemetry.ResetSnap();   // 새로 시작하므로 stage_end 차이 계산 기준도 0부터
                     if (SaveIO.LastLoadFailed) Notify(Loc.T("세이브를 읽지 못해 새로 시작해요 (이전 세이브는 따로 보관했어요)"));
                 }
                 else if (G.seenT > 0) away = Now() - G.seenT;   // 껐다 켠 동안 꼬마들이 채운 보따리
