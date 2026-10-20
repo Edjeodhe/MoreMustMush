@@ -34,6 +34,7 @@ namespace MoreMush
         public bool bossOn = true;                 // 보스 도전 (끄면 보스 스테이지에서 파밍만 한다. 보스에게 지면 꺼진다)
         public double play;
         public double lastNormalGold;              // 보스가 안 나온 마지막 판의 정산 골드 (보스 처치 보상 기준)
+        public double bagGoldPerSec;               // 일반 판 골드/초 평활값 (수확 보따리 골드 기준, Game.BagBaseUpdate)
         public bool ending;
         // 튜토리얼 (기획서 Ver.01): 0 첫 판(1스테이지) 전 · 1 1스테이지 클리어, 첫 노드 사기 · 2 첫 노드 산 뒤 "수확하러 가기" 유도 · 3 끝
         public int tut;
@@ -198,6 +199,7 @@ namespace MoreMush
             if (!IsFinite(g.gem)) g.gem = 0;
             if (!IsFinite(g.legacyDia) || g.legacyDia < 0) g.legacyDia = 0;
             if (!IsFinite(g.lastNormalGold) || g.lastNormalGold < 0) g.lastNormalGold = 0;
+            if (!IsFinite(g.bagGoldPerSec) || g.bagGoldPerSec < 0) g.bagGoldPerSec = 0;
 
             // prototype loadSave() migrations that still apply
             foreach (var id in g.hv.Keys) if (!g.hvOn.ContainsKey(id)) g.hvOn[id] = true;

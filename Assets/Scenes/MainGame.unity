@@ -34778,6 +34778,7 @@ GameObject:
   - component: {fileID: 896512440}
   - component: {fileID: 896512442}
   - component: {fileID: 896512441}
+  - component: {fileID: 1999000001}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -51544,6 +51545,7 @@ GameObject:
   - component: {fileID: 1267084041}
   - component: {fileID: 1267084043}
   - component: {fileID: 1267084042}
+  - component: {fileID: 1999000003}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -72682,6 +72684,7 @@ GameObject:
   - component: {fileID: 1748801888}
   - component: {fileID: 1748801890}
   - component: {fileID: 1748801889}
+  - component: {fileID: 1999000002}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -81841,6 +81844,54 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+--- !u!114 &1999000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896512439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uB3C4\uAC10"
+  authored: MushDex
+--- !u!114 &1999000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1748801887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uC138\uACC4\uC218"
+  authored: MushTree
+--- !u!114 &1999000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1267084040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uC2DC\uC791\uD558\uAE30"
+  authored: Stage Start
 --- !u!1 &2000525001 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -84637,6 +84688,7 @@ GameObject:
   - component: {fileID: 2065431522}
   - component: {fileID: 2065431524}
   - component: {fileID: 2065431523}
+  - component: {fileID: 2065431525}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -84763,6 +84815,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2065431521}
   m_CullTransparentMesh: 1
+--- !u!114 &2065431525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065431521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uACF5\uBC29"
+  authored: Harvesters
 --- !u!1 &2065440265
 GameObject:
   m_ObjectHideFlags: 0

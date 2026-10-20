@@ -38,6 +38,20 @@ namespace MoreMush.EditorTools
             EditorApplication.Exit(code);
         }
 
+        // 배치 -executeMethod MoreMush.EditorTools.ReleaseBuild.BatchWebGL : WebGL만 빌드 (결과 Builds/build_report.txt)
+        public static void BatchWebGL()
+        {
+            int code = 0; string text;
+            var origTarget = EditorUserBuildSettings.activeBuildTarget;
+            var origGroup = BuildPipeline.GetBuildTargetGroup(origTarget);
+            try { text = WebGL(); if (text.Contains("결과: 실패")) code = 1; }
+            catch (Exception e) { text = "실패: " + e; code = 1; }
+            finally { Restore(origTarget, origGroup); }
+            Directory.CreateDirectory(Out("Builds"));
+            File.WriteAllText(Out("Builds/build_report.txt"), text);
+            EditorApplication.Exit(code);
+        }
+
         // WebGL → Windows 순서로 빌드하고 원래 활성 타깃으로 복귀
         public static string All()
         {

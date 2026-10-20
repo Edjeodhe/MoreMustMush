@@ -16,7 +16,9 @@ namespace MoreMush
         public const int CODEX_PER_CAT_FOR_TREE = 2;
 
         // 조건(스테이지·도감·첫 패배)은 되돌아가지 않으므로 매번 계산해도 같다. feat는 알림(Newly)과 기존 세이브(OpenAll)용
-        public static bool On(string k) => G == null || (G.feat.TryGetValue(k, out var on) && on) || Ready(k);
+        public static bool On(string k) => G == null || Opened(k) || Ready(k);
+        // 열린 것으로 기록됐는지 (Newly·OpenAll). 조건만 채우고 아직 알리지 않은 기능은 false
+        public static bool Opened(string k) => G != null && G.feat.TryGetValue(k, out var on) && on;
 
         // 조건. 스테이지 N 클리어 = 지금 스테이지가 N보다 큼
         static bool Ready(string k) => k switch
@@ -45,7 +47,11 @@ namespace MoreMush
             var o = new List<string>();
             if (G == null) return o;
             foreach (var k in ALL)
-                if (!(G.feat.TryGetValue(k, out var on) && on) && Ready(k)) { G.feat[k] = true; o.Add(k); }
+                if (!(G.feat.TryGetValue(k, out var on) && on) && Ready(k))
+                {
+                    G.feat[k] = true; o.Add(k);
+                    if (k == WORLDTREE) BagRestart();   // 방치 보상은 세계수가 열린 뒤부터 쌓인다
+                }
             return o;
         }
 

@@ -492,6 +492,7 @@ GameObject:
   - component: {fileID: 529177180}
   - component: {fileID: 529177182}
   - component: {fileID: 529177181}
+  - component: {fileID: 1999000002}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -977,6 +978,7 @@ GameObject:
   - component: {fileID: 664244087}
   - component: {fileID: 664244089}
   - component: {fileID: 664244088}
+  - component: {fileID: 1999000003}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1114,6 +1116,7 @@ GameObject:
   - component: {fileID: 970061232}
   - component: {fileID: 970061234}
   - component: {fileID: 970061233}
+  - component: {fileID: 1999000004}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1720,6 +1723,7 @@ GameObject:
   - component: {fileID: 1788296079}
   - component: {fileID: 1788296081}
   - component: {fileID: 1788296080}
+  - component: {fileID: 1999000001}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1976,3 +1980,67 @@ SceneRoots:
   - {fileID: 474229430}
   - {fileID: 157141767}
   - {fileID: 139774812}
+--- !u!114 &1999000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788296078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uC2DC\uC791\uD558\uAE30"
+  authored: Start
+--- !u!114 &1999000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529177179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uC635\uC158"
+  authored: Option
+--- !u!114 &1999000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664244086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uAC8C\uC784 \uC885\uB8CC"
+  authored: Exit Game
+--- !u!114 &1999000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970061231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f87874a6b2d24244ba2023b768369843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MoreMush.LocText
+  role: 0
+  preset: -1
+  key: "\uCD08\uAE30\uD654"
+  authored: Reset
