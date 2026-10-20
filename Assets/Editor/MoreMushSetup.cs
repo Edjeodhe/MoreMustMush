@@ -224,14 +224,15 @@ namespace MoreMush.EditorTools
 
         // Combo counter skin (sheet "combo_skin" → UI/Combo/*): <sprite="ComboDigits" name="n7">, not tinted.
         // n* = everyday gold set, c* = critical set; each set is scaled so its median digit is H tall (the crit
-        // digits carry sparkles and a wider rim, so they are measured on their own), the COMBO words keep their size
-        // next to their set's digits. critical / super_combo_* are shown as Images, not glyphs.
+        // digits carry sparkles and a wider rim, so they are measured on their own), the COMBO words go with their
+        // set's digits, critical (the word over critical damage numbers) goes with the crit set at its painted size.
+        // super_combo_* are shown as Images, not glyphs.
         [MenuItem("MoreMush/Build Combo Digit Sprite Asset")]
         public static void BuildComboSpriteAsset()
         {
             const float H = 128;
             var src = ResolvedArt().Where(kv => kv.Key.StartsWith("UI/Combo/")).ToDictionary(kv => Path.GetFileName(kv.Key), kv => kv.Value)
-                .Where(kv => (kv.Key.Length == 2 && (kv.Key[0] == 'n' || kv.Key[0] == 'c')) || kv.Key == "combo_n" || kv.Key == "combo_c")
+                .Where(kv => (kv.Key.Length == 2 && (kv.Key[0] == 'n' || kv.Key[0] == 'c')) || kv.Key == "combo_n" || kv.Key == "combo_c" || kv.Key == "critical")
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
             if (src.Count == 0) { Debug.LogWarning("[MoreMush] no UI/Combo art"); return; }
             var texs = src.ToDictionary(kv => kv.Key, kv => LoadReadable(kv.Value));
@@ -242,7 +243,9 @@ namespace MoreMush.EditorTools
             }
             float kn = K('n'), kc = K('c');
             var names = texs.Keys.OrderBy(n => n, System.StringComparer.Ordinal).ToList();
-            var scaled = names.ToDictionary(n => n, n => Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * (n[0] == 'n' || n == "combo_n" ? kn : kc))));
+            // the painted COMBO word is about half a digit tall; a little bigger reads better next to the number
+            float Word(string n) => n.StartsWith("combo") ? 1.3f : 1;
+            var scaled = names.ToDictionary(n => n, n => Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * (n[0] == 'n' || n == "combo_n" ? kn : kc) * Word(n))));
             PackSpriteAsset("ComboDigits", names, scaled, H, (n, h) => h);
         }
 

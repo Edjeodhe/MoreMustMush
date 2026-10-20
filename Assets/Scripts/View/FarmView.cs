@@ -566,7 +566,7 @@ namespace MoreMush
         public static float ViewK = 1;
         public static Vector2 ViewCenter = new Vector2(WT.camX, 540);   // 화면 가운데 (무대 px)
         const float VIEW_MIN = 0.4f, VIEW_MAX = 1.2f, VIEW_STEP = 0.88f;
-        float viewTarget = 1; Vector2 viewFocus; bool viewFocusOn;
+        float viewTarget = 1; Vector2 viewFocus; bool viewFocusOn, viewPan;
 
         void UpdateView(float dt)
         {
@@ -578,6 +578,19 @@ namespace MoreMush
                 {
                     viewTarget = Mathf.Clamp(viewTarget * (sc > 0 ? VIEW_STEP : 1 / VIEW_STEP), VIEW_MIN, VIEW_MAX);
                     viewFocus = ToStage(m.position.ReadValue()); viewFocusOn = true;
+                }
+            }
+            // 휠을 꾹 누른 채 끌면 화면을 옮긴다 (손으로 잡아 끄는 방향 그대로). 누르기는 무대 위에서만 시작, 끄는 중엔 UI 위로 가도 이어진다
+            if (m != null)
+            {
+                if (m.middleButton.wasPressedThisFrame && !App.ModalOpen && held == null && !(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())) viewPan = true;
+                if (!m.middleButton.isPressed) viewPan = false;
+                if (viewPan)
+                {
+                    var d = m.delta.ReadValue();
+                    float px = 1080 * Zoom * ViewK / Mathf.Max(1, Screen.height);   // 화면 1px = 무대 몇 px
+                    ViewCenter += new Vector2(-d.x, d.y) * px;
+                    viewFocusOn = false;
                 }
             }
             float k = Mathf.Abs(ViewK - viewTarget) < 0.002f ? viewTarget : Mathf.Lerp(ViewK, viewTarget, 1 - Mathf.Exp(-dt * 12));

@@ -34,7 +34,7 @@ namespace MoreMush
     public static partial class Game
     {
         public static SaveData G;
-        public static class DBG { public static bool open, infinite, allSeeds; public static int speed = 1; }
+        public static class DBG { public static bool open, infinite, allSeeds, allNodes; public static int speed = 1; }   // allNodes: 개발자 치트 — 업그레이드 노드 선행 조건 무시
 
         public static void SaveGame() => SaveIO.Save(G);
 
@@ -122,7 +122,7 @@ namespace MoreMush
         static void Pay(Cost c) { G.gold -= c.gold; G.gem -= c.gem; }
 
         // 부모 조건: 보통은 1레벨 이상, 단계 노드(II·III·IV)는 부모가 최대 레벨이어야 한다
-        public static bool ParentOk(Node n) => (n.parent == null || Lv(n.parent) >= 1) && (n.req == null || Lv(n.req) >= NODE[n.req].max);
+        public static bool ParentOk(Node n) => DBG.allNodes || (n.parent == null || Lv(n.parent) >= 1) && (n.req == null || Lv(n.req) >= NODE[n.req].max);
 
         public static string NodeState(Node n)
         {

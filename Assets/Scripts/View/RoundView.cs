@@ -6,7 +6,7 @@ using static MoreMush.Defs;
 namespace MoreMush
 {
     // Draws RoundSim.R every frame (prototype drawRound) into pooled scene objects under the Field root.
-    public class RoundView : MonoBehaviour
+    public partial class RoundView : MonoBehaviour
     {
         [Header("Field (world)")]
         public Transform field;                 // field root: scaled by ZOOM, shaken
@@ -128,6 +128,7 @@ namespace MoreMush
             bossStr.Clear();
             shrooms.Trim(0); balls.Trim(0); extraBars.Trim(0); devices.Trim(0); clouds.Trim(0); parts.Trim(0); flyers.Trim(0); lines.Trim(0); aimLines.Trim(0); ringFx.Trim(0); fxPool.Trim(0);
             ReleaseTexts(true);
+            ReleaseCombos();
         }
 
         // live: 이번 프레임에 시뮬레이션이 진행됐는지 (일시정지·창·히트스톱이면 false → 흔들림·반짝이를 멈춘다)
@@ -284,16 +285,8 @@ namespace MoreMush
 
             festTint.enabled = R.festOn;
             if (festTint.enabled) { festTint.color = new Color(1, 190 / 255f, 60 / 255f, 0.05f + 0.02f * Mathf.Sin(now * 8)); festTint.transform.localPosition = Art.P(W / 2, H / 2); festTint.transform.localScale = new Vector3(W / Art.PPU, H / Art.PPU, 1); }
-            acornFrame.enabled = R.acornT > 0;
-            if (acornFrame.enabled)
-            {
-                float x0 = RoundSim.FX0 + 6, y0 = RoundSim.FY0 + 6, x1 = RoundSim.FX1 - 6, y1 = RoundSim.FY1 - 6;
-                acornFrame.positionCount = 4; acornFrame.loop = true;
-                var fp = PosBuf(4); fp[0] = Art.P(x0, y0); fp[1] = Art.P(x1, y0); fp[2] = Art.P(x1, y1); fp[3] = Art.P(x0, y1);
-                acornFrame.SetPositions(fp);
-                acornFrame.widthMultiplier = 12 / Art.PPU;
-                acornFrame.startColor = acornFrame.endColor = new Color(1, 220 / 255f, 100 / 255f, 0.4f + 0.2f * Mathf.Sin(now * 10));
-            }
+            // 도토리(점수 ×2) 동안 필드 둘레에 깜빡이던 노란 네모 테두리는 사용자 요청으로 뺐다 (2026-10-20)
+            if (acornFrame != null) acornFrame.enabled = false;
 
             // 날아가는 버섯
             int nf = 0;
@@ -307,7 +300,7 @@ namespace MoreMush
             }
             flyers.Trim(nf);
 
-            if (textLayer != null) DrawTexts(R, z);   // 필드 글자 층(캔버스)이 없으면 글자만 건너뛴다
+            if (textLayer != null) { DrawTexts(R, z); DrawCombos(R, z, live); }   // 필드 글자 층(캔버스)이 없으면 글자만 건너뛴다
         }
 
         LineRenderer Circle(int i, float x, float y, float r, float width) => Ellipse(i, x, y, r, r, 0, width);
@@ -444,9 +437,8 @@ namespace MoreMush
                 float c = t.crit ? 3.4f : 2.4f, e = Mathf.Clamp01(t.t / 0.18f) - 1;
                 float pop = Mathf.Max(0.05f, 1 + (c + 1) * e * e * e + c * e * e) * (k > 0.75f ? 1 - (k - 0.75f) * 0.8f : 1);
                 string col = t.coin || t.golden ? "#efcb6a" : t.crit ? "#e8705c" : TierCols[t.tier];
-                // 값이 바뀌지 않으니 한 번만 만든다. 그림 숫자(DmgDigits)가 있으면 치명타는 "치명!" 글자 대신 숫자 뒤 느낌표
-                t.view ??= t.coin ? DmgDigits.Spell($"+{U.FmtN(t.v, 1)}G") ?? $"+{U.FmtN(t.v, 1)}G"
-                    : DmgDigits.Spell(t.crit ? U.Fmt(t.v) + "!" : "+" + U.Fmt(t.v)) ?? (t.crit ? Loc.T("치명!") + " " : "+") + U.Fmt(t.v);
+                // 값이 바뀌지 않으니 한 번만 만든다
+                t.view ??= t.coin ? DmgDigits.Spell($"+{U.FmtN(t.v, 1)}G") ?? $"+{U.FmtN(t.v, 1)}G" : HitView(t);
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
             foreach (var l in R.labels)
@@ -469,6 +461,19 @@ namespace MoreMush
             }
             ReleaseTexts(false);
         }
+
+        // 데미지는 + 없이 1000부터 단위 표기(1.25K·300K·4.5M, 1 아래 피해가 "0"으로 보이지 않게 올림), 점수(그루터기)는 +.
+        // 치명타는 숫자 위에 숫자보다 작은 CRITICAL! 그림 글자(ComboDigits), 그 글자가 없으면 숫자 뒤 느낌표
+        static string HitView(FloatText t)
+        {
+            string n = t.dmg ? U.Fmt(System.Math.Ceiling(t.v), 1000) : "+" + U.Fmt(t.v);
+            string num = DmgDigits.Spell(n);
+            if (num == null) return t.crit ? Loc.T("치명!") + " " + n : n;
+            if (!t.crit) return num;
+            string tag = ComboDigits.Critical;
+            return tag != null ? "<size=" + CRIT_TAG + "%>" + tag + "</size><br>" + num : num + DmgDigits.Spell("!");
+        }
+        const int CRIT_TAG = 140;   // CRITICAL! 글자 크기 (%). 글자 그림이 숫자 높이의 약 절반이라 140%여도 숫자 높이의 약 3/4
 
         void Text(object key, string s, float x, float y, float size, float pop, string col, float alpha, float z)
         {

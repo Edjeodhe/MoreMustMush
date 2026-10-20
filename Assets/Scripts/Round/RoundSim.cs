@@ -51,8 +51,6 @@ namespace MoreMush
         public List<FloatText> texts = new List<FloatText>();
         public List<Flyer> flyers = new List<Flyer>();
         public List<Label> labels = new List<Label>();
-        public List<ComboPop> combos = new List<ComboPop>();
-        public const float COMBO_LIFE = 1.15f;   // 마지막 타격 뒤 콤보 숫자가 떠 있는 시간 (끝 0.25초에 사라진다)
         public double score;
         public Dictionary<string, double> gains = new Dictionary<string, double> { ["ed"] = 0, ["md"] = 0, ["ps"] = 0 };
         public int harvests, maxCombo, maxBalls, maxChain;

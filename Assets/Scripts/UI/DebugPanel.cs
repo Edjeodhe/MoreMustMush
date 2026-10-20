@@ -38,6 +38,7 @@ namespace MoreMush
             new Cheat(Key.Digit9, "dbg-stage", null, "스테이지 +10"),
             new Cheat(Key.Digit0, "dbg-bulk", null, "싼 강화부터 일괄 구매"),
             new Cheat(Key.K, "dbg-specials", null, "정령(꼬마) 모두 합류"),
+            new Cheat(Key.U, "dbg-nodes", null, "업그레이드 노드 모두 해금 켜기/끄기"),
             new Cheat(Key.S, "dbg-spd", "cycle", "라운드 배속 1→2→4→8"),
             new Cheat(Key.I, "dbg-inf", null, "라운드 시간 무한 켜기/끄기"),
             new Cheat(Key.T, "dbg-grow", null, "세계수 한 단계 성장 (비용 없이 진화)"),
@@ -100,7 +101,7 @@ namespace MoreMush
             if (fpsAcc > 0.5f) { fps = Mathf.RoundToInt(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0; }
             var R = StageController.I != null ? StageController.I.Round : null;
             info.text = $"FPS {fps}" + (R != null ? " · " + Loc.F("수확기 {0} · 버섯 {1} · 군락지 {2}/{3}", R.balls.Count, R.shrooms.Count, R.colonies.Count, R.st.maxCol) : "")
-                + "\n" + Loc.F("배속 {0} · 해금 {1} · 무한 {2} · 밸런스 {3}", DBG.speed, DBG.allSeeds ? "ON" : "off", DBG.infinite ? "ON" : "off", TUNE.n)
+                + "\n" + Loc.F("배속 {0} · 해금 {1} · 무한 {2} · 밸런스 {3}", DBG.speed, DBG.allSeeds ? "ON" : "off", DBG.infinite ? "ON" : "off", TUNE.n) + (DBG.allNodes ? " · 노드 해금 ON" : "")
                 + (G != null ? "\n" + Loc.F("스테이지 {0} · 골드 {1} · 균사석 {2}", StageNow(), U.Fmt(G.gold), U.Fmt(G.gem)) : "")
                 + (rain ? "\n골드 자동 증가 ON" : "")
                 + (G != null ? "\n고른 정령: " + KidText(SelKid()) : "")
@@ -257,6 +258,7 @@ namespace MoreMush
                     Saved(KidText(kid));
                     break;
                 }
+                case "dbg-nodes": DBG.allNodes = !DBG.allNodes; Saved(DBG.allNodes ? "업그레이드 노드 모두 해금 (선행 조건 무시)" : "업그레이드 노드 모두 해금 끔"); break;
                 case "dbg-specials": foreach (var k in SPECIALS) G.specials[k.id] = true; Saved(Loc.T("꼬마를 모두 합류시켰어요")); break;
                 case "dbg-bulk":
                     var res = BulkBuy(CAT_KEYS, 0, false);

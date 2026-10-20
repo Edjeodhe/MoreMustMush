@@ -187,8 +187,6 @@ namespace MoreMush
             // numbers jump up, slow down and drift aside instead of sliding up at a constant speed
             foreach (var tx in texts) { tx.t += h; tx.x += tx.vx * h; tx.y += tx.vy * h; tx.vy = Mathf.Min(tx.vy + 300 * h, -20); tx.vx *= 0.94f; }
             texts.RemoveAll(tx => tx.t >= (tx.tier >= 2 ? 1.2f : 0.8f));
-            foreach (var c in combos) { c.t += h; c.y -= 14 * h; }
-            combos.RemoveAll(c => c.t >= COMBO_LIFE);
             foreach (var l in labels) { l.t += h; l.y -= 25 * h; }
             labels.RemoveAll(l => l.t >= 1.4f);
             foreach (var r in rings) r.t += h;
@@ -289,14 +287,14 @@ namespace MoreMush
             flamePal = fi;
             if (chain % FLAME_STEP == 0)
             {
-                feverMsg = new FeverMsg { text = "SUPER COMBO!", sub = $"{U.Fmt(chain)} COMBO", lv = 2, pal = fi, noIcon = true };
+                feverMsg = new FeverMsg { text = "SUPER COMBO!", sub = $"{U.Fmt(chain)} COMBO", lv = 2, n = chain, pal = fi, noIcon = true };
                 flash = Mathf.Max(flash, 0.3f);
                 Snd.Record(); Snd.Tone(260 + fi * 60, 0.6f, Snd.Wave.Saw, 0.3f, 3);
             }
             int lv = FeverLv(chain);
             if (lv > fever)
             {
-                fever = lv; feverMsg = new FeverMsg { text = FEVER[lv - 1].n, lv = lv };
+                fever = lv; feverMsg = new FeverMsg { text = FEVER[lv - 1].n, lv = lv, n = chain };
                 flash = Mathf.Max(flash, 0.5f); shake = Mathf.Max(shake, 0.4f);
                 Snd.Record(); Snd.Tone(lv == 2 ? 220 : 180, 0.5f, Snd.Wave.Saw, 0.35f, 3);
             }
