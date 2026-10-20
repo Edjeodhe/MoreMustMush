@@ -37,6 +37,7 @@ namespace MoreMush
         public static readonly int BAR_CLONE_MAX = Db.CInt("BAR_CLONE_MAX", 0);
         public static double SkillPow(int P) => 1 + 0.75 * P;   // 스킬 위력 배율 (피해·시간·속도)
         public static double KidRate(int L) => V("md_kid", L);
+        public static float MapZoom2() => (float)V("md_map2", 1);   // 필드 넓히기 마지막 칸(md_map2)의 화면 확대
         public static double MultiRate(int L) => V("ed_multi", L);
 
         // 노드 효과 값 (DB Efx_Lv0~4). 레벨은 0~최대 레벨로 자른다
@@ -362,6 +363,7 @@ namespace MoreMush
             E["ed_giant"] = L => Loc.F("라운드마다 {0} 확률로 거대 버섯", U.Pct(NF.ed_giant(L)));
             E["ed_multi"] = L => L > 0 ? Loc.F("수확할 때 {0} 확률로 버섯 ×3", U.Pct(MultiRate(L))) : Loc.T("없음");
             // ── 약용 (바·스킬·필드) ──
+            E["md_map2"] = L => { float z = L > 0 ? (float)V("md_map2", 1) : MAP_ZOOM[MAP_ZOOM.Length - 1]; return Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / z), U.JsRound(H / z), F(z)); };
             E["md_map"] = L => Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / MAP_ZOOM[L]), U.JsRound(H / MAP_ZOOM[L]), F(MAP_ZOOM[L]));
             E["md_bar"] = L => $"{U.JsRound(150 * NF.md_bar(L))}px";
             E["md_combo"] = L => Loc.F("콤보당 +{0}배", F(NF.md_combo(L), 3));

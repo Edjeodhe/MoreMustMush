@@ -116,7 +116,7 @@ namespace MoreMush
         void RenderStage()
         {
             if (stageText == null || G == null) return;
-            string n = StageNow().ToString();
+            string n = StageLabel(StageNow());   // 튜토리얼 판 T1~T4, 그 뒤 1부터 (5회차 P-2)
             UIUtil.SetText(stageText, Loc.F("스테이지 {0}", n));
         }
 
@@ -203,16 +203,16 @@ namespace MoreMush
         {
             if (G == null) return;
             G.bossOn = !G.bossOn; SaveGame(); Snd.Ui();
-            App.Notify(G.bossOn ? Loc.F("보스 도전 켬 · 스테이지 {0}에서 보스와 싸워요", NextBossStage(StageNow())) : Loc.T("보스 도전 끔 · 보스 스테이지에서는 파밍만 해요"));
+            App.Notify(G.bossOn ? Loc.F("보스 도전 켬 · 스테이지 {0}에서 보스와 싸워요", NextBossStage(ContentNow())) : Loc.T("보스 도전 끔 · 보스 스테이지에서는 파밍만 해요"));
             RenderBoss();
         }
 
         void RenderBoss()
         {
             if (bossLabel == null || G == null) return;
-            int bs = NextBossStage(StageNow());
+            int bs = NextBossStage(ContentNow());   // 콘텐츠(표시) 스테이지
             var b = BossAt(bs);
-            string where = b == null ? "" : bs == StageNow() ? Loc.F("지금 스테이지 {0} · {1}", bs, b.n) : Loc.F("스테이지 {0} · {1}", bs, b.n);
+            string where = b == null ? "" : bs == ContentNow() ? Loc.F("지금 스테이지 {0} · {1}", bs, b.n) : Loc.F("스테이지 {0} · {1}", bs, b.n);
             string state = G.bossOn ? "<color=#b8321e>ON</color>" : "<color=#2a5a9a>OFF</color>";
             UIUtil.SetText(bossLabel, $"{Loc.T("보스 도전 버튼")} {state}\n<size=70%>{where}</size>");
             if (bossFrame != null) bossFrame.color = G.bossOn ? U.Hex("#fff0e6") : U.Hex("#eef7ff");

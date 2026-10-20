@@ -20,17 +20,19 @@ namespace MoreMush
         // 열린 것으로 기록됐는지 (Newly·OpenAll). 조건만 채우고 아직 알리지 않은 기능은 false
         public static bool Opened(string k) => G != null && G.feat.TryGetValue(k, out var on) && on;
 
-        // 조건. 스테이지 N 클리어 = 지금 스테이지가 N보다 큼
+        // 조건. 스테이지 N 클리어 = 지금 스테이지가 N보다 큼.
+        // 온보딩 해금(강화·도감·기록·날씨)은 내부 판 번호(G.stage, 튜토리얼 T1~T4 포함)로 센다 — 같은 플레이 판 수에 열린다.
+        // 의뢰는 보스 기준이라 BossCleared(콘텐츠 스테이지)로 (5회차 P-2)
         static bool Ready(string k) => k switch
         {
-            UPGRADE => G.stage > 1,                                   // 1스테이지(튜토리얼) 클리어
-            CODEX => G.stage > 3,                                     // 3스테이지 클리어
+            UPGRADE => G.stage > 1,                                   // 첫 판(T1 튜토리얼) 클리어
+            CODEX => G.stage > 3,                                     // 3번째 판(T3) 클리어
             RECORDS => G.stage > 3,                                   // 기획서에 없음 — 도감과 함께 연다
-            WEATHER => G.stage > 5,                                   // 5스테이지 클리어
+            WEATHER => G.stage > 5,                                   // 5번째 판(표시 1스테이지) 클리어
             WORLDTREE => CodexReady(),                                // 일정 도감 해금
             SKIN => CodexReady(),
             BOSS => G.bossFailed,                                     // 보스에게 처음 졌을 때 (보스 도전 버튼)
-            QUEST => BossCleared(FIRST_BOSS_STAGE),                   // 첫 보스 클리어
+            QUEST => BossCleared(FIRST_BOSS_STAGE),                   // 첫 보스(표시 10스테이지 = 14번째 판) 클리어
             _ => true,
         };
 

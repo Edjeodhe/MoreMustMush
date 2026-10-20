@@ -74,12 +74,26 @@ namespace MoreMush
             return m;
         }
 
+        // 포자 구름 이속저하 (5회차 P-8): 기본 -25%, 보스를 하나 처치할 때마다 -3%p 더, 상한 -35%. 판 시작 때 한 번 정한다
+        public const float SPORE_SLOW_BASE = 0.25f, SPORE_SLOW_PER_BOSS = 0.03f, SPORE_SLOW_MAX = 0.35f;
+        float sporeSlowMul = 1 - SPORE_SLOW_BASE;   // 이동 속도에 곱하는 값 (0.75 → 0.65)
+
+        // 지금까지 처치한 보스 수: 보스 스테이지(IsBossStage/NextBossStage)를 앞에서부터 세며 BossCleared로 확인한다 (스테이지 번호 계산은 Defs/Game 쪽 규칙을 그대로 따른다)
+        static int BossesCleared()
+        {
+            int n = 0;
+            for (int s = NextBossStage(1); BossCleared(s); s = NextBossStage(s + 1)) n++;
+            return n;
+        }
+
+        static float SporeSlowMulNow() => 1 - Mathf.Min(SPORE_SLOW_MAX, SPORE_SLOW_BASE + SPORE_SLOW_PER_BOSS * BossesCleared());
+
         float EffMul(Ball b)
         {
             float m = b.jf * (float)HV[b.hv].spdMul;
             if (b.accel > 0) m *= b.accelMul;
             if (b.moss > 0) m *= 1 + 0.4f * (float)st.devMul;
-            if (b.slow > 0) m *= 0.65f;
+            if (b.slow > 0) m *= sporeSlowMul;
             return m;
         }
 

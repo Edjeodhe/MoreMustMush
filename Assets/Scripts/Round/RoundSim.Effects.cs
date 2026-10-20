@@ -400,7 +400,7 @@ namespace MoreMush
             // 보스를 쓰러뜨리면 "이번 판 골드와 직전 일반 판 골드 중 큰 쪽"의 BOSS_REWARD_MUL배를 더 받고 균사석도 받는다
             // (보스 타격 골드는 BOSS_SCORE_MUL로 줄었고, 처치하면 판이 바로 끝나므로 직전 일반 판이 기준)
             double bossGold = BossRound && bossCleared ? Math.Floor(Math.Max(scoreGold + bonus, G.lastNormalGold) * BOSS_REWARD_MUL) : 0;
-            int bossGem = BossRound && bossCleared ? BossGem(G.stage) + (int)st.bossGemAdd : 0;
+            int bossGem = BossRound && bossCleared ? BossGem(ContentStage(G.stage)) + (int)st.bossGemAdd : 0;
             int bossShrooms = BossRound && bossCleared ? BossShroomReward() : 0;
             G.gold += scoreGold + bonus - penalty + bossGold;
             G.gem += bossGem;
@@ -415,14 +415,14 @@ namespace MoreMush
             LogDamage(G.stage); LastSummary = s;
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
-            // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍)
+            // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍). G.stage는 내부 판 번호, 보스 판정은 콘텐츠 스테이지
             if (BossRound && !bossCleared) { G.bossOn = false; G.bossFailed = true; }   // 처음 지면 보스 도전 버튼이 열린다 (Unlock.BOSS)
-            else if (!aborted && (!IsBossStage(G.stage) || BossRound)) G.stage++;
+            else if (!aborted && (!IsBossStage(ContentStage(G.stage)) || BossRound)) G.stage++;
             s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);
             s.stored = StoreRound(bossShrooms > 0);
             if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hvOn["gold"] = OnHvs().Count < HvSlots(); G.hv["gold"] = 1; s.goldHv = true; }
-            var newTheme = s.nextStage > s.stage ? THEMES.FirstOrDefault(th => th.from > 1 && th.from == StageNow()) : null;
+            var newTheme = s.nextStage > s.stage ? THEMES.FirstOrDefault(th => th.from > 1 && th.from == ContentNow()) : null;
             if (newTheme != null) G.theme = newTheme.id;
             s.unlocks = CheckUnlocks();
             SaveGame();

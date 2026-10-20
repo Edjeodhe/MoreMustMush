@@ -30,7 +30,7 @@ namespace MoreMush
         public Quests quest = new Quests();        // 일일·주간 의뢰 (예전 마을 의뢰 "quests"와는 다른 필드)
         public Records rec = new Records();
         public int rounds;
-        public int stage = 1;                      // 지금 스테이지. 보스 스테이지(10의 배수)는 보스를 쓰러뜨려야 넘어간다
+        public int stage = 1;                      // 지금 판 번호 (내부, 튜토리얼 T1~T4 포함). 표시 스테이지 = stage − Defs.TUT_ROUNDS. 보스 스테이지(표시 10의 배수)는 보스를 쓰러뜨려야 넘어간다
         public bool bossOn = true;                 // 보스 도전 (끄면 보스 스테이지에서 파밍만 한다. 보스에게 지면 꺼진다)
         public double play;
         public double lastNormalGold;              // 보스가 안 나온 마지막 판의 정산 골드 (보스 처치 보상 기준)

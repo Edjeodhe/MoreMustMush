@@ -1,5 +1,5 @@
 {
-  "_source": "MMM_DB_Ver.05.xlsx",
+  "_source": "MMM_DB_Ver.06.xlsx",
   "Upgrade": [
     {
       "Upg_ID": 13002,
@@ -523,11 +523,11 @@
       "Skill": "",
       "Icon": "",
       "Color": "",
-      "Efx_Lv0": 1.5,
-      "Efx_Lv1": 1.35,
-      "Efx_Lv2": 1.2,
-      "Efx_Lv3": 1.1,
-      "Efx_Lv4": 1.0
+      "Efx_Lv0": 1.68,
+      "Efx_Lv1": 1.5,
+      "Efx_Lv2": 1.35,
+      "Efx_Lv3": 1.2,
+      "Efx_Lv4": 1.1
     },
     {
       "Upg_ID": 12003,
@@ -1198,7 +1198,7 @@
       "Upg_Req": 0,
       "Branch": "ps",
       "Type": "cnt",
-      "Efx_MaxLv": 1,
+      "Efx_MaxLv": 2,
       "Cost_ID": 90055,
       "Tier": 1,
       "Sub": 0,
@@ -1207,7 +1207,7 @@
       "Color": "",
       "Efx_Lv0": 0.0,
       "Efx_Lv1": 1.0,
-      "Efx_Lv2": 0.0,
+      "Efx_Lv2": 2.0,
       "Efx_Lv3": 0.0,
       "Efx_Lv4": 0.0
     },
@@ -1572,7 +1572,7 @@
       "Upg_Req": 0,
       "Branch": "ps",
       "Type": "cnt",
-      "Efx_MaxLv": 2,
+      "Efx_MaxLv": 4,
       "Cost_ID": 90072,
       "Tier": 3,
       "Sub": 0,
@@ -1582,8 +1582,8 @@
       "Efx_Lv0": 0.0,
       "Efx_Lv1": 1.0,
       "Efx_Lv2": 2.0,
-      "Efx_Lv3": 0.0,
-      "Efx_Lv4": 0.0
+      "Efx_Lv3": 3.0,
+      "Efx_Lv4": 4.0
     },
     {
       "Upg_ID": 11023,
@@ -1932,7 +1932,7 @@
       "Icon": "",
       "Color": "",
       "Efx_Lv0": 1.0,
-      "Efx_Lv1": 1.05,
+      "Efx_Lv1": 1.07,
       "Efx_Lv2": 0.0,
       "Efx_Lv3": 0.0,
       "Efx_Lv4": 0.0
@@ -1954,7 +1954,7 @@
       "Icon": "",
       "Color": "",
       "Efx_Lv0": 1.0,
-      "Efx_Lv1": 1.025,
+      "Efx_Lv1": 1.04,
       "Efx_Lv2": 0.0,
       "Efx_Lv3": 0.0,
       "Efx_Lv4": 0.0
@@ -1979,6 +1979,28 @@
       "Efx_Lv1": 0.45,
       "Efx_Lv2": 0.7,
       "Efx_Lv3": 1.0,
+      "Efx_Lv4": 0.0
+    },
+    {
+      "Upg_ID": 12066,
+      "Upg_Key": "md_map2",
+      "Upg_Name": "필드 넓히기 II",
+      "Str_Group_ID": 22066,
+      "Upg_Pre": 12002,
+      "Upg_Req": 12002,
+      "Branch": "md",
+      "Type": "map_zoom",
+      "Efx_MaxLv": 1,
+      "Cost_ID": 90091,
+      "Tier": 1,
+      "Sub": 0,
+      "Skill": "",
+      "Icon": "",
+      "Color": "",
+      "Efx_Lv0": 1.1,
+      "Efx_Lv1": 1.0,
+      "Efx_Lv2": 0.0,
+      "Efx_Lv3": 0.0,
       "Efx_Lv4": 0.0
     }
   ],
@@ -2238,10 +2260,10 @@
     },
     {
       "Cost_ID": 90024,
-      "Cost_Lv1": 340.0,
-      "Cost_Lv2": 750.0,
-      "Cost_Lv3": 1700.0,
-      "Cost_Lv4": 4000.0,
+      "Cost_Lv1": 150.0,
+      "Cost_Lv2": 340.0,
+      "Cost_Lv3": 750.0,
+      "Cost_Lv4": 1700.0,
       "Gem_Lv1": 0.0,
       "Gem_Lv2": 0.0,
       "Gem_Lv3": 0.0,
@@ -2579,8 +2601,8 @@
     },
     {
       "Cost_ID": 90055,
-      "Cost_Lv1": 2400.0,
-      "Cost_Lv2": 0.0,
+      "Cost_Lv1": 888.0,
+      "Cost_Lv2": 2666.0,
       "Cost_Lv3": 0.0,
       "Cost_Lv4": 0.0,
       "Gem_Lv1": 0.0,
@@ -2768,8 +2790,8 @@
       "Cost_ID": 90072,
       "Cost_Lv1": 990000000000.0,
       "Cost_Lv2": 1400000000000.0,
-      "Cost_Lv3": 0.0,
-      "Cost_Lv4": 0.0,
+      "Cost_Lv3": 2000000000000.0,
+      "Cost_Lv4": 3000000000000.0,
       "Gem_Lv1": 0.0,
       "Gem_Lv2": 0.0,
       "Gem_Lv3": 0.0,
@@ -2972,6 +2994,17 @@
       "Gem_Lv2": 0.0,
       "Gem_Lv3": 0.0,
       "Gem_Lv4": 0.0
+    },
+    {
+      "Cost_ID": 90091,
+      "Cost_Lv1": 4000.0,
+      "Cost_Lv2": 0.0,
+      "Cost_Lv3": 0.0,
+      "Cost_Lv4": 0.0,
+      "Gem_Lv1": 0.0,
+      "Gem_Lv2": 0.0,
+      "Gem_Lv3": 0.0,
+      "Gem_Lv4": 0.0
     }
   ],
   "Skill": [
@@ -3115,8 +3148,8 @@
       "Ball_Str": 10002,
       "Ball_Type": "속도형",
       "Ball_Look": "은빛 합금 날의 작은 수리검",
-      "Ball_Unlock": 3000.0,
-      "Ball_LvGold": 0.0,
+      "Ball_Unlock": 1600000000.0,
+      "Ball_LvGold": 1950000000.0,
       "Ball_Efx_ID": 2002
     },
     {
@@ -3126,8 +3159,8 @@
       "Ball_Str": 10003,
       "Ball_Type": "치명타형",
       "Ball_Look": "흑철 날 끝이 송곳처럼 뾰족한 괭이",
-      "Ball_Unlock": 3500.0,
-      "Ball_LvGold": 0.0,
+      "Ball_Unlock": 61000000000.0,
+      "Ball_LvGold": 76000000000.0,
       "Ball_Efx_ID": 2003
     },
     {
@@ -3137,8 +3170,8 @@
       "Ball_Str": 10004,
       "Ball_Type": "범위형",
       "Ball_Look": "동그라미 + 회전 칼날",
-      "Ball_Unlock": 5000.0,
-      "Ball_LvGold": 0.0,
+      "Ball_Unlock": 99000000000000.0,
+      "Ball_LvGold": 120000000000000.0,
       "Ball_Efx_ID": 2004
     },
     {
@@ -3148,8 +3181,8 @@
       "Ball_Str": 10005,
       "Ball_Type": "분열형",
       "Ball_Look": "포자가 맺힌 버섯 갓",
-      "Ball_Unlock": 4000.0,
-      "Ball_LvGold": 0.0,
+      "Ball_Unlock": 2200000000000.0,
+      "Ball_LvGold": 2800000000000.0,
       "Ball_Efx_ID": 2005
     },
     {
@@ -3159,8 +3192,8 @@
       "Ball_Str": 10006,
       "Ball_Type": "울림형",
       "Ball_Look": "큰 도토리 방울",
-      "Ball_Unlock": 8000.0,
-      "Ball_LvGold": 0.0,
+      "Ball_Unlock": 210000000000000.0,
+      "Ball_LvGold": 260000000000000.0,
       "Ball_Efx_ID": 2006
     },
     {
@@ -3170,8 +3203,8 @@
       "Ball_Str": 10007,
       "Ball_Type": "재물형",
       "Ball_Look": "구멍 뚫린 큰 엽전",
-      "Ball_Unlock": 2500.0,
-      "Ball_LvGold": 0.0,
+      "Ball_Unlock": 58000.0,
+      "Ball_LvGold": 72500.0,
       "Ball_Efx_ID": 2007
     },
     {
@@ -3327,7 +3360,7 @@
       "Cat": "ed",
       "Look": "송이버섯",
       "Color": "#c9a27a",
-      "Hp_Mul": 0.35
+      "Hp_Mul": 1.75
     },
     {
       "Boss_ID": 6002,
@@ -3337,7 +3370,7 @@
       "Cat": "md",
       "Look": "선녀낙엽버섯",
       "Color": "#7ad07a",
-      "Hp_Mul": 2.33
+      "Hp_Mul": 20.0
     },
     {
       "Boss_ID": 6003,
@@ -3347,7 +3380,7 @@
       "Cat": "ps",
       "Look": "독우산광대버섯",
       "Color": "#b48cff",
-      "Hp_Mul": 93.33
+      "Hp_Mul": 740.0
     },
     {
       "Boss_ID": 6004,
@@ -3357,7 +3390,7 @@
       "Cat": "ps",
       "Look": "광대버섯",
       "Color": "#ff6b6b",
-      "Hp_Mul": 128.33
+      "Hp_Mul": 1650.0
     },
     {
       "Boss_ID": 6005,
@@ -3367,7 +3400,7 @@
       "Cat": "md",
       "Look": "동충하초",
       "Color": "#f2a64a",
-      "Hp_Mul": 163.33
+      "Hp_Mul": 1100.0
     }
   ],
   "Const": [
@@ -5044,12 +5077,12 @@
       "Str_ID": 201022,
       "Str_Group_ID": 21022,
       "Str_Name": "upg:ps_ball3:desc",
-      "Str_KR": "영구 수확기를 두 개까지 더 늘려요.",
-      "Str_EN": "Adds up to two more permanent harvesters.",
-      "Str_JA": "恒久収穫機をさらに最大2つ増やします。",
-      "Str_RU": "Добавляет до двух постоянных сборщиков.",
-      "Str_UK": "Додає до двох постійних збирачів.",
-      "Str_PT": "Adiciona até mais dois coletores permanentes."
+      "Str_KR": "영구 수확기를 네 개까지 더 늘려요.",
+      "Str_EN": "Adds up to four more permanent harvesters.",
+      "Str_JA": "恒久収穫機をさらに最大4つ増やします。",
+      "Str_RU": "Добавляет до четырёх постоянных сборщиков.",
+      "Str_UK": "Додає до чотирьох постійних збирачів.",
+      "Str_PT": "Adiciona até mais quatro coletores permanentes."
     },
     {
       "Str_ID": 201018,
@@ -5462,12 +5495,12 @@
       "Str_ID": 202002,
       "Str_Group_ID": 22002,
       "Str_Name": "upg:md_map:desc",
-      "Str_KR": "버섯 밭(필드)을 넓혀요. 처음엔 필드가 좁아 화면이 확대되어 수확기·버섯이 크게 보이고, 넓힐수록 군락지와 숲 장치가 더 많이 들어가요(수입 증가). 4레벨이면 원래 크기예요.",
-      "Str_EN": "Widens the mushroom field. At first the field is narrow, so the screen is zoomed in and harvesters and mushrooms look big. The wider it gets, the more colonies and forest gadgets fit (more income). At level 4 it is the original size.",
-      "Str_JA": "キノコ畑(フィールド)を広げます。最初はフィールドが狭いので画面が拡大され、収穫機やキノコが大きく見えます。広げるほど群落や森のしかけがたくさん入ります(収入アップ)。レベル4で元の大きさです。",
-      "Str_RU": "Расширяет грибную поляну (поле). Сначала поле узкое, экран приближен, и сборщики с грибами выглядят крупными; чем шире поле, тем больше колоний и лесных устройств помещается (больше дохода). На 4 уровне поле обычного размера.",
-      "Str_UK": "Розширює грибне поле. Спершу поле вузьке, тож екран наближений і збирачі з грибами здаються великими. Чим ширше, тим більше колоній і лісових пристроїв (більше доходу). На 4 рівні поле має звичайний (повний) розмір.",
-      "Str_PT": "Amplia o campo de cogumelos. No início o campo é estreito, então a tela fica com zoom e os coletores e cogumelos parecem grandes; quanto mais largo, mais colônias e engenhocas da floresta cabem (mais ganhos). No nível 4, volta ao tamanho original."
+      "Str_KR": "버섯 밭(필드)을 넓혀요. 처음엔 필드가 좁아 화면이 확대되어 수확기·버섯이 크게 보이고, 넓힐수록 군락지와 숲 장치가 더 많이 들어가요(수입 증가). 4레벨 뒤 '필드 넓히기 II'까지 사면 원래 크기예요.",
+      "Str_EN": "Widens the mushroom field. At first the field is narrow, so the screen is zoomed in and harvesters and mushrooms look big. The wider it gets, the more colonies and forest gadgets fit (more income). After level 4, buying 'Widen Field II' too brings it back to the original size.",
+      "Str_JA": "キノコ畑(フィールド)を広げます。最初はフィールドが狭いので画面が拡大され、収穫機やキノコが大きく見えます。広げるほど群落や森のしかけがたくさん入ります(収入アップ)。レベル4のあと「フィールド拡張 II」まで買うと元の大きさになります。",
+      "Str_RU": "Расширяет грибную поляну (поле). Сначала поле узкое, экран приближен, и сборщики с грибами выглядят крупными; чем шире поле, тем больше колоний и лесных устройств помещается (больше дохода). После 4 уровня, если купить ещё и «Расширить поле II», поле станет обычного размера.",
+      "Str_UK": "Розширює грибне поле. Спершу поле вузьке, тож екран наближений і збирачі з грибами здаються великими. Чим ширше, тим більше колоній і лісових пристроїв (більше доходу). Після 4 рівня, якщо купити ще й «Розширення поля II», поле матиме звичайний (повний) розмір.",
+      "Str_PT": "Amplia o campo de cogumelos. No início o campo é estreito, então a tela fica com zoom e os coletores e cogumelos parecem grandes; quanto mais largo, mais colônias e engenhocas da floresta cabem (mais ganhos). Depois do nível 4, comprando também “Ampliar Campo II”, volta ao tamanho original."
     },
     {
       "Str_ID": 202003,
@@ -7222,12 +7255,12 @@
       "Str_ID": 301022,
       "Str_Group_ID": 21022,
       "Str_Name": "upg:ps_ball3:name",
-      "Str_KR": "수확기 +2 (III)",
-      "Str_EN": "Harvester +2 (III)",
-      "Str_JA": "収穫機 +2 (III)",
-      "Str_RU": "Сборщик +2 (III)",
-      "Str_UK": "Збирач +2 (III)",
-      "Str_PT": "Coletor +2 (III)"
+      "Str_KR": "수확기 +4 (III)",
+      "Str_EN": "Harvester +4 (III)",
+      "Str_JA": "収穫機 +4 (III)",
+      "Str_RU": "Сборщик +4 (III)",
+      "Str_UK": "Збирач +4 (III)",
+      "Str_PT": "Coletor +4 (III)"
     },
     {
       "Str_ID": 301023,
@@ -20868,6 +20901,28 @@
       "Str_RU": "<b>{0}</b> <color=#e8a900>{1}</color>  ур.{2}/{3}",
       "Str_UK": "<b>{0}</b> <color=#e8a900>{1}</color>  рів.{2}/{3}",
       "Str_PT": "<b>{0}</b> <color=#e8a900>{1}</color>  Nv.{2}/{3}"
+    },
+    {
+      "Str_ID": 302066,
+      "Str_Group_ID": 22066,
+      "Str_Name": "upg:md_map2:name",
+      "Str_KR": "필드 넓히기 II",
+      "Str_EN": "Widen Field II",
+      "Str_JA": "フィールド拡張 II",
+      "Str_RU": "Расширить поле II",
+      "Str_UK": "Розширення поля II",
+      "Str_PT": "Ampliar Campo II"
+    },
+    {
+      "Str_ID": 202066,
+      "Str_Group_ID": 22066,
+      "Str_Name": "upg:md_map2:desc",
+      "Str_KR": "필드를 원래 크기까지 마저 넓혀요. 군락지와 숲 장치가 더 들어가요.",
+      "Str_EN": "Widens the field the rest of the way to its original size. More colonies and forest gadgets fit.",
+      "Str_JA": "フィールドを元の大きさまで広げきります。群落や森のしかけがさらに入ります。",
+      "Str_RU": "Расширяет поле до исходного размера. Помещается больше колоний и лесных устройств.",
+      "Str_UK": "Розширює поле до початкового розміру. Вміщується більше колоній і лісових пристроїв.",
+      "Str_PT": "Amplia o campo até o tamanho original. Cabem mais colônias e engenhocas da floresta."
     }
   ]
 }

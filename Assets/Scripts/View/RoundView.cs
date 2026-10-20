@@ -50,6 +50,19 @@ namespace MoreMush
 
         static readonly AnimationCurve Taper = AnimationCurve.Linear(0, 1, 1, 0);
         const int MAX_RINGS = 64;               // 한 번에 그리는 고리 수 상한 (종 수확기는 맞힐 때마다 고리를 만든다)
+        // 모바일: 한 번에 그리는 조각·날아가는 버섯 수 상한 (시뮬 상한 parts 260 · flyers 220). 군락 하나를 거두면 조각 36개 + 날아가는 버섯
+        // 13~16개가 한 점에서 겹쳐 나와 줄여도 차이가 작다. 넘치면 가장 최근 것만 그린다 (시뮬은 그대로라 밸런스 무관)
+        const int MOBILE_MAX_PARTS = 140, MOBILE_MAX_FLYERS = 60;
+        int MaxPartsDrawn = int.MaxValue, MaxFlyersDrawn = int.MaxValue;   // Awake에서 플랫폼 보고 정한다
+
+        static bool IsMobile()
+        {
+#if UNITY_ANDROID || UNITY_IOS
+            return true;
+#else
+            return Application.isMobilePlatform;   // 휴대폰 브라우저의 웹 데모
+#endif
+        }
         // SetPositions용 버퍼 (개수별로 하나씩, 프레임마다 배열을 만들지 않게)
         readonly Dictionary<int, Vector3[]> posBufs = new Dictionary<int, Vector3[]>();
         Vector3[] PosBuf(int n) { if (!posBufs.TryGetValue(n, out var b)) posBufs[n] = b = new Vector3[n]; return b; }
@@ -157,6 +170,7 @@ namespace MoreMush
 
         void Awake()
         {
+            if (IsMobile()) { MaxPartsDrawn = MOBILE_MAX_PARTS; MaxFlyersDrawn = MOBILE_MAX_FLYERS; }
             CaptureBackgroundLayout();
             shrooms = new Pool<ShroomView>(shroomPrefab, shroomRoot);
             balls = new Pool<BallView>(ballPrefab, ballRoot);
@@ -257,12 +271,11 @@ namespace MoreMush
             }
 
             // 버섯 (y 순서로 그린다)
-            bool night = st.wId == "moon" || st.theme.id == "night";
             for (int i = 0; i < R.shrooms.Count; i++)
             {
                 var m = R.shrooms[i];
                 if (live && m.golden && Random.value < 0.02f) R.AddPart(m.x + Random.Range(-m.r, m.r), m.y + Random.Range(-m.r, m.r), 0, -30, 0.5f, U.Hex("#fff3a0"), 3);
-                shrooms.Get(i).Show(m, now, night, 1000 + Mathf.RoundToInt(m.y));
+                shrooms.Get(i).Show(m, now, 1000 + Mathf.RoundToInt(m.y));
             }
             shrooms.Trim(R.shrooms.Count);
 
@@ -346,9 +359,10 @@ namespace MoreMush
 
             // 파티클
             // dream: one in four bigger bits is a spinning leaf; every bit pops big for a moment, then shrinks away
-            for (int i = 0; i < R.parts.Count; i++)
+            int p0 = Mathf.Max(0, R.parts.Count - MaxPartsDrawn);
+            for (int i = p0; i < R.parts.Count; i++)
             {
-                var p = R.parts[i]; var s = parts.Get(i);
+                var p = R.parts[i]; var s = parts.Get(i - p0);
                 float k = p.t / p.life;
                 int h = System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(p);
                 bool chip = p.shape == (byte)FxShape.Chip && fxSp[(int)FxShape.Chip] != null;
@@ -363,7 +377,7 @@ namespace MoreMush
                 s.transform.localRotation = leaf || chip ? Quaternion.Euler(0, 0, (h % 360) + p.t * ((h & 8) != 0 ? 420 : -420)) : Quaternion.identity;
                 var c = p.col; c.a *= 1 - k * k; s.color = c;
             }
-            parts.Trim(R.parts.Count);
+            parts.Trim(R.parts.Count - p0);
             ringFx.Trim(nr);
             DrawFx(R);
 
@@ -383,14 +397,18 @@ namespace MoreMush
             }
 
             // 날아가는 버섯
-            int nf = 0;
+            // 재질 SpriteFx: 황금은 정점 색으로 (속성 블록 없이 묶어 그린다)
+            int nf = 0, flying = 0;
+            foreach (var f in R.flyers) if (f.t >= 0) flying++;
+            int skip = Mathf.Max(0, flying - MaxFlyersDrawn);
             foreach (var f in R.flyers)
             {
-                if (f.t < 0) continue;
+                if (f.t < 0 || skip-- > 0) continue;
                 var s = flyers.Get(nf++);
                 s.transform.localPosition = Art.P(f.x, f.y);
-                if (f.clock) { s.sprite = SpriteDB.Icon("clock"); Art.FitPx(s, 30); Art.SetFx(s); }
-                else { s.sprite = SpriteDB.Single(f.sp.id); Art.FitPx(s, 40); Art.SetFx(s, f.golden ? 1 : 0); }
+                var fsp = f.clock ? SpriteDB.Icon("clock") : SpriteDB.Single(f.sp.id);
+                if (!ReferenceEquals(s.sprite, fsp)) { s.sprite = fsp; Art.FitPx(s, f.clock ? 30 : 40); }
+                s.color = Art.FxColor(!f.clock && f.golden ? 1 : 0);
             }
             flyers.Trim(nf);
 

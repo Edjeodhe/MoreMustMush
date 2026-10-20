@@ -58,6 +58,7 @@ namespace MoreMush
         public static int ZONE_RAMP = 0;
         // 시뮬 전용 실험(콤보 상한 원인 측정): true면 버섯 체력 배율(지역·스테이지·초반)을 1로 고정한다. 기본 false = 지금 게임. BalanceComboProbe에서만 켠다
         public static bool SIM_HP1 = false;
+        // stage = 콘텐츠 스테이지 (Defs.ContentStage). 튜토리얼 4판은 1스테이지 배율, 지역 from도 표시 스테이지 기준 (5회차 P-2)
         public static double ZoneMul(string themeId, int stage)
         {
             int i = ThemeIndex(themeId);

@@ -75,18 +75,20 @@ namespace MoreMush.EditorTools
         static double Get(string id) => id == "loop" ? Defs.BOSS_LOOP_HP_MUL : Defs.BOSS[id].hpMul;
         static void Set(string id, double v) { if (id == "loop") Defs.BOSS_LOOP_HP_MUL = v; else Defs.BOSS[id].hpMul = v; }
 
-        // 새 게임부터 그 보스를 잡을 때까지 돌려 도전 횟수. 시간 상한에 걸려 보스를 못 넘었으면 NOT_DONE
+        // 새 게임부터 그 보스를 잡을 때까지 돌려 도전 횟수. 시간 상한에 걸려 보스를 못 넘었으면 NOT_DONE.
+        // stage = 표시(콘텐츠) 스테이지 10·20·30 … — 봇 기록(stageR)·멈춤 판정은 내부 판 번호라 RoundOfStage로 바꾼다 (5회차 P-2: 튜토리얼 4판)
         public static int Tries(int seed, int stage)
         {
             int keepCk = BalanceSim.CkptEvery; BalanceSim.CkptEvery = 0;
-            try { BalanceSim.Progression(5000, false, seed, BalanceSim.SKILL, SEED_WALL_SEC, 1, stage); }
+            int round = Defs.RoundOfStage(stage);
+            try { BalanceSim.Progression(5000, false, seed, BalanceSim.SKILL, SEED_WALL_SEC, 1, round); }
             finally { BalanceSim.CkptEvery = keepCk; }
             if (!BalanceSim.LastHitStop) return NOT_DONE;
             var path = Path.GetFullPath(Path.Combine(Application.dataPath, $"../Temp/balance_phase_s{seed}.json"));
             var ph = JsonConvert.DeserializeObject<BalanceSim.PhaseLog>(File.ReadAllText(path));
             int tries = 0;
             for (int i = 0; i < ph.stageR.Count; i++)
-                if (ph.stageR[i] == stage && (ph.bossR[i] == 1 || ph.bossR[i] == -1)) { tries++; if (ph.bossR[i] == 1) return tries; }
+                if (ph.stageR[i] == round && (ph.bossR[i] == 1 || ph.bossR[i] == -1)) { tries++; if (ph.bossR[i] == 1) return tries; }
             return NOT_DONE;
         }
 

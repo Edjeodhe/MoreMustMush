@@ -100,11 +100,37 @@ namespace MoreMush
             if (persist) PlayerPrefs.SetString(PresetKey, TUNE.id);
         }
 
-        public static void LoadPreset() => ApplyPreset(PlayerPrefs.GetString(PresetKey, "tuned"), false);
+        // 프리셋 고르기 UI는 없어졌다. 옛 빌드가 저장한 "spec"(체력 ×2.5~3)이 남아 있으면 게임이 계속 spec으로 돌아서, 게임은 항상 tuned로 하고 옛 저장값은 지운다 (5회차). spec은 밸런스 도구에서만 ApplyPreset으로 쓴다
+        public static void LoadPreset()
+        {
+            if (PlayerPrefs.HasKey(PresetKey)) PlayerPrefs.DeleteKey(PresetKey);
+            ApplyPreset("tuned", false);
+        }
+#if UNITY_EDITOR
+        // 플레이 모드 진입 때 도메인을 다시 읽지 않아(Enter Play Mode Options) 밸런스 도구가 바꾼 TUNE이 플레이까지 남는다 → 플레이 시작마다 tuned로 되돌린다
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        static void ResetPresetOnPlay() => LoadPreset();
+#endif
 
         // 라운드 시간: 처음 10초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다 (밸런스 3회차: 15 → 10, 줄어든 5초는 ps_dur 4레벨로 되찾는다)
         public const float BASE_TIME = 10;
+        // stage = 콘텐츠 스테이지(ContentStage). 튜토리얼 4판 뒤 표시 1스테이지부터 늘어난다 (5회차 P-2)
         public static double StageTime(int stage) => Math.Min(10, 0.5 * (stage - 1));
+
+        // ===== 튜토리얼 판 오프셋 (5회차 P-2, 사용자 확정 2026-10-20) =====
+        // G.stage는 내부 판 번호(1부터)다. 1~TUT_ROUNDS판은 튜토리얼 T1~T4로 표시하고, 그 뒤를 1스테이지부터 센다.
+        // 보스·지역 해금·체력 성장(STAGE_GROWTH)·라운드 시간 성장 같은 콘텐츠는 ContentStage(표시 스테이지, 튜토리얼은 1)로 판정한다 → 첫 보스 = 14번째 판.
+        // 온보딩(초반 종 수·낱개 버섯·초반 체력·초반 10초·튜토리얼 판·기능 해금)은 내부 판 번호 그대로다
+        public const int TUT_ROUNDS = 4;
+        public static bool IsTutRound(int stage) => stage <= TUT_ROUNDS;
+        // 표시 스테이지 (튜토리얼 판이면 0 이하)
+        public static int DispStage(int stage) => stage - TUT_ROUNDS;
+        // 콘텐츠 스테이지: 튜토리얼 판은 1스테이지와 같은 콘텐츠
+        public static int ContentStage(int stage) => Math.Max(1, stage - TUT_ROUNDS);
+        // 콘텐츠(표시) 스테이지 → 내부 판 번호 (ContentStage의 반대, 시뮬 도구용)
+        public static int RoundOfStage(int content) => content + TUT_ROUNDS;
+        // 화면에 쓰는 스테이지 글자: 튜토리얼 판 "T1"~"T4", 그 뒤 "1", "2" … (Loc.F("스테이지 {0}", …)에 넣는다)
+        public static string StageLabel(int stage) => IsTutRound(stage) ? "T" + Math.Max(1, stage) : DispStage(stage).ToString();
 
         // 초반 스테이지 (사용자 요청 2026-10-16): 스테이지 N까지는 버섯 종을 N종으로 고정한다 (1스테이지 1종 → 6스테이지 6종).
         // 6종 = 처음부터 열린 종, 분류마다 2종 (식용 → 약용 → 독 순으로 하나씩 늘어난다). 7스테이지부터는 보통 뽑기
@@ -116,20 +142,25 @@ namespace MoreMush
         public static readonly int[] EARLY_LOOSE = { 10, 10, 9, 8, 6, 4 };   // 군락이 ed_cols 2~3개뿐이라 맵이 비어 보여 늘렸다 (2026-10-19, 이전 6·6·5·4·3·2)
         // 초반 버섯 체력 너프 (사용자 지시 2026-10-19): 스테이지 1~EARLY_HP_FLAT_TO는 체력이 EARLY_HP_MUL배라 몇 대 안 맞아도 부서지고,
         // 그 뒤로 스테이지마다 일정하게 늘어 EARLY_HP_FULL_AT 스테이지에서 원래 체력이 된다. 군락·낱개 버섯 공통 (보스 체력은 따로)
+        // stage = 내부 판 번호 (온보딩 구간이라 튜토리얼 오프셋을 빼지 않는다)
         public const double EARLY_HP_MUL = 0.5;
         public const int EARLY_HP_FLAT_TO = 3, EARLY_HP_FULL_AT = 7;
+        // 5회차 P-6: 튜토리얼 T1~T4 + 표시 1~9스테이지(= 내부 1~13판) 일반 버섯 체력을 한 번 더 ×EARLY_HP_NERF
+        public const int EARLY_HP_NERF_TO = 13;
+        public const double EARLY_HP_NERF = 0.9;
         public static double EarlyHpMul(int stage)
         {
-            if (stage <= EARLY_HP_FLAT_TO) return EARLY_HP_MUL;
-            if (stage >= EARLY_HP_FULL_AT) return 1;
-            return EARLY_HP_MUL + (1 - EARLY_HP_MUL) * (stage - EARLY_HP_FLAT_TO) / (double)(EARLY_HP_FULL_AT - EARLY_HP_FLAT_TO);
+            double nerf = stage <= EARLY_HP_NERF_TO ? EARLY_HP_NERF : 1;
+            if (stage <= EARLY_HP_FLAT_TO) return EARLY_HP_MUL * nerf;
+            if (stage >= EARLY_HP_FULL_AT) return nerf;
+            return (EARLY_HP_MUL + (1 - EARLY_HP_MUL) * (stage - EARLY_HP_FLAT_TO) / (double)(EARLY_HP_FULL_AT - EARLY_HP_FLAT_TO)) * nerf;
         }
         // 초반 라운드 시간: 이 스테이지까지는 기본 EARLY_SEC초 (시간 노드는 더해진다)
         public const int EARLY_TIME_STAGES = 4;
         public const float EARLY_SEC = 10;
         public const float INCOME_MUL = 3;
         public const float SCORE_GOLD = 1;
-        public const float COST_MUL = 1;
+        public const double COST_MUL = 0.9;   // 5회차 P-1: 트리 골드 가격 전체 ×0.9 (균사석 가격엔 안 곱함)
         public static int ColCount(int L) => (int)Math.Round(V("ed_cols", L));   // DB Efx 4·6·10·17·27 (지역·지도 배율 전)
 
         // ===== 도감 75종 =====
@@ -324,7 +355,7 @@ namespace MoreMush
         public const string BOSS_ICON = "trophy";   // 임시 아이콘. 보스 전용 리소스가 생기면 바꾼다
 
         // ===== 진행도 골드 =====
-        // 포자 값·자동 수확 골드·특수 버섯 보너스의 기준. 100골드에서 3스테이지마다 ×1.5
+        // 포자 값·자동 수확 골드·특수 버섯 보너스의 기준. 100골드에서 3스테이지마다 ×1.5 (stage = 콘텐츠 스테이지, ContentStage)
         public static double StageGold(int stage) => Math.Ceiling(100 * Math.Pow(1.5, (stage - 1) / 3) / 10) * 10;
 
         public static readonly LocMap TRAIT_TEXT = new LocMap(new Dictionary<string, string>

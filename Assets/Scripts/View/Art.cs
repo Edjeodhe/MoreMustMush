@@ -43,7 +43,7 @@ namespace MoreMush
         public static void SetFx(Renderer r, float gold = 0, float dark = 0, float flash = 0)
         {
             // 효과가 없으면 속성 블록을 지운다: 블록이 붙은 렌더러는 묶어 그리지(배칭) 못해 그림마다 그리기 호출이 따로 생겼다.
-            // 셰이더 기본값이 0이라 보이는 것은 같다 (버섯 휨은 바로 뒤 SetBend가 다시 넣는다)
+            // 셰이더 기본값이 0이라 보이는 것은 같다. 수가 많은 버섯 몸통·날아가는 버섯은 이 대신 SpriteFx 재질 + FxColor를 쓴다
             if (gold == 0 && dark == 0 && flash == 0)
             {
                 if (r.HasPropertyBlock()) r.SetPropertyBlock(null);
@@ -54,14 +54,21 @@ namespace MoreMush
             r.SetPropertyBlock(mpb);
         }
 
-        static readonly int BendId = Shader.PropertyToID("_Bend"), BendBaseId = Shader.PropertyToID("_BendBase"), BendHId = Shader.PropertyToID("_BendH");
-        // Soft-body lean for a sprite on MoreMush/Sprite: lean = top offset as a fraction of the sprite width.
-        public static void SetBend(SpriteRenderer r, float lean)
+        // Materials/SpriteFx.mat(셰이더 _VCFX)용 정점 색: 효과값을 속성 블록 대신 색에 담아 같은 재질끼리 묶어 그리게 한다.
+        // r = 1 - 번쩍, g = 1 - 황금, b = 1 - 실루엣, a = 투명도 (흰색 = 효과 없음). 이 재질에서는 색으로 물들일 수 없다
+        public static Color FxColor(float gold = 0, float flash = 0, float alpha = 1, float dark = 0) =>
+            new Color(1 - Mathf.Clamp01(flash), 1 - Mathf.Clamp01(gold), 1 - Mathf.Clamp01(dark), alpha);
+
+        // 2×2 선형 변환 [[a, b], [c, d]] = 회전(phi) · 크기(scale) · 회전(theta) (각도는 도). 행렬식이 양수일 때 scale은 둘 다 양수.
+        // Transform 두 겹(부모 회전+크기, 자식 회전)으로 기울임(shear)을 만들 때 쓴다
+        public static void Decompose2x2(float a, float b, float c, float d, out float phi, out Vector2 scale, out float theta)
         {
-            var b = r.sprite != null ? r.sprite.bounds : new Bounds(Vector3.zero, Vector3.one);
-            r.GetPropertyBlock(mpb);
-            mpb.SetFloat(BendId, lean * b.size.x); mpb.SetFloat(BendBaseId, b.min.y); mpb.SetFloat(BendHId, b.size.y);
-            r.SetPropertyBlock(mpb);
+            float e = (a + d) / 2, f = (a - d) / 2, g = (c + b) / 2, h = (c - b) / 2;
+            float q = Mathf.Sqrt(e * e + h * h), r = Mathf.Sqrt(f * f + g * g);
+            float a1 = Mathf.Atan2(g, f), a2 = Mathf.Atan2(h, e);
+            scale = new Vector2(q + r, q - r);
+            theta = (a2 - a1) / 2 * Mathf.Rad2Deg;
+            phi = (a2 + a1) / 2 * Mathf.Rad2Deg;
         }
     }
 }

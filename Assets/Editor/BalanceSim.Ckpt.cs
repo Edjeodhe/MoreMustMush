@@ -90,7 +90,8 @@ namespace MoreMush.EditorTools
             return use;
         }
 
-        // 초반만 빠르게: 시드마다 새 게임부터 stopStage까지 돌려 스테이지 10(첫 보스) 도착 판·보스 도전 횟수·그때 공격력을 본다
+        // 초반만 빠르게: 시드마다 새 게임부터 stopStage까지 돌려 스테이지 10(첫 보스) 도착 판·보스 도전 횟수·그때 공격력을 본다.
+        // stopStage·출력 스테이지는 표시 스테이지 (튜토리얼 4판 뒤, 5회차 P-2). 기록(stageR)은 내부 판 번호라 RoundOfStage로 바꿔 찾는다
         public static string EarlyCheck(int stopStage = 15, int seeds = 3)
         {
             var sb = new StringBuilder();
@@ -99,15 +100,15 @@ namespace MoreMush.EditorTools
             {
                 for (int sd = 1; sd <= seeds; sd++)
                 {
-                    Progression(400, false, sd, SKILL, 120, 1, stopStage);
+                    Progression(400, false, sd, SKILL, 120, 1, RoundOfStage(stopStage));
                     var ph = JsonConvert.DeserializeObject<PhaseLog>(File.ReadAllText(PhasePath(sd)));
-                    int first = FIRST_BOSS_STAGE;
-                    int arrive = ph.stageR.IndexOf(first) + 1;
+                    int first = FIRST_BOSS_STAGE, firstR = RoundOfStage(first);
+                    int arrive = ph.stageR.IndexOf(firstR) + 1;
                     int tries = 0, clearAt = 0;
                     for (int i = 0; i < ph.stageR.Count; i++)
-                        if (ph.stageR[i] == first && ph.bossR[i] != 0 && ph.bossR[i] != 2) { tries++; if (ph.bossR[i] == 1) { clearAt = i + 1; break; } }
+                        if (ph.stageR[i] == firstR && ph.bossR[i] != 0 && ph.bossR[i] != 2) { tries++; if (ph.bossR[i] == 1) { clearAt = i + 1; break; } }
                     double atk = arrive > 0 ? ph.atkR[arrive - 1] : 0;
-                    sb.AppendLine($"시드 {sd}: 스테이지 {first} 도착 {(arrive > 0 ? $"{arrive}판" : "못 감")} · 공격력 {U.Fmt(atk)} · 보스 도전 {tries}번 {(clearAt > 0 ? $"→ {clearAt}판에 처치" : "→ 못 잡음")} · 끝 스테이지 {(ph.stageR.Count > 0 ? ph.stageR[ph.stageR.Count - 1] : 0)} ({ph.rounds}판)");
+                    sb.AppendLine($"시드 {sd}: 스테이지 {first} 도착 {(arrive > 0 ? $"{arrive}판" : "못 감")} · 공격력 {U.Fmt(atk)} · 보스 도전 {tries}번 {(clearAt > 0 ? $"→ {clearAt}판에 처치" : "→ 못 잡음")} · 끝 스테이지 {(ph.stageR.Count > 0 ? StageLabel(ph.stageR[ph.stageR.Count - 1]) : "-")} ({ph.rounds}판)");
                 }
             }
             finally { CkptEvery = keep; }

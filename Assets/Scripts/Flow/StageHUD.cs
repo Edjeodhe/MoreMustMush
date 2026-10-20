@@ -109,7 +109,7 @@ namespace MoreMush
         {
             var st = R.st;
             UIUtil.SetText(info, st.boss != null ? Loc.F("보스 스테이지: {0}", st.boss.n) : Loc.F("오늘의 날씨: {0}", st.weather.n));
-            UIUtil.SetText(stageNo, Loc.F("스테이지 {0}", st.stage));
+            UIUtil.SetText(stageNo, Loc.F("스테이지 {0}", Defs.StageLabel(st.stage)));   // 튜토리얼 판 T1~T4
             var ic = st.weather != null ? SpriteDB.Icon(st.weather.icon) : null;
             if (weatherIcon != null && ic != null) weatherIcon.sprite = ic;
             UIUtil.Show(gimmick, st.boss != null);

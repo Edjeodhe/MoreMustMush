@@ -95,6 +95,7 @@ namespace MoreMush
             SetWorld((float)st.zoom);
             var r = new RoundSim { st = st, themeId = st.theme.id };
             R = r;
+            r.sporeSlowMul = SporeSlowMulNow();
             // 튜토리얼 판(1스테이지, 튜토리얼 전)만 군락 1개 고정. 그 밖의 초반 판은 보통처럼 스폰하고 종만 제한한다 (PickSpecies)
             r.tutorial = st.boss == null && st.stage == 1 && G != null && G.tut == 0;
             r.lone = r.tutorial ? 1 : 0;

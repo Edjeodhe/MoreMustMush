@@ -82,7 +82,7 @@ namespace MoreMush.EditorTools
             var st = ComputeStats("clear", THEMES[0].id);
             string best = THEMES[0].id;
             foreach (var t in THEMES)
-                if (ThemeOpen(t) && st.atk >= 0.5 * TIERS[0].hp * ZoneMul(t.id, StageNow())) best = t.id;
+                if (ThemeOpen(t) && st.atk >= 0.5 * TIERS[0].hp * ZoneMul(t.id, ContentNow())) best = t.id;
             return best;
         }
 
@@ -90,7 +90,7 @@ namespace MoreMush.EditorTools
         {
             if (autoZone) G.theme = PickZone();
             else if (!THEME.TryGetValue(G.theme ?? "", out var th) || !ThemeOpen(th)) G.theme = LatestTheme().id;
-            var boss = BossRoundNext() ? BossAt(StageNow()) : null;
+            var boss = BossRoundNext() ? BossAt(ContentNow()) : null;
             string w = RollWeather(boss != null);
             var R = RoundSim.Start(w, G.theme, boss);
             var res = new RoundResult { stage = StageNow(), weather = w, duration = R.st.duration, cols = R.st.maxCol, zone = G.theme, atk = R.st.atk, balls = R.st.permBalls, boss = boss?.id };
@@ -204,6 +204,7 @@ namespace MoreMush.EditorTools
                 if (!resume) { botFarm = 0; botBoughtSinceFail = false; }
                 // 상태·기록 파일은 판마다가 아니라 호출이 끝날 때 한 번 쓴다
                 if (!resume) Log(sb, $"조건: 시드 {seed} · 바 오차 {skill} · 보스 {(BOSS_GATE ? $"관문 H0={GATE_H} KB={GATE_KB} MOVER_H={GATE_MOVER_H} TAU={GATE_TAU} T0={GATE_T0} 환상×{GATE_PHANTOM_K}" : "실제 판(봇 조준)")} · 프리셋 {TUNE.id} · DB {Db.Data._source}");
+                if (!resume) Log(sb, $"R = 내부 판 번호(튜토리얼 T1~T{TUT_ROUNDS} 포함). 표시 스테이지 = R − {TUT_ROUNDS}, 첫 보스(표시 {FIRST_BOSS_STAGE}) = R{RoundOfStage(FIRST_BOSS_STAGE)}");
                 if (!resume) Log(sb, "판 | 누적 | 지역 | 시간 | 핀볼 | 공격력 | 점수골드 | 수확 | 보유골드 | 산 레벨 | 초반/중반/후반");
                 for (int i = 0; i < rounds; i++)
                 {
@@ -212,7 +213,7 @@ namespace MoreMush.EditorTools
                     var rnd = new System.Random(seed * 1000 + G.rounds); UnityEngine.Random.InitState(seed * 1000 + G.rounds);
                     // 봇의 보스 재도전: 지고 나면 파밍하다가, 무언가 사고 나서 또는 3판마다 다시 켠다
                     // 관문 모드는 결정적이라(공격력이 그대로면 또 진다) 공격 관련 노드를 산 다음 판 또는 5판마다 (theory 재도전 규칙)
-                    if (IsBossStage(StageNow()) && !G.bossOn && (botBoughtSinceFail || ++botFarm >= (BOSS_GATE ? 5 : 3))) { G.bossOn = true; botFarm = 0; botBoughtSinceFail = false; }
+                    if (IsBossStage(ContentNow()) && !G.bossOn && (botBoughtSinceFail || ++botFarm >= (BOSS_GATE ? 5 : 3))) { G.bossOn = true; botFarm = 0; botBoughtSinceFail = false; }
                     var r = PlayRound(rnd, skill, !GAME_ZONE);
                     // 버섯 판매·마을 의뢰는 v3에서 없어졌다. 판 수입은 정산 골드뿐이다 (SELL 설정은 이제 효과 없음)
                     double sold = 0;
@@ -224,12 +225,12 @@ namespace MoreMush.EditorTools
                     int bought = GoldLevels() - before;
                     if (BOSS_GATE ? AtkLevels() > atkBefore : bought > 0) botBoughtSinceFail = true;
                     if (r.boss != null && !r.bossCleared) botBoughtSinceFail = false;   // 패배 뒤에 산 것만 센다
-                    if (r.boss != null) Log(sb,$"  보스 R{r.stage} {BOSS[r.boss].nKo}: {(r.bossCleared ? "처치" : r.gateT >= 0 ? "실패" : $"실패 (남은 체력 {r.bossHpLeft:P0})")}{(r.gateT >= 0 ? $" · 관문 예상 {r.gateT:F1}s / 판 {r.duration:F0}s" : "")}");
+                    if (r.boss != null) Log(sb,$"  보스 R{r.stage} {BOSS[r.boss].nKo}: {(r.bossCleared ? "처치" : r.gateT >= 0 ? "실패" : $"실패 (남은 체력 {r.bossHpLeft:P0})")}{(r.gateT >= 0 ? $" · 관문 예상 {r.gateT:F1}s / 판 {r.duration:F0}s" : "")} · 표시 스테이지 {StageLabel(r.stage)}");
                     ph.rounds++; if (bought > 0) ph.buyRounds++;
                     // 스테이지 수입도 정산 net(보스 처치 보상·패배 감액 포함). 2회차부터 — 1회차 기록(scoreGold + bonus)과 비교할 때 주의
                     ph.Set(r.stage, r.net + sold, bought, r.value, r.spawned > 0 ? (double)r.harvests / r.spawned : 0, r.zone);
                     ph.incR.Add(r.net); ph.stageR.Add(r.stage); ph.playR.Add(G.play); ph.atkR.Add(r.atk); ph.buysR.Add(bought); ph.gateR.Add(r.gateT);
-                    ph.bossR.Add(r.boss != null ? (r.bossCleared ? 1 : -1) : IsBossStage(r.stage) ? 2 : 0);
+                    ph.bossR.Add(r.boss != null ? (r.bossCleared ? 1 : -1) : IsBossStage(ContentStage(r.stage)) ? 2 : 0);
                     ph.SetTiers(r.stage, r.madeT, r.killT);
                     string marks = "";
                     for (int t = 1; t <= 3; t++)
