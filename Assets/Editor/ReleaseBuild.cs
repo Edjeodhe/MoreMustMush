@@ -18,11 +18,14 @@ namespace MoreMush.EditorTools
 
         [MenuItem("MoreMush/Build/WebGL (itch.io)")]
         public static void MenuWebGL() => Log(WebGL());
-        // 개발자 패널(` 키)이 들어간 테스트용. 출시 메뉴는 Build Settings의 Development Build 체크를 따르지 않는다 (늘 출시 빌드)
+        // 개발자 패널(` 키)·치트 키(Shift+숫자)가 들어간 테스트용. 출시 메뉴는 Build Settings의 Development Build 체크를 따르지 않는다 (늘 출시 빌드)
         [MenuItem("MoreMush/Build/WebGL (개발용)")]
         public static void MenuWebGLDev() => Log(WebGL(true));
         [MenuItem("MoreMush/Build/Windows (exe)")]
         public static void MenuWindows() => Log(Windows());
+        // 개발자 패널·치트 키(Shift+숫자)가 들어간 테스트용 exe (Development Build). 결과는 Builds/Windows_Dev
+        [MenuItem("MoreMush/Build/Windows (개발용)")]
+        public static void MenuWindowsDev() => Log(Windows(true));
         [MenuItem("MoreMush/Build/All")]
         public static void MenuAll() => Log(All());
 
@@ -102,14 +105,14 @@ namespace MoreMush.EditorTools
             return sb.ToString();
         }
 
-        public static string Windows()
+        public static string Windows(bool dev = false)
         {
-            var sb = new StringBuilder("[Windows 빌드]\n");
+            var sb = new StringBuilder(dev ? "[Windows 개발용 빌드]\n" : "[Windows 빌드]\n");
             var origTarget = EditorUserBuildSettings.activeBuildTarget;
             var origGroup = BuildPipeline.GetBuildTargetGroup(origTarget);
             try
             {
-                string dir = Out("Builds/Windows");
+                string dir = Out(dev ? "Builds/Windows_Dev" : "Builds/Windows");
                 if (Directory.Exists(dir)) Directory.Delete(dir, true);
                 Directory.CreateDirectory(dir);
 
@@ -119,13 +122,13 @@ namespace MoreMush.EditorTools
                     locationPathName = Path.Combine(dir, "MoreMustMush.exe"),
                     target = BuildTarget.StandaloneWindows64,
                     targetGroup = BuildTargetGroup.Standalone,
-                    options = BuildOptions.None,
+                    options = dev ? BuildOptions.Development : BuildOptions.None,
                 };
                 var rep = BuildPipeline.BuildPlayer(opt);
                 bool ok = Report(sb, rep);
                 if (ok)
                 {
-                    string zip = Out("Builds/MoreMustMush_Windows.zip");
+                    string zip = Out(dev ? "Builds/MoreMustMush_Windows_Dev.zip" : "Builds/MoreMustMush_Windows.zip");
                     Zip(dir, zip, rel => rel.Split('/')[0].EndsWith("_BurstDebugInformation_DoNotShip"));
                     sb.AppendLine($"zip: {zip} ({new FileInfo(zip).Length / 1048576.0:F1} MB)");
                 }
