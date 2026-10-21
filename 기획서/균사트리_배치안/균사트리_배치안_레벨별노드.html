@@ -1,0 +1,346 @@
+<title>균사 트리 배치안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+/* 레이아웃: 위 배치도(정사각 틀, 확대·스크롤) + 옆 정보 카드 → 배치 규칙 → 레어도 기준표 → 기존 노드 대비 변경 → 가지별 노드 표 */
+:root{
+  --bg:#f3f2f8; --paper:#ffffff; --fg:#1f2033; --muted:#64667e; --line:#dcdbe8;
+  --ed:#ef9a12; --md:#2f9e2a; --ps:#7a2fd8; --root:#ff2a2a; --gem:#ffd54a; --myc:#fff4dc; --axis:#ff3b3b;
+  --warn:#b4472f; --warn-soft:#f8e2da; --ok:#2f7d3a; --ok-soft:#dff1e2; --mv:#2a62c9; --mv-soft:#dde8fb;
+  --f-disp:"Do Hyeon","IBM Plex Sans KR",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#14141f; --paper:#1d1d2c; --fg:#e8e8f3; --muted:#a2a3bb; --line:#33344a; --warn:#ef9a82; --warn-soft:#45261f; --ok:#8fd49a; --ok-soft:#1d3a24; --mv:#8fb4ff; --mv-soft:#1d2a47; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14141f; --paper:#1d1d2c; --fg:#e8e8f3; --muted:#a2a3bb; --line:#33344a; --warn:#ef9a82; --warn-soft:#45261f; --ok:#8fd49a; --ok-soft:#1d3a24; --mv:#8fb4ff; --mv-soft:#1d2a47; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.65;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+main{max-width:1180px;margin:0 auto;display:grid;gap:40px}
+h1,h2,h3{font-family:var(--f-disp);font-weight:400;margin:0;line-height:1.25;text-wrap:balance}
+h1{font-size:2.2rem} h2{font-size:1.55rem} h3{font-size:1.15rem}
+p{margin:0}
+.prose{max-width:800px;display:grid;gap:10px}
+.meta{color:var(--muted);font-size:.9rem;display:flex;flex-wrap:wrap;gap:4px 14px}
+.board{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+@media (max-width:920px){.board{grid-template-columns:minmax(0,1fr)}}
+.frame{background:#0d0a26;border-radius:12px;overflow:auto;max-width:100%;aspect-ratio:1/1}
+.frame svg{display:block;width:100%;height:auto}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font:inherit;font-size:.82rem;padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.chip:focus-visible{outline:2px solid var(--mv);outline-offset:2px}
+.side{display:grid;gap:12px;font-size:.88rem;min-width:0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.card h3{margin-bottom:4px}
+.lg{display:grid;gap:6px}
+.lg div{display:flex;align-items:center;gap:8px}
+.lg svg{flex:none}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;flex:none;vertical-align:-2px}
+.nd{cursor:pointer}
+.nd:focus{outline:none}
+.nd:focus-visible .c{stroke:#fff;stroke-width:6}
+.dim{opacity:.13}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;padding:7px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.78rem;background:var(--bg);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.nw{white-space:nowrap}
+td.n{text-align:center;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;border-radius:999px;padding:0 9px;font-size:.76rem;font-weight:600;white-space:nowrap}
+.rar{display:inline-flex;align-items:center;justify-content:center;min-width:1.7em;height:1.7em;border-radius:6px;font-size:.8rem;font-weight:700;color:#fff}
+.tag{color:var(--muted);font-size:.78rem;white-space:nowrap}
+.brh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.outgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.outgrid .card{font-size:.9rem}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.s-keep{background:var(--ok-soft);color:var(--ok)} .s-chg{background:var(--mv-soft);color:var(--mv)} .s-del{background:var(--warn-soft);color:var(--warn)} .s-out{background:var(--line);color:var(--muted)} .s-new{background:#fff1c2;color:#8a6200}
+svg text{font-family:var(--f-body)}
+</style>
+<main>
+<header class="prose">
+  <h1>균사 트리 배치안</h1>
+  <div class="meta"><span>MoreMustMush · 업그레이드 트리</span><span>기준: 사용자 업그레이드 표 (무한 확장·세계수·비용 제외)</span><span>2026-10-19 · 15차</span></div>
+  <p>가운데 <b>사냥 준비</b>에서 식용(위)·약용(오른쪽 아래)·독성(왼쪽 아래)이 흰 선으로 나뉜 영역 안에서 뻗어요. 빨간 선은 각 영역의 중심축이에요. 각 영역은 고정된 첫 노드(식용 <b>효율적 사냥</b>, 약용 <b>스프링</b>, 독성 <b>날 갈기</b>, 레어도 1)에서 시작해 <b>좌우로 번갈아 꺾이는 지그재그</b>로 원 전체에 뻗어요. 각 영역의 첫 노드에서 바로 <b>두 갈래</b>로 나뉘어 모두 <b>6갈래</b>예요 (같은 영역도 갈래마다 색 진하기가 달라요). The Greenening처럼 가로·세로 간격이 같은 네모 칸 위에 놓이고, 선은 가로·세로·45° 대각선이에요 (작은 점 = 빈 칸). 레어도는 <b>세로로 한 단계 나갈 때 +2, 링을 따라 가로로 한 칸 갈 때 +1</b>이에요 (1단계 첫 노드 = 1). 노드 테두리 색과 오른쪽 위 숫자가 레어도예요. 노드를 누르면 효과가 보이고, 확대하면 이름과 레벨을 읽을 수 있어요.</p>
+</header>
+
+<section class="board" aria-label="배치도">
+  <div>
+    <div class="tools" role="group" aria-label="보기">
+      <button class="chip" data-z="1" aria-pressed="true">전체 보기</button>
+      <button class="chip" data-z="2" aria-pressed="false">2배</button>
+      <button class="chip" data-z="3" aria-pressed="false">3배</button>
+      <span style="width:8px"></span>
+      <button class="chip" data-f="all" aria-pressed="true">모든 가지</button>
+      <button class="chip" data-f="ed" aria-pressed="false">식용</button>
+      <button class="chip" data-f="md" aria-pressed="false">약용</button>
+      <button class="chip" data-f="ps" aria-pressed="false">독성</button>
+      <button class="chip" data-f="inplace" aria-pressed="false">한 곳에서 레벨업</button>
+      <span style="width:8px"></span>
+      <button class="chip" id="ringBtn" aria-pressed="true">배경 켜기/끄기</button>
+    </div>
+    <div class="frame" id="frame"><svg id="tree" role="img" aria-label="원형 균사 트리 배치도"></svg></div>
+  </div>
+  <div class="side">
+    <div class="card" id="info" aria-live="polite"><h3>노드를 눌러 보세요</h3><p style="color:var(--muted)">효과, 태그, 효과 등급, 레어도, 연결된 안쪽 노드가 나와요.</p></div>
+    <div class="card lg" id="legend"></div>
+    <div class="card"><h3>레어도별 노드 수 <span class="tag">(내부 규격)</span></h3><div class="tbl" style="border:0"><table id="ringTbl"></table></div></div>
+  </div>
+</section>
+
+
+<section style="display:grid;gap:14px" aria-labelledby="sOut">
+  <div class="prose"><h2 id="sOut">트리 밖 업그레이드와 정리 사항</h2>
+  <p>균사 트리에 넣지 않고 따로 두기로 한 것들이에요.</p></div>
+  <div class="outgrid">
+    <div class="card"><h3>무한 확장 <span class="pill s-out">미정</span></h3>
+      <p class="tag" style="white-space:normal">트리를 다 채운 뒤 레벨 제한 없이 올리는 노드</p>
+      <ul style="margin-top:6px">
+        <li><b>무한의 날</b> 【수확기】 공격력 +1% / Lv</li>
+        <li><b>박살 러쉬</b> 【수확기】 치명타 피해 +1% / Lv</li>
+        <li><b>파쇄기</b> 【수확기】 보스 피해 +1% / Lv</li>
+        <li><b>치명타 확률</b> 【수확기】 치명타 확률 +1% / Lv. 100%를 넘으면 <b>극한 치명타</b>로 바뀌고, 넘친 만큼 치명타 피해에 더해요 (예: 확률 102% → 치명타 피해 150% → 152%)</li>
+        <li>그 밖은 미정</li>
+      </ul></div>
+    <div class="card"><h3>세계수 업그레이드</h3>
+      <p class="tag" style="white-space:normal">세계수 화면에서 따로 올리는 업그레이드</p>
+      <ul style="margin-top:6px">
+        <li><b>균사석 획득률 증가</b> <span class="tag">(기존 균사 감응·풍요의 손길)</span></li>
+        <li><b>나무버섯 성장률 증가</b> <span class="tag">(기존 대지의 축복)</span></li>
+        <li><b>자동 수확 보따리 획득량 증가</b> <span class="tag">(기존 자동 수확 확장)</span></li>
+        <li><b>꼬마 버섯 건축 속도 단축</b> <span class="tag">(기존 꼬마 건축가)</span></li>
+      </ul></div>
+    <div class="card"><h3>버프 도움말</h3>
+      <p class="tag" style="white-space:normal">【슬라이드 바】 노드가 주는 버프 설명</p>
+      <ul style="margin-top:6px">
+        <li><b>관통</b>: 버섯 군락에 부딪히지 않고 통과하며 피해를 줘요</li>
+        <li><b>유도</b>: 기물에 부딪힌 뒤 가장 가까운 버섯 군락을 향해 튕겨요</li>
+        <li><b>분열</b>: 꼬마 수확기가 생겨요</li>
+        <li><b>꼬마 수확기</b>: 수확기 공격력의 10%를 가져요 (수확기 공격력이 오르면 같이 올라요)</li>
+        <li><b>약손</b>: 디버프 상태가 되지 않아요</li>
+        <li><b>가속</b>: 수확기 속도 +50%</li>
+        <li><b>지혜</b>: 3초 동안 수확기 스킬 발동률 증가</li>
+        <li><b>피버</b>: 3~5초 동안 콤보 계수 +50%</li>
+      </ul></div>
+    <div class="card"><h3>정해진 규칙</h3>
+      <ul style="margin-top:6px">
+        <li><b>수확기 스테이터스와 버프는 따로</b> 계산해요. 노드로 오르는 상시 능력치(예: 콤보 계수 노드)와 슬라이드 바 버프(예: 피버의 콤보 계수 +50%)는 합치지 않아요</li>
+        <li>레전더리 버섯은 <b>보스 전용</b>이에요. 필드에서는 일반·에픽·유니크만 나와요</li>
+        <li>버섯 등급 이름: 일반 · 에픽 · 유니크 · 레전더리</li>
+        <li><b>거대 버섯</b>은 삭제해요</li>
+        <li>환경 복원의 <b>이끼 길은 꽃밭</b>으로 바꿔요</li>
+        <li><b>분신 바</b>는 맵 양 끝에 나오고, 길이는 바와 같아요. 트리에서는 한가득 포옹 Lv.1 → 한가득 포옹 Lv.2 → 분신술 Lv.1(해금) → 한가득 포옹 Lv.3 → 분신술 Lv.2 → 분신술 Lv.3 → 거울 분신술이 한 줄로 이어져요. 한가득 포옹은 세로줄 2번째부터, 분신술은 4번째부터 놓여요</li>
+        <li>라운드 <b>시작 시간은 10초</b>이고, 노장의 체력으로 24초까지 늘어요</li>
+        <li><b>극한 치명타</b>: 치명타 확률이 100%를 넘으면 넘친 만큼 치명타 피해율에 더해요 (102% → +2%p)</li>
+        <li>사냥 준비는 첫 레벨업만 골드, 이후 균사석으로 Lv.10까지 한 노드에서 올려요</li>
+        <li><b>필드 넓히기 노드는 없어요.</b> 군락지(균사) 수가 늘면 필드가 자동으로 넓어져요</li>
+        <li><b>초반 30레벨은 직관적인 효과 위주</b>예요. 노장의 체력·보스 피해·탈피·약손 같은 유틸은 레벨은 그대로 두고, 첫 노드에서 <b>세로 3단계 이후</b> 칸에만 놓았어요. 디버프를 쓰는 버섯은 30레벨 무렵부터 나오도록 함께 설계해야 해요</li>
+        <li><b>같은 스킬은 이전 레벨을 찍어야</b> 다음 레벨 노드를 찍을 수 있어요</li>
+      </ul></div>
+  </div>
+</section>
+<section class="prose">
+  <h2>배치 규칙</h2>
+  <ul>
+    <li><b>첫 노드</b>: 효과 등급과 상관없이 식용 효율적 사냥 Lv.1~3, 약용 스프링 Lv.1, 독성 날 갈기 Lv.1로 고정했어요 (레어도 1).</li>
+    <li><b>지그재그</b>: 한 줄기가 곧게 이어지는 곳은 없어요. 매번 45° 꺾이고, 꺾는 방향을 좌우로 번갈아 바꿔요.</li>
+    <li><b>6갈래</b>: 첫 노드에서 좌우로 갈라져 식용 1(획득률)·식용 2(스테이지), 약용 1(슬라이드 바 버프)·약용 2(스킬·환경·저항), 독성 1(공격·치명·지속)·독성 2(바·이동)로 나뉘어요. 각 갈래는 영역의 반쪽(60°)을 맡아 10시·2시·6시 경계 가까이까지 채워요.</li>
+    <li><b>선택지 갈림길</b>: 노드 1 → 2~3 → 1 → 2 → 1 …처럼, 하나를 해금하면 다음에 2~3갈래 중에서 고르고, 그다음은 한 줄로 이어지는 흐름을 반복해요.</li>
+    <li><b>이전 레벨 먼저</b>: 다른 노드에 이어져 있어도 같은 스킬의 이전 레벨을 찍어야 다음 레벨 노드를 찍을 수 있어요. 노드를 누르면 선행 레벨이 보여요.</li>
+    <li><b>같은 간격</b>: 네모 칸 위라 가로·세로 이웃 간격이 같아요. 대각선 이웃은 칸 모서리 방향이에요.</li>
+    <li><b>2칸 띄우기</b>: 바로 옆 칸에 놓으면 다른 뿌리와 붙는 자리에서는 한 칸을 비우고 2칸 건너 이어요 (긴 선, 가운데 빈 점).</li>
+    <li><b>레어도</b>: 유저에게 보이는 수치가 아니라 노드 배치와 가격을 정하는 내부 규격이에요. 자리로 정해요. 첫 노드를 1로 두고, 중심축 방향(세로)으로 한 칸 나가면 +2, 중심축에서 옆(가로)으로 한 칸 벌어지면 +1이에요 (1~<span id="maxD"></span>). 그래서 레어도가 높은 노드는 항상 더 바깥이나 더 옆에 있고, 같은 스킬의 다음 레벨이 중심에서 더 가까운 곳은 없어요.</li>
+    <li><b>강한 노드일수록 바깥</b>. 효과 등급(아래 기준표) 순서로 안쪽부터 채웠고, 같은 스킬의 다음 레벨은 항상 같은 띠이거나 더 바깥이에요.</li>
+    <li><b>같은 스킬은 바로 잇지 않음</b>. 부모와 자식이 같은 스킬인 곳은 0곳이에요.</li>
+    <li><b>원 전체</b>: 세 영역 모두 바깥 테두리까지 닿게 했어요. 노드가 적은 약용·독성은 2칸 건너기가 많아 성겨요.</li>
+    <li><b>레벨</b>: 3레벨 줄은 레벨마다 노드. 식용의 5레벨 줄(효율적 사냥)과 희귀한 버섯 소문은 Lv.1~3을 한 노드에서 올려요. 독성은 노드가 적어서 5레벨 줄(날 갈기·노장의 체력·치명 공격)을 레벨마다 풀었어요.</li>
+    <li><b>레어도 이름</b>: 표의 레어 → 에픽, 에픽 → 유니크로 바꿔 게임 등급(일반·에픽·유니크·레전더리)에 맞췄어요. <b>레전더리 버섯은 보스 전용</b>이라 필드 스폰 노드가 없고, 은둔 고수만 보스의 레전더리 수확량을 올려요.</li>
+    <li><b>꼬마 수확기</b>: 따로 키우는 노드는 없고, 수확기 공격력이 오르면 꼬마 수확기 공격력도 같이 올라요.</li>
+    <li><b>균사석 스킬</b> 3개는 각 영역 중심축의 맨 끝 칸에 있어요. 효과 등급과 상관없이 고정이에요.</li>
+  </ul>
+</section>
+
+<section style="display:grid;gap:14px">
+  <div class="prose"><h2>레어도 기준표</h2>
+  <p>레어도는 두 단계로 정했어요. 먼저 효과 크기로 <b>효과 등급</b>(1~5)을 매기고, 영역 안에서 등급 순서대로 칸 수가 적은 자리부터 놓았어요. 실제 <b>레어도</b>는 놓인 자리로 정해져요 (세로 한 단계 +2, 가로 한 칸 +1).</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>효과 등급</th><th>기준</th><th>예</th></tr></thead>
+    <tbody>
+      <tr><td class="nw"><b>1 일반</b></td><td>줄의 첫 단계. 작은 수치 (+10% 이하, +1개, 3초 버프, 공격력 +2)</td><td>효율적 사냥 Lv.1~3, 넓은 시야 Lv.1, 스프링 Lv.1, 초토화 Lv.1</td></tr>
+      <tr><td class="nw"><b>2 고급</b></td><td>첫 줄의 2~3단계, 또는 조건이 붙은 작은 효과</td><td>흥정 기술 Lv.2~3, 관통 Lv.2~3, 이독제독 Lv.1~2, 바람의 길 Lv.2~3</td></tr>
+      <tr><td class="nw"><b>3 희귀</b></td><td>상위 줄의 첫 단계, 확률형 공격 스킬의 시작, 앞 줄 최대치를 넘는 수치</td><td>단골 손님 Lv.1, 하늘의 시야 Lv.1, 포자 폭발 Lv.1, 분신술 Lv.1</td></tr>
+      <tr><td class="nw"><b>4 영웅</b></td><td>상위 줄의 2~3단계, 핵심 배율</td><td>단골 손님 Lv.2~3 (전환율 +40~50%), 치명 박살 Lv.2, 연속 번개 Lv.2~3</td></tr>
+      <tr><td class="nw"><b>5 전설</b></td><td>판을 바꾸는 효과, 최상위 줄의 마지막, 균사석 스킬</td><td>신의 눈 (군락지 +3), 거울 분신술, 일확천금 Lv.3, 장인의 도구</td></tr>
+    </tbody></table></div>
+  <details class="card"><summary style="cursor:pointer;font-weight:600">노드별 효과 등급과 레어도 전체 보기</summary><div class="tbl" style="margin-top:10px"><table id="rarTbl"></table></div></details>
+</section>
+
+<section style="display:grid;gap:14px">
+  <div class="prose"><h2>기존 업그레이드 노드와 비교</h2>
+  <p>지금 게임(db.json)의 노드 90개가 새 표에서 어떻게 되는지예요. 무한 확장과 세계수는 이번 배치에서 뺐어요.</p>
+  <div class="meta" id="sumChg"></div></div>
+  <div class="tbl"><table id="chgTbl"></table></div>
+</section>
+
+<section style="display:grid;gap:22px" id="tables"></section>
+</main>
+<script>
+const DATA={"nodes": [{"id": "root", "br": "root", "line": "사냥 준비", "name": "사냥 준비", "tag": "슬라이드 바", "lv": "Lv.1~10", "inplace": true, "rar": 0, "eff": ["공격력 +2 (3초) 버프, 레벨마다 +2", "첫 레벨업은 골드, 이후 균사석"], "x": 0, "y": 0, "parent": null, "depth": 0, "sub_n": 130, "subsize": 130, "sub_": "", "sub": 130}, {"br": "ed", "line": "효율적 사냥", "name": "효율적 사냥", "tag": "획득률", "lv": "Lv.1~3", "inplace": true, "rar": 1, "gem": false, "eff": ["Lv.1 획득 점수 +10%", "Lv.2 획득 점수 +20%", "Lv.3 획득 점수 +30%"], "id": "ed:0,-1", "x": 0, "y": -1, "parent": "root", "depth": 1, "sub_n": 46, "subsize": 46, "sub_": "시작 갈래", "sub": 46}, {"br": "ed", "line": "흥정 기술", "name": "흥정 기술", "tag": "획득률", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["점수 골드 전환율 +10%"], "id": "ed:-1,-2", "x": -1, "y": -2, "parent": "ed:0,-1", "depth": 4, "sub_n": 24, "subsize": 24, "sub_": "식용 1 · 획득률", "sub": 24}, {"br": "ed", "line": "넓은 시야", "name": "넓은 시야", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["군락지 수 +1 (3 → 4)"], "id": "ed:1,-2", "x": 1, "y": -2, "parent": "ed:0,-1", "depth": 4, "sub_n": 21, "subsize": 21, "sub_": "식용 2 · 스테이지", "sub": 21}, {"br": "ed", "line": "희귀한 버섯 소문", "name": "희귀한 버섯 소문", "tag": "스테이지", "lv": "Lv.1~3", "inplace": true, "rar": 2, "gem": false, "eff": ["Lv.1 에픽 버섯 스폰율 +10%", "Lv.2 에픽 버섯 스폰율 +15%", "Lv.3 에픽 버섯 스폰율 +20%"], "id": "ed:1,-3", "x": 1, "y": -3, "parent": "ed:1,-2", "depth": 6, "sub_n": 10, "subsize": 10, "sub_": "식용 2 · 스테이지", "sub": 10}, {"br": "ed", "line": "재빠른 손길", "name": "재빠른 손길", "tag": "획득률", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["일반 버섯 수확량 +10%"], "id": "ed:-1,-3", "x": -1, "y": -3, "parent": "ed:-1,-2", "depth": 6, "sub_n": 12, "subsize": 12, "sub_": "식용 1 · 획득률", "sub": 12}, {"br": "ed", "line": "더 많은 버섯", "name": "더 많은 버섯", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["군락지 주변 단일 버섯 +1 (3 → 4)"], "id": "ed:2,-2", "x": 2, "y": -2, "parent": "ed:1,-2", "depth": 5, "sub_n": 10, "subsize": 10, "sub_": "식용 2 · 스테이지", "sub": 10}, {"br": "ed", "line": "재빠른 손길", "name": "재빠른 손길", "tag": "획득률", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["일반 버섯 수확량 +5%"], "id": "ed:-2,-2", "x": -2, "y": -2, "parent": "ed:-1,-2", "depth": 5, "sub_n": 11, "subsize": 11, "sub_": "식용 1 · 획득률", "sub": 11}, {"br": "ed", "line": "고속 범람", "name": "고속 범람", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["군락지 리스폰 −1초 (7 → 6)"], "id": "ed:3,-3", "x": 3, "y": -3, "parent": "ed:2,-2", "depth": 8, "sub_n": 9, "subsize": 9, "sub_": "식용 2 · 스테이지", "sub": 9}, {"br": "ed", "line": "흥정 기술", "name": "흥정 기술", "tag": "획득률", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["점수 골드 전환율 +20%"], "id": "ed:-2,-4", "x": -2, "y": -4, "parent": "ed:-1,-3", "depth": 9, "sub_n": 11, "subsize": 11, "sub_": "식용 1 · 획득률", "sub": 11}, {"br": "ed", "line": "플렉스", "name": "플렉스", "tag": "획득률", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["점수 3배 확률 +5%"], "id": "ed:-2,-5", "x": -2, "y": -5, "parent": "ed:-2,-4", "depth": 11, "sub_n": 8, "subsize": 8, "sub_": "식용 1 · 획득률", "sub": 8}, {"br": "ed", "line": "흥정 기술", "name": "흥정 기술", "tag": "획득률", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["점수 골드 전환율 +15%"], "id": "ed:-3,-3", "x": -3, "y": -3, "parent": "ed:-2,-2", "depth": 8, "sub_n": 10, "subsize": 10, "sub_": "식용 1 · 획득률", "sub": 10}, {"br": "ed", "line": "플렉스", "name": "플렉스", "tag": "획득률", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["점수 3배 확률 +3%"], "id": "ed:-4,-3", "x": -4, "y": -3, "parent": "ed:-3,-3", "depth": 9, "sub_n": 6, "subsize": 6, "sub_": "식용 1 · 획득률", "sub": 6}, {"br": "ed", "line": "넓은 시야", "name": "넓은 시야", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["군락지 수 +1 (4 → 5)"], "id": "ed:4,-3", "x": 4, "y": -3, "parent": "ed:3,-3", "depth": 9, "sub_n": 5, "subsize": 5, "sub_": "식용 2 · 스테이지", "sub": 5}, {"br": "ed", "line": "고속 범람", "name": "고속 범람", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["군락지 리스폰 −1초 (6 → 5)"], "id": "ed:2,-4", "x": 2, "y": -4, "parent": "ed:1,-3", "depth": 9, "sub_n": 9, "subsize": 9, "sub_": "식용 2 · 스테이지", "sub": 9}, {"br": "ed", "line": "섬세한 손길", "name": "섬세한 손길", "tag": "획득률", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["에픽 버섯 수확량 +5%"], "id": "ed:-1,-5", "x": -1, "y": -5, "parent": "ed:-2,-4", "depth": 10, "sub_n": 2, "subsize": 2, "sub_": "식용 1 · 획득률", "sub": 2}, {"br": "ed", "line": "더 많은 버섯", "name": "더 많은 버섯", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["군락지 주변 단일 버섯 +1 (5 → 6)"], "id": "ed:2,-5", "x": 2, "y": -5, "parent": "ed:2,-4", "depth": 11, "sub_n": 6, "subsize": 6, "sub_": "식용 2 · 스테이지", "sub": 6}, {"br": "ed", "line": "넓은 시야", "name": "넓은 시야", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["군락지 수 +1 (5 → 6)"], "id": "ed:1,-5", "x": 1, "y": -5, "parent": "ed:2,-4", "depth": 10, "sub_n": 2, "subsize": 2, "sub_": "식용 2 · 스테이지", "sub": 2}, {"br": "ed", "line": "신들린 손길", "name": "신들린 손길", "tag": "획득률", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["유니크 버섯 수확량 +5%"], "id": "ed:-3,-6", "x": -3, "y": -6, "parent": "ed:-2,-5", "depth": 14, "sub_n": 7, "subsize": 7, "sub_": "식용 1 · 획득률", "sub": 7}, {"br": "ed", "line": "재빠른 손길", "name": "재빠른 손길", "tag": "획득률", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["일반 버섯 수확량 +15%"], "id": "ed:-3,-4", "x": -3, "y": -4, "parent": "ed:-3,-3", "depth": 10, "sub_n": 3, "subsize": 3, "sub_": "식용 1 · 획득률", "sub": 3}, {"br": "ed", "line": "고속 범람", "name": "고속 범람", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["군락지 리스폰 −2초 (5 → 3)"], "id": "ed:3,-6", "x": 3, "y": -6, "parent": "ed:2,-5", "depth": 14, "sub_n": 5, "subsize": 5, "sub_": "식용 2 · 스테이지", "sub": 5}, {"br": "ed", "line": "희귀한 버섯 소문", "name": "희귀한 버섯 소문", "tag": "스테이지", "lv": "Lv.4", "inplace": false, "rar": 3, "gem": false, "eff": ["에픽 버섯 스폰율 +25%"], "id": "ed:5,-4", "x": 5, "y": -4, "parent": "ed:4,-3", "depth": 12, "sub_n": 4, "subsize": 4, "sub_": "식용 2 · 스테이지", "sub": 4}, {"br": "ed", "line": "단골 손님", "name": "단골 손님", "tag": "획득률", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["점수 골드 전환율 +30%"], "id": "ed:-5,-4", "x": -5, "y": -4, "parent": "ed:-4,-3", "depth": 12, "sub_n": 5, "subsize": 5, "sub_": "식용 1 · 획득률", "sub": 5}, {"br": "ed", "line": "하늘의 시야", "name": "하늘의 시야", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["군락지 수 +2 (6 → 8)"], "id": "ed:1,-6", "x": 1, "y": -6, "parent": "ed:1,-5", "depth": 12, "sub_n": 1, "subsize": 1, "sub_": "식용 2 · 스테이지", "sub": 1}, {"br": "ed", "line": "더 많은 버섯", "name": "더 많은 버섯", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["군락지 주변 단일 버섯 +1 (4 → 5)"], "id": "ed:3,-4", "x": 3, "y": -4, "parent": "ed:3,-3", "depth": 10, "sub_n": 3, "subsize": 3, "sub_": "식용 2 · 스테이지", "sub": 3}, {"br": "ed", "line": "효율적 사냥", "name": "효율적 사냥", "tag": "획득률", "lv": "Lv.4", "inplace": false, "rar": 3, "gem": false, "eff": ["획득 점수 +40%"], "id": "ed:-1,-6", "x": -1, "y": -6, "parent": "ed:-1,-5", "depth": 12, "sub_n": 1, "subsize": 1, "sub_": "식용 1 · 획득률", "sub": 1}, {"br": "ed", "line": "플렉스", "name": "플렉스", "tag": "획득률", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["점수 3배 확률 +7%"], "id": "ed:-6,-4", "x": -6, "y": -4, "parent": "ed:-5,-4", "depth": 13, "sub_n": 2, "subsize": 2, "sub_": "식용 1 · 획득률", "sub": 2}, {"br": "ed", "line": "섬세한 손길", "name": "섬세한 손길", "tag": "획득률", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["에픽 버섯 수확량 +15%"], "id": "ed:-5,-5", "x": -5, "y": -5, "parent": "ed:-5,-4", "depth": 14, "sub_n": 2, "subsize": 2, "sub_": "식용 1 · 획득률", "sub": 2}, {"br": "ed", "line": "굉장한 버섯 전설", "name": "굉장한 버섯 전설", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["유니크 버섯 스폰율 +5%"], "id": "ed:6,-4", "x": 6, "y": -4, "parent": "ed:5,-4", "depth": 13, "sub_n": 2, "subsize": 2, "sub_": "식용 2 · 스테이지", "sub": 2}, {"br": "ed", "line": "일확천금의 신화", "name": "일확천금의 신화", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["황금 변종 스폰율 +1%"], "id": "ed:5,-5", "x": 5, "y": -5, "parent": "ed:5,-4", "depth": 14, "sub_n": 1, "subsize": 1, "sub_": "식용 2 · 스테이지", "sub": 1}, {"br": "ed", "line": "은둔 고수", "name": "은둔 고수", "tag": "획득률", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["보스 전용 레전더리 버섯 수확량 +6%"], "id": "ed:-3,-7", "x": -3, "y": -7, "parent": "ed:-3,-6", "depth": 16, "sub_n": 2, "subsize": 2, "sub_": "식용 1 · 획득률", "sub": 2}, {"br": "ed", "line": "은둔 고수", "name": "은둔 고수", "tag": "획득률", "lv": "Lv.1", "inplace": false, "rar": 4, "gem": false, "eff": ["보스 전용 레전더리 버섯 수확량 +3%"], "id": "ed:-2,-7", "x": -2, "y": -7, "parent": "ed:-3,-6", "depth": 15, "sub_n": 4, "subsize": 4, "sub_": "식용 1 · 획득률", "sub": 4}, {"br": "ed", "line": "하늘의 시야", "name": "하늘의 시야", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["군락지 수 +2 (8 → 10)"], "id": "ed:4,-5", "x": 4, "y": -5, "parent": "ed:3,-4", "depth": 13, "sub_n": 2, "subsize": 2, "sub_": "식용 2 · 스테이지", "sub": 2}, {"br": "ed", "line": "일확천금의 신화", "name": "일확천금의 신화", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["황금 변종 스폰율 +3%"], "id": "ed:3,-7", "x": 3, "y": -7, "parent": "ed:3,-6", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "식용 2 · 스테이지", "sub": 1}, {"br": "ed", "line": "굉장한 버섯 전설", "name": "굉장한 버섯 전설", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["유니크 버섯 스폰율 +15%"], "id": "ed:2,-7", "x": 2, "y": -7, "parent": "ed:3,-6", "depth": 15, "sub_n": 3, "subsize": 3, "sub_": "식용 2 · 스테이지", "sub": 3}, {"br": "ed", "line": "하늘의 시야", "name": "하늘의 시야", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["군락지 수 +2 (10 → 12)"], "id": "ed:7,-5", "x": 7, "y": -5, "parent": "ed:6,-4", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "식용 2 · 스테이지", "sub": 1}, {"br": "ed", "line": "섬세한 손길", "name": "섬세한 손길", "tag": "획득률", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["에픽 버섯 수확량 +10%"], "id": "ed:-4,-5", "x": -4, "y": -5, "parent": "ed:-3,-4", "depth": 13, "sub_n": 2, "subsize": 2, "sub_": "식용 1 · 획득률", "sub": 2}, {"br": "ed", "line": "단골 손님", "name": "단골 손님", "tag": "획득률", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["점수 골드 전환율 +40%"], "id": "ed:-7,-5", "x": -7, "y": -5, "parent": "ed:-6,-4", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "식용 1 · 획득률", "sub": 1}, {"br": "ed", "line": "일확천금의 신화", "name": "일확천금의 신화", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 5, "gem": false, "eff": ["황금 변종 스폰율 +5%"], "id": "ed:2,-8", "x": 2, "y": -8, "parent": "ed:2,-7", "depth": 17, "sub_n": 2, "subsize": 2, "sub_": "식용 2 · 스테이지", "sub": 2}, {"br": "ed", "line": "단골 손님", "name": "단골 손님", "tag": "획득률", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["점수 골드 전환율 +50%"], "id": "ed:-4,-8", "x": -4, "y": -8, "parent": "ed:-3,-7", "depth": 19, "sub_n": 1, "subsize": 1, "sub_": "식용 1 · 획득률", "sub": 1}, {"br": "ed", "line": "신의 눈", "name": "신의 눈", "tag": "스테이지", "lv": "", "inplace": false, "rar": 5, "gem": false, "eff": ["군락지 수 +3 (12 → 15)"], "id": "ed:1,-9", "x": 1, "y": -9, "parent": "ed:2,-8", "depth": 18, "sub_n": 1, "subsize": 1, "sub_": "식용 2 · 스테이지", "sub": 1}, {"br": "ed", "line": "굉장한 버섯 전설", "name": "굉장한 버섯 전설", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["유니크 버섯 스폰율 +10%"], "id": "ed:4,-6", "x": 4, "y": -6, "parent": "ed:4,-5", "depth": 15, "sub_n": 1, "subsize": 1, "sub_": "식용 2 · 스테이지", "sub": 1}, {"br": "ed", "line": "신들린 손길", "name": "신들린 손길", "tag": "획득률", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["유니크 버섯 수확량 +10%"], "id": "ed:-4,-6", "x": -4, "y": -6, "parent": "ed:-4,-5", "depth": 15, "sub_n": 1, "subsize": 1, "sub_": "식용 1 · 획득률", "sub": 1}, {"br": "ed", "line": "효율적 사냥", "name": "효율적 사냥", "tag": "획득률", "lv": "Lv.5", "inplace": false, "rar": 4, "gem": false, "eff": ["획득 점수 +50%"], "id": "ed:-6,-6", "x": -6, "y": -6, "parent": "ed:-5,-5", "depth": 17, "sub_n": 1, "subsize": 1, "sub_": "식용 1 · 획득률", "sub": 1}, {"br": "ed", "line": "신들린 손길", "name": "신들린 손길", "tag": "획득률", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["유니크 버섯 수확량 +15%"], "id": "ed:-2,-8", "x": -2, "y": -8, "parent": "ed:-2,-7", "depth": 17, "sub_n": 3, "subsize": 3, "sub_": "식용 1 · 획득률", "sub": 3}, {"br": "ed", "line": "은둔 고수", "name": "은둔 고수", "tag": "획득률", "lv": "Lv.3", "inplace": false, "rar": 5, "gem": false, "eff": ["보스 전용 레전더리 버섯 수확량 +9%"], "id": "ed:-1,-9", "x": -1, "y": -9, "parent": "ed:-2,-8", "depth": 18, "sub_n": 2, "subsize": 2, "sub_": "식용 1 · 획득률", "sub": 2}, {"br": "ed", "line": "할아버지의 전설", "name": "할아버지의 전설", "tag": "스킬", "lv": "Lv.1~5", "inplace": true, "rar": 5, "gem": true, "eff": ["라운드 마지막 5초 점수·수확량 +10% / Lv (최대 5Lv = 50%)"], "id": "ed:0,-9", "x": 0, "y": -9, "parent": "ed:-1,-9", "depth": 17, "sub_n": 1, "subsize": 1, "sub_": "식용 1 · 획득률", "sub": 1}, {"br": "md", "line": "스프링", "name": "스프링", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["가속(3초) 버프"], "id": "md:1,1", "x": 1, "y": 1, "parent": "root", "depth": 1, "sub_n": 40, "subsize": 40, "sub_": "시작 갈래", "sub": 40}, {"br": "md", "line": "관통", "name": "관통", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["관통(3초) 버프"], "id": "md:2,0", "x": 2, "y": 0, "parent": "md:1,1", "depth": 2, "sub_n": 21, "subsize": 21, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 21}, {"br": "md", "line": "환경 복원", "name": "환경 복원", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["필드에 그루터기 추가"], "id": "md:1,2", "x": 1, "y": 2, "parent": "md:1,1", "depth": 3, "sub_n": 18, "subsize": 18, "sub_": "약용 2 · 스킬·환경·저항", "sub": 18}, {"br": "md", "line": "피버까지 피버", "name": "피버까지 피버", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["[피버] 버프 3초 · 콤보 계수 +50%"], "id": "md:3,0", "x": 3, "y": 0, "parent": "md:2,0", "depth": 5, "sub_n": 16, "subsize": 16, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 16}, {"br": "md", "line": "스프링", "name": "스프링", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 1, "gem": false, "eff": ["가속(4초) 버프"], "id": "md:2,-1", "x": 2, "y": -1, "parent": "md:2,0", "depth": 2, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "md", "line": "이독제독", "name": "이독제독", "tag": "스킬", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["단일 버섯 획득 시 4% 확률로 다음 타격 피해 +200%"], "id": "md:2,3", "x": 2, "y": 3, "parent": "md:1,2", "depth": 6, "sub_n": 10, "subsize": 10, "sub_": "약용 2 · 스킬·환경·저항", "sub": 10}, {"br": "md", "line": "관통", "name": "관통", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["관통(4초) 버프"], "id": "md:4,-1", "x": 4, "y": -1, "parent": "md:3,0", "depth": 7, "sub_n": 15, "subsize": 15, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 15}, {"br": "md", "line": "스프링", "name": "스프링", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["가속(5초) 버프"], "id": "md:3,1", "x": 3, "y": 1, "parent": "md:2,0", "depth": 5, "sub_n": 3, "subsize": 3, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 3}, {"br": "md", "line": "환경 복원", "name": "환경 복원", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["필드에 꽃밭 추가"], "id": "md:2,4", "x": 2, "y": 4, "parent": "md:2,3", "depth": 8, "sub_n": 9, "subsize": 9, "sub_": "약용 2 · 스킬·환경·저항", "sub": 9}, {"br": "md", "line": "관통", "name": "관통", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["관통(5초) 버프"], "id": "md:4,1", "x": 4, "y": 1, "parent": "md:3,1", "depth": 7, "sub_n": 2, "subsize": 2, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 2}, {"br": "md", "line": "유도", "name": "유도", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["유도(4초) 버프"], "id": "md:5,-1", "x": 5, "y": -1, "parent": "md:4,-1", "depth": 9, "sub_n": 8, "subsize": 8, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 8}, {"br": "md", "line": "노인의 지혜", "name": "노인의 지혜", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["[지혜] 버프 3초 · 수확기 스킬 발동률 +1%"], "id": "md:6,1", "x": 6, "y": 1, "parent": "md:4,-1", "depth": 11, "sub_n": 5, "subsize": 5, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 5}, {"br": "md", "line": "이독제독", "name": "이독제독", "tag": "스킬", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["단일 버섯 획득 시 3% 확률로 다음 타격 피해 +200%"], "id": "md:2,2", "x": 2, "y": 2, "parent": "md:1,2", "depth": 4, "sub_n": 7, "subsize": 7, "sub_": "약용 2 · 스킬·환경·저항", "sub": 7}, {"br": "md", "line": "포자 폭발", "name": "포자 폭발", "tag": "스킬", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["군락 충돌 시 1% 확률로 전체 피해(공격력 10%)"], "id": "md:3,5", "x": 3, "y": 5, "parent": "md:2,4", "depth": 11, "sub_n": 6, "subsize": 6, "sub_": "약용 2 · 스킬·환경·저항", "sub": 6}, {"br": "md", "line": "이독제독", "name": "이독제독", "tag": "스킬", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["단일 버섯 획득 시 5% 확률로 다음 타격 피해 +200%"], "id": "md:1,5", "x": 1, "y": 5, "parent": "md:2,4", "depth": 8, "sub_n": 2, "subsize": 2, "sub_": "약용 2 · 스킬·환경·저항", "sub": 2}, {"br": "md", "line": "환경 복원", "name": "환경 복원", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["필드에 도토리 점등 추가"], "id": "md:3,6", "x": 3, "y": 6, "parent": "md:3,5", "depth": 13, "sub_n": 5, "subsize": 5, "sub_": "약용 2 · 스킬·환경·저항", "sub": 5}, {"br": "md", "line": "회오리", "name": "회오리", "tag": "스킬", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["군락 충돌 시 3% 확률로 3초 지속 피해(공격력 5%)"], "id": "md:1,6", "x": 1, "y": 6, "parent": "md:1,5", "depth": 10, "sub_n": 1, "subsize": 1, "sub_": "약용 2 · 스킬·환경·저항", "sub": 1}, {"br": "md", "line": "유도", "name": "유도", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["유도(3초) 버프"], "id": "md:4,-2", "x": 4, "y": -2, "parent": "md:4,-1", "depth": 7, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "md", "line": "할아버지 손은 약손", "name": "할아버지 손은 약손", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["포자 디버프 제거 + 약손(3초)"], "id": "md:5,2", "x": 5, "y": 2, "parent": "md:4,1", "depth": 9, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "md", "line": "노인의 지혜", "name": "노인의 지혜", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["[지혜] 버프 3초 · 수확기 스킬 발동률 +2%"], "id": "md:6,-2", "x": 6, "y": -2, "parent": "md:5,-1", "depth": 11, "sub_n": 7, "subsize": 7, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 7}, {"br": "md", "line": "분열", "name": "분열", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["10% 확률로 분열(3초) 버프"], "id": "md:7,-2", "x": 7, "y": -2, "parent": "md:6,-2", "depth": 13, "sub_n": 2, "subsize": 2, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 2}, {"br": "md", "line": "연속 번개", "name": "연속 번개", "tag": "스킬", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["군락 파괴 시 3% 확률로 랜덤 군락에 번개(공격력 30%)"], "id": "md:3,3", "x": 3, "y": 3, "parent": "md:2,2", "depth": 7, "sub_n": 6, "subsize": 6, "sub_": "약용 2 · 스킬·환경·저항", "sub": 6}, {"br": "md", "line": "할아버지 손은 약손", "name": "할아버지 손은 약손", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["포자 디버프 제거 + 약손(4초)"], "id": "md:7,1", "x": 7, "y": 1, "parent": "md:6,1", "depth": 14, "sub_n": 4, "subsize": 4, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 4}, {"br": "md", "line": "탈피", "name": "탈피", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["군락 충돌로 디버프를 얻으면 10% 확률로 해제"], "id": "md:4,3", "x": 4, "y": 3, "parent": "md:3,3", "depth": 8, "sub_n": 4, "subsize": 4, "sub_": "약용 2 · 스킬·환경·저항", "sub": 4}, {"br": "md", "line": "포자 폭발", "name": "포자 폭발", "tag": "스킬", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["군락 충돌 시 2% 확률로 전체 피해(공격력 10%)"], "id": "md:5,4", "x": 5, "y": 4, "parent": "md:4,3", "depth": 12, "sub_n": 3, "subsize": 3, "sub_": "약용 2 · 스킬·환경·저항", "sub": 3}, {"br": "md", "line": "유도", "name": "유도", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["유도(5초) 버프"], "id": "md:7,-1", "x": 7, "y": -1, "parent": "md:6,-2", "depth": 13, "sub_n": 3, "subsize": 3, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 3}, {"br": "md", "line": "포자 폭발", "name": "포자 폭발", "tag": "스킬", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["군락 충돌 시 3% 확률로 전체 피해(공격력 10%)"], "id": "md:4,7", "x": 4, "y": 7, "parent": "md:3,6", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "약용 2 · 스킬·환경·저항", "sub": 1}, {"br": "md", "line": "회오리", "name": "회오리", "tag": "스킬", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["군락 충돌 시 4% 확률로 4초 지속 피해(공격력 5%)"], "id": "md:2,7", "x": 2, "y": 7, "parent": "md:3,6", "depth": 13, "sub_n": 3, "subsize": 3, "sub_": "약용 2 · 스킬·환경·저항", "sub": 3}, {"br": "md", "line": "연속 번개", "name": "연속 번개", "tag": "스킬", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["군락 파괴 시 5% 확률로 랜덤 군락에 번개(공격력 30%)"], "id": "md:2,8", "x": 2, "y": 8, "parent": "md:2,7", "depth": 15, "sub_n": 2, "subsize": 2, "sub_": "약용 2 · 스킬·환경·저항", "sub": 2}, {"br": "md", "line": "할아버지 손은 약손", "name": "할아버지 손은 약손", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["포자 디버프 제거 + 약손(5초)"], "id": "md:8,-3", "x": 8, "y": -3, "parent": "md:7,-2", "depth": 15, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "md", "line": "분열", "name": "분열", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["10% 확률로 분열(5초) 버프"], "id": "md:8,2", "x": 8, "y": 2, "parent": "md:7,1", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "md", "line": "노인의 지혜", "name": "노인의 지혜", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["[지혜] 버프 3초 · 수확기 스킬 발동률 +3%"], "id": "md:7,3", "x": 7, "y": 3, "parent": "md:7,1", "depth": 14, "sub_n": 2, "subsize": 2, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 2}, {"br": "md", "line": "피버까지 피버", "name": "피버까지 피버", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["[피버] 버프 4초 · 콤보 계수 +50%"], "id": "md:6,-3", "x": 6, "y": -3, "parent": "md:6,-2", "depth": 11, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "md", "line": "탈피", "name": "탈피", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["군락 충돌로 디버프를 얻으면 30% 확률로 해제"], "id": "md:5,5", "x": 5, "y": 5, "parent": "md:5,4", "depth": 13, "sub_n": 2, "subsize": 2, "sub_": "약용 2 · 스킬·환경·저항", "sub": 2}, {"br": "md", "line": "회오리", "name": "회오리", "tag": "스킬", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["군락 충돌 시 5% 확률로 5초 지속 피해(공격력 5%)"], "id": "md:1,9", "x": 1, "y": 9, "parent": "md:2,8", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "약용 2 · 스킬·환경·저항", "sub": 1}, {"br": "md", "line": "연속 번개", "name": "연속 번개", "tag": "스킬", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["군락 파괴 시 7% 확률로 랜덤 위치에 번개(공격력 30%)"], "id": "md:6,6", "x": 6, "y": 6, "parent": "md:5,5", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "약용 2 · 스킬·환경·저항", "sub": 1}, {"br": "md", "line": "탈피", "name": "탈피", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["군락 충돌로 디버프를 얻으면 20% 확률로 해제"], "id": "md:3,4", "x": 3, "y": 4, "parent": "md:3,3", "depth": 9, "sub_n": 1, "subsize": 1, "sub_": "약용 2 · 스킬·환경·저항", "sub": 1}, {"br": "md", "line": "분열", "name": "분열", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["10% 확률로 분열(4초) 버프"], "id": "md:8,-1", "x": 8, "y": -1, "parent": "md:7,-1", "depth": 16, "sub_n": 2, "subsize": 2, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 2}, {"br": "md", "line": "피버까지 피버", "name": "피버까지 피버", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["[피버] 버프 5초 · 콤보 계수 +50%"], "id": "md:9,0", "x": 9, "y": 0, "parent": "md:8,-1", "depth": 18, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "md", "line": "전설의 할아버지", "name": "전설의 할아버지", "tag": "슬라이드 바", "lv": "Lv.1~5", "inplace": true, "rar": 5, "gem": true, "eff": ["게임 시작 시 보유 버프 스킬 즉시 발동 확률 +2% / Lv (최대 5Lv = 10%)"], "id": "md:8,4", "x": 8, "y": 4, "parent": "md:7,3", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "약용 1 · 슬라이드 바 버프", "sub": 1}, {"br": "ps", "line": "날 갈기", "name": "날 갈기", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["공격력 +2 (1 → 3)"], "id": "ps:-1,1", "x": -1, "y": 1, "parent": "root", "depth": 1, "sub_n": 43, "subsize": 43, "sub_": "시작 갈래", "sub": 43}, {"br": "ps", "line": "치명 공격", "name": "치명 공격", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["치명타 확률 2%"], "id": "ps:-1,2", "x": -1, "y": 2, "parent": "ps:-1,1", "depth": 3, "sub_n": 23, "subsize": 23, "sub_": "독성 1 · 공격·치명·지속", "sub": 23}, {"br": "ps", "line": "바람의 길", "name": "바람의 길", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["수확기 속도 +10%"], "id": "ps:-2,0", "x": -2, "y": 0, "parent": "ps:-1,1", "depth": 2, "sub_n": 19, "subsize": 19, "sub_": "독성 2 · 바·이동", "sub": 19}, {"br": "ps", "line": "콤보 계수", "name": "콤보 계수", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["콤보 계수 +20%"], "id": "ps:-3,0", "x": -3, "y": 0, "parent": "ps:-2,0", "depth": 5, "sub_n": 8, "subsize": 8, "sub_": "독성 2 · 바·이동", "sub": 8}, {"br": "ps", "line": "초토화", "name": "초토화", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["수확기 크기 +10%"], "id": "ps:-2,-1", "x": -2, "y": -1, "parent": "ps:-2,0", "depth": 2, "sub_n": 1, "subsize": 1, "sub_": "독성 2 · 바·이동", "sub": 1}, {"br": "ps", "line": "회전 칼날", "name": "회전 칼날", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 2, "gem": false, "eff": ["회전 꼬마 수확기 +1 (0 → 1)"], "id": "ps:-2,3", "x": -2, "y": 3, "parent": "ps:-1,2", "depth": 6, "sub_n": 12, "subsize": 12, "sub_": "독성 1 · 공격·치명·지속", "sub": 12}, {"br": "ps", "line": "날 갈기", "name": "날 갈기", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 1, "gem": false, "eff": ["공격력 +2 (3 → 5)"], "id": "ps:-2,2", "x": -2, "y": 2, "parent": "ps:-1,2", "depth": 4, "sub_n": 10, "subsize": 10, "sub_": "독성 1 · 공격·치명·지속", "sub": 10}, {"br": "ps", "line": "바람의 길", "name": "바람의 길", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["수확기 속도 +20%"], "id": "ps:-4,-1", "x": -4, "y": -1, "parent": "ps:-3,0", "depth": 7, "sub_n": 7, "subsize": 7, "sub_": "독성 2 · 바·이동", "sub": 7}, {"br": "ps", "line": "치명 공격", "name": "치명 공격", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["치명타 확률 6%"], "id": "ps:-2,4", "x": -2, "y": 4, "parent": "ps:-2,3", "depth": 8, "sub_n": 11, "subsize": 11, "sub_": "독성 1 · 공격·치명·지속", "sub": 11}, {"br": "ps", "line": "초토화", "name": "초토화", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["수확기 크기 +30%"], "id": "ps:-5,-1", "x": -5, "y": -1, "parent": "ps:-4,-1", "depth": 9, "sub_n": 4, "subsize": 4, "sub_": "독성 2 · 바·이동", "sub": 4}, {"br": "ps", "line": "콤보 계수", "name": "콤보 계수", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["콤보 계수 +40%"], "id": "ps:-5,0", "x": -5, "y": 0, "parent": "ps:-4,-1", "depth": 9, "sub_n": 1, "subsize": 1, "sub_": "독성 2 · 바·이동", "sub": 1}, {"br": "ps", "line": "노장의 체력", "name": "노장의 체력", "tag": "스테이지", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["지속 시간 +3초 (15 → 18)"], "id": "ps:-3,5", "x": -3, "y": 5, "parent": "ps:-2,4", "depth": 11, "sub_n": 8, "subsize": 8, "sub_": "독성 1 · 공격·치명·지속", "sub": 8}, {"br": "ps", "line": "회전 칼날", "name": "회전 칼날", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["회전 꼬마 수확기 +1 (1 → 2)"], "id": "ps:-1,5", "x": -1, "y": 5, "parent": "ps:-2,4", "depth": 8, "sub_n": 2, "subsize": 2, "sub_": "독성 1 · 공격·치명·지속", "sub": 2}, {"br": "ps", "line": "한가득 포옹", "name": "한가득 포옹", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["바 길이 +20% (분신 바도 같은 길이)"], "id": "ps:-3,1", "x": -3, "y": 1, "parent": "ps:-2,0", "depth": 5, "sub_n": 9, "subsize": 9, "sub_": "독성 2 · 바·이동", "sub": 9}, {"br": "ps", "line": "한가득 포옹", "name": "한가득 포옹", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["바 길이 +30%"], "id": "ps:-4,1", "x": -4, "y": 1, "parent": "ps:-3,1", "depth": 7, "sub_n": 8, "subsize": 8, "sub_": "독성 2 · 바·이동", "sub": 8}, {"br": "ps", "line": "분신술", "name": "분신술", "tag": "슬라이드 바", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["10% 확률로 3초 분신 바"], "id": "ps:-5,2", "x": -5, "y": 2, "parent": "ps:-4,1", "depth": 9, "sub_n": 7, "subsize": 7, "sub_": "독성 2 · 바·이동", "sub": 7}, {"br": "ps", "line": "날 갈기", "name": "날 갈기", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["공격력 +3 (5 → 7)"], "id": "ps:-1,6", "x": -1, "y": 6, "parent": "ps:-1,5", "depth": 10, "sub_n": 1, "subsize": 1, "sub_": "독성 1 · 공격·치명·지속", "sub": 1}, {"br": "ps", "line": "치명 공격", "name": "치명 공격", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["치명타 확률 4%"], "id": "ps:-3,3", "x": -3, "y": 3, "parent": "ps:-2,2", "depth": 7, "sub_n": 9, "subsize": 9, "sub_": "독성 1 · 공격·치명·지속", "sub": 9}, {"br": "ps", "line": "노장의 체력", "name": "노장의 체력", "tag": "스테이지", "lv": "Lv.1", "inplace": false, "rar": 1, "gem": false, "eff": ["지속 시간 +2초 (10 → 12)"], "id": "ps:-4,3", "x": -4, "y": 3, "parent": "ps:-3,3", "depth": 8, "sub_n": 2, "subsize": 2, "sub_": "독성 1 · 공격·치명·지속", "sub": 2}, {"br": "ps", "line": "초토화", "name": "초토화", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 2, "gem": false, "eff": ["수확기 크기 +20%"], "id": "ps:-4,-2", "x": -4, "y": -2, "parent": "ps:-4,-1", "depth": 7, "sub_n": 1, "subsize": 1, "sub_": "독성 2 · 바·이동", "sub": 1}, {"br": "ps", "line": "한가득 포옹", "name": "한가득 포옹", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["바 길이 +50%"], "id": "ps:-6,2", "x": -6, "y": 2, "parent": "ps:-5,2", "depth": 12, "sub_n": 6, "subsize": 6, "sub_": "독성 2 · 바·이동", "sub": 6}, {"br": "ps", "line": "바람의 길", "name": "바람의 길", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 2, "gem": false, "eff": ["수확기 속도 +30%"], "id": "ps:-6,-2", "x": -6, "y": -2, "parent": "ps:-5,-1", "depth": 11, "sub_n": 3, "subsize": 3, "sub_": "독성 2 · 바·이동", "sub": 3}, {"br": "ps", "line": "치명 공격", "name": "치명 공격", "tag": "수확기", "lv": "Lv.4", "inplace": false, "rar": 3, "gem": false, "eff": ["치명타 확률 8%"], "id": "ps:-5,4", "x": -5, "y": 4, "parent": "ps:-4,3", "depth": 12, "sub_n": 1, "subsize": 1, "sub_": "독성 1 · 공격·치명·지속", "sub": 1}, {"br": "ps", "line": "회전 회오리", "name": "회전 회오리", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["회전 꼬마 수확기 공격력 5%"], "id": "ps:-3,6", "x": -3, "y": 6, "parent": "ps:-3,5", "depth": 13, "sub_n": 7, "subsize": 7, "sub_": "독성 1 · 공격·치명·지속", "sub": 7}, {"br": "ps", "line": "콤보 계수", "name": "콤보 계수", "tag": "슬라이드 바", "lv": "Lv.4", "inplace": false, "rar": 3, "gem": false, "eff": ["콤보 계수 +80%"], "id": "ps:-7,-2", "x": -7, "y": -2, "parent": "ps:-6,-2", "depth": 13, "sub_n": 1, "subsize": 1, "sub_": "독성 2 · 바·이동", "sub": 1}, {"br": "ps", "line": "콤보 계수", "name": "콤보 계수", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 3, "gem": false, "eff": ["콤보 계수 +60%"], "id": "ps:-7,-1", "x": -7, "y": -1, "parent": "ps:-6,-2", "depth": 13, "sub_n": 1, "subsize": 1, "sub_": "독성 2 · 바·이동", "sub": 1}, {"br": "ps", "line": "콤보 계수", "name": "콤보 계수", "tag": "슬라이드 바", "lv": "Lv.5", "inplace": false, "rar": 4, "gem": false, "eff": ["콤보 계수 +100%"], "id": "ps:-7,3", "x": -7, "y": 3, "parent": "ps:-6,2", "depth": 14, "sub_n": 2, "subsize": 2, "sub_": "독성 2 · 바·이동", "sub": 2}, {"br": "ps", "line": "분신술", "name": "분신술", "tag": "슬라이드 바", "lv": "Lv.2", "inplace": false, "rar": 3, "gem": false, "eff": ["10% 확률로 4초 분신 바"], "id": "ps:-7,1", "x": -7, "y": 1, "parent": "ps:-6,2", "depth": 14, "sub_n": 3, "subsize": 3, "sub_": "독성 2 · 바·이동", "sub": 3}, {"br": "ps", "line": "분신술", "name": "분신술", "tag": "슬라이드 바", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["10% 확률로 5초 분신 바"], "id": "ps:-8,1", "x": -8, "y": 1, "parent": "ps:-7,1", "depth": 16, "sub_n": 2, "subsize": 2, "sub_": "독성 2 · 바·이동", "sub": 2}, {"br": "ps", "line": "회전 칼날", "name": "회전 칼날", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["회전 꼬마 수확기 +1 (2 → 3)"], "id": "ps:-4,7", "x": -4, "y": 7, "parent": "ps:-3,6", "depth": 16, "sub_n": 2, "subsize": 2, "sub_": "독성 1 · 공격·치명·지속", "sub": 2}, {"br": "ps", "line": "노장의 체력", "name": "노장의 체력", "tag": "스테이지", "lv": "Lv.4", "inplace": false, "rar": 3, "gem": false, "eff": ["지속 시간 +3초 (18 → 21)"], "id": "ps:-2,7", "x": -2, "y": 7, "parent": "ps:-3,6", "depth": 13, "sub_n": 4, "subsize": 4, "sub_": "독성 1 · 공격·치명·지속", "sub": 4}, {"br": "ps", "line": "날 갈기", "name": "날 갈기", "tag": "수확기", "lv": "Lv.5", "inplace": false, "rar": 4, "gem": false, "eff": ["공격력 +5 (10 → 15)"], "id": "ps:-2,8", "x": -2, "y": 8, "parent": "ps:-2,7", "depth": 15, "sub_n": 3, "subsize": 3, "sub_": "독성 1 · 공격·치명·지속", "sub": 3}, {"br": "ps", "line": "거울 분신술", "name": "거울 분신술", "tag": "슬라이드 바", "lv": "", "inplace": false, "rar": 5, "gem": false, "eff": ["분신 바 +1 (1 → 2)"], "id": "ps:-9,0", "x": -9, "y": 0, "parent": "ps:-8,1", "depth": 18, "sub_n": 1, "subsize": 1, "sub_": "독성 2 · 바·이동", "sub": 1}, {"br": "ps", "line": "노장의 체력", "name": "노장의 체력", "tag": "스테이지", "lv": "Lv.2", "inplace": false, "rar": 1, "gem": false, "eff": ["지속 시간 +3초 (12 → 15)"], "id": "ps:-3,4", "x": -3, "y": 4, "parent": "ps:-3,3", "depth": 9, "sub_n": 6, "subsize": 6, "sub_": "독성 1 · 공격·치명·지속", "sub": 6}, {"br": "ps", "line": "치명 박살", "name": "치명 박살", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 5, "gem": false, "eff": ["치명타 피해 150%"], "id": "ps:-4,8", "x": -4, "y": 8, "parent": "ps:-4,7", "depth": 18, "sub_n": 1, "subsize": 1, "sub_": "독성 1 · 공격·치명·지속", "sub": 1}, {"br": "ps", "line": "회전 회오리", "name": "회전 회오리", "tag": "수확기", "lv": "Lv.3", "inplace": false, "rar": 4, "gem": false, "eff": ["회전 꼬마 수확기 공격력 15%"], "id": "ps:-1,9", "x": -1, "y": 9, "parent": "ps:-2,8", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "독성 1 · 공격·치명·지속", "sub": 1}, {"br": "ps", "line": "치명 박살", "name": "치명 박살", "tag": "수확기", "lv": "Lv.1", "inplace": false, "rar": 3, "gem": false, "eff": ["치명타 피해 100%"], "id": "ps:-4,5", "x": -4, "y": 5, "parent": "ps:-3,4", "depth": 12, "sub_n": 5, "subsize": 5, "sub_": "독성 1 · 공격·치명·지속", "sub": 5}, {"br": "ps", "line": "날 갈기", "name": "날 갈기", "tag": "수확기", "lv": "Lv.4", "inplace": false, "rar": 3, "gem": false, "eff": ["공격력 +3 (7 → 10)"], "id": "ps:-5,5", "x": -5, "y": 5, "parent": "ps:-4,5", "depth": 13, "sub_n": 2, "subsize": 2, "sub_": "독성 1 · 공격·치명·지속", "sub": 2}, {"br": "ps", "line": "회전 회오리", "name": "회전 회오리", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["회전 꼬마 수확기 공격력 10%"], "id": "ps:-6,6", "x": -6, "y": 6, "parent": "ps:-5,5", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "독성 1 · 공격·치명·지속", "sub": 1}, {"br": "ps", "line": "치명 공격", "name": "치명 공격", "tag": "수확기", "lv": "Lv.5", "inplace": false, "rar": 4, "gem": false, "eff": ["치명타 확률 10%"], "id": "ps:-4,6", "x": -4, "y": 6, "parent": "ps:-4,5", "depth": 14, "sub_n": 2, "subsize": 2, "sub_": "독성 1 · 공격·치명·지속", "sub": 2}, {"br": "ps", "line": "노장의 체력", "name": "노장의 체력", "tag": "스테이지", "lv": "Lv.5", "inplace": false, "rar": 4, "gem": false, "eff": ["지속 시간 +3초 (21 → 24)"], "id": "ps:-5,7", "x": -5, "y": 7, "parent": "ps:-4,6", "depth": 17, "sub_n": 1, "subsize": 1, "sub_": "독성 1 · 공격·치명·지속", "sub": 1}, {"br": "ps", "line": "치명 박살", "name": "치명 박살", "tag": "수확기", "lv": "Lv.2", "inplace": false, "rar": 4, "gem": false, "eff": ["치명타 피해 120%"], "id": "ps:-3,8", "x": -3, "y": 8, "parent": "ps:-2,8", "depth": 17, "sub_n": 1, "subsize": 1, "sub_": "독성 1 · 공격·치명·지속", "sub": 1}, {"br": "ps", "line": "장인의 도구", "name": "장인의 도구", "tag": "수확기", "lv": "Lv.1~4", "inplace": true, "rar": 5, "gem": true, "eff": ["수확기 개수 +1 / Lv (최대 4Lv = 5개 장착)"], "id": "ps:-8,4", "x": -8, "y": 4, "parent": "ps:-7,3", "depth": 16, "sub_n": 1, "subsize": 1, "sub_": "독성 2 · 바·이동", "sub": 1}], "R": 9.2, "R0": 1.0, "D": 1.64, "RINGS": 6, "cells": [[-9, -3], [-9, -2], [-9, -1], [-9, 1], [-9, 2], [-9, 3], [-8, -5], [-8, -4], [-8, -3], [-8, -2], [-8, -1], [-8, 0], [-8, 2], [-8, 3], [-8, 5], [-7, -6], [-7, -4], [-7, -3], [-7, 0], [-7, 2], [-7, 4], [-7, 5], [-7, 6], [-6, -7], [-6, -5], [-6, -3], [-6, -1], [-6, 0], [-6, 1], [-6, 3], [-6, 4], [-6, 5], [-6, 7], [-5, -8], [-5, -7], [-5, -6], [-5, -3], [-5, -2], [-5, 1], [-5, 3], [-5, 6], [-5, 8], [-4, -7], [-4, -4], [-4, 0], [-4, 2], [-4, 4], [-3, -9], [-3, -8], [-3, -5], [-3, -2], [-3, -1], [-3, 2], [-3, 7], [-3, 9], [-2, -9], [-2, -6], [-2, -3], [-2, 1], [-2, 5], [-2, 6], [-2, 9], [-1, -8], [-1, -7], [-1, -4], [-1, -1], [-1, 0], [-1, 3], [-1, 4], [-1, 7], [-1, 8], [0, -8], [0, -7], [0, -6], [0, -5], [0, -4], [0, -3], [0, -2], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [1, -8], [1, -7], [1, -4], [1, -1], [1, 0], [1, 3], [1, 4], [1, 7], [1, 8], [2, -9], [2, -6], [2, -3], [2, 1], [2, 5], [2, 6], [2, 9], [3, -9], [3, -8], [3, -5], [3, -2], [3, -1], [3, 2], [3, 7], [3, 8], [3, 9], [4, -8], [4, -7], [4, -4], [4, 0], [4, 2], [4, 4], [4, 5], [4, 6], [4, 8], [5, -8], [5, -7], [5, -6], [5, -3], [5, -2], [5, 0], [5, 1], [5, 3], [5, 6], [5, 7], [5, 8], [6, -7], [6, -6], [6, -5], [6, -1], [6, 0], [6, 2], [6, 3], [6, 4], [6, 5], [6, 7], [7, -6], [7, -4], [7, -3], [7, 0], [7, 2], [7, 4], [7, 5], [7, 6], [8, -5], [8, -4], [8, -2], [8, 0], [8, 1], [8, 3], [8, 5], [9, -3], [9, -2], [9, -1], [9, 1], [9, 2], [9, 3]], "SUBS": {"ed-1": "식용 1 · 획득률", "ed1": "식용 2 · 스테이지", "md-1": "약용 1 · 슬라이드 바 버프", "md1": "약용 2 · 스킬·환경·저항", "ps-1": "독성 1 · 공격·치명·지속", "ps1": "독성 2 · 바·이동"}};
+const N={}; DATA.nodes.forEach(n=>N[n.id]=n);
+const BR={ed:["식용","var(--ed)"],md:["약용","var(--md)"],ps:["독성","var(--ps)"],root:["시작","var(--root)"]};
+const TIER=["","일반","고급","희귀","영웅","전설"];
+const MAXD=Math.max(...DATA.nodes.map(n=>n.depth));
+// 레어도 색: 하늘색 → 보라색
+const C0=[140,240,255], C1=[58,15,154];
+const RC=k=>{const t=MAXD<=1?0:(k-1)/(MAXD-1); const c=C0.map((v,i)=>Math.round(v+(C1[i]-v)*Math.pow(t,0.85))); return `rgb(${c})`;};
+const S=120, RINGS=DATA.RINGS, RR=k=>(DATA.R0+(k-1)*DATA.D), HALF=(RR(RINGS)+1.6)*S;
+const svg=document.getElementById("tree"), ns="http://www.w3.org/2000/svg";
+svg.setAttribute("viewBox",`${-HALF} ${-HALF} ${2*HALF} ${2*HALF}`);
+const el=(t,a,p)=>{const e=document.createElementNS(ns,t); for(const k in a) e.setAttribute(k,a[k]); (p||svg).appendChild(e); return e;};
+const VC=["#5c6675","#566070","#505a6b","#4a5366","#444c60","#3e455a","#383e53"];   // 채도를 낮춘 회청색 링
+const gBg=el("g",{});
+const gRing=el("g",{id:"rings"},gBg);
+for(let k=RINGS;k>=1;k--) el("circle",{r:(RR(k)+DATA.D/2)*S,fill:VC[k]},gRing);
+el("circle",{r:(RR(1)-DATA.D/2)*S,fill:VC[0]},gRing);
+(DATA.cells||[]).forEach(c=>el("circle",{cx:c[0]*S,cy:c[1]*S,r:7,fill:"#fff","fill-opacity":.4},gRing));
+[-150,-30,90].forEach(a=>{const r=a*Math.PI/180; el("line",{x1:0,y1:0,x2:Math.cos(r)*(RR(RINGS)+DATA.D/2)*S,y2:Math.sin(r)*(RR(RINGS)+DATA.D/2)*S,stroke:"#fff","stroke-width":5},gRing);});
+[-90,30,150].forEach(a=>{const r=a*Math.PI/180; el("line",{x1:0,y1:0,x2:Math.cos(r)*(RR(RINGS)+DATA.D/2)*S,y2:Math.sin(r)*(RR(RINGS)+DATA.D/2)*S,stroke:"var(--axis)","stroke-width":3,"stroke-dasharray":"14 12","stroke-opacity":.7},gRing);});
+// 갈래 이름
+const SUBL={"ed-1":[-120,"식용 1 · 획득률"],"ed1":[-60,"식용 2 · 스테이지"],"md-1":[0,"약용 1 · 바 버프"],"md1":[60,"약용 2 · 스킬·환경·저항"],"ps-1":[120,"독성 1 · 공격·치명·지속"],"ps1":[180,"독성 2 · 바·이동"]};
+Object.values(SUBL).forEach(([a,s])=>{const r=a*Math.PI/180, R=(DATA.R+0.55)*S, cx=Math.cos(r); const tx=el("text",{x:cx*R,y:Math.sin(r)*R+10,"text-anchor":cx>0.5?"end":cx<-0.5?"start":"middle","font-size":30,"font-weight":700,fill:"#fff","fill-opacity":.9,"paint-order":"stroke",stroke:"rgba(0,0,0,.35)","stroke-width":5},gBg); tx.textContent=s;});
+// 균사 선
+const gE=el("g",{}), edge={};
+DATA.nodes.forEach(n=>{ if(!n.parent) return; const p=N[n.parent];
+  edge[n.id]=el("line",{x1:p.x*S,y1:p.y*S,x2:n.x*S,y2:n.y*S,stroke:"var(--myc)","stroke-width":5+16*Math.sqrt(n.sub/46),"stroke-linecap":"round"},gE);});
+// 노드: 이름 전체 + 레벨
+function wrap(s){ if(s.length<=5) return [s]; const w=s.split(" ");
+  if(w.length>1){ let best=null; for(let i=1;i<w.length;i++){const a=w.slice(0,i).join(" "), b=w.slice(i).join(" "); const m=Math.max(a.length,b.length); if(!best||m<best[0]) best=[m,[a,b]];} return best[1]; }
+  const h=Math.ceil(s.length/2); return [s.slice(0,h),s.slice(h)]; }
+const gN=el("g",{}), nodeEl={};
+DATA.nodes.forEach(n=>{
+  const g=el("g",{class:"nd",tabindex:0,role:"button","aria-label":`${n.name} ${n.lv}`,transform:`translate(${n.x*S},${n.y*S})`},gN);
+  const col=(n.sub_&&n.sub_.includes(" 2 "))?`color-mix(in srgb, ${BR[n.br][1]} 62%, white)`:BR[n.br][1], r=n.br==="root"?52:44;
+  const rc=n.depth?RC(n.depth):"#fff";
+  if(n.gem){ el("rect",{class:"c",x:-40,y:-40,width:80,height:80,rx:12,transform:"rotate(45)",fill:col,stroke:"var(--gem)","stroke-width":7},g); }
+  else { if(n.inplace) el("circle",{r:r+9,fill:"none",stroke:"#fff","stroke-width":3.5},g); el("circle",{class:"c",r,fill:col,stroke:rc,"stroke-width":7},g); }
+  const lines=wrap(n.name), fs=lines.some(l=>l.length>5)?13:15, lh=fs+2, y0=-((lines.length)*lh)/2+fs*0.35-6;
+  lines.forEach((l,i)=>{const t=el("text",{"text-anchor":"middle",x:0,y:y0+i*lh,"font-size":fs,"font-weight":700,fill:"#fff"},g); t.textContent=l;});
+  const lv=el("text",{"text-anchor":"middle",y:y0+lines.length*lh+3,"font-size":13,"font-weight":600,fill:"#fff","fill-opacity":.92},g); lv.textContent=n.lv||"단일";
+  if(n.depth){ el("circle",{cx:r*0.72,cy:-r*0.72,r:15,fill:RC(n.depth),stroke:"#fff","stroke-width":2.5},g); const bt=el("text",{x:r*0.72,y:-r*0.72+5,"text-anchor":"middle","font-size":14,"font-weight":700,fill:"#fff"},g); bt.textContent=n.depth; }
+  nodeEl[n.id]=g;
+  g.addEventListener("click",()=>pick(n.id)); g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();pick(n.id);}});
+});
+function path(id){const a=new Set(); let c=N[id]; while(c){a.add(c.id); c=c.parent?N[c.parent]:null;} return a;}
+function show(keep){DATA.nodes.forEach(n=>{const on=keep(n); nodeEl[n.id].classList.toggle("dim",!on); if(edge[n.id]) edge[n.id].classList.toggle("dim",!on);});}
+window.show=show;
+function pick(id){
+  const n=N[id], pa=path(id); show(m=>pa.has(m.id)||(m.line===n.line&&m.br===n.br));
+  const p=n.parent?N[n.parent]:null;
+  document.getElementById("info").innerHTML=`<h3 style="color:${BR[n.br][1]}">${n.name} <span style="font-size:.9rem">${n.lv}</span></h3>
+   <p><span class="rar" style="background:${n.depth?RC(n.depth):"var(--root)"}">${n.depth||"–"}</span> <span class="tag">레어도 · ${n.sub_||"시작"} · 효과 등급 ${n.rar?TIER[n.rar]:"시작"} · ${BR[n.br][0]} · 【${n.tag}】${n.inplace?" · 한 곳에서 레벨업":""}${n.gem?" · 균사석":""}</span></p>
+   <ul style="margin-top:6px">${n.eff.map(e=>`<li>${e}</li>`).join("")}</ul>
+   <p style="margin-top:6px;color:var(--muted)">연결: ${p?`${p.name} ${p.lv}`:"없음 (시작 노드)"}</p>
+   ${(()=>{const same=DATA.nodes.filter(m=>m.br===n.br&&m.line===n.line&&m.id!==n.id&&m.depth<=n.depth&&m.lv<n.lv); const pre=same.sort((a,b)=>b.depth-a.depth)[0]; return pre?`<p style="color:var(--muted)">선행 레벨: <b>${pre.name} ${pre.lv}</b>을 먼저 찍어야 해요</p>`:"";})()}
+   <button class="chip" style="margin-top:8px" onclick="show(()=>true)">강조 끄기</button>`;
+}
+document.querySelectorAll("[data-f]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-f]").forEach(x=>x.setAttribute("aria-pressed",x===b)); const f=b.dataset.f;
+  show(f==="all"?()=>true:f==="inplace"?n=>n.inplace:n=>n.br===f||n.br==="root");}));
+const frame=document.getElementById("frame");
+document.querySelectorAll("[data-z]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-z]").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  svg.style.width=(+b.dataset.z*100)+"%"; frame.scrollLeft=(frame.scrollWidth-frame.clientWidth)/2; frame.scrollTop=(frame.scrollHeight-frame.clientHeight)/2;}));
+document.getElementById("maxD").textContent=MAXD;
+document.getElementById("ringBtn").addEventListener("click",e=>{const on=e.currentTarget.getAttribute("aria-pressed")!=="true"; e.currentTarget.setAttribute("aria-pressed",on); gRing.style.display=on?"":"none";});
+// 범례
+document.getElementById("legend").innerHTML=`<h3>범례</h3>
+ <div><span class="dot" style="background:var(--ed)"></span>식용 <span class="dot" style="background:var(--md);margin-left:8px"></span>약용 <span class="dot" style="background:var(--ps);margin-left:8px"></span>독성</div>
+ <div><svg width="30" height="30" viewBox="-15 -15 30 30"><circle r="8" fill="var(--ps)" stroke="#999" stroke-width="2"/><circle r="12.5" fill="none" stroke="#999" stroke-width="1.6"/></svg>한 곳에서 레벨업</div>
+ <div><svg width="30" height="30" viewBox="-15 -15 30 30"><rect x="-9" y="-9" width="18" height="18" rx="3" transform="rotate(45)" fill="var(--md)" stroke="var(--gem)" stroke-width="3"/></svg>균사석 스킬</div>
+ <div><svg width="40" height="12"><line x1="2" y1="6" x2="38" y2="6" stroke="#bbb" stroke-width="3"/></svg>영역 경계 <svg width="40" height="12" style="margin-left:6px"><line x1="2" y1="6" x2="38" y2="6" stroke="var(--axis)" stroke-width="2" stroke-dasharray="6 5"/></svg>중심축</div>
+ <div><svg width="30" height="14"><circle cx="15" cy="7" r="4" fill="#fff" fill-opacity=".45"/></svg>빈 칸 (노드 자리 간격)</div>
+ <div style="flex-wrap:wrap;gap:3px">레어도 (테두리·숫자) ${Array.from({length:MAXD},(_,i)=>`<span class="rar" style="background:${RC(i+1)}">${i+1}</span>`).join("")}</div>`;
+// 레어도별 수
+const cnt=(b,k)=>DATA.nodes.filter(n=>n.br===b&&n.depth===k).length;
+document.getElementById("ringTbl").innerHTML=`<thead><tr><th>레어도</th><th>식용</th><th>약용</th><th>독성</th></tr></thead><tbody>`+
+ Array.from({length:MAXD},(_,i)=>i+1).map(k=>`<tr><td><span class="rar" style="background:${RC(k)}">${k}</span></td><td class="n">${cnt("ed",k)}</td><td class="n">${cnt("md",k)}</td><td class="n">${cnt("ps",k)}</td></tr>`).join("")+
+ `<tr><td><b>합계</b></td>${["ed","md","ps"].map(b=>`<td class="n"><b>${DATA.nodes.filter(n=>n.br===b).length}</b></td>`).join("")}</tr></tbody>`;
+// 노드별 등급·레어도
+const all=DATA.nodes.filter(n=>n.br!=="root");
+const order=["ed","md","ps"];
+document.getElementById("rarTbl").innerHTML=`<thead><tr><th>가지</th><th>노드</th><th>레벨</th><th>효과</th><th>효과 등급</th><th>레어도</th></tr></thead><tbody>`+
+ all.slice().sort((a,b)=>order.indexOf(a.br)-order.indexOf(b.br)||a.depth-b.depth||a.line.localeCompare(b.line)).map(n=>`<tr><td class="nw"><span class="dot" style="background:${BR[n.br][1]}"></span> ${BR[n.br][0]}</td><td class="nw"><b>${n.name}</b></td><td class="nw">${n.lv||"단일"}</td><td>${n.eff.join("<br>")}</td><td class="nw">${n.rar} ${TIER[n.rar]}</td><td class="n"><span class="rar" style="background:${RC(n.depth)}">${n.depth}</span></td></tr>`).join("")+`</tbody>`;
+// 기존 노드 대비 변경
+const ST={keep:["유지","s-keep"],chg:["바뀜","s-chg"],del:["삭제","s-del"],out:["이번 배치 제외","s-out"],new:["신규","s-new"]};
+const CHG=[
+ ["식용","타격 점수 I · I+ · II · II+ · III · III+","chg","효율적 사냥","고정 +점수 → 획득 점수 +%"],
+ ["식용","수확량 I · I+ · II · II+ · III · III+","chg","재빠른 손길 · 섬세한 손길 · 신들린 손길","버섯당 +개수 → 등급별(일반·에픽·유니크) 수확량 +%"],
+ ["식용","정산 보너스 · 정산 보너스 II","chg","흥정 기술","정산 골드 → 점수 골드 전환율로 합침"],
+ ["식용","단골 손님","keep","단골 손님","정산 골드 → 점수 골드 전환율"],
+ ["식용","군락지 수 · 군락지 수 II","chg","넓은 시야 · 하늘의 시야 · 신의 눈","+1 · +2 · +3 세 줄로 나눔 (최대 15개)"],
+ ["식용","군락 재생 속도","keep","고속 범람","리스폰 7초 → 3초"],
+ ["식용","군락지 버섯 수","keep","더 많은 버섯","단일 버섯 3 → 6개"],
+ ["식용","희귀 포자 · 변종 출현율","chg","희귀한 버섯 소문 · 굉장한 버섯 전설","등급 가중치 배율 → 에픽·유니크 스폰율 +%"],
+ ["식용","황금 변종","keep","일확천금의 신화","확률 1 → 3 → 5% 그대로"],
+ ["식용","배수 획득","chg","플렉스","수확량 ×3 → 점수 3배 확률"],
+ ["식용","거대 버섯","del","—","표 하단 결정 1"],
+ ["식용","균사 공명 · 균사 정산 (균사석)","del","—","균사석 곱 노드 정리"],
+ ["식용","끝없는 풍년 (싱크)","out","무한 확장 (미정)",""],
+ ["식용","균사 감응 · 풍요의 손길 (균사석)","out","세계수",""],
+ ["약용","기운 북돋기 (시작)","chg","사냥 준비 (시작)","공격력 % · 발동률 버프 → 공격력 +2 버프, 한 곳에서 Lv.10까지 (첫 레벨만 골드)"],
+ ["독","북돋기 강화","chg","사냥 준비 레벨업","시작 노드 레벨업으로 흡수"],
+ ["약용","가속","keep","스프링","가속 버프"],
+ ["약용","날 갈기 (스킬)","chg","이독제독","바 충돌 → 단일 버섯 획득 시 발동, 다음 타격 +200%"],
+ ["약용","분열","chg","분열","임시 수확기 → 분열 버프(꼬마 수확기)"],
+ ["약용","맑은 포자막","chg","할아버지 손은 약손","디버프 제거 + 약손 버프"],
+ ["약용","관통 · 유도","keep","관통 · 유도",""],
+ ["약용","포자 폭발","chg","포자 폭발","반경 피해 → 전체 피해(공격력 10%)"],
+ ["약용","연쇄 번개","chg","연속 번개","주변 버섯 → 랜덤 군락"],
+ ["약용","회오리","chg","회오리","벽 튕김 · 가로 띠 → 군락 충돌 · 지속 피해"],
+ ["약용","분신 바","chg","분신술 (독성으로 이동)","분신 바가 맵 양 끝, 바와 같은 길이. 한가득 포옹 2레벨 뒤 분신술 해금, 거울 분신술까지 한 줄"],
+ ["약용","풍년","chg","할아버지의 전설 (균사석, 식용)","마지막 5초 ×배율 → +10%/Lv"],
+ ["약용","그루터기 · 이끼 길 · 도토리 스위치","chg","환경 복원 Lv.1~3","이끼 길 → 꽃밭"],
+ ["약용","바 넓이","chg","한가득 포옹 (독성으로 이동)","바 넓이 II와 합침"],
+ ["약용","분신 수확기 · 버섯 자석 · 충격파","del","—","스킬 3종 삭제"],
+ ["약용","필드 넓히기","del","—","군락지(균사) 수가 늘면 필드가 자동으로 넓어짐"],
+ ["약용","콤보 계수 · 콤보 계수 II","chg","콤보 계수 (독성으로 이동)","콤보 계수 +20 ~ +100% (5레벨)"],
+ ["약용","숲 장치 강화","del","—",""],
+ ["약용","꼬마 수확기 · 임시 수확기 수명 · 버프 지속","del","—","꼬마 수확기 공격력은 수확기 공격력에 따라 자동으로 오름. 버프 시간은 각 스킬 레벨로"],
+ ["약용","균사 술법 · 균사 바 · 균사석 낙하 · 보스의 전리품 (균사석)","del","—",""],
+ ["약용","꼬마 건축가 · 자동 수확 확장 · 대지의 축복","out","세계수",""],
+ ["독","공격력 I · II · II+ · III · III+ · IV","chg","날 갈기 (독성)","6줄 → 1줄. 최대 +108.5 → +15"],
+ ["독","균사 투지 (균사석)","del","—",""],
+ ["독","보스 파쇄 (균사석)","del","—","보스 피해 트리 노드는 삭제. 무한 확장의 파쇄기만 남음"],
+ ["독","끝없는 투지","out","무한 확장 (무한의 날)",""],
+ ["독","수확기 크기","keep","초토화","+10 · 20 · 30%"],
+ ["독","공속","keep","바람의 길","+10 · 20 · 30%"],
+ ["독","치명타","keep","치명 공격","최대 15% → 10%"],
+ ["독","치명타 피해","chg","치명 박살","×3~5 → 100 · 120 · 150%"],
+ ["독","회전 칼날","chg","회전 칼날","칼날 → 회전 꼬마 수확기 +1 · +2 · +3"],
+ ["독","바 넓이 II","chg","한가득 포옹","바 넓이와 합침. 분신 바도 같은 길이"],
+ ["독","지속시간 · 지속시간 II","keep","노장의 체력","시작 10초 → 24초 (+14초, 5레벨, 유틸)"],
+ ["독","수확기 +1 · +1 (II) · +2 (III)","chg","장인의 도구 (균사석)","트리 노드 → 균사석 스킬, 최대 5개"],
+ ["독","포자 저항 · 독성 내성","del","—","약손이 디버프를 막음"],
+ ["독","선제 공격 · 무더기 파쇄 · 바 반사 속도","del","—",""],
+ ["독","바 스킬 지속 · 바 스킬 발동률","del","—","각 스킬 레벨로 대신"],
+ ["—","(없음)","new","은둔 고수","보스 레전더리 버섯 수확량"],
+ ["—","(없음)","new","거울 분신술","분신 바 +1"],
+ ["—","(없음)","new","회전 회오리","회전 꼬마 수확기 공격력"],
+ ["—","(없음)","new","전설의 할아버지 (균사석)","시작 시 버프 즉시 발동 확률"],
+ ["—","(없음)","new","노인의 지혜 (약용)","[지혜] 버프 3초 고정, 수확기 스킬 발동률 +1~3%"],
+ ["—","(없음)","new","피버까지 피버 (약용)","[피버] 버프 3~5초, 콤보 계수 +50%"],
+ ["—","(없음)","new","탈피 (약용)","군락 충돌로 얻은 디버프를 10~30% 확률로 해제"],
+];
+const c={}; CHG.forEach(r=>c[r[2]]=(c[r[2]]||0)+1);
+document.getElementById("sumChg").innerHTML=Object.entries(ST).map(([k,v])=>`<span><span class="pill ${v[1]}">${v[0]}</span> ${c[k]||0}행</span>`).join("");
+document.getElementById("chgTbl").innerHTML=`<thead><tr><th>기존 가지</th><th>기존 노드</th><th>상태</th><th>새 노드</th><th>메모</th></tr></thead><tbody>`+
+ CHG.map(r=>`<tr><td class="nw">${r[0]}</td><td>${r[1]}</td><td class="nw"><span class="pill ${ST[r[2]][1]}">${ST[r[2]][0]}</span></td><td>${r[3]}</td><td class="tag" style="white-space:normal">${r[4]}</td></tr>`).join("")+`</tbody>`;
+// 가지별 노드
+document.getElementById("tables").innerHTML=`<div class="prose"><h2>가지별 노드</h2><p style="color:var(--muted)">레어도 순(안쪽 → 바깥)이에요.</p></div>`+
+ ["root","ed","md","ps"].map(b=>{const ns_=DATA.nodes.filter(n=>n.br===b).sort((a,c)=>a.depth-c.depth||a.line.localeCompare(c.line));
+  return `<div style="display:grid;gap:8px"><div class="brh"><span class="dot" style="background:${BR[b][1]}"></span><h3>${b==="root"?"시작":BR[b][0]+" 가지"}</h3><span class="tag">${ns_.length}개 노드</span></div>
+  <div class="tbl"><table><thead><tr><th>레어도</th><th>노드</th><th>레벨</th><th>효과</th><th>태그</th></tr></thead><tbody>${
+   ns_.map(n=>`<tr><td class="n">${n.depth?`<span class="rar" style="background:${RC(n.depth)}">${n.depth}</span>`:"시작"}</td><td class="nw"><b>${n.name}</b>${n.gem?" (균사석)":""}</td><td class="nw">${n.lv||"단일"}${n.inplace?"<br><span class='tag'>한 곳에서</span>":""}</td><td>${n.eff.join("<br>")}</td><td class="tag">【${n.tag}】</td></tr>`).join("")}</tbody></table></div></div>`;}).join("");
+</script>
