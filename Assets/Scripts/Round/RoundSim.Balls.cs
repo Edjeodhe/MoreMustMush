@@ -74,12 +74,26 @@ namespace MoreMush
             return m;
         }
 
+        // 포자 구름 이속저하 (5회차 P-8): 기본 -25%, 보스를 하나 처치할 때마다 -3%p 더, 상한 -35%. 판 시작 때 한 번 정한다
+        public const float SPORE_SLOW_BASE = 0.25f, SPORE_SLOW_PER_BOSS = 0.03f, SPORE_SLOW_MAX = 0.35f;
+        float sporeSlowMul = 1 - SPORE_SLOW_BASE;   // 이동 속도에 곱하는 값 (0.75 → 0.65)
+
+        // 지금까지 처치한 보스 수: 보스 스테이지(IsBossStage/NextBossStage)를 앞에서부터 세며 BossCleared로 확인한다 (스테이지 번호 계산은 Defs/Game 쪽 규칙을 그대로 따른다)
+        static int BossesCleared()
+        {
+            int n = 0;
+            for (int s = NextBossStage(1); BossCleared(s); s = NextBossStage(s + 1)) n++;
+            return n;
+        }
+
+        static float SporeSlowMulNow() => 1 - Mathf.Min(SPORE_SLOW_MAX, SPORE_SLOW_BASE + SPORE_SLOW_PER_BOSS * BossesCleared());
+
         float EffMul(Ball b)
         {
             float m = b.jf * (float)HV[b.hv].spdMul;
             if (b.accel > 0) m *= b.accelMul;
             if (b.moss > 0) m *= 1 + 0.4f * (float)st.devMul;
-            if (b.slow > 0) m *= 0.65f;
+            if (b.slow > 0) m *= sporeSlowMul;
             return m;
         }
 
@@ -271,7 +285,7 @@ namespace MoreMush
             else if (NODE.TryGetValue(id, out var nd)) { n = nd.n; col = nd.col ?? "#ffffff"; }
             else if (id == "spark") { n = Loc.T("연쇄 번개"); col = "#ffe03a"; }
             else if (id == "hv_split") { n = Loc.T("세포 분열"); col = "#ff8a80"; }
-            if (n != null) AddLabel(n + "!", x, y - 30, col, 20);
+            if (n != null) AddLabel(n + "!", x, y - 30, col, 20, true);
         }
 
         // ===== 피해·점수·수확 =====
@@ -407,6 +421,9 @@ namespace MoreMush
         {
             if (m.dead) return;
             m.dead = true; m.hp = 0;
+            // HUD 콤보: 직접 타격은 DirectHit에서 셌다. 폭발·번개 등 효과로 거둔 버섯도 그 수확기의 콤보로 센다
+            // (강해질수록 효과가 필드를 비워 직접 때릴 버섯이 없어 콤보가 오히려 느리게 올랐다)
+            if (b != null && kind != "direct") b.hits++;
             var sp = m.sp;
             double drop = m.dropMul * st.harvestMul * (m.golden ? 5 : 1) * (m.giant ? 30 : 1) * (sp.c == "ps" ? st.poisonMul : 1) * (festOn ? st.festMul : 1);
             if (st.multiP > 0 && U.Chance((float)st.multiP)) { drop *= 3; AddLabel(Loc.T("×3 배수 획득!"), m.x, m.y - m.r - 34, "#ffe36e", 24); }
@@ -489,19 +506,23 @@ namespace MoreMush
                 m.col.alive--;
                 if (m.col.alive <= 0) { colonies.Remove(m.col); regen.Add((float)st.regen); }
             }
-            if (b != null && b.hv == "sam" && b.statMul >= 1 && kind != "skill" && U.Chance((float)HV["sam"].ab(b.hs)["p"])) queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
+            if (b != null && b.hv == "sam" && b.statMul >= 1 && kind != "skill" && U.Chance((float)HV["sam"].ab(b.hs)["p"])) QueueSam(m, b);
             var sk = st.sk;
             if (kind == "shock")
             {
                 if (wave != null && !wave.child && wave.depth < 8)
                 {
-                    wave.child = true; float x = m.x, y = m.y; int dp = wave.depth + 1; var wb = wave.b;
-                    queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, dp, wb) });
+                    wave.child = true;
+                    QueueWave(m.x, m.y, wave.depth + 1, wave.b);
                 }
             }
             else if (sk["shock"].on && Skillful(b) && U.Chance((float)SkP("shock", b))) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
             if (sk["clone"].on && Skillful(b) && U.Chance((float)SkP("clone", b))) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
         }
+
+        // 예약 효과는 따로 만든다: Harvest 안에서 람다가 m·b를 잡으면 클로저 객체가 Harvest를 부를 때마다(수확마다) 생겼다
+        void QueueSam(Shroom m, Ball b) => queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
+        void QueueWave(float x, float y, int depth, Ball b) => queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, depth, b) });
 
         // dmg >= 0: 숫자로는 점수 대신 그 타격의 피해를 띄운다 (점수는 그대로 더한다)
         void AddScore(double v, float x, float y, int tier, bool crit, bool golden, double dmg = -1)
@@ -515,7 +536,9 @@ namespace MoreMush
         public void AddPart(float x, float y, float vx, float vy, float life, Color col, float size, FxShape shape = FxShape.Dot)
         {
             if (parts.Count > 260) return;
-            parts.Add(new Part { x = x, y = y, vx = vx, vy = vy, life = life, col = col, size = size, shape = (byte)shape });
+            var p = partFree.Count > 0 ? partFree.Pop() : new Part();   // 사라진 조각을 다시 쓴다 (모든 칸을 새로 채운다)
+            p.x = x; p.y = y; p.vx = vx; p.vy = vy; p.t = 0; p.life = life; p.col = col; p.size = size; p.shape = (byte)shape;
+            parts.Add(p);
         }
 
         // Effects draw from their own random stream: UnityEngine.Random is the gameplay stream that BalanceSim seeds,
@@ -529,7 +552,9 @@ namespace MoreMush
         public void AddFx(FxShape shape, float x, float y, float size, float dur, Color col, float rot, float rise)
         {
             if (fxs.Count > 90) return;
-            fxs.Add(new Fx { shape = shape, x = x, y = y, size = size, dur = dur, col = col, rot = rot, rise = rise, spin = FxR(-40, 40), flip = FxChance(0.5f) });
+            var f = fxFree.Count > 0 ? fxFree.Pop() : new Fx();   // 효과 난수(FxR·FxChance)는 예전과 같은 순서로 뽑는다
+            f.shape = shape; f.x = x; f.y = y; f.t = 0; f.size = size; f.dur = dur; f.col = col; f.rot = rot; f.rise = rise; f.spin = FxR(-40, 40); f.flip = FxChance(0.5f);
+            fxs.Add(f);
         }
 
         // a harvester hits a mushroom: a punchy burst at the contact point, tinted by the mushroom, bigger for rarer ones
@@ -551,10 +576,10 @@ namespace MoreMush
                     AddPart(cx, cy, -dx / d * FxR(80, 200) + FxR(-60, 60), -dy / d * FxR(80, 200) - 80, 0.4f, U.Hex(m.sp.c1), 4, FxShape.Chip);
         }
 
-        public void AddLabel(string text, float x, float y, string col, float size)
+        public void AddLabel(string text, float x, float y, string col, float size, bool skill = false)   // skill: 스킬 이름 글자 (연출 간소화 때 안 그린다)
         {
             if (labels.Count > 10) labels.RemoveAt(0);
-            labels.Add(new Label { text = text, x = U.Clamp(x, 120, WW - 120), y = U.Clamp(y, 80, WH - 60), col = col, size = size });
+            labels.Add(new Label { text = text, x = U.Clamp(x, 120, WW - 120), y = U.Clamp(y, 80, WH - 60), col = col, size = size, skill = skill });
         }
     }
 }

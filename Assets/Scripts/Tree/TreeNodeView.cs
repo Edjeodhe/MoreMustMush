@@ -227,9 +227,9 @@ namespace MoreMush
                     label.fontSize = (n.sub ? 15 : 18) / 10f;
                     label.color = n.gem ? U.Hex("#2f8a6a") : st == "poor" ? U.Hex("#8a7a66") : INK;
                     label.transform.localPosition = Art.P(0, r + 14);
-                    string lvTxt = n.inf ? $"Lv {L}" : n.max > 1 ? $"Lv {L}/{n.max}" : "";   // 싱크: 레벨 칸 없이 'Lv N' (사용자 결정 2026-10-13)
+                    string lvTxt = n.inf ? Loc.F("Lv {0}", L) : n.max > 1 ? Loc.F("Lv {0}/{1}", L, n.max) : "";   // 싱크: 레벨 칸 없이 'Lv N' (사용자 결정 2026-10-13)
                     string costTxt = cost.gold > 0 && cost.gem > 0 ? Loc.F("{0}G + 균사석 {1}", U.Fmt(cost.gold), U.Fmt(cost.gem)) : cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : cost.gem > 0 ? Loc.F("균사석 {0}", U.Fmt(cost.gem)) : "";
-                    line2.text = st == "max" ? (n.inf ? $"MAX {L}" : n.max > 1 ? $"MAX {L}/{n.max}" : "MAX") : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
+                    line2.text = st == "max" ? (n.inf ? Loc.F("MAX {0}", L) : n.max > 1 ? Loc.F("MAX {0}/{1}", L, n.max) : Loc.T("MAX")) : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
                     line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : TXT_MAX;
                     line2.transform.localPosition = Art.P(0, r + 32);
                 }

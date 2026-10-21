@@ -50,6 +50,23 @@ namespace MoreMush
 
         static readonly AnimationCurve Taper = AnimationCurve.Linear(0, 1, 1, 0);
         const int MAX_RINGS = 64;               // 한 번에 그리는 고리 수 상한 (종 수확기는 맞힐 때마다 고리를 만든다)
+        // 모바일: 한 번에 그리는 조각·날아가는 버섯 수 상한 (시뮬 상한 parts 260 · flyers 220). 군락 하나를 거두면 조각 36개 + 날아가는 버섯
+        // 13~16개가 한 점에서 겹쳐 나와 줄여도 차이가 작다. 넘치면 가장 최근 것만 그린다 (시뮬은 그대로라 밸런스 무관)
+        const int MOBILE_MAX_PARTS = 140, MOBILE_MAX_FLYERS = 60;
+        // 날아가는 버섯·시계 아이콘의 화면 크기 (스테이지 px, 가로 1920 기준). 필드(ZOOM 배율) 아래에 있어 배율로 나눠 화면 크기를 고정한다.
+        // 예전 40·30은 배율을 곱해 화면에서 60~67px(필드 0레벨 1.68)로 너무 컸다 (2026-10-20 사용자)
+        const float FLYER_PX = 36, FLYER_CLOCK_PX = 27;
+        readonly Dictionary<SpriteRenderer, float> flyerFit = new Dictionary<SpriteRenderer, float>();   // 칸 → 크기를 맞춘 필드 배율
+        int MaxPartsDrawn = int.MaxValue, MaxFlyersDrawn = int.MaxValue;   // Awake에서 플랫폼 보고 정한다
+
+        static bool IsMobile()
+        {
+#if UNITY_ANDROID || UNITY_IOS
+            return true;
+#else
+            return Application.isMobilePlatform;   // 휴대폰 브라우저의 웹 데모
+#endif
+        }
         // SetPositions용 버퍼 (개수별로 하나씩, 프레임마다 배열을 만들지 않게)
         readonly Dictionary<int, Vector3[]> posBufs = new Dictionary<int, Vector3[]>();
         Vector3[] PosBuf(int n) { if (!posBufs.TryGetValue(n, out var b)) posBufs[n] = b = new Vector3[n]; return b; }
@@ -69,8 +86,107 @@ namespace MoreMush
             bgOffset = background.transform.localPosition - Art.P(Defs.W / 2, Defs.H / 2);   // z는 그대로 둔다 (깊이)
         }
 
+        // ===== 라운드 간 풀 유지 =====
+        // 풀 항목은 Stage 씬 밑에 있어 라운드가 끝나면 씬과 함께 버려졌다. 다음 라운드는 시작·첫 발사 때 GameObject 약 1,500개를
+        // 다시 Instantiate해 끊겼다 → 씬을 떠날 때(App.Leaving) 씬 밖 보관소로 옮겨 두고 다음 RoundView가 그대로 다시 쓴다.
+        // 처음 라운드는 아래 Prewarm이 프레임마다 조금씩 미리 채운다.
+        static Transform stashRoot;
+        static readonly Dictionary<string, object> stash = new Dictionary<string, object>();
+        static Material brushShared;            // 붓 결 선 재질: 라운드마다 새로 만들지 않는다 (보관한 선이 같은 재질을 쓴다)
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void ResetStash() { stashRoot = null; stash.Clear(); brushShared = null; }
+
+        static Transform StashRoot()
+        {
+            if (stashRoot == null)
+            {
+                var go = new GameObject("~RoundPoolStash");
+                go.SetActive(false);   // 맡긴 항목이 보이거나 Update되지 않게
+                DontDestroyOnLoad(go);
+                stashRoot = go.transform;
+            }
+            return stashRoot;
+        }
+
+        void Keep<T>(string key, Pool<T> pool) where T : Component
+        {
+            var list = pool.Detach(StashRoot());
+            if (stash.TryGetValue(key, out var o) && o is List<T> had) had.AddRange(list);   // 이미 맡긴 것이 있으면 합친다 (잃어버리지 않게)
+            else stash[key] = list;
+        }
+        void Take<T>(string key, Pool<T> pool) where T : Component { if (stash.TryGetValue(key, out var o)) { pool.Adopt(o as List<T>); stash.Remove(key); } }
+
+        void OnEnable() { App.Leaving += StashPools; Loc.Changed += ApplyTextFonts; }
+        void OnDisable() { App.Leaving -= StashPools; Loc.Changed -= ApplyTextFonts; }
+
+        void StashPools()
+        {
+            Keep("shroom", shrooms); Keep("ball", balls); Keep("device", devices); Keep("cloud", clouds);
+            Keep("part", parts); Keep("flyer", flyers); Keep("line", lines); Keep("aim", aimLines); Keep("ring", ringFx); Keep("fx", fxPool);
+            // 필드 글자 칸 (UI): 빈 칸으로 돌려 맡긴다
+            var tmps = new List<TextMeshProUGUI>(textSlots.Count);
+            foreach (var sl in textSlots)
+            {
+                if (sl.tmp == null) continue;
+                sl.tmp.gameObject.SetActive(false);
+                sl.tmp.transform.SetParent(StashRoot(), false);
+                tmps.Add(sl.tmp);
+            }
+            textSlots.Clear(); slotOf.Clear();
+            if (stash.TryGetValue("text", out var o) && o is List<TextMeshProUGUI> had) had.AddRange(tmps);
+            else stash["text"] = tmps;
+        }
+
+        void AdoptStash()
+        {
+            Take("shroom", shrooms); Take("ball", balls); Take("device", devices); Take("cloud", clouds);
+            Take("part", parts); Take("flyer", flyers); Take("line", lines); Take("aim", aimLines); Take("ring", ringFx); Take("fx", fxPool);
+            if (stash.TryGetValue("text", out var o) && o is List<TextMeshProUGUI> tmps)
+            {
+                foreach (var t in tmps) if (t != null) { t.transform.SetParent(textLayer, false); LocFonts.Apply(t, fieldRole, fieldPreset); textSlots.Add(new TextSlot { tmp = t, letter = t.transform.Find("Lettering")?.GetComponent<UnityEngine.UI.Image>() }); }
+                stash.Remove("text");
+            }
+        }
+
+        // 첫 라운드: 한 판에 필요한 만큼 프레임마다 시간 예산(ms) 안에서 꺼진 채로 미리 만든다 (조준하는 동안 끝난다)
+        const float PREWARM_MS = 2f;
+        System.Collections.IEnumerator Prewarm()
+        {
+            yield return null;   // 첫 프레임(씬 진입)은 건드리지 않는다
+            var sw = new System.Diagnostics.Stopwatch();
+            var steps = new (System.Func<int> count, int target, System.Action grow)[]
+            {
+                (() => balls.Count, 60, balls.Grow), (() => textSlots.Count, TEXT_SLOTS, () => WarmText(NewTextSlot())), (() => shrooms.Count, 200, shrooms.Grow),
+                (() => fxPool.Count, 90, fxPool.Grow), (() => parts.Count, 260, parts.Grow), (() => ringFx.Count, MAX_RINGS, ringFx.Grow),
+                (() => flyers.Count, 40, flyers.Grow), (() => lines.Count, 24, lines.Grow),
+            };
+            foreach (var st in steps)
+                while (st.count() < st.target)
+                {
+                    sw.Restart();
+                    while (st.count() < st.target && sw.Elapsed.TotalMilliseconds < PREWARM_MS) st.grow();
+                    if (st.count() < st.target) yield return null;
+                }
+        }
+
+        void Start() => StartCoroutine(Prewarm());
+
+        // 필드 글자 칸 수: 숫자 45 + 라벨 11 + 콤보(공마다) + 보스 이름이 한꺼번에 뜬다. 45개만 미리 만들었더니 판 중에 90개 가까이까지
+        // 새로 만들며(Instantiate) TMP 배열을 키웠다 (2026-10-20 할당 조사)
+        const int TEXT_SLOTS = 120;
+        // 미리 만든 칸에 긴 예시 글자(그림 숫자 + 한글)로 메시를 한 번 만들어 둔다: TMP 배열과 그림 숫자용 서브메시를 판 중이 아니라 여기서 만든다
+        static string warmText;
+        void WarmText(TextSlot sl)
+        {
+            warmText ??= (DmgDigits.Spell("+999.99Qa!") ?? "+999.99Qa!") + " " + (DmgDigits.Numbers("+12.3B") ?? "+12.3B") + " 새 버섯! 황금 버섯 배수 획득";
+            sl.tmp.text = warmText;
+            sl.tmp.ForceMeshUpdate(true, true);
+        }
+
         void Awake()
         {
+            if (IsMobile()) { MaxPartsDrawn = MOBILE_MAX_PARTS; MaxFlyersDrawn = MOBILE_MAX_FLYERS; }
             CaptureBackgroundLayout();
             shrooms = new Pool<ShroomView>(shroomPrefab, shroomRoot);
             balls = new Pool<BallView>(ballPrefab, ballRoot);
@@ -90,6 +206,7 @@ namespace MoreMush
             ringSp = splashSp != null ? SpriteDB.Get("FX/ring") : null; ringThinSp = splashSp != null ? SpriteDB.Get("FX/ring_thin") : null;
             dotSp = partPrefab.sprite;
             fxPool = new Pool<SpriteRenderer>(partPrefab, fxRoot);
+            AdoptStash();
             string[] fxKeys = { null, "FX/chip", "FX/leaf", "FX/impact", "FX/impact_ring", "FX/puff", "FX/dust", "FX/streak", "FX/sprout", "FX/drop", "FX/hit_0", "FX/twinkle", "FX/dot_ring" };
             hitFrames = new Sprite[5];
             for (int i = 0; i < 5; i++) hitFrames[i] = SpriteDB.Get("FX/hit_" + i);
@@ -97,7 +214,7 @@ namespace MoreMush
             for (int i = 0; i < fxKeys.Length; i++) fxSp[i] = fxKeys[i] != null ? SpriteDB.Get(fxKeys[i]) : null;
             fxSp[0] = dotSp;
             var brush = SpriteDB.Get("FX/brush");
-            if (brush != null) brushMat = new Material(linePrefab.sharedMaterial) { mainTexture = brush.texture };
+            if (brush != null) brushMat = brushShared != null ? brushShared : brushShared = new Material(linePrefab.sharedMaterial) { mainTexture = brush.texture };
         }
 
         // a line of the shared pool, painted with the brush texture when the dream set has one
@@ -171,21 +288,22 @@ namespace MoreMush
             }
 
             // 버섯 (y 순서로 그린다)
-            bool night = st.wId == "moon" || st.theme.id == "night";
             for (int i = 0; i < R.shrooms.Count; i++)
             {
                 var m = R.shrooms[i];
                 if (live && m.golden && Random.value < 0.02f) R.AddPart(m.x + Random.Range(-m.r, m.r), m.y + Random.Range(-m.r, m.r), 0, -30, 0.5f, U.Hex("#fff3a0"), 3);
-                shrooms.Get(i).Show(m, now, night, 1000 + Mathf.RoundToInt(m.y));
+                shrooms.Get(i).Show(m, now, 1000 + Mathf.RoundToInt(m.y));
             }
             shrooms.Trim(R.shrooms.Count);
 
             // 포자 구름
-            for (int i = 0; i < R.clouds.Count; i++) clouds.Get(i).Show(R.clouds[i], now);
-            clouds.Trim(R.clouds.Count);
+            bool noSkill = FxPrefs.Simple;   // 연출 간소화: 스킬 효과(구름·고리·충격파·회오리·번개)를 그리지 않는다 (판정은 그대로)
+            int ncl = noSkill ? 0 : R.clouds.Count;
+            for (int i = 0; i < ncl; i++) clouds.Get(i).Show(R.clouds[i], now);
+            clouds.Trim(ncl);
 
             int nl = 0, nr = 0;
-            if (ringSp != null)
+            if (!noSkill && ringSp != null)
             {
                 // watercolor: the ring bursts out fast and settles (ease-out), a paint splash pops at the hit for an
                 // instant and fades; quiet rings (every bell hit) stay thin and small
@@ -209,7 +327,7 @@ namespace MoreMush
                     Blot(ref nr, ringSp, w.x, w.y, 2 * w.r, new Color(1, 0.9f, 0.76f, (1 - k) * 0.9f), w.x % 360, 3040);
                 }
             }
-            else
+            else if (!noSkill)
             {
                 for (int ri = Mathf.Max(0, R.rings.Count - MAX_RINGS); ri < R.rings.Count; ri++)   // 가장 최근 것만
                 {
@@ -225,12 +343,14 @@ namespace MoreMush
                     var c = U.Hex("#ffd9a8"); c.a = 1 - k; l.startColor = l.endColor = c;
                 }
             }
+            if (!noSkill)
             foreach (var tn in R.tornados)
                 for (int i = 0; i < 5; i++)
                 {
                     var l = Ellipse(nl++, tn.x, tn.y + (i - 2) * tn.h / 5, 30 + i * 6, 8, now * 10 + i, 4);
                     l.startColor = l.endColor = new Color(230 / 255f, 1, 250 / 255f, 0.8f - i * 0.12f);
                 }
+            if (!noSkill)
             foreach (var bo in R.bolts)
             {
                 var l = Line(nl++);
@@ -260,9 +380,10 @@ namespace MoreMush
 
             // 파티클
             // dream: one in four bigger bits is a spinning leaf; every bit pops big for a moment, then shrinks away
-            for (int i = 0; i < R.parts.Count; i++)
+            int p0 = Mathf.Max(0, R.parts.Count - MaxPartsDrawn);
+            for (int i = p0; i < R.parts.Count; i++)
             {
-                var p = R.parts[i]; var s = parts.Get(i);
+                var p = R.parts[i]; var s = parts.Get(i - p0);
                 float k = p.t / p.life;
                 int h = System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(p);
                 bool chip = p.shape == (byte)FxShape.Chip && fxSp[(int)FxShape.Chip] != null;
@@ -277,7 +398,7 @@ namespace MoreMush
                 s.transform.localRotation = leaf || chip ? Quaternion.Euler(0, 0, (h % 360) + p.t * ((h & 8) != 0 ? 420 : -420)) : Quaternion.identity;
                 var c = p.col; c.a *= 1 - k * k; s.color = c;
             }
-            parts.Trim(R.parts.Count);
+            parts.Trim(R.parts.Count - p0);
             ringFx.Trim(nr);
             DrawFx(R);
 
@@ -289,14 +410,23 @@ namespace MoreMush
             if (acornFrame != null) acornFrame.enabled = false;
 
             // 날아가는 버섯
-            int nf = 0;
+            // 재질 SpriteFx: 황금은 정점 색으로 (속성 블록 없이 묶어 그린다)
+            int nf = 0, flying = 0;
+            foreach (var f in R.flyers) if (f.t >= 0) flying++;
+            int skip = Mathf.Max(0, flying - MaxFlyersDrawn);
             foreach (var f in R.flyers)
             {
-                if (f.t < 0) continue;
+                if (f.t < 0 || FxPrefs.Simple || skip-- > 0) continue;   // 연출 간소화: 아이콘은 안 그리고 도착할 때 칸이 튀는 것은 그대로
                 var s = flyers.Get(nf++);
                 s.transform.localPosition = Art.P(f.x, f.y);
-                if (f.clock) { s.sprite = SpriteDB.Icon("clock"); Art.FitPx(s, 30); Art.SetFx(s); }
-                else { s.sprite = SpriteDB.Single(f.sp.id); Art.FitPx(s, 40); Art.SetFx(s, f.golden ? 1 : 0); }
+                var fsp = f.clock ? SpriteDB.Icon("clock") : SpriteDB.Single(f.sp.id);
+                // 칸마다 맞춘 배율을 기억한다: 프리팹 기본 그림이 양송이(ed0)라, 그림만 비교하면 튜토리얼 판(양송이뿐)에서 새 칸이 크기를 안 맞추고 프리팹 크기로 크게 나왔다
+                if (!ReferenceEquals(s.sprite, fsp) || !flyerFit.TryGetValue(s, out var fz) || fz != RoundSim.ZOOM)
+                {
+                    s.sprite = fsp; Art.FitPx(s, (f.clock ? FLYER_CLOCK_PX : FLYER_PX) / RoundSim.ZOOM);
+                    flyerFit[s] = RoundSim.ZOOM;
+                }
+                s.color = Art.FxColor(!f.clock && f.golden ? 1 : 0);
             }
             flyers.Trim(nf);
 
@@ -429,6 +559,7 @@ namespace MoreMush
         void DrawTexts(RoundSim R, float z)
         {
             textFrame++;
+            if (!FxPrefs.Simple)   // 연출 간소화: 대미지 숫자를 그리지 않는다
             foreach (var t in R.texts)
             {
                 float life = t.tier >= 2 ? 1.2f : 0.8f, k = t.t / life;
@@ -441,8 +572,9 @@ namespace MoreMush
                 t.view ??= t.coin ? DmgDigits.Spell($"+{U.FmtN(t.v, 1)}G") ?? $"+{U.FmtN(t.v, 1)}G" : HitView(t);
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
+            bool noSkillLabel = FxPrefs.Simple;
             foreach (var l in R.labels)
-                Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
+                if (!(noSkillLabel && l.skill)) Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
             foreach (var b in R.balls)
                 if (b.combo >= 3 && b.perm)
                 {
@@ -481,17 +613,9 @@ namespace MoreMush
             {
                 sl = null;
                 foreach (var f in textSlots) if (f.key == null) { sl = f; break; }
-                if (sl == null)
-                {
-                    sl = new TextSlot { tmp = Instantiate(textPrefab, textLayer) };
-                    sl.tmp.name = textPrefab.name + " " + textSlots.Count;
-                    // the prefab picked up auto-size (max 20) from the localisation pass, which capped every number and
-                    // label at one small size; the field sets its own sizes per tier
-                    sl.tmp.enableAutoSizing = false;
-                    textSlots.Add(sl);
-                }
+                if (sl == null) sl = NewTextSlot();
                 sl.key = key; slotOf[key] = sl;
-                sl.tmp.gameObject.SetActive(true);
+                if (!sl.tmp.gameObject.activeSelf) sl.tmp.gameObject.SetActive(true);   // 한 번 켠 칸은 끄지 않는다 (ReleaseTexts 참고)
             }
             sl.seen = textFrame;
             var t = sl.tmp;
@@ -576,6 +700,24 @@ namespace MoreMush
             return s != null && letterOf.TryGetValue(s, out var id) ? id : null;
         }
 
+        // 글자 칸의 언어 폰트: 프리팹의 LocText는 칸을 켜고 끌 때마다 Loc.Changed 구독·해제로 할당이 생겨 떼어 내고, 같은 역할로 여기서 맞춘다
+        static LocFonts.Role fieldRole = LocFonts.Role.Title; static int fieldPreset = -1;
+        void ApplyTextFonts() { foreach (var sl in textSlots) LocFonts.Apply(sl.tmp, fieldRole, fieldPreset); }
+
+        TextSlot NewTextSlot()
+        {
+            var sl = new TextSlot { tmp = Instantiate(textPrefab, textLayer) };
+            sl.tmp.name = textPrefab.name + " " + textSlots.Count;
+            if (sl.tmp.TryGetComponent<LocText>(out var lt)) { fieldRole = lt.role; fieldPreset = lt.preset; Destroy(lt); }
+            LocFonts.Apply(sl.tmp, fieldRole, fieldPreset);
+            // the prefab picked up auto-size (max 20) from the localisation pass, which capped every number and
+            // label at one small size; the field sets its own sizes per tier
+            sl.tmp.enableAutoSizing = false;
+            sl.tmp.gameObject.SetActive(false);
+            textSlots.Add(sl);
+            return sl;
+        }
+
         // 이번 프레임에 그리지 않은 글자 칸을 비운다 (all = 전부)
         void ReleaseTexts(bool all)
         {
@@ -583,7 +725,9 @@ namespace MoreMush
             {
                 if (sl.key == null || (!all && sl.seen == textFrame)) continue;
                 slotOf.Remove(sl.key); sl.key = null; sl.s = null;
-                sl.tmp.gameObject.SetActive(false);
+                // 끄지도 비우지도 않고 크기 0으로 숨긴다: SetActive를 오가면 TMP·서브메시가 OnEnable/OnDisable로, 글자를 비우면
+                // 다시 채울 때 TMP 배열을 매번 새로 할당했다 (숫자가 초당 수십 개 뜨고 진다). 다시 쓰면 Text()가 크기를 되돌린다
+                sl.tmp.rectTransform.localScale = Vector3.zero;
             }
         }
     }

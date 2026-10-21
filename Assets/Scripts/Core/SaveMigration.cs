@@ -6,7 +6,7 @@ namespace MoreMush
     // 세이브 버전 올리기. SaveIO.Load가 Sanitize 끝에서 부르며, 한 버전씩 차례로 올린다.
     public static class SaveMigration
     {
-        public const int CURRENT = 8;
+        public const int CURRENT = 9;
 
         // 이번 로드에서 플레이어에게 알릴 문장 (App.FlushMigrationNotice가 알리고 비운다)
         public static string Notice;
@@ -32,6 +32,7 @@ namespace MoreMush
             if (g.v < 6) ToV6(g);
             if (g.v < 7) ToV7(g);
             if (g.v < 8) ToV8(g);
+            if (g.v < 9) ToV9(g);
             g.v = Math.Max(g.v, CURRENT);
         }
 
@@ -127,6 +128,15 @@ namespace MoreMush
                 g.nodes[id] = V8_LEVEL[Math.Max(0, Math.Min(V8_LEVEL.Length - 1, L))];
             }
             if (g.stage >= 7) g.nodes["ed_rare0"] = 3;
+        }
+
+        // v9 (5회차 P-2): 튜토리얼 T1~T4 4판이 스테이지 앞에 붙었다. G.stage는 내부 판 번호라 표시 스테이지 = stage − TUT_ROUNDS.
+        // 튜토리얼 판(1스테이지)을 이미 지난 세이브는 stage를 TUT_ROUNDS만큼 올려 같은 콘텐츠(보스·지역·체력) 위치를 지킨다.
+        // (예: 옛 10스테이지 보스 앞 → 내부 14 = 표시 10). 스테이지 번호를 담은 다른 세이브 필드는 없다 (lastNormalGold·rec는 골드·기록 값)
+        static void ToV9(SaveData g)
+        {
+            if (g.stage <= 1 && g.tut < 3) return;   // 아직 첫 판(튜토리얼) 전: 새 흐름대로 T1부터
+            g.stage += Defs.TUT_ROUNDS;
         }
 
         static void ToV6(SaveData g)

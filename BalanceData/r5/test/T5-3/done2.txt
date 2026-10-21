@@ -1,0 +1,1 @@
+16:34:04 복원 확인: preset=tuned gate=False king=1.75 cleaner=20 angel=740 phantom=1650 mover=1100 (측정 전 값 1.75,20,740,1650,1100)

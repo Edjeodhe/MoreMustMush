@@ -30,6 +30,7 @@ namespace MoreMush.EditorTools
             ("ja", "MPLUSRounded1c-ExtraBold", "ZenMaruGothic-Medium"), // 가나·한자 다 있음 (鍮 하나만 본문 폰트로)
             ("ru", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 문자 있음
             ("uk", "Nunito-Black", "Nunito-SemiBold"),     // 키릴 + ІЇЄҐ 모두 있음
+            ("pt", "Nunito-Black", "Nunito-SemiBold"),     // 라틴 + 악센트(á ã ç é ê í ó õ ú …) 모두 있음 (Jua는 악센트 글자가 없다)
         };
         // 어느 폰트에도 없는 글자가 나오면 이 폰트로 넘긴다 (한글·가나·한자·기호를 모두 가진 폰트)
         const string UniversalFallback = "ONEMobileRegular";
@@ -248,13 +249,17 @@ namespace MoreMush.EditorTools
             void Add(string k) { if (ContainsHangul(k) && seen.Add(k)) keys.Add(k); }
             var interp = new List<string>();
             foreach (string path in Directory.GetFiles("Assets/Scripts", "*.cs", SearchOption.AllDirectories).OrderBy(p => p, StringComparer.Ordinal))
-                if (!DEV_ONLY_FILES.Contains(Path.GetFileName(path)))
-                foreach (var (lit, isInterp, line) in Literals(File.ReadAllText(path)))
+            {
+                if (DEV_ONLY_FILES.Contains(Path.GetFileName(path))) continue;
+                string src = File.ReadAllText(path);
+                foreach (var (lit, isInterp, line) in Literals(src))
                 {
                     if (!ContainsHangul(lit)) continue;
                     if (isInterp) { interp.Add($"{path}:{line}"); continue; }
                     Add(lit);
                 }
+                foreach (var k in LocCallKeys(src)) Add(k);
+            }
             foreach (var k in SceneKeys()) Add(k);
             Db.Reload();
             var db = Db.Data;
@@ -268,7 +273,7 @@ namespace MoreMush.EditorTools
             var have = new HashSet<string>(db.String.Select(r => r.Str_KR));
             var missing = keys.Where(k => !have.Contains(k)).ToList();
             int unused = db.String.Count(r => r.Str_Name == "ui" && !seen.Contains(r.Str_KR));
-            int filled = db.String.Sum(r => new[] { r.Str_EN, r.Str_JA, r.Str_RU, r.Str_UK }.Count(t => !string.IsNullOrEmpty(t)));
+            int filled = db.String.Sum(r => new[] { r.Str_EN, r.Str_JA, r.Str_RU, r.Str_UK, r.Str_PT }.Count(t => !string.IsNullOrEmpty(t)));
             string msg = $"문구 {keys.Count}개 · DB String {db.String.Count}줄 (번역 칸 {filled}/{db.String.Count * (Loc.LANGS.Length - 1)}) · 안 쓰는 UI 줄 {unused}";
             string xlsx = DbImport.LatestDb();
             if (missing.Count > 0 && xlsx == null) msg += $"\n새 문구 {missing.Count}개가 있지만 Assets/DB에 엑셀 DB가 없어요";
@@ -348,6 +353,24 @@ namespace MoreMush.EditorTools
             }
         }
 
+        // Loc.T("…")·Loc.F("…", …)의 첫 인자. TOKEN은 보간 문자열 구멍($"{Loc.T("…")}") 안의 따옴표를 문자열 끝으로 봐서 이 키를 놓치므로 따로 줍는다
+        static readonly Regex LOC_CALL = new Regex(@"\bLoc\.[TF]\(\s*""((?:\\.|[^""\\\r\n])*)""", RegexOptions.Compiled);
+
+        static IEnumerable<string> LocCallKeys(string src)
+        {
+            foreach (Match m in LOC_CALL.Matches(src))
+            {
+                int lineStart = src.LastIndexOf('\n', m.Index) + 1, lineEnd = src.IndexOf('\n', m.Index);
+                string line = src.Substring(lineStart, (lineEnd < 0 ? src.Length : lineEnd) - lineStart);
+                if (line.Contains("Debug.Log") || line.Contains("Exception(")) continue;
+                string before = src.Substring(lineStart, m.Index - lineStart);
+                if (before.TrimStart().StartsWith("*")) continue;   // /* … */ 주석 줄
+                int slash = before.IndexOf("//", StringComparison.Ordinal);
+                if (slash >= 0 && before.Take(slash).Count(c => c == '"') % 2 == 0) continue;   // // 주석 뒤
+                yield return Unescape(m.Groups[1].Value);
+            }
+        }
+
         static string Unescape(string s) => Regex.Replace(s, @"\\(u[0-9a-fA-F]{4}|.)", m =>
         {
             string e = m.Groups[1].Value;
@@ -377,6 +400,7 @@ namespace MoreMush.EditorTools
                 langChars["ja"].UnionWith(r.Str_JA ?? "");
                 langChars["ru"].UnionWith(r.Str_RU ?? "");
                 langChars["uk"].UnionWith(r.Str_UK ?? "");
+                langChars["pt"].UnionWith(r.Str_PT ?? "");
             }
             var basic = new HashSet<char>(Enumerable.Range(32, 95).Select(i => (char)i));
             basic.UnionWith(SYMBOLS);
@@ -396,20 +420,20 @@ namespace MoreMush.EditorTools
                 Bake(font, new string(chars.OrderBy(c => c).ToArray()));
                 log.AppendLine($"{font.name}: {font.characterTable.Count}자, 아틀라스 {font.atlasTextures.Length}장");
             }
-            // 세트 밖 한·영 전용 폰트(LocFonts.koEnFonts: ONEMobilePOP 등)도 한국어·영어 글자로 굽는다.
-            // 빼먹으면 새 문구의 글자가 아틀라스에 없어 빠지거나 대체 폰트로 나온다 (2026-10-20 옵션 창 "메인 메뉴"의 '뉴')
-            var setPaths = new HashSet<string>(AllTtfs().Select(FontAssetPath));
-            var koEn = LocFonts.I != null ? LocFonts.I.koEnFonts : new TMP_FontAsset[0];
-            foreach (var font in koEn)
-            {
-                if (font == null || setPaths.Contains(AssetDatabase.GetAssetPath(font))) continue;
-                var chars = new HashSet<char>(basic);
-                chars.UnionWith(langChars["ko"]); chars.UnionWith(langChars["en"]);
-                foreach (var ch in font.characterTable) if (ch.unicode < 0x10000) chars.Add((char)ch.unicode);   // 이미 구운 글자(예전 키릴 등)는 그대로 둔다
-                chars.RemoveWhere(c => c < 32 && c != '\n');
-                Bake(font, new string(chars.OrderBy(c => c).ToArray()));
-                log.AppendLine($"{font.name} (한·영 전용): {font.characterTable.Count}자, 아틀라스 {font.atlasTextures.Length}장");
-            }
+            // 세트 밖 한·영 전용 UI 폰트(LocFonts.koEnFonts: ONEMobilePOP 등)도 한·영 글자를 굽는다.
+            // 안 구우면 새 문구 글자(예: '잠김'의 '김')가 대체 폰트로 그려져 한 낱말 안에서 글꼴이 섞인다 (2026-10-20)
+            var lf = AssetDatabase.LoadAssetAtPath<LocFonts>(LocFontsPath);
+            if (lf != null)
+                foreach (var font in lf.koEnFonts.Where(f => f != null && !AllTtfs().Any(t => FontAssetPath(t) == AssetDatabase.GetAssetPath(f))).Distinct())
+                {
+                    var chars = new HashSet<char>(basic);
+                    chars.UnionWith(langChars["ko"]);
+                    chars.UnionWith(langChars["en"]);
+                    chars.UnionWith(font.characterTable.Where(c => c.unicode <= 0xFFFF).Select(c => (char)c.unicode));   // 배치 때 구운 글자(번역표 밖 문구)는 남긴다
+                    chars.RemoveWhere(c => c < 32 && c != '\n');
+                    Bake(font, new string(chars.OrderBy(c => c).ToArray()));
+                    log.AppendLine($"{font.name}: {font.characterTable.Count}자, 아틀라스 {font.atlasTextures.Length}장 (한·영 전용)");
+                }
             var fonts = AllTtfs().Select(t => AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontAssetPath(t))).ToArray();
             string unsupported = new string(all.Where(c => c >= 32 && !fonts.Any(f => f.HasCharacter(c))).OrderBy(c => c).ToArray());
             if (unsupported.Length > 0) log.AppendLine("어느 폰트에도 없는 글자: " + unsupported);

@@ -78,6 +78,19 @@ MonoBehaviour:
       - {fileID: 2100000, guid: b88768834d115bf4da057a2bc4fc150e, type: 2}
       - {fileID: 2100000, guid: c32fa84a52a521c4b9ff7fef00c02d3b, type: 2}
       - {fileID: 2100000, guid: dd409a37470503b4783ee192bfe35e5c, type: 2}
+  - lang: pt
+    title:
+      font: {fileID: 11400000, guid: d773d23161014614baddbc14e70a5dc7, type: 2}
+      presets:
+      - {fileID: 2100000, guid: 487da5c74493f074fb6fc0863441e5ca, type: 2}
+      - {fileID: 2100000, guid: bb4267f9b85072847b6ee27deb378b81, type: 2}
+      - {fileID: 2100000, guid: 063e1480b11332d41897e19ca6aa271e, type: 2}
+    body:
+      font: {fileID: 11400000, guid: 8ac937bcddac1b44abae0781aaf2160d, type: 2}
+      presets:
+      - {fileID: 2100000, guid: b88768834d115bf4da057a2bc4fc150e, type: 2}
+      - {fileID: 2100000, guid: c32fa84a52a521c4b9ff7fef00c02d3b, type: 2}
+      - {fileID: 2100000, guid: dd409a37470503b4783ee192bfe35e5c, type: 2}
   koEnFonts:
   - {fileID: 11400000, guid: 45b3f35b74dac2043bdf19e2f9cb784b, type: 2}
   - {fileID: 11400000, guid: c0448b3cc8b872640ba01688f14753d0, type: 2}

@@ -132,3 +132,6 @@ Builds/
 # 로그 서버 주소·키 (빌드에는 들어가지만 저장소에는 올리지 않는다. 형식은 Server/LogConfig.example.json)
 Assets/Resources/LogConfig.json
 Assets/Resources/LogConfig.json.meta
+
+# wrangler 배포 임시 폴더
+Server/.wrangler/

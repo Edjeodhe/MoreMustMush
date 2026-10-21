@@ -1,0 +1,40 @@
+{
+ "Boss": {
+  "cleaner": {"Hp_Mul": 2.097},
+  "angel": {"Hp_Mul": 84.0},
+  "phantom": {"Hp_Mul": 115.5},
+  "mover": {"Hp_Mul": 147.0}
+ },
+ "Upgrade": {
+  "ps_ball": {"Efx_MaxLv": 2, "Efx_Lv1": 1, "Efx_Lv2": 2},
+  "ps_ball3": {"Efx_MaxLv": 4, "Efx_Lv3": 3, "Efx_Lv4": 4},
+  "md_map": {"Efx_Lv0": 1.68, "Efx_Lv1": 1.5, "Efx_Lv2": 1.35, "Efx_Lv3": 1.2, "Efx_Lv4": 1.1},
+  "inf_gold": {"Efx_Lv1": 1.04},
+  "inf_atk": {"Efx_Lv1": 1.07}
+ },
+ "Upgrade_Cost": {
+  "90055": {"Cost_Lv1": 888, "Cost_Lv2": 2666},
+  "90072": {"Cost_Lv3": 2.0e12, "Cost_Lv4": 3.0e12},
+  "90024": {"Cost_Lv1": 150, "Cost_Lv2": 340, "Cost_Lv3": 750, "Cost_Lv4": 1700}
+ },
+ "Ball": {
+  "coin": {"Ball_Unlock": 140000, "Ball_LvGold": 180000},
+  "saw": {"Ball_Unlock": 2.0e9, "Ball_LvGold": 2.5e9},
+  "hoe": {"Ball_Unlock": 7.4e10, "Ball_LvGold": 9.3e10},
+  "spore": {"Ball_Unlock": 2.2e12, "Ball_LvGold": 2.8e12},
+  "mill": {"Ball_Unlock": 9.9e13, "Ball_LvGold": 1.2e14},
+  "bell": {"Ball_Unlock": 2.1e14, "Ball_LvGold": 2.6e14}
+ },
+ "String": {
+  "301022": {"Str_KR": "수확기 +4 (III)", "Str_EN": "Harvester +4 (III)", "Str_JA": "収穫機 +4 (III)", "Str_RU": "Сборщик +4 (III)", "Str_UK": "Збирач +4 (III)", "Str_PT": "Coletor +4 (III)"},
+  "201022": {"Str_KR": "영구 수확기를 네 개까지 더 늘려요.", "Str_EN": "Adds up to four more permanent harvesters.", "Str_JA": "恒久収穫機をさらに最大4つ増やします。", "Str_RU": "Добавляет до четырёх постоянных сборщиков.", "Str_UK": "Додає до чотирьох постійних збирачів.", "Str_PT": "Adiciona até mais quatro coletores permanentes."},
+  "202002": {
+   "Str_KR": "버섯 밭(필드)을 넓혀요. 처음엔 필드가 좁아 화면이 확대되어 수확기·버섯이 크게 보이고, 넓힐수록 군락지와 숲 장치가 더 많이 들어가요(수입 증가). 4레벨 뒤 '필드 넓히기 II'까지 사면 원래 크기예요.",
+   "Str_EN": "Widens the mushroom field. At first the field is narrow, so the screen is zoomed in and harvesters and mushrooms look big. The wider it gets, the more colonies and forest gadgets fit (more income). After level 4, buying 'Widen Field II' too brings it back to the original size.",
+   "Str_JA": "キノコ畑(フィールド)を広げます。最初はフィールドが狭いので画面が拡大され、収穫機やキノコが大きく見えます。広げるほど群落や森のしかけがたくさん入ります(収入アップ)。レベル4のあと「フィールド拡張 II」まで買うと元の大きさになります。",
+   "Str_RU": "Расширяет грибную поляну (поле). Сначала поле узкое, экран приближен, и сборщики с грибами выглядят крупными; чем шире поле, тем больше колоний и лесных устройств помещается (больше дохода). После 4 уровня, если купить ещё и «Расширить поле II», поле станет обычного размера.",
+   "Str_UK": "Розширює грибне поле. Спершу поле вузьке, тож екран наближений і збирачі з грибами здаються великими. Чим ширше, тим більше колоній і лісових пристроїв (більше доходу). Після 4 рівня, якщо купити ще й «Розширення поля II», поле матиме звичайний (повний) розмір.",
+   "Str_PT": "Amplia o campo de cogumelos. No início o campo é estreito, então a tela fica com zoom e os coletores e cogumelos parecem grandes; quanto mais largo, mais colônias e engenhocas da floresta cabem (mais ganhos). Depois do nível 4, comprando também “Ampliar Campo II”, volta ao tamanho original."
+  }
+ }
+}

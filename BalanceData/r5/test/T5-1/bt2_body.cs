@@ -1,0 +1,10 @@
+MoreMush.Defs.ApplyPreset("tuned", false);
+MoreMush.EditorTools.BalanceSim.BOSS_GATE = false;
+var T = new System.Collections.Generic.List<MoreMush.EditorTools.BossTune.Target>();
+System.Action<string,int,int,int,double[]> A = (id, st, lo, hi, c) => T.Add(new MoreMush.EditorTools.BossTune.Target { id = id, stage = st, lo = lo, hi = hi, cands = c });
+A("king", 10, 2, 3, new double[]{1.75, 2.0, 2.2, 2.4, 2.6});
+A("cleaner", 20, 2, 3, new double[]{16.78, 20, 25, 30, 40});
+A("angel", 30, 2, 3, new double[]{672, 840, 1000, 1300, 1700});
+A("phantom", 40, 3, 5, new double[]{924, 1386, 2310, 3465, 5775, 9000});
+A("mover", 50, 4, 6, new double[]{735, 900, 1000, 1100, 1176});
+return MoreMush.EditorTools.BossTune.Start(T, 3, false);

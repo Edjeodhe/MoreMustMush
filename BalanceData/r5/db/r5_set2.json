@@ -1,0 +1,14 @@
+{
+ "Boss": {
+  "king": {"Hp_Mul": 1.75},
+  "cleaner": {"Hp_Mul": 20},
+  "angel": {"Hp_Mul": 740},
+  "phantom": {"Hp_Mul": 1650},
+  "mover": {"Hp_Mul": 1100}
+ },
+ "Ball": {
+  "coin": {"Ball_Unlock": 58000, "Ball_LvGold": 72500},
+  "saw": {"Ball_Unlock": 1.6e9, "Ball_LvGold": 1.95e9},
+  "hoe": {"Ball_Unlock": 6.1e10, "Ball_LvGold": 7.6e10}
+ }
+}

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS logs (
   version  TEXT,
   platform TEXT,
   session  TEXT,
-  event    TEXT NOT NULL,         -- session_start · tree_up · tree_build · quest_clear · ftue · crash · error · game_clear
+  event    TEXT NOT NULL,         -- session_start · tree_up · tree_build · tree_act · quest_clear · ftue · crash · error · game_clear
   t        REAL,                  -- 세션 시작 후 경과 초
   data     TEXT                   -- 이벤트별 내용 JSON
 ) WITHOUT ROWID;
@@ -42,3 +42,7 @@ CREATE TABLE IF NOT EXISTS stage_end (
   codex    TEXT,                  -- 새 도감 [버섯 번호, ...] (식용 1·약용 2·독 3 × 100 + 번호)
   data     TEXT                   -- 나머지 필드(out_gem·gem 등) JSON
 ) WITHOUT ROWID;
+
+-- 기간 조회용 인덱스 (2026-10-20 적용). 분석 쿼리는 cts(기기 시각)로 최근 7일만 읽는다. logs는 event 조건을 같이 걸어야 탄다
+CREATE INDEX IF NOT EXISTS i_logs_event_cts ON logs(event, cts);
+CREATE INDEX IF NOT EXISTS i_stage_cts ON stage_end(cts);

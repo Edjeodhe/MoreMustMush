@@ -51,7 +51,7 @@ namespace MoreMush
             public double Hp_Mul;
         }
         public sealed class Const { public string Const_Key, Desc; public double Value; }
-        public sealed class Str { public int Str_ID, Str_Group_ID; public string Str_Name, Str_KR, Str_EN, Str_JA, Str_RU, Str_UK; }
+        public sealed class Str { public int Str_ID, Str_Group_ID; public string Str_Name, Str_KR, Str_EN, Str_JA, Str_RU, Str_UK, Str_PT; }
 
         public sealed class Book
         {
@@ -148,7 +148,7 @@ namespace MoreMush
             foreach (var s in Data.String)
             {
                 if (string.IsNullOrEmpty(s.Str_KR)) continue;
-                map[s.Str_KR] = lang switch { "en" => s.Str_EN, "ja" => s.Str_JA, "ru" => s.Str_RU, "uk" => s.Str_UK, _ => null };
+                map[s.Str_KR] = lang switch { "en" => s.Str_EN, "ja" => s.Str_JA, "ru" => s.Str_RU, "uk" => s.Str_UK, "pt" => s.Str_PT, _ => null };
             }
             return map;
         }

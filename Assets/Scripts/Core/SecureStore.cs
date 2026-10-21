@@ -22,6 +22,17 @@ namespace MoreMush
 
         public static void Save(string path, string uid, string json)
         {
+            var all = Pack(uid, json);
+            var tmp = path + ".tmp";
+            File.WriteAllBytes(tmp, all);                                   // 1) 새 파일을 먼저 완성
+            if (TryRead(path, uid, out _, out _)) File.Copy(path, path + ".bak", true); // 2) 현재 파일이 정상일 때만 백업 갱신
+            if (File.Exists(path)) File.Delete(path);
+            File.Move(tmp, path);                                           // 3) 교체
+        }
+
+        // 파일과 같은 암호화 묶음 (MAC 32 + IV 16 + 암호문). 브라우저 저장소 사본(SaveIO)도 이 형식을 base64로 둔다
+        public static byte[] Pack(string uid, string json)
+        {
             var plain = Encoding.UTF8.GetBytes(FORMAT + "|" + json);
             byte[] body;
             using (var aes = Aes.Create())
@@ -38,12 +49,7 @@ namespace MoreMush
             var all = new byte[32 + body.Length];
             Buffer.BlockCopy(mac, 0, all, 0, 32);
             Buffer.BlockCopy(body, 0, all, 32, body.Length);
-
-            var tmp = path + ".tmp";
-            File.WriteAllBytes(tmp, all);                                   // 1) 새 파일을 먼저 완성
-            if (TryRead(path, uid, out _, out _)) File.Copy(path, path + ".bak", true); // 2) 현재 파일이 정상일 때만 백업 갱신
-            if (File.Exists(path)) File.Delete(path);
-            File.Move(tmp, path);                                           // 3) 교체
+            return all;
         }
 
         public static bool Load(string path, string uid, out int format, out string json)
@@ -65,10 +71,17 @@ namespace MoreMush
         static bool TryRead(string p, string uid, out int format, out string json)
         {
             format = 0; json = null;
+            try { return File.Exists(p) && Unpack(File.ReadAllBytes(p), uid, out format, out json); }
+            catch { return false; }
+        }
+
+        // Pack의 반대. 변조·손상·다른 uid면 false
+        public static bool Unpack(byte[] all, string uid, out int format, out string json)
+        {
+            format = 0; json = null;
             try
             {
-                if (!File.Exists(p)) return false;
-                var all = File.ReadAllBytes(p);
+                if (all == null) return false;
                 if (all.Length < 32 + 16 + 16) return false;
                 var mac = new byte[32]; Buffer.BlockCopy(all, 0, mac, 0, 32);
                 var body = new byte[all.Length - 32]; Buffer.BlockCopy(all, 32, body, 0, body.Length);

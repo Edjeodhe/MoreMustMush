@@ -32,7 +32,7 @@ namespace MoreMush
         {
             int P = st.sk["bolt"].P, n = 2 + P;
             double dmg = st.atk * st.sk["bolt"].pm * st.skillDmg * Wk(b);
-            var hit = new HashSet<Shroom> { m0 };
+            var hit = RentSet(); hit.Add(m0);   // 맞힌 버섯 (끝나면 돌려준다. 번개가 수확으로 다른 번개를 부를 수 있어 공용 하나를 쓰지 않는다)
             var pts = new List<Vector2> { new Vector2(m0.x, m0.y) };
             float cx = m0.x, cy = m0.y;
             for (int i = 0; i < n; i++)
@@ -47,8 +47,28 @@ namespace MoreMush
                 Damage(best, dmg, b, "skill", src: src);
                 cx = tx; cy = ty;
             }
+            ReturnSet(hit);
             bolts.Add(new Bolt { pts = pts, t = 0.3f });
             Snd.Skill(900);
+        }
+
+        // ===== 할당 줄이기: 프레임마다 생기고 사라지는 작은 객체·집합을 다시 쓴다 (시뮬 결과와 무관한 그릇만) =====
+        readonly Stack<HashSet<Shroom>> setPool = new Stack<HashSet<Shroom>>();
+        HashSet<Shroom> RentSet() => setPool.Count > 0 ? setPool.Pop() : new HashSet<Shroom>();
+        void ReturnSet(HashSet<Shroom> s) { if (s == null) return; s.Clear(); setPool.Push(s); }
+        readonly List<Queued> readyBuf = new List<Queued>();
+        readonly Stack<Part> partFree = new Stack<Part>();
+        readonly Stack<Fx> fxFree = new Stack<Fx>();
+        // RemoveAll과 같은 결과(남는 항목의 순서 유지)에 빠진 항목을 free에 돌려준다
+        static void Recycle<T>(List<T> list, Stack<T> free, Predicate<T> gone)
+        {
+            int w = 0;
+            for (int i = 0; i < list.Count; i++)
+            {
+                var it = list[i];
+                if (gone(it)) free.Push(it); else list[w++] = it;
+            }
+            if (w < list.Count) list.RemoveRange(w, list.Count - w);
         }
 
         void SpawnTornado(Ball b, string side)
@@ -63,9 +83,9 @@ namespace MoreMush
         void MakeWave(float x, float y, int depth, Ball b)
         {
             var sk = st.sk["shock"];
-            waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b });
+            waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b, hit = RentSet() });
             if (depth > maxChain) maxChain = depth;
-            if (depth > 1) AddLabel(Loc.F("연쇄 {0}", depth), x, y - 30, "#ffd0a0", 18 + depth);
+            if (depth > 1) AddLabel(Loc.F("연쇄 {0}", depth), x, y - 30, "#ffd0a0", 18 + depth, true);
             Snd.Skill(260 + depth * 40);
         }
 
@@ -129,6 +149,7 @@ namespace MoreMush
                 }
                 FreeQuery(q);
             }
+            for (int wi = 0; wi < waves.Count; wi++) if (waves[wi].t >= 0.4f) { ReturnSet(waves[wi].hit); waves[wi].hit = null; }
             waves.RemoveAll(w => w.t >= 0.4f);
             // 회오리
             for (int ti = 0, tnN = tornados.Count; ti < tnN; ti++)
@@ -147,9 +168,11 @@ namespace MoreMush
             foreach (var q in queue) q.t -= h;
             if (queue.Count > 0)   // 비어 있으면 Where/ToList를 만들지 않는다
             {
-                var ready = queue.Where(q => q.t <= 0).ToList();
+                var ready = readyBuf; ready.Clear();   // 예전 Where().ToList()와 같은 항목·순서 (프레임마다 새 리스트를 만들지 않는다)
+                foreach (var q in queue) if (q.t <= 0) ready.Add(q);
                 queue.RemoveAll(q => q.t <= 0);
                 foreach (var q in ready) q.f();
+                ready.Clear();
             }
             // 거대 버섯
             if (giantState == "pending" && runT >= 4)
@@ -179,9 +202,9 @@ namespace MoreMush
         void UpdateFx(float h)
         {
             foreach (var p in parts) { p.t += h; p.x += p.vx * h; p.y += p.vy * h; p.vy += (p.shape == (byte)FxShape.Chip ? 900 : 500) * h; p.vx *= 0.97f; }
-            parts.RemoveAll(p => p.t >= p.life);
+            Recycle(parts, partFree, p => p.t >= p.life);
             foreach (var f in fxs) { f.t += h; f.y -= f.rise * h; f.rot += f.spin * h; }
-            fxs.RemoveAll(f => f.t >= f.dur);
+            Recycle(fxs, fxFree, f => f.t >= f.dur);
             barKick = Mathf.Max(0, barKick - h * 4);
             if (popStopCd > 0) popStopCd -= h;
             // numbers jump up, slow down and drift aside instead of sliding up at a constant speed
@@ -377,25 +400,29 @@ namespace MoreMush
             // 보스를 쓰러뜨리면 "이번 판 골드와 직전 일반 판 골드 중 큰 쪽"의 BOSS_REWARD_MUL배를 더 받고 균사석도 받는다
             // (보스 타격 골드는 BOSS_SCORE_MUL로 줄었고, 처치하면 판이 바로 끝나므로 직전 일반 판이 기준)
             double bossGold = BossRound && bossCleared ? Math.Floor(Math.Max(scoreGold + bonus, G.lastNormalGold) * BOSS_REWARD_MUL) : 0;
-            int bossGem = BossRound && bossCleared ? BossGem(G.stage) + (int)st.bossGemAdd : 0;
+            int bossGem = BossRound && bossCleared ? BossGem(ContentStage(G.stage)) + (int)st.bossGemAdd : 0;
             int bossShrooms = BossRound && bossCleared ? BossShroomReward() : 0;
             G.gold += scoreGold + bonus - penalty + bossGold;
             G.gem += bossGem;
             // 중간에 끝낸 판: 스테이지를 완료하지 않는다. 보스 처치 보상 기준(직전 일반 판 골드)도 짧은 판으로 덮지 않는다
             bool aborted = earlyExitSec >= 0 && !(BossRound && bossCleared);
-            if (!BossRound && !aborted) G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
+            if (!BossRound && !aborted)
+            {
+                G.lastNormalGold = scoreGold + bonus;   // 보스 처치 보상 기준 (보스가 안 나온 판: 일반 스테이지 + 보스 스테이지 파밍 판)
+                if (!DBG.infinite) BagBaseUpdate(scoreGold + bonus, timeMax);   // 수확 보따리 골드 기준 (정산 뒤 갱신)
+            }
             var s = new Summary { aborted = aborted, score = score, scoreGold = scoreGold, bonusGold = bonus, value = scoreGold + bonus, net = scoreGold + bonus - penalty + bossGold, goldMul = st.goldMul, gains = new Dictionary<string, double>(gains), harvests = harvests, coinGold = Math.Floor(coinGold), bossId = st.boss?.id, bossCleared = bossCleared, bossPenalty = penalty, bossGold = bossGold, bossGem = bossGem, bossShrooms = bossShrooms, stage = G.stage, dmgBySrc = Copy(dmgBySrc), dmgByHv = Copy(dmgByHv) };
             LogDamage(G.stage); LastSummary = s;
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
-            // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍)
+            // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍). G.stage는 내부 판 번호, 보스 판정은 콘텐츠 스테이지
             if (BossRound && !bossCleared) { G.bossOn = false; G.bossFailed = true; }   // 처음 지면 보스 도전 버튼이 열린다 (Unlock.BOSS)
-            else if (!aborted && (!IsBossStage(G.stage) || BossRound)) G.stage++;
+            else if (!aborted && (!IsBossStage(ContentStage(G.stage)) || BossRound)) G.stage++;
             s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);
             s.stored = StoreRound(bossShrooms > 0);
             if (GoldenCount() >= 15 && !G.hv.ContainsKey("gold")) { G.hvOn["gold"] = OnHvs().Count < HvSlots(); G.hv["gold"] = 1; s.goldHv = true; }
-            var newTheme = s.nextStage > s.stage ? THEMES.FirstOrDefault(th => th.from > 1 && th.from == StageNow()) : null;
+            var newTheme = s.nextStage > s.stage ? THEMES.FirstOrDefault(th => th.from > 1 && th.from == ContentNow()) : null;
             if (newTheme != null) G.theme = newTheme.id;
             s.unlocks = CheckUnlocks();
             SaveGame();

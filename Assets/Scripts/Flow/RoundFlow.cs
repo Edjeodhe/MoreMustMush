@@ -30,15 +30,16 @@ namespace MoreMush
             var why = CantStart();
             if (why != null) { Snd.Err(); App.Notify(why); return false; }
             pending = MakePlan();
+            if (G.tut == 2) G.tut = 3;   // 튜토리얼 마지막 단계: 첫 노드를 사고 출발했다 (Begin이 저장한다)
             App.Go(Scenes.Stage);
             return true;
         }
 
         static Plan MakePlan()
         {
-            var boss = BossRoundNext() ? BossAt(StageNow()) : null;
+            var boss = BossRoundNext() ? BossAt(ContentNow()) : null;
             // 지역은 고르지 않는다: 스테이지가 열어 준 가장 새 지역
-            // 날씨는 5스테이지 클리어 뒤부터 (그전엔 맑음). 보스 판은 늘 나쁜 날씨
+            // 날씨는 5번째 판(표시 1스테이지) 클리어 뒤부터 (그전엔 맑음, Unlock.WEATHER). 보스 판은 늘 나쁜 날씨
             string w = boss != null || Unlock.On(Unlock.WEATHER) ? RollWeather(boss != null) : "clear";
             return new Plan { weather = w, theme = LatestTheme().id, boss = boss };
         }

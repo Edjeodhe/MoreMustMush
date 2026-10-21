@@ -54,6 +54,8 @@ namespace MoreMush.EditorTools
             AssetDatabase.SaveAssets();
         }
 
+        static readonly string[] UvBound = { "FX/brush", "FX/square", "FX/tree_soil" };
+
         public static void BuildAtlases()
         {
             Directory.CreateDirectory(AtlasRoot);
@@ -63,18 +65,24 @@ namespace MoreMush.EditorTools
             {
                 string path = kv.Value;
                 string relative = kv.Key + Path.GetExtension(path);
-                // WeatherMask and procedural FX use 0..1 UVs; never atlas these textures.
-                if (relative.StartsWith("FX/") || relative.EndsWith("grandpa_ref.png")) continue;
+                // 0..1 UV에 기대는 것(번개 선의 붓 결 FX/brush, 날씨 가림막 FX/square — WeatherMask 셰이더가 UV로 구멍 위치를 잡는다)과
+                // 큰 농장 흙은 빼고, 나머지 FX는 한 장에 묶는다: 라운드 조각·타격 효과·그림자가 같은 텍스처를 써야 SpriteRenderer끼리
+                // 묶여 그려진다 (모바일 그리기 호출)
+                if (UvBound.Any(relative.StartsWith) || relative.EndsWith("grandpa_ref.png")) continue;
                 string group = relative.Split('/')[0];
                 // Keep each full-screen background separate. The atlas adds compression padding
                 // without resampling the NPOT source or changing the sprite's dimensions.
                 if (relative.StartsWith("Backgrounds/")) group = "Background_" + Path.GetFileNameWithoutExtension(path);
                 if (relative.StartsWith("Characters/")) group += "_" + relative.Split('/')[1];
-                if (relative.StartsWith("Mushrooms/")) group += "_" + relative.Split('/')[1];
+                // 낱개·군락 버섯은 한 아틀라스로: 필드에서 y 순서로 섞여 그려져 텍스처가 갈리면 묶음이 끊긴다
+                if (relative.StartsWith("Mushrooms/")) group = "Mushrooms";
                 if (!groups.TryGetValue(group, out var items)) groups[group] = items = new List<Object>();
                 var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
                 if (sprite != null) items.Add(sprite);
             }
+            // 예전 그룹(버섯 낱개·군락 따로)이 남아 있으면 같은 그림이 두 아틀라스에 들어가니 지운다
+            foreach (string stale in new[] { "Mushrooms_Single", "Mushrooms_Colony" })
+                AssetDatabase.DeleteAsset(AtlasRoot + "/" + stale + ".spriteatlasv2");
             foreach (var pair in groups)
             {
                 var atlas = new SpriteAtlasAsset();
@@ -94,7 +102,7 @@ namespace MoreMush.EditorTools
                 foreach (var platform in new[] { "DefaultTexturePlatform", "Standalone", "WebGL" })
                 {
                     var settings = importer.GetPlatformSettings(platform);
-                    settings.name = platform; settings.maxTextureSize = 2048;
+                    settings.name = platform; settings.maxTextureSize = AtlasMaxSize(pair.Key);
                     settings.format = TextureImporterFormat.DXT5; settings.textureCompression = TextureImporterCompression.CompressedHQ;
                     settings.overridden = platform != "DefaultTexturePlatform";
                     importer.SetPlatformSettings(settings);
@@ -104,6 +112,9 @@ namespace MoreMush.EditorTools
             Debug.Log($"[MoreMush] {groups.Count} sprite atlases created; FX excluded, backgrounds packed separately.");
         }
 
+        // 버섯 150장(256px)은 2048 한 장에 안 들어가 여러 장으로 나뉘면 묶음이 끊긴다 → 4096 한 장
+        static int AtlasMaxSize(string group) => group == "Mushrooms" ? 4096 : 2048;
+
         [MenuItem("MoreMush/Optimize/Player and Render Settings")]
         public static void ConfigureSettings()
         {
@@ -112,6 +123,8 @@ namespace MoreMush.EditorTools
                 var obj = AssetDatabase.LoadMainAssetAtPath("Assets/Settings/" + name + ".asset");
                 var so = new SerializedObject(obj);
                 foreach (string field in new[] { "m_RequireDepthTexture", "m_RequireOpaqueTexture", "m_SupportsHDR" }) so.FindProperty(field).boolValue = false;
+                // MoreMush/Sprite 셰이더는 SRP Batcher 대상이 아니라, SpriteRenderer는 동적 배칭이 켜져 있어야 같은 재질·텍스처끼리 묶인다
+                so.FindProperty("m_SupportsDynamicBatching").boolValue = true;
                 so.FindProperty("m_RenderScale").floatValue = 1;
                 so.ApplyModifiedPropertiesWithoutUndo();
             }

@@ -95,6 +95,7 @@ namespace MoreMush
             SetWorld((float)st.zoom);
             var r = new RoundSim { st = st, themeId = st.theme.id };
             R = r;
+            r.sporeSlowMul = SporeSlowMulNow();
             // 튜토리얼 판(1스테이지, 튜토리얼 전)만 군락 1개 고정. 그 밖의 초반 판은 보통처럼 스폰하고 종만 제한한다 (PickSpecies)
             r.tutorial = st.boss == null && st.stage == 1 && G != null && G.tut == 0;
             r.lone = r.tutorial ? 1 : 0;
@@ -154,30 +155,51 @@ namespace MoreMush
         // ===== 군락지 =====
         Species PickSpecies(bool wall)
         {
-            var w = st.weather;
-            var pool = EarlyStage(st.stage) && st.boss == null
-                ? EARLY_SPECIES.Take(st.stage).Select(n => SP_BY_NAME[n]).ToList()   // 초반: 스테이지 수만큼의 종만
-                : SPECIES.Where(sp => IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)).ToList();
-            return U.PickWeighted(pool, sp =>
+            // 후보 목록은 예전 LINQ(Take/Select · Where)와 같은 순서로 재사용 버퍼에 채운다 (군락마다 새 리스트를 만들지 않게)
+            var pool = spPool; pool.Clear();
+            if (EarlyStage(st.stage) && st.boss == null)
             {
-                double x = TIERS[sp.t].w;
-                if (st.theme.favIds.Contains(sp.id)) x *= THEME_FAV_MUL;
-                if (sp.t >= 1) x *= st.rareMul;
-                x *= Math.Pow(st.stageMul, sp.t);
-                if (wall && sp.t >= 2) x *= 3;
-                if (w.favIds.Contains(sp.id) || (w.favTier >= 0 && sp.t == w.favTier)) x *= w.favMul;
-                return x;
-            });
+                for (int i = 0; i < EARLY_SPECIES.Length && i < st.stage; i++) pool.Add(SP_BY_NAME[EARLY_SPECIES[i]]);   // 초반: 스테이지 수만큼의 종만
+            }
+            else foreach (var sp in SPECIES) if (IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)) pool.Add(sp);
+            pickWall = wall;
+            return U.PickWeighted(pool, speciesWeight ??= SpeciesWeight);
+        }
+
+        // 종 가중치 (PickSpecies). 예전 람다와 같은 계산·순서. 대리자는 한 번만 만들어 둔다 (군락을 만들 때마다 클로저가 생기지 않게)
+        bool pickWall;
+        Func<Species, double> speciesWeight;
+        double SpeciesWeight(Species sp)
+        {
+            var w = st.weather;
+            double x = TIERS[sp.t].w;
+            if (st.theme.favIds.Contains(sp.id)) x *= THEME_FAV_MUL;
+            if (sp.t >= 1) x *= st.rareMul;
+            x *= Math.Pow(st.stageMul, sp.t);
+            if (pickWall && sp.t >= 2) x *= 3;
+            if (w.favIds.Contains(sp.id) || (w.favTier >= 0 && sp.t == w.favTier)) x *= w.favMul;
+            return x;
         }
 
         static float ClusterR(float r) => Mathf.Round(r * 1.9f);
 
         class Cand { public float x, y, R; public List<Vector2> offs; public bool wall; public string side; public Shape shape; }
+        readonly List<Species> spPool = new List<Species>();
+        // 바닥 군락 후보는 자리를 찾을 때까지 최대 30번 만들어 본다: 그릇(후보·오프셋·모양)은 하나를 다시 쓰고, 고른 뒤 Own으로 모양만 새로 만든다
+        readonly Cand floorCand = new Cand { offs = new List<Vector2>() };
+        readonly Shape floorShape = new Shape { circle = true };
+        // 군락이 계속 들고 있을 모양을 후보의 재사용 그릇에서 떼어 낸다
+        static Cand Own(Cand c)
+        {
+            var s = c.shape;
+            c.shape = new Shape { circle = s.circle, x = s.x, y = s.y, r = s.r, x0 = s.x0, y0 = s.y0, x1 = s.x1, y1 = s.y1 };
+            return c;
+        }
 
         Cand FloorCandidate(int n, float r)
         {
             float rc = ClusterR(r), ring = rc + r + 6, rot = U.Rand(0, U.TAU);
-            var offs = new List<Vector2> { Vector2.zero };
+            var offs = floorCand.offs; offs.Clear(); offs.Add(Vector2.zero);
             for (int i = 0; i < n; i++)
             {
                 float a = rot + i * U.TAU / n + U.Rand(-0.15f, 0.15f), dd = ring + U.Rand(-4, 6);
@@ -186,7 +208,9 @@ namespace MoreMush
             float RR = ring + r + 6;
             if (FX0 + RR > FX1 - RR || FY0 + RR > NO_SPAWN_Y - RR) return null;
             float x = U.Rand(FX0 + RR, FX1 - RR), y = U.Rand(FY0 + RR, NO_SPAWN_Y - RR);
-            return new Cand { x = x, y = y, R = RR, offs = offs, wall = false, shape = Shape.C(x, y, RR) };
+            floorShape.circle = true; floorShape.x = x; floorShape.y = y; floorShape.r = RR;
+            var c = floorCand; c.x = x; c.y = y; c.R = RR; c.wall = false; c.side = null; c.shape = floorShape;
+            return c;
         }
 
         Cand WallCandidate(int n, float r)
@@ -213,6 +237,9 @@ namespace MoreMush
             return new Cand { x = xx, y = yy, R = half, offs = offs, wall = true, side = side, shape = Shape.Rect(xx - rc, yy - half, xx + rc, yy + half) };
         }
 
+        // 벽(위·좌·우 가장자리)에 길게 늘어선 군락. 화면 바깥 띠에 버섯이 줄지어 보여서 끈다 (사용자 지시 2026-10-19). 낱개 버섯은 그대로 가장자리에도 나온다
+        const bool WALL_COLONIES = false;
+
         public int lone;                       // 군락을 자리 고정으로 만드는 수 (튜토리얼 판만 1, 그 밖은 0 = 보통 스폰)
         public bool tutorial;                  // 1스테이지 튜토리얼 판: 첫 군락을 수확기 바로 위에 움직이지 않게 둔다 (Tutorial이 길을 밝혀 준다)
         public Colony TutorialColony;
@@ -223,7 +250,7 @@ namespace MoreMush
         {
             if (colonies.Count >= MaxCol) return true;
             if (lone > 0) return SpawnLone(instant);
-            bool wall = U.Chance(0.3f);
+            bool wall = U.Chance(0.3f) && WALL_COLONIES;   // 난수 순서는 그대로 두고 벽 군락만 끈다
             var sp = PickSpecies(wall);
             if (sp == null) return false;
             if (sp.wander) wall = false;
@@ -234,7 +261,7 @@ namespace MoreMush
                 for (int a = 0; a < 30; a++)
                 {
                     var cand = tryWall ? WallCandidate(n, r) : FloorCandidate(n, r);
-                    if (cand != null && AreaFree(cand.shape)) { CreateColony(sp, r, cand, instant); return true; }
+                    if (cand != null && AreaFree(cand.shape)) { CreateColony(sp, r, Own(cand), instant); return true; }
                 }
                 if (!tryWall) return false;
             }
@@ -244,7 +271,12 @@ namespace MoreMush
         bool SpawnLone(bool instant)
         {
             int slot = -1;
-            for (int i = 0; i < lone && slot < 0; i++) if (!colonies.Any(c => c.slot == i)) slot = i;
+            for (int i = 0; i < lone && slot < 0; i++)
+            {
+                bool used = false;   // colonies.Any(c => c.slot == i)와 같다 (반복마다 클로저를 만들지 않게)
+                for (int k = 0; k < colonies.Count; k++) if (colonies[k].slot == i) { used = true; break; }
+                if (!used) slot = i;
+            }
             if (slot < 0) return true;
             Species sp;
             if (slot < loneSp.Count) sp = loneSp[slot];
@@ -267,7 +299,7 @@ namespace MoreMush
                     cand.x = LAUNCH.x; cand.y = FY0 + (NO_SPAWN_Y - FY0) * 0.35f; cand.shape = Shape.C(cand.x, cand.y, cand.R);
                 }
                 else if (!AreaFree(cand.shape)) continue;
-                CreateColony(sp, r, cand, instant, first);
+                CreateColony(sp, r, Own(cand), instant, first);
                 var col = colonies[colonies.Count - 1];
                 col.slot = slot;
                 if (first) TutorialColony = col;
@@ -343,6 +375,7 @@ namespace MoreMush
             }
         }
 
+        readonly Shape wanderShape = new Shape { circle = true };
         void UpdateWander(float h)
         {
             foreach (var c in colonies)
@@ -353,7 +386,7 @@ namespace MoreMush
                 float nx = c.x + c.vx * h, ny = c.y + c.vy * h;
                 if (nx - c.R < FX0 || nx + c.R > FX1) { c.vx = -c.vx; nx = c.x; }
                 if (ny - c.R < FY0 || ny + c.R > NO_SPAWN_Y) { c.vy = -c.vy; ny = c.y; }
-                var shape = Shape.C(nx, ny, c.R);
+                var shape = wanderShape; shape.circle = true; shape.x = nx; shape.y = ny; shape.r = c.R;   // 시험용 그릇 (매 프레임 새 모양을 만들지 않게)
                 Shape blocked = null;
                 foreach (var o in colonies) if (o != c && Overlap(shape, o.shape, 10)) { blocked = o.shape; break; }
                 if (blocked == null) foreach (var d in devices) { foreach (var s in d.Shapes()) if (Overlap(shape, s, 10)) { blocked = s; break; } if (blocked != null) break; }
@@ -365,7 +398,9 @@ namespace MoreMush
                     c.vx = Mathf.Cos(a) * 40; c.vy = Mathf.Sin(a) * 40;
                     continue;
                 }
-                c.x = nx; c.y = ny; c.shape = shape;
+                c.x = nx; c.y = ny;
+                if (c.shape != null && c.shape.circle && c.shape != wanderShape) { c.shape.x = nx; c.shape.y = ny; c.shape.r = c.R; }   // 군락의 모양을 제자리에서 옮긴다
+                else c.shape = Shape.C(nx, ny, c.R);
                 foreach (var m in c.members) { m.x = c.x + m.ox; m.y = c.y + m.oy; }
             }
         }
