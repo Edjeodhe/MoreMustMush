@@ -186,7 +186,7 @@ namespace MoreMush
                 if (runT >= 5)
                 {
                     var sp = PickSpecies(false) ?? SPECIES[0]; var T = TIERS[sp.t];
-                    double hp = T.hp * 40 * st.shroomHp;
+                    double hp = TIERS[0].hp * 40 * GIANT_TIER_HP[sp.t] * st.shroomHp;   // 7-3: 등급 배수 1·2·3·4 (예전 등급 체력 그대로 = 레전드리가 일반의 40배)
                     var g = new Shroom { sp = sp, x = giantWarn.x, y = giantWarn.y, r = 90, hp = hp, maxHp = hp, giant = true, golden = U.Chance((float)st.golden), solid = true, spore = sp.spore, grow = 0.5f };
                     giant = g; shrooms.Add(g); giantWarn = null; giantState = "up";
                     AddLabel(Loc.F("거대 {0} 등장!", sp.n), g.x, g.y - 130, "#ffffff", 40);

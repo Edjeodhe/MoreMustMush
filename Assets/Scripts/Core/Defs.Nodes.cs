@@ -334,10 +334,13 @@ namespace MoreMush
             string Plus(double mul) => $"+{U.JsRound((mul - 1) * 100)}%";
             string Num(double v) => U.Fmt(v);
             var E = new Dictionary<string, Func<int, string>>();
+            static int LvNow(string id) => Game.G == null ? 0 : Game.Lv(id);
+            static double FieldZoomNow() => LvNow("md_map2") > 0 ? MapZoom2() : MAP_ZOOM[Math.Min(LvNow("md_map"), MAP_ZOOM.Length - 1)];
             // ── 식용 (돈·수확) ──
             // 초반
             E["ed_score"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score(L)));
-            E["ed_cols"] = L => Loc.F("최대 {0}개", ColCount(L));
+            // 7회차: 지금 필드(필드 넓히기) 기준 실제 최대치. 군락지 수 II는 '합의 차'로 보인다 (반올림이 합에 걸려서, 검증_7 6절)
+            E["ed_cols"] = L => Loc.F("최대 {0}개", ColOnField(ColCount(L) + NF.ed_cols2(LvNow("ed_cols2")), FieldZoomNow()));
             E["ed_regen"] = L => Loc.F("사라진 군락지가 {0}초 뒤 다시 돋아남", F(NF.ed_regen(L)));
             E["ed_price"] = L => Loc.F("정산 골드 {0}", Plus(NF.ed_price(L)));
             E["ed_bonus"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus(L)));
@@ -348,7 +351,7 @@ namespace MoreMush
             E["ed_bonus2"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus2(L)));
             E["ed_score2p"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score2p(L)));
             E["ed_bonus2p"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus2p(L)));
-            E["ed_cols2"] = L => Loc.F("군락지 +{0}개", NF.ed_cols2(L));
+            E["ed_cols2"] = L => { int cc = ColCount(LvNow("ed_cols")); double z = FieldZoomNow(); return Loc.F("군락지 +{0}개", ColOnField(cc + NF.ed_cols2(L), z) - ColOnField(cc, z)); };
             E["ed_price2"] = L => Loc.F("정산 골드 +{0}%", U.JsRound(NF.ed_price2(L) * 100));
             E["ed_rare"] = L => Loc.F("에픽 이상 가중치 {0}", Plus(NF.ed_rare(L)));
             E["ed_rare0"] = L => Loc.F("에픽 이상 가중치 ×{0}", F(NF.ed_rare0(L)));

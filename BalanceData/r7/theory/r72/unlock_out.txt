@@ -1,0 +1,27 @@
+ed14 곰보버섯 t2 [after:큰갓버섯 cnt:20] 첫 수확 표시 스테이지 중앙 6회차 18.5 → 7회차 18.0
+ed15 달걀버섯 t2 [boss:40] 첫 수확 표시 스테이지 중앙 6회차 41.0 → 7회차 42.0
+ed16 소혀버섯 t2 [after:기와버섯 cnt:20] 첫 수확 표시 스테이지 중앙 6회차 18.0 → 7회차 21.0
+ed17 능이버섯 t2 [after:곰보버섯 cnt:12] 첫 수확 표시 스테이지 중앙 6회차 20.0 → 7회차 20.5
+ed18 송이버섯 t3 [thick glow after:능이버섯 cnt:10] 첫 수확 표시 스테이지 중앙 6회차 21.5 → 7회차 22.5
+ed19 송로버섯 t3 [glow boss:70] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+ed21 달빛표고 t2 [theme:night glow] 첫 수확 표시 스테이지 중앙 6회차 21.5 → 7회차 21.0
+ed23 바다송이 t2 [theme:sea thick] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+ed24 벽돌먹물버섯 t2 [theme:ruins] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+md14 영지버섯 t2 [boss:50] 첫 수확 표시 스테이지 중앙 6회차 51.0 → 7회차 52.0
+md15 상황버섯 t2 [after:잔나비걸상버섯 cnt:20] 첫 수확 표시 스테이지 중앙 6회차 25.0 → 7회차 24.0
+md16 차가버섯 t2 [after:소나무잔나비버섯 cnt:20] 첫 수확 표시 스테이지 중앙 6회차 22.5 → 7회차 24.0
+md17 말똥진흙버섯 t2 [after:상황버섯 cnt:12] 첫 수확 표시 스테이지 중앙 6회차 26.0 → 7회차 26.5
+md18 동충하초 t3 [wander glow after:차가버섯 cnt:10] 첫 수확 표시 스테이지 중앙 6회차 23.5 → 7회차 25.0
+md19 눈꽃동충하초 t3 [wander glow boss:80] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+md21 달빛동충하초 t2 [theme:night wander glow] 첫 수확 표시 스테이지 중앙 6회차 21.0 → 7회차 21.0
+md23 산호버섯 t2 [theme:sea] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+md24 녹슨영지 t3 [theme:ruins glow] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+ps14 화경버섯 t2 [glow boss:60] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+ps15 개나리광대버섯 t2 [ring after:알광대버섯 cnt:20] 첫 수확 표시 스테이지 중앙 6회차 25.5 → 7회차 23.0
+ps16 마귀광대버섯 t2 [spore:weak after:마귀곰보버섯 cnt:20] 첫 수확 표시 스테이지 중앙 6회차 24.0 → 7회차 25.0
+ps17 독우산광대버섯 t2 [spore:both ring glow after:개나리광대버섯 cnt:12] 첫 수확 표시 스테이지 중앙 6회차 26.5 → 7회차 24.5
+ps18 붉은사슴뿔버섯 t3 [horn after:마귀광대버섯 cnt:10] 첫 수확 표시 스테이지 중앙 6회차 25.0 → 7회차 26.0
+ps19 갈색고리갓버섯 t3 [ring glow boss:90] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+ps20 흰가시광대버섯 t2 [theme:forest ring] 첫 수확 표시 스테이지 중앙 6회차 10.0 → 7회차 14.0
+ps23 해파리버섯 t2 [theme:sea jelly spore:weak] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None
+ps24 콘크리트광대버섯 t3 [theme:ruins ring spore:both] 첫 수확 표시 스테이지 중앙 6회차 None → 7회차 None

@@ -244,9 +244,10 @@ namespace MoreMush
             st.scoreFlat = NF.ed_score(Lv("ed_score")) + NF.ed_score1p(Lv("ed_score1p")) + NF.ed_score2(Lv("ed_score2")) + NF.ed_score2p(Lv("ed_score2p")) + NF.ed_score3(Lv("ed_score3")) + NF.ed_score3p(Lv("ed_score3p"));
             st.scoreMul = (1 + (SetDone("cook") ? 0.5 : 0) + ab["score"]) * st.zoneMul;
             st.maxCol = Math.Max(1, (int)Math.Ceiling((ColCount(Lv("ed_cols")) + NF.ed_cols2(Lv("ed_cols2")) + tb.colsN) * (1 + ab["cols"] + tb.cols) * (wId == "rain" ? 1.2 : 1)));
-            st.regen = NF.ed_regen(Lv("ed_regen")) / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1) * (wId == "storm" ? 2 : 1);
+            st.regen = NF.ed_regen(Lv("ed_regen")) / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1);   // 7회차: 폭우 재생 ×2 뺌 (새 배치 규칙에서 실제 손해가 커서, 검증_7 7-2)
             st.rareMul = (NF.ed_rare(Lv("ed_rare")) + ab["rare"]) * NF.ed_rare0(Lv("ed_rare0"));   // 희귀 포자: 안 사면 에픽 이상이 1/5
-            st.stageMul = 1 + 0.03 * (cst - 1);
+            // 7회차 7-2: 예전 재생 대기열이 큰 일반 군락을 걸러 희귀가 많이 남던 효과(숨은 거르기)를 보이는 규칙으로 옮겼다 — 21~30 기울기 0.06, 상한 2.4(c 48부터 예전 식과 같음)
+            st.stageMul = Math.Max(1 + 0.03 * (cst - 1), Math.Min(1 + 0.06 * (cst - 1), 2.4));
             // 수확 개수 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합) × 균사석 × 지역 배율
             double harvFlat = 1 + NF.ed_bonus(Lv("ed_bonus")) + NF.ed_bonus1p(Lv("ed_bonus1p")) + NF.ed_bonus2(Lv("ed_bonus2")) + NF.ed_bonus2p(Lv("ed_bonus2p")) + NF.ed_bonus3(Lv("ed_bonus3")) + NF.ed_bonus3p(Lv("ed_bonus3p"));
             st.harvestMul = harvFlat * (1 + ab["harvest"]) * NF.gm_harvest(Lv("gm_harvest")) * st.zoneMul;
@@ -254,7 +255,7 @@ namespace MoreMush
             st.priceMul = PriceMul(ab);
             st.colMax = NF.ed_size(Lv("ed_size"));
             st.zoom = Lv("md_map2") > 0 ? MapZoom2() : MAP_ZOOM[Lv("md_map")];   // md_map2 = 필드 넓히기 마지막 한 칸 (형제 노드)
-            double area = Math.Pow(1 / (st.zoom * st.zoom), 0.7);
+            double area = Math.Pow(1 / (st.zoom * st.zoom), COL_AREA_EXP);
             st.maxCol = Math.Max(1, (int)U.JsRound(st.maxCol * area));
             st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"] + tb.goldenP) * tb.goldenMul * (wId == "moon" ? 3 : 1);
             st.sparkP = tb.spark;   // 연쇄 번개 (꼬마·장식): bolt 스킬이 없어도 친다

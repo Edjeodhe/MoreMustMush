@@ -41,9 +41,9 @@
       "Color": "",
       "Efx_Lv0": 4.0,
       "Efx_Lv1": 6.0,
-      "Efx_Lv2": 10.0,
-      "Efx_Lv3": 17.0,
-      "Efx_Lv4": 27.0
+      "Efx_Lv2": 8.0,
+      "Efx_Lv3": 10.0,
+      "Efx_Lv4": 11.0
     },
     {
       "Upg_ID": 13007,
@@ -61,10 +61,10 @@
       "Skill": "",
       "Icon": "",
       "Color": "",
-      "Efx_Lv0": 4.0,
-      "Efx_Lv1": 3.2,
-      "Efx_Lv2": 2.4,
-      "Efx_Lv3": 1.6,
+      "Efx_Lv0": 3.0,
+      "Efx_Lv1": 2.2,
+      "Efx_Lv2": 0.9,
+      "Efx_Lv3": 0.25,
       "Efx_Lv4": 0.0
     },
     {
@@ -260,8 +260,8 @@
       "Icon": "",
       "Color": "",
       "Efx_Lv0": 0.0,
-      "Efx_Lv1": 4.0,
-      "Efx_Lv2": 8.0,
+      "Efx_Lv1": 3.0,
+      "Efx_Lv2": 5.0,
       "Efx_Lv3": 0.0,
       "Efx_Lv4": 0.0
     },
@@ -8190,12 +8190,12 @@
       "Str_ID": 308004,
       "Str_Group_ID": 28004,
       "Str_Name": "wea:storm:desc",
-      "Str_KR": "수확기 속도 ×0.8, 군락 재생이 2배 느려짐",
-      "Str_EN": "Harvester speed ×0.8, Colony regrowth is 2× slower",
-      "Str_JA": "収穫機の速度 ×0.8、群落の再生が2倍遅くなる",
-      "Str_RU": "Скорость сборщиков ×0.8, колонии возрождаются в 2 раза медленнее",
-      "Str_UK": "Швидкість збирачів ×0,8, колонії відновлюються вдвічі повільніше",
-      "Str_PT": "Velocidade do coletor ×0,8, regeneração de colônias 2× mais lenta"
+      "Str_KR": "수확기 속도 ×0.8",
+      "Str_EN": "Harvester speed ×0.8",
+      "Str_JA": "収穫機の速度 ×0.8",
+      "Str_RU": "Скорость сборщиков ×0.8",
+      "Str_UK": "Швидкість збирачів ×0,8",
+      "Str_PT": "Velocidade do coletor ×0,8"
     },
     {
       "Str_ID": 208005,

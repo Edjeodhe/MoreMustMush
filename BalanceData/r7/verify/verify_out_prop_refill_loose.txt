@@ -1,0 +1,39 @@
+[prop] 168조합×40판(일반 등급만): P(전부) 최소 1.000, s 최저 0.459, s<s_min 판 0/6720, 다시 놓기 최대 8회
+  z1.68 cols0+II0 비 장치3 N2 P1.00 s평균 0.77 최저 0.65
+  z1.68 cols1+II0 비 장치3 N3 P1.00 s평균 0.67 최저 0.57
+  z1.68 cols2+II0 비 장치3 N4 P1.00 s평균 0.61 최저 0.56
+  z1.68 cols3+II0 비 장치3 N5 P1.00 s평균 0.58 최저 0.52
+  z1.68 cols4+II0 비 장치3 N6 P1.00 s평균 0.55 최저 0.50
+  z1.68 cols4+II1 비 장치3 N7 P1.00 s평균 0.51 최저 0.46
+  z1.68 cols4+II2 비 장치3 N7 P1.00 s평균 0.50 최저 0.46
+  z1.0 cols0+II0 비 장치3 N5 P1.00 s평균 1.00 최저 1.00
+  z1.0 cols1+II0 비 장치3 N8 P1.00 s평균 1.00 최저 1.00
+  z1.0 cols2+II0 비 장치3 N10 P1.00 s평균 0.95 최저 0.91
+  z1.0 cols3+II0 비 장치3 N12 P1.00 s평균 0.87 최저 0.76
+  z1.0 cols4+II0 비 장치3 N14 P1.00 s평균 0.80 최저 0.75
+  z1.0 cols4+II1 비 장치3 N16 P1.00 s평균 0.74 최저 0.70
+  z1.0 cols4+II2 비 장치3 N17 P1.00 s평균 0.72 최저 0.70
+[refill] z1.0 N14 섞임(0.069, 0.235, 0.378, 0.318): 작은 군락 빈자리에 일반 등급 재생 — 30번 실패 0.25, 격자까지 실패 0.00 (60판)
+[refill] z1.0 N14 섞임(1, 0, 0, 0): 작은 군락 빈자리에 일반 등급 재생 — 30번 실패 0.63, 격자까지 실패 0.00 (60판)
+[refill] z1.68 N6 섞임(0.58, 0.25, 0.14, 0.03): 작은 군락 빈자리에 일반 등급 재생 — 30번 실패 0.70, 격자까지 실패 0.20 (60판)
+[refill] z1.2 N8 섞임(0.58, 0.25, 0.14, 0.03): 작은 군락 빈자리에 일반 등급 재생 — 30번 실패 0.68, 격자까지 실패 0.12 (60판)
+[loose] 스테이지 2 낱개 10 md_map L0 ed_cols 0 now: 놓인 낱개 평균 9.98
+[loose] 스테이지 2 낱개 10 md_map L0 ed_cols 1 now: 놓인 낱개 평균 9.80
+[loose] 스테이지 2 낱개 10 md_map L0 ed_cols 0 prop: 놓인 낱개 평균 9.98
+[loose] 스테이지 2 낱개 10 md_map L0 ed_cols 1 prop: 놓인 낱개 평균 9.81
+[loose] 스테이지 3 낱개 9 md_map L0 ed_cols 0 now: 놓인 낱개 평균 9.00
+[loose] 스테이지 3 낱개 9 md_map L0 ed_cols 1 now: 놓인 낱개 평균 8.88
+[loose] 스테이지 3 낱개 9 md_map L0 ed_cols 0 prop: 놓인 낱개 평균 9.00
+[loose] 스테이지 3 낱개 9 md_map L0 ed_cols 1 prop: 놓인 낱개 평균 8.90
+[loose] 스테이지 4 낱개 8 md_map L0 ed_cols 0 now: 놓인 낱개 평균 8.00
+[loose] 스테이지 4 낱개 8 md_map L0 ed_cols 1 now: 놓인 낱개 평균 7.89
+[loose] 스테이지 4 낱개 8 md_map L0 ed_cols 0 prop: 놓인 낱개 평균 8.00
+[loose] 스테이지 4 낱개 8 md_map L0 ed_cols 1 prop: 놓인 낱개 평균 7.94
+[loose] 스테이지 5 낱개 6 md_map L0 ed_cols 0 now: 놓인 낱개 평균 6.00
+[loose] 스테이지 5 낱개 6 md_map L0 ed_cols 1 now: 놓인 낱개 평균 5.98
+[loose] 스테이지 5 낱개 6 md_map L0 ed_cols 0 prop: 놓인 낱개 평균 6.00
+[loose] 스테이지 5 낱개 6 md_map L0 ed_cols 1 prop: 놓인 낱개 평균 6.00
+[loose] 스테이지 6 낱개 4 md_map L0 ed_cols 0 now: 놓인 낱개 평균 4.00
+[loose] 스테이지 6 낱개 4 md_map L0 ed_cols 1 now: 놓인 낱개 평균 4.00
+[loose] 스테이지 6 낱개 4 md_map L0 ed_cols 0 prop: 놓인 낱개 평균 4.00
+[loose] 스테이지 6 낱개 4 md_map L0 ed_cols 1 prop: 놓인 낱개 평균 4.00

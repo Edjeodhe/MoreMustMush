@@ -106,7 +106,11 @@ namespace MoreMush
             if (st.boss != null) r.SpawnBoss(st.boss);   // 군락지·장치보다 먼저 자리를 잡는다
             foreach (var d in st.devTypes) r.PlaceDevice(d, null);
             r.barLen = Mathf.Min(r.barLen, WW / 3);   // 슬라이드 바 최대 길이: 화면의 1/3
-            if (st.boss == null) for (int i = 0; i < r.MaxCol; i++) r.SpawnColony(true);
+            if (st.boss == null)
+            {
+                if (r.lone > 0) for (int i = 0; i < r.MaxCol; i++) r.SpawnColony(true);   // 튜토리얼 판: 크기 그대로
+                else r.PlanColonies();
+            }
             if (st.boss == null && !r.tutorial && EarlyStage(st.stage)) { r.looseSpawned = true; r.SpawnLoose(EARLY_LOOSE[st.stage - 1]); }   // 초반 낱개 버섯 (판 시작 때 한 번)
             for (int i = 0; i < st.permBalls; i++) r.balls.Add(r.MakeBall(LAUNCH.x, LAUNCH.y, true, st.hvs[i % st.hvs.Count]));
             r.RebuildGrid();
@@ -137,6 +141,7 @@ namespace MoreMush
             areaLaunch.x = LAUNCH.x; areaLaunch.y = LAUNCH.y; areaFloor.y0 = NO_SPAWN_Y;
             if (Overlap(shape, areaLaunch, 0) || Overlap(shape, areaFloor, 0)) return false;
             foreach (var c in colonies) if (c != skipCol && Overlap(shape, c.shape, 10)) return false;
+            foreach (var p in planned) if (Overlap(shape, p, 10)) return false;   // 판 시작 계획 중인 군락 자리
             foreach (var d in devices) foreach (var s in d.Shapes()) if (Overlap(shape, s, 10)) return false;
             if (giant != null)
             {
@@ -254,17 +259,115 @@ namespace MoreMush
             var sp = PickSpecies(wall);
             if (sp == null) return false;
             if (sp.wander) wall = false;
-            float r = TIERS[sp.t].r;
+            float r = TIERS[sp.t].r * colS;   // 7회차: 판마다 정한 군락 크기 배율 (재생도 같은 크기)
             int n = U.RandI(3, st.colMax);
             for (bool tryWall = wall; ; tryWall = false)
             {
-                for (int a = 0; a < 30; a++)
+                for (int a = 0; a < COL_TRIES; a++)
                 {
                     var cand = tryWall ? WallCandidate(n, r) : FloorCandidate(n, r);
                     if (cand != null && AreaFree(cand.shape)) { CreateColony(sp, r, Own(cand), instant); return true; }
                 }
-                if (!tryWall) return false;
+                if (!tryWall)
+                {
+                    var g = GridCandidate(n, r, COL_GRID_REGEN);   // 무작위로 못 찾으면 빈 자리 격자에서 고른다
+                    if (g != null) { CreateColony(sp, r, g, instant); return true; }
+                    return false;
+                }
             }
+        }
+
+        // ===== 판 시작 군락 계획 (밸런스 7회차) =====
+        // 최대치만큼 군락이 실제로 놓이게 한다: 종·둘레 수를 먼저 다 뽑고(난수 순서는 예전 SpawnColony와 같다: 벽 → 종 → 둘레 수),
+        // 등급이 섞인 계획으로 시작 크기 s0를 푼 뒤 자리만 계획한다(무작위 30번 → 격자 보충). 하나라도 못 놓으면 크기를 줄여 처음부터.
+        // 크기 하한 ColSMin(zoom)은 한 번 들르고 COL_S_ABS에서 멈춘다(그때는 놓인 만큼만). 정한 크기는 판 안의 재생에도 쓴다
+        public float colS = 1;
+        readonly List<Shape> planned = new List<Shape>();
+        readonly struct PlanSlot { public readonly Species sp; public readonly int n; public PlanSlot(Species sp, int n) { this.sp = sp; this.n = n; } }
+
+        void PlanColonies()
+        {
+            var slots = new List<PlanSlot>();
+            for (int i = 0; i < MaxCol; i++)
+            {
+                bool wall = U.Chance(0.3f) && WALL_COLONIES;   // 예전 SpawnColony와 같은 난수 순서 (벽 군락은 꺼져 있다)
+                var sp = PickSpecies(wall);
+                if (sp == null) continue;
+                slots.Add(new PlanSlot(sp, U.RandI(3, st.colMax)));
+            }
+            if (slots.Count == 0) return;
+            float sMin = ColSMin(ZOOM), s = StartScale(slots);
+            var cands = new List<Cand>(slots.Count);
+            while (true)
+            {
+                planned.Clear(); cands.Clear();
+                foreach (var sl in slots)
+                {
+                    float r = TIERS[sl.sp.t].r * s;
+                    Cand c = null;
+                    for (int a = 0; a < COL_TRIES && c == null; a++)
+                    {
+                        var f = FloorCandidate(sl.n, r);
+                        if (f != null && AreaFree(f.shape)) c = Copy(f);
+                    }
+                    c ??= GridCandidate(sl.n, r, COL_GRID);
+                    if (c == null) break;
+                    cands.Add(c); planned.Add(c.shape);
+                }
+                if (cands.Count == slots.Count || s <= COL_S_ABS) break;
+                float next = s * COL_SHRINK;
+                if (s > sMin && next < sMin) next = sMin;   // 하한은 건너뛰지 않고 한 번 들른다
+                s = Mathf.Max(next, COL_S_ABS);
+            }
+            planned.Clear();
+            colS = s;
+            for (int i = 0; i < cands.Count; i++) CreateColony(slots[i].sp, TIERS[slots[i].sp.t].r * s, cands[i], true);
+        }
+
+        // 계획한 종으로 시작 크기를 푼다: Σ π(3.9·r_i·s + 17)² = COL_PACK · 빈 넓이 (검증_7 M1)
+        float StartScale(List<PlanSlot> slots)
+        {
+            double free = (FX1 - FX0) * (NO_SPAWN_Y - FY0) - Math.PI * 140 * 140 / 2;
+            foreach (var d in devices) foreach (var sh in d.Shapes()) free -= sh.circle ? Math.PI * sh.r * sh.r : (sh.x1 - sh.x0) * (sh.y1 - sh.y0);
+            double a = 0, b = 0, c = 289.0 * slots.Count - COL_PACK * Math.Max(0, free) / Math.PI;
+            foreach (var sl in slots) { double k = 3.9 * TIERS[sl.sp.t].r; a += k * k; b += 34 * k; }
+            double disc = b * b - 4 * a * c;
+            double s0 = disc < 0 ? COL_S_ABS : (-b + Math.Sqrt(disc)) / (2 * a);
+            return Mathf.Clamp((float)s0, COL_S_ABS, 1);
+        }
+
+        // 후보를 계획 목록에 남길 수 있게 떼어 낸다 (FloorCandidate는 그릇 하나를 다시 쓴다)
+        static Cand Copy(Cand c)
+        {
+            var o = Own(c);
+            return new Cand { x = o.x, y = o.y, R = o.R, offs = new List<Vector2>(o.offs), wall = false, side = null, shape = o.shape };
+        }
+
+        // 빈 자리 격자에서 하나: 군락 원(RR)이 들어가는 격자점을 모두 모아 U.RandI로 하나 고른 뒤 둘레를 뽑는다 (위치 → 회전·둘레 순, 검증_7 M2)
+        readonly List<Vector2> gridPts = new List<Vector2>();
+        readonly Shape gridProbe = new Shape { circle = true };
+        Cand GridCandidate(int n, float r, float step)
+        {
+            float RR = ClusterR(r) + r + 6 + r + 6;
+            if (FX0 + RR > FX1 - RR || FY0 + RR > NO_SPAWN_Y - RR) return null;
+            gridPts.Clear();
+            gridProbe.r = RR;
+            for (float y = FY0 + RR; y <= NO_SPAWN_Y - RR; y += step)
+                for (float x = FX0 + RR; x <= FX1 - RR; x += step)
+                {
+                    gridProbe.x = x; gridProbe.y = y;
+                    if (AreaFree(gridProbe)) gridPts.Add(new Vector2(x, y));
+                }
+            if (gridPts.Count == 0) return null;
+            var p = gridPts[Mathf.Min(gridPts.Count - 1, U.RandI(0, gridPts.Count - 1))];
+            float rc = ClusterR(r), ring = rc + r + 6, rot = U.Rand(0, U.TAU);
+            var offs = new List<Vector2> { Vector2.zero };
+            for (int i = 0; i < n; i++)
+            {
+                float a = rot + i * U.TAU / n + U.Rand(-0.15f, 0.15f), dd = ring + U.Rand(-4, 6);
+                offs.Add(new Vector2(Mathf.Cos(a) * dd, Mathf.Sin(a) * dd));
+            }
+            return new Cand { x = p.x, y = p.y, R = RR, offs = offs, wall = false, side = null, shape = Shape.C(p.x, p.y, RR) };
         }
 
         // 초반 스테이지 군락: 빈 자리 하나를 그 자리의 종으로 채운다. 첫 판 튜토리얼의 첫 군락은 발사 지점 바로 위에
