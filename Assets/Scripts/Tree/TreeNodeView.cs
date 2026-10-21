@@ -58,9 +58,19 @@ namespace MoreMush
             return m;
         }
 
-        void Awake()
+        void Awake() => Seed();
+
+        // 실행 중에 만든 노드 (TreeView.SyncNodes): 복제한 노드의 id를 바꾸고 모양 난수를 다시 뽑는다
+        public void Init(string id)
         {
-            var r = U.Seeded(nodeId.GetHashCode() & 0xffff);
+            nodeId = id;
+            growAnim = -1; shownHidden = null; shownS = null; shownL = -1; shownParent = null;
+            Seed();
+        }
+
+        void Seed()
+        {
+            var r = U.Seeded((nodeId ?? "").GetHashCode() & 0xffff);
             bend = (float)(r() - 0.5) * 0.5f;
             hairs = new Vector2[3];
             for (int i = 0; i < 3; i++) hairs[i] = new Vector2((float)(r() * U.TAU), 22 + (float)r() * 40);
@@ -173,21 +183,22 @@ namespace MoreMush
             }
             if (!dirty) return;   // 아래(레벨 칸·속 그림·배지·이름표)는 상태가 바뀔 때만
 
-            // 레벨 칸
+            // 레벨 칸 (칸이 레벨보다 적으면 칸 하나가 여러 레벨: 사냥 준비 Lv.10은 5칸 × 2레벨)
+            int arcs = Mathf.Min(n.max, levelArcs.Length), filled = n.max > 0 ? Mathf.FloorToInt(L * arcs / (float)n.max) : 0;
             for (int i = 0; i < levelArcs.Length; i++)
             {
                 var a = levelArcs[i];
                 if (a == null) continue;
-                bool show = n.max > 1 && i < n.max;
+                bool show = n.max > 1 && i < arcs;
                 Show(a, show);
                 if (!show) continue;
-                float gap = 0.12f, seg = U.TAU / n.max, a0 = -Mathf.PI / 2 + i * seg + gap / 2, a1 = a0 + seg - gap;
+                float gap = 0.12f, seg = U.TAU / arcs, a0 = -Mathf.PI / 2 + i * seg + gap / 2, a1 = a0 + seg - gap;
                 const int K = 10;
                 a.positionCount = K + 1;
                 float ar = r + (slot != null ? SLOT_PAD / 2 + 4 : 6);
                 for (int j = 0; j <= K; j++) { float ang = Mathf.Lerp(a0, a1, j / (float)K); arcBuf[j] = Art.P(Mathf.Cos(ang) * ar * sc, Mathf.Sin(ang) * ar * sc); }
                 a.SetPositions(arcBuf);
-                a.startColor = a.endColor = i < L ? MAX : new Color(0.55f, 0.48f, 0.38f, 0.25f);
+                a.startColor = a.endColor = i < filled ? MAX : new Color(0.55f, 0.48f, 0.38f, 0.25f);
             }
 
             // 속 그림

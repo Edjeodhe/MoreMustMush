@@ -6,7 +6,7 @@ namespace MoreMush
     // 세이브 버전 올리기. SaveIO.Load가 Sanitize 끝에서 부르며, 한 버전씩 차례로 올린다.
     public static class SaveMigration
     {
-        public const int CURRENT = 8;
+        public const int CURRENT = 9;
 
         // 이번 로드에서 플레이어에게 알릴 문장 (App.FlushMigrationNotice가 알리고 비운다)
         public static string Notice;
@@ -32,6 +32,7 @@ namespace MoreMush
             if (g.v < 6) ToV6(g);
             if (g.v < 7) ToV7(g);
             if (g.v < 8) ToV8(g);
+            if (g.v < 9) ToV9(g);
             g.v = Math.Max(g.v, CURRENT);
         }
 
@@ -129,6 +130,128 @@ namespace MoreMush
             if (g.stage >= 7) g.nodes["ed_rare0"] = 3;
         }
 
+        // v9 (균사 트리 A안, 2026-10-19): 예전 트리 노드가 모두 바뀌었다. 예전 노드에 쓴 골드·균사석을 돌려주고 지운다.
+        // 사냥 준비(power, 예전 기운 북돋기)는 1레벨만 남기고 2~4레벨 값을 돌려준다. 세계수 노드(md_chef·gm_farm·gm_spore·gm_herb·gm_gourmet)는 그대로.
+        // 가격표는 예전 DB(MMM_DB_Ver.05)의 Upgrade_Cost (gold, gem 레벨별)
+        static readonly Dictionary<string, (double[] gold, double[] gem)> RETIRED_V9 = new Dictionary<string, (double[], double[])>
+        {
+            ["ed_score"] = (new double[] { 16, 60, 230 }, null),
+            ["ed_cols"] = (new double[] { 22, 84, 250, 650 }, null),
+            ["ed_regen"] = (new double[] { 280, 700, 1700 }, null),
+            ["ed_price"] = (new double[] { 40, 150, 380 }, null),
+            ["ed_bonus"] = (new double[] { 550, 1300, 2900 }, null),
+            ["ed_score1p"] = (new double[] { 4500, 17000, 64000 }, null),
+            ["ed_bonus1p"] = (new double[] { 9600, 32000, 110000 }, null),
+            ["ed_score2"] = (new double[] { 210000, 770000, 2900000 }, null),
+            ["ed_bonus2"] = (new double[] { 370000, 1400000, 5200000 }, null),
+            ["ed_score2p"] = (new double[] { 11000000, 42000000, 150000000 }, null),
+            ["ed_bonus2p"] = (new double[] { 19000000, 72000000, 270000000 }, null),
+            ["ed_cols2"] = (new double[] { 4100000, 15000000 }, null),
+            ["ed_price2"] = (new double[] { 13000000, 50000000 }, null),
+            ["ed_rare"] = (new double[] { 720000, 2600000, 9400000 }, null),
+            ["ed_size"] = (new double[] { 410000, 1300000, 5000000 }, null),
+            ["ed_score3"] = (new double[] { 940000000, 3500000000, 13000000000 }, null),
+            ["ed_bonus3"] = (new double[] { 1700000000, 6100000000, 23000000000 }, null),
+            ["ed_score3p"] = (new double[] { 50000000000, 190000000000, 660000000000 }, null),
+            ["ed_bonus3p"] = (new double[] { 82000000000, 310000000000, 1200000000000 }, null),
+            ["ed_trade"] = (new double[] { 120000000000, 430000000000 }, null),
+            ["ed_gold"] = (new double[] { 120000000000, 430000000000 }, null),
+            ["ed_giant"] = (new double[] { 30000000000, 120000000000 }, null),
+            ["ed_multi"] = (new double[] { 370000000000, 600000000000 }, null),
+            ["md_map"] = (new double[] { 340, 750, 1700, 4000 }, null),
+            ["md_bar"] = (new double[] { 55, 200, 440 }, null),
+            ["md_combo"] = (new double[] { 260, 600, 1300 }, null),
+            ["dev_stump"] = (new double[] { 220 }, null),
+            ["dev_moss"] = (new double[] { 420 }, null),
+            ["dev_acorn"] = (new double[] { 900 }, null),
+            ["md_kid"] = (new double[] { 1300, 3400, 6800 }, null),
+            ["md_combo2"] = (new double[] { 2400000, 8800000 }, null),
+            ["md_templife"] = (new double[] { 13000000, 50000000 }, null),
+            ["md_stump"] = (new double[] { 61000000000, 230000000000 }, null),
+            ["accel"] = (new double[] { 700, 2100, 3700, 14000 }, null),
+            ["sharpen"] = (new double[] { 1100000, 4100000, 8300000, 31000000 }, null),
+            ["split"] = (new double[] { 43000000000, 160000000000, 330000000000, 1300000000000 }, null),
+            ["clear"] = (new double[] { 8800000, 33000000, 130000000, 350000000 }, null),
+            ["burst"] = (new double[] { 1600, 5000, 10000, 38000 }, null),
+            ["clone"] = (new double[] { 370000000000, 600000000000, 600000000000, 1800000000000 }, null),
+            ["magnet"] = (new double[] { 7700000, 30000000, 66000000, 250000000 }, null),
+            ["bolt"] = (new double[] { 770000000000, 880000000000, 880000000000, 2400000000000 }, null),
+            ["tornado"] = (new double[] { 880000000000, 990000000000, 990000000000, 2400000000000 }, null),
+            ["shock"] = (new double[] { 600000000000, 770000000000, 770000000000, 2000000000000 }, null),
+            ["pierce"] = (new double[] { 1000, 2500, 3700, 14000 }, null),
+            ["homing"] = (new double[] { 26000, 52000, 82000, 310000 }, null),
+            ["barclone"] = (new double[] { 19000000, 37000000, 61000000, 230000000 }, null),
+            ["fest"] = (new double[] { 1200000000000, 1300000000000, 1400000000000, 4100000000000 }, null),
+            ["md_buffdur"] = (new double[] { 32000000, 100000000 }, null),
+            ["ps_atk"] = (new double[] { 370, 1400, 5200, 20000 }, null),
+            ["ps_size"] = (new double[] { 450, 900, 1800 }, null),
+            ["ps_spd"] = (new double[] { 480, 960, 1900 }, null),
+            ["ps_dur"] = (new double[] { 30, 110, 300, 800 }, null),
+            ["ps_ball"] = (new double[] { 2400 }, null),
+            ["ps_atk2"] = (new double[] { 14000, 52000, 200000, 720000 }, null),
+            ["ps_ball2"] = (new double[] { 61000000 }, null),
+            ["ps_atk2p"] = (new double[] { 2700000, 9900000, 37000000 }, null),
+            ["ps_dur2"] = (new double[] { 14000000, 52000000 }, null),
+            ["ps_crit"] = (new double[] { 1000000, 3900000, 15000000 }, null),
+            ["ps_resist"] = (new double[] { 2400000, 8800000 }, null),
+            ["ps_rush"] = (new double[] { 16000000, 61000000 }, null),
+            ["bl"] = (new double[] { 20000000000, 77000000000, 130000000000, 500000000000 }, null),
+            ["ps_bar"] = (new double[] { 11000, 28000, 66000 }, null),
+            ["ps_barspd"] = (new double[] { 18000, 43000, 110000 }, null),
+            ["ps_bardur"] = (new double[] { 26000, 66000, 180000 }, null),
+            ["ps_barrate"] = (new double[] { 2500000, 6100000, 15000000 }, null),
+            ["ps_power"] = (new double[] { 13000000, 31000000, 77000000 }, null),
+            ["ps_atk3"] = (new double[] { 45000000, 160000000, 600000000, 2300000000 }, null),
+            ["ps_atk3p"] = (new double[] { 8300000000, 31000000000, 120000000000 }, null),
+            ["ps_atk4"] = (new double[] { 140000000000, 540000000000, 1400000000000 }, null),
+            ["ps_ball3"] = (new double[] { 990000000000, 1400000000000 }, null),
+            ["ps_crit2"] = (new double[] { 55000000000, 72000000000 }, null),
+            ["ps_heavy"] = (new double[] { 5500000000, 22000000000 }, null),
+            ["gm_harvest"] = (new double[] { 3000, 6000, 12000 }, new double[] { 10, 20, 40 }),
+            ["gm_meteor"] = (new double[] { 5000, 10000, 20000 }, new double[] { 25, 50, 100 }),
+            ["gm_toxin"] = (new double[] { 2000, 4000, 8000 }, new double[] { 8, 16, 32 }),
+            ["gm_atk"] = (new double[] { 3000, 6000, 12000 }, new double[] { 12, 24, 48 }),
+            ["gm_boss"] = (new double[] { 3000, 6000, 12000 }, new double[] { 15, 30, 60 }),
+            ["gm_score"] = (new double[] { 3000, 6000, 12000 }, new double[] { 12, 24, 48 }),
+            ["gm_bossgem"] = (new double[] { 2500, 5000, 10000 }, new double[] { 10, 20, 40 }),
+            ["gm_skill"] = (new double[] { 3000, 6000, 12000 }, new double[] { 12, 24, 48 }),
+            ["gm_bar"] = (new double[] { 2500, 5000, 10000 }, new double[] { 8, 16, 32 }),
+            ["ed_rare0"] = (new double[] { 320, 800, 2000 }, null),
+        };
+        static readonly double[] RETIRED_V9_POWER = { 12, 46, 170, 510 };
+        const double RETIRED_V9_SINK0 = 3630000000000, RETIRED_V9_SINK_K = 1.076;   // 끝없는 투지·끝없는 풍년: Cost0 × K^L
+
+        static void ToV9(SaveData g)
+        {
+            double gold = 0, gem = 0;
+            foreach (var kv in RETIRED_V9)
+            {
+                if (!g.nodes.TryGetValue(kv.Key, out int L)) continue;
+                for (int i = 0; i < Math.Min(L, kv.Value.gold.Length); i++)
+                {
+                    gold += Math.Ceiling(kv.Value.gold[i] * Defs.COST_MUL);
+                    if (kv.Value.gem != null) gem += Math.Ceiling(kv.Value.gem[i] * Defs.COST_MUL);
+                }
+                g.nodes.Remove(kv.Key);
+            }
+            foreach (var id in new[] { "inf_atk", "inf_gold" })
+            {
+                if (!g.nodes.TryGetValue(id, out int L)) continue;
+                for (int i = 0; i < Math.Min(L, 20000) && !double.IsInfinity(gold); i++) gold += Math.Ceiling(RETIRED_V9_SINK0 * Math.Pow(RETIRED_V9_SINK_K, i) * Defs.COST_MUL);
+                g.nodes.Remove(id);
+            }
+            if (g.nodes.TryGetValue(Defs.ROOT_NODE, out int p) && p > 1)
+            {
+                for (int i = 1; i < Math.Min(p, RETIRED_V9_POWER.Length); i++) gold += Math.Ceiling(RETIRED_V9_POWER[i] * Defs.COST_MUL);
+                g.nodes[Defs.ROOT_NODE] = 1;
+            }
+            if (double.IsInfinity(gold) || double.IsNaN(gold)) gold = double.MaxValue / 4;
+            g.gold += gold; g.gem += gem;
+            FitHarvestersToSlots(g);   // 장착 칸이 장인의 도구(균사석)로 바뀌었다
+            if (gold > 0 || gem > 0)
+                AddNotice(Loc.T("균사 트리가 새로 바뀌었어요!") + "\n" + Loc.F("예전 트리에 쓴 골드 {0}·균사석 {1}을 돌려받았어요", U.Fmt(gold), U.Fmt(gem)));
+        }
+
         static void ToV6(SaveData g)
         {
             var f = g.farm;
@@ -176,7 +299,7 @@ namespace MoreMush
         static void FitHarvestersToSlots(SaveData g)
         {
             int Lv(string id) => g.nodes.TryGetValue(id, out var L) ? L : 0;
-            int slots = 1 + Lv("ps_ball") + Lv("ps_ball2") + Lv("ps_ball3");
+            int slots = 1 + Lv("ps_tools");   // 장인의 도구 (균사 트리 A안. 예전엔 ps_ball·ps_ball2·ps_ball3)
             var on = new List<string>();
             foreach (var h in Defs.HARVESTERS)
                 if (g.hv.ContainsKey(h.id) && (!g.hvOn.TryGetValue(h.id, out var o) || o)) on.Add(h.id);

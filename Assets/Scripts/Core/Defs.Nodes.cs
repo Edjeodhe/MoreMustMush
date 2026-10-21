@@ -21,14 +21,11 @@ namespace MoreMush
         public static readonly Dictionary<string, Skill> SKILLS = new Dictionary<string, Skill>();
         public static readonly List<string> SKILL_IDS = new List<string>();
 
-        // 성장 설계
-        // - 레벨 효과는 레벨당 고정값을 더하는 식이다. 최대 레벨은 2~4로 짧다.
-        // - 공격력·타격 점수·수확량은 단계 노드 I(+1) → II(+10) → III(+100) → IV(+1000)로 단위가 커진다.
-        //   다음 단계는 앞 단계를 최대 레벨까지 올려야 열린다(가격이 아니라 구조로 막는다).
-        // - 버섯 체력·보상도 지역마다 ×10씩 커지므로(ZoneMul) 단계가 오를 때마다 숫자 단위가 한 자리씩 뛴다.
-        // - 곱셈은 균사석 노드(후반)에서만 들어온다.
-        // - 지역·스테이지로 노드를 잠그지 않는다. 기본 노드는 골드로만 사고, 단계(초반·중반·후반)는 가격으로만 구분한다.
-        //   가격은 산 순서대로 늘어놓았을 때 한 번에 크게 뛰지 않게 맞춘다(엑셀 DB Upgrade_Cost, BalanceSim.TunePrices).
+        // 성장 설계 (균사 트리 A안 15차, 2026-10-19)
+        // - 트리는 줄(같은 스킬) 단위다. 한 줄의 레벨은 여러 노드(행)에 나뉘어 놓이고, 앞 행을 최대 레벨까지 올려야 다음 행이 열린다(DB Upg_Req).
+        //   줄의 값 = 그 줄에서 마지막으로 산 행의 Efx (각 행의 Efx_Lv0~N은 그 행까지 올렸을 때의 줄 전체 값). Game.LineV
+        // - 효과는 % 합연산(+10%, +20%…)과 고정값(공격력 +2…)으로 통일. 수확기 상시 능력치와 슬라이드 바 버프는 따로 곱한다.
+        // - 노드 자리(Pos_X·Pos_Y)와 레어도(자리로 정한 가격 등급)는 기획서/균사트리_배치안. 가격은 임시(레어도 기반).
         public static double SkillRate(int S) => 0.10 + 0.10 * S;
         // 슬라이드 바 스킬 지속시간: 3 + n초 (n = 위력 레벨). 기운 북돋기: 공격력 +POWER_ATK·스킬 발동률 +POWER_SKILL × (1 + 위력 레벨)
         public static double BarSkillDur(int P) => 3 + P;
@@ -36,102 +33,36 @@ namespace MoreMush
         public static readonly float BAR_CLONE_DUR = (float)Db.C("BAR_CLONE_DUR");
         public static readonly int BAR_CLONE_MAX = Db.CInt("BAR_CLONE_MAX", 0);
         public static double SkillPow(int P) => 1 + 0.75 * P;   // 스킬 위력 배율 (피해·시간·속도)
-        public static double KidRate(int L) => V("md_kid", L);
-        public static double MultiRate(int L) => V("ed_multi", L);
 
-        // 노드 효과 값 (DB Efx_Lv0~4). 레벨은 0~최대 레벨로 자른다
+        // 노드 효과 값 (DB Efx_Lv0~10). 레벨은 0~최대 레벨로 자른다
         static double V(string id, int L)
         {
             var n = NODE[id];
             return n.efx[L < 0 ? 0 : L > n.max ? n.max : L];
         }
+        public const int MAX_LV = 10;   // 한 행의 최대 레벨 (사냥 준비 Lv.10)
 
-
-        // ===== 균사 노드 효과 공식 (NF) =====
+        // ===== 균사 노드 효과 (NF) =====
+        // 트리 노드는 줄 값(Game.LineV)으로 읽는다. 여기는 세계수 화면이 쓰는 노드(가지 wt, 트리에 안 보임)와 레벨과 상관없는 공식만 남긴다
         public static class NF
         {
-            // 노드 효과 값은 엑셀 DB Upgrade 시트의 Efx_Lv0~4 (레벨별 값)에서 읽는다. 함수 이름 = 노드 키
-            // 단계 노드: 고정값 더하기 (I +1 · II +10 · III +100 · IV +1000)
-            public static double ps_atk(int L) => V("ps_atk", L);
-            // 공격력 II 이상은 증가량 25% 너프 (사용자 지시 2026-10-13: II부터 너무 강함 → DB 값이 7.5·75·750 단위)
-            public static double ps_atk2(int L) => V("ps_atk2", L);
-            public static double ps_atk3(int L) => V("ps_atk3", L);
-            public static double ps_atk4(int L) => V("ps_atk4", L);
-            public static double ed_score(int L) => V("ed_score", L);      // 타격 점수 +
-            public static double ed_score2(int L) => V("ed_score2", L);
-            public static double ed_score3(int L) => V("ed_score3", L);
-            public static double ed_bonus(int L) => V("ed_bonus", L);      // 버섯 하나당 수확 개수 +
-            public static double ed_bonus2(int L) => V("ed_bonus2", L);
-            public static double ed_bonus3(int L) => V("ed_bonus3", L);
-            // 형제 노드 (I+ · II+ · III+): 같은 단계 효과를 한 번 더. 최대 레벨을 늘리지 않고 줄의 레벨 수를 늘린다
-            public static double ed_score1p(int L) => V("ed_score1p", L);
-            public static double ed_score2p(int L) => V("ed_score2p", L);
-            public static double ed_score3p(int L) => V("ed_score3p", L);
-            public static double ed_bonus1p(int L) => V("ed_bonus1p", L);
-            public static double ed_bonus2p(int L) => V("ed_bonus2p", L);
-            public static double ed_bonus3p(int L) => V("ed_bonus3p", L);
-            public static double ps_atk2p(int L) => V("ps_atk2p", L);
-            public static double ps_atk3p(int L) => V("ps_atk3p", L);
-            public static double ed_price(int L) => V("ed_price", L);
-            public static double ed_price2(int L) => V("ed_price2", L);   // 정산 골드 +50%씩 (I에 더함)
-            public static int ed_cols2(int L) => (int)Math.Round(V("ed_cols2", L));         // 군락지 수 +4씩
-            public static double md_combo2(int L) => V("md_combo2", L);   // 콤보 계수 +0.1씩
-            public static double ps_dur2(int L) => V("ps_dur2", L);       // 라운드 시간 +3초씩
-            public static double ps_crit2(int L) => V("ps_crit2", L);  // 치명타 배율 ×3 → ×5
-            public static double ed_regen(int L) => V("ed_regen", L);
-            public static double ed_rare(int L) => V("ed_rare", L);
-            public static double ed_rare0(int L) => V("ed_rare0", L);   // 희귀 포자: 에픽 이상 가중치 배율 (0레벨 0.2 → 3레벨 1.0)
-            public static double ed_gold(int L) => V("ed_gold", L);
-            public static double ed_trade(int L) => V("ed_trade", L);
-            public static double ed_giant(int L) => V("ed_giant", L);
-            public static int ed_size(int L) => (int)Math.Round(V("ed_size", L));   // 군락지당 최대 버섯 수
-            public static double md_bar(int L) => V("md_bar", L);
-            // 슬라이드 바 수치 강화 (독 가지): 바 길이 +20%p씩(기본 150 기준) · 바 반사 속도 · 바 스킬 지속 +초 · 바 스킬 발동률 +%p · 기운 북돋기 공격력 +%p (발동률은 1/4)
-            public static double ps_bar(int L) => V("ps_bar", L);
-            public static double ps_barspd(int L) => V("ps_barspd", L);
-            public static double ps_bardur(int L) => V("ps_bardur", L);
-            public static double ps_barrate(int L) => V("ps_barrate", L);
-            public static double ps_power(int L) => V("ps_power", L);
-            public static double md_combo(int L) => V("md_combo", L);
             public static double md_chef(int L) => V("md_chef", L);        // 꼬마 공방 제작 시간 배율 (세계수)
-            public static double md_buffdur(int L) => V("md_buffdur", L);
-            public static double md_templife(int L) => V("md_templife", L);
-            public static double md_stump(int L) => V("md_stump", L);
-            public static double ps_size(int L) => V("ps_size", L);
-            public static double ps_spd(int L) => V("ps_spd", L);
-            public static double ps_dur(int L) => V("ps_dur", L);   // 라운드 시간 +초
-            public static double ps_crit(int L) => V("ps_crit", L);
-            public static double ps_heavy(int L) => V("ps_heavy", L);
-            public static double ps_resist(int L) => V("ps_resist", L);
-            public static double ps_rush(int L) => V("ps_rush", L);
-            // 회전 칼날·스킬 범위는 노드 레벨이 아니라 하위 단계(BladeLv·위력)로 정해서 코드에 둔다
-            public static double bl_range(int L) => 20 + 25 * L;
-            public static double bl_spd(int L) => 0.6 - 0.12 * L;
-            public static double bl_pow(int L) => 0.4 * SkillPow(L);
-            // 스킬 범위: 기본값에 위력 레벨당 고정값을 더한다
+            public static double gm_spore(int L) => V("gm_spore", L);
+            public static double gm_herb(int L) => V("gm_herb", L);              // 수확 보따리 배율
+            public static double gm_gourmet(int L) => V("gm_gourmet", L);           // 나무버섯 균사석 배율
+            public static double gm_farm(int L) => V("gm_farm", L);
+            // 스킬 범위 공식 (예전 스킬 노드). 지금 트리에서는 쓰지 않는다
             public static double burst_r(int P) => 80 + 25 * P;
             public static double tornado_h(int P) => 50 + 22 * P;
             public static double shock_r(int P) => 100 + 30 * P;
-            // ↓ 균사석 노드 (후반): 다른 보너스를 다 더한 값에 곱한다
-            public static double gm_harvest(int L) => V("gm_harvest", L);
-            public static double gm_spore(int L) => V("gm_spore", L);
-            public static double gm_toxin(int L) => V("gm_toxin", L);
-            public static double gm_herb(int L) => V("gm_herb", L);              // 수확 보따리 배율
-            public static double gm_gourmet(int L) => V("gm_gourmet", L);           // 나무버섯 균사석 배율
-            public static double gm_atk(int L) => V("gm_atk", L);               // 공격력 배율
-            // 싱크 노드 (최대 레벨 없음, DB Efx_MaxLv = 0): 레벨마다 Efx_Lv1배씩 곱한다. V()는 쓰지 않는다 (efx 표가 레벨 4까지뿐)
-            public static double inf_atk(int L) => Inf("inf_atk", L);             // 공격력 ×1.05^L (끝없는 투지)
-            public static double inf_gold(int L) => Inf("inf_gold", L);           // 정산 골드 ×1.025^L (끝없는 풍년, 점수→골드에만)
-            static double Inf(string id, int L) => L <= 0 || !NODE.TryGetValue(id, out var n) ? 1 : Math.Pow(n.infMul, Math.Min(L, n.infCap));
-            public static double gm_score(int L) => V("gm_score", L);             // 정산 골드 배율
-            public static double gm_boss(int L) => V("gm_boss", L);             // 보스에게 주는 피해 배율
-            public static int gm_bossgem(int L) => (int)Math.Round(V("gm_bossgem", L));                    // 보스 처치 균사석 +
-            public static double gm_skill(int L) => V("gm_skill", L);             // 모든 스킬 발동률 배율
-            public static double gm_bar(int L) => V("gm_bar", L);               // 바 길이 배율 (필드 폭 1/3까지)
-            public static double gm_farm(int L) => V("gm_farm", L);
             public struct Meteor { public double interval, dmg, r; }
-            public static Meteor gm_meteor(int L) => new Meteor { interval = 3.5 * Math.Pow(0.8, Math.Max(0, L - 1)), dmg = 3 * Math.Pow(2, Math.Max(0, L - 1)), r = 110 + 20 * L };
         }
+
+        // 트리 밖 노드 (세계수 화면용, 가지 wt): 트리에 그리지 않고 일괄 강화에서도 빠진다
+        public const string WORLD_BRANCH = "wt";
+        public static bool InTree(Node n) => n.br != WORLD_BRANCH;
+        // 트리 네모 칸 한 칸의 픽셀 (TreeLayout)
+        public const float TREE_CELL = 130;
 
         public class Node
         {
@@ -155,12 +86,17 @@ namespace MoreMush
             public int infCap;
             public double[] costs;   // 레벨별 골드 가격 (길이 = max). DB Upgrade_Cost.Cost_Lv1~4
             public double[] gems;    // 레벨별 균사석 가격. DB Upgrade_Cost.Gem_Lv1~4
-            public double[] efx;     // 레벨별 효과 값 0~4. DB Upgrade.Efx_Lv0~4
+            public double[] efx;     // 레벨별 효과 값 0~10. DB Upgrade.Efx_Lv0~10 (그 행까지 올렸을 때의 줄 전체 값)
             public Func<int, string> eff;
+            public string line;      // 줄(같은 스킬) 키. DB Line
+            public int gx, gy;       // 트리 네모 칸 좌표. DB Pos_X·Pos_Y
+            public int lv0;          // 이 행 앞까지 줄의 레벨 (줄 레벨 = lv0 + 이 행 레벨)
         }
 
         public static readonly List<Node> NODES = new List<Node>();
         public static readonly Dictionary<string, Node> NODE = new Dictionary<string, Node>();
+        public static readonly Dictionary<string, List<Node>> LINES = new Dictionary<string, List<Node>>();   // 줄 키 → 행 (레벨 순)
+        public static string LineName(string line) => LINES.TryGetValue(line, out var l) ? Loc.T(l[0].nKo.Split(new[] { " Lv." }, StringSplitOptions.None)[0]) : null;
         public static readonly string[] TIER_NAMES = { "", "초반", "중반", "후반" };
 
         public const string ROOT_NODE = "power";
@@ -228,7 +164,8 @@ namespace MoreMush
             {
                 string key = u.Upg_Key, skill = NullIfEmpty(u.Skill);
                 bool inf = u.Efx_MaxLv == 0;   // 싱크 노드: 최대 레벨 없음
-                if (u.Efx_MaxLv < 0 || u.Efx_MaxLv > 4) throw new InvalidOperationException($"[DB] Upgrade {key}: Efx_MaxLv는 0(싱크)·1~4 ({u.Efx_MaxLv})");
+                if (u.Efx_MaxLv < 0 || u.Efx_MaxLv > MAX_LV) throw new InvalidOperationException($"[DB] Upgrade {key}: Efx_MaxLv는 0(싱크)·1~{MAX_LV} ({u.Efx_MaxLv})");
+                string line = string.IsNullOrEmpty(u.Line) ? key : u.Line;
                 if (!costOf.TryGetValue(u.Cost_ID, out var c)) throw new InvalidOperationException($"[DB] Upgrade {key}: Upgrade_Cost에 Cost_ID {u.Cost_ID}가 없어요");
                 Func<int, string> eff;
                 if (skill != null)
@@ -237,7 +174,8 @@ namespace MoreMush
                     if (skill != key) throw new InvalidOperationException($"[DB] Upgrade {key}: 스킬 노드는 Upg_Key와 Skill이 같아야 해요 ({skill})");
                     eff = SkillNodeEffect(s);
                 }
-                else if (!nodeEff.TryGetValue(key, out eff)) throw new InvalidOperationException($"[DB] Upgrade {key}: 코드에 효과가 없는 노드예요 (새 효과는 코드가 필요해요)");
+                else if (nodeEff.TryGetValue(line, out var fmt)) { string k = key; eff = L => fmt(V(k, L)); }
+                else throw new InvalidOperationException($"[DB] Upgrade {key}: 코드에 효과가 없는 줄 {line}이에요 (새 효과는 코드가 필요해요, Defs.Nodes.cs NodeEffects)");
                 if (inf)
                 {
                     if (skill != null) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크(Efx_MaxLv 0)는 스킬 노드일 수 없어요");
@@ -252,6 +190,7 @@ namespace MoreMush
                     id = key, br = u.Branch, parent = Key(u.Upg_Pre, key), req = Key(u.Upg_Req, key), nKo = u.Upg_Name, dKo = Db.Text($"upg:{key}:desc"),
                     max = u.Efx_MaxLv, tier = u.Tier, sub = u.Sub != 0, skill = skill, icon = NullIfEmpty(u.Icon), col = NullIfEmpty(u.Color),
                     costs = c.Gold.Take(u.Efx_MaxLv).ToArray(), gems = gems, gem = gems.Any(g => g > 0), efx = u.Efx, eff = eff,
+                    line = line, gx = u.Pos_X, gy = u.Pos_Y,
                 };
                 if (inf)
                 {
@@ -266,9 +205,25 @@ namespace MoreMush
                         + (kind == 0 ? Loc.T("2레벨 범위·속도 · 3레벨 위력 · 4레벨 모두 한 단계 더") : kind == 1 ? Loc.T("2~4레벨 위력") : Loc.T("2레벨 발동률 · 3레벨 위력 · 4레벨 발동률·위력")) + "</color></size>";
                 }
                 NODES.Add(n); NODE[key] = n;
+                if (!LINES.TryGetValue(line, out var rows)) LINES[line] = rows = new List<Node>();
+                rows.Add(n);
+            }
+            // 줄의 행 순서: 첫 행(Upg_Req 없음)부터 Upg_Req를 따라간다. 갈래가 지거나 끊기면 바로 알린다
+            foreach (var kv in LINES)
+            {
+                var all = kv.Value;
+                var order = new List<Node>();
+                var cur = all.Where(n => n.req == null || NODE[n.req].line != kv.Key).ToList();
+                if (cur.Count != 1) throw new InvalidOperationException($"[DB] Upgrade 줄 {kv.Key}: 첫 행(같은 줄의 Upg_Req가 없는 행)이 {cur.Count}개예요");
+                for (var n = cur[0]; n != null; n = all.FirstOrDefault(x => x.req == n.id))
+                {
+                    if (order.Contains(n)) throw new InvalidOperationException($"[DB] Upgrade 줄 {kv.Key}: Upg_Req가 빙글빙글 돌아요");
+                    n.lv0 = order.Sum(x => x.max); order.Add(n);
+                }
+                if (order.Count != all.Count) throw new InvalidOperationException($"[DB] Upgrade 줄 {kv.Key}: Upg_Req로 이어지지 않는 행이 있어요 ({all.Count - order.Count}개)");
+                all.Clear(); all.AddRange(order);
             }
             CheckTree(nodeEff.Keys);
-            for (int L = 0; L < MAP_ZOOM.Length; L++) MAP_ZOOM[L] = (float)V("md_map", L);
             InitHarvesters();
         }
 
@@ -289,8 +244,8 @@ namespace MoreMush
             }
             foreach (var n in NODES)
                 if (n.req != null && NODE[n.req].inf) throw new InvalidOperationException($"[DB] Upgrade {n.id}: Upg_Req가 싱크 노드 {n.req}예요 (싱크는 최대 레벨이 없어 '최대 레벨로 열기'가 안 돼요)");
-            var lost = codeKeys.Concat(SKILL_IDS).Where(k => !NODE.ContainsKey(k)).ToList();
-            if (lost.Count > 0) throw new InvalidOperationException("[DB] Upgrade에서 빠진 노드 (코드가 씀): " + string.Join(", ", lost));
+            var lost = codeKeys.Where(k => !LINES.ContainsKey(k)).ToList();
+            if (lost.Count > 0) throw new InvalidOperationException("[DB] Upgrade에서 빠진 줄 (코드가 씀): " + string.Join(", ", lost));
         }
 
         // 스킬 노드 (4레벨). 1레벨 해금, 2~4레벨에 발동률·위력이 번갈아 오른다 (SkillSP)
@@ -325,115 +280,90 @@ namespace MoreMush
             };
         }
 
-        // 노드 효과 문구 (레벨 L → 글). 값은 NF(DB Efx)에서 읽고, 글 모양만 코드에 둔다. 스킬 노드는 SkillNodeEffect
-        static Dictionary<string, Func<int, string>> NodeEffects()
+        // 줄 효과 문구 (줄 값 → 글). 값은 행의 DB Efx(그 행까지 올렸을 때의 줄 값)에서 읽고, 글 모양만 코드에 둔다.
+        // 여기 있는 줄은 DB에 꼭 있어야 한다 (CheckTree). 스킬 노드는 SkillNodeEffect
+        static Dictionary<string, Func<double, string>> NodeEffects()
         {
             string F(double v, int d = 2) => U.FmtN(v, d);
-            // 퍼센트 효과는 "기본 대비 +%"로 보여 준다 (다른 보너스와도 더해진다)
-            string Plus(double mul) => $"+{U.JsRound((mul - 1) * 100)}%";
-            string Num(double v) => U.Fmt(v);
-            var E = new Dictionary<string, Func<int, string>>();
-            // ── 식용 (돈·수확) ──
-            // 초반
-            E["ed_score"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score(L)));
-            E["ed_cols"] = L => Loc.F("최대 {0}개", ColCount(L));
-            E["ed_regen"] = L => Loc.F("사라진 군락지가 {0}초 뒤 다시 돋아남", F(NF.ed_regen(L)));
-            E["ed_price"] = L => Loc.F("정산 골드 {0}", Plus(NF.ed_price(L)));
-            E["ed_bonus"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus(L)));
-            E["ed_score1p"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score1p(L)));
-            E["ed_bonus1p"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus1p(L)));
-            // 중반
-            E["ed_score2"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score2(L)));
-            E["ed_bonus2"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus2(L)));
-            E["ed_score2p"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score2p(L)));
-            E["ed_bonus2p"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus2p(L)));
-            E["ed_cols2"] = L => Loc.F("군락지 +{0}개", NF.ed_cols2(L));
-            E["ed_price2"] = L => Loc.F("정산 골드 +{0}%", U.JsRound(NF.ed_price2(L) * 100));
-            E["ed_rare"] = L => Loc.F("에픽 이상 가중치 {0}", Plus(NF.ed_rare(L)));
-            E["ed_rare0"] = L => Loc.F("에픽 이상 가중치 ×{0}", F(NF.ed_rare0(L)));
-            E["ed_size"] = L => Loc.F("군락지당 3~{0}개", NF.ed_size(L));
-            // 후반
-            E["ed_score3"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score3(L)));
-            E["ed_bonus3"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus3(L)));
-            E["ed_score3p"] = L => Loc.F("버섯을 칠 때 점수 +{0}", Num(NF.ed_score3p(L)));
-            E["ed_bonus3p"] = L => Loc.F("버섯 하나당 수확 +{0}개", Num(NF.ed_bonus3p(L)));
-            E["ed_trade"] = L => Loc.F("정산 골드 {0}", Plus(NF.ed_trade(L)));
-            E["ed_gold"] = L => Loc.F("버섯마다 {0}", U.Pct(NF.ed_gold(L)));
-            E["ed_giant"] = L => Loc.F("라운드마다 {0} 확률로 거대 버섯", U.Pct(NF.ed_giant(L)));
-            E["ed_multi"] = L => L > 0 ? Loc.F("수확할 때 {0} 확률로 버섯 ×3", U.Pct(MultiRate(L))) : Loc.T("없음");
-            // ── 약용 (바·스킬·필드) ──
-            E["md_map"] = L => Loc.F("필드 {0}×{1} · 화면 확대 ×{2}", U.JsRound(W / MAP_ZOOM[L]), U.JsRound(H / MAP_ZOOM[L]), F(MAP_ZOOM[L]));
-            E["md_bar"] = L => $"{U.JsRound(150 * NF.md_bar(L))}px";
-            E["md_combo"] = L => Loc.F("콤보당 +{0}배", F(NF.md_combo(L), 3));
-            // 숲 장치: 바 넓이 바로 다음에 골드로 해금. 해금하면 라운드마다 반드시 1개씩 놓인다
-            E["dev_stump"] = L => L > 0 ? Loc.F("라운드마다 1개 · 부딪히면 {0}초 공격력 ×{1}", STUMP_ATK_DUR, STUMP_ATK_MUL) : Loc.T("해금하면 라운드마다 놓여요");
-            E["dev_moss"] = L => L > 0 ? Loc.T("라운드마다 1개 · 지나가면 2초 가속") : Loc.T("해금하면 라운드마다 놓여요");
-            E["dev_acorn"] = L => L > 0 ? Loc.T("라운드마다 1개 · 셋 다 켜면 5초 점수 ×2 (한 번)") : Loc.T("해금하면 라운드마다 놓여요");
-            E["md_kid"] = L => L > 0 ? Loc.F("영구 수확기가 바에 맞을 때 {0} 확률로 작은 임시 수확기 1개 (8초)", U.Pct(KidRate(L))) : Loc.T("없음");
-            E["md_combo2"] = L => Loc.F("콤보당 +{0}배 더", F(NF.md_combo2(L), 2));
-            E["md_templife"] = L => Loc.F("임시 수확기 지속시간 {0}", Plus(NF.md_templife(L)));
-            E["md_chef"] = L => Loc.F("꼬마 공방 제작 시간 ×{0}", F(NF.md_chef(L)));
-            E["md_stump"] = L => Loc.F("숲 장치 효과 {0}", Plus(NF.md_stump(L)));
-            E["md_buffdur"] = L => Loc.F("가속·맑은 포자막 지속 {0}, 날 갈기 {1}타", Plus(NF.md_buffdur(L)), Math.Ceiling(3 * NF.md_buffdur(L)));
-            // ── 독 (전투) ──
-            // 초반
-            E["ps_atk"] = L => Loc.F("공격력 +{0}", Num(NF.ps_atk(L)));
-            E["ps_size"] = L => Loc.F("반지름 {0}", F(TUNE.ball0 * BALL_SCALE * NF.ps_size(L), 1));
-            E["ps_spd"] = L => Loc.F("이동 속도 {0}", Plus(NF.ps_spd(L)));
-            E["ps_dur"] = L => Loc.F("라운드 시간 +{0}초", NF.ps_dur(L));
-            E["ps_ball"] = L => Loc.F("영구 수확기 +{0}개", L);
-            // 중반
-            E["ps_atk2"] = L => Loc.F("공격력 +{0}", Num(NF.ps_atk2(L)));
-            E["ps_ball2"] = L => Loc.F("영구 수확기 +{0}개", L);
-            E["ps_atk2p"] = L => Loc.F("공격력 +{0}", Num(NF.ps_atk2p(L)));
-            E["ps_dur2"] = L => Loc.F("라운드 시간 +{0}초 더", NF.ps_dur2(L));
-            E["ps_crit"] = L => L > 0 ? Loc.F("{0} (피해·점수 ×3)", U.Pct(NF.ps_crit(L))) : "0%";
-            E["ps_resist"] = L => Loc.F("느림·약화 디버프 지속 -{0}%", U.JsRound((1 - NF.ps_resist(L)) * 100));
-            E["ps_rush"] = L => Loc.F("라운드 시작 후 3초 동안 공격력 ×{0}", F(NF.ps_rush(L)));
-            // 회전 칼날도 스킬처럼 노드 하나 (4레벨): 2 범위·속도, 3 위력, 4 모두 한 단계 더 (BladeLv)
-            E["bl"] = L =>
-            {
-                if (L == 0) return Loc.T("해금하면 칼날 사용 시작");
-                var (rg, sp, pw) = BladeLv(L);
-                return Loc.F("반지름 +{0}px · {1}초마다 · 피해 공격력×{2}", U.JsRound(NF.bl_range(rg)), F(NF.bl_spd(sp)), F(NF.bl_pow(pw)));
-            };
-            // 슬라이드 바 수치 강화 (보라 가지). 가격은 가안
-            E["ps_bar"] = L => Loc.F("바 길이 +{0}px (필드 폭 1/3까지)", U.JsRound(150 * NF.ps_bar(L)));
-            E["ps_barspd"] = L => Loc.F("바에 튕길 때 속도 {0}", Plus(NF.ps_barspd(L)));
-            E["ps_bardur"] = L => Loc.F("바 스킬 지속시간 +{0}초", F(NF.ps_bardur(L), 1));
-            E["ps_barrate"] = L => Loc.F("바 스킬 발동률 +{0}%p", U.JsRound(NF.ps_barrate(L) * 100));
-            E["ps_power"] = L => Loc.F("기운 북돋기 공격력 +{0}%p · 발동률 +{1}%p", U.JsRound(NF.ps_power(L) * 100), U.JsRound(NF.ps_power(L) * 100 * POWER_SKILL / POWER_ATK));
-            // 후반
-            E["ps_atk3"] = L => Loc.F("공격력 +{0}", Num(NF.ps_atk3(L)));
-            E["ps_atk3p"] = L => Loc.F("공격력 +{0}", Num(NF.ps_atk3p(L)));
-            E["ps_atk4"] = L => Loc.F("공격력 +{0}", Num(NF.ps_atk4(L)));
-            E["ps_ball3"] = L => Loc.F("영구 수확기 +{0}개", L);
-            E["ps_crit2"] = L => Loc.F("치명타 피해·점수 ×{0}", NF.ps_crit2(L));
-            E["ps_heavy"] = L => Loc.F("군락 무더기·거대 버섯 피해 ×{0}", F(NF.ps_heavy(L)));
-            // 균사석 노드 (후반): 여기서부터 곱셈 효과가 들어온다
-            E["gm_harvest"] = L => Loc.F("모든 버섯 획득량 ×{0}", F(NF.gm_harvest(L)));
-            E["gm_spore"] = L => Loc.F("나무버섯을 딸 때 {0} 확률로 균사석 +2", U.Pct(NF.gm_spore(L)));
-            E["gm_gourmet"] = L => Loc.F("나무버섯 균사석 ×{0}", F(NF.gm_gourmet(L)));
-            E["gm_herb"] = L => Loc.F("수확 보따리 ×{0}", F(NF.gm_herb(L)));
-            E["gm_farm"] = L => Loc.F("나무버섯 성장 시간 ×{0}", F(NF.gm_farm(L)));
-            E["gm_meteor"] = L =>
-            {
-                if (L == 0) return Loc.T("없음");
-                var m = NF.gm_meteor(L);
-                return Loc.F("{0}초마다 균사석이 떨어져 반경 {1} 피해 공격력×{2}", F(m.interval), m.r, m.dmg);
-            };
-            E["gm_toxin"] = L => Loc.F("포자 디버프 지속 ×{0} · 독버섯 포자 구름 ×{1}", F(NF.gm_toxin(L)), F(NF.gm_toxin(L)));
-            // 균사석 노드 추가 (가안): 공격력·정산 골드·보스·스킬·바·보스 균사석
-            E["gm_atk"] = L => Loc.F("공격력 ×{0}", F(NF.gm_atk(L)));
-            E["inf_atk"] = L => Loc.F("공격력 ×{0}", F(NF.inf_atk(L)));      // 끝없는 투지 (싱크)
-            E["inf_gold"] = L => Loc.F("정산 골드 ×{0}", F(NF.inf_gold(L)));  // 끝없는 풍년 (싱크, 점수→골드에만)
-            E["gm_boss"] = L => Loc.F("보스에게 주는 피해 ×{0}", F(NF.gm_boss(L)));
-            E["gm_score"] = L => Loc.F("정산 골드 ×{0}", F(NF.gm_score(L)));
-            E["gm_bossgem"] = L => Loc.F("보스를 쓰러뜨릴 때 균사석 +{0}", NF.gm_bossgem(L));
-            E["gm_skill"] = L => Loc.F("모든 스킬 발동률 ×{0}", F(NF.gm_skill(L)));
-            E["gm_bar"] = L => Loc.F("바 길이 ×{0} (필드 폭 1/3까지)", F(NF.gm_bar(L)));
+            string P(double v) => $"+{U.JsRound(v * 100)}%";
+            string Pc(double v) => $"{U.JsRound(v * 1000) / 10}%";
+            string Sec(double v) => v > 0 ? Loc.F("{0}초", F(v, 1)) : Loc.T("없음");
+            var E = new Dictionary<string, Func<double, string>>();
+            // ── 시작: 사냥 준비 (슬라이드 바 버프)
+            E["power"] = v => v > 0 ? Loc.F("바에 맞으면 {0}초 동안 공격력 +{1}", POWER_DUR, U.Fmt(v)) : Loc.T("없음");
+            // ── 식용
+            E["ed_hunt"] = v => Loc.F("획득 점수 {0}", P(v));
+            E["ed_haggle"] = v => Loc.F("점수 → 골드 전환율 {0}", P(v));
+            E["ed_regular"] = v => Loc.F("점수 → 골드 전환율 {0}", P(v));
+            E["ed_view"] = v => Loc.F("군락지 수 +{0}", v);
+            E["ed_sky"] = v => Loc.F("군락지 수 +{0}", v);
+            E["ed_god"] = v => Loc.F("군락지 수 +{0}", v);
+            E["ed_epic"] = v => Loc.F("에픽 버섯 스폰율 {0}", P(v));
+            E["ed_unique"] = v => Loc.F("유니크 버섯 스폰율 {0}", P(v));
+            E["ed_regen"] = v => Loc.F("군락지 리스폰 {0}초", F(v, 1));
+            E["ed_more"] = v => Loc.F("군락지 둘레 단일 버섯 {0}개", v);
+            E["ed_gold"] = v => Loc.F("황금 변종 스폰율 +{0}", Pc(v));
+            E["ed_hand1"] = v => Loc.F("일반 버섯 수확량 {0}", P(v));
+            E["ed_hand2"] = v => Loc.F("에픽 버섯 수확량 {0}", P(v));
+            E["ed_hand3"] = v => Loc.F("유니크 버섯 수확량 {0}", P(v));
+            E["ed_hand4"] = v => Loc.F("보스 레전더리 버섯 수확량 {0}", P(v));
+            E["ed_flex"] = v => Loc.F("점수 3배 확률 {0}", Pc(v));
+            E["ed_legend"] = v => Loc.F("라운드 마지막 5초 점수·수확량 {0}", P(v));
+            // ── 약용
+            E["md_spring"] = v => v > 0 ? Loc.F("바에 맞으면 [가속] {0} (속도 +50%)", Sec(v)) : Loc.T("없음");
+            E["md_pierce"] = v => v > 0 ? Loc.F("바에 맞으면 [관통] {0}", Sec(v)) : Loc.T("없음");
+            E["md_homing"] = v => v > 0 ? Loc.F("바에 맞으면 [유도] {0}", Sec(v)) : Loc.T("없음");
+            E["md_heal"] = v => v > 0 ? Loc.F("바에 맞으면 디버프 제거 + [약손] {0}", Sec(v)) : Loc.T("없음");
+            E["md_poison"] = v => Loc.F("단일 버섯을 딸 때 {0} 확률로 다음 타격 피해 +200%", Pc(v));
+            E["md_burst"] = v => Loc.F("군락에 부딪힐 때 {0} 확률로 필드 전체 피해 (공격력 {1}%)", Pc(v), U.JsRound(BURST_ATK * 100));
+            E["md_split"] = v => v > 0 ? Loc.F("바에 맞을 때 {0}% 확률로 [분열] {1} (꼬마 수확기)", U.JsRound(SPLIT_P * 100), Sec(v)) : Loc.T("없음");
+            E["md_bolt"] = v => Loc.F("군락을 다 딸 때 {0} 확률로 다른 군락에 번개 (공격력 {1}%)", Pc(v), U.JsRound(BOLT_ATK * 100));
+            E["md_tornado"] = v => Loc.F("군락에 부딪힐 때 {0} 확률로 그 군락에 지속 피해 (공격력 {1}%)", Pc(v), U.JsRound(DOT_ATK * 100));
+            E["md_env"] = v => v <= 0 ? Loc.T("없음") : v < 2 ? Loc.T("그루터기") : v < 3 ? Loc.T("그루터기 · 꽃밭") : Loc.T("그루터기 · 꽃밭 · 도토리 점등");
+            E["md_wisdom"] = v => v > 0 ? Loc.F("바에 맞으면 [지혜] {0}초 · 수확기 스킬 발동률 +{1}", WISDOM_DUR, Pc(v)) : Loc.T("없음");
+            E["md_fever"] = v => v > 0 ? Loc.F("바에 맞으면 [피버] {0} (콤보 계수 +50%)", Sec(v)) : Loc.T("없음");
+            E["md_molt"] = v => Loc.F("디버프를 얻을 때 {0} 확률로 해제", Pc(v));
+            E["md_grand"] = v => Loc.F("라운드 시작 때 가진 바 버프 즉시 발동 확률 {0}", Pc(v));
+            // ── 독성
+            E["ps_hug"] = v => Loc.F("바 길이 {0} (분신 바도 같은 길이)", P(v));
+            E["ps_clone"] = v => v > 0 ? Loc.F("바에 맞을 때 {0}% 확률로 {1} 분신 바", U.JsRound(CLONE_P * 100), Sec(v)) : Loc.T("없음");
+            E["ps_mirror"] = v => Loc.F("분신 바 최대 {0}개", v);
+            E["ps_blade"] = v => Loc.F("공격력 {0}", U.Fmt(v));
+            E["ps_stamina"] = v => Loc.F("라운드 시간 {0}초", U.Fmt(ROUND_SEC + v));
+            E["ps_crit"] = v => Loc.F("치명타 확률 {0}", Pc(v));
+            E["ps_critdmg"] = v => Loc.F("치명타 피해 {0}%", U.JsRound((1 + v) * 100));
+            E["ps_size"] = v => Loc.F("수확기 크기 {0}", P(v));
+            E["ps_wind"] = v => Loc.F("수확기 속도 {0}", P(v));
+            E["ps_kid"] = v => Loc.F("도는 꼬마 수확기 {0}개", v);
+            E["ps_kidatk"] = v => Loc.F("도는 꼬마 수확기 공격력 +{0}%", U.JsRound(v * 100));
+            E["ps_combo"] = v => Loc.F("콤보 계수 {0}", P(v));
+            E["ps_tools"] = v => Loc.F("수확기 장착 칸 {0}개", 1 + v);
+            // ── 세계수 (가지 wt, 트리 밖)
+            E["md_chef"] = v => Loc.F("꼬마 공방 제작 시간 ×{0}", F(v));
+            E["gm_spore"] = v => Loc.F("나무버섯을 딸 때 {0} 확률로 균사석 +2", U.Pct(v));
+            E["gm_gourmet"] = v => Loc.F("나무버섯 균사석 ×{0}", F(v));
+            E["gm_herb"] = v => Loc.F("수확 보따리 ×{0}", F(v));
+            E["gm_farm"] = v => Loc.F("나무버섯 성장 시간 ×{0}", F(v));
             return E;
         }
+
+        // ===== 트리 효과 상수 (균사 트리 A안). 노드 값이 아닌 고정 규칙 =====
+        public const float ROUND_SEC = 10;          // 라운드 기본 시간 (노장의 체력으로 늘어난다)
+        public const float POWER_DUR = 3;           // 사냥 준비 버프 시간
+        public const float WISDOM_DUR = 3;          // 노인의 지혜 [지혜] 시간 (고정)
+        public const float SPRING_MUL = 1.5f;       // [가속] 속도 배율
+        public const double FEVER_COMBO = 0.5;      // [피버] 콤보 계수 +50% (상시 콤보 계수 노드와 따로 곱한다)
+        public const double SPLIT_P = 0.10, CLONE_P = 0.10;   // 분열·분신술 발동 확률 (바에 맞을 때)
+        public const float KID_STAT = 0.10f;        // 꼬마 수확기 = 수확기 공격력의 10%
+        public const double BURST_ATK = 0.10, BOLT_ATK = 0.30, DOT_ATK = 0.05;   // 포자 폭발·연속 번개·회오리(틱당) 피해 = 공격력 ×
+        public const float DOT_TICK = 0.5f;         // 회오리 지속 피해 간격 (초)
+        public const double POISON_MUL = 3;         // 이독제독: 다음 타격 피해 +200%
+        public const double CRIT_BASE = 0.5;        // 치명타 피해 기본 150% (치명 박살이 올린다)
+        public const int COL_BASE = 3;              // 군락지 기본 수 (넓은 시야·하늘의 시야·신의 눈이 더한다)
+        public const int COL_FULL = 15;             // 이 군락지 수에서 필드가 가장 넓다 (화면 확대 ×1)
+        public const float ZOOM_MIN_FIELD = 1.5f;   // 군락지 기본 수일 때 화면 확대 (필드가 좁다)
+        public const int BOSS_LEGEND_N = 3;         // 보스를 쓰러뜨리면 얻는 레전더리 버섯 수 (보스 전용)
+        public static float ZoomForCols(int cols) => Mathf.Lerp(ZOOM_MIN_FIELD, 1, Mathf.Clamp01((cols - COL_BASE) / (float)(COL_FULL - COL_BASE)));
 
         // 수확기: 이름·유형·해금·레벨 가격·기본 능력치는 DB Ball·Ball_Efx 시트, 고유 능력(ab·문구)은 코드
         static void InitHarvesters()

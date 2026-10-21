@@ -86,6 +86,8 @@ namespace MoreMush
         public float accel, accelMul = 1, moss, slow, weak, clear, sharpMul = 1, magnet, magRate, stumpAtk;
         public float jf = 1, jTick, bladeT, bladeFx, ang, lastHitT, stumpT;
         public float pierceT, homeT, powT; public int powLv;
+        public float feverT, wisT;     // [피버]·[지혜] 버프 남은 시간 (균사 트리 A안)
+        public Cloud moltCloud; public bool moltOk;   // 탈피: 포자 구름마다 한 번만 굴린다 (그 구름에서 풀렸는지)
         public int sawStk, hitsLeft;   // 수리검 튕기기 누적 · 분열 소형 수확기가 사라지기까지 남은 충돌 (0 = 제한 없음)   // 바 스킬: 관통·유도·기운 북돋기 남은 시간
         public Shroom lastHit;
         public List<Vector2> trail = new List<Vector2>();
@@ -94,6 +96,7 @@ namespace MoreMush
     }
 
     public class Cloud { public float x, y, r, t, max; public bool slow, weak; }
+    public class Dot { public Colony col; public float t, tick; public double dmg; public Ball b; }   // 회오리: 군락 지속 피해
     public class Wave { public float x, y, r, max, t; public double dmg; public int depth; public HashSet<Shroom> hit = new HashSet<Shroom>(); public bool child; public Ball b; }
     public class Tornado { public float y, h, x, dir; public double dmg; public HashSet<Shroom> hit = new HashSet<Shroom>(); public Ball b; }
     public class Bolt { public List<Vector2> pts; public float t; public bool slash, big; public string col; public float jitterSeed; }

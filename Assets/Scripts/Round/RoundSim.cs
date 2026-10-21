@@ -43,6 +43,7 @@ namespace MoreMush
         List<Queued> queue = new List<Queued>();
         public List<Wave> waves = new List<Wave>();
         public List<Tornado> tornados = new List<Tornado>();
+        public List<Dot> dots = new List<Dot>();
         public List<Bolt> bolts = new List<Bolt>();
         public List<Ring> rings = new List<Ring>();
         public List<Part> parts = new List<Part>();
@@ -155,14 +156,17 @@ namespace MoreMush
         Species PickSpecies(bool wall)
         {
             var w = st.weather;
+            // 레전더리(등급 3)는 보스 전용: 필드에는 일반·에픽·유니크만
             var pool = EarlyStage(st.stage) && st.boss == null
-                ? EARLY_SPECIES.Take(st.stage).Select(n => SP_BY_NAME[n]).ToList()   // 초반: 스테이지 수만큼의 종만
-                : SPECIES.Where(sp => IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)).ToList();
+                ? EARLY_SPECIES.Take(st.stage).Select(n => SP_BY_NAME[n]).Where(sp => sp.t < 3).ToList()   // 초반: 스테이지 수만큼의 종만
+                : SPECIES.Where(sp => sp.t < 3 && IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)).ToList();
             return U.PickWeighted(pool, sp =>
             {
                 double x = TIERS[sp.t].w;
                 if (st.theme.favIds.Contains(sp.id)) x *= THEME_FAV_MUL;
                 if (sp.t >= 1) x *= st.rareMul;
+                if (sp.t == 1) x *= st.epicMul;
+                if (sp.t == 2) x *= st.uniqueMul;
                 x *= Math.Pow(st.stageMul, sp.t);
                 if (wall && sp.t >= 2) x *= 3;
                 if (w.favIds.Contains(sp.id) || (w.favTier >= 0 && sp.t == w.favTier)) x *= w.favMul;
@@ -228,7 +232,7 @@ namespace MoreMush
             if (sp == null) return false;
             if (sp.wander) wall = false;
             float r = TIERS[sp.t].r;
-            int n = U.RandI(3, st.colMax);
+            int n = st.colMax;   // 군락지 둘레 단일 버섯 수 (더 많은 버섯 노드)
             for (bool tryWall = wall; ; tryWall = false)
             {
                 for (int a = 0; a < 30; a++)
@@ -256,7 +260,7 @@ namespace MoreMush
                 loneSp.Add(sp);
             }
             float r = TIERS[sp.t].r;
-            int n = U.RandI(3, st.colMax);
+            int n = st.colMax;
             bool first = tutorial && TutorialColony == null && slot == 0;
             for (int a = 0; a < 30; a++)
             {
