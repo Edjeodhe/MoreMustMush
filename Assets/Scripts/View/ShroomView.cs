@@ -38,7 +38,9 @@ namespace MoreMush
         {
             var bt = body.transform;
             Vector2 p = new Vector2(0, rise / Art.PPU);   // = Art.P(0, -rise)
-            float s = sp != null ? px / Art.PPU / Mathf.Max(sp.bounds.size.x, sp.bounds.size.y, 1e-6f) : 0;   // Art.FitPx와 같은 크기
+            // Mathf.Max(a, b, c)는 params 배열을 만든다 (버섯마다 매 프레임 44B) → 둘씩 비교
+            var bs = sp != null ? sp.bounds.size : Vector3.zero;
+            float s = sp != null ? px / Art.PPU / Mathf.Max(Mathf.Max(bs.x, bs.y), 1e-6f) : 0;   // Art.FitPx와 같은 크기
             if (s < 1e-6f || sqx < 1e-4f || sqy < 1e-4f)
             {
                 // 막 돋아나는 순간(크기 0)이나 그림 없음: 기울임 없이 크기만 (0으로 나누지 않게)

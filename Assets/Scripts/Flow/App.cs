@@ -89,7 +89,16 @@ namespace MoreMush
 #endif
         }
 
-        static bool InGame => G != null && SceneManager.GetActiveScene().name != Scenes.MainMenu;
+        static bool InGame => G != null && !OnMainMenu();
+
+        // Scene.name은 부를 때마다 새 문자열을 만든다 (매 프레임 Update) → 활성 씬이 바뀔 때만 이름을 읽는다
+        static int menuCheckedScene = -1; static bool onMenu;
+        static bool OnMainMenu()
+        {
+            var s = SceneManager.GetActiveScene();
+            if (s.handle != menuCheckedScene) { menuCheckedScene = s.handle; onMenu = s.name == Scenes.MainMenu; }
+            return onMenu;
+        }
 
         void Update()
         {

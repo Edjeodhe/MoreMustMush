@@ -107,9 +107,45 @@ namespace MoreMush.EditorTools
                     settings.overridden = platform != "DefaultTexturePlatform";
                     importer.SetPlatformSettings(settings);
                 }
+                foreach (string platform in MOBILE) importer.SetPlatformSettings(MobileSettings(importer.GetPlatformSettings(platform), platform, AtlasMaxSize(pair.Key)));
                 importer.SaveAndReimport();
             }
             Debug.Log($"[MoreMush] {groups.Count} sprite atlases created; FX excluded, backgrounds packed separately.");
+        }
+
+        // 모바일 GPU는 DXT5를 못 읽어 실행 중에 RGBA32로 풀어 올린다 (메모리 4배, 불러올 때 끊김).
+        // 안드로이드·iOS는 ASTC 6x6 (픽셀당 3.56비트, DXT5의 절반 아래)로 따로 굽는다 (2026-10-21 모바일 버벅임)
+        static readonly string[] MOBILE = { "Android", "iPhone" };
+
+        static TextureImporterPlatformSettings MobileSettings(TextureImporterPlatformSettings s, string platform, int maxSize)
+        {
+            s.name = platform; s.overridden = true; s.maxTextureSize = maxSize;
+            s.format = TextureImporterFormat.ASTC_6x6; s.textureCompression = TextureImporterCompression.CompressedHQ;
+            return s;
+        }
+
+        // 아틀라스를 다시 묶지 않고 모바일 압축만 건다: 지금 아틀라스와 아틀라스 밖 그림(FX/brush·square·tree_soil)
+        [MenuItem("MoreMush/Optimize/Mobile Texture Compression")]
+        public static void ConfigureMobileCompression()
+        {
+            int n = 0;
+            foreach (var guid in AssetDatabase.FindAssets("t:SpriteAtlas", new[] { AtlasRoot }))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                if (!(AssetImporter.GetAtPath(path) is SpriteAtlasImporter importer)) continue;
+                int max = AtlasMaxSize(Path.GetFileNameWithoutExtension(path));
+                foreach (string platform in MOBILE) importer.SetPlatformSettings(MobileSettings(importer.GetPlatformSettings(platform), platform, max));
+                importer.SaveAndReimport(); n++;
+            }
+            foreach (var kv in MoreMushSetup.ResolvedArt())
+            {
+                string relative = kv.Key + Path.GetExtension(kv.Value);
+                if (!UvBound.Any(relative.StartsWith)) continue;
+                if (!(AssetImporter.GetAtPath(kv.Value) is TextureImporter importer)) continue;
+                foreach (string platform in MOBILE) importer.SetPlatformTextureSettings(MobileSettings(importer.GetPlatformTextureSettings(platform), platform, TextureLimit(kv.Value)));
+                importer.SaveAndReimport(); n++;
+            }
+            Debug.Log($"[MoreMush] mobile ASTC compression set on {n} textures/atlases.");
         }
 
         // 버섯 150장(256px)은 2048 한 장에 안 들어가 여러 장으로 나뉘면 묶음이 끊긴다 → 4096 한 장
@@ -126,6 +162,8 @@ namespace MoreMush.EditorTools
                 // MoreMush/Sprite 셰이더는 SRP Batcher 대상이 아니라, SpriteRenderer는 동적 배칭이 켜져 있어야 같은 재질·텍스처끼리 묶인다
                 so.FindProperty("m_SupportsDynamicBatching").boolValue = true;
                 so.FindProperty("m_RenderScale").floatValue = 1;
+                // 2D 스프라이트 게임이라 그림자를 쓰지 않는다 (켜 두면 2048 그림자 맵을 잡고 매 프레임 그림자 패스를 준비한다)
+                foreach (string field in new[] { "m_MainLightShadowsSupported", "m_AdditionalLightShadowsSupported" }) so.FindProperty(field).boolValue = false;
                 so.ApplyModifiedPropertiesWithoutUndo();
             }
             var renderer = AssetDatabase.LoadMainAssetAtPath("Assets/Settings/PC_Renderer.asset");

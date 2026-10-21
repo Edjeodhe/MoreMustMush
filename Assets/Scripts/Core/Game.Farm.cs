@@ -149,8 +149,9 @@ namespace MoreMush
 
         public static int KLv(string kid) => G?.farm?.klv != null && F.klv.TryGetValue(kid, out var l) ? l : 1;
         public static int Awaken(string kid) => G?.farm?.awaken != null && F.awaken.TryGetValue(kid, out var a) ? a : 0;
-        public static int KLvSum() => KidsOwned().Sum(k => KLv(k.id));
-        public static int KLvSteps() => KLV.sumAt.Count(a => KLvSum() >= a);
+        // 세계수 화면이 프레임마다 여러 번 부른다 → LINQ·리스트 없이 센다 (예전 Count 람다는 원소마다 KLvSum을 다시 돌렸다)
+        public static int KLvSum() { int s = 0; foreach (var k in KIDS) if (HasSpecial(k.id)) s += KLv(k.id); return s; }
+        public static int KLvSteps() { int s = KLvSum(), n = 0; foreach (var a in KLV.sumAt) if (s >= a) n++; return n; }
 
         public enum KidFail { None, NotOwned, Max, Cap, Gold, Gem, Lv, Owned, Stage }   // Stage = 세계수 단계가 아직 낮다
         public static double KLvCost(string kid) => KLv(kid) >= KLV.max ? 0 : KLV.Cost(KLv(kid));
@@ -224,8 +225,11 @@ namespace MoreMush
         public static bool ZoneOpen(string zone) => ZONE.TryGetValue(zone ?? "", out var z) && Stage() >= z.open;
         public static string ZoneOf(string kid) => G?.farm?.zone != null && F.zone.TryGetValue(kid, out var z) && ZoneOpen(z) ? z : null;
         public static List<string> KidsIn(string zone) => KidsOwned().Where(k => ZoneOf(k.id) == zone).Select(k => k.id).ToList();
+        // KidsIn(zone).Count·Contains와 같지만 리스트를 만들지 않는다 (세계수 화면이 슬롯마다 매 프레임 부른다)
+        public static int KidsInCount(string zone) { int n = 0; foreach (var k in KIDS) if (HasSpecial(k.id) && ZoneOf(k.id) == zone) n++; return n; }
+        public static bool KidIn(string kid, string zone) { foreach (var k in KIDS) if (k.id == kid) return HasSpecial(kid) && ZoneOf(kid) == zone; return false; }
         public static int ZoneCapacity() => HARV.ZoneCap(Stage()) + (KLvSum() >= KLV.sumAt[1] ? 1 : 0) + (KLvSum() >= KLV.sumAt[3] ? 1 : 0);
-        public static bool ZoneRoom(string zone) => KidsIn(zone).Count < ZoneCapacity();
+        public static bool ZoneRoom(string zone) => KidsInCount(zone) < ZoneCapacity();
 
         // 꼬마를 구역에 보낸다 (zone = null이면 쉬게 한다)
         public static bool Assign(string kid, string zone)
@@ -265,7 +269,7 @@ namespace MoreMush
         // 나무버섯 성장 속도 (구역마다): 나이테 · 장식 · 이슬 꼬마 · 균사 트리 노드
         public static double GrowMul(string zone)
         {
-            double m = 1 + WT.ringGrow * (Ring() - 1) + DecoSum("grow") + (KidsIn(zone).Contains("dew") ? KID["dew"].tv : 0);
+            double m = 1 + WT.ringGrow * (Ring() - 1) + DecoSum("grow") + (KidIn("dew", zone) ? KID["dew"].tv : 0);
             return m / NF.gm_farm(Lv("gm_farm"));
         }
 
