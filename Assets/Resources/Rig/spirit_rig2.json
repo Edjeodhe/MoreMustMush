@@ -4,46 +4,88 @@
    "id": "dew_0",
    "kind": "dew",
    "form": 0,
-   "height": 3.1,
+   "height": 3.11,
    "k": 0.8097,
    "cap": {
-    "sprite": "Rig2/r2_dew_0_cap",
+    "sprite": "Rig2/gen_dew_0_cap",
     "x": 0.025,
-    "y": 1.53
+    "y": 1.53,
+    "orig": "Rig2/r2_dew_0_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_dew_0_stem",
+    "sprite": "Rig2/gen_dew_0_stem",
     "x": 0.025,
-    "y": 1.53
+    "y": 1.53,
+    "orig": "Rig2/r2_dew_0_stem"
    },
-   "face": "Rig2/r2_dew_0_face_",
+   "face": "Rig2/gen_dew_0_bface_",
    "footL": {
-    "sprite": "Rig2/r2_dew_0_footL",
-    "x": 0.025,
-    "y": 1.53
+    "sprite": "Rig2/gen_dew_0_footL",
+    "x": -0.0107,
+    "y": 1.5552,
+    "orig": "Rig2/r2_dew_0_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_dew_0_footR",
-    "x": 0.025,
-    "y": 1.53
+    "sprite": "Rig2/gen_dew_0_footR",
+    "x": 0.0297,
+    "y": 1.5552,
+    "orig": "Rig2/r2_dew_0_footR"
    },
    "ankle": [
-    -0.5335,
-    0.33
+    -0.5692,
+    0.3552
    ],
    "ankleR": [
-    0.5469,
-    0.33
+    0.5516,
+    0.3552
    ],
    "capJoint": [
+    0.005,
+    1.61
+   ],
+   "capTop": [
+    0.005,
+    3.02
+   ],
+   "sole": -0.09,
+   "gradeScale": 1.002,
+   "capJointOrig": [
     0.025,
     1.21
    ],
-   "capTop": [
-    0.025,
-    3.05
-   ],
-   "sole": -0.09
+   "faceOrig": "Rig2/r2_dew_0_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5335,
+     0.33
+    ],
+    "ankleR": [
+     0.5469,
+     0.33
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_dew_0_footL",
+     "x": 0.025,
+     "y": 1.53,
+     "orig": "Rig2/r2_dew_0_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_dew_0_footR",
+     "x": 0.025,
+     "y": 1.53,
+     "orig": "Rig2/r2_dew_0_footR"
+    },
+    "capTop": [
+     0.025,
+     3.05
+    ],
+    "height": 3.1
+   },
+   "body": {
+    "sprite": "Rig2/gen_dew_0_body",
+    "x": 0.025,
+    "y": 1.53
+   }
   },
   {
    "id": "dew_1",
@@ -52,25 +94,29 @@
    "height": 3.24,
    "k": 0.8519,
    "cap": {
-    "sprite": "Rig2/r2_dew_1_cap",
+    "sprite": "Rig2/gen_dew_1_cap",
     "x": 0.005,
-    "y": 1.59
+    "y": 1.59,
+    "orig": "Rig2/r2_dew_1_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_dew_1_stem",
+    "sprite": "Rig2/gen_dew_1_stem",
     "x": 0.005,
-    "y": 1.59
+    "y": 1.59,
+    "orig": "Rig2/r2_dew_1_stem"
    },
-   "face": "Rig2/r2_dew_1_face_",
+   "face": "Rig2/gen_dew_1_face_",
    "footL": {
-    "sprite": "Rig2/r2_dew_1_footL",
+    "sprite": "Rig2/gen_dew_1_footL",
     "x": 0.005,
-    "y": 1.59
+    "y": 1.59,
+    "orig": "Rig2/r2_dew_1_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_dew_1_footR",
+    "sprite": "Rig2/gen_dew_1_footR",
     "x": 0.005,
-    "y": 1.59
+    "y": 1.59,
+    "orig": "Rig2/r2_dew_1_footR"
    },
    "ankle": [
     -0.5382,
@@ -81,18 +127,20 @@
     0.3
    ],
    "nubL": {
-    "sprite": "Rig2/r2_dew_1_nubL",
+    "sprite": "Rig2/gen_dew_1_nubL",
     "x": 0.005,
-    "y": 1.59
+    "y": 1.59,
+    "orig": "Rig2/r2_dew_1_nubL"
    },
    "nubPivotL": [
     -0.6688,
     0.6228
    ],
    "nubR": {
-    "sprite": "Rig2/r2_dew_1_nubR",
+    "sprite": "Rig2/gen_dew_1_nubR",
     "x": 0.005,
-    "y": 1.59
+    "y": 1.59,
+    "orig": "Rig2/r2_dew_1_nubR"
    },
    "nubPivotR": [
     0.7472,
@@ -106,13 +154,19 @@
     0.005,
     3.19
    ],
-   "sole": -0.11
+   "sole": -0.11,
+   "gradeScale": 1.042,
+   "capJointOrig": [
+    0.005,
+    1.28
+   ],
+   "faceOrig": "Rig2/r2_dew_1_face_"
   },
   {
    "id": "dew_2",
    "kind": "dew",
    "form": 2,
-   "height": 5.4772,
+   "height": 5.7805,
    "k": 0.6354,
    "chest": {
     "sprite": "Rig2/r2_dew_2_chest",
@@ -130,50 +184,50 @@
     "y": 1.6316
    },
    "head": {
-    "sprite": "Evo/k_dew_2_head_bare",
+    "sprite": "Rig2/gen_dew_2_front_head",
     "x": 0.0,
-    "y": 3.9047
+    "y": 4.0581
    },
-   "face": "Rig2/r2_dew_2_face_",
+   "face": "Rig2/gen_dew_2_front_face_",
    "hair": {
-    "sprite": "Evo/k_dew_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 3.0765
    },
    "upperArm": {
-    "sprite": "Evo/k_dew_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_dew_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_dew_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_dew_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_dew_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_dew_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_dew_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_dew_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_dew_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_dew_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_dew_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_dew_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_dew_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -189,7 +243,7 @@
    ],
    "capTop": [
     0.0,
-    5.3491
+    5.6524
    ],
    "shoulderL": [
     -0.4464,
@@ -201,11 +255,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -216,21 +270,258 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "hairOrig": {
+    "sprite": "Evo/k_dew_2_hair",
+    "x": 0.0,
+    "y": 3.0765
+   },
+   "headOrig": {
+    "sprite": "Evo/k_dew_2_head_bare",
+    "x": 0.0,
+    "y": 3.9047
+   },
+   "faceOrig": "Rig2/r2_dew_2_face_",
+   "capTopOrig": [
+    0.0,
+    5.3491
+   ],
+   "headScale": 1.1038,
+   "heightOrig": 5.4772,
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_dew_2_back_head",
+     "x": 0.0,
+     "y": 3.9883
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_dew_2_back_chest",
+     "x": 0.01,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_dew_2_back_skirt",
+     "x": 0.01,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.8866
+    ],
+    "capTop": [
+     0.0,
+     5.5883
+    ],
+    "shoulderL": [
+     -0.551,
+     2.3066
+    ],
+    "elbow": [
+     -0.551,
+     1.9318
+    ],
+    "wrist": [
+     -0.5516,
+     1.6515
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_dew_2_arm_upper",
+     "x": -0.5304,
+     "y": 1.8933
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_dew_2_arm_fore",
+     "x": -0.5304,
+     "y": 1.8933
+    },
+    "hand": {
+     "sprite": "Rig2/gen_dew_2_arm_hand",
+     "x": -0.5304,
+     "y": 1.8933
+    },
+    "shoulderR": [
+     0.561,
+     2.3066
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_dew_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_dew_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_dew_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_dew_2_sleeve",
+     "x": -0.541,
+     "y": 2.2566
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_dew_2_side_head",
+     "x": -0.165,
+     "y": 3.8566
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_dew_2_side_chest",
+     "x": -0.185,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_dew_2_side_skirt",
+     "x": -0.185,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8966
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     5.4066
+    ],
+    "hipL": [
+     0.015,
+     0.9245
+    ],
+    "hipR": [
+     0.085,
+     0.9245
+    ],
+    "shoulderL": [
+     0.035,
+     2.1866
+    ],
+    "elbow": [
+     0.035,
+     1.8118
+    ],
+    "wrist": [
+     0.0344,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_dew_2_arm_upper",
+     "x": 0.0556,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_dew_2_arm_fore",
+     "x": 0.0556,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_dew_2_arm_hand",
+     "x": 0.0556,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.085,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_dew_2_side_thigh",
+     "x": 0.075,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_dew_2_side_shin",
+     "x": 0.075,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_dew_2_side_shoe",
+     "x": 0.075,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.075,
+     "y": 0.6945
+    },
+    "knee": [
+     0.06,
+     0.7545
+    ],
+    "ankle": [
+     0.055,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_dew_2_sleeve",
+     "x": 0.045,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "dew_3",
    "kind": "dew",
    "form": 3,
-   "height": 5.7787,
+   "height": 5.289,
    "k": 0.706,
    "chest": {
     "sprite": "Rig2/r2_dew_3_chest",
@@ -248,50 +539,50 @@
     "y": 1.786
    },
    "head": {
-    "sprite": "Evo/k_dew_3_head_bare",
+    "sprite": "Rig2/gen_dew_3_front_head",
     "x": 0.0,
-    "y": 4.1562
+    "y": 3.9085
    },
-   "face": "Rig2/r2_dew_3_face_",
+   "face": "Rig2/gen_dew_3_front_face_",
    "hair": {
-    "sprite": "Evo/k_dew_3_hair",
-    "x": 0.0,
-    "y": 2.6579
+    "sprite": "Rig2/gen_dew_3_front_hair",
+    "x": -0.005,
+    "y": 2.5779
    },
    "upperArm": {
-    "sprite": "Evo/k_dew_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_dew_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_dew_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_dew_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_dew_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_dew_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
-    "sprite": "Rig2/r2_dew_3_leg",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "",
+    "x": -0.3772,
+    "y": 0.747
    },
    "thigh": {
-    "sprite": "Rig2/r2_dew_3_thigh",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_dew_3_front_thigh",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shin": {
-    "sprite": "Rig2/r2_dew_3_shin",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_dew_3_front_shin",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shoe": {
-    "sprite": "Rig2/r2_dew_3_shoe",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_dew_3_front_shoe",
+    "x": -0.3772,
+    "y": 0.747
    },
    "waist": [
     0.0,
@@ -302,12 +593,12 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    4.0871
+    -0.005,
+    3.3929
    ],
    "capTop": [
     0.0,
-    5.6466
+    5.1569
    ],
    "shoulderL": [
     -0.3816,
@@ -319,10 +610,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -334,123 +625,528 @@
     1.037
    ],
    "knee": [
-    -0.2322,
-    0.75
+    -0.3622,
+    0.847
    ],
    "ankle": [
-    -0.2572,
-    0.47
+    -0.3772,
+    0.247
    ],
-   "sole": -0.0,
-   "legScale": 1.0
+   "sole": -0.003,
+   "legScale": 1.0,
+   "lift": 0.34,
+   "gradeScale": 1.0,
+   "headOrig": {
+    "sprite": "Evo/k_dew_3_head_bare",
+    "x": 0.0,
+    "y": 4.1562
+   },
+   "faceOrig": "Rig2/r2_dew_3_face_",
+   "capTopOrig": [
+    0.0,
+    5.6466
+   ],
+   "headScale": 0.8376,
+   "heightOrig": 5.7787,
+   "hairOrig": {
+    "sprite": "Evo/k_dew_3_hair",
+    "x": 0.0,
+    "y": 2.6579
+   },
+   "hairBones": [
+    [
+     -0.005,
+     3.3929
+    ],
+    [
+     -0.005,
+     2.6629
+    ],
+    [
+     -0.005,
+     1.9329
+    ],
+    [
+     -0.005,
+     1.2029
+    ]
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_dew_3_back_head",
+     "x": 0.0,
+     "y": 3.8485
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_dew_3_back_chest",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_dew_3_back_skirt",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "waist": [
+     0.0,
+     2.191
+    ],
+    "capTop": [
+     0.0,
+     5.0735
+    ],
+    "shoulderL": [
+     -0.376,
+     2.501
+    ],
+    "elbow": [
+     -0.376,
+     2.0922
+    ],
+    "wrist": [
+     -0.3766,
+     1.7865
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_dew_3_arm_upper",
+     "x": -0.3567,
+     "y": 2.0478
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_dew_3_arm_fore",
+     "x": -0.3567,
+     "y": 2.0478
+    },
+    "hand": {
+     "sprite": "Rig2/gen_dew_3_arm_hand",
+     "x": -0.3567,
+     "y": 2.0478
+    },
+    "shoulderR": [
+     0.376,
+     2.501
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_dew_3_back_thigh",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_dew_3_back_shin",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_dew_3_back_shoe",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "knee": [
+     -0.2972,
+     0.837
+    ],
+    "ankle": [
+     -0.2772,
+     0.237
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_dew_3_sleeve",
+     "x": -0.366,
+     "y": 2.451
+    },
+    "hair": {
+     "sprite": "Rig2/gen_dew_3_back_hair",
+     "x": 0.025,
+     "y": 3.191
+    },
+    "hairRoot": [
+     0.025,
+     3.831
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.831
+     ],
+     [
+      0.025,
+      3.261
+     ],
+     [
+      0.025,
+      2.691
+     ],
+     [
+      0.025,
+      2.111
+     ]
+    ]
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_dew_3_side_head",
+     "x": -0.06,
+     "y": 3.686
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_dew_3_side_chest",
+     "x": -0.2,
+     "y": 1.921
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_dew_3_side_skirt",
+     "x": -0.2,
+     "y": 1.921
+    },
+    "waist": [
+     0.0,
+     2.071
+    ],
+    "neck": [
+     0.0,
+     2.631
+    ],
+    "capTop": [
+     0.0,
+     4.871
+    ],
+    "hipL": [
+     0.075,
+     1.037
+    ],
+    "hipR": [
+     0.145,
+     1.037
+    ],
+    "shoulderL": [
+     0.095,
+     2.381
+    ],
+    "elbow": [
+     0.095,
+     1.9722
+    ],
+    "wrist": [
+     0.0944,
+     1.6665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_dew_3_arm_upper",
+     "x": 0.1143,
+     "y": 1.9278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_dew_3_arm_fore",
+     "x": 0.1143,
+     "y": 1.9278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_dew_3_arm_hand",
+     "x": 0.1143,
+     "y": 1.9278
+    },
+    "shoulderR": [
+     0.145,
+     2.391
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_dew_3_side_thigh",
+     "x": 0.14,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_dew_3_side_shin",
+     "x": 0.14,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_dew_3_side_shoe",
+     "x": 0.14,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.14,
+     "y": 0.747
+    },
+    "knee": [
+     0.13,
+     0.827
+    ],
+    "ankle": [
+     0.115,
+     0.197
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_dew_3_sleeve",
+     "x": 0.105,
+     "y": 2.331
+    },
+    "hair": {
+     "sprite": "Rig2/gen_dew_3_side_hair",
+     "x": -0.41,
+     "y": 3.346
+    },
+    "hairRoot": [
+     -0.195,
+     3.881
+    ],
+    "hairBones": [
+     [
+      -0.195,
+      3.881
+     ],
+     [
+      -0.47,
+      3.401
+     ],
+     [
+      -1.605,
+      2.931
+     ],
+     [
+      -1.33,
+      2.461
+     ]
+    ]
+   }
   },
   {
    "id": "fire_0",
    "kind": "fire",
    "form": 0,
-   "height": 3.44,
+   "height": 3.47,
    "k": 0.7413,
    "cap": {
-    "sprite": "Rig2/r2_fire_0_cap",
+    "sprite": "Rig2/gen_fire_0_cap",
     "x": 0.01,
-    "y": 1.71
+    "y": 1.71,
+    "orig": "Rig2/r2_fire_0_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_fire_0_stem",
+    "sprite": "Rig2/gen_fire_0_stem",
     "x": 0.01,
-    "y": 1.71
+    "y": 1.71,
+    "orig": "Rig2/r2_fire_0_stem"
    },
-   "face": "Rig2/r2_fire_0_face_",
+   "face": "Rig2/gen_fire_0_bface_",
    "footL": {
-    "sprite": "Rig2/r2_fire_0_footL",
-    "x": 0.01,
-    "y": 1.71
+    "sprite": "Rig2/gen_fire_0_footL",
+    "x": -0.0211,
+    "y": 1.7478,
+    "orig": "Rig2/r2_fire_0_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_fire_0_footR",
-    "x": 0.01,
-    "y": 1.71
+    "sprite": "Rig2/gen_fire_0_footR",
+    "x": 0.0311,
+    "y": 1.7483,
+    "orig": "Rig2/r2_fire_0_footR"
    },
    "ankle": [
-    -0.5355,
-    0.41
+    -0.5666,
+    0.4478
    ],
    "ankleR": [
-    0.6659,
-    0.42
+    0.687,
+    0.4583
    ],
    "capJoint": [
+    0.06,
+    1.69
+   ],
+   "capTop": [
+    0.06,
+    3.4
+   ],
+   "sole": -0.07,
+   "gradeScale": 0.903,
+   "capJointOrig": [
     0.01,
     1.08
    ],
-   "capTop": [
-    0.01,
-    3.39
-   ],
-   "sole": -0.07
+   "faceOrig": "Rig2/r2_fire_0_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5355,
+     0.41
+    ],
+    "ankleR": [
+     0.6659,
+     0.42
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_fire_0_footL",
+     "x": 0.01,
+     "y": 1.71,
+     "orig": "Rig2/r2_fire_0_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_fire_0_footR",
+     "x": 0.01,
+     "y": 1.71,
+     "orig": "Rig2/r2_fire_0_footR"
+    },
+    "capTop": [
+     0.01,
+     3.39
+    ],
+    "height": 3.44
+   },
+   "body": {
+    "sprite": "Rig2/gen_fire_0_body",
+    "x": 0.01,
+    "y": 1.71
+   }
   },
   {
    "id": "fire_1",
    "kind": "fire",
    "form": 1,
-   "height": 3.68,
+   "height": 3.83,
    "k": 0.788,
    "cap": {
-    "sprite": "Rig2/r2_fire_1_cap",
+    "sprite": "Rig2/gen_fire_1_cap",
     "x": 0.02,
-    "y": 1.82
+    "y": 1.82,
+    "orig": "Rig2/r2_fire_1_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_fire_1_stem",
+    "sprite": "Rig2/gen_fire_1_stem",
     "x": 0.02,
-    "y": 1.82
+    "y": 1.82,
+    "orig": "Rig2/r2_fire_1_stem"
    },
-   "face": "Rig2/r2_fire_1_face_",
+   "face": "Rig2/gen_fire_1_bface_",
    "footL": {
-    "sprite": "Rig2/r2_fire_1_footL",
-    "x": 0.02,
-    "y": 1.82
+    "sprite": "Rig2/gen_fire_1_footL",
+    "x": -0.028,
+    "y": 1.8592,
+    "orig": "Rig2/r2_fire_1_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_fire_1_footR",
-    "x": 0.02,
-    "y": 1.82
+    "sprite": "Rig2/gen_fire_1_footR",
+    "x": 0.1105,
+    "y": 1.87,
+    "orig": "Rig2/r2_fire_1_footR"
    },
    "ankle": [
-    -0.5164,
-    0.38
+    -0.5644,
+    0.4192
    ],
    "ankleR": [
-    0.6375,
-    0.47
+    0.728,
+    0.52
    ],
    "nubL": {
-    "sprite": "Rig2/r2_fire_1_nubL",
-    "x": 0.02,
-    "y": 1.82
+    "sprite": "Rig2/gen_fire_1_nubL",
+    "x": -0.0525,
+    "y": 1.9164,
+    "orig": "Rig2/r2_fire_1_nubL"
    },
    "nubPivotL": [
-    -0.7207,
-    0.8566
+    -0.7932,
+    0.953
    ],
    "nubR": {
-    "sprite": "Rig2/r2_fire_1_nubR",
-    "x": 0.02,
-    "y": 1.82
+    "sprite": "Rig2/gen_fire_1_nubR",
+    "x": 0.1385,
+    "y": 1.9191,
+    "orig": "Rig2/r2_fire_1_nubR"
    },
    "nubPivotR": [
-    0.8712,
-    0.8789
+    0.9897,
+    0.978
    ],
    "capJoint": [
+    0.07,
+    1.95
+   ],
+   "capTop": [
+    0.07,
+    3.73
+   ],
+   "sole": -0.1,
+   "faceOrig": "Rig2/r2_fire_1_face_",
+   "gradeScale": 0.9174,
+   "capJointOrig": [
     0.02,
     1.15
    ],
-   "capTop": [
-    0.02,
-    3.64
-   ],
-   "sole": -0.1
+   "mushOrig": {
+    "ankle": [
+     -0.5164,
+     0.38
+    ],
+    "ankleR": [
+     0.6375,
+     0.47
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_fire_1_footL",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_fire_1_footR",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_footR"
+    },
+    "nubPivotL": [
+     -0.7207,
+     0.8566
+    ],
+    "nubPivotR": [
+     0.8712,
+     0.8789
+    ],
+    "nubL": {
+     "sprite": "Rig2/gen_fire_1_nubL",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_nubL"
+    },
+    "nubR": {
+     "sprite": "Rig2/gen_fire_1_nubR",
+     "x": 0.02,
+     "y": 1.82,
+     "orig": "Rig2/r2_fire_1_nubR"
+    },
+    "capTop": [
+     0.02,
+     3.64
+    ],
+    "height": 3.68
+   },
+   "body": {
+    "sprite": "Rig2/gen_fire_1_body",
+    "x": 0.02,
+    "y": 1.82
+   }
   },
   {
    "id": "fire_2",
@@ -480,44 +1176,44 @@
    },
    "face": "Rig2/r2_fire_2_face_",
    "hair": {
-    "sprite": "Evo/k_fire_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 2.9999
    },
    "upperArm": {
-    "sprite": "Evo/k_fire_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_fire_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_fire_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_fire_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_fire_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_fire_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_fire_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_fire_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_fire_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_fire_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_fire_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_fire_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_fire_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -545,11 +1241,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -560,15 +1256,250 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "hairOrig": {
+    "sprite": "Evo/k_fire_2_hair",
+    "x": 0.0,
+    "y": 2.9999
+   },
+   "headOrig": {
+    "sprite": "Evo/k_fire_2_head_bare",
+    "x": 0.0,
+    "y": 4.3489
+   },
+   "faceOrig": "Rig2/r2_fire_2_face_",
+   "capTopOrig": [
+    0.0,
+    6.2303
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_fire_2_back_head",
+     "x": 0.015,
+     "y": 4.2989
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_fire_2_back_chest",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_fire_2_back_skirt",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "capTop": [
+     0.0,
+     6.2239
+    ],
+    "shoulderL": [
+     -0.49,
+     2.2666
+    ],
+    "elbow": [
+     -0.49,
+     1.8918
+    ],
+    "wrist": [
+     -0.4906,
+     1.6115
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_fire_2_arm_upper",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_fire_2_arm_fore",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "hand": {
+     "sprite": "Rig2/gen_fire_2_arm_hand",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "shoulderR": [
+     0.47,
+     2.2666
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_fire_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_fire_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_fire_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_fire_2_sleeve",
+     "x": -0.48,
+     "y": 2.2166
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_fire_2_side_head",
+     "x": -0.18,
+     "y": 4.3666
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_fire_2_side_chest",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_fire_2_side_skirt",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     6.5166
+    ],
+    "hipL": [
+     0.02,
+     0.9245
+    ],
+    "hipR": [
+     0.09,
+     0.9245
+    ],
+    "shoulderL": [
+     0.04,
+     2.1866
+    ],
+    "elbow": [
+     0.04,
+     1.8118
+    ],
+    "wrist": [
+     0.0394,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_fire_2_arm_upper",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_fire_2_arm_fore",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_fire_2_arm_hand",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.09,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_fire_2_side_thigh",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_fire_2_side_shin",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_fire_2_side_shoe",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "knee": [
+     0.065,
+     0.7545
+    ],
+    "ankle": [
+     0.06,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_fire_2_sleeve",
+     "x": 0.05,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "fire_3",
@@ -598,24 +1529,24 @@
    },
    "face": "Rig2/r2_fire_3_face_",
    "hair": {
-    "sprite": "Evo/k_fire_3_hair",
-    "x": 0.0,
-    "y": 2.9698
+    "sprite": "Rig2/gen_fire_3_front_hair",
+    "x": -0.01,
+    "y": 3.1848
    },
    "upperArm": {
-    "sprite": "Evo/k_fire_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_fire_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_fire_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_fire_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_fire_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_fire_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
     "sprite": "",
@@ -646,8 +1577,8 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    4.1722
+    -0.01,
+    3.7598
    ],
    "capTop": [
     0.0,
@@ -663,10 +1594,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -691,7 +1622,7 @@
    "side": {
     "head": {
      "sprite": "Rig2/gen_fire_3_side_head",
-     "x": -0.07,
+     "x": -0.32,
      "y": 4.0888
     },
     "face": "",
@@ -712,8 +1643,8 @@
     },
     "hair": {
      "sprite": "Rig2/gen_fire_3_side_hair",
-     "x": -0.595,
-     "y": 2.9698
+     "x": -0.41,
+     "y": 3.1388
     },
     "waist": [
      0.0,
@@ -724,11 +1655,29 @@
      2.631
     ],
     "hairRoot": [
-     0.05,
-     4.2698
+     -0.54,
+     3.7538
+    ],
+    "hairBones": [
+     [
+      -0.54,
+      3.7538
+     ],
+     [
+      -0.8,
+      3.2038
+     ],
+     [
+      -0.855,
+      2.6538
+     ],
+     [
+      -0.935,
+      2.1038
+     ]
     ],
     "capTop": [
-     0.0,
+     -0.25,
      5.5738
     ],
     "hipL": [
@@ -745,26 +1694,26 @@
     ],
     "elbow": [
      0.07,
-     1.9115
+     1.9122
     ],
     "wrist": [
-     0.0725,
+     0.0694,
      1.6065
     ],
     "upperArm": {
-     "sprite": "Evo/k_fire_3_arm_up",
-     "x": 0.0325,
-     "y": 1.9115
+     "sprite": "Rig2/gen_fire_3_arm_upper",
+     "x": 0.0893,
+     "y": 1.8678
     },
     "foreArm": {
-     "sprite": "Rig2/r2_fire_3_forearm",
-     "x": 0.0325,
-     "y": 1.9115
+     "sprite": "Rig2/gen_fire_3_arm_fore",
+     "x": 0.0893,
+     "y": 1.8678
     },
     "hand": {
-     "sprite": "Rig2/r2_fire_3_hand",
-     "x": 0.0325,
-     "y": 1.9115
+     "sprite": "Rig2/gen_fire_3_arm_hand",
+     "x": 0.0893,
+     "y": 1.8678
     },
     "shoulderR": [
      0.12,
@@ -800,7 +1749,12 @@
     ],
     "sole": -0.003,
     "legScale": 1.0,
-    "lift": 0.34
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_fire_3_sleeve",
+     "x": 0.08,
+     "y": 2.271
+    }
    },
    "back": {
     "head": {
@@ -824,6 +1778,33 @@
      "x": 0.005,
      "y": 1.796
     },
+    "hair": {
+     "sprite": "Rig2/gen_fire_3_back_hair",
+     "x": 0.025,
+     "y": 3.1288
+    },
+    "hairRoot": [
+     0.025,
+     3.7888
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.7888
+     ],
+     [
+      0.025,
+      3.1988
+     ],
+     [
+      0.025,
+      2.6088
+     ],
+     [
+      0.025,
+      2.0088
+     ]
+    ],
     "waist": [
      0.0,
      2.131
@@ -838,26 +1819,26 @@
     ],
     "elbow": [
      -0.375,
-     2.0315
+     2.0322
     ],
     "wrist": [
-     -0.3725,
+     -0.3756,
      1.7265
     ],
     "upperArm": {
-     "sprite": "Evo/k_fire_3_arm_up",
-     "x": -0.4125,
-     "y": 2.0315
+     "sprite": "Rig2/gen_fire_3_arm_upper",
+     "x": -0.3557,
+     "y": 1.9878
     },
     "foreArm": {
-     "sprite": "Rig2/r2_fire_3_forearm",
-     "x": -0.4125,
-     "y": 2.0315
+     "sprite": "Rig2/gen_fire_3_arm_fore",
+     "x": -0.3557,
+     "y": 1.9878
     },
     "hand": {
-     "sprite": "Rig2/r2_fire_3_hand",
-     "x": -0.4125,
-     "y": 2.0315
+     "sprite": "Rig2/gen_fire_3_arm_hand",
+     "x": -0.3557,
+     "y": 1.9878
     },
     "shoulderR": [
      0.385,
@@ -893,122 +1874,257 @@
     ],
     "sole": -0.003,
     "legScale": 1.0,
-    "lift": 0.34
-   }
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_fire_3_sleeve",
+     "x": -0.365,
+     "y": 2.391
+    }
+   },
+   "gradeScale": 1.0,
+   "hairOrig": {
+    "sprite": "Evo/k_fire_3_hair",
+    "x": 0.0,
+    "y": 2.9698
+   },
+   "hairBones": [
+    [
+     -0.01,
+     3.7598
+    ],
+    [
+     -0.01,
+     3.2498
+    ],
+    [
+     -0.01,
+     2.7298
+    ],
+    [
+     -0.01,
+     2.2098
+    ]
+   ]
   },
   {
    "id": "leaf_0",
    "kind": "leaf",
    "form": 0,
-   "height": 3.38,
+   "height": 3.62,
    "k": 0.7515,
    "cap": {
-    "sprite": "Rig2/r2_leaf_0_cap",
+    "sprite": "Rig2/gen_leaf_0_cap",
     "x": 0.005,
-    "y": 1.67
+    "y": 1.67,
+    "orig": "Rig2/r2_leaf_0_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_leaf_0_stem",
+    "sprite": "Rig2/gen_leaf_0_stem",
     "x": 0.005,
-    "y": 1.67
+    "y": 1.67,
+    "orig": "Rig2/r2_leaf_0_stem"
    },
-   "face": "Rig2/r2_leaf_0_face_",
+   "face": "Rig2/gen_leaf_0_bface_",
    "footL": {
-    "sprite": "Rig2/r2_leaf_0_footL",
-    "x": 0.005,
-    "y": 1.67
+    "sprite": "Rig2/gen_leaf_0_footL",
+    "x": -0.0235,
+    "y": 1.7066,
+    "orig": "Rig2/r2_leaf_0_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_leaf_0_footR",
-    "x": 0.005,
-    "y": 1.67
+    "sprite": "Rig2/gen_leaf_0_footR",
+    "x": 0.1159,
+    "y": 1.7079,
+    "orig": "Rig2/r2_leaf_0_footR"
    },
    "ankle": [
-    -0.5305,
-    0.31
+    -0.559,
+    0.3466
    ],
    "ankleR": [
-    0.5594,
-    0.32
+    0.6703,
+    0.3579
    ],
    "capJoint": [
+    0.045,
+    1.57
+   ],
+   "capTop": [
+    0.045,
+    3.53
+   ],
+   "sole": -0.09,
+   "gradeScale": 0.919,
+   "capJointOrig": [
     0.005,
     0.8
    ],
-   "capTop": [
-    0.005,
-    3.33
-   ],
-   "sole": -0.09
+   "faceOrig": "Rig2/r2_leaf_0_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5305,
+     0.31
+    ],
+    "ankleR": [
+     0.5594,
+     0.32
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_leaf_0_footL",
+     "x": 0.005,
+     "y": 1.67,
+     "orig": "Rig2/r2_leaf_0_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_leaf_0_footR",
+     "x": 0.005,
+     "y": 1.67,
+     "orig": "Rig2/r2_leaf_0_footR"
+    },
+    "capTop": [
+     0.005,
+     3.33
+    ],
+    "height": 3.38
+   },
+   "body": {
+    "sprite": "Rig2/gen_leaf_0_body",
+    "x": 0.005,
+    "y": 1.67
+   }
   },
   {
    "id": "leaf_1",
    "kind": "leaf",
    "form": 1,
-   "height": 3.47,
+   "height": 3.45,
    "k": 0.879,
    "cap": {
-    "sprite": "Rig2/r2_leaf_1_cap",
+    "sprite": "Rig2/gen_leaf_1_cap",
     "x": 0.015,
-    "y": 1.72
+    "y": 1.72,
+    "orig": "Rig2/r2_leaf_1_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_leaf_1_stem",
+    "sprite": "Rig2/gen_leaf_1_stem",
     "x": 0.015,
-    "y": 1.72
+    "y": 1.72,
+    "orig": "Rig2/r2_leaf_1_stem"
    },
-   "face": "Rig2/r2_leaf_1_face_",
+   "face": "Rig2/gen_leaf_1_bface_",
    "footL": {
-    "sprite": "Rig2/r2_leaf_1_footL",
-    "x": 0.015,
-    "y": 1.72
+    "sprite": "Rig2/gen_leaf_1_footL",
+    "x": -0.0009,
+    "y": 1.7316,
+    "orig": "Rig2/r2_leaf_1_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_leaf_1_footR",
-    "x": 0.015,
-    "y": 1.72
+    "sprite": "Rig2/gen_leaf_1_footR",
+    "x": 0.011,
+    "y": 1.7318,
+    "orig": "Rig2/r2_leaf_1_footR"
    },
    "ankle": [
-    -0.5097,
-    0.31
+    -0.5256,
+    0.3216
    ],
    "ankleR": [
-    0.5705,
-    0.32
+    0.5665,
+    0.3318
    ],
    "nubL": {
-    "sprite": "Rig2/r2_leaf_1_nubL",
-    "x": 0.015,
-    "y": 1.72
+    "sprite": "Rig2/gen_leaf_1_nubL",
+    "x": -0.0023,
+    "y": 1.7359,
+    "orig": "Rig2/r2_leaf_1_nubL"
    },
    "nubPivotL": [
-    -0.6358,
-    0.6999
+    -0.6531,
+    0.7158
    ],
    "nubR": {
-    "sprite": "Rig2/r2_leaf_1_nubR",
-    "x": 0.015,
-    "y": 1.72
+    "sprite": "Rig2/gen_leaf_1_nubR",
+    "x": 0.0127,
+    "y": 1.7362,
+    "orig": "Rig2/r2_leaf_1_nubR"
    },
    "nubPivotR": [
-    0.7228,
-    0.7244
+    0.7205,
+    0.7406
    ],
    "capJoint": [
     0.015,
-    0.94
+    1.56
    ],
    "capTop": [
     0.015,
-    3.42
+    3.37
    ],
-   "sole": -0.08
+   "sole": -0.08,
+   "gradeScale": 0.9729,
+   "capJointOrig": [
+    0.015,
+    0.94
+   ],
+   "faceOrig": "Rig2/r2_leaf_1_face_",
+   "mushOrig": {
+    "ankle": [
+     -0.5097,
+     0.31
+    ],
+    "ankleR": [
+     0.5705,
+     0.32
+    ],
+    "footL": {
+     "sprite": "Rig2/gen_leaf_1_footL",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_footL"
+    },
+    "footR": {
+     "sprite": "Rig2/gen_leaf_1_footR",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_footR"
+    },
+    "nubPivotL": [
+     -0.6358,
+     0.6999
+    ],
+    "nubPivotR": [
+     0.7228,
+     0.7244
+    ],
+    "nubL": {
+     "sprite": "Rig2/gen_leaf_1_nubL",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_nubL"
+    },
+    "nubR": {
+     "sprite": "Rig2/gen_leaf_1_nubR",
+     "x": 0.015,
+     "y": 1.72,
+     "orig": "Rig2/r2_leaf_1_nubR"
+    },
+    "capTop": [
+     0.015,
+     3.42
+    ],
+    "height": 3.47
+   },
+   "body": {
+    "sprite": "Rig2/gen_leaf_1_body",
+    "x": 0.015,
+    "y": 1.72
+   }
   },
   {
    "id": "leaf_2",
    "kind": "leaf",
    "form": 2,
-   "height": 5.7925,
+   "height": 6.6253,
    "k": 0.6491,
    "chest": {
     "sprite": "Rig2/r2_leaf_2_chest",
@@ -1026,50 +2142,50 @@
     "y": 1.6316
    },
    "head": {
-    "sprite": "Evo/k_leaf_2_head_bare",
+    "sprite": "Rig2/gen_leaf_2_front_head",
     "x": 0.0,
-    "y": 4.0575
+    "y": 4.4784
    },
-   "face": "Rig2/r2_leaf_2_face_",
+   "face": "Rig2/gen_leaf_2_front_face_",
    "hair": {
-    "sprite": "Evo/k_leaf_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 3.1555
    },
    "upperArm": {
-    "sprite": "Evo/k_leaf_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_leaf_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_leaf_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_leaf_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_leaf_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_leaf_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_leaf_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_leaf_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_leaf_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_leaf_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_leaf_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_leaf_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_leaf_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -1085,7 +2201,7 @@
    ],
    "capTop": [
     0.0,
-    5.6537
+    6.4865
    ],
    "shoulderL": [
     -0.4464,
@@ -1097,11 +2213,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -1112,21 +2228,258 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "hairOrig": {
+    "sprite": "Evo/k_leaf_2_hair",
+    "x": 0.0,
+    "y": 3.1555
+   },
+   "headOrig": {
+    "sprite": "Evo/k_leaf_2_head_bare",
+    "x": 0.0,
+    "y": 4.0575
+   },
+   "faceOrig": "Rig2/r2_leaf_2_face_",
+   "capTopOrig": [
+    0.0,
+    5.6537
+   ],
+   "headScale": 1.2581,
+   "heightOrig": 5.7925,
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_leaf_2_back_head",
+     "x": 0.01,
+     "y": 4.496
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_leaf_2_back_chest",
+     "x": 0.01,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_leaf_2_back_skirt",
+     "x": 0.01,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.9566
+    ],
+    "capTop": [
+     0.0,
+     6.616
+    ],
+    "shoulderL": [
+     -0.444,
+     2.2866
+    ],
+    "elbow": [
+     -0.444,
+     1.9118
+    ],
+    "wrist": [
+     -0.4446,
+     1.6315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_leaf_2_arm_upper",
+     "x": -0.4234,
+     "y": 1.8733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_leaf_2_arm_fore",
+     "x": -0.4234,
+     "y": 1.8733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_leaf_2_arm_hand",
+     "x": -0.4234,
+     "y": 1.8733
+    },
+    "shoulderR": [
+     0.444,
+     2.2866
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_leaf_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_leaf_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_leaf_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_leaf_2_sleeve",
+     "x": -0.434,
+     "y": 2.2366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_leaf_2_side_head",
+     "x": -0.1,
+     "y": 4.4816
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_leaf_2_side_chest",
+     "x": -0.11,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_leaf_2_side_skirt",
+     "x": -0.11,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8866
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     6.7166
+    ],
+    "hipL": [
+     0.025,
+     0.9245
+    ],
+    "hipR": [
+     0.095,
+     0.9245
+    ],
+    "shoulderL": [
+     0.045,
+     2.1866
+    ],
+    "elbow": [
+     0.045,
+     1.8118
+    ],
+    "wrist": [
+     0.0444,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_leaf_2_arm_upper",
+     "x": 0.0656,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_leaf_2_arm_fore",
+     "x": 0.0656,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_leaf_2_arm_hand",
+     "x": 0.0656,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.095,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_leaf_2_side_thigh",
+     "x": 0.085,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_leaf_2_side_shin",
+     "x": 0.085,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_leaf_2_side_shoe",
+     "x": 0.085,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.085,
+     "y": 0.6945
+    },
+    "knee": [
+     0.07,
+     0.7545
+    ],
+    "ankle": [
+     0.065,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_leaf_2_sleeve",
+     "x": 0.055,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "leaf_3",
    "kind": "leaf",
    "form": 3,
-   "height": 6.2588,
+   "height": 6.1224,
    "k": 0.6519,
    "chest": {
     "sprite": "Rig2/r2_leaf_3_chest",
@@ -1144,50 +2497,50 @@
     "y": 1.786
    },
    "head": {
-    "sprite": "Evo/k_leaf_3_head_bare",
+    "sprite": "Rig2/gen_leaf_3_front_head",
     "x": 0.0,
-    "y": 4.3888
+    "y": 4.3199
    },
-   "face": "Rig2/r2_leaf_3_face_",
+   "face": "Rig2/gen_leaf_3_front_face_",
    "hair": {
-    "sprite": "Evo/k_leaf_3_hair",
-    "x": 0.0,
-    "y": 3.2548
+    "sprite": "Rig2/gen_leaf_3_front_hair",
+    "x": -0.005,
+    "y": 2.9948
    },
    "upperArm": {
-    "sprite": "Evo/k_leaf_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_leaf_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_leaf_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_leaf_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_leaf_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_leaf_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
-    "sprite": "Rig2/r2_leaf_3_leg",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "",
+    "x": -0.3772,
+    "y": 0.747
    },
    "thigh": {
-    "sprite": "Rig2/r2_leaf_3_thigh",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_leaf_3_front_thigh",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shin": {
-    "sprite": "Rig2/r2_leaf_3_shin",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_leaf_3_front_shin",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shoe": {
-    "sprite": "Rig2/r2_leaf_3_shoe",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_leaf_3_front_shoe",
+    "x": -0.3772,
+    "y": 0.747
    },
    "waist": [
     0.0,
@@ -1198,12 +2551,12 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    4.4752
+    -0.005,
+    3.7698
    ],
    "capTop": [
     0.0,
-    6.1092
+    5.9728
    ],
    "shoulderL": [
     -0.3816,
@@ -1215,10 +2568,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -1230,15 +2583,444 @@
     1.037
    ],
    "knee": [
-    -0.2322,
-    0.75
+    -0.3622,
+    0.847
    ],
    "ankle": [
-    -0.2572,
-    0.47
+    -0.3772,
+    0.247
    ],
-   "sole": -0.0,
-   "legScale": 1.0
+   "sole": -0.003,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_leaf_3_head_bare",
+    "x": 0.0,
+    "y": 4.3888
+   },
+   "faceOrig": "Rig2/r2_leaf_3_face_",
+   "capTopOrig": [
+    0.0,
+    6.1092
+   ],
+   "headScale": 0.9608,
+   "heightOrig": 6.2588,
+   "hairOrig": {
+    "sprite": "Evo/k_leaf_3_hair",
+    "x": 0.0,
+    "y": 3.2548
+   },
+   "hairBones": [
+    [
+     -0.005,
+     3.7698
+    ],
+    [
+     -0.005,
+     3.0798
+    ],
+    [
+     -0.005,
+     2.3798
+    ],
+    [
+     -0.005,
+     1.6798
+    ]
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_leaf_3_back_head",
+     "x": 0.005,
+     "y": 4.2866
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_leaf_3_back_chest",
+     "x": -0.01,
+     "y": 1.796
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_leaf_3_back_skirt",
+     "x": -0.01,
+     "y": 1.796
+    },
+    "waist": [
+     0.0,
+     2.181
+    ],
+    "capTop": [
+     0.0,
+     5.9816
+    ],
+    "shoulderL": [
+     -0.381,
+     2.501
+    ],
+    "elbow": [
+     -0.381,
+     2.0922
+    ],
+    "wrist": [
+     -0.3816,
+     1.7865
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_leaf_3_arm_upper",
+     "x": -0.3617,
+     "y": 2.0478
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_leaf_3_arm_fore",
+     "x": -0.3617,
+     "y": 2.0478
+    },
+    "hand": {
+     "sprite": "Rig2/gen_leaf_3_arm_hand",
+     "x": -0.3617,
+     "y": 2.0478
+    },
+    "shoulderR": [
+     0.371,
+     2.501
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_leaf_3_back_thigh",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_leaf_3_back_shin",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_leaf_3_back_shoe",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "knee": [
+     -0.2972,
+     0.837
+    ],
+    "ankle": [
+     -0.2772,
+     0.237
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_leaf_3_sleeve",
+     "x": -0.371,
+     "y": 2.451
+    },
+    "hair": {
+     "sprite": "Rig2/gen_leaf_3_back_hair",
+     "x": 0.025,
+     "y": 3.101
+    },
+    "hairRoot": [
+     0.025,
+     3.781
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.781
+     ],
+     [
+      0.025,
+      3.171
+     ],
+     [
+      0.025,
+      2.571
+     ],
+     [
+      0.025,
+      1.961
+     ]
+    ]
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_leaf_3_side_head",
+     "x": -0.01,
+     "y": 4.056
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_leaf_3_side_chest",
+     "x": -0.085,
+     "y": 1.921
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_leaf_3_side_skirt",
+     "x": -0.085,
+     "y": 1.921
+    },
+    "waist": [
+     0.0,
+     2.091
+    ],
+    "neck": [
+     0.0,
+     2.631
+    ],
+    "capTop": [
+     0.0,
+     5.731
+    ],
+    "hipL": [
+     0.09,
+     1.037
+    ],
+    "hipR": [
+     0.16,
+     1.037
+    ],
+    "shoulderL": [
+     0.11,
+     2.381
+    ],
+    "elbow": [
+     0.11,
+     1.9722
+    ],
+    "wrist": [
+     0.1094,
+     1.6665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_leaf_3_arm_upper",
+     "x": 0.1293,
+     "y": 1.9278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_leaf_3_arm_fore",
+     "x": 0.1293,
+     "y": 1.9278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_leaf_3_arm_hand",
+     "x": 0.1293,
+     "y": 1.9278
+    },
+    "shoulderR": [
+     0.16,
+     2.391
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_leaf_3_side_thigh",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_leaf_3_side_shin",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_leaf_3_side_shoe",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "knee": [
+     0.145,
+     0.827
+    ],
+    "ankle": [
+     0.13,
+     0.197
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_leaf_3_sleeve",
+     "x": 0.12,
+     "y": 2.331
+    },
+    "hair": {
+     "sprite": "Rig2/gen_leaf_3_side_hair",
+     "x": -0.41,
+     "y": 3.146
+    },
+    "hairRoot": [
+     -0.445,
+     3.761
+    ],
+    "hairBones": [
+     [
+      -0.445,
+      3.761
+     ],
+     [
+      -1.185,
+      3.211
+     ],
+     [
+      -0.815,
+      2.671
+     ],
+     [
+      -0.91,
+      2.121
+     ]
+    ]
+   }
+  },
+  {
+   "id": "moon_0",
+   "kind": "moon",
+   "form": 0,
+   "height": 3.1138,
+   "k": 0.7659,
+   "cap": {
+    "sprite": "Rig2/gen_moon_0_cap",
+    "x": 0.0,
+    "y": 1.605,
+    "orig": "Rig2/r2_moon_0_cap"
+   },
+   "stem": {
+    "sprite": "Rig2/gen_moon_0_stem",
+    "x": 0.0,
+    "y": 1.605,
+    "orig": "Rig2/r2_moon_0_stem"
+   },
+   "face": "Rig2/gen_moon_0_face_",
+   "footL": {
+    "sprite": "Rig2/gen_moon_0_footL",
+    "x": 0.0,
+    "y": 1.605,
+    "orig": "Rig2/r2_moon_0_footL"
+   },
+   "footR": {
+    "sprite": "Rig2/gen_moon_0_footR",
+    "x": 0.0,
+    "y": 1.605,
+    "orig": "Rig2/r2_moon_0_footR"
+   },
+   "ankle": [
+    -0.5498,
+    0.41
+   ],
+   "ankleR": [
+    0.573,
+    0.42
+   ],
+   "capJoint": [
+    0.0,
+    1.2
+   ],
+   "capTop": [
+    0.0,
+    3.16
+   ],
+   "sole": -0.08,
+   "capJointOrig": [
+    0.0,
+    1.2
+   ],
+   "faceOrig": "Rig2/r2_moon_0_face_",
+   "gradeScale": 0.9976
+  },
+  {
+   "id": "moon_1",
+   "kind": "moon",
+   "form": 1,
+   "height": 3.3775,
+   "k": 0.8146,
+   "cap": {
+    "sprite": "Rig2/gen_moon_1_cap",
+    "x": 0.0,
+    "y": 1.71,
+    "orig": "Rig2/r2_moon_1_cap"
+   },
+   "stem": {
+    "sprite": "Rig2/gen_moon_1_stem",
+    "x": 0.0,
+    "y": 1.71,
+    "orig": "Rig2/r2_moon_1_stem"
+   },
+   "face": "Rig2/gen_moon_1_face_",
+   "footL": {
+    "sprite": "Rig2/gen_moon_1_footL",
+    "x": 0.0,
+    "y": 1.71,
+    "orig": "Rig2/r2_moon_1_footL"
+   },
+   "footR": {
+    "sprite": "Rig2/gen_moon_1_footR",
+    "x": 0.0,
+    "y": 1.71,
+    "orig": "Rig2/r2_moon_1_footR"
+   },
+   "ankle": [
+    -0.4962,
+    0.36
+   ],
+   "ankleR": [
+    0.6151,
+    0.39
+   ],
+   "nubL": {
+    "sprite": "Rig2/gen_moon_1_nubL",
+    "x": 0.0,
+    "y": 1.71,
+    "orig": "Rig2/r2_moon_1_nubL"
+   },
+   "nubPivotL": [
+    -0.7549,
+    1.4612
+   ],
+   "nubR": {
+    "sprite": "Rig2/gen_moon_1_nubR",
+    "x": 0.0,
+    "y": 1.71,
+    "orig": "Rig2/r2_moon_1_nubR"
+   },
+   "nubPivotR": [
+    0.8008,
+    0.8925
+   ],
+   "capJoint": [
+    0.0,
+    1.35
+   ],
+   "capTop": [
+    0.0,
+    3.39
+   ],
+   "sole": -0.08,
+   "capJointOrig": [
+    0.0,
+    1.35
+   ],
+   "faceOrig": "Rig2/r2_moon_1_face_",
+   "gradeScale": 0.9995
   },
   {
    "id": "moon_2",
@@ -1262,50 +3044,50 @@
     "y": 1.6316
    },
    "head": {
-    "sprite": "Evo/k_moon_2_head_bare",
+    "sprite": "Rig2/gen_moon_2_front_head",
     "x": 0.0,
     "y": 4.0269
    },
-   "face": "Rig2/r2_moon_2_face_",
+   "face": "Rig2/gen_moon_2_front_face_",
    "hair": {
-    "sprite": "Evo/k_moon_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 3.0952
    },
    "upperArm": {
-    "sprite": "Evo/k_moon_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_moon_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_moon_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_moon_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_moon_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_moon_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_moon_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_moon_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_moon_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_moon_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_moon_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_moon_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_moon_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -1333,11 +3115,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -1348,21 +3130,258 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "hairOrig": {
+    "sprite": "Evo/k_moon_2_hair",
+    "x": 0.0,
+    "y": 3.0952
+   },
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_moon_2_head_bare",
+    "x": 0.0,
+    "y": 4.0269
+   },
+   "faceOrig": "Rig2/r2_moon_2_face_",
+   "capTopOrig": [
+    0.0,
+    5.5909
+   ],
+   "headScale": 1.0,
+   "heightOrig": 5.7294,
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_moon_2_back_head",
+     "x": -0.005,
+     "y": 4.0719
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_moon_2_back_chest",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_moon_2_back_skirt",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "capTop": [
+     0.0,
+     5.7569
+    ],
+    "shoulderL": [
+     -0.49,
+     2.2666
+    ],
+    "elbow": [
+     -0.49,
+     1.8918
+    ],
+    "wrist": [
+     -0.4906,
+     1.6115
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_moon_2_arm_upper",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_moon_2_arm_fore",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "hand": {
+     "sprite": "Rig2/gen_moon_2_arm_hand",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "shoulderR": [
+     0.47,
+     2.2666
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_moon_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_moon_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_moon_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_moon_2_sleeve",
+     "x": -0.48,
+     "y": 2.2166
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_moon_2_side_head",
+     "x": -0.135,
+     "y": 4.0666
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_moon_2_side_chest",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_moon_2_side_skirt",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     5.9566
+    ],
+    "hipL": [
+     0.02,
+     0.9245
+    ],
+    "hipR": [
+     0.09,
+     0.9245
+    ],
+    "shoulderL": [
+     0.04,
+     2.1866
+    ],
+    "elbow": [
+     0.04,
+     1.8118
+    ],
+    "wrist": [
+     0.0394,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_moon_2_arm_upper",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_moon_2_arm_fore",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_moon_2_arm_hand",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.09,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_moon_2_side_thigh",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_moon_2_side_shin",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_moon_2_side_shoe",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "knee": [
+     0.065,
+     0.7545
+    ],
+    "ankle": [
+     0.06,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_moon_2_sleeve",
+     "x": 0.05,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "moon_3",
    "kind": "moon",
    "form": 3,
-   "height": 5.8514,
+   "height": 5.6184,
    "k": 0.6084,
    "chest": {
     "sprite": "Rig2/r2_moon_3_chest",
@@ -1380,50 +3399,50 @@
     "y": 1.786
    },
    "head": {
-    "sprite": "Evo/k_moon_3_head_bare",
+    "sprite": "Rig2/gen_moon_3_front_head",
     "x": 0.0,
-    "y": 4.1914
+    "y": 4.0736
    },
-   "face": "Rig2/r2_moon_3_face_",
+   "face": "Rig2/gen_moon_3_front_face_",
    "hair": {
-    "sprite": "Evo/k_moon_3_hair",
-    "x": 0.0,
-    "y": 2.7519
+    "sprite": "Rig2/gen_moon_3_front_hair",
+    "x": -0.01,
+    "y": 2.6869
    },
    "upperArm": {
-    "sprite": "Evo/k_moon_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_moon_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_moon_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_moon_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_moon_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_moon_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
-    "sprite": "Rig2/r2_moon_3_leg",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "",
+    "x": -0.3772,
+    "y": 0.747
    },
    "thigh": {
-    "sprite": "Rig2/r2_moon_3_thigh",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_moon_3_front_thigh",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shin": {
-    "sprite": "Rig2/r2_moon_3_shin",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_moon_3_front_shin",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shoe": {
-    "sprite": "Rig2/r2_moon_3_shoe",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_moon_3_front_shoe",
+    "x": -0.3772,
+    "y": 0.747
    },
    "waist": [
     0.0,
@@ -1434,12 +3453,12 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    4.1487
+    -0.01,
+    3.4819
    ],
    "capTop": [
     0.0,
-    5.7186
+    5.4856
    ],
    "shoulderL": [
     -0.3816,
@@ -1451,10 +3470,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -1466,15 +3485,314 @@
     1.037
    ],
    "knee": [
-    -0.2322,
-    0.75
+    -0.3622,
+    0.847
    ],
    "ankle": [
-    -0.2572,
-    0.47
+    -0.3772,
+    0.247
    ],
-   "sole": -0.0,
-   "legScale": 1.0
+   "sole": -0.003,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_moon_3_head_bare",
+    "x": 0.0,
+    "y": 4.1914
+   },
+   "faceOrig": "Rig2/r2_moon_3_face_",
+   "capTopOrig": [
+    0.0,
+    5.7186
+   ],
+   "headScale": 0.9245,
+   "heightOrig": 5.8514,
+   "hairOrig": {
+    "sprite": "Evo/k_moon_3_hair",
+    "x": 0.0,
+    "y": 2.7519
+   },
+   "hairBones": [
+    [
+     -0.01,
+     3.4819
+    ],
+    [
+     -0.01,
+     2.7719
+    ],
+    [
+     -0.01,
+     2.0519
+    ],
+    [
+     -0.01,
+     1.3419
+    ]
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_moon_3_back_head",
+     "x": 0.005,
+     "y": 4.0409
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_moon_3_back_chest",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_moon_3_back_skirt",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "waist": [
+     0.0,
+     2.161
+    ],
+    "capTop": [
+     0.0,
+     5.4759
+    ],
+    "shoulderL": [
+     -0.392,
+     2.491
+    ],
+    "elbow": [
+     -0.392,
+     2.0822
+    ],
+    "wrist": [
+     -0.3926,
+     1.7765
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_moon_3_arm_upper",
+     "x": -0.3727,
+     "y": 2.0378
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_moon_3_arm_fore",
+     "x": -0.3727,
+     "y": 2.0378
+    },
+    "hand": {
+     "sprite": "Rig2/gen_moon_3_arm_hand",
+     "x": -0.3727,
+     "y": 2.0378
+    },
+    "shoulderR": [
+     0.392,
+     2.491
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_moon_3_back_thigh",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_moon_3_back_shin",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_moon_3_back_shoe",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "knee": [
+     -0.2972,
+     0.837
+    ],
+    "ankle": [
+     -0.2772,
+     0.237
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_moon_3_sleeve",
+     "x": -0.382,
+     "y": 2.441
+    },
+    "hair": {
+     "sprite": "Rig2/gen_moon_3_back_hair",
+     "x": 0.025,
+     "y": 3.051
+    },
+    "hairRoot": [
+     0.025,
+     3.751
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.751
+     ],
+     [
+      0.025,
+      3.121
+     ],
+     [
+      0.025,
+      2.501
+     ],
+     [
+      0.025,
+      1.881
+     ]
+    ]
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_moon_3_side_head",
+     "x": -0.005,
+     "y": 4.006
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_moon_3_side_chest",
+     "x": -0.18,
+     "y": 1.921
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_moon_3_side_skirt",
+     "x": -0.18,
+     "y": 1.921
+    },
+    "waist": [
+     0.0,
+     2.101
+    ],
+    "neck": [
+     0.0,
+     2.631
+    ],
+    "capTop": [
+     0.0,
+     5.581
+    ],
+    "hipL": [
+     0.06,
+     1.037
+    ],
+    "hipR": [
+     0.13,
+     1.037
+    ],
+    "shoulderL": [
+     0.08,
+     2.381
+    ],
+    "elbow": [
+     0.08,
+     1.9722
+    ],
+    "wrist": [
+     0.0794,
+     1.6665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_moon_3_arm_upper",
+     "x": 0.0993,
+     "y": 1.9278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_moon_3_arm_fore",
+     "x": 0.0993,
+     "y": 1.9278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_moon_3_arm_hand",
+     "x": 0.0993,
+     "y": 1.9278
+    },
+    "shoulderR": [
+     0.13,
+     2.391
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_moon_3_side_thigh",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_moon_3_side_shin",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_moon_3_side_shoe",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "knee": [
+     0.115,
+     0.827
+    ],
+    "ankle": [
+     0.1,
+     0.197
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_moon_3_sleeve",
+     "x": 0.09,
+     "y": 2.331
+    },
+    "hair": {
+     "sprite": "Rig2/gen_moon_3_side_hair",
+     "x": -0.41,
+     "y": 3.241
+    },
+    "hairRoot": [
+     -0.255,
+     3.811
+    ],
+    "hairBones": [
+     [
+      -0.255,
+      3.811
+     ],
+     [
+      -0.52,
+      3.301
+     ],
+     [
+      -0.685,
+      2.791
+     ],
+     [
+      -0.665,
+      2.281
+     ]
+    ]
+   }
   },
   {
    "id": "rock_0",
@@ -1483,25 +3801,29 @@
    "height": 2.53,
    "k": 0.8182,
    "cap": {
-    "sprite": "Rig2/r2_rock_0_cap",
+    "sprite": "Rig2/gen_rock_0_cap",
     "x": 0.02,
-    "y": 1.24
+    "y": 1.24,
+    "orig": "Rig2/r2_rock_0_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_rock_0_stem",
+    "sprite": "Rig2/gen_rock_0_stem",
     "x": 0.02,
-    "y": 1.24
+    "y": 1.24,
+    "orig": "Rig2/r2_rock_0_stem"
    },
-   "face": "Rig2/r2_rock_0_face_",
+   "face": "Rig2/gen_rock_0_face_",
    "footL": {
-    "sprite": "Rig2/r2_rock_0_footL",
+    "sprite": "Rig2/gen_rock_0_footL",
     "x": 0.02,
-    "y": 1.24
+    "y": 1.24,
+    "orig": "Rig2/r2_rock_0_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_rock_0_footR",
+    "sprite": "Rig2/gen_rock_0_footR",
     "x": 0.02,
-    "y": 1.24
+    "y": 1.24,
+    "orig": "Rig2/r2_rock_0_footR"
    },
    "ankle": [
     -0.3995,
@@ -1519,7 +3841,13 @@
     0.02,
     2.48
    ],
-   "sole": -0.1
+   "sole": -0.1,
+   "gradeScale": 1.2278,
+   "capJointOrig": [
+    0.02,
+    0.81
+   ],
+   "faceOrig": "Rig2/r2_rock_0_face_"
   },
   {
    "id": "rock_1",
@@ -1528,25 +3856,29 @@
    "height": 3.12,
    "k": 0.7949,
    "cap": {
-    "sprite": "Rig2/r2_rock_1_cap",
+    "sprite": "Rig2/gen_rock_1_cap",
     "x": 0.015,
-    "y": 1.55
+    "y": 1.55,
+    "orig": "Rig2/r2_rock_1_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_rock_1_stem",
+    "sprite": "Rig2/gen_rock_1_stem",
     "x": 0.015,
-    "y": 1.55
+    "y": 1.55,
+    "orig": "Rig2/r2_rock_1_stem"
    },
-   "face": "Rig2/r2_rock_1_face_",
+   "face": "Rig2/gen_rock_1_face_",
    "footL": {
-    "sprite": "Rig2/r2_rock_1_footL",
+    "sprite": "Rig2/gen_rock_1_footL",
     "x": 0.015,
-    "y": 1.55
+    "y": 1.55,
+    "orig": "Rig2/r2_rock_1_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_rock_1_footR",
+    "sprite": "Rig2/gen_rock_1_footR",
     "x": 0.015,
-    "y": 1.55
+    "y": 1.55,
+    "orig": "Rig2/r2_rock_1_footR"
    },
    "ankle": [
     -0.524,
@@ -1557,18 +3889,20 @@
     0.37
    ],
    "nubL": {
-    "sprite": "Rig2/r2_rock_1_nubL",
+    "sprite": "Rig2/gen_rock_1_nubL",
     "x": 0.015,
-    "y": 1.55
+    "y": 1.55,
+    "orig": "Rig2/r2_rock_1_nubL"
    },
    "nubPivotL": [
     -0.6773,
     0.6751
    ],
    "nubR": {
-    "sprite": "Rig2/r2_rock_1_nubR",
+    "sprite": "Rig2/gen_rock_1_nubR",
     "x": 0.015,
-    "y": 1.55
+    "y": 1.55,
+    "orig": "Rig2/r2_rock_1_nubR"
    },
    "nubPivotR": [
     0.799,
@@ -1582,13 +3916,19 @@
     0.015,
     3.07
    ],
-   "sole": -0.07
+   "sole": -0.07,
+   "gradeScale": 1.082,
+   "capJointOrig": [
+    0.015,
+    1.08
+   ],
+   "faceOrig": "Rig2/r2_rock_1_face_"
   },
   {
    "id": "rock_2",
    "kind": "rock",
    "form": 2,
-   "height": 5.841,
+   "height": 5.9871,
    "k": 0.5273,
    "chest": {
     "sprite": "Rig2/r2_rock_2_chest",
@@ -1606,50 +3946,50 @@
     "y": 1.6316
    },
    "head": {
-    "sprite": "Evo/k_rock_2_head_bare",
+    "sprite": "Rig2/gen_rock_2_front_head",
     "x": 0.0,
-    "y": 4.081
+    "y": 4.1549
    },
-   "face": "Rig2/r2_rock_2_face_",
+   "face": "Rig2/gen_rock_2_front_face_",
    "hair": {
-    "sprite": "Evo/k_rock_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 3.1315
    },
    "upperArm": {
-    "sprite": "Evo/k_rock_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_rock_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_rock_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_rock_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_rock_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_rock_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_rock_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_rock_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_rock_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_rock_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_rock_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_rock_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_rock_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -1665,7 +4005,7 @@
    ],
    "capTop": [
     0.0,
-    5.7002
+    5.8463
    ],
    "shoulderL": [
     -0.4464,
@@ -1677,11 +4017,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -1692,21 +4032,258 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "hairOrig": {
+    "sprite": "Evo/k_rock_2_hair",
+    "x": 0.0,
+    "y": 3.1315
+   },
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_rock_2_head_bare",
+    "x": 0.0,
+    "y": 4.081
+   },
+   "faceOrig": "Rig2/r2_rock_2_face_",
+   "capTopOrig": [
+    0.0,
+    5.7002
+   ],
+   "headScale": 1.0446,
+   "heightOrig": 5.841,
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_rock_2_back_head",
+     "x": 0.005,
+     "y": 4.1126
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_rock_2_back_chest",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_rock_2_back_skirt",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "capTop": [
+     0.0,
+     5.8476
+    ],
+    "shoulderL": [
+     -0.49,
+     2.2666
+    ],
+    "elbow": [
+     -0.49,
+     1.8918
+    ],
+    "wrist": [
+     -0.4906,
+     1.6115
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_rock_2_arm_upper",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_rock_2_arm_fore",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "hand": {
+     "sprite": "Rig2/gen_rock_2_arm_hand",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "shoulderR": [
+     0.47,
+     2.2666
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_rock_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_rock_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_rock_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_rock_2_sleeve",
+     "x": -0.48,
+     "y": 2.2166
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_rock_2_side_head",
+     "x": -0.12,
+     "y": 4.0266
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_rock_2_side_chest",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_rock_2_side_skirt",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     5.8166
+    ],
+    "hipL": [
+     0.02,
+     0.9245
+    ],
+    "hipR": [
+     0.09,
+     0.9245
+    ],
+    "shoulderL": [
+     0.04,
+     2.1866
+    ],
+    "elbow": [
+     0.04,
+     1.8118
+    ],
+    "wrist": [
+     0.0394,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_rock_2_arm_upper",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_rock_2_arm_fore",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_rock_2_arm_hand",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.09,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_rock_2_side_thigh",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_rock_2_side_shin",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_rock_2_side_shoe",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "knee": [
+     0.065,
+     0.7545
+    ],
+    "ankle": [
+     0.06,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_rock_2_sleeve",
+     "x": 0.05,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "rock_3",
    "kind": "rock",
    "form": 3,
-   "height": 6.2006,
+   "height": 5.5732,
    "k": 0.5032,
    "chest": {
     "sprite": "Rig2/r2_rock_3_chest",
@@ -1724,50 +4301,50 @@
     "y": 1.786
    },
    "head": {
-    "sprite": "Evo/k_rock_3_head_bare",
+    "sprite": "Rig2/gen_rock_3_front_head",
     "x": 0.0,
-    "y": 4.3606
+    "y": 4.0435
    },
-   "face": "Rig2/r2_rock_3_face_",
+   "face": "Rig2/gen_rock_3_front_face_",
    "hair": {
-    "sprite": "Evo/k_rock_3_hair",
-    "x": 0.0,
-    "y": 3.2051
+    "sprite": "Rig2/gen_rock_3_front_hair",
+    "x": -0.01,
+    "y": 3.0851
    },
    "upperArm": {
-    "sprite": "Evo/k_rock_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_rock_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_rock_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_rock_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_rock_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_rock_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
-    "sprite": "Rig2/r2_rock_3_leg",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "",
+    "x": -0.3772,
+    "y": 0.747
    },
    "thigh": {
-    "sprite": "Rig2/r2_rock_3_thigh",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_rock_3_front_thigh",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shin": {
-    "sprite": "Rig2/r2_rock_3_shin",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_rock_3_front_shin",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shoe": {
-    "sprite": "Rig2/r2_rock_3_shoe",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_rock_3_front_shoe",
+    "x": -0.3772,
+    "y": 0.747
    },
    "waist": [
     0.0,
@@ -1778,12 +4355,12 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    4.4363
+    -0.01,
+    3.8151
    ],
    "capTop": [
     0.0,
-    6.0534
+    5.426
    ],
    "shoulderL": [
     -0.3816,
@@ -1795,10 +4372,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -1810,15 +4387,314 @@
     1.037
    ],
    "knee": [
-    -0.2322,
-    0.75
+    -0.3622,
+    0.847
    ],
    "ankle": [
-    -0.2572,
-    0.47
+    -0.3772,
+    0.247
    ],
-   "sole": -0.0,
-   "legScale": 1.0
+   "sole": -0.003,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_rock_3_head_bare",
+    "x": 0.0,
+    "y": 4.3606
+   },
+   "faceOrig": "Rig2/r2_rock_3_face_",
+   "capTopOrig": [
+    0.0,
+    6.0534
+   ],
+   "headScale": 0.8167,
+   "heightOrig": 6.2006,
+   "hairOrig": {
+    "sprite": "Evo/k_rock_3_hair",
+    "x": 0.0,
+    "y": 3.2051
+   },
+   "hairBones": [
+    [
+     -0.01,
+     3.8151
+    ],
+    [
+     -0.01,
+     3.1651
+    ],
+    [
+     -0.01,
+     2.5151
+    ],
+    [
+     -0.01,
+     1.8551
+    ]
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_rock_3_back_head",
+     "x": 0.025,
+     "y": 3.9985
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_rock_3_back_chest",
+     "x": -0.01,
+     "y": 1.796
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_rock_3_back_skirt",
+     "x": -0.01,
+     "y": 1.796
+    },
+    "waist": [
+     0.0,
+     2.191
+    ],
+    "capTop": [
+     0.0,
+     5.3935
+    ],
+    "shoulderL": [
+     -0.373,
+     2.511
+    ],
+    "elbow": [
+     -0.373,
+     2.1022
+    ],
+    "wrist": [
+     -0.3736,
+     1.7965
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_rock_3_arm_upper",
+     "x": -0.3537,
+     "y": 2.0578
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_rock_3_arm_fore",
+     "x": -0.3537,
+     "y": 2.0578
+    },
+    "hand": {
+     "sprite": "Rig2/gen_rock_3_arm_hand",
+     "x": -0.3537,
+     "y": 2.0578
+    },
+    "shoulderR": [
+     0.363,
+     2.511
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_rock_3_back_thigh",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_rock_3_back_shin",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_rock_3_back_shoe",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "knee": [
+     -0.2972,
+     0.837
+    ],
+    "ankle": [
+     -0.2772,
+     0.237
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_rock_3_sleeve",
+     "x": -0.363,
+     "y": 2.461
+    },
+    "hair": {
+     "sprite": "Rig2/gen_rock_3_back_hair",
+     "x": 0.025,
+     "y": 3.116
+    },
+    "hairRoot": [
+     0.025,
+     3.791
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.791
+     ],
+     [
+      0.025,
+      3.191
+     ],
+     [
+      0.025,
+      2.591
+     ],
+     [
+      0.025,
+      1.991
+     ]
+    ]
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_rock_3_side_head",
+     "x": 0.015,
+     "y": 3.876
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_rock_3_side_chest",
+     "x": -0.16,
+     "y": 1.921
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_rock_3_side_skirt",
+     "x": -0.16,
+     "y": 1.921
+    },
+    "waist": [
+     0.0,
+     2.081
+    ],
+    "neck": [
+     0.0,
+     2.631
+    ],
+    "capTop": [
+     0.0,
+     5.311
+    ],
+    "hipL": [
+     0.02,
+     1.037
+    ],
+    "hipR": [
+     0.09,
+     1.037
+    ],
+    "shoulderL": [
+     0.04,
+     2.381
+    ],
+    "elbow": [
+     0.04,
+     1.9722
+    ],
+    "wrist": [
+     0.0394,
+     1.6665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_rock_3_arm_upper",
+     "x": 0.0593,
+     "y": 1.9278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_rock_3_arm_fore",
+     "x": 0.0593,
+     "y": 1.9278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_rock_3_arm_hand",
+     "x": 0.0593,
+     "y": 1.9278
+    },
+    "shoulderR": [
+     0.09,
+     2.391
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_rock_3_side_thigh",
+     "x": 0.085,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_rock_3_side_shin",
+     "x": 0.085,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_rock_3_side_shoe",
+     "x": 0.085,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.085,
+     "y": 0.747
+    },
+    "knee": [
+     0.075,
+     0.827
+    ],
+    "ankle": [
+     0.06,
+     0.197
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_rock_3_sleeve",
+     "x": 0.05,
+     "y": 2.331
+    },
+    "hair": {
+     "sprite": "Rig2/gen_rock_3_side_hair",
+     "x": -0.41,
+     "y": 3.151
+    },
+    "hairRoot": [
+     -0.33,
+     3.761
+    ],
+    "hairBones": [
+     [
+      -0.33,
+      3.761
+     ],
+     [
+      -1.03,
+      3.221
+     ],
+     [
+      -0.59,
+      2.671
+     ],
+     [
+      -0.85,
+      2.131
+     ]
+    ]
+   }
   },
   {
    "id": "spark_0",
@@ -1827,25 +4703,29 @@
    "height": 3.13,
    "k": 0.7508,
    "cap": {
-    "sprite": "Rig2/r2_spark_0_cap",
+    "sprite": "Rig2/gen_spark_0_cap",
     "x": 0.01,
-    "y": 1.54
+    "y": 1.54,
+    "orig": "Rig2/r2_spark_0_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_spark_0_stem",
+    "sprite": "Rig2/gen_spark_0_stem",
     "x": 0.01,
-    "y": 1.54
+    "y": 1.54,
+    "orig": "Rig2/r2_spark_0_stem"
    },
-   "face": "Rig2/r2_spark_0_face_",
+   "face": "Rig2/gen_spark_0_face_",
    "footL": {
-    "sprite": "Rig2/r2_spark_0_footL",
+    "sprite": "Rig2/gen_spark_0_footL",
     "x": 0.01,
-    "y": 1.54
+    "y": 1.54,
+    "orig": "Rig2/r2_spark_0_footL"
    },
    "footR": {
-    "sprite": "Rig2/r2_spark_0_footR",
+    "sprite": "Rig2/gen_spark_0_footR",
     "x": 0.01,
-    "y": 1.54
+    "y": 1.54,
+    "orig": "Rig2/r2_spark_0_footR"
    },
    "ankle": [
     -0.3956,
@@ -1857,13 +4737,19 @@
    ],
    "capJoint": [
     0.01,
-    1.68
+    1.37
    ],
    "capTop": [
     0.01,
     3.08
    ],
-   "sole": -0.1
+   "sole": -0.1,
+   "gradeScale": 0.9924,
+   "capJointOrig": [
+    0.01,
+    1.68
+   ],
+   "faceOrig": "Rig2/r2_spark_0_face_"
   },
   {
    "id": "spark_1",
@@ -1872,16 +4758,18 @@
    "height": 3.44,
    "k": 0.8256,
    "cap": {
-    "sprite": "Rig2/r2_spark_1_cap",
+    "sprite": "Rig2/gen_spark_1_cap",
     "x": 0.0,
-    "y": 1.71
+    "y": 1.71,
+    "orig": "Rig2/r2_spark_1_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_spark_1_stem",
+    "sprite": "Rig2/gen_spark_1_stem",
     "x": 0.0,
-    "y": 1.71
+    "y": 1.71,
+    "orig": "Rig2/r2_spark_1_stem"
    },
-   "face": "Rig2/r2_spark_1_face_",
+   "face": "Rig2/gen_spark_1_face_",
    "footL": {
     "sprite": "Rig2/r2_spark_1_footL",
     "x": 0.0,
@@ -1920,19 +4808,25 @@
    ],
    "capJoint": [
     0.0,
-    2.04
+    1.78
    ],
    "capTop": [
     0.0,
     3.39
    ],
-   "sole": -0.07
+   "sole": -0.07,
+   "gradeScale": 0.9814,
+   "capJointOrig": [
+    0.0,
+    2.04
+   ],
+   "faceOrig": "Rig2/r2_spark_1_face_"
   },
   {
    "id": "spark_2",
    "kind": "spark",
    "form": 2,
-   "height": 5.7585,
+   "height": 6.2286,
    "k": 0.5904,
    "chest": {
     "sprite": "Rig2/r2_spark_2_chest",
@@ -1950,50 +4844,50 @@
     "y": 1.6316
    },
    "head": {
-    "sprite": "Evo/k_spark_2_head_bare",
+    "sprite": "Rig2/gen_spark_2_front_head",
     "x": 0.0,
-    "y": 4.041
+    "y": 4.2784
    },
-   "face": "Rig2/r2_spark_2_face_",
+   "face": "Rig2/gen_spark_2_front_face_",
    "hair": {
-    "sprite": "Evo/k_spark_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 3.1863
    },
    "upperArm": {
-    "sprite": "Evo/k_spark_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_spark_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_spark_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_spark_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_spark_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_spark_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_spark_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_spark_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_spark_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_spark_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_spark_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_spark_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_spark_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -2009,7 +4903,7 @@
    ],
    "capTop": [
     0.0,
-    5.6234
+    6.0935
    ],
    "shoulderL": [
     -0.4464,
@@ -2021,11 +4915,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -2036,21 +4930,258 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "hairOrig": {
+    "sprite": "Evo/k_spark_2_hair",
+    "x": 0.0,
+    "y": 3.1863
+   },
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_spark_2_head_bare",
+    "x": 0.0,
+    "y": 4.041
+   },
+   "faceOrig": "Rig2/r2_spark_2_face_",
+   "capTopOrig": [
+    0.0,
+    5.6234
+   ],
+   "headScale": 1.1471,
+   "heightOrig": 5.7585,
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_spark_2_back_head",
+     "x": -0.07,
+     "y": 4.2649
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_spark_2_back_chest",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_spark_2_back_skirt",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "capTop": [
+     0.0,
+     6.1599
+    ],
+    "shoulderL": [
+     -0.49,
+     2.2666
+    ],
+    "elbow": [
+     -0.49,
+     1.8918
+    ],
+    "wrist": [
+     -0.4906,
+     1.6115
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_spark_2_arm_upper",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_spark_2_arm_fore",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "hand": {
+     "sprite": "Rig2/gen_spark_2_arm_hand",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "shoulderR": [
+     0.47,
+     2.2666
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_spark_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_spark_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_spark_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_spark_2_sleeve",
+     "x": -0.48,
+     "y": 2.2166
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_spark_2_side_head",
+     "x": -0.085,
+     "y": 3.9216
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_spark_2_side_chest",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_spark_2_side_skirt",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     5.5666
+    ],
+    "hipL": [
+     0.02,
+     0.9245
+    ],
+    "hipR": [
+     0.09,
+     0.9245
+    ],
+    "shoulderL": [
+     0.04,
+     2.1866
+    ],
+    "elbow": [
+     0.04,
+     1.8118
+    ],
+    "wrist": [
+     0.0394,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_spark_2_arm_upper",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_spark_2_arm_fore",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_spark_2_arm_hand",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.09,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_spark_2_side_thigh",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_spark_2_side_shin",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_spark_2_side_shoe",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "knee": [
+     0.065,
+     0.7545
+    ],
+    "ankle": [
+     0.06,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_spark_2_sleeve",
+     "x": 0.05,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "spark_3",
    "kind": "spark",
    "form": 3,
-   "height": 5.6235,
+   "height": 5.8105,
    "k": 0.69,
    "chest": {
     "sprite": "Rig2/r2_spark_3_chest",
@@ -2068,50 +5199,50 @@
     "y": 1.786
    },
    "head": {
-    "sprite": "Evo/k_spark_3_head_bare",
+    "sprite": "Rig2/gen_spark_3_front_head",
     "x": 0.0,
-    "y": 4.081
+    "y": 4.1756
    },
-   "face": "Rig2/r2_spark_3_face_",
+   "face": "Rig2/gen_spark_3_front_face_",
    "hair": {
-    "sprite": "Evo/k_spark_3_hair",
-    "x": 0.0,
-    "y": 2.7587
+    "sprite": "Rig2/gen_spark_3_front_hair",
+    "x": -0.01,
+    "y": 2.9037
    },
    "upperArm": {
-    "sprite": "Evo/k_spark_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_spark_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_spark_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_spark_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_spark_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_spark_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
-    "sprite": "Rig2/r2_spark_3_leg",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "",
+    "x": -0.3772,
+    "y": 0.747
    },
    "thigh": {
-    "sprite": "Rig2/r2_spark_3_thigh",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_spark_3_front_thigh",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shin": {
-    "sprite": "Rig2/r2_spark_3_shin",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_spark_3_front_shin",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shoe": {
-    "sprite": "Rig2/r2_spark_3_shoe",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_spark_3_front_shoe",
+    "x": -0.3772,
+    "y": 0.747
    },
    "waist": [
     0.0,
@@ -2122,12 +5253,12 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    4.0439
+    -0.01,
+    3.5537
    ],
    "capTop": [
     0.0,
-    5.4978
+    5.6848
    ],
    "shoulderL": [
     -0.3816,
@@ -2139,10 +5270,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -2154,15 +5285,438 @@
     1.037
    ],
    "knee": [
-    -0.2322,
-    0.75
+    -0.3622,
+    0.847
    ],
    "ankle": [
-    -0.2572,
-    0.47
+    -0.3772,
+    0.247
    ],
-   "sole": -0.0,
-   "legScale": 1.0
+   "sole": -0.003,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_spark_3_head_bare",
+    "x": 0.0,
+    "y": 4.081
+   },
+   "faceOrig": "Rig2/r2_spark_3_face_",
+   "capTopOrig": [
+    0.0,
+    5.4978
+   ],
+   "headScale": 1.0652,
+   "heightOrig": 5.6235,
+   "hairOrig": {
+    "sprite": "Evo/k_spark_3_hair",
+    "x": 0.0,
+    "y": 2.7587
+   },
+   "hairBones": [
+    [
+     -0.01,
+     3.5537
+    ],
+    [
+     -0.01,
+     2.9737
+    ],
+    [
+     -0.01,
+     2.3937
+    ],
+    [
+     -0.01,
+     1.8037
+    ]
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_spark_3_back_head",
+     "x": -0.015,
+     "y": 4.1377
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_spark_3_back_chest",
+     "x": -0.005,
+     "y": 1.796
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_spark_3_back_skirt",
+     "x": -0.005,
+     "y": 1.796
+    },
+    "waist": [
+     0.0,
+     2.101
+    ],
+    "capTop": [
+     0.0,
+     5.6677
+    ],
+    "shoulderL": [
+     -0.357,
+     2.481
+    ],
+    "elbow": [
+     -0.357,
+     2.0722
+    ],
+    "wrist": [
+     -0.3576,
+     1.7665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_spark_3_arm_upper",
+     "x": -0.3377,
+     "y": 2.0278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_spark_3_arm_fore",
+     "x": -0.3377,
+     "y": 2.0278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_spark_3_arm_hand",
+     "x": -0.3377,
+     "y": 2.0278
+    },
+    "shoulderR": [
+     0.347,
+     2.481
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_spark_3_back_thigh",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_spark_3_back_shin",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_spark_3_back_shoe",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "knee": [
+     -0.2972,
+     0.837
+    ],
+    "ankle": [
+     -0.2772,
+     0.237
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_spark_3_sleeve",
+     "x": -0.347,
+     "y": 2.431
+    },
+    "hair": {
+     "sprite": "Rig2/gen_spark_3_back_hair",
+     "x": 0.025,
+     "y": 3.241
+    },
+    "hairRoot": [
+     0.025,
+     3.861
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.861
+     ],
+     [
+      0.025,
+      3.311
+     ],
+     [
+      0.025,
+      2.751
+     ],
+     [
+      0.025,
+      2.201
+     ]
+    ]
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_spark_3_side_head",
+     "x": -0.13,
+     "y": 3.926
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_spark_3_side_chest",
+     "x": -0.12,
+     "y": 1.921
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_spark_3_side_skirt",
+     "x": -0.12,
+     "y": 1.921
+    },
+    "waist": [
+     0.0,
+     2.111
+    ],
+    "neck": [
+     0.0,
+     2.631
+    ],
+    "capTop": [
+     0.0,
+     5.371
+    ],
+    "hipL": [
+     0.095,
+     1.037
+    ],
+    "hipR": [
+     0.165,
+     1.037
+    ],
+    "shoulderL": [
+     0.115,
+     2.381
+    ],
+    "elbow": [
+     0.115,
+     1.9722
+    ],
+    "wrist": [
+     0.1144,
+     1.6665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_spark_3_arm_upper",
+     "x": 0.1343,
+     "y": 1.9278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_spark_3_arm_fore",
+     "x": 0.1343,
+     "y": 1.9278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_spark_3_arm_hand",
+     "x": 0.1343,
+     "y": 1.9278
+    },
+    "shoulderR": [
+     0.165,
+     2.391
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_spark_3_side_thigh",
+     "x": 0.16,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_spark_3_side_shin",
+     "x": 0.16,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_spark_3_side_shoe",
+     "x": 0.16,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.16,
+     "y": 0.747
+    },
+    "knee": [
+     0.15,
+     0.827
+    ],
+    "ankle": [
+     0.135,
+     0.197
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_spark_3_sleeve",
+     "x": 0.125,
+     "y": 2.331
+    },
+    "hair": {
+     "sprite": "Rig2/gen_spark_3_side_hair",
+     "x": -0.41,
+     "y": 3.286
+    },
+    "hairRoot": [
+     -0.34,
+     3.841
+    ],
+    "hairBones": [
+     [
+      -0.34,
+      3.841
+     ],
+     [
+      -0.57,
+      3.341
+     ],
+     [
+      -0.735,
+      2.851
+     ],
+     [
+      -0.78,
+      2.351
+     ]
+    ]
+   }
+  },
+  {
+   "id": "star_0",
+   "kind": "star",
+   "form": 0,
+   "height": 3.1162,
+   "k": 0.7659,
+   "cap": {
+    "sprite": "Rig2/gen_star_0_cap",
+    "x": 0.0,
+    "y": 1.59,
+    "orig": "Rig2/r2_star_0_cap"
+   },
+   "stem": {
+    "sprite": "Rig2/gen_star_0_stem",
+    "x": 0.0,
+    "y": 1.59,
+    "orig": "Rig2/r2_star_0_stem"
+   },
+   "face": "Rig2/gen_star_0_face_",
+   "footL": {
+    "sprite": "Rig2/r2_star_0_footL",
+    "x": 0.0,
+    "y": 1.59
+   },
+   "footR": {
+    "sprite": "Rig2/r2_star_0_footR",
+    "x": 0.0,
+    "y": 1.59
+   },
+   "ankle": [
+    -0.5844,
+    0.36
+   ],
+   "ankleR": [
+    0.5302,
+    0.37
+   ],
+   "capJoint": [
+    0.0,
+    1.25
+   ],
+   "capTop": [
+    0.0,
+    3.14
+   ],
+   "sole": -0.08,
+   "capJointOrig": [
+    0.0,
+    1.27
+   ],
+   "faceOrig": "Rig2/r2_star_0_face_",
+   "gradeScale": 0.9968
+  },
+  {
+   "id": "star_1",
+   "kind": "star",
+   "form": 1,
+   "height": 3.38,
+   "k": 0.8146,
+   "cap": {
+    "sprite": "Rig2/gen_star_1_cap",
+    "x": 0.0,
+    "y": 1.73,
+    "orig": "Rig2/r2_star_1_cap"
+   },
+   "stem": {
+    "sprite": "Rig2/gen_star_1_stem",
+    "x": 0.0,
+    "y": 1.73,
+    "orig": "Rig2/r2_star_1_stem"
+   },
+   "face": "Rig2/gen_star_1_face_",
+   "footL": {
+    "sprite": "Rig2/r2_star_1_footL",
+    "x": 0.0,
+    "y": 1.73
+   },
+   "footR": {
+    "sprite": "Rig2/r2_star_1_footR",
+    "x": 0.0,
+    "y": 1.73
+   },
+   "ankle": [
+    -0.6154,
+    0.38
+   ],
+   "ankleR": [
+    0.5195,
+    0.41
+   ],
+   "nubL": {
+    "sprite": "Rig2/r2_star_1_nubL",
+    "x": 0.0,
+    "y": 1.73
+   },
+   "nubPivotL": [
+    -0.8038,
+    0.8582
+   ],
+   "nubR": {
+    "sprite": "Rig2/r2_star_1_nubR",
+    "x": 0.0,
+    "y": 1.73
+   },
+   "nubPivotR": [
+    0.7626,
+    0.8405
+   ],
+   "capJoint": [
+    0.0,
+    1.63
+   ],
+   "capTop": [
+    0.0,
+    3.42
+   ],
+   "sole": -0.08,
+   "capJointOrig": [
+    0.0,
+    1.66
+   ],
+   "faceOrig": "Rig2/r2_star_1_face_",
+   "gradeScale": 0.9988
   },
   {
    "id": "star_2",
@@ -2186,50 +5740,50 @@
     "y": 1.6316
    },
    "head": {
-    "sprite": "Evo/k_star_2_head_bare",
+    "sprite": "Rig2/gen_star_2_front_head",
     "x": 0.0,
     "y": 4.1938
    },
-   "face": "Rig2/r2_star_2_face_",
+   "face": "Rig2/gen_star_2_front_face_",
    "hair": {
-    "sprite": "Evo/k_star_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 3.2378
    },
    "upperArm": {
-    "sprite": "Evo/k_star_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_star_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_star_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_star_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_star_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_star_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_star_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_star_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_star_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_star_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_star_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_star_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_star_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -2257,11 +5811,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -2272,21 +5826,258 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "hairOrig": {
+    "sprite": "Evo/k_star_2_hair",
+    "x": 0.0,
+    "y": 3.2378
+   },
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_star_2_head_bare",
+    "x": 0.0,
+    "y": 4.1938
+   },
+   "faceOrig": "Rig2/r2_star_2_face_",
+   "capTopOrig": [
+    0.0,
+    5.9234
+   ],
+   "headScale": 1.0,
+   "heightOrig": 6.0738,
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_star_2_back_head",
+     "x": 0.005,
+     "y": 4.1188
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_star_2_back_chest",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_star_2_back_skirt",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "capTop": [
+     0.0,
+     5.8638
+    ],
+    "shoulderL": [
+     -0.49,
+     2.2666
+    ],
+    "elbow": [
+     -0.49,
+     1.8918
+    ],
+    "wrist": [
+     -0.4906,
+     1.6115
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_star_2_arm_upper",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_star_2_arm_fore",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "hand": {
+     "sprite": "Rig2/gen_star_2_arm_hand",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "shoulderR": [
+     0.47,
+     2.2666
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_star_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_star_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_star_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_star_2_sleeve",
+     "x": -0.48,
+     "y": 2.2166
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_star_2_side_head",
+     "x": -0.15,
+     "y": 3.9916
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_star_2_side_chest",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_star_2_side_skirt",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     5.6866
+    ],
+    "hipL": [
+     0.02,
+     0.9245
+    ],
+    "hipR": [
+     0.09,
+     0.9245
+    ],
+    "shoulderL": [
+     0.04,
+     2.1866
+    ],
+    "elbow": [
+     0.04,
+     1.8118
+    ],
+    "wrist": [
+     0.0394,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_star_2_arm_upper",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_star_2_arm_fore",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_star_2_arm_hand",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.09,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_star_2_side_thigh",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_star_2_side_shin",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_star_2_side_shoe",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "knee": [
+     0.065,
+     0.7545
+    ],
+    "ankle": [
+     0.06,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_star_2_sleeve",
+     "x": 0.05,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "star_3",
    "kind": "star",
    "form": 3,
-   "height": 5.9145,
+   "height": 5.98,
    "k": 0.5816,
    "chest": {
     "sprite": "Rig2/r2_star_3_chest",
@@ -2304,50 +6095,50 @@
     "y": 1.786
    },
    "head": {
-    "sprite": "Evo/k_star_3_head_bare",
+    "sprite": "Rig2/gen_star_3_front_head",
     "x": 0.0,
-    "y": 4.222
+    "y": 4.2551
    },
-   "face": "Rig2/r2_star_3_face_",
+   "face": "Rig2/gen_star_3_front_face_",
    "hair": {
-    "sprite": "Evo/k_star_3_hair",
-    "x": 0.0,
-    "y": 2.9622
+    "sprite": "Rig2/gen_star_3_front_hair",
+    "x": -0.01,
+    "y": 3.2222
    },
    "upperArm": {
-    "sprite": "Evo/k_star_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_star_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_star_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_star_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_star_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_star_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
-    "sprite": "Rig2/r2_star_3_leg",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "",
+    "x": -0.3772,
+    "y": 0.747
    },
    "thigh": {
-    "sprite": "Rig2/r2_star_3_thigh",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_star_3_front_thigh",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shin": {
-    "sprite": "Rig2/r2_star_3_shin",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_star_3_front_shin",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shoe": {
-    "sprite": "Rig2/r2_star_3_shoe",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_star_3_front_shoe",
+    "x": -0.3772,
+    "y": 0.747
    },
    "waist": [
     0.0,
@@ -2358,12 +6149,12 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    4.2366
+    -0.01,
+    3.8222
    ],
    "capTop": [
     0.0,
-    5.7768
+    5.8423
    ],
    "shoulderL": [
     -0.3816,
@@ -2375,10 +6166,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -2390,15 +6181,314 @@
     1.037
    ],
    "knee": [
-    -0.2322,
-    0.75
+    -0.3622,
+    0.847
    ],
    "ankle": [
-    -0.2572,
-    0.47
+    -0.3772,
+    0.247
    ],
-   "sole": -0.0,
-   "legScale": 1.0
+   "sole": -0.003,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_star_3_head_bare",
+    "x": 0.0,
+    "y": 4.222
+   },
+   "faceOrig": "Rig2/r2_star_3_face_",
+   "capTopOrig": [
+    0.0,
+    5.7768
+   ],
+   "headScale": 1.0208,
+   "heightOrig": 5.9145,
+   "hairOrig": {
+    "sprite": "Evo/k_star_3_hair",
+    "x": 0.0,
+    "y": 2.9622
+   },
+   "hairBones": [
+    [
+     -0.01,
+     3.8222
+    ],
+    [
+     -0.01,
+     3.2822
+    ],
+    [
+     -0.01,
+     2.7522
+    ],
+    [
+     -0.01,
+     2.2122
+    ]
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_star_3_back_head",
+     "x": -0.01,
+     "y": 4.1856
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_star_3_back_chest",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_star_3_back_skirt",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "waist": [
+     0.0,
+     2.211
+    ],
+    "capTop": [
+     0.0,
+     5.7806
+    ],
+    "shoulderL": [
+     -0.356,
+     2.501
+    ],
+    "elbow": [
+     -0.356,
+     2.0922
+    ],
+    "wrist": [
+     -0.3566,
+     1.7865
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_star_3_arm_upper",
+     "x": -0.3367,
+     "y": 2.0478
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_star_3_arm_fore",
+     "x": -0.3367,
+     "y": 2.0478
+    },
+    "hand": {
+     "sprite": "Rig2/gen_star_3_arm_hand",
+     "x": -0.3367,
+     "y": 2.0478
+    },
+    "shoulderR": [
+     0.356,
+     2.501
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_star_3_back_thigh",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_star_3_back_shin",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_star_3_back_shoe",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "knee": [
+     -0.2972,
+     0.837
+    ],
+    "ankle": [
+     -0.2772,
+     0.237
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_star_3_sleeve",
+     "x": -0.346,
+     "y": 2.451
+    },
+    "hair": {
+     "sprite": "Rig2/gen_star_3_back_hair",
+     "x": 0.025,
+     "y": 3.356
+    },
+    "hairRoot": [
+     0.025,
+     3.931
+    ],
+    "hairBones": [
+     [
+      0.025,
+      3.931
+     ],
+     [
+      0.025,
+      3.421
+     ],
+     [
+      0.025,
+      2.901
+     ],
+     [
+      0.025,
+      2.391
+     ]
+    ]
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_star_3_side_head",
+     "x": -0.045,
+     "y": 4.061
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_star_3_side_chest",
+     "x": -0.18,
+     "y": 1.921
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_star_3_side_skirt",
+     "x": -0.18,
+     "y": 1.921
+    },
+    "waist": [
+     0.0,
+     2.111
+    ],
+    "neck": [
+     0.0,
+     2.631
+    ],
+    "capTop": [
+     0.0,
+     5.701
+    ],
+    "hipL": [
+     0.06,
+     1.037
+    ],
+    "hipR": [
+     0.13,
+     1.037
+    ],
+    "shoulderL": [
+     0.08,
+     2.381
+    ],
+    "elbow": [
+     0.08,
+     1.9722
+    ],
+    "wrist": [
+     0.0794,
+     1.6665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_star_3_arm_upper",
+     "x": 0.0993,
+     "y": 1.9278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_star_3_arm_fore",
+     "x": 0.0993,
+     "y": 1.9278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_star_3_arm_hand",
+     "x": 0.0993,
+     "y": 1.9278
+    },
+    "shoulderR": [
+     0.13,
+     2.391
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_star_3_side_thigh",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_star_3_side_shin",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_star_3_side_shoe",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.125,
+     "y": 0.747
+    },
+    "knee": [
+     0.115,
+     0.827
+    ],
+    "ankle": [
+     0.1,
+     0.197
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_star_3_sleeve",
+     "x": 0.09,
+     "y": 2.331
+    },
+    "hair": {
+     "sprite": "Rig2/gen_star_3_side_hair",
+     "x": -0.41,
+     "y": 3.271
+    },
+    "hairRoot": [
+     -0.38,
+     3.831
+    ],
+    "hairBones": [
+     [
+      -0.38,
+      3.831
+     ],
+     [
+      -0.74,
+      3.331
+     ],
+     [
+      -0.775,
+      2.831
+     ],
+     [
+      -0.945,
+      2.331
+     ]
+    ]
+   }
   },
   {
    "id": "wind_0",
@@ -2407,16 +6497,18 @@
    "height": 3.04,
    "k": 0.7237,
    "cap": {
-    "sprite": "Rig2/r2_wind_0_cap",
+    "sprite": "Rig2/gen_wind_0_cap",
     "x": 0.01,
-    "y": 1.49
+    "y": 1.49,
+    "orig": "Rig2/r2_wind_0_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_wind_0_stem",
+    "sprite": "Rig2/gen_wind_0_stem",
     "x": 0.01,
-    "y": 1.49
+    "y": 1.49,
+    "orig": "Rig2/r2_wind_0_stem"
    },
-   "face": "Rig2/r2_wind_0_face_",
+   "face": "Rig2/gen_wind_0_face_",
    "footL": {
     "sprite": "Rig2/r2_wind_0_footL",
     "x": 0.01,
@@ -2443,7 +6535,13 @@
     0.01,
     2.99
    ],
-   "sole": -0.11
+   "sole": -0.11,
+   "gradeScale": 1.0218,
+   "capJointOrig": [
+    0.01,
+    1.26
+   ],
+   "faceOrig": "Rig2/r2_wind_0_face_"
   },
   {
    "id": "wind_1",
@@ -2452,16 +6550,18 @@
    "height": 3.3,
    "k": 0.7485,
    "cap": {
-    "sprite": "Rig2/r2_wind_1_cap",
+    "sprite": "Rig2/gen_wind_1_cap",
     "x": 0.02,
-    "y": 1.63
+    "y": 1.63,
+    "orig": "Rig2/r2_wind_1_cap"
    },
    "stem": {
-    "sprite": "Rig2/r2_wind_1_stem",
+    "sprite": "Rig2/gen_wind_1_stem",
     "x": 0.02,
-    "y": 1.63
+    "y": 1.63,
+    "orig": "Rig2/r2_wind_1_stem"
    },
-   "face": "Rig2/r2_wind_1_face_",
+   "face": "Rig2/gen_wind_1_face_",
    "footL": {
     "sprite": "Rig2/r2_wind_1_footL",
     "x": 0.02,
@@ -2506,7 +6606,13 @@
     0.02,
     3.25
    ],
-   "sole": -0.09
+   "sole": -0.09,
+   "gradeScale": 1.023,
+   "capJointOrig": [
+    0.02,
+    1.35
+   ],
+   "faceOrig": "Rig2/r2_wind_1_face_"
   },
   {
    "id": "wind_2",
@@ -2530,50 +6636,50 @@
     "y": 1.6316
    },
    "head": {
-    "sprite": "Evo/k_wind_2_head_bare",
+    "sprite": "Rig2/gen_wind_2_front_head",
     "x": 0.0,
     "y": 3.8671
    },
-   "face": "Rig2/r2_wind_2_face_",
+   "face": "Rig2/gen_wind_2_front_face_",
    "hair": {
-    "sprite": "Evo/k_wind_2_hair",
+    "sprite": "",
     "x": 0.0,
     "y": 2.9319
    },
    "upperArm": {
-    "sprite": "Evo/k_wind_2_arm_up",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_wind_2_arm_upper",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "foreArm": {
-    "sprite": "Rig2/r2_wind_2_forearm",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_wind_2_arm_fore",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "hand": {
-    "sprite": "Rig2/r2_wind_2_hand",
-    "x": -0.4839,
-    "y": 1.807
+    "sprite": "Rig2/gen_wind_2_arm_hand",
+    "x": -0.4258,
+    "y": 1.7837
    },
    "leg": {
-    "sprite": "Rig2/r2_wind_2_leg",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "",
+    "x": -0.39,
+    "y": 0.6945
    },
    "thigh": {
-    "sprite": "Rig2/r2_wind_2_thigh",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_wind_2_front_thigh",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shin": {
-    "sprite": "Rig2/r2_wind_2_shin",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_wind_2_front_shin",
+    "x": -0.39,
+    "y": 0.6945
    },
    "shoe": {
-    "sprite": "Rig2/r2_wind_2_shoe",
-    "x": -0.34,
-    "y": 0.6175
+    "sprite": "Rig2/gen_wind_2_front_shoe",
+    "x": -0.39,
+    "y": 0.6945
    },
    "waist": [
     0.0,
@@ -2601,11 +6707,11 @@
    ],
    "elbow": [
     -0.4464,
-    1.807
+    1.8222
    ],
    "wrist": [
-    -0.4339,
-    1.542
+    -0.447,
+    1.5419
    ],
    "hipL": [
     -0.34,
@@ -2616,15 +6722,252 @@
     0.9245
    ],
    "knee": [
-    -0.44,
-    0.7475
+    -0.375,
+    0.7745
    ],
    "ankle": [
-    -0.435,
-    0.5775
+    -0.39,
+    0.2245
    ],
-   "sole": -0.0025,
-   "legScale": 1.0
+   "sole": 0.0045,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "hairOrig": {
+    "sprite": "Evo/k_wind_2_hair",
+    "x": 0.0,
+    "y": 2.9319
+   },
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_wind_2_head_bare",
+    "x": 0.0,
+    "y": 3.8671
+   },
+   "faceOrig": "Rig2/r2_wind_2_face_",
+   "capTopOrig": [
+    0.0,
+    5.2747
+   ],
+   "headScale": 1.0,
+   "heightOrig": 5.3996,
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_wind_2_back_head",
+     "x": 0.02,
+     "y": 3.8471
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_wind_2_back_chest",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_wind_2_back_skirt",
+     "x": -0.005,
+     "y": 1.6416
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "capTop": [
+     0.0,
+     5.2871
+    ],
+    "shoulderL": [
+     -0.49,
+     2.2666
+    ],
+    "elbow": [
+     -0.49,
+     1.8918
+    ],
+    "wrist": [
+     -0.4906,
+     1.6115
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_wind_2_arm_upper",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_wind_2_arm_fore",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "hand": {
+     "sprite": "Rig2/gen_wind_2_arm_hand",
+     "x": -0.4694,
+     "y": 1.8533
+    },
+    "shoulderR": [
+     0.47,
+     2.2666
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_wind_2_back_thigh",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_wind_2_back_shin",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_wind_2_back_shoe",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.335,
+     "y": 0.6945
+    },
+    "knee": [
+     -0.32,
+     0.7845
+    ],
+    "ankle": [
+     -0.3,
+     0.2345
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_wind_2_sleeve",
+     "x": -0.48,
+     "y": 2.2166
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_wind_2_side_head",
+     "x": -0.16,
+     "y": 3.6066
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_wind_2_side_chest",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_wind_2_side_skirt",
+     "x": -0.125,
+     "y": 1.7666
+    },
+    "waist": [
+     0.0,
+     1.8666
+    ],
+    "neck": [
+     0.0,
+     2.4266
+    ],
+    "capTop": [
+     0.0,
+     4.8966
+    ],
+    "hipL": [
+     0.02,
+     0.9245
+    ],
+    "hipR": [
+     0.09,
+     0.9245
+    ],
+    "shoulderL": [
+     0.04,
+     2.1866
+    ],
+    "elbow": [
+     0.04,
+     1.8118
+    ],
+    "wrist": [
+     0.0394,
+     1.5315
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_wind_2_arm_upper",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_wind_2_arm_fore",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "hand": {
+     "sprite": "Rig2/gen_wind_2_arm_hand",
+     "x": 0.0606,
+     "y": 1.7733
+    },
+    "shoulderR": [
+     0.09,
+     2.1966
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_wind_2_side_thigh",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shin": {
+     "sprite": "Rig2/gen_wind_2_side_shin",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_wind_2_side_shoe",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.08,
+     "y": 0.6945
+    },
+    "knee": [
+     0.065,
+     0.7545
+    ],
+    "ankle": [
+     0.06,
+     0.1745
+    ],
+    "sole": 0.0045,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_wind_2_sleeve",
+     "x": 0.05,
+     "y": 2.1366
+    },
+    "hair": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
   },
   {
    "id": "wind_3",
@@ -2648,50 +6991,50 @@
     "y": 1.786
    },
    "head": {
-    "sprite": "Evo/k_wind_3_head_bare",
+    "sprite": "Rig2/gen_wind_3_front_head",
     "x": 0.0,
     "y": 4.0998
    },
-   "face": "Rig2/r2_wind_3_face_",
+   "face": "Rig2/gen_wind_3_front_face_",
    "hair": {
-    "sprite": "Evo/k_wind_3_hair",
-    "x": 0.0,
-    "y": 2.5035
+    "sprite": "Rig2/gen_wind_3_front_hair",
+    "x": -0.01,
+    "y": 2.9735
    },
    "upperArm": {
-    "sprite": "Evo/k_wind_3_arm_up",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_wind_3_arm_upper",
+    "x": -0.3623,
+    "y": 1.933
    },
    "foreArm": {
-    "sprite": "Rig2/r2_wind_3_forearm",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_wind_3_arm_fore",
+    "x": -0.3623,
+    "y": 1.933
    },
    "hand": {
-    "sprite": "Rig2/r2_wind_3_hand",
-    "x": -0.4191,
-    "y": 1.9767
+    "sprite": "Rig2/gen_wind_3_arm_hand",
+    "x": -0.3623,
+    "y": 1.933
    },
    "leg": {
-    "sprite": "Rig2/r2_wind_3_leg",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "",
+    "x": -0.3772,
+    "y": 0.747
    },
    "thigh": {
-    "sprite": "Rig2/r2_wind_3_thigh",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_wind_3_front_thigh",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shin": {
-    "sprite": "Rig2/r2_wind_3_shin",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_wind_3_front_shin",
+    "x": -0.3772,
+    "y": 0.747
    },
    "shoe": {
-    "sprite": "Rig2/r2_wind_3_shoe",
-    "x": -0.3222,
-    "y": 0.64
+    "sprite": "Rig2/gen_wind_3_front_shoe",
+    "x": -0.3772,
+    "y": 0.747
    },
    "waist": [
     0.0,
@@ -2702,8 +7045,8 @@
     2.631
    ],
    "hairRoot": [
-    0.0,
-    3.9903
+    -0.01,
+    3.6085
    ],
    "capTop": [
     0.0,
@@ -2719,10 +7062,10 @@
    ],
    "elbow": [
     -0.3816,
-    1.9767
+    1.9774
    ],
    "wrist": [
-    -0.3791,
+    -0.3822,
     1.6717
    ],
    "hipL": [
@@ -2734,15 +7077,320 @@
     1.037
    ],
    "knee": [
-    -0.2322,
-    0.75
+    -0.3622,
+    0.847
    ],
    "ankle": [
-    -0.2572,
-    0.47
+    -0.3772,
+    0.247
    ],
-   "sole": -0.0,
-   "legScale": 1.0
+   "sole": -0.003,
+   "legScale": 1.0,
+   "gradeScale": 1.0,
+   "lift": 0.34,
+   "headOrig": {
+    "sprite": "Evo/k_wind_3_head_bare",
+    "x": 0.0,
+    "y": 4.0998
+   },
+   "faceOrig": "Rig2/r2_wind_3_face_",
+   "capTopOrig": [
+    0.0,
+    5.535
+   ],
+   "headScale": 1.0,
+   "heightOrig": 5.6623,
+   "hairOrig": {
+    "sprite": "Evo/k_wind_3_hair",
+    "x": 0.0,
+    "y": 2.5035
+   },
+   "hairBones": [
+    [
+     -0.01,
+     3.6085
+    ],
+    [
+     -0.01,
+     3.0385
+    ],
+    [
+     -0.01,
+     2.4785
+    ],
+    [
+     -0.01,
+     1.9085
+    ]
+   ],
+   "back": {
+    "head": {
+     "sprite": "Rig2/gen_wind_3_back_head",
+     "x": -0.03,
+     "y": 4.0498
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_wind_3_back_chest",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_wind_3_back_skirt",
+     "x": 0.005,
+     "y": 1.796
+    },
+    "waist": [
+     0.0,
+     2.191
+    ],
+    "capTop": [
+     0.0,
+     5.4898
+    ],
+    "shoulderL": [
+     -0.379,
+     2.511
+    ],
+    "elbow": [
+     -0.379,
+     2.1022
+    ],
+    "wrist": [
+     -0.3796,
+     1.7965
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_wind_3_arm_upper",
+     "x": -0.3597,
+     "y": 2.0578
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_wind_3_arm_fore",
+     "x": -0.3597,
+     "y": 2.0578
+    },
+    "hand": {
+     "sprite": "Rig2/gen_wind_3_arm_hand",
+     "x": -0.3597,
+     "y": 2.0578
+    },
+    "shoulderR": [
+     0.389,
+     2.511
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_wind_3_back_thigh",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_wind_3_back_shin",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_wind_3_back_shoe",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": -0.3172,
+     "y": 0.747
+    },
+    "knee": [
+     -0.2972,
+     0.837
+    ],
+    "ankle": [
+     -0.2772,
+     0.237
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_wind_3_sleeve",
+     "x": -0.369,
+     "y": 2.461
+    },
+    "hair": {
+     "sprite": "Rig2/gen_wind_3_back_hair",
+     "x": 0.025,
+     "y": 3.496
+    },
+    "hairRoot": [
+     0.025,
+     4.011
+    ],
+    "hairBones": [
+     [
+      0.025,
+      4.011
+     ],
+     [
+      0.025,
+      3.551
+     ],
+     [
+      0.025,
+      3.091
+     ],
+     [
+      0.025,
+      2.631
+     ]
+    ]
+   },
+   "side": {
+    "head": {
+     "sprite": "Rig2/gen_wind_3_side_head",
+     "x": -0.185,
+     "y": 3.911
+    },
+    "face": "",
+    "collar": {
+     "sprite": "",
+     "x": 0.0,
+     "y": 0.0
+    },
+    "chest": {
+     "sprite": "Rig2/gen_wind_3_side_chest",
+     "x": -0.05,
+     "y": 1.921
+    },
+    "skirt": {
+     "sprite": "Rig2/gen_wind_3_side_skirt",
+     "x": -0.05,
+     "y": 1.921
+    },
+    "waist": [
+     0.0,
+     2.081
+    ],
+    "neck": [
+     0.0,
+     2.631
+    ],
+    "capTop": [
+     0.0,
+     5.381
+    ],
+    "hipL": [
+     0.09,
+     1.037
+    ],
+    "hipR": [
+     0.16,
+     1.037
+    ],
+    "shoulderL": [
+     0.11,
+     2.381
+    ],
+    "elbow": [
+     0.11,
+     1.9722
+    ],
+    "wrist": [
+     0.1094,
+     1.6665
+    ],
+    "upperArm": {
+     "sprite": "Rig2/gen_wind_3_arm_upper",
+     "x": 0.1293,
+     "y": 1.9278
+    },
+    "foreArm": {
+     "sprite": "Rig2/gen_wind_3_arm_fore",
+     "x": 0.1293,
+     "y": 1.9278
+    },
+    "hand": {
+     "sprite": "Rig2/gen_wind_3_arm_hand",
+     "x": 0.1293,
+     "y": 1.9278
+    },
+    "shoulderR": [
+     0.16,
+     2.391
+    ],
+    "thigh": {
+     "sprite": "Rig2/gen_wind_3_side_thigh",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "shin": {
+     "sprite": "Rig2/gen_wind_3_side_shin",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "shoe": {
+     "sprite": "Rig2/gen_wind_3_side_shoe",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "leg": {
+     "sprite": "",
+     "x": 0.155,
+     "y": 0.747
+    },
+    "knee": [
+     0.145,
+     0.827
+    ],
+    "ankle": [
+     0.13,
+     0.197
+    ],
+    "sole": -0.003,
+    "legScale": 1.0,
+    "lift": 0.34,
+    "sleeve": {
+     "sprite": "Rig2/gen_wind_3_sleeve",
+     "x": 0.12,
+     "y": 2.331
+    },
+    "hair": {
+     "sprite": "Rig2/gen_wind_3_side_hair",
+     "x": -0.41,
+     "y": 3.251
+    },
+    "hairRoot": [
+     -1.205,
+     3.821
+    ],
+    "hairBones": [
+     [
+      -1.205,
+      3.821
+     ],
+     [
+      -1.335,
+      3.311
+     ],
+     [
+      -0.755,
+      2.801
+     ],
+     [
+      -0.825,
+      2.301
+     ]
+    ]
+   }
   }
- ]
+ ],
+ "gradeHeight": {
+  "0": 3.1063,
+  "1": 3.3759,
+  "2": 6.0273,
+  "3": 5.7287
+ }
 }

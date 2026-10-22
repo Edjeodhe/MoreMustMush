@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>receive</title>
+<!-- 다른 사이트(ChatGPT)에서 만든 그림을 이 컴퓨터로 받는 곳. 그 사이트는 보안 정책 때문에 127.0.0.1로 직접 보낼 수 없어서,
+     그림을 주소의 # 뒤에 실어 이 페이지로 넘어온다: receive.html#name=<이름>&back=<돌아갈 주소>&data=<PNG dataURL>
+     → /api/shot 으로 Logs/Screens/<이름>.png 에 저장하고 back 주소로 돌아간다. -->
+<body style="font:16px system-ui;padding:16px">받는 중…
+<script>
+(async () => {
+  const p = new URLSearchParams(location.hash.slice(1));
+  const name = p.get("name") || "recv", back = p.get("back");
+  // WebP 등 다른 형식도 받는다 (주소 길이 한도 2MB 때문에 큰 그림은 WebP로 넘어옴): 서버는 png 머리말만 떼므로 머리말을 바꿔 보냄. 파일 내용은 원래 형식
+  const data = "data:image/png;base64," + (p.get("data") || "").replace(/^data:[^,]*,/, "");
+  const r = await fetch("/api/shot?name=" + encodeURIComponent(name), { method: "POST", body: data }).then((x) => x.json()).catch((e) => ({ ok: false, error: String(e) }));
+  document.body.textContent = (r.ok ? "저장: " + r.file : "실패: " + r.error);
+  document.title = r.ok ? "saved " + name : "save failed";
+  history.replaceState(null, "", location.pathname);              // 긴 주소 지우기
+  if (r.ok && back) setTimeout(() => (location.href = back), 400);
+})();
+</script>

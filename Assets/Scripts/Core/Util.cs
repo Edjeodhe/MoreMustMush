@@ -54,12 +54,12 @@ namespace MoreMush
 
         static readonly string[] Units = { "K", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc" };
 
-        // Big-number short form: 1.2K, 4.5M ...
-        public static string Fmt(double n)
+        // Big-number short form: 1.2K, 4.5M ... (below `plain` the full number with commas; damage numbers use 1000 → "300K")
+        public static string Fmt(double n, double plain = 10000)
         {
             if (double.IsInfinity(n) || double.IsNaN(n)) return "∞";
             n = Math.Floor(n);
-            if (n < 10000) return n.ToString("#,0", Inv);
+            if (n < plain) return n.ToString("#,0", Inv);
             int i = -1; double v = n;
             while (v >= 1000 && i < Units.Length - 1) { v /= 1000; i++; }
             // 반올림으로 1000이 되면(999,999 → "1000K") 다음 단위로 올린다

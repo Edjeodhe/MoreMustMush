@@ -17,6 +17,7 @@ namespace MoreMush
 
         [Header("Scene")]
         public FarmTreeView tree;
+        public GameObject vignette;   // 화면 가장자리 비네트 (Canvas 맨 아래 UI 그림): 농장이 보일 때만 켠다
 
         [Header("Templates (hidden slots)")]
         public Transform critterLayer;
@@ -40,7 +41,8 @@ namespace MoreMush
             public float vy, fallTo, swing, swingV, landT, perchT, prevX;
             public int perchSlot = -1, perchDeco = -1;       // (예전) 나무 위 자리: 버섯 슬롯 · 장식
             public bool goingDown;                           // climb: 내려가는 중
-            public List<int> path; public int pathI;         // 나무 길(tree_nav) 위 경로와 지금 향하는 마디
+            public bool carrying;                            // 나무 위에서 딴 버섯을 지고 길을 따라 내려가는 중 (내려오면 carry)
+            public List<int> path; public int pathI;         // 나무 길(tree_layout) 위 경로와 지금 향하는 마디
             public int navAt = -1;                           // 머무는 마디 (perch/pick)
             public string edge = "walk";                     // 지금 지나는 길 종류: walk · climb · hop
         }
@@ -158,7 +160,7 @@ namespace MoreMush
         void Pick(Critter p, Vector2 s)
         {
             held = p;
-            p.state = "held"; p.job = -1; p.tool = null; p.anim = null; p.t = 0; p.goingDown = false;
+            p.state = "held"; p.job = -1; p.tool = null; p.anim = null; p.t = 0; p.goingDown = false; p.carrying = false;
             p.path = null; p.navAt = -1; p.edge = "walk";
             p.prevX = s.x; p.swing = p.swingV = 0;
             p.pokeAt = Time.time;
@@ -178,11 +180,11 @@ namespace MoreMush
             if (Mathf.Abs(vx) > 30) p.face = vx > 0 ? 1 : -1;
         }
 
-        // 놓기: 나무 길(tree_nav)의 마디 가까이면 거기 올라앉고, 아니면 땅으로 떨어진다
+        // 놓기: 나무 길(tree_layout)의 마디 가까이면 거기 올라앉고, 아니면 땅으로 떨어진다
         void Drop(Critter p)
         {
             p.swing = 0; p.swingV = 0;
-            int n = tree.NearestNav(new Vector2(p.x, p.y), false, 80 * Zoom);
+            int n = tree.NearestNav(new Vector2(p.x, p.y), false, 80 * Zoom, TakenNav(p));
             if (n >= 0 && !tree.CurrentNav().nodes[n].ground)
             {
                 var at = tree.NavPos(n);
@@ -203,21 +205,44 @@ namespace MoreMush
             p.pokeAt = Time.time;
         }
 
-        // 쉬는 정령이 나무에 오르기 시작: 머물 곳 하나를 골라 가장 가까운 땅 입구로 걸어간 뒤 길을 따라 오른다
+        // 다른 정령이 머물고 있거나 가는 중인 마디 (한 마디에 한 마리: 겹쳐 서지 않게)
+        HashSet<int> TakenNav(Critter me)
+        {
+            var s = new HashSet<int>();
+            foreach (var q in crits)
+            {
+                if (q == me) continue;
+                if ((q.state == "perch" || q.state == "pick" || q.state == "work") && q.navAt >= 0) s.Add(q.navAt);
+                else if (q.state == "climb" && !q.goingDown && q.path != null && q.path.Count > 0) s.Add(q.path[q.path.Count - 1]);
+            }
+            return s;
+        }
+
+        // 쉬는 정령이 나무에 오르기 시작: 빈 머물 곳 하나를 골라 가장 가까운 땅 입구로 걸어간 뒤 길을 따라 오른다
         bool StartClimb(Critter p)
         {
-            int spot = tree.RandomSpot(); if (spot < 0) return false;
-            int g = tree.GroundFor(spot); if (g < 0) return false;
-            p.path = tree.NavPath(g, spot); p.pathI = 0; p.goingDown = false;
-            p.state = "climb"; p.edge = "walk"; p.navAt = -1;
-            return p.path != null;
+            int spot = tree.RandomSpot(TakenNav(p)); if (spot < 0) return false;
+            return StartClimbTo(p, spot);
         }
+
+        // 가장 가까운 땅 입구로 걸어가 길을 따라 node까지 오른다 (도착하면 job이 있으면 따기, 없으면 놀기)
+        bool StartClimbTo(Critter p, int node)
+        {
+            int g = tree.GroundFor(node); if (g < 0) return false;
+            var path = tree.NavPath(g, node); if (path == null) return false;
+            p.path = path; p.pathI = 0; p.goingDown = false;
+            p.state = "climb"; p.edge = "walk"; p.navAt = -1;
+            return true;
+        }
+
+        // 수확 속도 (보여 주기: 걷기·따기 시간)
+        static float PickSpeed(Critter p) => (float)(KidPickRate(p.id, ZoneOf(p.id) ?? KID[p.id].zone) * HARV.sec);
 
         // 내려가기: 머물던 마디에서 가장 가까운 땅 입구까지 길을 따라
         void StartDescend(Critter p)
         {
             var path = tree.NavPathToGround(p.navAt);
-            if (path == null) { p.state = "fall"; p.vy = 0; p.fallTo = Mathf.Max(p.y, HARV.y0); return; }
+            if (path == null) { p.state = "fall"; p.vy = 0; p.fallTo = Mathf.Max(p.y, HARV.y0); p.carrying = false; return; }
             p.path = path; p.pathI = 1; p.goingDown = true; p.state = "climb"; p.navAt = -1;
             p.edge = path.Count > 1 ? tree.NavEdge(path[0], path[1]) : "walk";
         }
@@ -241,6 +266,30 @@ namespace MoreMush
         public static bool Climbing(Critter p) => p.state == "climb" && p.edge == "climb" && p.pathI > 0;
         public static bool Hopping(Critter p) => p.state == "climb" && p.edge == "hop" && p.pathI > 0;
 
+        // 리그2 동작 이름 (SpiritRig2 · MushRig: Tools/rig-web MOTIONS). 놀이 동작(anim)이 먼저, 그다음 상태.
+        // 나무 길의 climb(사다리·줄기·밧줄)은 거의 곧게 서 있으면 사다리(뒷모습), 비스듬하면 줄기(옆모습)로 오른다. 내려가면 Down
+        public string RigMotion(Critter p)
+        {
+            if (p.anim != null) return p.anim;
+            switch (p.state)
+            {
+                case "held": return "held";
+                case "fall": return "fall";
+                case "pick": case "work": return "work";
+                case "carry": return "carry";
+                case "walk": return "walk";
+                case "perch": return "idle";
+                case "climb":
+                    if (p.pathI <= 0 || p.path == null || p.pathI >= p.path.Count || p.edge == "walk") return "walk";
+                    if (p.edge == "hop") return "hop";
+                    var to = tree.NavPos(p.path[p.pathI]);
+                    float dx = to.x - p.x, dy = to.y - p.y;            // 농장 px (y 아래로 +)
+                    bool down = dy > 0;
+                    return Mathf.Abs(dx) < Mathf.Abs(dy) * 0.3f ? (down ? "ladderDown" : "ladder") : (down ? "climbDown" : "climb");
+            }
+            return p.landT > 0 ? "land" : "idle";
+        }
+
         // 들기·떨어지기·나무 위 놀이. true = 이번 프레임은 여기서 다 했다
         bool UpdateTreePlay(Critter p, float dt)
         {
@@ -260,7 +309,20 @@ namespace MoreMush
                 case "climb":
                     if (FollowPath(p, dt))
                     {
-                        if (p.goingDown || p.path == null) { p.state = "idle"; p.goingDown = false; p.path = null; p.t = U.Rand(1f, 3f); p.y = Mathf.Max(p.y, HARV.y0); }
+                        if (p.goingDown && p.carrying)
+                        {
+                            // 딴 버섯을 지고 내려왔다 → 밑동 보따리까지 나른다
+                            p.carrying = false; p.goingDown = false; p.path = null;
+                            p.state = "carry"; p.tx = WT.x + U.Rand(-60, 60) * Zoom; p.ty = WT.y + U.Rand(10, 30);
+                        }
+                        else if (p.goingDown || p.path == null) { p.state = "idle"; p.goingDown = false; p.path = null; p.t = U.Rand(1f, 3f); p.y = Mathf.Max(p.y, HARV.y0); }
+                        else if (p.job >= 0)
+                        {
+                            // 일하러 올라왔다 → 이 마디에서 버섯을 딴다
+                            p.navAt = p.path[p.path.Count - 1]; p.path = null; p.edge = "walk";
+                            p.state = "work"; p.t = 1.2f / PickSpeed(p); p.tool = "basket";
+                            var sp = tree.SlotPos(p.job); if (Mathf.Abs(sp.x - p.x) > 4) p.face = sp.x > p.x ? 1 : -1;
+                        }
                         else Perch(p, p.path[p.path.Count - 1]);
                     }
                     return true;
@@ -291,7 +353,7 @@ namespace MoreMush
                                     if (on.Count == 0) break;
                                     spot = U.Pick(on).to; p.path.Add(spot);
                                 }
-                                if (nav.nodes[spot].spot)
+                                if (nav.nodes[spot].spot && !TakenNav(p).Contains(spot))
                                 {
                                     p.pathI = 1; p.edge = e.kind; p.state = "climb"; p.goingDown = false; p.navAt = -1;
                                     return true;
@@ -364,9 +426,15 @@ namespace MoreMush
                 p.t -= dt;
                 bool anim = TickAnim(p, dt);
                 string zone = ZoneOf(p.id);
-                float speed = (float)(KidPickRate(p.id, zone ?? KID[p.id].zone) * HARV.sec);   // 수확 속도 (보여 주기: 걷기·따기 시간)
+                float speed = PickSpeed(p);                                                         // 수확 속도 (보여 주기: 걷기·따기 시간)
 
-                // 일하는 꼬마: 자기 구역의 나무버섯으로 가서 따고, 다음 버섯으로
+                // 나무 위에서 따던 중에 일감이 없어졌다(구역에서 빠짐·단계 바뀜) → 길을 따라 내려온다
+                if (p.state == "work" && p.navAt >= 0 && (zone == null || p.job < 0 || p.job >= tree.slots.Count || tree.slots[p.job].zone != zone))
+                {
+                    p.job = -1; p.tool = null; p.carrying = false; StartDescend(p); continue;
+                }
+                // 일하는 꼬마: 자기 구역의 나무버섯으로 가서 따고, 다음 버섯으로.
+                // 땅에서 손 닿는 버섯은 걸어가서 따고, 높은 버섯은 땅 입구에서 나무 길을 따라 닿는 마디까지 올라가 딴 뒤 길로 내려온다 (4단계부터)
                 if (zone != null)
                 {
                     if (p.job >= 0 && (p.job >= tree.slots.Count || tree.slots[p.job].zone != zone)) { p.job = -1; p.state = "idle"; }
@@ -377,11 +445,13 @@ namespace MoreMush
                         {
                             var s = tree.slots[p.job];
                             if (s.mush.gem > 0) GemBurst(s.pos.x, s.pos.y, 4);
-                            // 딴 버섯은 지고 밑동 보따리까지 나른다 (골드는 내려놓을 때 뜬다)
-                            p.job = -1; p.tool = null; p.state = "carry";
+                            // 딴 버섯은 지고 밑동 보따리까지 나른다 (골드는 내려놓을 때 뜬다). 나무 위에서 땄으면 먼저 길을 따라 내려온다
+                            p.job = -1; p.tool = null;
                             p.carryGold = s.mush.gold * KidMul(p.id, zone);
-                            p.tx = WT.x + U.Rand(-60, 60) * Zoom; p.ty = WT.y + U.Rand(10, 30);
+                            if (p.navAt >= 0) { p.carrying = true; StartDescend(p); }
+                            else { p.state = "carry"; p.tx = WT.x + U.Rand(-60, 60) * Zoom; p.ty = WT.y + U.Rand(10, 30); }
                         }
+                        else if (p.state != "walk" && p.state != "work") p.job = -1;   // 들렸다 놓인 뒤 등: 다음 버섯을 다시 고른다
                         continue;
                     }
                     if (p.state == "carry")
@@ -397,7 +467,11 @@ namespace MoreMush
                     var mine = tree.SlotsIn(zone).ToList();
                     if (mine.Count == 0) continue;
                     int slot = U.Pick(mine); var sp = tree.SlotPos(slot);
-                    p.job = slot; p.tx = sp.x + U.Rand(-16, 16); p.ty = sp.y + 34; p.state = "walk"; p.anim = null;
+                    p.job = slot; p.anim = null;
+                    int node = tree.WorkNode(slot, TakenNav(p));
+                    if (node >= 0 && StartClimbTo(p, node)) continue;   // 높은 버섯: 길을 따라 올라간다
+                    // 땅에서 딴다: 버섯 아래에 선다 (뿌리 버섯이면 그 뿌리 위, 줄기 버섯이면 밑동 높이에서 손을 뻗는다)
+                    p.tx = sp.x + U.Rand(-16, 16); p.ty = Mathf.Max(sp.y + 34, tree.GroundFeetY); p.state = "walk";
                     continue;
                 }
                 p.job = -1; p.tool = null;
@@ -437,8 +511,8 @@ namespace MoreMush
         };
         readonly List<SpriteRenderer> bgLayers = new List<SpriteRenderer>();
 
-        void OnEnable() { snapZoom = true; SetupBackground(); }
-        void OnDisable() { Zoom = 1; ApplyCamera(); }
+        void OnEnable() { snapZoom = true; viewTarget = 1; viewFocusOn = false; ResetView(); SetupBackground(); if (vignette != null) vignette.SetActive(true); }
+        void OnDisable() { Zoom = 1; ResetView(); ApplyCamera(); if (vignette != null) vignette.SetActive(false); }
 
         void SetupBackground()
         {
@@ -479,18 +553,104 @@ namespace MoreMush
             float target = WT.zoom[WT.Picture(Stage())];
             if (snapZoom) { Zoom = zoomTarget = target; zoomVel = 0; snapZoom = false; }
             // grew while watching: the bigger tree shoots up first, then the camera pulls back slowly
-            if (target != zoomTarget) { zoomTarget = target; zoomWait = 0.7f; }
+            if (target != zoomTarget) { zoomTarget = target; zoomWait = 0.7f; viewTarget = 1; viewFocusOn = false; }   // 자라면 휠 확대를 풀고 커지는 나무를 보여 준다
             if (zoomWait > 0) zoomWait -= dt;
             else Zoom = Mathf.SmoothDamp(Zoom, zoomTarget, ref zoomVel, 1.2f, Mathf.Infinity, dt);
             ApplyCamera();
         }
 
+        // ===== 마우스 휠 확대·축소 (2026-10-20) =====
+        // 화각 Zoom(정령·장식·나무버섯 크기와 속도의 기준)은 그대로 두고 카메라만 ViewK배로 본다 (1 = 단계 기본 화면, 작을수록 확대).
+        // 휠을 굴린 곳(마우스 아래 무대 점)이 제자리에 있도록 확대하고, 화면은 단계 기본 화면 밖(땅 아래·배경 끝)으로 나가지 않는다.
+        // 농장에 들어올 때·나갈 때 1로 돌아간다.
+        public static float ViewK = 1;
+        public static Vector2 ViewCenter = new Vector2(WT.camX, 540);   // 화면 가운데 (무대 px)
+        const float VIEW_MIN = 0.4f, VIEW_MAX = 1.2f, VIEW_STEP = 0.88f;
+        float viewTarget = 1; Vector2 viewFocus; bool viewFocusOn, viewPan;
+        Vector2? viewGoto;   // 꾸미기 창이 고른 구역 쪽으로 천천히 옮겨 가는 화면 가운데 (휠·끌기를 하면 그만둔다)
+
+        // 꾸미기 창에서 구역 탭을 고르면 그 구역(장식 자리들의 평균 높이)으로 다가가 본다. 창이 화면 아래 30%를 덮으니
+        // 구역이 화면 위쪽 30% 높이에 오게 하고, 그동안은 화면이 땅 아래로 그만큼 더 내려갈 수 있다(viewLift: 뿌리도 창 위에 보이게)
+        public void FocusZone(string zone, float k = 0.62f)
+        {
+            if (tree == null) return;
+            viewTarget = Mathf.Clamp(k, VIEW_MIN, VIEW_MAX); viewFocusOn = false;
+            float vh = 1080 * Zoom * viewTarget;
+            viewLift = 0.3f * vh;
+            viewGoto = new Vector2(WT.x, WT.y - FarmTreeView.DecoZoneHeight(zone) * (WT.y - tree.Top) + 0.14f * vh);
+        }
+
+        // 꾸미기 창을 닫으면 단계 기본 화면으로 돌아간다
+        public void Unfocus() { focusKid = null; viewTarget = 1; viewFocusOn = false; viewLift = 0; viewGoto = new Vector2(WT.camX, 1080 - 540 * Zoom); }
+
+        // 아래 꼬마 칸에서 꼬마를 고르면 그 꼬마에게 다가가 따라다닌다 (정보 카드가 화면 오른쪽에 뜨니 꼬마는 화면 왼쪽 가운데쯤)
+        // 휠·끌기를 하면 따라가기를 그만둔다
+        public string FocusedKid => focusKid;
+        public void FocusKid(string id, float k = 0.45f)
+        {
+            if (Find(id) == null) return;
+            focusKid = id; viewTarget = Mathf.Clamp(k, VIEW_MIN, VIEW_MAX); viewFocusOn = false; viewLift = 0;
+        }
+        string focusKid;
+        void FollowKid()
+        {
+            var p = focusKid != null ? Find(focusKid) : null;
+            if (p == null) { focusKid = null; return; }
+            float vh = 1080 * Zoom * viewTarget, vw = vh * (Camera.main != null ? Camera.main.aspect : 16f / 9);
+            viewGoto = new Vector2(p.x + 0.17f * vw, p.y - 0.08f * vh);
+        }
+        static float viewLift;
+
+        void UpdateView(float dt)
+        {
+            var m = Mouse.current;
+            if (m != null && !App.ModalOpen && held == null && !(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()))
+            {
+                float sc = m.scroll.ReadValue().y;
+                if (Mathf.Abs(sc) > 0.01f)
+                {
+                    viewTarget = Mathf.Clamp(viewTarget * (sc > 0 ? VIEW_STEP : 1 / VIEW_STEP), VIEW_MIN, VIEW_MAX);
+                    viewFocus = ToStage(m.position.ReadValue()); viewFocusOn = true; viewGoto = null; focusKid = null;
+                }
+            }
+            // 휠을 꾹 누른 채 끌면 화면을 옮긴다 (손으로 잡아 끄는 방향 그대로). 누르기는 무대 위에서만 시작, 끄는 중엔 UI 위로 가도 이어진다
+            if (m != null)
+            {
+                if (m.middleButton.wasPressedThisFrame && !App.ModalOpen && held == null && !(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())) viewPan = true;
+                if (!m.middleButton.isPressed) viewPan = false;
+                if (viewPan)
+                {
+                    var d = m.delta.ReadValue();
+                    float px = 1080 * Zoom * ViewK / Mathf.Max(1, Screen.height);   // 화면 1px = 무대 몇 px
+                    ViewCenter += new Vector2(-d.x, d.y) * px;
+                    viewFocusOn = false; viewGoto = null; focusKid = null;
+                }
+            }
+            float k = Mathf.Abs(ViewK - viewTarget) < 0.002f ? viewTarget : Mathf.Lerp(ViewK, viewTarget, 1 - Mathf.Exp(-dt * 12));
+            if (viewFocusOn && k != ViewK) ViewCenter = viewFocus + (ViewCenter - viewFocus) * (k / ViewK);   // 마우스 아래 점을 붙잡고
+            if (k == viewTarget) viewFocusOn = false;
+            ViewK = k;
+            if (focusKid != null) FollowKid();
+            if (viewGoto != null)
+            {
+                ViewCenter = Vector2.Lerp(ViewCenter, viewGoto.Value, 1 - Mathf.Exp(-dt * 8));
+                if ((ViewCenter - viewGoto.Value).sqrMagnitude < 1) { ViewCenter = viewGoto.Value; viewGoto = null; }
+            }
+        }
+
+        static void ResetView() { viewLift = 0; ViewK = 1; ViewCenter = new Vector2(WT.camX, 1080 - 540 * Zoom); }
+
         static void ApplyCamera()
         {
             var cam = Camera.main;
             if (cam == null) return;
-            cam.orthographicSize = CAM_SIZE * Zoom;
-            cam.transform.position = new Vector3(WT.camX / Art.PPU, -(1080 - 540 * Zoom) / Art.PPU, cam.transform.position.z);
+            // 단계 기본 화면 (땅 = 화면 아래 1080, 가운데 camX). 축소하면 아래는 붙인 채 위·양옆으로 넓힌다
+            float hh = 540 * Zoom * ViewK, hw = hh * cam.aspect, R = Mathf.Max(1, ViewK);
+            float bx = 540 * Zoom * R * cam.aspect, top = 1080 - 1080 * Zoom * R;
+            ViewCenter.x = Mathf.Clamp(ViewCenter.x, WT.camX - bx + hw, WT.camX + bx - hw);
+            ViewCenter.y = Mathf.Clamp(ViewCenter.y, top + hh, 1080 - hh + viewLift);
+            cam.orthographicSize = CAM_SIZE * Zoom * ViewK;
+            cam.transform.position = new Vector3(ViewCenter.x / Art.PPU, -ViewCenter.y / Art.PPU, cam.transform.position.z);
         }
 
         // ===== frame =====
@@ -498,6 +658,7 @@ namespace MoreMush
         {
             if (G?.farm == null) return;
             float dt = Mathf.Min(Time.deltaTime, 0.05f), now = Time.time;
+            UpdateView(Time.deltaTime);
             UpdateZoom(Time.deltaTime);
             HandleInput();
             UpdateCritters(dt);

@@ -250,6 +250,7 @@ namespace MoreMush.EditorTools
             var interp = new List<string>();
             foreach (string path in Directory.GetFiles("Assets/Scripts", "*.cs", SearchOption.AllDirectories).OrderBy(p => p, StringComparer.Ordinal))
             {
+                if (DEV_ONLY_FILES.Contains(Path.GetFileName(path))) continue;
                 string src = File.ReadAllText(path);
                 foreach (var (lit, isInterp, line) in Literals(src))
                 {
@@ -286,6 +287,9 @@ namespace MoreMush.EditorTools
             if (interp.Count > 0) msg += $"\n보간 문자열에 한국어 {interp.Count}곳 (Loc.F로 바꿔야 함):\n" + string.Join("\n", interp.Take(40));
             return msg;
         }
+
+        // 개발 빌드 전용 화면(개발자 패널·치트 키): 문구를 번역표에 넣지 않는다 (출시 빌드에는 없고, 개발자만 본다)
+        static readonly HashSet<string> DEV_ONLY_FILES = new HashSet<string> { "DebugPanel.cs" };
 
         // python 스크립트 실행 (엑셀 COM 쓰기). 끝날 때까지 기다린다
         static (bool ok, string output) RunPython(string script, params string[] args)
@@ -330,6 +334,8 @@ namespace MoreMush.EditorTools
         // C# 소스의 문자열 리터럴 (주석 제외, Debug.Log 줄 제외). 보간 문자열은 표시만 한다
         static readonly Regex TOKEN = new Regex(@"//[^\r\n]*|/\*[\s\S]*?\*/|(\$@|@\$|\$|@)?""((?:""""|\\.|[^""\\\r\n])*)""|'(?:\\.|[^'\\])'", RegexOptions.Compiled);
 
+        static readonly Regex INSPECTOR_ATTR = new Regex(@"^\s*\[(Header|Tooltip)\(", RegexOptions.Compiled);
+
         static IEnumerable<(string lit, bool interp, int line)> Literals(string src)
         {
             foreach (Match m in TOKEN.Matches(src))
@@ -338,6 +344,7 @@ namespace MoreMush.EditorTools
                 int lineStart = src.LastIndexOf('\n', m.Index) + 1, lineEnd = src.IndexOf('\n', m.Index);
                 string line = src.Substring(lineStart, (lineEnd < 0 ? src.Length : lineEnd) - lineStart);
                 if (line.Contains("Debug.Log") || line.Contains("Exception(")) continue;
+                if (INSPECTOR_ATTR.IsMatch(line)) continue;   // [Header("…")] · [Tooltip("…")]: 인스펙터 설명이라 게임 화면 문구가 아니다
                 string prefix = m.Groups[1].Value;
                 bool verbatim = prefix.Contains("@"), interp = prefix.Contains("$");
                 string body = m.Groups[2].Value;

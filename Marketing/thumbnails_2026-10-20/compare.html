@@ -1,0 +1,16 @@
+<!doctype html><meta charset=utf-8><title>listing compare</title>
+<style>body{margin:0;background:#fff;font:12px Lato,sans-serif;color:#222}
+#g{display:grid;grid-template-columns:repeat(4,var(--w,190px));gap:14px 10px;padding:10px}
+img{width:var(--w,190px);aspect-ratio:315/250;height:auto;object-fit:cover;display:block;border-radius:2px}
+.t{font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden}.me .t{color:#d33}</style>
+<div id=g></div>
+<script>
+const C=[["Retromine","https://img.itch.zone/aW1nLzMwOTI4MzM3LnBuZw==/315x250%23c/fWR7sR.png"],["One More Rock!","https://img.itch.zone/aW1nLzMwODgxOTE1LnBuZw==/315x250%23c/JztaPw.png"],["Legend of Idle","https://img.itch.zone/aW1nLzMwNjM5MDE2LnBuZw==/315x250%23c/3%2F2HDx.png"],["Marketfield","https://img.itch.zone/aW1nLzMxMDc1NjI4LnBuZw==/315x250%23c/ZIwLRB.png"],["Squeak!Squeak!!","https://img.itch.zone/aW1nLzMwOTQxODU3LnBuZw==/315x250%23c/UrbjO6.png"],
+null,["Fungaia","https://img.itch.zone/aW1nLzMxMDc3OTU2LnBuZw==/315x250%23c/7412p%2B.png"],["Dig Dan Dig!","https://img.itch.zone/aW1nLzI5NDY0MTU5LnBuZw==/315x250%23c/%2BT9ftz.png"],["Planet Life","https://img.itch.zone/aW1nLzMwNTgxODIuZ2lm/315x250%23c/mG8%2FFh.gif"],["Astra's Garden","https://img.itch.zone/aW1nLzg3NTE3ODAucG5n/315x250%23c/1XG2jG.png"],["Booster Pack Heroes","https://img.itch.zone/aW1nLzMwMDcwMTk3LnBuZw==/315x250%23c/Y4l9l4.png"],["Life and Lemon","https://img.itch.zone/aW1nLzI2NjMwOTI4LnBuZw==/315x250%23c/93qtPa.png"],["Cheeky Chooks","https://img.itch.zone/aW1nLzE4MzIxNjIucG5n/315x250%23c/jfpUzq.png"],["Popcorn Idle","https://img.itch.zone/aW1nLzI5MDgxNTA2LnBuZw==/315x250%23c/dc4dO9.png"],["Prerolled","https://img.itch.zone/aW1nLzI5Njk0NTA4LnBuZw==/315x250%23c/7dRH2N.png"],["Tiny Towers","https://img.itch.zone/aW1nLzI3NjIyMzM4LmdpZg==/315x250%23c/dyiL8E.gif"]];
+// ?c=a.png,b.png → 우리 후보들을 경쟁작 사이에 하나씩 끼운다
+const mine=(new URLSearchParams(location.search).get('c')||'ours_current.png').split(',');
+const L=C.filter(Boolean);mine.forEach((m,i)=>L.splice(1+i*5,0,null));
+let k=0;const g=document.getElementById('g');
+L.forEach(x=>{const m=!x;const [t,s]=x||['MMM '+mine[k].replace(/^.*cover_|_630x500.png/g,''),mine[k++]];
+g.insertAdjacentHTML('beforeend',`<div class="${m?'me':''}"><img src="${s}"><div class=t>${t}</div></div>`)});
+</script>

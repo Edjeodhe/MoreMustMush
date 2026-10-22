@@ -12,7 +12,8 @@ namespace MoreMush
     // Animates around the rest pose: cap wobble, arm swing, stepping feet, blinking, idle fidgets, hop squash.
     // 통짜 그림 (2026-10-16): Characters/Kids/<id>[_pick|_climb|_carry|_skin]가 있으면 부품을 모두 끄고 갓이 붙은 한 장만 그린다.
     // 크기는 그 꼬마의 부품 배치(갓 꼭대기~발바닥)에 맞추고, 움직임은 그 한 장을 기울이고 늘이고 띄운다. 복장(outfit)은 FarmCritter가 정한다.
-    // 진화 정령 (2026-10-16): Resources/Rig/evo_rig.json에 그 진화 모습(form = 각성 ★)이 있으면 관절 리그로 그린다 (CritterRig.Evo.cs, 가장 먼저).
+    // 진화 정령 (2026-10-16): Resources/Rig/evo_rig.json에 그 진화 모습(form = 각성 ★)이 있으면 관절 리그로 그린다 (CritterRig.Evo.cs).
+    // 리그2 (2026-10-19): spirit_rig2.json에 그 모습이 있고 템플릿에 리그2 슬롯이 있으면 그것이 가장 먼저 (CritterRig.Rig2.cs).
     public partial class CritterRig : MonoBehaviour
     {
         public Transform root;                  // squash/scale pivot (feet line)
@@ -70,6 +71,7 @@ namespace MoreMush
             ApplyParts(id);
             Place(acc, sk?.acc);
             Place(hat, hatId);
+            if (ApplyRig2(id)) return;             // 리그2: ★2·★3 SpiritRig2 · ★0·★1 MushRig (CritterRig.Rig2.cs)
             if (ApplyEvo(id)) return;              // 진화 정령 리그 (CritterRig.Evo.cs)
             ApplyWhole(id, sk != null);
         }
@@ -233,6 +235,7 @@ namespace MoreMush
             }
             if (!idle) return;
             float t = Time.time + phase;
+            if (Rig2On) { AnimateRig2(); return; }
             if (EvoOn) { AnimateEvo(t); return; }
             if (WholeOn) { AnimateWhole(t); return; }
             if (perKind) { Animate(t); return; }

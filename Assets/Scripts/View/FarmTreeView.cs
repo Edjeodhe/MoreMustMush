@@ -21,10 +21,12 @@ namespace MoreMush
         public readonly List<Vector2> decoPos = new List<Vector2>();
         readonly List<SpriteRenderer> fruitR = new List<SpriteRenderer>(), glowR = new List<SpriteRenderer>(), decoR = new List<SpriteRenderer>();
         (int, int, int, int) shownKey; bool laidOut;
-        float widthPx, heightPx;
+        readonly Dictionary<int, Rect> decoRect = new Dictionary<int, Rect>();   // 슬롯 → 놓인 장식이 그려진 자리 (무대 px, y 아래 +)
+        float widthPx, heightPx, footV = 1;   // footV = 그림에서 땅에 닿는 선 (v, 아래 1)
 
-        public float Top => WT.y - heightPx;
+        public float Top => WT.y - footV * heightPx;
         public float Width => widthPx;
+        public float Height { get { Layout(); return heightPx; } }
 
         // 슬롯 자리: 구역 영역 안에 왼쪽부터 고르게, 위아래로 살짝 엇갈리게
         void Layout()
@@ -45,27 +47,37 @@ namespace MoreMush
                 treeSprite.transform.localPosition = new Vector3(0, sp.bounds.size.y * k / 2 - 0.06f, 0);
             }
             heightPx = sp != null ? widthPx * sp.bounds.size.y / sp.bounds.size.x : widthPx;
+            // 땅에 닿는 선(도면 foot): 그림 아래 흐려 놓은 띠는 땅 속으로 내려서, 진한 둔덕 바닥이 밑동(WT.y)에 닿게 한다 (2026-10-20 떠 보임)
+            footV = PicData(pic)?.foot ?? 1;
+            if (sp != null) treeSprite.transform.localPosition = new Vector3(0, sp.bounds.size.y * treeSprite.transform.localScale.y / 2 - 0.06f - (1 - footV) * heightPx / Art.PPU, 0);
             shadow.transform.localScale = new Vector3(widthPx * 0.9f / Art.PPU, widthPx * 0.16f / Art.PPU, 1);
             slots.Clear();
+            var plan = PicData(pic);   // 도면(tree_layout.json)에 적힌 자리가 있으면 그 자리, 없으면 구역 영역 공식
             foreach (var kv in ZoneSlots())
             {
                 var z = ZONE[kv.Key]; int n = kv.Value;
+                List<Vector2> pts = null; plan?.mush.TryGetValue(z.id, out pts);
                 for (int i = 0; i < n; i++)
                 {
-                    float t = n == 1 ? 0.5f : i / (float)(n - 1);
-                    float x = WT.x + (z.cx + (t * 2 - 1) * z.rx) * widthPx;
-                    float y = WT.y - (z.cy + (i % 2 == 0 ? -1 : 1) * z.ry * 0.5f) * heightPx;
-                    slots.Add(new Slot { zone = z.id, mush = SlotMush(z.id, i), pos = new Vector2(x, y), phase = (i * 0.37f + z.open * 0.11f) % 1 });
+                    Vector2 pos;
+                    if (pts != null && i < pts.Count) pos = UV(pts[i].x, pts[i].y);
+                    else
+                    {
+                        float t = n == 1 ? 0.5f : i / (float)(n - 1);
+                        pos = new Vector2(WT.x + (z.cx + (t * 2 - 1) * z.rx) * widthPx, WT.y - (z.cy + (i % 2 == 0 ? -1 : 1) * z.ry * 0.5f) * heightPx);
+                    }
+                    slots.Add(new Slot { zone = z.id, mush = SlotMush(z.id, i), pos = pos, phase = (i * 0.37f + z.open * 0.11f) % 1 });
                 }
             }
-            // 장식: 설치형은 밑동 양옆 땅 위, 걸이형은 가지·수관 높이
+            // 장식 슬롯 공식 자리 (도면에 장식 자리가 없을 때·빈 슬롯 짚기): 설치형은 밑동 양옆 땅 위, 걸이형은 가지·수관 높이
+            // (2026-10-20 나무에서 장식을 떼어 낸 맨 나무: 걸이형은 수관 아래 가지 안쪽에 — 바깥 칸이 수관 끝 허공에 뜨지 않게 좁혔다)
             decoPos.Clear();
             int nd = DecoSlotCount();
             for (int i = 0; i < nd; i++)
             {
                 int k = i / 2; float side = k % 2 == 0 ? -1 : 1, step = 1 + k / 2;
                 decoPos.Add(DecoSlotHang(i)
-                    ? new Vector2(WT.x + side * (0.18f + 0.1f * step) * widthPx, WT.y - (0.5f + 0.06f * (k % 3)) * heightPx)
+                    ? new Vector2(WT.x + side * (0.14f + 0.09f * step) * widthPx, WT.y - (0.5f + 0.06f * (k % 3)) * heightPx)
                     : new Vector2(WT.x + side * (0.42f + 0.14f * step) * widthPx, WT.y + 24 + 10 * (k % 2)));
             }
             Sign();
@@ -94,17 +106,28 @@ namespace MoreMush
             return worked ? (float)(t - System.Math.Floor(t)) : 1;
         }
 
+        // 2026-10-20 사용자: 세계수에 걸린 나무버섯 그림이 안 어울려서 뺀다. 슬롯·수확 규칙(보따리에 쌓이고 "수확 보따리 받기"로 받는다)은 그대로,
+        // 그림과 짚기만 끈다. 꼬마들은 지금처럼 자기 구역으로 가서 나무에서 따 온다
+        public static bool ShowFruits = false;
+
         public int SlotAt(float x, float y)
         {
+            if (!ShowFruits) return -1;
             Layout();
             int best = -1; float bd = FruitPx * 0.8f; bd *= bd;
             for (int i = 0; i < slots.Count; i++) { float d = U.D2(x, y, slots[i].pos.x, slots[i].pos.y - FruitPx * 0.3f); if (d < bd) { bd = d; best = i; } }
             return best;
         }
+        // 놓인 장식은 그려진 자리(도면 자리일 수 있다)로, 빈 슬롯은 공식 자리로 짚는다
         public int DecoAt(float x, float y)
         {
             Layout();
-            for (int i = 0; i < decoPos.Count; i++) if (Mathf.Abs(x - decoPos[i].x) < 50 * ZoomK && y < decoPos[i].y + 10 && y > decoPos[i].y - 100 * ZoomK) return i;
+            foreach (var kv in decoRect) if (kv.Value.Contains(new Vector2(x, y))) return kv.Key;
+            for (int i = 0; i < decoPos.Count; i++)
+            {
+                if (decoRect.ContainsKey(i)) continue;
+                if (Mathf.Abs(x - decoPos[i].x) < 60 * ZoomK && y < decoPos[i].y + 10 && y > decoPos[i].y - 120 * ZoomK) return i;
+            }
             return -1;
         }
         public bool TrunkAt(float x, float y) { Layout(); return Mathf.Abs(x - WT.x) < widthPx * 0.22f && y < WT.y + 10 && y > WT.y - heightPx * 0.6f; }
@@ -125,7 +148,7 @@ namespace MoreMush
             transform.localPosition = Art.P(WT.x, WT.y);
             treeSprite.sortingOrder = WT.order; shadow.sortingOrder = WT.order - 1;
             double t0 = Now(); float px = FruitPx;
-            for (int i = 0; i < slots.Count; i++)
+            for (int i = 0; i < (ShowFruits ? slots.Count : 0); i++)
             {
                 var f = Grow(fruitR, fruits, i); var g = Grow(glowR, glows, i);
                 var s = slots[i];
@@ -150,7 +173,7 @@ namespace MoreMush
                     g.sortingOrder = WT.order + 1;
                 }
             }
-            for (int i = slots.Count; i < fruitR.Count; i++) { fruitR[i].enabled = false; glowR[i].enabled = false; }
+            for (int i = ShowFruits ? slots.Count : 0; i < fruitR.Count; i++) { fruitR[i].enabled = false; glowR[i].enabled = false; }
             for (int i = fruitR.Count; i < fruits.Length; i++) { if (fruits[i] != null) fruits[i].enabled = false; if (i < glows.Length && glows[i] != null) glows[i].enabled = false; }
             DrawDecos();
         }
@@ -158,6 +181,8 @@ namespace MoreMush
         void DrawDecos()
         {
             var placed = G.farm.decoSlots;
+            var plan = PicData(WT.Picture(Stage()));
+            decoRect.Clear();
             int n = 0;
             for (int i = 0; i < decoPos.Count && i < placed.Count; i++)
             {
@@ -167,13 +192,24 @@ namespace MoreMush
                 r.enabled = true;
                 var spr = SpriteDB.Get("Farm/Props/", d.art);
                 if (r.sprite != spr) r.sprite = spr;
-                Art.FitPx(r, (d.hang ? 70 : 96) * ZoomK);
-                var p = decoPos[i];
-                r.transform.localPosition = new Vector3((p.x - WT.x) / Art.PPU, (WT.y - p.y + (d.hang ? 35 : 48)) / Art.PPU, 0);
+                // 2026-10-20 수채화 장식으로 교체하며 조금 키움 (예전 70·96은 큰 나무 옆에서 잘 안 보였다)
+                // 도면에 그 장식 자리가 있으면 걸이형은 고리(위 끝)를, 설치형은 바닥(아래 끝)을 그 자리에 댄다. 없으면 슬롯 공식 자리에 바닥을 댄다
+                DecoSpot at = null; plan?.deco.TryGetValue(d.id, out at);
+                float px = DecoPx(d) * (at?.s ?? 1);
+                Art.FitPx(r, px);
+                var b = spr != null ? spr.bounds.size : Vector3.one;
+                float w = px * b.x / Mathf.Max(b.x, b.y), h = px * b.y / Mathf.Max(b.x, b.y);
+                var p = at != null ? UV(at.u, at.v) : decoPos[i];
+                float cy = at != null && d.hang ? p.y + h / 2 : p.y - h / 2;   // 무대 y (아래 +)
+                r.transform.localPosition = new Vector3((p.x - WT.x) / Art.PPU, (WT.y - cy) / Art.PPU, 0);
                 r.color = Color.white;
                 r.sortingOrder = d.hang ? WT.order + 3 : 1000 + Mathf.RoundToInt(p.y);
+                decoRect[i] = new Rect(p.x - w / 2, cy - h / 2, w, h);
             }
             for (int i = n; i < decoR.Count; i++) decoR[i].enabled = false;
         }
+
+        // 장식 크기 (무대 px, 긴 변). 웹 편집기(Tools/tree-layout)도 같은 값으로 그린다
+        float DecoPx(Deco d) => (d.hang ? 95 : 115) * ZoomK;
     }
 }

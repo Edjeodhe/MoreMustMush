@@ -311,8 +311,8 @@ namespace MoreMush
             if (m.cluster || m.giant || m.boss) amt *= st.heavyMul;
             if (m.boss) amt *= st.bossMul;
             bool crit = forceCrit || U.Chance((float)(st.crit + (b != null ? HV[b.hv].crit : 0)));
-            double hpBefore = m.hp;
-            m.hp -= amt * (crit ? st.critMul : 1);
+            double hpBefore = m.hp, dealt = amt * (crit ? st.critMul : 1);
+            m.hp -= dealt;
             RecordDamage(src ?? kind, b, Math.Min(hpBefore, hpBefore - m.hp), m.hp <= 0);
             m.squish = 1;
             if (m.hpLag < 0 || m.hitT > 0.5f) m.hpLag = hpBefore;   // the trail starts where the bar was before this burst
@@ -320,7 +320,7 @@ namespace MoreMush
             if (crit && m.hp > 0) { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.HitAnim, m.x, m.y, m.r * 2.6f, 0.18f, new Color(1, 0.72f, 0.6f, 1), FxR(0, 360), 0); AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 2.4f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }
             // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
             double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
-            AddScore(sc, m.x, m.y - m.r, m.giant || m.boss ? 3 : m.sp.t, crit, m.golden);
+            AddScore(sc, m.x, m.y - m.r, m.giant || m.boss ? 3 : m.sp.t, crit, m.golden, dealt);   // 버섯 위 숫자는 데미지 (점수는 HUD에만)
             if (m.boss)
             {
                 BossDamaged(m);
@@ -524,12 +524,13 @@ namespace MoreMush
         void QueueSam(Shroom m, Ball b) => queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
         void QueueWave(float x, float y, int depth, Ball b) => queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, depth, b) });
 
-        void AddScore(double v, float x, float y, int tier, bool crit, bool golden)
+        // dmg >= 0: 숫자로는 점수 대신 그 타격의 피해를 띄운다 (점수는 그대로 더한다)
+        void AddScore(double v, float x, float y, int tier, bool crit, bool golden, double dmg = -1)
         {
             score += v; scoreBump = 1;
             if (texts.Count > 25 && tier < 2 && !golden) return;
             if (texts.Count > 45) return;
-            texts.Add(new FloatText { x = x + U.Rand(-8, 8), y = y, vx = FxR(-40, 40), vy = crit ? -170 : -130, v = v, tier = tier, crit = crit, golden = golden });
+            texts.Add(new FloatText { x = x + U.Rand(-8, 8), y = y, vx = FxR(-40, 40), vy = crit ? -170 : -130, v = dmg >= 0 ? dmg : v, dmg = dmg >= 0, tier = tier, crit = crit, golden = golden });
         }
 
         public void AddPart(float x, float y, float vx, float vy, float life, Color col, float size, FxShape shape = FxShape.Dot)

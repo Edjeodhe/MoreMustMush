@@ -59,6 +59,8 @@ namespace MoreMush
             }
 
             if (p.landT > 0) { float l = p.landT / 0.35f; sy *= 1 - 0.22f * l * l; sx *= 1 + 0.18f * l * l; }   // 떨어져 착지: 납작했다 돌아옴
+            // 리그2는 통통·기울기·돌기·착지를 리그 안에서 한다 (겹치면 두 번 튄다). 들린 몸의 흔들림(진자)만 남긴다
+            if (rig.Rig2On) { ox = oy = 0; sx = sy = 1; rot = p.state == "held" && p.anim == null ? p.swing : 0; }
 
             transform.localPosition = Art.P(p.x, p.y);
             // a little bigger as the camera pulls back (not fully: the tree must look like it outgrew them)
@@ -76,6 +78,7 @@ namespace MoreMush
             rig.pokeAt = p.pokeAt;   // 누르면 갓이 통통 튄다
             rig.SetLook(p.id, CharSkinOn(p.id)?.id, hat);
             rig.motion = p.anim ?? (FarmView.Climbing(p) ? "climb" : p.state == "pick" ? "work" : p.state == "perch" ? "idle" : p.state == "climb" ? "walk" : p.state);
+            rig.rig2Motion = FarmView.I != null ? FarmView.I.RigMotion(p) : null;   // 리그2: 사다리·줄기·폴짝·착지까지 나눈 이름
             rigGroup.sortingOrder = order;
             if (!rig.gameObject.activeSelf) rig.gameObject.SetActive(true);
             builder.enabled = false;
@@ -123,8 +126,8 @@ namespace MoreMush
                 float w = Mathf.Min(420, sayText.preferredWidth * P + 34);
                 // sayRect is in stage px at the critter's scale (it is spread against the other bubbles); clamp it
                 // to the visible stage, which widens with the farm camera
-                float ws = w * zsc, half = W / 2 * FarmView.Zoom;
-                float bx = Mathf.Clamp(p.x - ws / 2, WT.camX - half + 10, WT.camX + half - ws - 10), by = (-R0 * 2 - 78) * zsc;
+                float ws = w * zsc, half = W / 2 * FarmView.Zoom * FarmView.ViewK, cx0 = FarmView.ViewCenter.x;   // 휠 확대(ViewK) 중에도 보이는 화면 안
+                float bx = Mathf.Clamp(p.x - ws / 2, cx0 - half + 10, cx0 + half - ws - 10), by = (-R0 * 2 - 78) * zsc;
                 sayRect = new Rect(bx, p.y + by, ws, 50 * zsc); sayFeetX = p.x; sayFeetY = p.y;
                 Art.SlicedPx(sayBack, w, 50);
                 PlaceSay(0, 0);

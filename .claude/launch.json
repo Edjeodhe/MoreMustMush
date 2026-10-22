@@ -12,6 +12,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["Tools/rig-web/serve.mjs", "5178"],
       "port": 5178
+    },
+    {
+      "name": "tree-layout",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["Tools/tree-layout/serve.mjs", "5179"],
+      "port": 5179
     }
   ]
 }

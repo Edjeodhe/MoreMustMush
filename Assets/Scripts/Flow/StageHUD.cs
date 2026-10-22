@@ -14,13 +14,16 @@ namespace MoreMush
     public class StageHUD : MonoBehaviour
     {
         StageController stage;
-        TMP_Text score, scoreLabel, gold, timer, info, stageNo, combo, speed, gimmickName, gimmickDesc;
+        TMP_Text score, scoreLabel, gold, timer, info, stageNo, combo, comboGhost, speed, gimmickName, gimmickDesc;
         GameObject gimmick;
         Image weatherIcon, timeFill, endDim;
         TMP_Text endTitle;
         static readonly Color TimeOk = U.Hex("#8cc47a"), TimeMid = U.Hex("#e8c25e"), TimeLow = U.Hex("#dd6a52"), TimeLow2 = U.Hex("#e8946a");   // 옛 RoundHUD와 같은 수채 색
         double shownScore = -1, shownGold = -1;
         int shownTenths = -1, shownCombo = -1, shownSpeed = -1;
+        float comboT = 9, comboPow = 1, comboDir = 1;   // 콤보 애니메이션: 바뀐 뒤 지난 시간 · 세기 · 기울 방향(번갈아)
+        bool comboHot, comboDrop;                       // 10단위 순간 치명 색 · 0으로 끊김
+        Vector2 comboHome;
 
         void Awake()
         {
@@ -37,6 +40,9 @@ namespace MoreMush
             stageNo = SceneUI.TextIn(SceneUI.Find(scene, "StageText"));
             weatherIcon = SceneUI.Find(scene, "WeatherIcon")?.GetComponent<Image>();
             combo = SceneUI.TextIn(SceneUI.Find(scene, "Cur_Combo"));
+            comboGhost = SceneUI.TextIn(SceneUI.Find(scene, "ComboGhost"));   // 오를 때 부풀며 사라지는 잔상 (배치한 Cur_Combo 복제)
+            if (combo != null) comboHome = combo.rectTransform.anchoredPosition;
+            if (comboGhost != null) comboGhost.canvasRenderer.SetAlpha(0);
             speed = SceneUI.TextIn(SceneUI.Find(scene, "SpeedText"));
             gimmick = SceneUI.Find(scene, "StageGimmick")?.gameObject;
             gimmickName = SceneUI.TextIn(SceneUI.Find(scene, "GimmickName"));
@@ -127,7 +133,7 @@ namespace MoreMush
             if (timer != null && tenths != shownTenths) { shownTenths = tenths; UIUtil.SetText(timer, Game.DBG.infinite ? "∞" : Loc.F("{0:F1}초", Mathf.Max(0, R.timeLeft))); }
             int c = 0;
             foreach (var b in R.balls) if (b.hits > c) c = b.hits;   // 콤보 = 떨어지기 전까지 버섯 타격 수
-            if (combo != null && c != shownCombo) { shownCombo = c; UIUtil.SetText(combo, c.ToString()); }
+            if (combo != null) DrawCombo(c);
             if (speed != null && StageController.Speed != shownSpeed) { shownSpeed = StageController.Speed; UIUtil.SetText(speed, "x" + shownSpeed); }
         }
 
@@ -165,6 +171,58 @@ namespace MoreMush
                 timeFill.enabled = frac > 0;
             }
             timeFill.color = Game.DBG.infinite ? TimeOk : R.timeLeft <= 5 ? (Mathf.Sin(now * 12) > 0 ? TimeLow : TimeLow2) : R.timeLeft <= 10 ? TimeMid : TimeOk;
+        }
+
+        static string ComboText(int c, bool hot) => ComboDigits.Spell(c, hot, true) ?? c + " COMBO";
+
+        // 오른쪽 위 콤보 (라운드의 유일한 콤보 표시): "12 COMBO" 그림 글자. 오를 때마다 크게 튀어 출렁이고(펀치), 번갈아 기울고,
+        // 위로 툭 차이며 흔들리고, 뒤에서 잔상이 부풀며 사라진다. 콤보가 클수록 세게, 10단위는 더 크게 + 잠깐 치명 색.
+        // 0으로 끊기면 납작하게 눌렸다가 다시 선다.
+        void DrawCombo(int c)
+        {
+            if (c != shownCombo)
+            {
+                bool up = c > shownCombo && shownCombo >= 0;
+                comboDrop = c == 0 && shownCombo > 0;
+                shownCombo = c;
+                if (up || comboDrop)
+                {
+                    comboT = 0;
+                    comboHot = up && c % 10 == 0;
+                    comboPow = comboDrop ? 1 : Mathf.Min(1.6f, 1 + Mathf.Log(Mathf.Max(1, c), 2) * 0.08f) * (comboHot ? 1.5f : 1);
+                    comboDir = -comboDir;
+                }
+                UIUtil.SetText(combo, ComboText(c, comboHot));
+                if (comboGhost != null && up) UIUtil.SetText(comboGhost, combo.text);
+            }
+            if (comboT > 1.2f) return;
+            float t = comboT += Time.unscaledDeltaTime;
+            if (comboHot && t > 0.45f) { comboHot = false; UIUtil.SetText(combo, ComboText(shownCombo, false)); }
+            var rt = combo.rectTransform;
+            if (t > 1.2f || comboDrop)
+            {
+                // 끊김(또는 끝): 납작하게 눌렸다가 다시 선다
+                float sq = t > 1.2f ? 0 : Mathf.Exp(-t * 8) * Mathf.Cos(t * 18);
+                rt.localScale = new Vector3(1 + 0.25f * sq, 1 - 0.35f * sq, 1);
+                rt.localRotation = Quaternion.identity;
+                rt.anchoredPosition = comboHome + new Vector2(0, t > 1.2f ? 0 : -16 * Mathf.Exp(-t * 9));
+                if (comboGhost != null) comboGhost.canvasRenderer.SetAlpha(0);
+                return;
+            }
+            float p = comboPow;
+            float s = 1 + 0.6f * p * Mathf.Exp(-t * 9) * Mathf.Cos(t * 26);
+            rt.localScale = new Vector3(s, s, 1);
+            rt.localRotation = Quaternion.Euler(0, 0, comboDir * 12 * p * Mathf.Exp(-t * 10) * Mathf.Cos(t * 22));
+            float amp = 7 * p * Mathf.Exp(-t * 13);
+            rt.anchoredPosition = comboHome + new Vector2(Mathf.Sin(t * 95) * amp, 22 * p * Mathf.Exp(-t * 12) * Mathf.Cos(t * 20));
+            if (comboGhost != null)
+            {
+                float k = Mathf.Clamp01(t / 0.4f), gs = 1 + (0.7f + 0.3f * p) * (1 - (1 - k) * (1 - k));
+                var g = comboGhost.rectTransform;
+                g.localScale = new Vector3(gs, gs, 1);
+                g.localRotation = rt.localRotation;
+                comboGhost.canvasRenderer.SetAlpha(0.55f * (1 - k));
+            }
         }
     }
 }

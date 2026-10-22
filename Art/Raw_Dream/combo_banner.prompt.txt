@@ -1,0 +1,8 @@
+Sprite sheet: a 1x2 grid holding 2 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines and no extra words: only the exact lettering listed for each cell, spelled exactly as written. All assets share one consistent lettering style.
+Big headline lettering for a soft dreamy watercolor game, painted EXACTLY like the attached combo-counter glyph sheet: the same heavy chunky italic slanted typeface with softly rounded corners, thick painted rim, faint soft shadow down-right, rough-paper watercolor texture. Each cell holds the words "SUPER" on the first line and "COMBO!" on the second line, centred, the two lines touching a little, slightly arched upward.
+
+Assets in reading order (left to right, top to bottom):
+1. "SUPER COMBO!" in the GOLD SET colours of the attached sheet (honey-gold wash, pale butter top, apricot-amber bottom, thick chestnut-brown rim)
+2. "SUPER COMBO!" in the CRIT SET colours of the attached sheet (rose-coral to crimson-magenta wash, thick honey-gold rim with a thin deep plum edge outside, a few tiny white four-point sparkle glints)

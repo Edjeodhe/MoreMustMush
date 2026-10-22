@@ -137,9 +137,7 @@ namespace MoreMush
             if (whole != null) whole.gameObject.SetActive(false);
 
             // 크기: 부품 꼬마와 같은 키(갓 꼭대기~발바닥)를 ★1 모습에 맞추고, 다른 모습은 그림 크기 비율대로 (자랄수록 커진다)
-            var capSp = SpriteDB.Get("Characters/Critters/cap_", id); var footSp = SpriteDB.Get("Characters/Critters/foot_", id);
-            float top = lay.cap.y + (capSp != null ? capSp.bounds.max.y * lay.cap.s : 0.5f);
-            float bottom = lay.foot.y + (footSp != null ? footSp.bounds.min.y * lay.foot.s : -0.5f);
+            LayoutSpan(id, out float bottom, out float top);
             var refL = EvoOf(id, 1) ?? l;
             evoScale = (top - bottom) / Mathf.Max(0.01f, refL.height * refL.k) * l.k;   // 부품 단위 → 배치 표 단위
             evoHalfH = l.height * 0.5f * evoScale;

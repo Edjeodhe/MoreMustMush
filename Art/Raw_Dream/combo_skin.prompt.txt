@@ -1,0 +1,30 @@
+Sprite sheet: a 5x5 grid holding 23 separate game assets on a fully transparent background.
+Each asset sits centered in its own invisible grid cell with clear empty space around it. Assets never touch or overlap.
+No grid lines and no extra words: only the exact lettering listed for each cell, spelled exactly as written. All assets share one consistent lettering style.
+Combo-counter font glyphs (a game 'damage skin') for a soft dreamy watercolor game: ONE single character or word per cell. Use EXACTLY the typeface of the attached numerals sheet (heavy, condensed, chunky numerals leaning forward in an italic slant with softly rounded corners, thick painted rim, faint soft shadow offset down-right) and the same rough-paper watercolor texture, but painted in two COLOUR SETS. GOLD SET: fill is a warm honey-gold watercolor wash, pale butter-cream at the top melting into deeper apricot-amber at the bottom, with a soft pale highlight stroke along the upper-left inside edge; rim is a thick warm chestnut-brown painted edge. CRIT SET (fancier, for critical hits): fill is a rich rose-coral watercolor wash melting into deep crimson-magenta at the bottom with a soft pale pink highlight stroke; a thick glowing honey-gold painted rim, and outside it a thin deep plum edge; two or three tiny white four-point sparkle glints painted on the corners of each glyph. Both sets: digits all the same height, matte painted look with visible paper grain and pigment pooling, no vector gloss, no 3D bevel, no drop shadow on the ground, nothing else in the cells.
+
+Assets in reading order (left to right, top to bottom):
+1. the digit "0" in the GOLD SET
+2. the digit "1" in the GOLD SET
+3. the digit "2" in the GOLD SET
+4. the digit "3" in the GOLD SET
+5. the digit "4" in the GOLD SET
+6. the digit "5" in the GOLD SET
+7. the digit "6" in the GOLD SET
+8. the digit "7" in the GOLD SET
+9. the digit "8" in the GOLD SET
+10. the digit "9" in the GOLD SET
+11. the digit "0" in the CRIT SET
+12. the digit "1" in the CRIT SET
+13. the digit "2" in the CRIT SET
+14. the digit "3" in the CRIT SET
+15. the digit "4" in the CRIT SET
+16. the digit "5" in the CRIT SET
+17. the digit "6" in the CRIT SET
+18. the digit "7" in the CRIT SET
+19. the digit "8" in the CRIT SET
+20. the digit "9" in the CRIT SET
+21. the word "COMBO" in the GOLD SET (letters about two-thirds of the digit height, same slanted typeface)
+22. the word "COMBO" in the CRIT SET (letters about two-thirds of the digit height, same slanted typeface)
+23. the word "CRITICAL!" in the CRIT SET (letters about two-thirds of the digit height, same slanted typeface)
+Leave the remaining 2 cell(s) empty.

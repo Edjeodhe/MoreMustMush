@@ -1,0 +1,26 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>ref copy</title>
+<!-- 다른 사이트(예: ChatGPT)에 참고 그림을 넘기는 다리. 그 사이트는 보안 정책 때문에 127.0.0.1을 못 읽고, 미리보기 창은 팝업도 안 되므로
+     클립보드로 넘긴다: http://127.0.0.1:5178/Tools/rig-web/bridge.html?f=<경로> 를 열고 버튼을 누르면 그림이 클립보드에 복사된다
+     → 그 사이트 입력칸에서 Ctrl+V. -->
+<body style="font:16px system-ui;padding:16px">
+<button id="b" style="font-size:22px;padding:16px 28px">그림 복사</button>
+<div id="s" style="margin:10px 0"></div>
+<img id="i" style="max-width:100%;border:1px solid #ccc">
+<script>
+const f = new URLSearchParams(location.search).get("f") || "";
+const img = document.getElementById("i");
+img.src = "/" + f + "?t=" + Date.now();
+document.getElementById("b").onclick = async () => {
+  const s = document.getElementById("s");
+  try {
+    const c = document.createElement("canvas"); c.width = img.naturalWidth; c.height = img.naturalHeight;
+    c.getContext("2d").drawImage(img, 0, 0);
+    const blob = await new Promise((r) => c.toBlob(r, "image/png"));
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+    s.textContent = "복사됨: " + f.split("/").pop();
+    document.title = "copied";
+  } catch (e) { s.textContent = "실패: " + e.message; document.title = "copy failed"; }
+};
+</script>

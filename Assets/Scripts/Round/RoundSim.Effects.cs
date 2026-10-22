@@ -310,14 +310,14 @@ namespace MoreMush
             flamePal = fi;
             if (chain % FLAME_STEP == 0)
             {
-                feverMsg = new FeverMsg { text = "SUPER COMBO!", sub = $"{U.Fmt(chain)} COMBO", lv = 2, pal = fi, noIcon = true };
+                feverMsg = new FeverMsg { text = "SUPER COMBO!", sub = $"{U.Fmt(chain)} COMBO", lv = 2, n = chain, pal = fi, noIcon = true };
                 flash = Mathf.Max(flash, 0.3f);
                 Snd.Record(); Snd.Tone(260 + fi * 60, 0.6f, Snd.Wave.Saw, 0.3f, 3);
             }
             int lv = FeverLv(chain);
             if (lv > fever)
             {
-                fever = lv; feverMsg = new FeverMsg { text = FEVER[lv - 1].n, lv = lv };
+                fever = lv; feverMsg = new FeverMsg { text = FEVER[lv - 1].n, lv = lv, n = chain };
                 flash = Mathf.Max(flash, 0.5f); shake = Mathf.Max(shake, 0.4f);
                 Snd.Record(); Snd.Tone(lv == 2 ? 220 : 180, 0.5f, Snd.Wave.Saw, 0.35f, 3);
             }
