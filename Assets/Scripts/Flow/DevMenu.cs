@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || MMM_DEV
+#if MMM_DEV
 using UnityEngine;
 using UnityEngine.UI;
 using static MoreMush.Game;
@@ -6,7 +6,7 @@ using static MoreMush.Game;
 namespace MoreMush
 {
     // 테스트용 개발자 메뉴: 모든 화면 왼쪽 가장자리의 작은 DEV 버튼 → 골드 복사.
-    // 에디터와 스크립트 정의 MMM_DEV가 있는 빌드에만 들어간다 (Player Settings → Scripting Define Symbols, 출시 빌드에서는 뺀다)
+    // 스크립트 정의 MMM_DEV가 있을 때만 들어간다 (에디터 포함. Player Settings → Scripting Define Symbols, 출시 빌드에서는 뺀다)
     public class DevMenu : MonoBehaviour
     {
         const double ADD_GOLD = 1e6;   // 골드가 적을 때 ×10 대신 최소로 더하는 양
