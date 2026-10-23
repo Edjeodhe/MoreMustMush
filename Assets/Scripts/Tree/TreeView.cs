@@ -37,6 +37,8 @@ namespace MoreMush
         void Awake()
         {
             content.GetComponentsInChildren(true, nodes);
+            foreach (var n in nodes) if (!NODE.ContainsKey(n.nodeId)) n.gameObject.SetActive(false);   // 정의에서 빠진 노드(OFF_NODES 등)는 씬에 남아 있어도 숨긴다
+            nodes.RemoveAll(n => !NODE.ContainsKey(n.nodeId));
             foreach (var n in nodes) byId[n.nodeId] = n;
         }
 

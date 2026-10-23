@@ -33,7 +33,7 @@ namespace MoreMush.EditorTools
             var atk = NODE["inf_atk"]; var gold = NODE["inf_gold"];
             Check(atk.inf && gold.inf && atk.max == 0 && gold.max == 0, "싱크 2개가 inf·max 0으로 만들어짐");
             Check(atk.req == "ps_atk4" && gold.req == "ed_score3p", "열림 조건 = ps_atk4·ed_score3p 최대");
-            Check(Math.Abs(atk.infCostK - 1.076) < 1e-9 && Math.Abs(atk.infMul - 1.05) < 1e-12 && Math.Abs(gold.infMul - 1.025) < 1e-12, "가격 ×1.076 · 효과 ×1.05 / ×1.025");
+            Check(Math.Abs(atk.infCostK - 1.076) < 1e-9 && atk.infMul > 1 && gold.infMul > 1, $"가격 ×1.076 · 효과 레벨당 +{atk.infMul - 1:0.###} / +{gold.infMul - 1:0.###}");
             Check(NodeCost(atk, 0).gold == Math.Ceiling(atk.infCost0 * COST_MUL) && NodeCost(atk, 0).gem == 0, "1레벨 가격 = Cost_Lv1");
             var capCost = NodeCost(atk, atk.infCap).gold;
             Check(atk.infCap > 1000 && !double.IsInfinity(capCost) && !double.IsNaN(capCost), $"상한 {atk.infCap}레벨 가격이 유한함 ({capCost:E2})");
@@ -53,10 +53,10 @@ namespace MoreMush.EditorTools
                 int L = Lv("inf_atk");
                 Check(k == L && k > 50 && k < 10000, $"BuyMax(1e20 골드) → {k}레벨");
                 double ratio = ComputeStats("clear", THEMES[0].id).atk / atk0;
-                Check(Math.Abs(ratio / Math.Pow(1.05, L) - 1) < 1e-9, $"공격력 ×1.05^{L} 반영");
+                Check(Math.Abs(ratio / (1 + (atk.infMul - 1) * L) - 1) < 1e-9, $"공격력 ×(1 + {atk.infMul - 1:0.###}×{L}) 반영 (덧셈)");
                 G.nodes["inf_gold"] = 40;
                 double gr = ComputeStats("clear", THEMES[0].id).goldMul / gm0;
-                Check(Math.Abs(gr / Math.Pow(1.025, 40) - 1) < 1e-9, "점수→골드 ×1.025^40 반영");
+                Check(Math.Abs(gr / (1 + (gold.infMul - 1) * 40) - 1) < 1e-9, "점수→골드 ×(1 + 레벨당 증가×40) 반영 (덧셈)");
                 Check(NodeState(atk) != "max", "상한 전에는 MAX가 아님");
 
                 // 세이브 정리: 싱크 레벨은 상한까지 남고, 넘으면 상한으로 잘린다

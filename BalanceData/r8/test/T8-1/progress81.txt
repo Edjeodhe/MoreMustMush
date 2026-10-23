@@ -1,0 +1,95 @@
+[11:14:12] start items=snap,eff,ball,cols,c24 DB MMM_DB_Ver.07.xlsx
+[11:14:25] snap s1
+[11:14:37] snap s2
+[11:14:50] snap s3
+[11:15:03] snap s4
+[11:15:16] snap s5
+[11:15:29] snap s6
+[11:15:29] done snap
+[11:15:29] done eff
+[11:15:29] ball s1
+[11:15:30] ball s2
+[11:15:30] ball s3
+[11:15:30] ball s4
+[11:15:30] ball s5
+[11:15:30] ball s6
+[11:15:30] done ball
+[11:15:31] cols s1
+[11:15:32] cols s2
+[11:15:33] cols s3
+[11:15:33] cols s4
+[11:15:34] cols s5
+[11:15:35] cols s6
+[11:15:35] done cols
+[11:15:35] c24 s1
+[11:15:35] c24 s2
+[11:15:35] c24 s3
+[11:15:36] c24 s4
+[11:15:36] c24 s5
+[11:15:36] c24 s6
+[11:15:36] done c24
+[11:15:58] start items=legacy,m DB MMM_DB_Ver.07.xlsx
+[11:15:58] legacy s1
+[11:15:59] legacy s2
+[11:16:00] legacy s3
+[11:16:00] legacy s4
+[11:16:01] legacy s5
+[11:16:02] legacy s6
+[11:16:02] done legacy
+[11:16:03] m s1 boss34 lag0
+[11:16:05] m s1 boss34 lag4
+[11:16:06] m s1 boss34 lag8
+[11:16:08] m s1 boss44 lag0
+[11:16:10] m s1 boss44 lag4
+[11:16:14] m s1 boss44 lag8
+[11:16:21] m s1 boss54 lag0
+[11:16:27] m s1 boss54 lag4
+[11:16:30] m s1 boss54 lag8
+[11:16:32] m s2 boss34 lag0
+[11:16:33] m s2 boss34 lag4
+[11:16:33] m s2 boss34 lag8
+[11:16:36] m s2 boss44 lag0
+[11:16:38] m s2 boss44 lag4
+[11:16:42] m s2 boss44 lag8
+[11:16:48] m s2 boss54 lag0
+[11:16:53] m s2 boss54 lag4
+[11:16:56] m s2 boss54 lag8
+[11:16:58] m s3 boss34 lag0
+[11:16:59] m s3 boss34 lag4
+[11:17:00] m s3 boss34 lag8
+[11:17:03] m s3 boss44 lag0
+[11:17:05] m s3 boss44 lag4
+[11:17:08] m s3 boss44 lag8
+[11:17:15] m s3 boss54 lag0
+[11:17:20] m s3 boss54 lag4
+[11:17:23] m s3 boss54 lag8
+[11:17:25] m s4 boss34 lag0
+[11:17:26] m s4 boss34 lag4
+[11:17:27] m s4 boss34 lag8
+[11:17:29] m s4 boss44 lag0
+[11:17:32] m s4 boss44 lag4
+[11:17:35] m s4 boss44 lag8
+[11:17:42] m s4 boss54 lag0
+[11:17:48] m s4 boss54 lag4
+[11:17:52] m s4 boss54 lag8
+[11:17:53] m s5 boss34 lag0
+[11:17:55] m s5 boss34 lag4
+[11:17:55] m s5 boss34 lag8
+[11:17:58] m s5 boss44 lag0
+[11:18:00] m s5 boss44 lag4
+[11:18:03] m s5 boss44 lag8
+[11:18:10] m s5 boss54 lag0
+[11:18:16] m s5 boss54 lag4
+[11:18:20] m s5 boss54 lag8
+[11:18:22] m s6 boss34 lag0
+[11:18:24] m s6 boss34 lag4
+[11:18:25] m s6 boss34 lag8
+[11:18:28] m s6 boss44 lag0
+[11:18:30] m s6 boss44 lag4
+[11:18:33] m s6 boss44 lag8
+[11:18:41] m s6 boss54 lag0
+[11:18:47] m s6 boss54 lag4
+[11:18:50] m s6 boss54 lag8
+[11:18:50] done m
+[11:34:27] start items=eff DB MMM_DB_Ver.07.xlsx
+[11:34:27] done eff

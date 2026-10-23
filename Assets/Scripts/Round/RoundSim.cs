@@ -412,7 +412,7 @@ namespace MoreMush
         }
 
         // 낱개 버섯 (군락에 속하지 않는다. 수확해도 다시 생기지 않는다): 튜토리얼 판은 첫 발사 때 TUTORIAL_LOOSE개, 초반 판은 시작 때 EARLY_LOOSE
-        public const int TUTORIAL_LOOSE = 8;
+        public const int TUTORIAL_LOOSE = 12;   // 첫 판 수입을 늘려 첫 강화까지 이어지게 (8회차 2026-10-23, 이전 8)
         bool looseSpawned;
 
         void SpawnLoose(int count)

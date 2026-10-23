@@ -1,0 +1,6 @@
+seed 1 done 11:31:49
+seed 2 done 11:32:02
+seed 3 done 11:32:15
+seed 4 done 11:32:29
+seed 5 done 11:32:43
+seed 6 done 11:32:57

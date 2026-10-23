@@ -210,8 +210,9 @@ namespace MoreMush
 
         static SkillInfo SkillInfoOf(string id)
         {
-            var (S, P) = SkillSP(SKILLS[id], Lv(id));
-            return new SkillInfo { on = Lv(id) > 0, S = S, p = SkillRate(S), P = P, pm = SkillPow(P) };
+            int L = OFF_NODES.Contains(id) ? 0 : Lv(id);   // 뺀 노드는 옛 세이브에 레벨이 남아 있어도 끈다
+            var (S, P) = SkillSP(SKILLS[id], L);
+            return new SkillInfo { on = L > 0, S = S, p = SkillRate(S), P = P, pm = SkillPow(P) };
         }
 
         // ===== 라운드 능력치 =====

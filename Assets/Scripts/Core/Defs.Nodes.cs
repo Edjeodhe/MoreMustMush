@@ -20,6 +20,9 @@ namespace MoreMush
 
         public static readonly Dictionary<string, Skill> SKILLS = new Dictionary<string, Skill>();
         public static readonly List<string> SKILL_IDS = new List<string>();
+        // 잠시 뺀 노드: DB에 있어도 트리·효과에서 뺀다. 세이브의 레벨은 지우지 않아 다시 넣으면 돌아온다
+        // homing(유도): 보스 판에서 공이 보스로 날아가 보스 체력이 이 스킬 기준으로 잡혔다 → 빼고 다시 맞춤 (사용자 2026-10-23)
+        public static readonly HashSet<string> OFF_NODES = new HashSet<string> { "homing" };
 
         // 성장 설계
         // - 레벨 효과는 레벨당 고정값을 더하는 식이다. 최대 레벨은 2~4로 짧다.
@@ -121,9 +124,10 @@ namespace MoreMush
             public static double gm_gourmet(int L) => V("gm_gourmet", L);           // 나무버섯 균사석 배율
             public static double gm_atk(int L) => V("gm_atk", L);               // 공격력 배율
             // 싱크 노드 (최대 레벨 없음, DB Efx_MaxLv = 0): 레벨마다 Efx_Lv1배씩 곱한다. V()는 쓰지 않는다 (efx 표가 레벨 4까지뿐)
-            public static double inf_atk(int L) => Inf("inf_atk", L);             // 공격력 ×1.05^L (끝없는 투지)
-            public static double inf_gold(int L) => Inf("inf_gold", L);           // 정산 골드 ×1.025^L (끝없는 풍년, 점수→골드에만)
-            static double Inf(string id, int L) => L <= 0 || !NODE.TryGetValue(id, out var n) ? 1 : Math.Pow(n.infMul, Math.Min(L, n.infCap));
+            public static double inf_atk(int L) => Inf("inf_atk", L);             // 공격력 ×(1 + 0.07L) (끝없는 투지)
+            public static double inf_gold(int L) => Inf("inf_gold", L);           // 정산 골드 ×(1 + 0.04L) (끝없는 풍년, 점수→골드에만)
+            // 덧셈: 레벨마다 (Efx_Lv1 − 1)씩 더한다. 곱(거듭제곱)이면 레벨 100+에서 수천 배가 되어 뒤 스테이지 적이 의미를 잃었다 (사용자 2026-10-23)
+            static double Inf(string id, int L) => L <= 0 || !NODE.TryGetValue(id, out var n) ? 1 : 1 + (n.infMul - 1) * Math.Min(L, n.infCap);
             public static double gm_score(int L) => V("gm_score", L);             // 정산 골드 배율
             public static double gm_boss(int L) => V("gm_boss", L);             // 보스에게 주는 피해 배율
             public static int gm_bossgem(int L) => (int)Math.Round(V("gm_bossgem", L));                    // 보스 처치 균사석 +
@@ -150,7 +154,7 @@ namespace MoreMush
             public int tier = 1;   // 성장 단계: 1 초반 · 2 중반 · 3 후반
             public int max;          // 싱크 노드는 0 (상한 비교는 Game.AtMax로)
             // 싱크 노드 (DB Efx_MaxLv = 0, 2026-10-13 밸런스 2회차): 레벨 상한 없이 계속 산다.
-            // 가격 = infCost0 × infCostK^L (Cost_Lv1, Cost_Lv2/Cost_Lv1), 효과 = infMul^L (Efx_Lv1). infCap = 가격이 double을 넘기 직전 레벨
+            // 가격 = infCost0 × infCostK^L (Cost_Lv1, Cost_Lv2/Cost_Lv1), 효과 = 1 + (infMul − 1)·L (Efx_Lv1). infCap = 가격이 double을 넘기 직전 레벨
             public bool inf;
             public double infCost0, infCostK, infMul;
             public int infCap;
@@ -224,9 +228,11 @@ namespace MoreMush
             var costOf = new Dictionary<int, Db.UpgradeCost>();
             foreach (var c in db.Upgrade_Cost)
                 if (!costOf.TryAdd(c.Cost_ID, c)) throw new InvalidOperationException($"[DB] Upgrade_Cost: Cost_ID {c.Cost_ID}가 겹쳐요");
-            string Key(int id, string who) => id == 0 ? null : keyOf.TryGetValue(id, out var k) ? k : throw new InvalidOperationException($"[DB] Upgrade {who}: 없는 Upg_ID {id}");
+            string Key(int id, string who) => id == 0 ? null : !keyOf.TryGetValue(id, out var k) ? throw new InvalidOperationException($"[DB] Upgrade {who}: 없는 Upg_ID {id}")
+                : OFF_NODES.Contains(k) ? throw new InvalidOperationException($"[DB] Upgrade {who}: 부모·선행이 잠시 뺀 노드 {k}예요 (Defs.OFF_NODES)") : k;
             foreach (var u in db.Upgrade)
             {
+                if (OFF_NODES.Contains(u.Upg_Key)) continue;
                 string key = u.Upg_Key, skill = NullIfEmpty(u.Skill);
                 bool inf = u.Efx_MaxLv == 0;   // 싱크 노드: 최대 레벨 없음
                 if (u.Efx_MaxLv < 0 || u.Efx_MaxLv > 4) throw new InvalidOperationException($"[DB] Upgrade {key}: Efx_MaxLv는 0(싱크)·1~4 ({u.Efx_MaxLv})");
@@ -244,7 +250,7 @@ namespace MoreMush
                     if (skill != null) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크(Efx_MaxLv 0)는 스킬 노드일 수 없어요");
                     if (c.Gem.Any(g => g > 0)) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크는 골드로만 사요 (Gem_Lv1~4 = 0)");
                     if (!(c.Gold[0] > 0 && c.Gold[1] > c.Gold[0])) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크 가격은 Cost_Lv1 > 0, Cost_Lv2 > Cost_Lv1 (증가율 = Lv2/Lv1)");
-                    if (!(u.Efx[1] > 1)) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크 효과 배율 Efx_Lv1은 1보다 커야 해요");
+                    if (!(u.Efx[1] > 1)) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크 효과 Efx_Lv1은 1보다 커야 해요 (레벨당 Efx_Lv1 − 1씩 더함)");
                     if (u.Upg_Req == 0) throw new InvalidOperationException($"[DB] Upgrade {key}: 싱크는 Upg_Req(최대 레벨로 열 노드)가 있어야 해요");
                 }
                 var gems = c.Gem.Take(u.Efx_MaxLv).ToArray();
@@ -257,7 +263,7 @@ namespace MoreMush
                 if (inf)
                 {
                     n.inf = true; n.infCost0 = c.Gold[0]; n.infCostK = c.Gold[1] / c.Gold[0]; n.infMul = u.Efx[1];
-                    // 가격이 double.MaxValue/4를 넘기 전 레벨에서 멈춘다 (c0 3.6e12 · ×1.076이면 약 9,290레벨). 그때 효과 1.05^L도 유한하다
+                    // 가격이 double.MaxValue/4를 넘기 전 레벨에서 멈춘다 (c0 3.6e12 · ×1.076이면 약 9,290레벨). 그때 효과(덧셈)도 유한하다
                     n.infCap = (int)Math.Floor(Math.Log(double.MaxValue / 4 / (n.infCost0 * COST_MUL)) / Math.Log(n.infCostK));
                 }
                 if (skill != null || key == "bl")
@@ -290,7 +296,7 @@ namespace MoreMush
             }
             foreach (var n in NODES)
                 if (n.req != null && NODE[n.req].inf) throw new InvalidOperationException($"[DB] Upgrade {n.id}: Upg_Req가 싱크 노드 {n.req}예요 (싱크는 최대 레벨이 없어 '최대 레벨로 열기'가 안 돼요)");
-            var lost = codeKeys.Concat(SKILL_IDS).Where(k => !NODE.ContainsKey(k)).ToList();
+            var lost = codeKeys.Concat(SKILL_IDS).Where(k => !NODE.ContainsKey(k) && !OFF_NODES.Contains(k)).ToList();
             if (lost.Count > 0) throw new InvalidOperationException("[DB] Upgrade에서 빠진 노드 (코드가 씀): " + string.Join(", ", lost));
         }
 

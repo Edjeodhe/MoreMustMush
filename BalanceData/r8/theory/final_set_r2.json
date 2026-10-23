@@ -1,0 +1,18 @@
+{
+ "Boss": {
+  "angel": {
+   "Hp_Mul": 37
+  },
+  "phantom": {
+   "Hp_Mul": 160
+  },
+  "mover": {
+   "Hp_Mul": 220
+  }
+ },
+ "Const": {
+  "BOSS_LOOP_HP_MUL": {
+   "Value": 240
+  }
+ }
+}
