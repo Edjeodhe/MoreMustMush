@@ -116,7 +116,7 @@ namespace MoreMush
         void RenderStage()
         {
             if (stageText == null || G == null) return;
-            string n = StageLabel(StageNow());   // 튜토리얼 판 T1~T4, 그 뒤 1부터 (5회차 P-2)
+            string n = StageLabel(StageNow());   // 튜토리얼 판 T1~T2, 그 뒤 1부터 (5회차 P-2)
             UIUtil.SetText(stageText, Loc.F("스테이지 {0}", n));
         }
 

@@ -114,14 +114,14 @@ namespace MoreMush
 
         // 라운드 시간: 처음 10초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다 (밸런스 3회차: 15 → 10, 줄어든 5초는 ps_dur 4레벨로 되찾는다)
         public const float BASE_TIME = 10;
-        // stage = 콘텐츠 스테이지(ContentStage). 튜토리얼 4판 뒤 표시 1스테이지부터 늘어난다 (5회차 P-2)
+        // stage = 콘텐츠 스테이지(ContentStage). 튜토리얼 판 뒤 표시 1스테이지부터 늘어난다 (5회차 P-2)
         public static double StageTime(int stage) => Math.Min(10, 0.5 * (stage - 1));
 
-        // ===== 튜토리얼 판 오프셋 (5회차 P-2, 사용자 확정 2026-10-20) =====
-        // G.stage는 내부 판 번호(1부터)다. 1~TUT_ROUNDS판은 튜토리얼 T1~T4로 표시하고, 그 뒤를 1스테이지부터 센다.
-        // 보스·지역 해금·체력 성장(STAGE_GROWTH)·라운드 시간 성장 같은 콘텐츠는 ContentStage(표시 스테이지, 튜토리얼은 1)로 판정한다 → 첫 보스 = 14번째 판.
+        // ===== 튜토리얼 판 오프셋 (5회차 P-2 4판 → 사용자 2026-10-23 2판) =====
+        // G.stage는 내부 판 번호(1부터)다. 1~TUT_ROUNDS판은 튜토리얼 T1~T2로 표시하고, 그 뒤를 1스테이지부터 센다.
+        // 보스·지역 해금·체력 성장(STAGE_GROWTH)·라운드 시간 성장 같은 콘텐츠는 ContentStage(표시 스테이지, 튜토리얼은 1)로 판정한다 → 첫 보스 = 12번째 판.
         // 온보딩(초반 종 수·낱개 버섯·초반 체력·초반 10초·튜토리얼 판·기능 해금)은 내부 판 번호 그대로다
-        public const int TUT_ROUNDS = 4;
+        public const int TUT_ROUNDS = 2;
         public static bool IsTutRound(int stage) => stage <= TUT_ROUNDS;
         // 표시 스테이지 (튜토리얼 판이면 0 이하)
         public static int DispStage(int stage) => stage - TUT_ROUNDS;
@@ -129,7 +129,7 @@ namespace MoreMush
         public static int ContentStage(int stage) => Math.Max(1, stage - TUT_ROUNDS);
         // 콘텐츠(표시) 스테이지 → 내부 판 번호 (ContentStage의 반대, 시뮬 도구용)
         public static int RoundOfStage(int content) => content + TUT_ROUNDS;
-        // 화면에 쓰는 스테이지 글자: 튜토리얼 판 "T1"~"T4", 그 뒤 "1", "2" … (Loc.F("스테이지 {0}", …)에 넣는다)
+        // 화면에 쓰는 스테이지 글자: 튜토리얼 판 "T1"~"T2", 그 뒤 "1", "2" … (Loc.F("스테이지 {0}", …)에 넣는다)
         public static string StageLabel(int stage) => IsTutRound(stage) ? "T" + Math.Max(1, stage) : DispStage(stage).ToString();
 
         // 초반 스테이지 (사용자 요청 2026-10-16): 스테이지 N까지는 버섯 종을 N종으로 고정한다 (1스테이지 1종 → 6스테이지 6종).
@@ -145,8 +145,8 @@ namespace MoreMush
         // stage = 내부 판 번호 (온보딩 구간이라 튜토리얼 오프셋을 빼지 않는다)
         public const double EARLY_HP_MUL = 0.5;
         public const int EARLY_HP_FLAT_TO = 3, EARLY_HP_FULL_AT = 7;
-        // 5회차 P-6: 튜토리얼 T1~T4 + 표시 1~9스테이지(= 내부 1~13판) 일반 버섯 체력을 한 번 더 ×EARLY_HP_NERF
-        public const int EARLY_HP_NERF_TO = 13;
+        // 5회차 P-6: 튜토리얼 판 + 표시 1~9스테이지(첫 보스 앞까지) 일반 버섯 체력을 한 번 더 ×EARLY_HP_NERF
+        public const int EARLY_HP_NERF_TO = TUT_ROUNDS + 9;
         public const double EARLY_HP_NERF = 0.9;
         public static double EarlyHpMul(int stage)
         {

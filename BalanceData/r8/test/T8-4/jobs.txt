@@ -1,0 +1,7 @@
+1 0.6 62 52 600 BalanceData/r8/test/T8-4/
+1 0.6 110 102 1500 BalanceData/r8/test/T8-4/late/
+2 0.6 110 102 1500 BalanceData/r8/test/T8-4/late/
+3 0.6 110 102 1500 BalanceData/r8/test/T8-4/late/
+4 0.6 110 102 1500 BalanceData/r8/test/T8-4/late/
+5 0.6 110 102 1500 BalanceData/r8/test/T8-4/late/
+6 0.6 110 102 1500 BalanceData/r8/test/T8-4/late/

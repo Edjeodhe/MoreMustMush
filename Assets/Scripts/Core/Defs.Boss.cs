@@ -6,7 +6,7 @@ namespace MoreMush
     public static partial class Defs
     {
         // ===== 보스 (전투 기획서 Ver05 · 03. 보스 기믹) =====
-        // 보스 스테이지: 첫 보스 10, 그 뒤 10스테이지마다(20·30…). 표시(콘텐츠) 스테이지 기준 — 튜토리얼 4판 뒤라 첫 보스는 14번째 판 (Defs.ContentStage). 제한 시간 안에 보스(분신 포함)를 모두 쓰러뜨리면 다음 스테이지로 간다.
+        // 보스 스테이지: 첫 보스 10, 그 뒤 10스테이지마다(20·30…). 표시(콘텐츠) 스테이지 기준 — 튜토리얼 판(TUT_ROUNDS) 뒤라 첫 보스는 12번째 판 (Defs.ContentStage). 제한 시간 안에 보스(분신 포함)를 모두 쓰러뜨리면 다음 스테이지로 간다.
         // 못 쓰러뜨리면 그 판 정산 골드 ×BOSS_FAIL_GOLD, 스테이지는 그대로이고 보스 도전이 꺼진다(그 스테이지에서 파밍).
         // 보스 도전은 균사 트리에서 언제든 다시 켤 수 있다.
         // 밸런스 상수는 엑셀 DB Const 시트에서 읽는다
@@ -41,7 +41,7 @@ namespace MoreMush
         public static readonly float MOVER_SPD = (float)Db.C("MOVER_SPD");
 
         // 보스는 BOSS_EVERY(10)의 배수 스테이지마다: 10 · 20 · 30 … (사용자 결정 2026-10-16, 첫 보스 14 → 10)
-        // 아래 함수의 stage는 모두 콘텐츠(표시) 스테이지다. 내부 판 번호(G.stage)는 ContentStage로 바꿔 넣는다 (5회차 P-2: 튜토리얼 4판 오프셋)
+        // 아래 함수의 stage는 모두 콘텐츠(표시) 스테이지다. 내부 판 번호(G.stage)는 ContentStage로 바꿔 넣는다 (5회차 P-2: 튜토리얼 판 오프셋 TUT_ROUNDS)
         public static int FIRST_BOSS_STAGE => BOSS_EVERY;
         public static bool IsBossStage(int stage) => stage >= BOSS_EVERY && stage % BOSS_EVERY == 0;
         public static BossDef BossAt(int stage) => !IsBossStage(stage) ? null : BOSSES[(stage / BOSS_EVERY - 1) % BOSSES.Count];

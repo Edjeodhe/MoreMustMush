@@ -55,7 +55,7 @@ namespace MoreMush
             return b;
         }
 
-        // 내부 판 번호 (튜토리얼 T1~T4 포함, 1부터). 화면 글자는 Defs.StageLabel
+        // 내부 판 번호 (튜토리얼 T1~T2 포함, 1부터). 화면 글자는 Defs.StageLabel
         public static int StageNow() => G != null ? G.stage : 1;
         // 콘텐츠(표시) 스테이지: 보스·지역·체력 성장은 이것으로 판정한다 (튜토리얼 판은 1, Defs.ContentStage)
         public static int ContentNow() => ContentStage(StageNow());
@@ -225,7 +225,7 @@ namespace MoreMush
             st.hvStar = st.hvs.Distinct().ToDictionary(id => id, id => G.hv.TryGetValue(id, out var s) ? s : 1);
             // 노드·코어·별 능력치·꼬마 보너스는 더하고, 날씨(라운드마다 바뀌는 조건)만 곱한다
             // 지역 배율: 버섯 체력·점수·수확 개수가 함께 커진다
-            int cst = ContentStage(st.stage);   // 콘텐츠 스테이지 (튜토리얼 4판 오프셋). st.stage는 내부 판 번호
+            int cst = ContentStage(st.stage);   // 콘텐츠 스테이지 (튜토리얼 판 오프셋). st.stage는 내부 판 번호
             st.zoneMul = ZoneMul(st.theme.id, cst);
             // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
             double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
