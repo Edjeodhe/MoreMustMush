@@ -68,7 +68,7 @@ namespace MoreMush
         }
 
         // ===== 임시 창 (배치 전) =====
-        // 그림은 Art/Dream/UI (세계수 탭 창과 같은 세트): 창 panel_wood · 제목 ribbon · 닫기 btn_close · 의뢰 줄 panel_paper · 세계수 줄 panel_mint
+        // 그림은 Resources/UI (세계수 탭 창과 같은 세트): 창 panel_wood · 제목 ribbon · 닫기 btn_close · 의뢰 줄 panel_paper · 세계수 줄 panel_mint
         // 받기 버튼 = 받을 수 있으면 btn_go(크림 글자), 아니면 btn_wood(진한 글자, 흐리게)
         const float ROW_H = 80, BOX_W = 1240;
         bool temp;   // 임시 창이면 받기 버튼 그림을 상태마다 바꾼다

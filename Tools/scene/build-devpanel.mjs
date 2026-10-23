@@ -1,9 +1,9 @@
-// 개발자 패널 프리팹 (Assets/Resources/Dev/DevPanel.prefab): 씬에 잠깐 만들어 프리팹으로 저장하고 씬에서 지운다.
+// 개발자 패널 프리팹 (Assets/Resources/Prefabs/Dev/DevPanel.prefab): 씬에 잠깐 만들어 프리팹으로 저장하고 씬에서 지운다.
 // App이 개발용(에디터·Development Build)일 때만 복제한다. ` 키 = Window 여닫기, Shift+숫자 = 치트 (DebugPanel.CHEATS)
 //   node Tools/scene/build-devpanel.mjs
 import { call, destroyPaths, Builder, col, R, txt } from "./mcp.mjs";
 
-const ROOT = "DevPanel", PREFAB = "Assets/Resources/Dev/DevPanel.prefab";
+const ROOT = "DevPanel", PREFAB = "Assets/Resources/Prefabs/Dev/DevPanel.prefab";
 const FONT = "Assets/Fonts/ONEMobilePOP SDF.asset";
 const panel = (a) => ({ color: col("#000000", a), raycastTarget: false });
 const text = (s, size, color, align = "TopLeft") => ({ ...txt(s, size, color, { align, wrap: true, font: FONT }), raycastTarget: false });

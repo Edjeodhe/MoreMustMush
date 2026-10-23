@@ -11,9 +11,9 @@ namespace MoreMush.EditorTools
     // One-time project setup for generated art and fonts. Menu: MoreMush/...
     public static class MoreMushSetup
     {
-        // Art sets, later ones win: Doodle (outlined cel set) > Soft (watercolor) > Generated for the same key.
-        // 옛 세트(Generated·Soft·Doodle)는 Resources 밖 ArtArchive에 둔다: Dream에 없는 키만 SpriteDB가 GUID로 물어 빌드에 들어가고, 덮인 그림은 빌드에서 빠진다.
-        public static readonly string[] ArtRoots = { "Assets/ArtArchive/Generated", "Assets/ArtArchive/Soft", "Assets/ArtArchive/Doodle", "Assets/Resources/Art/Dream" };
+        // 게임 그림은 모두 Assets/Resources 아래 종류별 폴더에 있다 (Mushrooms·Characters·UI …). 키는 이 폴더 기준 상대경로 ("Icons/gold").
+        // 쓰지 않는 그림은 프로젝트 루트 Legacy/에 보관 (2026-10-23 정리).
+        public static readonly string[] ArtRoots = { "Assets/Resources" };
 
         // key ("Icons/gold") → asset path of the sprite the game uses for it
         public static SortedDictionary<string, string> ResolvedArt()

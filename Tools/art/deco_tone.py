@@ -15,7 +15,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DST = os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Props")
+DST = os.path.join(ROOT, "Assets/Resources/Farm/Props")
 SRC = os.path.join(ROOT, "Art/Raw_Dream/props_tree")
 SKIP = {"auto_reward"}            # not a decoration
 
@@ -121,8 +121,8 @@ def main():
     print(f"toned {len(done)} props -> {DST}")
     if "--preview" in sys.argv:
         path = sys.argv[sys.argv.index("--preview") + 1]
-        tree = Image.open(os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Tree/tree_6.png")).convert("RGBA") \
-            if os.path.exists(os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Tree/tree_6.png")) else None
+        tree = Image.open(os.path.join(ROOT, "Assets/Resources/Farm/Tree/tree_6.png")).convert("RGBA") \
+            if os.path.exists(os.path.join(ROOT, "Assets/Resources/Farm/Tree/tree_6.png")) else None
         S, W = 220, 6
         rows = (len(names) + W - 1) // W
         sheet = Image.new("RGBA", (W * S * 2, rows * S), (110, 140, 95, 255))

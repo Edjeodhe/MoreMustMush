@@ -39,7 +39,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_spirit_faces as FACES      # eye finder (the head's neck stub is searched under the eyes)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-ART = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters")
+ART = os.path.join(ROOT, "Assets/Resources/Characters")
 OUT = os.path.join(ROOT, "Assets/Resources/Rig/spirit_rig.json")
 FIX = os.path.join(ROOT, "Tools/art/spirit_rig_fix.json")
 PPU = 100.0

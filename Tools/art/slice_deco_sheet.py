@@ -14,7 +14,7 @@ from PIL import Image
 from scipy import ndimage
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DST = os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Props")
+DST = os.path.join(ROOT, "Assets/Resources/Farm/Props")
 OLD = os.path.join(ROOT, "Art/Raw_Dream/props_old")
 ORDER = ["dew_chime", "dew_pond", "dew_spring", "fire_brazier", "fire_candle", "fire_lantern", "leaf_crown", "leaf_house",
          "leaf_lamp", "moon_crescent", "moon_garland", "moon_owl", "rock_geode", "rock_moss", "rock_table", "spark_bell",

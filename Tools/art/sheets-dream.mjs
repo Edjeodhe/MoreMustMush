@@ -3,7 +3,7 @@
 // Same subjects and output keys as the doodle set; only the style changes, plus:
 //   - mushrooms are drawn true to the real species (field-guide plates)
 //   - scenery objects come in depth layers (far / mid / near + fog) so scenes are built with real depth
-// Raw sheets: Art/Raw_Dream/<id>.png. Sliced: Assets/Resources/Art/Dream/<same keys>. SpriteDB: Dream > Doodle > Soft > Generated.
+// Raw sheets: Art/Raw_Dream/<id>.png. Sliced: Assets/Resources/<same keys>. SpriteDB: Dream > Doodle > Soft > Generated.
 
 import { SHEETS as DOODLE } from "./sheets-doodle.mjs";
 import { MUSHROOMS } from "./sheets.mjs";

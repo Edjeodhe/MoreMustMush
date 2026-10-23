@@ -16,7 +16,7 @@ from scipy import ndimage
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 RAW = os.path.join(ROOT, "Art/Raw_Dream/rig2")
-EVO = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/Evo")
+EVO = os.path.join(ROOT, "Assets/Resources/Characters/Evo")
 
 
 def arg(name, default=None):

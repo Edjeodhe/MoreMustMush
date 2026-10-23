@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..", "..");
 const RAW = "Art/Raw_Dream/rig2";
-const EVO = "Assets/Resources/Art/Dream/Characters/Evo";
+const EVO = "Assets/Resources/Characters/Evo";
 const REF = {
   whole: `${EVO}/evo_fire_3.png`,                 // 불 정령 ★3 전신 (확정 그림)
   head: `${EVO}/k_fire_3_head.png`, body: `${EVO}/k_fire_3_body.png`, hair: `${EVO}/k_fire_3_hair.png`, leg: `${EVO}/k_fire_3_leg.png`, arm: `${EVO}/k_fire_3_arm_up.png`,

@@ -6,14 +6,14 @@ using UnityEngine.UI;
 namespace MoreMush
 {
     // 세계수 창들(공방·꼬마·성장·꾸미기·꼬마 정보와 그 팝업)이 함께 쓰는 작은 도구. 창은 모두 Unity MCP로 만든 프리팹(Resources/UI/*)이고,
-    // 코드는 프리팹을 캔버스에 한 번 꺼내 두고 템플릿 칸만 복제한다. 그림은 Art/Dream/UI/Window (시안 2026-10-20과 같은 세트).
+    // 코드는 프리팹을 캔버스에 한 번 꺼내 두고 템플릿 칸만 복제한다. 그림은 Resources/UI/Window (시안 2026-10-20과 같은 세트).
     public static class FarmWin
     {
         public static GameObject Spawn(Scene scene, string prefab)
         {
             var canvas = TempDialog.RootCanvas(scene);
-            var p = Resources.Load<GameObject>("UI/" + prefab);
-            if (canvas == null || p == null) { Debug.LogWarning("[FarmWin] 프리팹 Resources/UI/" + prefab + " 또는 캔버스가 없어요"); return null; }
+            var p = Resources.Load<GameObject>("Prefabs/UI/" + prefab);
+            if (canvas == null || p == null) { Debug.LogWarning("[FarmWin] 프리팹 Resources/Prefabs/UI/" + prefab + " 또는 캔버스가 없어요"); return null; }
             var go = Object.Instantiate(p, canvas.transform, false);
             go.name = p.name;
             foreach (var t in go.GetComponentsInChildren<TMP_Text>(true)) TextLangFont.Register(t);

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MoreMush.EditorTools
 {
     // Points every Sprite reference in the scenes and prefabs at the sprite its key resolves to
-    // (MoreMushSetup.ArtRoots, later sets win), e.g. Assets/ArtArchive/Generated/Icons/gold → Assets/Resources/Art/Dream/Icons/gold.
+    // (MoreMushSetup.ArtRoots, later sets win), e.g. an old copy of Icons/gold → Assets/Resources/Icons/gold.
     // Code-loaded art goes through SpriteDB and needs no swap; this covers sprites wired in the inspector.
     public static class ArtSetSwap
     {

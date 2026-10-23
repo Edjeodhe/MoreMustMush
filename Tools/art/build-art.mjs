@@ -21,7 +21,7 @@ const SET = setIdx >= 0 ? argv.splice(setIdx, 2)[1] : "default";
 const SETS = {
   default: { module: "./sheets.mjs", raw: "Art/Raw", gen: "Assets/ArtArchive/Generated", style: "Tools/art-style.md" },
   soft: { module: "./sheets-soft.mjs", raw: "Art/Raw_Soft", gen: "Assets/ArtArchive/Soft", style: "Tools/art-style-soft.md" },
-  dream: { module: "./sheets-dream.mjs", raw: "Art/Raw_Dream", gen: "Assets/Resources/Art/Dream", style: "Tools/art-style-dream.md" },
+  dream: { module: "./sheets-dream.mjs", raw: "Art/Raw_Dream", gen: "Assets/Resources", style: "Tools/art-style-dream.md" },
   doodle: { module: "./sheets-doodle.mjs", raw: "Art/Raw_Doodle", gen: "Assets/ArtArchive/Doodle", style: "Tools/art-style-doodle.md", imageStyle: "Tools/art-style-story.md" },
 };
 if (!SETS[SET]) { console.error(`unknown set: ${SET}`); process.exit(1); }

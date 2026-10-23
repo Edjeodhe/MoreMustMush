@@ -33,7 +33,7 @@ SETS = {
         EYES=[(380, 465, 20, 28), (507, 477, 20, 28)]),
     # dream set (2026-10-16 redraw, sheet grandpa_full): fist on the viewer's left, handle behind the head and hat
     "dream": dict(
-        root="Assets/Resources/Art/Dream", FEET=(465, 1148), WRIST=(288, 598),
+        root="Assets/Resources", FEET=(465, 1148), WRIST=(288, 598),
         # handle lines fitted to the handle's own colour (lower: x = -0.640y + 675, upper: x = -0.491y + 705)
         HANDLE=[(51, 975), (292, 598), (581, 252), (698, 14)], HANDLE_HALF=27, PAINT_HALF=18, WOOD_ONLY=True, LOWER_STOP=0.84, UPPER_START=0.0,
         BLADE_POLY=[(640, 0), (980, 0), (980, 420), (925, 420), (830, 210), (725, 135), (648, 122)],

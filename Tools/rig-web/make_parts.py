@@ -23,8 +23,8 @@ from PIL import Image, ImageDraw
 from scipy import ndimage
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-EVO = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/Evo")
-OUT = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/Rig2")
+EVO = os.path.join(ROOT, "Assets/Resources/Characters/Evo")
+OUT = os.path.join(ROOT, "Assets/Resources/Characters/Rig2")
 OLD_RIG = os.path.join(ROOT, "Assets/Resources/Rig/evo_rig.json")
 NEW_RIG = os.path.join(ROOT, "Assets/Resources/Rig/spirit_rig2.json")
 SHOTS = os.path.join(ROOT, "Logs/Screens")

@@ -13,7 +13,7 @@ const ROOT = path.resolve(HERE, "..", "..");
 const OUT = path.resolve(process.argv[2] || path.join(HERE, "dist", "spirit_rig2.html"));
 const RIG = "Assets/Resources/Rig/spirit_rig2.json";
 // serve.mjs와 같은 순서 (뒤가 앞을 덮는다)
-const ART_ROOTS = ["Assets/ArtArchive/Generated", "Assets/ArtArchive/Soft", "Assets/ArtArchive/Doodle", "Assets/Resources/Art/Dream"];
+const ART_ROOTS = ["Assets/Resources"];
 const MODULES = ["unity.js", "rigjson.js", "rig2.js", "mush_rig.js", "app.js"];   // 의존 순서
 
 const read = (f) => fs.readFileSync(path.join(HERE, f), "utf8");

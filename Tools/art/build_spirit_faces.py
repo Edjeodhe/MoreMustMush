@@ -20,7 +20,7 @@ from PIL import Image
 from scipy import ndimage as ndi
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PARTS = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/Spirits")
+PARTS = os.path.join(ROOT, "Assets/Resources/Characters/Spirits")
 GEN = os.path.join(ROOT, "Art/Raw_Dream/faces")
 EXPRS = ["blink", "happy", "surprise", "love", "effort", "tired"]
 FIX = __import__("json").load(open(os.path.join(ROOT, "Tools/art/spirit_rig_fix.json"), encoding="utf-8"))     if os.path.exists(os.path.join(ROOT, "Tools/art/spirit_rig_fix.json")) else {}   # eyes: hints, keepFace: no expressions

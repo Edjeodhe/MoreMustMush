@@ -190,7 +190,7 @@ if "--export" in sys.argv:
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import build_spirit_faces as FACES
     E = 0.5
-    EVO = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/Evo")
+    EVO = os.path.join(ROOT, "Assets/Resources/Characters/Evo")
     RIG = os.path.join(ROOT, "Assets/Resources/Rig/evo_rig.json")
     FGEN = os.path.join(ROOT, "Art/Raw_Dream/faces")
     pre = f"k_{kid}_{form}_"

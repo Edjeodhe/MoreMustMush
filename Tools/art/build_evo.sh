@@ -8,7 +8,7 @@ ART_CONCURRENCY=3 node Tools/art/build-art.mjs --set dream --force evo_parts_fir
 python Tools/art/fit_evo_parts.py                     # 얼굴을 떼어 내야 표정 참고 그림을 만든다
 python - <<'PY'
 from PIL import Image
-P='Assets/Resources/Art/Dream/Characters/Evo/'
+P='Assets/Resources/Characters/Evo/'
 cells=[Image.open(P+n+'.png').convert('RGBA') for n in ['e_fire_2_head','e_fire_2_face_normal','e_dew_1_body','e_dew_1_face_normal']]
 cw=max(i.width for i in cells)+40; ch=max(i.height for i in cells)+40
 S=Image.new('RGBA',(cw*2,ch*2),(0,0,0,0))

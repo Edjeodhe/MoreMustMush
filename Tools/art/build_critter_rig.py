@@ -1,6 +1,6 @@
 """Lay out each critter's separately drawn parts by its body structure and write the rig layout.
 
-Inputs (Assets/Resources/Art/Dream/Characters/Critters), all cut from one parts sheet row so they share one pixel scale:
+Inputs (Assets/Resources/Characters/Critters), all cut from one parts sheet row so they share one pixel scale:
   cap_<id>, body_<id>, blink_<id>, arm_<id>, foot_<id>.png   (critter_rig_a|b sheets)
   body_<id>_closed.png   optional second body with the eyes closed (critter_closed_a|b), aligned here onto body_<id>
   <id>_ref.png           the design drawing, only for the debug overlay
@@ -24,7 +24,7 @@ from scipy import ndimage
 from scipy.signal import fftconvolve
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DIR = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/Critters")   # the art set that wins in SpriteDB
+DIR = os.path.join(ROOT, "Assets/Resources/Characters/Critters")   # the art set that wins in SpriteDB
 OUT = os.path.join(ROOT, "Assets/Resources/Rig/critter_rig.json")
 IDS = ["fire", "spark", "dew", "coin", "star", "leaf", "moon", "wind", "rock", "chest"]
 PPU = 100

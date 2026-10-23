@@ -2,14 +2,14 @@
 A full-screen UI image under the farm UI: transparent centre around the tree, a soft cool blue-teal veil toward the
 edges, with low-frequency watercolor unevenness so it reads as painted rather than a digital gradient.
 
-Usage: python Tools/art/make_farm_vignette.py   -> Assets/Resources/Art/Dream/FX/vignette.png
+Usage: python Tools/art/make_farm_vignette.py   -> Assets/Resources/FX/vignette.png
 """
 import os
 import numpy as np
 from PIL import Image, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-OUT = os.path.join(ROOT, "Assets/Resources/Art/Dream/FX/vignette.png")
+OUT = os.path.join(ROOT, "Assets/Resources/FX/vignette.png")
 W, H = 768, 432
 COL = (30, 52, 62)          # deep blue-teal, the background's shadow colour
 MAX_A = 0.62                # opacity at the far corners

@@ -71,7 +71,7 @@ namespace MoreMush
             for (int i = 0; i < VOICES; i++) { var a = go.AddComponent<AudioSource>(); a.playOnAwake = false; snd.voices[i] = a; }
             I = go.AddComponent<App>();
             // 개발자 패널 (` 키): 개발용일 때만 프리팹을 한 번 복제해 씬을 넘어 둔다
-            if (DevOnly.ON) { var dev = Resources.Load<GameObject>("Dev/DevPanel"); if (dev != null) DontDestroyOnLoad(Instantiate(dev)); }
+            if (DevOnly.ON) { var dev = Resources.Load<GameObject>("Prefabs/Dev/DevPanel"); if (dev != null) DontDestroyOnLoad(Instantiate(dev)); }
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneLoaded += OnSceneLoaded;
         }

@@ -1,5 +1,5 @@
 """Cut the illustrations out of the user's window mockups (Art/Raw_Dream/concept/ui_mock_*.png, 1536x1024) and save
-them as UI sprites in Resources/Art/Dream/UI/Window/mock_*.png. 2026-10-20 user: "내가 보낸 사진들 다 그대로 적용해".
+them as UI sprites in Resources/UI/Window/mock_*.png. 2026-10-20 user: "내가 보낸 사진들 다 그대로 적용해".
 
   card   = rounded-rect picture (soft alpha corners)
   circle = round badge picture (soft alpha edge)
@@ -13,7 +13,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, "Art/Raw_Dream/concept")
-DST = os.path.join(ROOT, "Assets/Resources/Art/Dream/UI/Window")
+DST = os.path.join(ROOT, "Assets/Resources/UI/Window")
 
 CUTS = [
     # name, mockup, box (l, t, r, b), kind

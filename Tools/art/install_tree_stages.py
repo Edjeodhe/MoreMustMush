@@ -1,6 +1,6 @@
 """World tree stages 1-8 from the 2026-10-20 watercolor redraw (Codex, Art/Raw_Dream/concept/tree_v10_s1..7 +
 tree_v9_c = stage 8, user-approved) -> Art/Raw_Dream/tree_src/tree_0..7.png, then blend_tree_base.py makes the game
-sprites in Assets/Resources/Art/Dream/Farm/Tree.
+sprites in Assets/Resources/Farm/Tree.
 
 Each drawing is cropped to its painted area (small margin) and resized to about twice its on-screen width. Each stage's
 on-stage HEIGHT follows the camera zoom (see TOP/ZOOM below) and WT.width comes from the drawing's own proportions;

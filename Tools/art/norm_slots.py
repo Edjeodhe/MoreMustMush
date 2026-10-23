@@ -1,4 +1,4 @@
-"""Square and centre the node slot pictures (Assets/Resources/Art/Dream/UI/Slots) so every slot has the same circle size.
+"""Square and centre the node slot pictures (Assets/Resources/UI/Slots) so every slot has the same circle size.
 
 Each slot is cropped to its round silhouette, centred on a square canvas with a small margin and resized to SIZE,
 so a slot drawn a few pixels bigger or off-centre on the sheet still lines up with the others in the tree.
@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DIR = os.path.join(ROOT, "Assets/Resources/Art/Dream/UI/Slots")
+DIR = os.path.join(ROOT, "Assets/Resources/UI/Slots")
 SIZE, MARGIN = 256, 4
 
 for p in sorted(glob.glob(os.path.join(DIR, "slot_*.png"))):

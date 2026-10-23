@@ -196,7 +196,7 @@ namespace MoreMush
             flyers = new Pool<SpriteRenderer>(flyerPrefab, flyerRoot);
             lines = new Pool<LineRenderer>(linePrefab, fxRoot);
             aimLines = new Pool<LineRenderer>(linePrefab, fxRoot);
-            // 슬라이드 바: 씬에는 옛 그림(ArtArchive)이 걸려 있다. 얇은 바용 9슬라이스 그림(SpriteDB UI/bar_log)으로 바꾼다 (분신 바도 같이)
+            // 슬라이드 바: 씬에는 옛 그림(UI/bar_log_archive)이 걸려 있다. 얇은 바용 9슬라이스 그림(SpriteDB UI/bar_log)으로 바꾼다 (분신 바도 같이)
             var barSp = SpriteDB.Get("UI/bar_log");
             if (barSp != null) { bar.sprite = barSp; bar.drawMode = SpriteDrawMode.Sliced; }
             extraBars = new Pool<SpriteRenderer>(bar, bar.transform.parent);

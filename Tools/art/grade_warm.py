@@ -3,8 +3,8 @@
 
 Composition is untouched; only colour moves: warmer white balance, a little more saturation, lifted midtones.
 Always grades from the ungraded originals, so running it again never stacks:
-  - backgrounds: Art/Raw_Dream/bg_*.png  ->  Assets/Resources/Art/Dream/Backgrounds/bg_*.png
-  - Env scenery: first run copies Assets/Resources/Art/Dream/Env/**.png to Art/Raw_Dream/grade_src/Env/, grades from there
+  - backgrounds: Art/Raw_Dream/bg_*.png  ->  Assets/Resources/Backgrounds/bg_*.png
+  - Env scenery: first run copies Assets/Resources/Env/**.png to Art/Raw_Dream/grade_src/Env/, grades from there
     (re-slicing env sheets writes ungraded sprites: delete grade_src/Env and run this again)
 
   python Tools/art/grade_warm.py [--preview out_dir]
@@ -18,7 +18,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 RAW = ROOT / "Art/Raw_Dream"
-OUT = ROOT / "Assets/Resources/Art/Dream"
+OUT = ROOT / "Assets/Resources"
 SRC_ENV = RAW / "grade_src/Env"
 
 WARM = np.array([1.05, 1.0, 0.89])   # white balance: a touch more red, less blue

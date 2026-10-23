@@ -22,7 +22,7 @@ namespace MoreMush
     //   Sheet / Empty (TMP)             그 구역에 놓을 장식이 없을 때
     public class DecoWindow
     {
-        const string PREFAB = "UI/DecoPanel";
+        const string PREFAB = "Prefabs/UI/DecoPanel";
         static readonly Color ON = Color.white, DIM = new Color(1, 1, 1, 0.45f);
 
         public readonly GameObject root;

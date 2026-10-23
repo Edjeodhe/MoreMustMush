@@ -30,7 +30,7 @@ import fit_spirit_parts as SP          # joint finders
 import build_spirit_faces as FACES     # face split
 
 ROOT = SP.ROOT
-EVO = os.path.join(ROOT, "Assets/Resources/Art/Dream/Characters/Evo")
+EVO = os.path.join(ROOT, "Assets/Resources/Characters/Evo")
 OUT = os.path.join(ROOT, "Assets/Resources/Rig/evo_rig.json")
 FIX = os.path.join(ROOT, "Tools/art/evo_rig_fix.json")
 GEN = os.path.join(ROOT, "Art/Raw_Dream/faces")

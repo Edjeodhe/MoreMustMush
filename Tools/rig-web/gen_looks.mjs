@@ -13,7 +13,7 @@ import { fileURLToPath } from "node:url";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..", "..");
 const RAW = "Art/Raw_Dream/rig2";
-const EVO = "Assets/Resources/Art/Dream/Characters/Evo";
+const EVO = "Assets/Resources/Characters/Evo";
 
 // 정령별 모습 설명 (참고 그림을 돕는 짧은 말). 색·모양은 참고 그림이 우선
 export const SPIRIT = {

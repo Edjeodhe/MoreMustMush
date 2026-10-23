@@ -6,7 +6,7 @@ import { Builder, call, col, img, txt, RT, STRETCH } from "./mcp.mjs";
 
 const SCENES = ["MainMenu", "MainGame", "OutGame", "Stage"];
 const P = "Canvas/Toast";
-const PAPER = "Assets/Resources/Art/Dream/UI/panel_paper.png";
+const PAPER = "Assets/Resources/UI/panel_paper.png";
 const POP = "Assets/Fonts/ONEMobilePOP SDF.asset";
 
 for (const s of SCENES) {

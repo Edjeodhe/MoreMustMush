@@ -6,7 +6,7 @@ Works in STAGE coordinates (1920x1080, y down, the ground line at the bottom), s
 no seam shows where an inner layer fades into the next one. Higher up = farther = lower contrast, less saturation,
 more pale fog; the bottom band (near bushes) gets a little darker and cooler so it frames the view.
 
-Works from untouched copies in Art/Raw_Dream/bg_src (made from Assets/Resources/Art/Dream/Backgrounds on the first run),
+Works from untouched copies in Art/Raw_Dream/bg_src (made from Assets/Resources/Backgrounds on the first run),
 so it can be run again. After rebuilding the layers (build_farm_bg.py), delete bg_src first.
 
 Usage: python Tools/art/haze_farm_bg.py [strength=0.6]
@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DIR = os.path.join(ROOT, "Assets/Resources/Art/Dream/Backgrounds")
+DIR = os.path.join(ROOT, "Assets/Resources/Backgrounds")
 SRC = os.path.join(ROOT, "Art/Raw_Dream/bg_src")
 K = float(sys.argv[1]) if len(sys.argv) > 1 else 0.6     # overall strength
 STAGE_H = 1080.0

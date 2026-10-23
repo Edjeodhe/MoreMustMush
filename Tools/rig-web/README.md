@@ -15,7 +15,7 @@ Claude 미리보기에서는 `preview_start {name: "rig-web"}`(`.claude/launch.j
 
 | 파일 | 내용 |
 |---|---|
-| `make_parts.py` | 기존 진화 그림(`Characters/Evo`)을 관절 단위로 잘라 `Assets/Resources/Art/Dream/Characters/Rig2/r2_*`에 저장한다. ★2·★3은 가슴/치마, 아래팔/손, 다리/신발로, ★0·★1은 갓/대/발로 나눈다. 표정 blink·happy·surprise·effort도 여기서 만든다. 기존 그림은 덮어쓰지 않는다. `--json`을 붙이면 `spirit_rig2.json`을 새로 쓰고, `--preview`를 붙이면 `Logs/Screens/rig2_parts_<id>.png`를 만든다. |
+| `make_parts.py` | 기존 진화 그림(`Characters/Evo`)을 관절 단위로 잘라 `Assets/Resources/Characters/Rig2/r2_*`에 저장한다. ★2·★3은 가슴/치마, 아래팔/손, 다리/신발로, ★0·★1은 갓/대/발로 나눈다. 표정 blink·happy·surprise·effort도 여기서 만든다. 기존 그림은 덮어쓰지 않는다. `--json`을 붙이면 `spirit_rig2.json`을 새로 쓰고, `--preview`를 붙이면 `Logs/Screens/rig2_parts_<id>.png`를 만든다. |
 | `gen_parts.mjs` | 코덱스로 부위별 파츠를 한 장씩 생성한다(불 정령 ★3 시범, `--ref`로 확정 그림을 넣어 그림풍 유지). 원본은 `Art/Raw_Dream/rig2/gen_*.png`(게임 밖)에 두고, 프롬프트는 `parts_prompts.md`에 남긴다. 이미 있는 원본은 건너뛴다(`--force`로 다시 생성). |
 | `fit_gen_parts.py` | 원본을 정면 그림 크기에 맞춰 `Characters/Rig2/gen_fire_3_<front|side|back>_*`로 저장한다. 다리는 허벅지/정강이/신발로 나눈다. spirit_rig2.json의 fire_3에 정면 다리(무릎)와 `side`·`back` 칸을 넣는다(다시 돌리면 웹에서 고친 값이 지워짐). |
 | `bundle.mjs` | 서버 없이 열리는 한 장짜리 `dist/spirit_rig2.html`을 만든다. |

@@ -15,7 +15,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..", "..");
 const PORT = Number(process.argv[2] || process.env.PORT || 5178);
 // MoreMushSetup.ArtRoots: 뒤가 앞을 덮는다
-const ART_ROOTS = ["Assets/ArtArchive/Generated", "Assets/ArtArchive/Soft", "Assets/ArtArchive/Doodle", "Assets/Resources/Art/Dream"];
+const ART_ROOTS = ["Assets/ArtArchive/Generated", "Assets/ArtArchive/Soft", "Assets/ArtArchive/Doodle", "Assets/Resources"];
 const SAVE_OK = new Set(["spirit_rig2"]);
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".mjs": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".png": "image/png", ".jpg": "image/jpeg", ".md": "text/plain; charset=utf-8", ".txt": "text/plain; charset=utf-8" };

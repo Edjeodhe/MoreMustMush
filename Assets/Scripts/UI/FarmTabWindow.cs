@@ -80,7 +80,7 @@ namespace MoreMush
         }
 
         // ===== 임시 창 (배치 전): 화면 오른쪽 큰 상자 · 제목 · 스크롤 목록 · 닫기 =====
-        // 그림은 Art/Dream/UI (OutGame에 배치된 것과 같은 세트): 창틀 panel_wood · 제목 ribbon · 줄 panel_paper/mint/accent · 버튼 btn_go/orange/wood · 닫기 btn_close
+        // 그림은 Resources/UI (OutGame에 배치된 것과 같은 세트): 창틀 panel_wood · 제목 ribbon · 줄 panel_paper/mint/accent · 버튼 btn_go/orange/wood · 닫기 btn_close
         static readonly Color INK = new Color(0.29f, 0.2f, 0.15f), OFF_TINT = new Color(0.8f, 0.78f, 0.75f, 0.85f);
         static Sprite UI(string n) => SpriteDB.Get("UI/" + n);
         // 세계수 창 아이콘 (icons_farm 시트: f_*). 아직 없으면 비슷한 기존 아이콘

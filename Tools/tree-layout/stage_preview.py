@@ -9,7 +9,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 import tree_defs as T
 
-B = os.path.join(T.ROOT, "Assets/Resources/Art/Dream/Backgrounds")
+B = os.path.join(T.ROOT, "Assets/Resources/Backgrounds")
 NAMES = ["새싹", "묘목", "어린 나무", "버섯 나무", "이끼 고목", "룬 신목", "고대수", "아르카나 세계수"]
 OW, OH = 640, 360
 

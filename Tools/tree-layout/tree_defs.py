@@ -1,15 +1,15 @@
 """Game definitions the tree layout tools need, read from the C# sources so they never drift:
 deco list (id, owner kid, hang), kid join order, zones (weight, open stage), tree slot counts, tree widths and zoom.
 
-Coordinates in tree_layout.json are fractions of the game picture Assets/Resources/Art/Dream/Farm/Tree/tree_<pic>.png
+Coordinates in tree_layout.json are fractions of the game picture Assets/Resources/Farm/Tree/tree_<pic>.png
 (u right, v down). pic = stage - 1.
 """
 import json, os, re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LAYOUT = os.path.join(ROOT, "Assets/Resources/Rig/tree_layout.json")
-TREE = os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Tree")
-PROPS = os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Props")
+TREE = os.path.join(ROOT, "Assets/Resources/Farm/Tree")
+PROPS = os.path.join(ROOT, "Assets/Resources/Farm/Props")
 _FARM = open(os.path.join(ROOT, "Assets/Scripts/Core/Defs.Farm.cs"), encoding="utf-8").read()
 _DEFS = open(os.path.join(ROOT, "Assets/Scripts/Core/Defs.cs"), encoding="utf-8").read()
 

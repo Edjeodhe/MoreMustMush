@@ -144,7 +144,7 @@ namespace MoreMush
         {
             var dim = Dim(canvas, name);
 
-            // 그림은 Art/Dream/UI (세계수 탭 창과 같은 세트): 창 panel_wood · 짧은 제목은 ribbon 위, 긴 문장(확인 질문)은 창 안 글자 + 덩굴
+            // 그림은 Resources/UI (세계수 탭 창과 같은 세트): 창 panel_wood · 짧은 제목은 ribbon 위, 긴 문장(확인 질문)은 창 안 글자 + 덩굴
             bool ribbon = title.Length <= 12;
             var box = new GameObject("Box", typeof(RectTransform), typeof(Image));
             box.transform.SetParent(dim.transform, false);
@@ -260,7 +260,7 @@ namespace MoreMush
             return im;
         }
 
-        // ===== 임시 창 그림 (Art/Dream/UI, SpriteDB) — 그림이 없으면 예전 단색 =====
+        // ===== 임시 창 그림 (Resources/UI, SpriteDB) — 그림이 없으면 예전 단색 =====
         internal static readonly Color INK = new Color(0.29f, 0.2f, 0.15f), CREAM = new Color(1f, 0.973f, 0.906f), BOX = new Color(0.98f, 0.93f, 0.8f),
             OFF_TINT = new Color(0.8f, 0.78f, 0.75f, 0.85f), DEEP_GREEN = new Color(0.12f, 0.25f, 0.09f), DEEP_ORANGE = new Color(0.38f, 0.16f, 0.04f);
 

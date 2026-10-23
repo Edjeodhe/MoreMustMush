@@ -5,7 +5,7 @@ over FADE (fraction of the sprite width) towards the drawing's edge, more strong
 pulled a little toward the farm ground (GROUND), so the background grass shows through the rim. On top, a light
 vignette, a shade at the foot and a hazy rim (VIG, SHADE, EDGE_TINT) sit the watercolor tree in the misty scene.
 
-Works from untouched copies in Art/Raw_Dream/tree_src (made from Assets/Resources/Art/Dream/Farm/Tree on the first run), so it
+Works from untouched copies in Art/Raw_Dream/tree_src (made from Assets/Resources/Farm/Tree on the first run), so it
 can be run again. After re-slicing mush_tree or rebuilding tree_7 (build_tree_final.py), delete tree_src first.
 
 Usage: python Tools/art/blend_tree_base.py
@@ -16,7 +16,7 @@ from PIL import Image
 from scipy import ndimage
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DIR = os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Tree")
+DIR = os.path.join(ROOT, "Assets/Resources/Farm/Tree")
 SRC = os.path.join(ROOT, "Art/Raw_Dream/tree_src")
 BAND = 0.2             # bottom part of the sprite (fraction of its height) that is blended
 FADE = 0.07            # edge fade width at the very bottom (fraction of the sprite width)

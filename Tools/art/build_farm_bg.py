@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_critter_rig as R
 
 ROOT = R.ROOT
-OUT = os.path.join(ROOT, "Assets/Resources/Art/Dream/Backgrounds")
+OUT = os.path.join(ROOT, "Assets/Resources/Backgrounds")
 SRC = [("bg_ranch_core", os.path.join(OUT, "bg_ranch.png")),
        ("bg_ranch_wide", os.path.join(ROOT, "Art/Raw_Dream/bg_ranch_wide.png")),
        ("bg_ranch_wide2", os.path.join(ROOT, "Art/Raw_Dream/bg_ranch_wide2.png"))]

@@ -11,7 +11,7 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, "Art/Raw_Dream/concept/tree_final_v2.png")
-DST = os.path.join(ROOT, "Assets/Resources/Art/Dream/Farm/Tree/tree_7.png")
+DST = os.path.join(ROOT, "Assets/Resources/Farm/Tree/tree_7.png")
 ALPHA_CUT = 170
 
 a = np.array(Image.open(SRC).convert("RGBA"))

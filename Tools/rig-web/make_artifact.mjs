@@ -6,7 +6,7 @@ const ROOT = process.argv[2];            // 꺼낸 저장소 루트
 const OUT = process.argv[3];             // 출력 폴더
 const HERE = path.join(ROOT, "Tools/rig-web");
 const RIG = "Assets/Resources/Rig/spirit_rig2.json";
-const ART = path.join(ROOT, "Assets/Resources/Art/Dream");
+const ART = path.join(ROOT, "Assets/Resources");
 const MODULES = ["unity.js", "rigjson.js", "rig2.js", "mush_rig.js", "app.js"];
 
 function readMeta(file) {

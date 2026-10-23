@@ -2,8 +2,8 @@
 // 크기 규칙은 게임과 같다: 장식 긴 변 = (걸이형 95 · 설치형 115) × 화각 × s (무대 px), 나무버섯 = (34 + 20·pic/7) × 화각, 나무 너비 = WT.width.
 const $ = (id) => document.getElementById(id);
 const cv = $("cv"), ctx = cv.getContext("2d");
-const TREE = "/Assets/Resources/Art/Dream/Farm/Tree/tree_";
-const PROPS = "/Assets/Resources/Art/Dream/Farm/Props/";
+const TREE = "/Assets/Resources/Farm/Tree/tree_";
+const PROPS = "/Assets/Resources/Farm/Props/";
 const EDGE = { walk: "#50e678", climb: "#ffc828", hop: "#ff5ac8" };
 const ZCOL = { root: "#c08a4a", trunk: "#3cc85a", branch: "#28aaff", crown: "#c878ff" };
 
