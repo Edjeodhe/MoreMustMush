@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static MoreMush.Defs;
 using static MoreMush.Game;
@@ -168,6 +169,29 @@ namespace MoreMush
             return added;
         }
 
+        // 레전더리 버섯은 보스 전용: 보스를 쓰러뜨리면 보스 분류의 레전더리 BOSS_LEGEND_N개 (은둔 고수가 수확량을 올린다)
+        void BossLegendDrop(Shroom m)
+        {
+            var pool = SPECIES.Where(s => s.t == 3 && s.c == st.boss.cat).ToList();
+            if (pool.Count == 0) pool = SPECIES.Where(s => s.t == 3).ToList();
+            if (pool.Count == 0) return;
+            var sp = U.Pick(pool);
+            double drop = BOSS_LEGEND_N * st.harvestMul * st.handMul[3];
+            gains[sp.c] += drop;
+            bag[sp.id] = (bag.TryGetValue(sp.id, out var bv) ? bv : 0) + drop;
+            picks[sp.id] = (picks.TryGetValue(sp.id, out var pc) ? pc : 0) + BOSS_LEGEND_N;
+            harvests += BOSS_LEGEND_N; killT[3] += BOSS_LEGEND_N;
+            if (!G.codex.TryGetValue(sp.id, out var e)) e = G.codex[sp.id] = new SaveData.CodexEntry();
+            if (e.n <= 0) { e.first = G.rounds + 1; newSpecies.Add(sp.id); codexShake = 1; }
+            int star0 = StarOf(sp.id);
+            e.n += BOSS_LEGEND_N;
+            int star1 = StarOf(sp.id);
+            if (star1 > star0) newStars.Add((sp.id, star1));
+            AddLabel(Loc.F("레전더리 {0} ×{1}!", sp.n, BOSS_LEGEND_N), m.x, m.y - m.r - 70, TIERS[3].color, 32);
+            for (int i = 0; i < 6 && flyers.Count < 220; i++)
+                flyers.Add(new Flyer { x = m.x, y = m.y, sx = m.x, sy = m.y, t = -i * 0.05f, dur = U.Rand(0.5f, 0.8f), sp = sp, cat = sp.c });
+        }
+
         void BossDown(Shroom m, Ball b)
         {
             if (m.dead) return;
@@ -186,6 +210,7 @@ namespace MoreMush
                 return;
             }
             bossCleared = true; bossClearT = runT;
+            BossLegendDrop(m);
             hitstop = 0.35f; hitstopCd = 0.8f; flash = 0.9f; shake = 1;
             AddLabel(Loc.F("보스 {0} 처치!", st.boss.n), WW / 2, WH * 0.3f, "#fff7c2", 54);
             AddLabel(Loc.T("다음 스테이지가 열렸어요"), WW / 2, WH * 0.3f + 60, "#ffe36e", 28);

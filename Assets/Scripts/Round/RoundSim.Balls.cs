@@ -59,18 +59,19 @@ namespace MoreMush
                 b.spd = (float)st.launch;
             }
             phase = "run";
+            StartBuffs();   // 전설의 할아버지
             Snd.Launch();
             if (tutorial && !looseSpawned) { looseSpawned = true; SpawnLoose(TUTORIAL_LOOSE); }   // 튜토리얼 첫 스와이프: 낱개 버섯도 나온다
             if (G.rounds == 0) Telemetry.Ftue(Telemetry.FTUE_FIRST_LAUNCH);
         }
 
-        // 수확기 한 개의 공격력 배율: 약화 구름 ×0.5, 분신 ×statMul, 그루터기 버프
+        // 수확기 한 개의 공격력 배율: 약화 구름 ×0.5, 분신 ×statMul, 그루터기 버프, 사냥 준비(공격력 +고정값 → 배율로)
         float Wk(Ball b)
         {
             if (b == null) return 1;
             float m = (b.weak > 0 ? 0.5f : 1) * b.statMul * (float)HV[b.hv].atkMul;
             if (b.stumpAtk > 0) m *= 1 + (STUMP_ATK_MUL - 1) * (float)st.devMul;
-            if (b.powT > 0) m *= 1 + (float)(POWER_ATK * (1 + b.powLv) + st.powAtk);
+            if (b.powT > 0 && st.atk > 0) m *= 1 + (float)(st.powFlat / st.atk);
             return m;
         }
 
@@ -100,6 +101,7 @@ namespace MoreMush
         void UpdateBall(Ball b, float h)
         {
             b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.pierceT -= h; b.homeT -= h; b.powT -= h; b.clear -= h; b.magnet -= h; b.stumpAtk -= h; b.stumpT -= h; b.bladeFx -= h;
+            b.feverT -= h; b.wisT -= h;
             if (!b.perm)
             {
                 b.life -= h;
@@ -114,6 +116,13 @@ namespace MoreMush
             {
                 if (U.D2(b.x, b.y, c.x, c.y) < (c.r + b.r) * (c.r + b.r) && b.clear <= 0)
                 {
+                    // 탈피: 구름마다 한 번 굴려, 풀리면 그 구름의 디버프는 받지 않는다
+                    if (st.moltP > 0 && b.moltCloud != c)
+                    {
+                        b.moltCloud = c; b.moltOk = U.Chance((float)st.moltP);
+                        if (b.moltOk && b.perm) SkillFx("md_molt", b.x, b.y);
+                    }
+                    if (st.moltP > 0 && b.moltOk && b.moltCloud == c) continue;
                     if (c.slow) b.slow = (float)st.debuffDur;
                     if (c.weak) b.weak = (float)st.debuffDur;
                 }
@@ -271,8 +280,6 @@ namespace MoreMush
             b.dx = Mathf.Cos(a); b.dy = Mathf.Sin(a); FixDir(b);
             Snd.Wall();
             SawBounce(b);
-            var sk = st.sk["tornado"];
-            if (sk.on && Skillful(b) && U.Chance((float)SkP("tornado", b))) SpawnTornado(b, side);
         }
 
         void SkillFx(string id, float x, float y)
@@ -283,6 +290,7 @@ namespace MoreMush
             string n = null, col = "#ffffff";
             if (SKILLS.TryGetValue(id, out var s)) { n = s.n; col = s.col; }
             else if (NODE.TryGetValue(id, out var nd)) { n = nd.n; col = nd.col ?? "#ffffff"; }
+            else if (LINES.TryGetValue(id, out var rows)) { n = LineName(id); col = rows[0].col ?? "#ffffff"; }
             else if (id == "spark") { n = Loc.T("연쇄 번개"); col = "#ffe03a"; }
             else if (id == "hv_split") { n = Loc.T("세포 분열"); col = "#ff8a80"; }
             if (n != null) AddLabel(n + "!", x, y - 30, col, 20, true);
@@ -291,7 +299,8 @@ namespace MoreMush
         // ===== 피해·점수·수확 =====
         double ScoreMulFor(Shroom m, Ball b)
         {
-            double x = st.scoreMul * (1 + (b != null ? b.combo : 0) * st.comboK);
+            // 콤보 계수: 상시(콤보 계수 노드) × [피버] 버프 (따로 곱한다)
+            double x = st.scoreMul * (1 + (b != null ? b.combo : 0) * st.comboK * (b != null && b.feverT > 0 ? 1 + FEVER_COMBO : 1));
             if (m != null)
             {
                 if (m.golden) x *= 10;
@@ -310,8 +319,10 @@ namespace MoreMush
             if (m.dead) return;
             if (m.cluster || m.giant || m.boss) amt *= st.heavyMul;
             if (m.boss) amt *= st.bossMul;
-            bool crit = forceCrit || U.Chance((float)(st.crit + (b != null ? HV[b.hv].crit : 0)));
-            double hpBefore = m.hp, dealt = amt * (crit ? st.critMul : 1);
+            // 극한 치명타: 치명타 확률이 100%를 넘으면 넘친 만큼 치명타 피해에 더한다 (102% → 150% + 2%p)
+            double critP = st.crit + (b != null ? HV[b.hv].crit : 0), critMul = st.critMul + Math.Max(0, critP - 1);
+            bool crit = forceCrit || U.Chance((float)critP);
+            double hpBefore = m.hp, dealt = amt * (crit ? critMul : 1);
             m.hp -= dealt;
             RecordDamage(src ?? kind, b, Math.Min(hpBefore, hpBefore - m.hp), m.hp <= 0);
             m.squish = 1;
@@ -319,7 +330,8 @@ namespace MoreMush
             m.hitT = 0;
             if (crit && m.hp > 0) { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.HitAnim, m.x, m.y, m.r * 2.6f, 0.18f, new Color(1, 0.72f, 0.6f, 1), FxR(0, 360), 0); AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 2.4f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }
             // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
-            double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? st.critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
+            double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
+            if (st.flexP > 0 && U.Chance((float)st.flexP)) { sc *= 3; SkillFx("ed_flex", m.x, m.y); }   // 플렉스: 점수 3배
             AddScore(sc, m.x, m.y - m.r, m.giant || m.boss ? 3 : m.sp.t, crit, m.golden, dealt);   // 버섯 위 숫자는 데미지 (점수는 HUD에만)
             if (m.boss)
             {
@@ -363,10 +375,12 @@ namespace MoreMush
             if (hv == "spore" && !b.noSplit && U.Chance((float)a["p"])) SporeSplit(b, (int)a["hits"]);
             if (st.sparkP > 0 && Skillful(b) && U.Chance((float)st.sparkP)) { ChainBolt(m, b, "spark"); SkillFx("spark", b.x, b.y); }
             if (m.spore != null && m.sporeCd <= 0 && U.Chance((float)st.sporeP)) { m.sporeCd = 2; SpawnCloud(m.x, m.y, m.spore); }
-            var sk = st.sk;
-            if (sk["burst"].on && Skillful(b) && U.Chance((float)SkP("burst", b))) { BurstAt(b.x, b.y, (float)st.burstR, st.atk * 2 * sk["burst"].pm * st.skillDmg * Wk(b), b, "#ffb347", false, "burst"); SkillFx("burst", b.x, b.y); Snd.Skill(180); }
-            if (sk["magnet"].on && Skillful(b) && U.Chance((float)SkP("magnet", b))) { b.magnet = 1; b.magRate = 20 * (float)sk["magnet"].pm; SkillFx("magnet", b.x, b.y); }
-            if (sk["bolt"].on && Skillful(b) && U.Chance((float)SkP("bolt", b))) { ChainBolt(m, b, "bolt"); SkillFx("bolt", b.x, b.y); }
+            // 군락에 부딪힐 때: 포자 폭발(필드 전체 피해) · 회오리(그 군락 지속 피해)
+            if (m.col != null && Skillful(b))
+            {
+                if (st.burstP > 0 && U.Chance((float)SkP(st.burstP, b))) FieldBurst(b);
+                if (st.tornadoP > 0 && !m.dead && U.Chance((float)SkP(st.tornadoP, b))) ColonyDot(m.col, b);
+            }
         }
 
         // 분열형: 능력치 50%인 작은 같은 수확기 (다시 분열하지 않음)
@@ -425,7 +439,7 @@ namespace MoreMush
             // (강해질수록 효과가 필드를 비워 직접 때릴 버섯이 없어 콤보가 오히려 느리게 올랐다)
             if (b != null && kind != "direct") b.hits++;
             var sp = m.sp;
-            double drop = m.dropMul * st.harvestMul * (m.golden ? 5 : 1) * (m.giant ? 30 : 1) * (sp.c == "ps" ? st.poisonMul : 1) * (festOn ? st.festMul : 1);
+            double drop = m.dropMul * st.harvestMul * st.handMul[Math.Min(sp.t, 3)] * (m.golden ? 5 : 1) * (m.giant ? 30 : 1) * (sp.c == "ps" ? st.poisonMul : 1) * (festOn ? st.festMul : 1);
             if (st.multiP > 0 && U.Chance((float)st.multiP)) { drop *= 3; AddLabel(Loc.T("×3 배수 획득!"), m.x, m.y - m.r - 34, "#ffe36e", 24); }
             gains[sp.c] += drop;
             bag[sp.id] = (bag.TryGetValue(sp.id, out var bv) ? bv : 0) + drop;
@@ -501,28 +515,21 @@ namespace MoreMush
             }
             else Snd.Harvest(b != null ? b.combo : 0);
             // 군락지
+            bool colGone = false;
             if (m.col != null)
             {
                 m.col.alive--;
-                if (m.col.alive <= 0) { colonies.Remove(m.col); regen.Add((float)st.regen); }
+                if (m.col.alive <= 0) { colonies.Remove(m.col); regen.Add((float)st.regen); colGone = true; }
             }
             if (b != null && b.hv == "sam" && b.statMul >= 1 && kind != "skill" && U.Chance((float)HV["sam"].ab(b.hs)["p"])) QueueSam(m, b);
-            var sk = st.sk;
-            if (kind == "shock")
-            {
-                if (wave != null && !wave.child && wave.depth < 8)
-                {
-                    wave.child = true;
-                    QueueWave(m.x, m.y, wave.depth + 1, wave.b);
-                }
-            }
-            else if (sk["shock"].on && Skillful(b) && U.Chance((float)SkP("shock", b))) { MakeWave(m.x, m.y, 1, b); SkillFx("shock", m.x, m.y); }
-            if (sk["clone"].on && Skillful(b) && U.Chance((float)SkP("clone", b))) { SpawnTemp(m.x, m.y, 1 + sk["clone"].P, 4, true, null); SkillFx("clone", m.x, m.y); }
+            // 이독제독: 단일 버섯(무더기가 아닌 것)을 딸 때 → 다음 타격 피해 +200%
+            if (b != null && !m.cluster && Skillful(b) && st.poisonP > 0 && U.Chance((float)SkP(st.poisonP, b))) { b.sharpen = 1; b.sharpMul = (float)POISON_MUL; SkillFx("md_poison", b.x, b.y); }
+            // 연속 번개: 군락을 다 땄을 때 → 다른 군락에 번개
+            if (colGone && Skillful(b) && st.boltP > 0 && U.Chance((float)SkP(st.boltP, b))) ColonyBolt(b);
         }
 
         // 예약 효과는 따로 만든다: Harvest 안에서 람다가 m·b를 잡으면 클로저 객체가 Harvest를 부를 때마다(수확마다) 생겼다
         void QueueSam(Shroom m, Ball b) => queue.Add(new Queued { t = 0.05f, f = () => SamCleave(m, b) });
-        void QueueWave(float x, float y, int depth, Ball b) => queue.Add(new Queued { t = 0.08f, f = () => MakeWave(x, y, depth, b) });
 
         // dmg >= 0: 숫자로는 점수 대신 그 타격의 피해를 띄운다 (점수는 그대로 더한다)
         void AddScore(double v, float x, float y, int tier, bool crit, bool golden, double dmg = -1)

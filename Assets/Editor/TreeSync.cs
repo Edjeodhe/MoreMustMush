@@ -7,8 +7,9 @@ using UnityEngine;
 
 namespace MoreMush.EditorTools
 {
-    // Defs.NODES와 씬(MainGame 임시 트리)의 트리 노드(TreeNodeView)를 맞춘다: 없는 노드는 TreeNode 프리팹으로 만들고, 정의에서 빠진 노드는 지우고,
-    // 전부 TreeLayout.Compute() 위치로 다시 놓는다. 노드를 추가·삭제한 뒤 메뉴 또는 배치 모드로 실행한다.
+    // Defs.NODES와 씬(MainGame 임시 트리)의 트리 노드(TreeNodeView)를 맞춘다: 없는 노드는 TreeNode 프리팹으로 만들고, 정의에서 빠진 노드·트리 밖 노드(세계수 wt)는 지우고,
+    // 전부 TreeLayout.Compute() 위치(DB Pos_X·Pos_Y)로 다시 놓는다. 노드를 추가·삭제한 뒤 메뉴 또는 배치 모드로 실행한다.
+    // (게임은 실행할 때도 TreeView.SyncNodes로 같은 일을 하므로, 이 메뉴는 씬 파일을 DB에 맞춰 저장해 두는 용도)
     // Unity.exe -batchmode -nographics -projectPath <프로젝트> -executeMethod MoreMush.EditorTools.TreeSync.Batch -logFile <로그>
     public static class TreeSync
     {
@@ -22,7 +23,7 @@ namespace MoreMush.EditorTools
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
             var views = parent.GetComponentsInChildren<TreeNodeView>(true);
             var have = views.Select(v => v.nodeId).ToHashSet();
-            var made = Defs.NODES.Where(n => !have.Contains(n.id)).Select(n =>
+            var made = Defs.NODES.Where(n => Defs.InTree(n) && !have.Contains(n.id)).Select(n =>
             {
                 var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
                 go.name = n.id;
@@ -30,7 +31,7 @@ namespace MoreMush.EditorTools
                 so.FindProperty("nodeId").stringValue = n.id; so.ApplyModifiedPropertiesWithoutUndo();
                 return n.id;
             }).ToList();
-            var removed = views.Where(v => !Defs.NODE.ContainsKey(v.nodeId ?? "")).Select(v => { string id = v.nodeId; UnityEngine.Object.DestroyImmediate(v.gameObject); return id; }).ToList();
+            var removed = views.Where(v => !Defs.NODE.TryGetValue(v.nodeId ?? "", out var nd) || !Defs.InTree(nd)).Select(v => { string id = v.nodeId; UnityEngine.Object.DestroyImmediate(v.gameObject); return id; }).ToList();
             var layout = TreeLayout.Compute();
             int moved = 0;
             foreach (var v in parent.GetComponentsInChildren<TreeNodeView>(true))

@@ -37,9 +37,40 @@ namespace MoreMush
         void Awake()
         {
             content.GetComponentsInChildren(true, nodes);
-            foreach (var n in nodes) if (!NODE.ContainsKey(n.nodeId)) n.gameObject.SetActive(false);   // 정의에서 빠진 노드(OFF_NODES 등)는 씬에 남아 있어도 숨긴다
-            nodes.RemoveAll(n => !NODE.ContainsKey(n.nodeId));
+            SyncNodes();
             foreach (var n in nodes) byId[n.nodeId] = n;
+        }
+
+        // 씬의 노드 오브젝트를 DB 트리에 맞춘다 (균사 트리 A안): 없는 노드는 있는 노드를 복제해 만들고, 트리에 없는 노드(지운 노드·세계수 wt)는 지우고,
+        // 모두 DB 자리(TreeLayout.Compute)로 옮긴다. 씬을 다시 저장하려면 에디터 메뉴 MoreMush/트리 노드 맞추기
+        void SyncNodes()
+        {
+            var layout = TreeLayout.Compute();
+            for (int i = nodes.Count - 1; i >= 0; i--)
+            {
+                var nv = nodes[i];
+                if (nv.nodeId != null && layout.ContainsKey(nv.nodeId) && nodes.FindIndex(x => x.nodeId == nv.nodeId) == i) continue;
+                nodes.RemoveAt(i);
+                nv.gameObject.SetActive(false);
+                Destroy(nv.gameObject);
+            }
+            var have = new HashSet<string>(nodes.Select(x => x.nodeId));
+            var template = nodes.Count > 0 ? nodes[0] : null;
+            if (template != null)
+                foreach (var n in NODES)
+                {
+                    if (have.Contains(n.id) || !layout.ContainsKey(n.id)) continue;
+                    var go = Instantiate(template.gameObject, template.transform.parent);
+                    go.name = n.id;
+                    var nv = go.GetComponent<TreeNodeView>();
+                    nv.Init(n.id);
+                    nodes.Add(nv);
+                }
+            foreach (var nv in nodes)
+            {
+                var p = layout[nv.nodeId].pos;
+                nv.transform.localPosition = Art.P(p.x, p.y, nv.transform.localPosition.z);
+            }
         }
 
         public Vector2 W2S(Vector2 p) => new Vector2((p.x - camX) * camZ + 960, (p.y - camY) * camZ + 560);

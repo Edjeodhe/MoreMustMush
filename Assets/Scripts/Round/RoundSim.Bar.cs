@@ -13,22 +13,21 @@ namespace MoreMush
         public readonly List<BarSeg> extraBars = new List<BarSeg>();   // 분신 바
         public const float BAR_MAX_ANGLE = 60;   // 바 끝에서 수직으로부터 기우는 각도
 
-        // 분신 바: 필드 가운데·왼쪽·오른쪽 중 본 바에서 가장 먼 빈자리
-        void SpawnCloneBar(int P)
+        // 분신 바 (분신술): 맵 양 끝 중 본 바에서 먼 빈자리. 길이는 본 바와 같다. 최대 개수는 거울 분신술 (1 → 2)
+        void SpawnCloneBar(float dur)
         {
             int n = 0; foreach (var o in extraBars) if (o.clone) n++;
-            if (n >= BAR_CLONE_MAX) return;
+            if (n >= st.cloneMax) return;
             float best = -1, bx = 0;
-            foreach (float k in new[] { 0.2f, 0.5f, 0.8f })
+            foreach (float x in new[] { FX0 + barLen / 2, FX1 - barLen / 2 })
             {
-                float x = WW * k;
                 bool used = false; foreach (var o in extraBars) if (o.clone && Mathf.Abs(o.x - x) < 10) used = true;
                 if (used) continue;
                 float d = Mathf.Abs(x - barX);
                 if (d > best) { best = d; bx = x; }
             }
             if (best < 0) return;
-            extraBars.Add(new BarSeg { x = bx, y = BAR_Y, len = barLen, life = (float)(BAR_CLONE_DUR + P + st.barDur), clone = true });
+            extraBars.Add(new BarSeg { x = bx, y = BAR_Y, len = barLen, life = dur, clone = true });
         }
 
         void UpdateBars(float h)
@@ -80,27 +79,60 @@ namespace MoreMush
             if (b.homeT > 0) HomeAim(b);
         }
 
-        // 바 버프·바 스킬 (영구 핀볼만)
+        // 바 버프 (영구 핀볼만, 균사 트리 A안): 사냥 준비·가속·관통·유도·약손·지혜·피버는 바에 맞을 때마다, 분열·분신술은 확률로
         void BarBuffs(Ball b)
         {
             if (!b.perm) return;
-            var sk = st.sk;
-            bool Proc(string id) => sk[id].on && U.Chance((float)SkP(id, b));
-            bool On(string id) => sk[id].on;
-            float Dur(string id) => (float)((BarSkillDur(sk[id].P) + st.barDur) * st.buffMul);
-            if (On("power")) { b.powT = Dur("power"); b.powLv = sk["power"].P; Flash("power"); }
-            if (On("clear")) { b.clear = Dur("clear"); b.slow = 0; b.weak = 0; Flash("clear"); }
-            if (Proc("accel")) { b.accel = 3 * (float)st.buffMul; b.accelMul = 1 + 0.15f * (float)sk["accel"].pm; SkillFx("accel", b.x, b.y); }
-            if (Proc("sharpen")) { b.sharpen = Mathf.CeilToInt(3 * (float)st.buffMul); b.sharpMul = 2 * (float)sk["sharpen"].pm; SkillFx("sharpen", b.x, b.y); }
-            if (Proc("pierce")) { b.pierceT = Dur("pierce"); SkillFx("pierce", b.x, b.y); }
-            if (Proc("homing")) { b.homeT = Dur("homing"); SkillFx("homing", b.x, b.y); }
-            if (Proc("split")) { SpawnTemp(b.x, b.y - 4, 1 + sk["split"].P, 6, false, Mathf.Atan2(b.dy, b.dx)); SkillFx("split", b.x, b.y); }
-            if (Proc("barclone")) { SpawnCloneBar(sk["barclone"].P); SkillFx("barclone", b.x, b.y); }
-            if (st.kidP > 0 && U.Chance((float)st.kidP)) { SpawnTemp(b.x, b.y - 4, 1, 8, true, -Mathf.PI / 2 + U.Rand(-0.7f, 0.7f)); SkillFx("md_kid", b.x, b.y); }
+            foreach (var id in ALWAYS_BUFFS) if (BuffOwned(id)) ApplyBuff(b, id, false);
+            if (st.splitDur > 0 && U.Chance((float)SPLIT_P)) ApplyBuff(b, "md_split", true);
+            if (st.cloneDur > 0 && U.Chance((float)CLONE_P)) ApplyBuff(b, "ps_clone", true);
         }
 
-        // 스킬 발동률: 기운 북돋기 버프 중이면 +POWER_SKILL × (1 + 위력)
-        double SkP(string id, Ball b) => st.sk[id].p + (SKILLS[id].kind == "bar" ? st.barRate : 0) + (b != null && b.powT > 0 ? POWER_SKILL * (1 + b.powLv) + st.powSkill : 0);
+        static readonly string[] ALWAYS_BUFFS = { "power", "md_spring", "md_pierce", "md_homing", "md_heal", "md_wisdom", "md_fever" };
+        static readonly string[] ALL_BUFFS = { "power", "md_spring", "md_pierce", "md_homing", "md_heal", "md_wisdom", "md_fever", "md_split", "ps_clone" };
+
+        bool BuffOwned(string id) => id switch
+        {
+            "power" => st.powFlat > 0, "md_spring" => st.springDur > 0, "md_pierce" => st.pierceDur > 0, "md_homing" => st.homingDur > 0,
+            "md_heal" => st.healDur > 0, "md_wisdom" => st.wisdomP > 0, "md_fever" => st.feverDur > 0, "md_split" => st.splitDur > 0, "ps_clone" => st.cloneDur > 0,
+            _ => false,
+        };
+
+        // label: 이름표를 띄운다 (확률로 걸린 것만. 늘 걸리는 버프는 아이콘만 반짝)
+        void ApplyBuff(Ball b, string id, bool label)
+        {
+            switch (id)
+            {
+                case "power": b.powT = POWER_DUR; break;
+                case "md_spring": b.accel = (float)st.springDur; b.accelMul = SPRING_MUL; break;
+                case "md_pierce": b.pierceT = (float)st.pierceDur; break;
+                case "md_homing": b.homeT = (float)st.homingDur; break;
+                case "md_heal": b.clear = (float)st.healDur; b.slow = 0; b.weak = 0; break;
+                case "md_wisdom": b.wisT = WISDOM_DUR; break;
+                case "md_fever": b.feverT = (float)st.feverDur; break;
+                case "md_split":
+                    // [분열]: 꼬마 수확기(공격력 10%)가 버프 시간 동안
+                    foreach (var k in SpawnTemp(b.x, b.y - 4, 1, (float)st.splitDur, true, Mathf.Atan2(b.dy, b.dx))) k.statMul = KID_STAT;
+                    break;
+                case "ps_clone": SpawnCloneBar((float)st.cloneDur); break;
+            }
+            if (label) SkillFx(id, b.x, b.y); else Flash(id);
+        }
+
+        // 라운드 시작 (전설의 할아버지): 가진 바 버프마다 확률로 바로 건다
+        void StartBuffs()
+        {
+            if (st.legendP <= 0) return;
+            for (int i = 0, n = balls.Count; i < n; i++)   // 분열이 꼬마 수확기를 더하므로 시작할 때의 수만큼만
+            {
+                var b = balls[i];
+                if (!b.perm) continue;
+                foreach (var id in ALL_BUFFS) if (BuffOwned(id) && U.Chance((float)st.legendP)) ApplyBuff(b, id, true);
+            }
+        }
+
+        // 수확기 스킬(이독제독·포자 폭발·연속 번개·회오리) 발동률 + [지혜] 버프
+        double SkP(double p, Ball b) => p <= 0 ? 0 : p + (b != null && b.wisT > 0 ? st.wisdomP : 0);
 
         // 유도: 직선 거리로 가장 가까운 군락(등급 무관). 보스 스테이지에서는 살아 있는 보스. 숲 장치·바는 보지 않는다
         void HomeAim(Ball b)

@@ -48,7 +48,7 @@ namespace MoreMush.EditorTools
                         var v = f.GetValue(st);
                         if (v is double || v is float || v is int || v is bool || v is string) sb.Append($" {f.Name}={v}");
                     }
-                    foreach (var k in SKILL_IDS) sb.Append($" sk.{k}={st.sk[k].p:0.####}/{st.sk[k].pm:0.####}");
+                    foreach (var k in SKILL_IDS) if (st.sk.TryGetValue(k, out var si)) sb.Append($" sk.{k}={si.p:0.####}/{si.pm:0.####}");
                     sb.Append('\n');
                 }
             }

@@ -16,7 +16,6 @@ namespace MoreMush
         // 기본 수확기: 빈 장착 칸을 채우고, 스킬이 만드는 분신도 이 모양이다. 분신 공격력 = 기본의 CLONE_STAT 배
         public const string BASE_HV = "sam";
         public const float CLONE_STAT = 0.2f;
-        public static readonly float[] MAP_ZOOM = new float[5];   // 필드 넓히기 0~4레벨 화면 확대 (DB Upgrade md_map의 Efx_Lv0~4)
         public const int MAX_BALLS = 60;
 
         // 값이 화면용 한국어 문구인 사전. 읽을 때 지금 언어로 번역한다 (키는 그대로)
@@ -160,9 +159,7 @@ namespace MoreMush
         public const float EARLY_SEC = 10;
         public const float INCOME_MUL = 3;
         public const float SCORE_GOLD = 1;
-        public const double COST_MUL = 0.9;   // 5회차 P-1: 트리 골드 가격 전체 ×0.9 (균사석 가격엔 안 곱함)
-        public static int ColCount(int L) => (int)Math.Round(V("ed_cols", L));   // DB Efx (지역·지도 배율 전). 7회차: 4·6·8·10·11
-
+        public const double COST_MUL = 1;   // 균사 트리 A안: 가격은 DB 값 그대로 (예전 5회차 P-1의 ×0.9는 옛 트리 가격용이었다)
         // ===== 군락 배치·크기 (밸런스 7회차, 2026-10-20 · 밸런스설계/이론_7.md·검증_7.md) =====
         // 최대치(maxCol)만큼 군락이 실제로 놓이게, 판마다 군락 크기 배율 RoundSim.colS를 정한다 (버섯 r·더미·둘레가 모두 같이 준다)
         public const double COL_AREA_EXP = 0.8;   // 최대치 × (1/zoom²)^이것 (예전 0.7)
@@ -176,8 +173,6 @@ namespace MoreMush
         // 거대 버섯 체력의 등급 배수 (일반·레어·에픽·레전드리). 예전에는 등급 체력(tuned 1·4·12·40)을 그대로 곱해 레전드리 거대가 밤 지역 표시 25에서 2만이 넘어 거의 못 잡았다 (7-3, 2026-10-21)
         public static readonly double[] GIANT_TIER_HP = { 1, 2, 3, 4 };
         public static float ColSMin(float zoom) => Math.Max(COL_S_VIS / zoom, COL_S_ABS);
-        // 노드 설명용: 지금 필드(필드 넓히기 배율) 기준 군락 수. 날씨·꼬마·축복 덤은 빼고 보여 준다
-        public static int ColOnField(double n, double zoom) => Math.Max(1, (int)U.JsRound(n * Math.Pow(1 / (zoom * zoom), COL_AREA_EXP)));
 
         // ===== 도감 75종 =====
         public class Species
