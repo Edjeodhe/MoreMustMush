@@ -184,7 +184,7 @@ namespace MoreMush.EditorTools
         // every: 몇 판마다 한 줄씩 남길지. 트리를 다 산 판은 항상 남긴다
         static int botFarm; static bool botBoughtSinceFail;
         // 보스 처치에 쓰이는 노드 레벨 합 (관문 모드 재도전 규칙: 이것이 올라야 다시 도전)
-        static readonly string[] ATK_KEYS = { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4", "inf_atk", "ps_crit", "ps_crit2", "ps_heavy", "gm_atk", "gm_boss", "ps_spd", "ps_ball", "ps_ball2", "ps_ball3", "ps_dur", "ps_dur2" };
+        static readonly string[] ATK_KEYS = { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4", "inf_atk", "ps_crit", "ps_crit2", "ps_heavy", "gm_atk", "gm_boss", "ps_spd", "ps_ball", "ps_ball2", "ps_ball3", "ps_dur", "ps_dur2", "inf_sdmg", "inf_srate", "inf_spd", "inf_ball" };
         static int AtkLevels() => ATK_KEYS.Where(NODE.ContainsKey).Sum(Lv);
 
         // 마지막 Progression 호출에서 실제로 돈 판 수 (BalanceJob이 시간 예산만큼 묶어 부를 때 남은 판을 센다)

@@ -23,6 +23,8 @@ namespace MoreMush
         // 잠시 뺀 노드: DB에 있어도 트리·효과에서 뺀다. 세이브의 레벨은 지우지 않아 다시 넣으면 돌아온다
         // homing(유도): 보스 판에서 공이 보스로 날아가 보스 체력이 이 스킬 기준으로 잡혔다 → 빼고 다시 맞춤 (사용자 2026-10-23)
         public static readonly HashSet<string> OFF_NODES = new HashSet<string> { "homing" };
+        // 효과 상한이 있는 싱크 노드의 최대 레벨 (9회차, 모바일 성능: 공 수·속도는 계산량에 비례). 기기 프레임 측정 뒤 넓힌다 (사용자 2026-10-23)
+        static readonly Dictionary<string, int> INF_CAP = new Dictionary<string, int> { ["inf_srate"] = 50, ["inf_spd"] = 50, ["inf_ball"] = 6 };
 
         // 성장 설계
         // - 레벨 효과는 레벨당 고정값을 더하는 식이다. 최대 레벨은 2~4로 짧다.
@@ -126,6 +128,11 @@ namespace MoreMush
             // 싱크 노드 (최대 레벨 없음, DB Efx_MaxLv = 0): 레벨마다 Efx_Lv1배씩 곱한다. V()는 쓰지 않는다 (efx 표가 레벨 4까지뿐)
             public static double inf_atk(int L) => Inf("inf_atk", L);             // 공격력 ×(1 + 0.07L) (끝없는 투지)
             public static double inf_gold(int L) => Inf("inf_gold", L);           // 정산 골드 ×(1 + 0.04L) (끝없는 풍년, 점수→골드에만)
+            // 9회차 싱크 4개 (사용자 2026-10-23 "무한 노드 성장 요소를 좀 더"): 위력·질주는 합에 더하는 몫, 기세는 발동률 곱, 동료는 수확기 개수
+            public static double inf_sdmg(int L) => Inf("inf_sdmg", L);           // 스킬 피해 합 +(Efx_Lv1 − 1)L (끝없는 위력)
+            public static double inf_srate(int L) => Inf("inf_srate", L);         // 스킬 발동률 ×(1 + (Efx_Lv1 − 1)L) (끝없는 기세)
+            public static double inf_spd(int L) => Inf("inf_spd", L);             // 수확기 속도 합 +(Efx_Lv1 − 1)L (끝없는 질주)
+            public static int inf_ball(int L) => (int)Math.Round(Inf("inf_ball", L)) - 1;   // 영구 수확기 +L개 (끝없는 동료, Efx_Lv1 2)
             // 덧셈: 레벨마다 (Efx_Lv1 − 1)씩 더한다. 곱(거듭제곱)이면 레벨 100+에서 수천 배가 되어 뒤 스테이지 적이 의미를 잃었다 (사용자 2026-10-23)
             static double Inf(string id, int L) => L <= 0 || !NODE.TryGetValue(id, out var n) ? 1 : 1 + (n.infMul - 1) * Math.Min(L, n.infCap);
             public static double gm_score(int L) => V("gm_score", L);             // 정산 골드 배율
@@ -265,6 +272,7 @@ namespace MoreMush
                     n.inf = true; n.infCost0 = c.Gold[0]; n.infCostK = c.Gold[1] / c.Gold[0]; n.infMul = u.Efx[1];
                     // 가격이 double.MaxValue/4를 넘기 전 레벨에서 멈춘다 (c0 3.6e12 · ×1.076이면 약 9,290레벨). 그때 효과(덧셈)도 유한하다
                     n.infCap = (int)Math.Floor(Math.Log(double.MaxValue / 4 / (n.infCost0 * COST_MUL)) / Math.Log(n.infCostK));
+                    if (INF_CAP.TryGetValue(key, out var cap)) n.infCap = Math.Min(n.infCap, cap);   // 효과 상한이 있는 싱크 (Inf·AtMax·Sanitize가 함께 따른다)
                 }
                 if (skill != null || key == "bl")
                 {
@@ -438,6 +446,11 @@ namespace MoreMush
             E["gm_atk"] = L => Loc.F("공격력 ×{0}", F(NF.gm_atk(L)));
             E["inf_atk"] = L => Loc.F("공격력 ×{0}", F(NF.inf_atk(L)));      // 끝없는 투지 (싱크)
             E["inf_gold"] = L => Loc.F("정산 골드 ×{0}", F(NF.inf_gold(L)));  // 끝없는 풍년 (싱크, 점수→골드에만)
+            // 위력·질주는 합에 더하므로 실제 효과(%p)로 보인다 (verify 9-R3: ×로 쓰면 실제보다 크게 보임)
+            E["inf_sdmg"] = L => Loc.F("스킬 피해 +{0}%p", F((NF.inf_sdmg(L) - 1) * 100));
+            E["inf_srate"] = L => Loc.F("스킬 발동률 ×{0}", F(NF.inf_srate(L)));
+            E["inf_spd"] = L => Loc.F("수확기 속도 +{0}%p", F((NF.inf_spd(L) - 1) * 100));
+            E["inf_ball"] = L => Loc.F("영구 수확기 +{0}개", NF.inf_ball(L));
             E["gm_boss"] = L => Loc.F("보스에게 주는 피해 ×{0}", F(NF.gm_boss(L)));
             E["gm_score"] = L => Loc.F("정산 골드 ×{0}", F(NF.gm_score(L)));
             E["gm_bossgem"] = L => Loc.F("보스를 쓰러뜨릴 때 균사석 +{0}", NF.gm_bossgem(L));

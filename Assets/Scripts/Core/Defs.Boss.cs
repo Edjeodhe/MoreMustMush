@@ -54,11 +54,24 @@ namespace MoreMush
         // 보스가 한 바퀴 돈 뒤(스테이지 60~)는 BOSS_LOOP_HP_MUL을 쓴다 (첫 보스로 돌아가도 쉬워지지 않게, 커지는 건 ZoneMul이 맡는다).
         // 2026-10-14 마지막 보스(움직이는 버섯) 배율과 분리: 50을 3시간 벽으로 올려도 60~가 같이 단단해지지 않게(theory R2-14 안 B)
         public static double BOSS_LOOP_HP_MUL = Db.CPos("BOSS_LOOP_HP_MUL");
+        // 9회차: 반복 보스는 끝없이 오르는 허들 (사용자 "반복 구조고 모바일 방치형처럼 계속해서 허들 및 증가").
+        // 둘째 바퀴(60~100)는 보스마다 LOOP_BOSS배, 셋째 바퀴부터(110~)는 LOOP_LATER배 고정이고 커지는 건 ZoneMul이 맡는다.
+        // 바퀴가 바뀌어도 체력이 떨어지지 않게 InitBoss가 BossHp(110) ≥ BossHp(100)을 검사한다
+        static readonly double[] LOOP_BOSS = { 1.00, 3.75, 7.98, 32.2, 76.7 };
+        const double LOOP_LATER = 7.0;
+        static bool IsLoopBoss(int stage) => stage / BOSS_EVERY > BOSSES.Count;
         public static double BossHp(BossDef b, string themeId, int stage)
         {
-            double mul = stage / BOSS_EVERY > BOSSES.Count ? BOSS_LOOP_HP_MUL : b.hpMul;
+            int k = stage / BOSS_EVERY - 1, lap = k / BOSSES.Count;
+            double mul = !IsLoopBoss(stage) ? b.hpMul : BOSS_LOOP_HP_MUL * (lap == 1 ? LOOP_BOSS[k % BOSSES.Count] : LOOP_LATER);
             return TIERS[3].hp * BOSS_HP_K * ZoneMul(themeId, stage) * mul;
         }
+
+        // 끈기 (9회차, 사용자 "시간을 통해 강화를 해서 허들을 뚫는 것"): 반복 보스 스테이지에서 보스를 못 잡은 판마다 점수가 쌓여 보스 피해가 오른다.
+        // 진 판 +1 · 파밍 판 +2 · "지금 끝내기" 판 0, 2점마다 ×GRIT_STEP, 상한 ×GRIT_CAP. 잡으면(스테이지가 오르면) 0. 첫 바퀴(10~50)는 8회차 D1 맞춤이라 쓰지 않는다
+        public const double GRIT_STEP = 1.05, GRIT_CAP = 3.0;
+        public static bool GritOn(int stage) => IsBossStage(stage) && IsLoopBoss(stage);   // stage = 콘텐츠 스테이지
+        public static double GritMul(int pts) => Math.Min(GRIT_CAP, Math.Pow(GRIT_STEP, Math.Max(0, pts) / 2.0));
 
         // 보스 타격 점수 배율 (2회차, 엑셀 DB Const). 1보다 작으면 보스를 못 잡은 판이 일반 판보다 손해
         public static readonly double BOSS_SCORE_MUL = Db.C("BOSS_SCORE_MUL");
@@ -73,6 +86,10 @@ namespace MoreMush
                 if (!SP_BY_NAME.ContainsKey(b.look)) throw new InvalidOperationException($"보스 {b.id}의 그림 버섯 '{b.look}'이 도감에 없습니다");
                 BOSS[b.id] = b;
             }
+            if (LOOP_BOSS.Length != BOSSES.Count) throw new InvalidOperationException($"반복 보스 배율 LOOP_BOSS는 보스 수({BOSSES.Count})만큼 있어야 해요 ({LOOP_BOSS.Length})");
+            int last = BOSS_EVERY * BOSSES.Count * 2;   // 둘째 바퀴 마지막 보스 (표시 100)
+            if (BossHp(BOSSES[^1], LatestThemeAt(last).id, last) > BossHp(BOSSES[0], LatestThemeAt(last + BOSS_EVERY).id, last + BOSS_EVERY))
+                throw new InvalidOperationException($"반복 보스 체력이 {last} → {last + BOSS_EVERY}에서 떨어져요 (LOOP_LATER를 올리세요)");
         }
     }
 }

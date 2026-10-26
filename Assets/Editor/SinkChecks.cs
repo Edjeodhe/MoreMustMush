@@ -9,7 +9,7 @@ using static MoreMush.Game;
 
 namespace MoreMush.EditorTools
 {
-    // 싱크 노드(Efx_MaxLv = 0: 끝없는 투지·끝없는 풍년) 회귀 검사. 실제 세이브(Game.G·PlayerPrefs)는 건드리지 않는다.
+    // 싱크 노드(Efx_MaxLv = 0: 끝없는 투지·풍년·위력·기세·질주·동료)와 9회차 반복 보스·끈기 회귀 검사. 실제 세이브(Game.G·PlayerPrefs)는 건드리지 않는다.
     // 메뉴 MoreMush/Validate Sink Nodes · 배치 -executeMethod MoreMush.EditorTools.SinkChecks.Batch (결과 BalanceData/sink_checks.txt)
     public static class SinkChecks
     {
@@ -33,12 +33,32 @@ namespace MoreMush.EditorTools
             var atk = NODE["inf_atk"]; var gold = NODE["inf_gold"];
             Check(atk.inf && gold.inf && atk.max == 0 && gold.max == 0, "싱크 2개가 inf·max 0으로 만들어짐");
             Check(atk.req == "ps_atk4" && gold.req == "ed_score3p", "열림 조건 = ps_atk4·ed_score3p 최대");
-            Check(Math.Abs(atk.infCostK - 1.076) < 1e-9 && atk.infMul > 1 && gold.infMul > 1, $"가격 ×1.076 · 효과 레벨당 +{atk.infMul - 1:0.###} / +{gold.infMul - 1:0.###}");
+            Check(Math.Abs(atk.infCostK - 1.06) < 1e-9 && atk.infMul > 1 && gold.infMul > 1, $"가격 ×1.06 · 효과 레벨당 +{atk.infMul - 1:0.###} / +{gold.infMul - 1:0.###}");
             Check(NodeCost(atk, 0).gold == Math.Ceiling(atk.infCost0 * COST_MUL) && NodeCost(atk, 0).gem == 0, "1레벨 가격 = Cost_Lv1");
             var capCost = NodeCost(atk, atk.infCap).gold;
             Check(atk.infCap > 1000 && !double.IsInfinity(capCost) && !double.IsNaN(capCost), $"상한 {atk.infCap}레벨 가격이 유한함 ({capCost:E2})");
             Check(!double.IsInfinity(NF.inf_atk(atk.infCap)) && NF.inf_atk(0) == 1 && NF.inf_gold(0) == 1, "효과: 0레벨 ×1, 상한에서도 유한");
             Check(!NODES.Any(n => n.req != null && NODE[n.req].inf), "싱크를 '최대 레벨로 열기' 선행으로 쓰는 노드 없음");
+
+            // 9회차 싱크 4개: 열림 조건과 효과 상한 (INF_CAP)
+            var sdmg = NODE["inf_sdmg"]; var srate = NODE["inf_srate"]; var spd = NODE["inf_spd"]; var ball = NODE["inf_ball"];
+            Check(new[] { sdmg, srate, spd, ball }.All(n => n.inf && n.max == 0), "새 싱크 4개가 inf·max 0으로 만들어짐");
+            Check(sdmg.req == "fest" && srate.req == "fest" && spd.req == "ps_ball3" && ball.req == "ps_ball3", "열림 조건 = 축제(fest)·영구 수확기 III 최대");
+            Check(srate.infCap == 50 && spd.infCap == 50 && ball.infCap == 6 && sdmg.infCap > 1000, $"효과 상한: 기세 {srate.infCap} · 질주 {spd.infCap} · 동료 {ball.infCap} · 위력 없음({sdmg.infCap})");
+            Check(NF.inf_ball(0) == 0 && NF.inf_ball(3) == 3 && NF.inf_ball(99) == 6, "동료: 레벨 = 수확기 개수, 6개에서 멈춤");
+            Check(Math.Abs(NF.inf_srate(99) - NF.inf_srate(50)) < 1e-12 && NF.inf_spd(99) == NF.inf_spd(50), "기세·질주: 50레벨에서 멈춤");
+
+            // 반복 보스 체력: 60부터 300까지 보스마다 오르기만 한다 (바퀴가 바뀌어도)
+            double prevHp = 0; int drop = -1;
+            for (int s = BOSS_EVERY * (BOSSES.Count + 1); s <= 300; s += BOSS_EVERY)
+            {
+                double hp = BossHp(BossAt(s), LatestThemeAt(s).id, s);
+                if (hp < prevHp && drop < 0) drop = s;
+                prevHp = hp;
+            }
+            Check(drop < 0, drop < 0 ? "반복 보스 체력 60 → 300 단조 증가" : $"반복 보스 체력이 {drop}에서 떨어짐");
+            Check(GritMul(0) == 1 && Math.Abs(GritMul(2) - GRIT_STEP) < 1e-12 && GritMul(9999) == GRIT_CAP, "끈기: 0점 ×1 · 2점 ×1.05 · 상한 ×3");
+            Check(!GritOn(BOSS_EVERY * BOSSES.Count) && GritOn(BOSS_EVERY * (BOSSES.Count + 1)) && !GritOn(BOSS_EVERY * (BOSSES.Count + 1) + 1), "끈기는 반복 보스 스테이지(60~)에서만");
 
             var prevG = G; bool prevS = SaveIO.Suspended; SaveIO.Suspended = true;
             try
@@ -58,6 +78,10 @@ namespace MoreMush.EditorTools
                 double gr = ComputeStats("clear", THEMES[0].id).goldMul / gm0;
                 Check(Math.Abs(gr / (1 + (gold.infMul - 1) * 40) - 1) < 1e-9, "점수→골드 ×(1 + 레벨당 증가×40) 반영 (덧셈)");
                 Check(NodeState(atk) != "max", "상한 전에는 MAX가 아님");
+                int slots0 = HvSlots(); G.nodes["inf_ball"] = 4;
+                Check(HvSlots() == slots0 + 4, "동료 4레벨 → 장착 칸 +4");
+                G.nodes["inf_ball"] = ball.infCap;
+                Check(NodeState(ball) == "max", "동료 6레벨 = MAX");
 
                 // 세이브 정리: 싱크 레벨은 상한까지 남고, 넘으면 상한으로 잘린다
                 var json = Newtonsoft.Json.JsonConvert.SerializeObject(new SaveData { nodes = new Dictionary<string, int> { ["inf_atk"] = 500, ["inf_gold"] = 99999 } });

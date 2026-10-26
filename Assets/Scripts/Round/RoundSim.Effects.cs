@@ -416,8 +416,12 @@ namespace MoreMush
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
             // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍). G.stage는 내부 판 번호, 보스 판정은 콘텐츠 스테이지
-            if (BossRound && !bossCleared) { G.bossOn = false; G.bossFailed = true; }   // 처음 지면 보스 도전 버튼이 열린다 (Unlock.BOSS)
-            else if (!aborted && (!IsBossStage(ContentStage(G.stage)) || BossRound)) G.stage++;
+            // 끈기(Defs.GritMul): 반복 보스 스테이지에서 못 잡고 끝난 판마다 쌓인다. 진 판 +1 · 파밍 판 +2 · 지금 끝내기 0, 스테이지가 오르면 0
+            bool grit = GritOn(ContentStage(G.stage));
+            if (!grit) G.bossGrit = 0;
+            if (BossRound && !bossCleared) { G.bossOn = false; G.bossFailed = true; if (grit && !aborted) G.bossGrit += 1; }   // 처음 지면 보스 도전 버튼이 열린다 (Unlock.BOSS)
+            else if (!aborted && (!IsBossStage(ContentStage(G.stage)) || BossRound)) { G.stage++; G.bossGrit = 0; }
+            else if (grit && !aborted) G.bossGrit += 2;   // 보스 스테이지 파밍 판
             s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);
             s.stored = StoreRound(bossShrooms > 0);

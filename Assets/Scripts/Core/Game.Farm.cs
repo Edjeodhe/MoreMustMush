@@ -19,6 +19,10 @@ namespace MoreMush
 
         // ===== 성장 =====
         public static int Stage() => G?.farm == null ? 1 : F.stage;
+        // 세계수 단계 골드 보정 (9회차, 사용자 "세계수 스테이지에 따라 골드 보상 보정", 후반 주 성장 축): 점수→골드에 곱한다.
+        // 가호 골드(tb.gold)처럼 정산 보너스에 더하면 후반 SettleBonus에 묻혀 효과가 1/3로 준다 (검증_9 9-R2)
+        public const double WT_GOLD_STEP = 0.12;
+        public static double WtGoldMul() => 1 + WT_GOLD_STEP * (Stage() - 1);
         public static int Ring() => G?.farm == null ? 1 : F.ring;
         public static bool StageMax() => Stage() >= WT.stages;
         public static double TreeExp() => G?.farm == null ? 0 : F.exp;

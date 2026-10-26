@@ -213,6 +213,7 @@ namespace MoreMush
             int bs = NextBossStage(ContentNow());   // 콘텐츠(표시) 스테이지
             var b = BossAt(bs);
             string where = b == null ? "" : bs == ContentNow() ? Loc.F("지금 스테이지 {0} · {1}", bs, b.n) : Loc.F("스테이지 {0} · {1}", bs, b.n);
+            if (bs == ContentNow() && GritOn(bs) && G.bossGrit > 0) where += " · " + Loc.F("끈기 ×{0}", GritMul(G.bossGrit).ToString("0.00"));   // 지고 파밍할수록 보스 피해가 오른다
             string state = G.bossOn ? "<color=#b8321e>ON</color>" : "<color=#2a5a9a>OFF</color>";
             UIUtil.SetText(bossLabel, $"{Loc.T("보스 도전 버튼")} {state}\n<size=70%>{where}</size>");
             if (bossFrame != null) bossFrame.color = G.bossOn ? U.Hex("#fff0e6") : U.Hex("#eef7ff");

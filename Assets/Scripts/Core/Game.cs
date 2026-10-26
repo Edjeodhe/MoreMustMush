@@ -187,7 +187,7 @@ namespace MoreMush
 
         // ===== 수확기·날씨 =====
         // 장착 칸 = 영구 핀볼 수. 수확기는 종류마다 한 칸씩, 남은 칸은 기본 수확기로 채운다
-        public static int HvSlots() => 1 + Lv("ps_ball") + Lv("ps_ball2") + Lv("ps_ball3");
+        public static int HvSlots() => 1 + Lv("ps_ball") + Lv("ps_ball2") + Lv("ps_ball3") + NF.inf_ball(Lv("inf_ball"));
         public static List<string> OnHvs() => HARVESTERS.Where(h => HvOn(h.id)).Select(h => h.id).ToList();
         // 켠 수확기가 장착 칸보다 많으면 라운드를 시작할 수 없다
         public static bool HvOver() => OnHvs().Count > HvSlots();
@@ -230,7 +230,7 @@ namespace MoreMush
             // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
             double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
             st.atk = atkFlat * (1 + 0.1 + ab["atk"] + tb.atk) * NF.gm_atk(Lv("gm_atk")) * NF.inf_atk(Lv("inf_atk"));
-            double spd = (NF.ps_spd(Lv("ps_spd")) + ab["spd"] + tb.spd) * (wId == "storm" ? 0.8 : 1);
+            double spd = (NF.ps_spd(Lv("ps_spd")) + ab["spd"] + tb.spd + (NF.inf_spd(Lv("inf_spd")) - 1)) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
             st.launch = TUNE.launch * spd;
             st.minSpd = TUNE.min * spd;
@@ -268,12 +268,12 @@ namespace MoreMush
             st.wanderMul = 1.5 * (SetDone("cordy") ? 1.5 : 1);
             st.poisonMul = SetDone("amanita") ? 1.3 : 1;
             st.jellySlow = SetDone("jelly") ? 0.75 : 0.55;
-            st.skillDmg = 1 + (SetDone("herb") ? 0.25 : 0) + ab["skillDmg"];
+            st.skillDmg = 1 + (SetDone("herb") ? 0.25 : 0) + ab["skillDmg"] + (NF.inf_sdmg(Lv("inf_sdmg")) - 1);
             st.sporeP = 0.25 * (wId == "wind" ? 2 : 1) * NF.gm_toxin(Lv("gm_toxin"));
             st.debuffDur = 3 * (wId == "wind" ? 2 : 1) * NF.ps_resist(Lv("ps_resist")) * NF.gm_toxin(Lv("gm_toxin"));
             st.goldBonus = 1 + GoldenSetBonus();
             st.harvestMul *= INCOME_MUL;
-            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab) + tb.gold) * NF.gm_score(Lv("gm_score")) * NF.inf_gold(Lv("inf_gold"));   // 끝없는 풍년은 점수→골드에만 (사용자 결정 2026-10-13)
+            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab) + tb.gold) * NF.gm_score(Lv("gm_score")) * NF.inf_gold(Lv("inf_gold")) * WtGoldMul();   // 끝없는 풍년은 점수→골드에만 (사용자 결정 2026-10-13)
             st.giantP = NF.ed_giant(Lv("ed_giant"));
             st.blade = Lv("bl") > 0;
             var (bRange, bSpd, bPow) = BladeLv(Lv("bl"));
@@ -290,8 +290,8 @@ namespace MoreMush
             st.barDur = NF.ps_bardur(Lv("ps_bardur"));
             st.barRate = NF.ps_barrate(Lv("ps_barrate"));
             st.powAtk = NF.ps_power(Lv("ps_power")); st.powSkill = NF.ps_power(Lv("ps_power")) * POWER_SKILL / POWER_ATK;
-            st.bossMul = NF.gm_boss(Lv("gm_boss")); st.bossGemAdd = NF.gm_bossgem(Lv("gm_bossgem"));
-            foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= (1 + ab["skill"] + tb.skill) * NF.gm_skill(Lv("gm_skill")); st.sk[id] = si; }
+            st.bossMul = NF.gm_boss(Lv("gm_boss")) * (boss != null && GritOn(cst) ? GritMul(G.bossGrit) : 1); st.bossGemAdd = NF.gm_bossgem(Lv("gm_bossgem"));
+            foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= (1 + ab["skill"] + tb.skill) * NF.gm_skill(Lv("gm_skill")) * NF.inf_srate(Lv("inf_srate")); st.sk[id] = si; }
             st.burstR = NF.burst_r(st.sk["burst"].P) + (SetDone("fart") ? 30 : 0);
             st.festMul = 2 * st.sk["fest"].pm;
             st.shroomHp = st.zoneMul * EarlyHpMul(st.stage);   // 초반 판은 버섯 체력을 낮춘다 (Defs.EarlyHpMul, 내부 판 번호)
