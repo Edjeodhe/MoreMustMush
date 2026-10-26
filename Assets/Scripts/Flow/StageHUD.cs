@@ -14,7 +14,7 @@ namespace MoreMush
     public class StageHUD : MonoBehaviour
     {
         StageController stage;
-        TMP_Text score, scoreLabel, gold, timer, info, stageNo, combo, comboGhost, speed, gimmickName, gimmickDesc;
+        TMP_Text score, scoreLabel, gold, timer, info, stageNo, combo, speed, gimmickName, gimmickDesc;
         GameObject gimmick;
         Image weatherIcon, timeFill, endDim;
         TMP_Text endTitle;
@@ -40,9 +40,8 @@ namespace MoreMush
             stageNo = SceneUI.TextIn(SceneUI.Find(scene, "StageText"));
             weatherIcon = SceneUI.Find(scene, "WeatherIcon")?.GetComponent<Image>();
             combo = SceneUI.TextIn(SceneUI.Find(scene, "Cur_Combo"));
-            comboGhost = SceneUI.TextIn(SceneUI.Find(scene, "ComboGhost"));   // 오를 때 부풀며 사라지는 잔상 (배치한 Cur_Combo 복제)
+            SceneUI.Find(scene, "ComboGhost")?.gameObject.SetActive(false);   // 콤보 뒤 큰 잔상은 뺐다 (사용자 2026-10-23). 씬 오브젝트는 남겨 둔다
             if (combo != null) comboHome = combo.rectTransform.anchoredPosition;
-            if (comboGhost != null) comboGhost.canvasRenderer.SetAlpha(0);
             speed = SceneUI.TextIn(SceneUI.Find(scene, "SpeedText"));
             gimmick = SceneUI.Find(scene, "StageGimmick")?.gameObject;
             gimmickName = SceneUI.TextIn(SceneUI.Find(scene, "GimmickName"));
@@ -115,7 +114,7 @@ namespace MoreMush
         {
             var st = R.st;
             UIUtil.SetText(info, st.boss != null ? Loc.F("보스 스테이지: {0}", st.boss.n) : Loc.F("오늘의 날씨: {0}", st.weather.n));
-            UIUtil.SetText(stageNo, Loc.F("스테이지 {0}", Defs.StageLabel(st.stage)));   // 튜토리얼 판 T1~T4
+            UIUtil.SetText(stageNo, Loc.F("스테이지 {0}", Defs.StageLabel(st.stage)));   // 튜토리얼 판 T1~T2
             var ic = st.weather != null ? SpriteDB.Icon(st.weather.icon) : null;
             if (weatherIcon != null && ic != null) weatherIcon.sprite = ic;
             UIUtil.Show(gimmick, st.boss != null);
@@ -176,7 +175,7 @@ namespace MoreMush
         static string ComboText(int c, bool hot) => ComboDigits.Spell(c, hot, true) ?? c + " COMBO";
 
         // 오른쪽 위 콤보 (라운드의 유일한 콤보 표시): "12 COMBO" 그림 글자. 오를 때마다 크게 튀어 출렁이고(펀치), 번갈아 기울고,
-        // 위로 툭 차이며 흔들리고, 뒤에서 잔상이 부풀며 사라진다. 콤보가 클수록 세게, 10단위는 더 크게 + 잠깐 치명 색.
+        // 위로 툭 차이며 흔들린다. 콤보가 클수록 세게, 10단위는 더 크게 + 잠깐 치명 색.
         // 0으로 끊기면 납작하게 눌렸다가 다시 선다.
         void DrawCombo(int c)
         {
@@ -193,7 +192,6 @@ namespace MoreMush
                     comboDir = -comboDir;
                 }
                 UIUtil.SetText(combo, ComboText(c, comboHot));
-                if (comboGhost != null && up) UIUtil.SetText(comboGhost, combo.text);
             }
             if (comboT > 1.2f) return;
             float t = comboT += Time.unscaledDeltaTime;
@@ -206,7 +204,6 @@ namespace MoreMush
                 rt.localScale = new Vector3(1 + 0.25f * sq, 1 - 0.35f * sq, 1);
                 rt.localRotation = Quaternion.identity;
                 rt.anchoredPosition = comboHome + new Vector2(0, t > 1.2f ? 0 : -16 * Mathf.Exp(-t * 9));
-                if (comboGhost != null) comboGhost.canvasRenderer.SetAlpha(0);
                 return;
             }
             float p = comboPow;
@@ -215,14 +212,6 @@ namespace MoreMush
             rt.localRotation = Quaternion.Euler(0, 0, comboDir * 12 * p * Mathf.Exp(-t * 10) * Mathf.Cos(t * 22));
             float amp = 7 * p * Mathf.Exp(-t * 13);
             rt.anchoredPosition = comboHome + new Vector2(Mathf.Sin(t * 95) * amp, 22 * p * Mathf.Exp(-t * 12) * Mathf.Cos(t * 20));
-            if (comboGhost != null)
-            {
-                float k = Mathf.Clamp01(t / 0.4f), gs = 1 + (0.7f + 0.3f * p) * (1 - (1 - k) * (1 - k));
-                var g = comboGhost.rectTransform;
-                g.localScale = new Vector3(gs, gs, 1);
-                g.localRotation = rt.localRotation;
-                comboGhost.canvasRenderer.SetAlpha(0.55f * (1 - k));
-            }
         }
     }
 }

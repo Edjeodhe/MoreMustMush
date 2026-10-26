@@ -1,0 +1,32 @@
+내부 1~13 n 78 RMSE(ln) 0.297: 상수 +2.65±1.41 · dur +0.60±0.44 · cols +0.73±0.36 · bar +0.34±0.29 · comboK +0.83±0.35 · zoom +1.05±0.44 · species +0.07±0.20
+내부 1~13 n 78 RMSE(ln) 0.291: 상수 +1.83±1.54 · dur +0.69±0.53 · cols +0.61±0.39 · bar +0.19±0.37 · comboK +0.60±0.40 · zoom +1.32±0.58 · atk -0.06±0.13 · power -0.17±0.39 · stump +0.56±0.33 · species +0.17±0.16
+내부 1~13 n 78 RMSE(ln) 0.311: 상수 +0.56±0.78 · dur +0.91±0.42 · cols +0.78±0.26
+내부 5~13 n 54 RMSE(ln) 0.275: 상수 +0.28±1.22 · dur +1.06±0.34 · cols +0.66±0.32 · bar +1.30±0.64 · comboK +0.63±0.28 · zoom +2.25±0.40
+
+산 것별 다음 판 net 배율(같은 판 여럿이면 기하 평균으로 나눔, 판 1~13) — 잡음 큼(판당 ×1.35)
+  ed_score1    ×1.73 (n 6)
+  power1       ×1.48 (n 6)
+  ed_cols1     ×1.46 (n 6)
+  ps_atk2      ×1.45 (n 6)
+  md_bar2      ×1.34 (n 6)
+  ed_price2    ×1.31 (n 6)
+  ps_dur1      ×1.27 (n 6)
+  ed_cols2     ×1.19 (n 6)
+  ed_score2    ×1.17 (n 6)
+  ps_atk1      ×1.16 (n 6)
+  ed_score3    ×1.15 (n 6)
+  ed_cols3     ×1.14 (n 6)
+  ed_rare01    ×1.13 (n 4)
+  dev_stump1   ×1.12 (n 6)
+  ps_dur3      ×1.12 (n 5)
+  ed_price1    ×1.10 (n 6)
+  ps_dur2      ×1.10 (n 6)
+  md_map2      ×1.08 (n 2)
+  md_bar1      ×1.06 (n 6)
+  ed_regen1    ×1.04 (n 6)
+  power2       ×1.03 (n 6)
+  md_combo1    ×1.02 (n 6)
+  ed_price3    ×1.00 (n 2)
+  dev_moss1    ×1.00 (n 2)
+  md_map1      ×0.94 (n 6)
+  power3       ×0.92 (n 6)

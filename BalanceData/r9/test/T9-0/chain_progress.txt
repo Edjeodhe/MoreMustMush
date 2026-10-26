@@ -1,0 +1,13 @@
+k06 seed 1 done 15:29:47 (74s)
+k06 seed 2 done 15:31:15 (75s)
+k06 seed 3 done 15:32:29 (74s)
+k06 seed 4 done 15:33:44 (74s)
+k06 seed 5 done 15:34:58 (75s)
+k06 seed 6 done 15:36:13 (75s)
+k10 seed 1 done 15:37:25 (72s)
+k10 seed 2 done 15:38:36 (71s)
+k10 seed 3 done 15:39:46 (70s)
+k10 seed 4 done 15:40:57 (71s)
+k10 seed 5 done 15:42:08 (70s)
+k10 seed 6 done 15:43:17 (69s)
+ALLDONE

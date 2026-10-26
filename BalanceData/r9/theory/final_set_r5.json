@@ -1,0 +1,12 @@
+{
+ "Upgrade": {
+  "inf_atk": {
+   "Efx_Lv1": 1.15
+  }
+ },
+ "Const": {
+  "BOSS_LOOP_HP_MUL": {
+   "Value": 157
+  }
+ }
+}

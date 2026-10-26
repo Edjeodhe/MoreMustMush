@@ -1,0 +1,14 @@
+균사 트리 A안(15차) → 엑셀 DB(MMM_DB_Ver.NN.xlsx) 옮기기
+
+게임은 이미 Assets/Resources/DB/db.json(이 표와 같은 내용)으로 돌아갑니다.
+엑셀을 이 표대로 바꾸기 전에 엑셀을 저장하면 db.json을 다시 만들려다 "2행에 Line 열이 없음" 오류로 멈춥니다 (db.json은 그대로 남아요).
+
+1. Upgrade 시트: 새 열 추가 (2행 영문 키 / 3행 타입)
+   Line(string) · Pos_X(int) · Pos_Y(int) · Efx_Lv5 ~ Efx_Lv10(float)
+   그다음 데이터 행을 Upgrade.csv로 통째로 바꾼다 (예전 노드 행은 지운다. 세계수 5개 md_chef·gm_farm·gm_spore·gm_herb·gm_gourmet는 Branch wt로 남는다)
+2. Upgrade_Cost 시트: 새 열 Cost_Lv5 ~ Cost_Lv10 · Gem_Lv5 ~ Gem_Lv10 (float), 데이터 행을 Upgrade_Cost.csv로 바꾼다
+3. String 시트: String_추가.csv 행을 맨 아래에 붙인다 (예전 문구는 그대로 둬도 된다)
+4. Skill 시트는 그대로 (트리에서 쓰지 않지만 지우지 않아도 된다)
+엑셀은 COM(엑셀 앱)으로 저장할 것. openpyxl로 저장하면 도형이 지워진다.
+
+다시 만들기: 기획서/균사트리_배치안/생성스크립트/to_unity_db.py (layout15.json → db.json + 이 CSV들)

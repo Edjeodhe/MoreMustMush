@@ -242,6 +242,7 @@ namespace MoreMush
             if (snap.hasGold) { double etc = g.gold - (snap.gold + gained - outGold); if (Math.Abs(etc) >= 0.5) data["etc"] = N(etc); }
             if (outGem > 0) data["out_gem"] = N(outGem);
             data["gem"] = N(g.gem);
+            if (g.bossGrit > 0) data["grit"] = g.bossGrit;   // 끈기 점수 (이번 판을 반영한 뒤, 반복 보스 스테이지에서 못 잡은 동안)
             if (result == "early_exit") data["sec"] = Math.Round(sec, 1);
             if (boss && result != "clear") data["boss_hp"] = Math.Round(bossHpPct, 1);
             StageSend(stage, result, boss, g.ending, data);

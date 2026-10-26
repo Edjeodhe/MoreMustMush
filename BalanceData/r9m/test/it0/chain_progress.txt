@@ -1,0 +1,4 @@
+조건: preset tuned · GAME_ZONE True · BOSS_GATE False · TUT_ROUNDS 2 · BOT_GEMS True · maxRounds 1500 · DB MMM_DB_Ver.08.xlsx + 균사트리 A안 15차 (Test_JS2 병합)
+k06 seed 1 done (127s)
+k06 seed 2 done (122s)
+k06 seed 3 done (113s)

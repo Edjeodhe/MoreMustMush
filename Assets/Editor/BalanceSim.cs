@@ -39,7 +39,7 @@ namespace MoreMush.EditorTools
             var st = R.st; var b = st.boss;
             double hp = st.bossHp;
             double A = st.atk * st.heavyMul * st.bossMul * (1 + Math.Min(1, st.crit) * (st.critMul - 1));
-            bool temp = st.kidP > 0 || st.sk["split"].on || st.sk["clone"].on || Lv("barclone") > 0;
+            bool temp = st.splitDur > 0 || st.cloneDur > 0;   // 분열(꼬마 수확기)·분신술(분신 바)
             double H = GATE_H * st.spdMul * (1 + GATE_KB * (st.permBalls - 1)) * (b.id == "mover" ? GATE_MOVER_H : 1) * (b.id != "angel" && temp ? 1 + GATE_TAU : 1);
             double dps = Math.Max(1e-9, A * H);
             double t;
@@ -184,8 +184,9 @@ namespace MoreMush.EditorTools
         // every: 몇 판마다 한 줄씩 남길지. 트리를 다 산 판은 항상 남긴다
         static int botFarm; static bool botBoughtSinceFail;
         // 보스 처치에 쓰이는 노드 레벨 합 (관문 모드 재도전 규칙: 이것이 올라야 다시 도전)
-        static readonly string[] ATK_KEYS = { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4", "inf_atk", "ps_crit", "ps_crit2", "ps_heavy", "gm_atk", "gm_boss", "ps_spd", "ps_ball", "ps_ball2", "ps_ball3", "ps_dur", "ps_dur2" };
-        static int AtkLevels() => ATK_KEYS.Where(NODE.ContainsKey).Sum(Lv);
+        // 전투 줄 (균사 트리 A안): 공격력·치명·크기·속도·장착 칸·시간
+        static readonly string[] ATK_LINES = { "ps_blade", "ps_crit", "ps_critdmg", "ps_size", "ps_wind", "ps_tools", "ps_stamina", "ps_kid", "ps_kidatk", "power" };
+        static int AtkLevels() => ATK_LINES.Where(LINES.ContainsKey).Sum(LineLv);
 
         // 마지막 Progression 호출에서 실제로 돈 판 수 (BalanceJob이 시간 예산만큼 묶어 부를 때 남은 판을 센다)
         public static int LastPlayed;
@@ -312,9 +313,7 @@ namespace MoreMush.EditorTools
         // cross: 그 줄의 효율 넘김 기준. 공격력 줄은 2026-10-13 단계적 성장(레벨당 1·2.5·6·15, theory R2-12)으로 바뀌어 단계 사이가 ×2.4~2.5뿐이라 0.66이면 % 기준 효율 비가 ×1.5에 못 미친다 → verify R2-12 판정의 0.53
         public static readonly (string[] ids, double[] per, double cross)[] TIER_LINES =
         {
-            (new[] { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4" }, new[] { 1.0, 2.5, 2.5, 6, 6, 15 }, 0.53),
-            (new[] { "ed_score", "ed_score1p", "ed_score2", "ed_score2p", "ed_score3", "ed_score3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
-            (new[] { "ed_bonus", "ed_bonus1p", "ed_bonus2", "ed_bonus2p", "ed_bonus3", "ed_bonus3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
+            // 균사 트리 A안(2026-10-19)에는 단계 노드(I·II·III)가 없다. 예전 줄: ps_atk…ps_atk4 · ed_score…ed_score3p · ed_bonus…ed_bonus3p
         };
         // 줄의 첫 경계(I → I+, 공격력은 I → II)는 줄 규칙에서 뺀다: 1단계 가격은 밸런스 3회차 사다리(DB)로 고정했고, I의 끝이 싸서 다음 첫 레벨이 ×4를 넘는다 (verify#12 안 a).
         // 공격력 I은 4회차 F안(2026-10-19, theory R4-2)으로 싸게 쪼개 효율 넘김(cross)을 못 지키므로 I → II 경계도 뺀다

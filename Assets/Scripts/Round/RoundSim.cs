@@ -43,6 +43,7 @@ namespace MoreMush
         List<Queued> queue = new List<Queued>();
         public List<Wave> waves = new List<Wave>();
         public List<Tornado> tornados = new List<Tornado>();
+        public List<Dot> dots = new List<Dot>();
         public List<Bolt> bolts = new List<Bolt>();
         public List<Ring> rings = new List<Ring>();
         public List<Part> parts = new List<Part>();
@@ -162,11 +163,12 @@ namespace MoreMush
         {
             // 후보 목록은 예전 LINQ(Take/Select · Where)와 같은 순서로 재사용 버퍼에 채운다 (군락마다 새 리스트를 만들지 않게)
             var pool = spPool; pool.Clear();
+            // 레전더리(등급 3)는 보스 전용: 필드에는 일반·에픽·유니크만
             if (EarlyStage(st.stage) && st.boss == null)
             {
-                for (int i = 0; i < EARLY_SPECIES.Length && i < st.stage; i++) pool.Add(SP_BY_NAME[EARLY_SPECIES[i]]);   // 초반: 스테이지 수만큼의 종만
+                for (int i = 0; i < EARLY_SPECIES.Length && i < st.stage; i++) { var sp0 = SP_BY_NAME[EARLY_SPECIES[i]]; if (sp0.t < 3) pool.Add(sp0); }   // 초반: 스테이지 수만큼의 종만
             }
-            else foreach (var sp in SPECIES) if (IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)) pool.Add(sp);
+            else foreach (var sp in SPECIES) if (sp.t < 3 && IsUnlockedSp(sp) && (sp.theme == null || sp.theme == st.theme.id)) pool.Add(sp);
             pickWall = wall;
             return U.PickWeighted(pool, speciesWeight ??= SpeciesWeight);
         }
@@ -180,6 +182,8 @@ namespace MoreMush
             double x = TIERS[sp.t].w;
             if (st.theme.favIds.Contains(sp.id)) x *= THEME_FAV_MUL;
             if (sp.t >= 1) x *= st.rareMul;
+            if (sp.t == 1) x *= st.epicMul;
+            if (sp.t == 2) x *= st.uniqueMul;
             x *= Math.Pow(st.stageMul, sp.t);
             if (pickWall && sp.t >= 2) x *= 3;
             if (w.favIds.Contains(sp.id) || (w.favTier >= 0 && sp.t == w.favTier)) x *= w.favMul;
@@ -260,7 +264,7 @@ namespace MoreMush
             if (sp == null) return false;
             if (sp.wander) wall = false;
             float r = TIERS[sp.t].r * colS;   // 7회차: 판마다 정한 군락 크기 배율 (재생도 같은 크기)
-            int n = U.RandI(3, st.colMax);
+            int n = st.colMax;   // 군락지 둘레 단일 버섯 수 (더 많은 버섯 노드)
             for (bool tryWall = wall; ; tryWall = false)
             {
                 for (int a = 0; a < COL_TRIES; a++)
@@ -293,7 +297,7 @@ namespace MoreMush
                 bool wall = U.Chance(0.3f) && WALL_COLONIES;   // 예전 SpawnColony와 같은 난수 순서 (벽 군락은 꺼져 있다)
                 var sp = PickSpecies(wall);
                 if (sp == null) continue;
-                slots.Add(new PlanSlot(sp, U.RandI(3, st.colMax)));
+                slots.Add(new PlanSlot(sp, st.colMax));
             }
             if (slots.Count == 0) return;
             float sMin = ColSMin(ZOOM), s = StartScale(slots);
@@ -391,7 +395,7 @@ namespace MoreMush
                 loneSp.Add(sp);
             }
             float r = TIERS[sp.t].r;
-            int n = U.RandI(3, st.colMax);
+            int n = st.colMax;
             bool first = tutorial && TutorialColony == null && slot == 0;
             for (int a = 0; a < 30; a++)
             {
@@ -412,7 +416,7 @@ namespace MoreMush
         }
 
         // 낱개 버섯 (군락에 속하지 않는다. 수확해도 다시 생기지 않는다): 튜토리얼 판은 첫 발사 때 TUTORIAL_LOOSE개, 초반 판은 시작 때 EARLY_LOOSE
-        public const int TUTORIAL_LOOSE = 8;
+        public const int TUTORIAL_LOOSE = 12;   // 첫 판 수입을 늘려 첫 강화까지 이어지게 (8회차 2026-10-23, 이전 8)
         bool looseSpawned;
 
         void SpawnLoose(int count)

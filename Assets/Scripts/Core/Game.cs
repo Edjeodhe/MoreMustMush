@@ -27,6 +27,13 @@ namespace MoreMush
         public double burstR, festMul, shroomHp = 1;
         public double zoneMul = 1, scoreFlat, critMul = 3;
         public BossDef boss; public double bossHp;
+        // 균사 트리 A안 (2026-10-19): 슬라이드 바 버프 지속(초, 0 = 없음)·확률 스킬·종류별 스폰·수확
+        public double powFlat, springDur, pierceDur, homingDur, healDur, splitDur, feverDur, cloneDur, wisdomP;
+        public int cloneMax = 1;
+        public double poisonP, burstP, boltP, tornadoP, tornadoDur, moltP, legendP, flexP;
+        public double epicMul = 1, uniqueMul = 1;
+        public double[] handMul = { 1, 1, 1, 1 };   // 등급별 수확량 배율 (일반·에픽·유니크·레전더리)
+        public bool fest;                            // 할아버지의 전설: 마지막 5초 festMul
         public Game.TreeBonus tree = new Game.TreeBonus();   // 세계수 보너스 (harvest: 창고에 넣는 버섯 수 +%)   // 보스 라운드면 보스와 그 체력 (아니면 null)
     }
 
@@ -40,6 +47,14 @@ namespace MoreMush
 
         // ===== 조회 =====
         public static int Lv(string id) => G.nodes.TryGetValue(id, out var L) ? L : 0;
+        // 줄(같은 스킬) 레벨 = 행 레벨의 합. 줄 값 = 마지막으로 산 행의 DB Efx (아무것도 안 샀으면 첫 행의 Efx_Lv0)
+        public static int LineLv(string line) { int s = 0; foreach (var n in LINES[line]) s += Lv(n.id); return s; }
+        public static double LineV(string line)
+        {
+            var rows = LINES[line];
+            for (int i = rows.Count - 1; i >= 0; i--) { int L = Lv(rows[i].id); if (L > 0) return rows[i].efx[Math.Min(L, rows[i].max)]; }
+            return rows[0].efx[0];
+        }
         public static bool IsUnlockedSp(Species sp) => sp.init || (G.seeds.TryGetValue(sp.id, out var b) && b) || DBG.allSeeds;
         public static bool Harvested(string id) => G.codex.TryGetValue(id, out var e) && e.n > 0;
         // 라운드 HUD가 프레임마다 부르므로 LINQ 대신 루프로 센다
@@ -55,7 +70,7 @@ namespace MoreMush
             return b;
         }
 
-        // 내부 판 번호 (튜토리얼 T1~T4 포함, 1부터). 화면 글자는 Defs.StageLabel
+        // 내부 판 번호 (튜토리얼 T1~T2 포함, 1부터). 화면 글자는 Defs.StageLabel
         public static int StageNow() => G != null ? G.stage : 1;
         // 콘텐츠(표시) 스테이지: 보스·지역·체력 성장은 이것으로 판정한다 (튜토리얼 판은 1, Defs.ContentStage)
         public static int ContentNow() => ContentStage(StageNow());
@@ -166,10 +181,11 @@ namespace MoreMush
                 Node best = null; double bc = double.PositiveInfinity;
                 foreach (var n in NODES)
                 {
-                    if (!brs.Contains(n.br) || n.gem) continue;
+                    if (!brs.Contains(n.br)) continue;
                     var s = NodeState(n); if (s != "avail" && s != "owned") continue;
                     if (!ParentOk(n)) continue;   // 산 노드라도 선행(부모·최대 레벨 선행)이 안 맞으면 더 못 올린다
-                    double c = NodeCost(n, Lv(n.id)).gold; if (c < bc) { bc = c; best = n; }
+                    var nc = NodeCost(n, Lv(n.id)); if (nc.gem > 0) continue;   // 다음 레벨이 균사석이면 건너뛴다 (사냥 준비는 1레벨만 골드)
+                    double c = nc.gold; if (c < bc) { bc = c; best = n; }
                 }
                 if (best == null || G.gold - bc < reserve) break;
                 G.gold -= bc; G.nodes[best.id] = Lv(best.id) + 1; levels++; spent += bc;
@@ -180,14 +196,15 @@ namespace MoreMush
 
         // ===== 정산 골드 =====
         // 버섯 판매가 없어진 뒤, 예전 판매가 보너스(노드·코어·별 능력치)는 정산 골드 +%로 쓴다. 보너스끼리는 더한다
+        // 흥정 기술·단골 손님(점수 → 골드 전환율)은 더한다
         public static double SettleBonus(Dictionary<string, double> ab) =>
-            (NF.ed_price(Lv("ed_price")) - 1) + NF.ed_price2(Lv("ed_price2")) + (NF.ed_trade(Lv("ed_trade")) - 1) + 0.1 /* 예전 식용 코어 보너스, 코어가 없어져 기본으로 */ + ab["price"];
+            LineV("ed_haggle") + LineV("ed_regular") + 0.1 /* 예전 식용 코어 보너스, 코어가 없어져 기본으로 */ + ab["price"];
         // 버섯 한 개의 골드 값어치 (엽전 수확기가 쓴다): 등급 기본가 × (1 + 정산 보너스 + 황금 세트)
         public static double PriceMul(Dictionary<string, double> ab) => 1 + SettleBonus(ab) + GoldenSetBonus();
 
         // ===== 수확기·날씨 =====
         // 장착 칸 = 영구 핀볼 수. 수확기는 종류마다 한 칸씩, 남은 칸은 기본 수확기로 채운다
-        public static int HvSlots() => 1 + Lv("ps_ball") + Lv("ps_ball2") + Lv("ps_ball3");
+        public static int HvSlots() => 1 + (int)Math.Round(LineV("ps_tools")) + NF.inf_ball(Lv("inf_ball"));   // 장인의 도구 (균사석)
         public static List<string> OnHvs() => HARVESTERS.Where(h => HvOn(h.id)).Select(h => h.id).ToList();
         // 켠 수확기가 장착 칸보다 많으면 라운드를 시작할 수 없다
         public static bool HvOver() => OnHvs().Count > HvSlots();
@@ -210,8 +227,9 @@ namespace MoreMush
 
         static SkillInfo SkillInfoOf(string id)
         {
-            var (S, P) = SkillSP(SKILLS[id], Lv(id));
-            return new SkillInfo { on = Lv(id) > 0, S = S, p = SkillRate(S), P = P, pm = SkillPow(P) };
+            int L = OFF_NODES.Contains(id) ? 0 : Lv(id);   // 뺀 노드는 옛 세이브에 레벨이 남아 있어도 끈다
+            var (S, P) = SkillSP(SKILLS[id], L);
+            return new SkillInfo { on = L > 0, S = S, p = SkillRate(S), P = P, pm = SkillPow(P) };
         }
 
         // ===== 라운드 능력치 =====
@@ -224,75 +242,81 @@ namespace MoreMush
             st.hvStar = st.hvs.Distinct().ToDictionary(id => id, id => G.hv.TryGetValue(id, out var s) ? s : 1);
             // 노드·코어·별 능력치·꼬마 보너스는 더하고, 날씨(라운드마다 바뀌는 조건)만 곱한다
             // 지역 배율: 버섯 체력·점수·수확 개수가 함께 커진다
-            int cst = ContentStage(st.stage);   // 콘텐츠 스테이지 (튜토리얼 4판 오프셋). st.stage는 내부 판 번호
+            int cst = ContentStage(st.stage);   // 콘텐츠 스테이지 (튜토리얼 판 오프셋). st.stage는 내부 판 번호
             st.zoneMul = ZoneMul(st.theme.id, cst);
-            // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
-            double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
-            st.atk = atkFlat * (1 + 0.1 + ab["atk"] + tb.atk) * NF.gm_atk(Lv("gm_atk")) * NF.inf_atk(Lv("inf_atk"));
-            double spd = (NF.ps_spd(Lv("ps_spd")) + ab["spd"] + tb.spd) * (wId == "storm" ? 0.8 : 1);
+            // 공격력 = 날 갈기(기본 1 포함) × (1 + 퍼센트 보너스 합)
+            double atkFlat = LineV("ps_blade") + (SetDone("poison") ? 3 : 0);
+            st.atk = atkFlat * (1 + 0.1 + ab["atk"] + tb.atk) * NF.inf_atk(Lv("inf_atk"));
+            double spd = (1 + LineV("ps_wind") + ab["spd"] + tb.spd + (NF.inf_spd(Lv("inf_spd")) - 1)) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
             st.launch = TUNE.launch * spd;
             st.minSpd = TUNE.min * spd;
-            st.ballR = TUNE.ball0 * BALL_SCALE * (NF.ps_size(Lv("ps_size")) + ab["size"]);
-            st.barLen = (150 * (NF.md_bar(Lv("md_bar")) + NF.ps_bar(Lv("ps_bar")) + 0.1 + ab["bar"] + tb.bar) + (SetDone("shelf") ? 40 : 0)) * NF.gm_bar(Lv("gm_bar")) * (wId == "cold" ? 0.75 : 1);   // 최대 필드 폭의 1/3 (RoundSim.Start)
-            double baseTime = st.stage <= EARLY_TIME_STAGES ? EARLY_SEC : BASE_TIME + StageTime(cst);   // 초반(내부 판 1~4)은 10초 + 시간 노드, 성장은 콘텐츠 스테이지로
-            st.duration = baseTime + NF.ps_dur(Lv("ps_dur")) + NF.ps_dur2(Lv("ps_dur2")) + ab["dur"] + tb.dur - (wId == "cold" ? 3 : 0);
-            st.crit = NF.ps_crit(Lv("ps_crit")) + (SetDone("coral") ? 0.05 : 0) + ab["crit"] + tb.crit;
-            st.critMul = NF.ps_crit2(Lv("ps_crit2"));
-            st.comboK = NF.md_combo(Lv("md_combo")) + NF.md_combo2(Lv("md_combo2")) + 0.1 * ab["combo"];
-            // 타격 점수 = (등급 기본 점수 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합) × 지역 배율
-            st.scoreFlat = NF.ed_score(Lv("ed_score")) + NF.ed_score1p(Lv("ed_score1p")) + NF.ed_score2(Lv("ed_score2")) + NF.ed_score2p(Lv("ed_score2p")) + NF.ed_score3(Lv("ed_score3")) + NF.ed_score3p(Lv("ed_score3p"));
-            st.scoreMul = (1 + (SetDone("cook") ? 0.5 : 0) + ab["score"]) * st.zoneMul;
-            st.maxCol = Math.Max(1, (int)Math.Ceiling((ColCount(Lv("ed_cols")) + NF.ed_cols2(Lv("ed_cols2")) + tb.colsN) * (1 + ab["cols"] + tb.cols) * (wId == "rain" ? 1.2 : 1)));
-            st.regen = NF.ed_regen(Lv("ed_regen")) / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1);   // 7회차: 폭우 재생 ×2 뺌 (새 배치 규칙에서 실제 손해가 커서, 검증_7 7-2)
-            st.rareMul = (NF.ed_rare(Lv("ed_rare")) + ab["rare"]) * NF.ed_rare0(Lv("ed_rare0"));   // 희귀 포자: 안 사면 에픽 이상이 1/5
-            // 7회차 7-2: 예전 재생 대기열이 큰 일반 군락을 걸러 희귀가 많이 남던 효과(숨은 거르기)를 보이는 규칙으로 옮겼다 — 21~30 기울기 0.06, 상한 2.4(c 48부터 예전 식과 같음)
-            st.stageMul = Math.Max(1 + 0.03 * (cst - 1), Math.Min(1 + 0.06 * (cst - 1), 2.4));
-            // 수확 개수 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합) × 균사석 × 지역 배율
-            double harvFlat = 1 + NF.ed_bonus(Lv("ed_bonus")) + NF.ed_bonus1p(Lv("ed_bonus1p")) + NF.ed_bonus2(Lv("ed_bonus2")) + NF.ed_bonus2p(Lv("ed_bonus2p")) + NF.ed_bonus3(Lv("ed_bonus3")) + NF.ed_bonus3p(Lv("ed_bonus3p"));
-            st.harvestMul = harvFlat * (1 + ab["harvest"]) * NF.gm_harvest(Lv("gm_harvest")) * st.zoneMul;
-            st.multiP = MultiRate(Lv("ed_multi"));
+            st.ballR = TUNE.ball0 * BALL_SCALE * (1 + LineV("ps_size") + ab["size"]);
+            st.barLen = (150 * (1 + LineV("ps_hug") + 0.1 + ab["bar"] + tb.bar) + (SetDone("shelf") ? 40 : 0)) * (wId == "cold" ? 0.75 : 1);   // 최대 필드 폭의 1/3 (RoundSim.Start)
+            // 라운드 시간: 기본 10초 + 노장의 체력 (스테이지로는 늘지 않는다)
+            st.duration = ROUND_SEC + LineV("ps_stamina") + ab["dur"] + tb.dur - (wId == "cold" ? 3 : 0);
+            st.crit = LineV("ps_crit") + (SetDone("coral") ? 0.05 : 0) + ab["crit"] + tb.crit;   // 100%를 넘으면 극한 치명타 (RoundSim.Damage)
+            st.critMul = 1 + LineV("ps_critdmg");   // 기본 150%
+            st.comboK = (0.1 + 0.1 * ab["combo"]) * (1 + LineV("ps_combo"));   // [피버] 버프는 따로 곱한다 (RoundSim.ScoreMulFor)
+            // 타격 점수 = 등급 기본 점수 × (1 + 퍼센트 보너스 합) × 지역 배율
+            st.scoreFlat = 0;
+            st.scoreMul = (1 + (SetDone("cook") ? 0.5 : 0) + ab["score"] + LineV("ed_hunt")) * st.zoneMul;
+            // 군락지 수 = 기본 3 + 넓은 시야·하늘의 시야·신의 눈. 군락지가 늘면 필드가 넓어진다 (필드 넓히기 노드 없음)
+            int cols = COL_BASE + (int)Math.Round(LineV("ed_view") + LineV("ed_sky") + LineV("ed_god")) + (int)Math.Round(tb.colsN);
+            st.zoom = ZoomForCols(cols);
+            st.maxCol = Math.Max(1, (int)Math.Ceiling(cols * (1 + ab["cols"] + tb.cols) * (wId == "rain" ? 1.2 : 1)));
+            st.regen = LineV("ed_regen") / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1) * (wId == "storm" ? 2 : 1);
+            // 레전더리는 보스 전용 (필드에 안 나온다). 에픽·유니크는 소문·전설 노드로 따로
+            st.rareMul = 1 + ab["rare"];
+            st.epicMul = 1 + LineV("ed_epic");
+            st.uniqueMul = 1 + LineV("ed_unique");
+            st.stageMul = 1 + 0.03 * (cst - 1);
+            // 수확 개수 = 1 × (1 + 퍼센트 보너스 합) × 지역 배율. 등급별 손길은 따로 곱한다 (RoundSim.Harvest)
+            st.harvestMul = (1 + ab["harvest"]) * st.zoneMul;
+            st.handMul = new[] { 1 + LineV("ed_hand1"), 1 + LineV("ed_hand2"), 1 + LineV("ed_hand3"), 1 + LineV("ed_hand4") };
+            st.multiP = 0;
             st.priceMul = PriceMul(ab);
-            st.colMax = NF.ed_size(Lv("ed_size"));
-            st.zoom = Lv("md_map2") > 0 ? MapZoom2() : MAP_ZOOM[Lv("md_map")];   // md_map2 = 필드 넓히기 마지막 한 칸 (형제 노드)
-            double area = Math.Pow(1 / (st.zoom * st.zoom), COL_AREA_EXP);
-            st.maxCol = Math.Max(1, (int)U.JsRound(st.maxCol * area));
-            st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"] + tb.goldenP) * tb.goldenMul * (wId == "moon" ? 3 : 1);
-            st.sparkP = tb.spark;   // 연쇄 번개 (꼬마·장식): bolt 스킬이 없어도 친다
-            st.devTypes = DEVICE_TYPES.Where(d => Lv("dev_" + d) > 0).ToList();
+            st.colMax = (int)Math.Round(LineV("ed_more"));   // 군락지 둘레 단일 버섯 수 (고정)
+            st.golden = (0.01 + LineV("ed_gold") + (SetDone("glow") ? 0.01 : 0) + ab["golden"] + tb.goldenP) * tb.goldenMul * (wId == "moon" ? 3 : 1);
+            st.sparkP = tb.spark;   // 연쇄 번개 (꼬마·장식)
+            // 환경 복원: 1레벨 그루터기 · 2레벨 꽃밭(moss) · 3레벨 도토리
+            int env = (int)Math.Round(LineV("md_env"));
+            st.devTypes = DEVICE_TYPES.Take(Math.Max(0, Math.Min(env, DEVICE_TYPES.Length))).ToList();
             st.permBalls = st.hvs.Count;
             st.comboWin = COMBO_WINDOW;
-            st.meteor = Lv("gm_meteor") > 0 ? NF.gm_meteor(Lv("gm_meteor")) : (NF.Meteor?)null;
+            st.meteor = null;
             st.wanderP = 0.08;
             st.wanderMul = 1.5 * (SetDone("cordy") ? 1.5 : 1);
             st.poisonMul = SetDone("amanita") ? 1.3 : 1;
             st.jellySlow = SetDone("jelly") ? 0.75 : 0.55;
-            st.skillDmg = 1 + (SetDone("herb") ? 0.25 : 0) + ab["skillDmg"];
-            st.sporeP = 0.25 * (wId == "wind" ? 2 : 1) * NF.gm_toxin(Lv("gm_toxin"));
-            st.debuffDur = 3 * (wId == "wind" ? 2 : 1) * NF.ps_resist(Lv("ps_resist")) * NF.gm_toxin(Lv("gm_toxin"));
+            st.skillDmg = 1 + (SetDone("herb") ? 0.25 : 0) + ab["skillDmg"] + (NF.inf_sdmg(Lv("inf_sdmg")) - 1);
+            st.sporeP = 0.25 * (wId == "wind" ? 2 : 1);
+            st.debuffDur = 3 * (wId == "wind" ? 2 : 1);
             st.goldBonus = 1 + GoldenSetBonus();
             st.harvestMul *= INCOME_MUL;
-            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab) + tb.gold) * NF.gm_score(Lv("gm_score")) * NF.inf_gold(Lv("inf_gold"));   // 끝없는 풍년은 점수→골드에만 (사용자 결정 2026-10-13)
-            st.giantP = NF.ed_giant(Lv("ed_giant"));
-            st.blade = Lv("bl") > 0;
-            var (bRange, bSpd, bPow) = BladeLv(Lv("bl"));
-            st.bladeR = st.ballR + NF.bl_range(bRange);
-            st.bladeInt = NF.bl_spd(bSpd);
-            st.bladeDmg = st.atk * NF.bl_pow(bPow);
-            st.kidP = KidRate(Lv("md_kid"));
-            st.buffMul = NF.md_buffdur(Lv("md_buffdur"));
-            st.tempLife = NF.md_templife(Lv("md_templife"));
-            st.devMul = NF.md_stump(Lv("md_stump"));
-            st.heavyMul = NF.ps_heavy(Lv("ps_heavy"));
-            st.rushMul = NF.ps_rush(Lv("ps_rush"));
-            st.barSpd = NF.ps_barspd(Lv("ps_barspd"));
-            st.barDur = NF.ps_bardur(Lv("ps_bardur"));
-            st.barRate = NF.ps_barrate(Lv("ps_barrate"));
-            st.powAtk = NF.ps_power(Lv("ps_power")); st.powSkill = NF.ps_power(Lv("ps_power")) * POWER_SKILL / POWER_ATK;
-            st.bossMul = NF.gm_boss(Lv("gm_boss")); st.bossGemAdd = NF.gm_bossgem(Lv("gm_bossgem"));
-            foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= (1 + ab["skill"] + tb.skill) * NF.gm_skill(Lv("gm_skill")); st.sk[id] = si; }
-            st.burstR = NF.burst_r(st.sk["burst"].P) + (SetDone("fart") ? 30 : 0);
-            st.festMul = 2 * st.sk["fest"].pm;
+            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab) + tb.gold) * NF.inf_gold(Lv("inf_gold")) * WtGoldMul();
+            st.giantP = 0;   // 거대 버섯 삭제 (A안)
+            // 회전 칼날: 수확기 둘레를 도는 꼬마 수확기 n개 = 칼날이 n배 자주 벤다. 피해 = 공격력 × (10% + 회전 회오리)
+            int kids = (int)Math.Round(LineV("ps_kid"));
+            st.blade = kids > 0;
+            st.bladeR = st.ballR + 45;
+            st.bladeInt = kids > 0 ? 0.6 / kids : 0.6;
+            st.bladeDmg = st.atk * (KID_STAT + LineV("ps_kidatk"));
+            st.kidP = 0;
+            st.buffMul = 1; st.tempLife = 1; st.devMul = 1; st.heavyMul = 1; st.rushMul = 1;
+            st.barSpd = 1; st.barDur = 0; st.barRate = 0; st.powAtk = 0; st.powSkill = 0;
+            st.bossMul = boss != null && GritOn(cst) ? GritMul(G.bossGrit) : 1; st.bossGemAdd = 0;   // 9회차 끈기: 반복 보스만
+            // 슬라이드 바 버프 (바에 맞을 때. 분열·분신술은 확률) · 수확기 스킬 확률 · 시작 버프
+            st.powFlat = LineV("power");
+            st.springDur = LineV("md_spring"); st.pierceDur = LineV("md_pierce"); st.homingDur = LineV("md_homing"); st.healDur = LineV("md_heal");
+            st.splitDur = LineV("md_split"); st.feverDur = LineV("md_fever"); st.cloneDur = LineV("ps_clone"); st.wisdomP = LineV("md_wisdom");
+            st.cloneMax = Math.Max(1, (int)Math.Round(LineV("ps_mirror")));
+            double srate = NF.inf_srate(Lv("inf_srate"));   // 끝없는 기세: 수확기 스킬 발동률 배율
+            st.poisonP = LineV("md_poison") * srate; st.burstP = LineV("md_burst") * srate; st.boltP = LineV("md_bolt") * srate;
+            st.tornadoP = LineV("md_tornado") * srate; st.tornadoDur = 2 + LineLv("md_tornado");   // 3·4·5초
+            st.moltP = LineV("md_molt"); st.legendP = LineV("md_grand"); st.flexP = LineV("ed_flex");
+            st.fest = LineV("ed_legend") > 0;
+            st.festMul = 1 + LineV("ed_legend");
             st.shroomHp = st.zoneMul * EarlyHpMul(st.stage);   // 초반 판은 버섯 체력을 낮춘다 (Defs.EarlyHpMul, 내부 판 번호)
             if (SIM_HP1) st.shroomHp = 1;   // 시뮬 전용 (기본 꺼짐)
             // 보스 체력은 고른 지역이 아니라 그 스테이지의 최신 지역 기준 (예전 지역을 골라 쉽게 잡지 못하게)

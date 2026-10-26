@@ -1,0 +1,7 @@
+job 0 seed 1 skill 0.6 done 15:11:06 (18s)
+job 1 seed 1 skill 0.6 done 15:12:42 (67s)
+job 2 seed 2 skill 0.6 done 15:13:49 (68s)
+job 3 seed 3 skill 0.6 done 15:14:57 (68s)
+job 4 seed 4 skill 0.6 done 15:16:05 (68s)
+job 5 seed 5 skill 0.6 done 15:17:12 (67s)
+job 6 seed 6 skill 0.6 done 15:18:20 (68s)

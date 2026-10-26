@@ -30,7 +30,7 @@ namespace MoreMush
         public Quests quest = new Quests();        // 일일·주간 의뢰 (예전 마을 의뢰 "quests"와는 다른 필드)
         public Records rec = new Records();
         public int rounds;
-        public int stage = 1;                      // 지금 판 번호 (내부, 튜토리얼 T1~T4 포함). 표시 스테이지 = stage − Defs.TUT_ROUNDS. 보스 스테이지(표시 10의 배수)는 보스를 쓰러뜨려야 넘어간다
+        public int stage = 1;                      // 지금 판 번호 (내부, 튜토리얼 T1~T2 포함). 표시 스테이지 = stage − Defs.TUT_ROUNDS. 보스 스테이지(표시 10의 배수)는 보스를 쓰러뜨려야 넘어간다
         public bool bossOn = true;                 // 보스 도전 (끄면 보스 스테이지에서 파밍만 한다. 보스에게 지면 꺼진다)
         public double play;
         public double lastNormalGold;              // 보스가 안 나온 마지막 판의 정산 골드 (보스 처치 보상 기준)
@@ -40,6 +40,7 @@ namespace MoreMush
         public int tut;
         public Dictionary<string, bool> feat = new Dictionary<string, bool>();   // 열린 기능 (Unlock). 한 번 열리면 남는다
         public bool bossFailed;                    // 보스에게 한 번이라도 졌다 (보스 도전 버튼 해금)
+        public int bossGrit;                       // 끈기 점수 (반복 보스 스테이지: 진 판 +1 · 파밍 판 +2, 스테이지가 오르면 0, Defs.GritMul). 옛 세이브는 0
 
         [Serializable] public class Skins { public Dictionary<string, bool> own = new Dictionary<string, bool>(); public Dictionary<string, string> ch = new Dictionary<string, string>(), hv = new Dictionary<string, string>(); }
         // 꼬마버섯 세계수 (Defs.WT·Game.Farm). stage 성장 단계 1~8 · ring 나이테 Lv.1~10 · exp 경험치(공물·의뢰)
@@ -258,6 +259,7 @@ namespace MoreMush
             foreach (var k in new List<string>(g.codex.Keys)) if (g.codex[k] == null) g.codex.Remove(k);
             g.rounds = Math.Max(0, g.rounds);
             g.stage = Math.Max(1, g.stage);
+            g.bossGrit = Math.Max(0, g.bossGrit);
             if (!IsFinite(g.gold)) g.gold = 0;
             if (!IsFinite(g.gem)) g.gem = 0;
             if (!IsFinite(g.legacyDia) || g.legacyDia < 0) g.legacyDia = 0;

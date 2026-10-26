@@ -44,6 +44,7 @@ namespace MoreMush
                 case "spark": return Loc.T("연쇄 번개");
                 case "meteor": return Loc.T("균사석 낙하");
             }
+            if (LINES.ContainsKey(src)) return LineName(src);   // 균사 트리 줄 (포자 폭발·연속 번개·회오리…)
             return SKILLS.TryGetValue(src, out var sk) ? sk.n : src;
         }
 

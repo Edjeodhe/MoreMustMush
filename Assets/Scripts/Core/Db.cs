@@ -20,15 +20,19 @@ namespace MoreMush
         {
             public int Upg_ID, Str_Group_ID, Upg_Pre, Upg_Req, Efx_MaxLv, Cost_ID, Tier, Sub;
             public string Upg_Key, Upg_Name, Branch, Type, Skill, Icon, Color;
-            public double Efx_Lv0, Efx_Lv1, Efx_Lv2, Efx_Lv3, Efx_Lv4;
-            public double[] Efx => new[] { Efx_Lv0, Efx_Lv1, Efx_Lv2, Efx_Lv3, Efx_Lv4 };
+            // 균사 트리 A안: Line = 같은 스킬(줄) 키 (줄의 행들은 앞 행을 최대로 올려야 다음 행이 열린다) · Pos_X·Pos_Y = 트리 네모 칸 좌표 (가운데 0,0, y 아래 +)
+            public string Line;
+            public int Pos_X, Pos_Y;
+            public double Efx_Lv0, Efx_Lv1, Efx_Lv2, Efx_Lv3, Efx_Lv4, Efx_Lv5, Efx_Lv6, Efx_Lv7, Efx_Lv8, Efx_Lv9, Efx_Lv10;
+            public double[] Efx => new[] { Efx_Lv0, Efx_Lv1, Efx_Lv2, Efx_Lv3, Efx_Lv4, Efx_Lv5, Efx_Lv6, Efx_Lv7, Efx_Lv8, Efx_Lv9, Efx_Lv10 };
         }
         public sealed class UpgradeCost
         {
             public int Cost_ID;
-            public double Cost_Lv1, Cost_Lv2, Cost_Lv3, Cost_Lv4, Gem_Lv1, Gem_Lv2, Gem_Lv3, Gem_Lv4;
-            public double[] Gold => new[] { Cost_Lv1, Cost_Lv2, Cost_Lv3, Cost_Lv4 };
-            public double[] Gem => new[] { Gem_Lv1, Gem_Lv2, Gem_Lv3, Gem_Lv4 };
+            public double Cost_Lv1, Cost_Lv2, Cost_Lv3, Cost_Lv4, Cost_Lv5, Cost_Lv6, Cost_Lv7, Cost_Lv8, Cost_Lv9, Cost_Lv10;
+            public double Gem_Lv1, Gem_Lv2, Gem_Lv3, Gem_Lv4, Gem_Lv5, Gem_Lv6, Gem_Lv7, Gem_Lv8, Gem_Lv9, Gem_Lv10;
+            public double[] Gold => new[] { Cost_Lv1, Cost_Lv2, Cost_Lv3, Cost_Lv4, Cost_Lv5, Cost_Lv6, Cost_Lv7, Cost_Lv8, Cost_Lv9, Cost_Lv10 };
+            public double[] Gem => new[] { Gem_Lv1, Gem_Lv2, Gem_Lv3, Gem_Lv4, Gem_Lv5, Gem_Lv6, Gem_Lv7, Gem_Lv8, Gem_Lv9, Gem_Lv10 };
         }
         public sealed class SkillRow { public string Skill_Key, Skill_Name, Kind, Color, Icon; public int No_Rate; }
         public sealed class Ball

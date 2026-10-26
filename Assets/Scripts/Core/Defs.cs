@@ -16,7 +16,6 @@ namespace MoreMush
         // 기본 수확기: 빈 장착 칸을 채우고, 스킬이 만드는 분신도 이 모양이다. 분신 공격력 = 기본의 CLONE_STAT 배
         public const string BASE_HV = "sam";
         public const float CLONE_STAT = 0.2f;
-        public static readonly float[] MAP_ZOOM = new float[5];   // 필드 넓히기 0~4레벨 화면 확대 (DB Upgrade md_map의 Efx_Lv0~4)
         public const int MAX_BALLS = 60;
 
         // 값이 화면용 한국어 문구인 사전. 읽을 때 지금 언어로 번역한다 (키는 그대로)
@@ -114,14 +113,14 @@ namespace MoreMush
 
         // 라운드 시간: 처음 10초, 스테이지마다 +0.5초(최대 +10초). 지속시간 강화는 여기에 초 단위로 더한다 (밸런스 3회차: 15 → 10, 줄어든 5초는 ps_dur 4레벨로 되찾는다)
         public const float BASE_TIME = 10;
-        // stage = 콘텐츠 스테이지(ContentStage). 튜토리얼 4판 뒤 표시 1스테이지부터 늘어난다 (5회차 P-2)
+        // stage = 콘텐츠 스테이지(ContentStage). 튜토리얼 판 뒤 표시 1스테이지부터 늘어난다 (5회차 P-2)
         public static double StageTime(int stage) => Math.Min(10, 0.5 * (stage - 1));
 
-        // ===== 튜토리얼 판 오프셋 (5회차 P-2, 사용자 확정 2026-10-20) =====
-        // G.stage는 내부 판 번호(1부터)다. 1~TUT_ROUNDS판은 튜토리얼 T1~T4로 표시하고, 그 뒤를 1스테이지부터 센다.
-        // 보스·지역 해금·체력 성장(STAGE_GROWTH)·라운드 시간 성장 같은 콘텐츠는 ContentStage(표시 스테이지, 튜토리얼은 1)로 판정한다 → 첫 보스 = 14번째 판.
+        // ===== 튜토리얼 판 오프셋 (5회차 P-2 4판 → 사용자 2026-10-23 2판) =====
+        // G.stage는 내부 판 번호(1부터)다. 1~TUT_ROUNDS판은 튜토리얼 T1~T2로 표시하고, 그 뒤를 1스테이지부터 센다.
+        // 보스·지역 해금·체력 성장(STAGE_GROWTH)·라운드 시간 성장 같은 콘텐츠는 ContentStage(표시 스테이지, 튜토리얼은 1)로 판정한다 → 첫 보스 = 12번째 판.
         // 온보딩(초반 종 수·낱개 버섯·초반 체력·초반 10초·튜토리얼 판·기능 해금)은 내부 판 번호 그대로다
-        public const int TUT_ROUNDS = 4;
+        public const int TUT_ROUNDS = 2;
         public static bool IsTutRound(int stage) => stage <= TUT_ROUNDS;
         // 표시 스테이지 (튜토리얼 판이면 0 이하)
         public static int DispStage(int stage) => stage - TUT_ROUNDS;
@@ -129,7 +128,7 @@ namespace MoreMush
         public static int ContentStage(int stage) => Math.Max(1, stage - TUT_ROUNDS);
         // 콘텐츠(표시) 스테이지 → 내부 판 번호 (ContentStage의 반대, 시뮬 도구용)
         public static int RoundOfStage(int content) => content + TUT_ROUNDS;
-        // 화면에 쓰는 스테이지 글자: 튜토리얼 판 "T1"~"T4", 그 뒤 "1", "2" … (Loc.F("스테이지 {0}", …)에 넣는다)
+        // 화면에 쓰는 스테이지 글자: 튜토리얼 판 "T1"~"T2", 그 뒤 "1", "2" … (Loc.F("스테이지 {0}", …)에 넣는다)
         public static string StageLabel(int stage) => IsTutRound(stage) ? "T" + Math.Max(1, stage) : DispStage(stage).ToString();
 
         // 초반 스테이지 (사용자 요청 2026-10-16): 스테이지 N까지는 버섯 종을 N종으로 고정한다 (1스테이지 1종 → 6스테이지 6종).
@@ -139,14 +138,14 @@ namespace MoreMush
         public static bool EarlyStage(int stage) => stage >= 1 && stage <= EARLY_STAGES;
         // 초반 낱개 버섯: 스테이지 1~6 판 시작 때 군락이 아닌 버섯을 이만큼 흩뿌린다 (다시 생기지 않음, 맵이 비어 보이지 않게 — 밸런스 3회차).
         // 군락 수는 스테이지가 아니라 ed_cols 구매로만 는다. [0](1스테이지)은 튜토리얼 판이 아닐 때만 (튜토리얼은 TUTORIAL_LOOSE를 첫 발사 때)
-        public static readonly int[] EARLY_LOOSE = { 10, 10, 9, 8, 6, 4 };   // 군락이 ed_cols 2~3개뿐이라 맵이 비어 보여 늘렸다 (2026-10-19, 이전 6·6·5·4·3·2)
+        public static readonly int[] EARLY_LOOSE = { 10, 10, 10, 10, 9, 8 };   // 초반 판 수입이 판마다 눈에 띄게 오르도록 뒤쪽을 덜 줄인다 (8회차 2026-10-23, 이전 10·10·9·8·6·4 · 6·6·5·4·3·2)
         // 초반 버섯 체력 너프 (사용자 지시 2026-10-19): 스테이지 1~EARLY_HP_FLAT_TO는 체력이 EARLY_HP_MUL배라 몇 대 안 맞아도 부서지고,
         // 그 뒤로 스테이지마다 일정하게 늘어 EARLY_HP_FULL_AT 스테이지에서 원래 체력이 된다. 군락·낱개 버섯 공통 (보스 체력은 따로)
         // stage = 내부 판 번호 (온보딩 구간이라 튜토리얼 오프셋을 빼지 않는다)
         public const double EARLY_HP_MUL = 0.5;
         public const int EARLY_HP_FLAT_TO = 3, EARLY_HP_FULL_AT = 7;
-        // 5회차 P-6: 튜토리얼 T1~T4 + 표시 1~9스테이지(= 내부 1~13판) 일반 버섯 체력을 한 번 더 ×EARLY_HP_NERF
-        public const int EARLY_HP_NERF_TO = 13;
+        // 5회차 P-6: 튜토리얼 판 + 표시 1~9스테이지(첫 보스 앞까지) 일반 버섯 체력을 한 번 더 ×EARLY_HP_NERF
+        public const int EARLY_HP_NERF_TO = TUT_ROUNDS + 9;
         public const double EARLY_HP_NERF = 0.9;
         public static double EarlyHpMul(int stage)
         {
@@ -160,9 +159,7 @@ namespace MoreMush
         public const float EARLY_SEC = 10;
         public const float INCOME_MUL = 3;
         public const float SCORE_GOLD = 1;
-        public const double COST_MUL = 0.9;   // 5회차 P-1: 트리 골드 가격 전체 ×0.9 (균사석 가격엔 안 곱함)
-        public static int ColCount(int L) => (int)Math.Round(V("ed_cols", L));   // DB Efx (지역·지도 배율 전). 7회차: 4·6·8·10·11
-
+        public const double COST_MUL = 1;   // 균사 트리 A안: 가격은 DB 값 그대로 (예전 5회차 P-1의 ×0.9는 옛 트리 가격용이었다)
         // ===== 군락 배치·크기 (밸런스 7회차, 2026-10-20 · 밸런스설계/이론_7.md·검증_7.md) =====
         // 최대치(maxCol)만큼 군락이 실제로 놓이게, 판마다 군락 크기 배율 RoundSim.colS를 정한다 (버섯 r·더미·둘레가 모두 같이 준다)
         public const double COL_AREA_EXP = 0.8;   // 최대치 × (1/zoom²)^이것 (예전 0.7)
@@ -176,8 +173,6 @@ namespace MoreMush
         // 거대 버섯 체력의 등급 배수 (일반·레어·에픽·레전드리). 예전에는 등급 체력(tuned 1·4·12·40)을 그대로 곱해 레전드리 거대가 밤 지역 표시 25에서 2만이 넘어 거의 못 잡았다 (7-3, 2026-10-21)
         public static readonly double[] GIANT_TIER_HP = { 1, 2, 3, 4 };
         public static float ColSMin(float zoom) => Math.Max(COL_S_VIS / zoom, COL_S_ABS);
-        // 노드 설명용: 지금 필드(필드 넓히기 배율) 기준 군락 수. 날씨·꼬마·축복 덤은 빼고 보여 준다
-        public static int ColOnField(double n, double zoom) => Math.Max(1, (int)U.JsRound(n * Math.Pow(1 / (zoom * zoom), COL_AREA_EXP)));
 
         // ===== 도감 75종 =====
         public class Species

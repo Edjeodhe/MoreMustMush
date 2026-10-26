@@ -1,0 +1,37 @@
+시드 1: 판 59 · 구매 수 불일치 0 [] · 공격력 불일치(파워 버프·세트 제외 판정) 42 [(18, 5.5, 5.85), (19, 5.5, 6.05), (20, 8.25, 9.45)]
+시드 2: 판 59 · 구매 수 불일치 0 [] · 공격력 불일치(파워 버프·세트 제외 판정) 42 [(18, 4.95, 5.26), (19, 5.5, 5.95), (20, 5.5, 6.05)]
+시드 3: 판 59 · 구매 수 불일치 0 [] · 공격력 불일치(파워 버프·세트 제외 판정) 41 [(19, 4.95, 5.26), (20, 4.95, 5.35), (21, 5.5, 5.95)]
+시드 4: 판 61 · 구매 수 불일치 0 [] · 공격력 불일치(파워 버프·세트 제외 판정) 42 [(20, 5.5, 5.8), (21, 5.5, 6.05), (22, 8.25, 9.07)]
+시드 5: 판 59 · 구매 수 불일치 0 [] · 공격력 불일치(파워 버프·세트 제외 판정) 41 [(19, 4.95, 5.35), (20, 5.5, 6.05), (21, 8.25, 9.07)]
+시드 6: 판 59 · 구매 수 불일치 0 [] · 공격력 불일치(파워 버프·세트 제외 판정) 42 [(18, 5.5, 5.7), (19, 5.5, 6.15), (20, 8.25, 9.22)]
+
+R 1 s1 b0 inc           16 산 1 ['power1'] | 다음 ed_score 15 (비 0.94) | 군락 2 수확기 1 시간 10.0 점수+0 정산x1.10 공1.10 zoom 1.68 만든 18
+R 2 s2 b0 inc           23 산 1 ['ed_score1'] | 다음 ed_cols 20 (비 0.87) | 군락 2 수확기 1 시간 10.0 점수+0 정산x1.10 공1.10 zoom 1.68 만든 21
+R 3 s3 b0 inc           64 산 2 ['ed_cols1', 'ps_dur1'] | 다음 ed_price 36 (비 0.56) | 군락 2 수확기 1 시간 10.0 점수+1 정산x1.10 공1.10 zoom 1.68 만든 28
+R 4 s4 b0 inc           81 산 2 ['ed_price1', 'power2'] | 다음 md_bar 50 (비 0.62) | 군락 3 수확기 1 시간 12.0 점수+1 정산x1.10 공1.10 zoom 1.68 만든 35
+R 5 s5 b0 inc          116 산 2 ['md_bar1', 'ed_score2'] | 다음 ps_atk 59 (비 0.51) | 군락 3 수확기 1 시간 12.0 점수+1 정산x1.40 공1.10 zoom 1.68 만든 34
+R 6 s6 b0 inc          157 산 2 ['ps_atk1', 'ed_cols2'] | 다음 ps_dur 99 (비 0.63) | 군락 3 수확기 1 시간 12.5 점수+2 정산x1.40 공1.10 zoom 1.68 만든 33
+R 7 s7 b0 inc          289 산 2 ['ps_dur2', 'ed_price2'] | 다음 md_map 135 (비 0.47) | 군락 3 수확기 1 시간 13.0 점수+2 정산x1.40 공2.75 zoom 1.68 만든 26
+R 8 s8 b0 inc          419 산 3 ['md_map1', 'power3', 'md_bar2'] | 다음 dev_stump 198 (비 0.47) | 군락 3 수확기 1 시간 15.5 점수+2 정산x1.70 공2.75 zoom 1.68 만든 44
+R 9 s9 b0 inc          468 산 2 ['dev_stump1', 'ed_score3'] | 다음 ps_atk 216 (비 0.46) | 군락 4 수확기 1 시간 16.0 점수+2 정산x1.70 공2.75 zoom 1.5 만든 29
+R10 s10 b0 inc          390 산 2 ['ps_atk2', 'ed_cols3'] | 다음 md_combo 234 (비 0.60) | 군락 4 수확기 1 시간 16.5 점수+3 정산x1.70 공2.75 zoom 1.5 만든 35
+R11 s11 b0 inc          506 산 2 ['md_combo1', 'ed_regen1'] | 다음 ps_dur 270 (비 0.53) | 군락 5 수확기 1 시간 17.0 점수+3 정산x1.70 공3.85 zoom 1.5 만든 45
+R12 s12 b0 inc          685 산 2 ['ps_dur3', 'ed_rare01'] | 다음 md_map 306 (비 0.45) | 군락 5 수확기 1 시간 17.5 점수+3 정산x1.70 공3.85 zoom 1.5 만든 36
+R13 s13 b0 inc          894 산 3 ['md_map2', 'ed_price3', 'dev_moss1'] | 다음 md_bar 396 (비 0.44) | 군락 5 수확기 1 시간 21.0 점수+3 정산x1.70 공3.85 zoom 1.5 만든 60
+R14 s14 b1 inc        2,534 산 5 ['md_bar3', 'ps_size1', 'ps_spd1', 'power4', 'ed_bonus1'] | 다음 md_combo 540 (비 0.21) | 군락 6 수확기 1 시간 21.5 점수+3 정산x2.00 공3.85 zoom 1.35 만든 0
+R15 s15 b0 inc        2,132 산 4 ['md_combo2', 'ed_cols4', 'ed_regen2', 'accel1'] | 다음 md_map 675 (비 0.32) | 군락 6 수확기 1 시간 22.0 점수+3 정산x2.00 공3.85 zoom 1.35 만든 94
+R16 s16 b0 inc       21,287 산 18 ['md_map3', 'ps_dur4', 'ed_rare02', 'ps_ball1', 'dev_acorn1', 'ps_size2', 'ps_atk3', 'ps_spd2', 'pierce1', 'ed_bonus2', 'md_combo3', 'md_kid1', 'burst1', 'ed_regen3', 'md_map4', 'ps_size3', 'ps_spd3', 'ed_rare03'] | 다음 accel 1,890 (비 0.09) | 군락 7 수확기 1 시간 22.5 점수+3 정산x2.00 공3.85 zoom 1.35 만든 129
+R17 s17 b0 inc       31,172 산 10 ['accel2', 'pierce2', 'ps_ball2', 'ed_bonus3', 'md_kid2', 'ps_atk4', 'accel3', 'pierce3', 'md_map21', 'ed_score1p1'] | 다음 burst 4,500 (비 0.14) | 군락 9 수확기 2 시간 27.0 점수+3 정산x2.00 공4.95 zoom 1.1 만든 314
+R18 s18 b0 inc       66,719 산 7 ['burst2', 'md_kid3', 'ed_bonus1p1', 'burst3', 'ps_bar1', 'accel4', 'pierce4'] | 다음 ps_atk2 12,600 (비 0.19) | 군락 11 수확기 3 시간 27.5 점수+4 정산x2.00 공5.50 zoom 1.0 만든 472
+R19 s19 b0 inc       82,270 산 4 ['ps_atk21', 'ed_score1p2', 'ps_barspd1', 'homing1'] | 다음 ps_bardur 23,400 (비 0.28) | 군락 11 수확기 3 시간 28.0 점수+4 정산x2.00 공5.50 zoom 1.0 만든 643
+R20 s20 b0 inc       59,081 산 3 ['ps_bardur1', 'ps_bar2', 'ed_bonus1p2'] | 다음 burst 34,200 (비 0.58) | 군락 11 수확기 3 시간 28.5 점수+5 정산x2.00 공8.25 zoom 1.0 만든 622
+R21 s21 b0 inc      104,671 산 2 ['burst4', 'ps_barspd2'] | 다음 homing 46,800 (비 0.45) | 군락 11 수확기 3 시간 29.0 점수+5 정산x2.00 공8.25 zoom 1.0 만든 677
+R22 s22 b0 inc      146,793 산 3 ['homing2', 'ps_atk22', 'ed_score1p3'] | 다음 ps_bar 59,400 (비 0.40) | 군락 11 수확기 3 시간 29.5 점수+5 정산x2.00 공8.25 zoom 1.0 만든 908
+R23 s23 b0 inc      187,277 산 3 ['ps_bar3', 'ps_bardur2', 'homing3'] | 다음 ed_bonus1p 99,000 (비 0.53) | 군락 11 수확기 3 시간 30.0 점수+6 정산x2.00 공11.00 zoom 1.0 만든 913
+R24 s24 b1 inc      375,892 산 3 ['ed_bonus1p3', 'ps_barspd3', 'ps_bardur3'] | 다음 ps_atk2 180,000 (비 0.48) | 군락 11 수확기 3 시간 30.5 점수+6 정산x2.00 공11.00 zoom 1.0 만든 0
+R25 s25 b0 inc    7,404,780 산 11 ['ps_atk23', 'ed_score21', 'homing4', 'ed_bonus21', 'ed_size1', 'ed_rare1', 'ps_atk24', 'ed_score22', 'ps_crit1', 'sharpen1', 'ed_size2'] | 다음 ed_bonus2 1,260,000 (비 0.17) | 군락 11 수확기 3 시간 31.0 점수+6 정산x2.00 공11.00 zoom 1.0 만든 325
+R26 s26 b0 inc   35,903,288 산 12 ['ed_bonus22', 'md_combo21', 'ps_resist1', 'ps_barrate1', 'ed_rare2', 'ps_atk2p1', 'ed_score23', 'ps_crit2', 'ed_cols21', 'sharpen2', 'ed_size3', 'ed_bonus23'] | 다음 ps_barrate 5,490,000 (비 0.15) | 군락 11 수확기 3 시간 31.0 점수+26 정산x2.00 공16.50 zoom 1.0 만든 613
+R27 s27 b0 inc   83,551,576 산 10 ['ps_barrate2', 'magnet1', 'sharpen3', 'md_combo22', 'clear1', 'ps_resist2', 'ed_rare3', 'ps_atk2p2', 'ed_score2p1', 'ed_price21'] | 다음 md_templife 11,700,000 (비 0.14) | 군락 14 수확기 3 시간 31.0 점수+36 정산x2.00 공19.25 zoom 1.0 만든 667
+R28 s28 b0 inc  149,643,883 산 9 ['md_templife1', 'ps_power1', 'ps_dur21', 'ed_cols22', 'ps_crit3', 'ps_barrate3', 'ps_rush1', 'ed_bonus2p1', 'magnet2'] | 다음 sharpen 27,900,000 (비 0.19) | 군락 14 수확기 3 시간 31.0 점수+46 정산x2.50 공22.00 zoom 1.0 만든 765
+R29 s29 b0 inc  241,056,665 산 7 ['sharpen4', 'ps_power2', 'md_buffdur1', 'clear2', 'ps_atk2p3', 'ed_score2p2', 'ed_price22'] | 다음 md_templife 45,000,000 (비 0.19) | 군락 16 수확기 3 시간 34.0 점수+46 정산x2.50 공22.00 zoom 1.0 만든 1736
+R30 s30 b0 inc  303,863,266 산 6 ['md_templife2', 'ps_dur22', 'ps_ball21', 'ps_rush2', 'magnet3', 'ed_bonus2p2'] | 다음 ps_power 69,300,000 (비 0.23) | 군락 16 수확기 3 시간 34.0 점수+56 정산x3.00 공24.75 zoom 1.0 만든 2147

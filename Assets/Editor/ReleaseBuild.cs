@@ -81,7 +81,8 @@ namespace MoreMush.EditorTools
             var origGroup = BuildPipeline.GetBuildTargetGroup(origTarget);
             try
             {
-                // 출시용 압축 설정 (itch는 Content-Encoding을 안 붙이므로 Gzip + fallback)
+                // 출시용 압축 설정 (itch는 Content-Encoding을 안 붙이므로 Gzip + fallback).
+                // Brotli는 쓰지 않는다: fallback(JS 해제)이 큰 데이터(풀면 ~640MB)에서 'subarray' 오류로 멈췄다 (0.1.0 itch, 2026-10-23)
                 PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
                 PlayerSettings.WebGL.decompressionFallback = true;
                 PlayerSettings.WebGL.nameFilesAsHashes = false;

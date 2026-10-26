@@ -5,9 +5,9 @@ using static MoreMush.Defs;
 
 namespace MoreMush
 {
-    // Radial mycelium tree layout (prototype layoutTree + relaxTree). Coordinates are tree pixels centered on
-    // the grandpa (y down). Used once to place the node objects in the scene; afterwards the scene positions win.
-    // 시작 노드(ROOT_NODE) 하나가 가운데 위에 있고, 그 아래 첫 줄(공격력·타격 점수·바 넓이)부터 가지 방향으로 퍼진다.
+    // Mycelium tree layout. Coordinates are tree pixels centered on the grandpa (y down).
+    // 균사 트리 A안부터는 DB 자리(Pos_X·Pos_Y)를 쓴다: TreeView가 게임을 켤 때마다 노드를 이 자리로 옮기고(씬 자리보다 DB가 우선),
+    // TreeSync(에디터 메뉴)도 같은 자리로 씬을 맞춘다. 예전 부채꼴 자동 배치는 ComputeRadial에 남겨 둔다.
     public static class TreeLayout
     {
         public static readonly Dictionary<string, (float a, float span)> BRANCH = new Dictionary<string, (float, float)>
@@ -24,12 +24,23 @@ namespace MoreMush
 
         public static readonly Vector2 ROOT_POS = new Vector2(0, -150);   // 할아버지 머리 위
 
+        // 균사 트리 A안 (2026-10-19): 노드 자리는 DB Pos_X·Pos_Y (기획서 배치안의 네모 칸) × TREE_CELL. 가운데 사냥 준비가 (0, 0)
+        // 트리 밖 노드(세계수 wt)는 빠진다. depth = 가운데에서 칸 수 (가로·세로 중 큰 쪽)
         public static Dictionary<string, (Vector2 pos, int depth)> Compute()
+        {
+            var o = new Dictionary<string, (Vector2, int)>();
+            foreach (var n in NODES)
+                if (InTree(n)) o[n.id] = (new Vector2(n.gx * TREE_CELL, n.gy * TREE_CELL), Mathf.Max(Mathf.Abs(n.gx), Mathf.Abs(n.gy)));
+            return o;
+        }
+
+        // 예전 자동 배치 (부채꼴 + 밀어내기). 지금은 쓰지 않는다
+        public static Dictionary<string, (Vector2 pos, int depth)> ComputeRadial()
         {
             var kids = new Dictionary<string, List<Node>>();
             foreach (var n in NODES)
             {
-                if (n.core || n.parent == null) continue;
+                if (n.core || n.parent == null || !InTree(n)) continue;
                 // 시작 노드의 바로 아래 노드는 자기 가지 방향으로 (가지별 부채꼴)
                 string p = n.parent != ROOT_NODE && !NODE[n.parent].core ? n.parent : "hub_" + n.br;
                 if (!kids.TryGetValue(p, out var l)) kids[p] = l = new List<Node>();
@@ -74,7 +85,7 @@ namespace MoreMush
         static void Relax(Dictionary<string, Vector2> pos, Dictionary<string, Vector2> hubs)
         {
             var fixedC = new List<(Vector2 p, float r)> { (Vector2.zero, 190), (ROOT_POS, 150) };
-            var L = NODES.Where(n => !n.core && n.parent != null).ToList();
+            var L = NODES.Where(n => !n.core && n.parent != null && InTree(n)).ToList();
             for (int it = 0; it < 600; it++)
             {
                 bool moved = false;

@@ -1,0 +1,132 @@
+12061 power 기운 북돋기 pre None req None T 1 max 4 cid 90047 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [12.0, 46.0, 170.0, 510.0] gem 
+13002 ed_score 타격 점수 I pre power req None T 1 max 3 cid 90001 efx [0.0, 1.0, 2.0, 3.0, 0.0] cost [16.0, 60.0, 230.0, 0.0] gem 
+13006 ed_cols 군락지 수 pre ed_score req None T 1 max 4 cid 90002 efx [4.0, 6.0, 8.0, 10.0, 11.0] cost [22.0, 84.0, 250.0, 650.0] gem 
+11006 ps_dur 지속시간 pre power req None T 1 max 4 cid 90054 efx [0.0, 2.0, 4.0, 7.0, 11.0] cost [30.0, 110.0, 300.0, 800.0] gem 
+13003 ed_price 정산 보너스 pre ed_score req None T 1 max 3 cid 90004 efx [1.0, 1.3, 1.6, 1.9, 0.0] cost [40.0, 150.0, 380.0, 0.0] gem 
+12003 md_bar 바 넓이 pre power req None T 1 max 3 cid 90025 efx [1.0, 1.25, 1.5, 1.75, 0.0] cost [55.0, 200.0, 440.0, 0.0] gem 
+11002 ps_atk 공격력 I pre power req None T 1 max 4 cid 90051 efx [0.0, 1.5, 2.5, 3.5, 4.0] cost [65.0, 240.0, 920.0, 3500.0] gem 
+12002 md_map 필드 넓히기 pre md_bar req None T 1 max 4 cid 90024 efx [1.68, 1.5, 1.35, 1.2, 1.1] cost [150.0, 340.0, 750.0, 1700.0] gem 
+12057 dev_stump 그루터기 pre md_bar req None T 1 max 1 cid 90027 efx [0.0, 1.0, 0.0, 0.0, 0.0] cost [220.0, 0.0, 0.0, 0.0] gem 
+12004 md_combo 콤보 계수 pre md_bar req None T 1 max 3 cid 90026 efx [0.1, 0.15, 0.2, 0.25, 0.0] cost [260.0, 600.0, 1300.0, 0.0] gem 
+13007 ed_regen 군락 재생 속도 pre ed_score req None T 1 max 3 cid 90003 efx [3.0, 2.2, 0.9, 0.25, 0.0] cost [280.0, 700.0, 1700.0, 0.0] gem 
+13033 ed_rare0 희귀 포자 pre ed_cols req None T 1 max 3 cid 90090 efx [0.2, 0.45, 0.7, 1.0, 0.0] cost [320.0, 800.0, 2000.0, 0.0] gem 
+12058 dev_moss 이끼 길 pre md_bar req None T 1 max 1 cid 90028 efx [0.0, 1.0, 0.0, 0.0, 0.0] cost [420.0, 0.0, 0.0, 0.0] gem 
+11003 ps_size 수확기 크기 pre ps_atk req None T 1 max 3 cid 90052 efx [1.0, 1.15, 1.3, 1.45, 0.0] cost [450.0, 900.0, 1800.0, 0.0] gem 
+11004 ps_spd 공속 pre ps_atk req None T 1 max 3 cid 90053 efx [1.0, 1.12, 1.24, 1.36, 0.0] cost [480.0, 960.0, 1900.0, 0.0] gem 
+13012 ed_bonus 수확량 I pre ed_regen req None T 1 max 3 cid 90005 efx [0.0, 1.0, 2.0, 3.0, 0.0] cost [550.0, 1300.0, 2900.0, 0.0] gem 
+12009 accel 가속 pre md_bar req None T 1 max 4 cid 90035 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [700.0, 2100.0, 3700.0, 14000.0] gem 
+11010 ps_ball 수확기 +1 pre ps_atk req None T 1 max 2 cid 90055 efx [0.0, 1.0, 2.0, 0.0, 0.0] cost [888.0, 2666.0, 0.0, 0.0] gem 
+12059 dev_acorn 도토리 스위치 pre md_bar req None T 1 max 1 cid 90029 efx [0.0, 1.0, 0.0, 0.0, 0.0] cost [900.0, 0.0, 0.0, 0.0] gem 
+12047 pierce 관통 pre accel req None T 1 max 4 cid 90045 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [1000.0, 2500.0, 3700.0, 14000.0] gem 
+12007 md_kid 꼬마 수확기 pre md_bar req None T 1 max 3 cid 90030 efx [0.0, 0.12, 0.24, 0.36, 0.0] cost [1300.0, 3400.0, 6800.0, 0.0] gem 
+12055 gm_farm 대지의 축복 pre md_stump req None T 3 max 3 cid 90079 efx [1.0, 0.8, 0.64, 0.512, 0.0] cost [1500.0, 3000.0, 6000.0, 0.0] gem [6.0, 12.0, 24.0, 0.0]
+12024 burst 포자 폭발 pre accel req None T 1 max 4 cid 90039 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [1600.0, 5000.0, 10000.0, 38000.0] gem 
+13029 gm_spore 균사 감응 pre ed_multi req None T 3 max 3 cid 90076 efx [0.0, 0.25, 0.5, 0.75, 0.0] cost [2000.0, 4000.0, 8000.0, 0.0] gem [8.0, 16.0, 32.0, 0.0]
+11024 gm_toxin 독성 내성 pre ps_resist req None T 3 max 3 cid 90081 efx [1.0, 0.75, 0.5625, 0.421875, 0.0] cost [2000.0, 4000.0, 8000.0, 0.0] gem [8.0, 16.0, 32.0, 0.0]
+13030 gm_gourmet 풍요의 손길 pre ed_trade req None T 3 max 3 cid 90077 efx [1.0, 1.1, 1.2, 1.3, 0.0] cost [2500.0, 5000.0, 10000.0, 0.0] gem [10.0, 20.0, 40.0, 0.0]
+12054 gm_herb 자동 수확 확장 pre md_chef req None T 3 max 3 cid 90078 efx [1.0, 1.2, 1.4, 1.6, 0.0] cost [2500.0, 5000.0, 10000.0, 0.0] gem [10.0, 20.0, 40.0, 0.0]
+12063 gm_bossgem 보스의 전리품 pre md_bar req None T 3 max 3 cid 90085 efx [0.0, 2.0, 4.0, 6.0, 0.0] cost [2500.0, 5000.0, 10000.0, 0.0] gem [10.0, 20.0, 40.0, 0.0]
+12065 gm_bar 균사 바 pre md_templife req None T 3 max 3 cid 90087 efx [1.0, 1.1, 1.2, 1.3, 0.0] cost [2500.0, 5000.0, 10000.0, 0.0] gem [8.0, 16.0, 32.0, 0.0]
+13028 gm_harvest 균사 공명 pre ed_bonus req None T 3 max 3 cid 90075 efx [1.0, 1.25, 1.5625, 1.953125, 0.0] cost [3000.0, 6000.0, 12000.0, 0.0] gem [10.0, 20.0, 40.0, 0.0]
+11030 gm_atk 균사 투지 pre ps_atk3p req None T 3 max 3 cid 90082 efx [1.0, 1.1, 1.2, 1.3, 0.0] cost [3000.0, 6000.0, 12000.0, 0.0] gem [12.0, 24.0, 48.0, 0.0]
+11031 gm_boss 보스 파쇄 pre ps_heavy req None T 3 max 3 cid 90083 efx [1.0, 1.15, 1.3, 1.45, 0.0] cost [3000.0, 6000.0, 12000.0, 0.0] gem [15.0, 30.0, 60.0, 0.0]
+13031 gm_score 균사 정산 pre ed_score3p req None T 3 max 3 cid 90084 efx [1.0, 1.1, 1.2, 1.3, 0.0] cost [3000.0, 6000.0, 12000.0, 0.0] gem [12.0, 24.0, 48.0, 0.0]
+12064 gm_skill 균사 술법 pre md_buffdur req None T 3 max 3 cid 90086 efx [1.0, 1.1, 1.2, 1.3, 0.0] cost [3000.0, 6000.0, 12000.0, 0.0] gem [12.0, 24.0, 48.0, 0.0]
+12066 md_map2 필드 넓히기 II pre md_map req md_map T 1 max 1 cid 90091 efx [1.1, 1.0, 0.0, 0.0, 0.0] cost [4000.0, 0.0, 0.0, 0.0] gem 
+13016 ed_score1p 타격 점수 I+ pre ed_score req ed_score T 1 max 3 cid 90006 efx [0.0, 1.0, 2.0, 3.0, 0.0] cost [4500.0, 17000.0, 64000.0, 0.0] gem 
+12056 gm_meteor 균사석 낙하 pre md_combo req None T 3 max 3 cid 90080 efx [0.0, 1.0, 2.0, 3.0, 0.0] cost [5000.0, 10000.0, 20000.0, 0.0] gem [25.0, 50.0, 100.0, 0.0]
+13017 ed_bonus1p 수확량 I+ pre ed_bonus req ed_bonus T 1 max 3 cid 90007 efx [0.0, 1.0, 2.0, 3.0, 0.0] cost [9600.0, 32000.0, 110000.0, 0.0] gem 
+11025 ps_bar 바 넓이 II pre ps_size req None T 2 max 3 cid 90064 efx [0.0, 0.2, 0.4, 0.6, 0.0] cost [11000.0, 28000.0, 66000.0, 0.0] gem 
+11015 ps_atk2 공격력 II pre ps_spd req ps_atk T 2 max 4 cid 90056 efx [0.0, 2.5, 5.0, 7.5, 10.0] cost [14000.0, 52000.0, 200000.0, 720000.0] gem 
+11026 ps_barspd 바 반사 속도 pre ps_spd req None T 2 max 3 cid 90065 efx [1.0, 1.08, 1.16, 1.24, 0.0] cost [18000.0, 43000.0, 110000.0, 0.0] gem 
+12060 homing 유도 pre pierce req None T 2 max 4 cid 90046 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [26000.0, 52000.0, 82000.0, 310000.0] gem 
+11027 ps_bardur 바 스킬 지속 pre ps_dur req None T 2 max 3 cid 90066 efx [0.0, 0.5, 1.0, 1.5, 0.0] cost [26000.0, 66000.0, 180000.0, 0.0] gem 
+13018 ed_score2 타격 점수 II pre ed_score1p req ed_score1p T 2 max 3 cid 90008 efx [0.0, 10.0, 20.0, 30.0, 0.0] cost [210000.0, 770000.0, 2900000.0, 0.0] gem 
+13019 ed_bonus2 수확량 II pre ed_bonus1p req ed_bonus1p T 2 max 3 cid 90009 efx [0.0, 10.0, 20.0, 30.0, 0.0] cost [370000.0, 1400000.0, 5200000.0, 0.0] gem 
+13014 ed_size 군락지 버섯 수 pre ed_regen req None T 2 max 3 cid 90015 efx [5.0, 7.0, 9.0, 11.0, 0.0] cost [410000.0, 1300000.0, 5000000.0, 0.0] gem 
+13008 ed_rare 변종 출현율 pre ed_cols req None T 2 max 3 cid 90014 efx [1.0, 1.5, 2.0, 2.5, 0.0] cost [720000.0, 2600000.0, 9400000.0, 0.0] gem 
+11008 ps_crit 치명타 pre ps_size req None T 2 max 3 cid 90060 efx [0.0, 0.05, 0.1, 0.15, 0.0] cost [1000000.0, 3900000.0, 15000000.0, 0.0] gem 
+12012 sharpen 날 갈기 pre accel req None T 2 max 4 cid 90036 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [1100000.0, 4100000.0, 8300000.0, 31000000.0] gem 
+12053 md_combo2 콤보 계수 II pre md_combo req md_combo T 2 max 2 cid 90031 efx [0.0, 0.1, 0.2, 0.0, 0.0] cost [2400000.0, 8800000.0, 0.0, 0.0] gem 
+11005 ps_resist 포자 저항 pre ps_atk2 req None T 2 max 2 cid 90061 efx [1.0, 0.85, 0.7, 0.0, 0.0] cost [2400000.0, 8800000.0, 0.0, 0.0] gem 
+11028 ps_barrate 바 스킬 발동률 pre ps_bardur req None T 3 max 3 cid 90067 efx [0.0, 0.04, 0.08, 0.12, 0.0] cost [2500000.0, 6100000.0, 15000000.0, 0.0] gem 
+11017 ps_atk2p 공격력 II+ pre ps_resist req ps_atk2 T 2 max 3 cid 90058 efx [0.0, 2.5, 5.0, 7.5, 0.0] cost [2700000.0, 9900000.0, 37000000.0, 0.0] gem 
+13022 ed_cols2 군락지 수 II pre ed_cols req ed_cols T 2 max 2 cid 90012 efx [0.0, 3.0, 5.0, 0.0, 0.0] cost [4100000.0, 15000000.0, 0.0, 0.0] gem 
+12033 magnet 버섯 자석 pre burst req None T 2 max 4 cid 90041 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [7700000.0, 30000000.0, 66000000.0, 250000000.0] gem 
+12021 clear 맑은 포자막 pre sharpen req None T 2 max 4 cid 90038 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [8800000.0, 33000000.0, 130000000.0, 350000000.0] gem 
+13020 ed_score2p 타격 점수 II+ pre ed_score2 req ed_score2 T 2 max 3 cid 90010 efx [0.0, 10.0, 20.0, 30.0, 0.0] cost [11000000.0, 42000000.0, 150000000.0, 0.0] gem 
+13023 ed_price2 정산 보너스 II pre ed_price req ed_price T 2 max 2 cid 90013 efx [0.0, 0.5, 1.0, 0.0, 0.0] cost [13000000.0, 50000000.0, 0.0, 0.0] gem 
+12008 md_templife 임시 수확기 수명 pre md_kid req None T 2 max 2 cid 90032 efx [1.0, 1.4, 1.8, 0.0, 0.0] cost [13000000.0, 50000000.0, 0.0, 0.0] gem 
+11029 ps_power 북돋기 강화 pre ps_barrate req None T 3 max 3 cid 90068 efx [0.0, 0.1, 0.2, 0.3, 0.0] cost [13000000.0, 31000000.0, 77000000.0, 0.0] gem 
+11018 ps_dur2 지속시간 II pre ps_dur req ps_dur T 2 max 2 cid 90059 efx [0.0, 3.0, 6.0, 0.0, 0.0] cost [14000000.0, 52000000.0, 0.0, 0.0] gem 
+11007 ps_rush 선제 공격 pre ps_dur req None T 2 max 2 cid 90062 efx [1.0, 1.75, 2.5, 0.0, 0.0] cost [16000000.0, 61000000.0, 0.0, 0.0] gem 
+13021 ed_bonus2p 수확량 II+ pre ed_bonus2 req ed_bonus2 T 2 max 3 cid 90011 efx [0.0, 10.0, 20.0, 30.0, 0.0] cost [19000000.0, 72000000.0, 270000000.0, 0.0] gem 
+12062 barclone 분신 바 pre split req None T 3 max 4 cid 90048 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [19000000.0, 37000000.0, 61000000.0, 230000000.0] gem 
+12052 md_buffdur 버프 지속 pre accel req None T 2 max 2 cid 90050 efx [1.0, 1.4, 1.8, 0.0, 0.0] cost [32000000.0, 100000000.0, 0.0, 0.0] gem 
+11019 ps_atk3 공격력 III pre ps_heavy req ps_atk2p T 3 max 4 cid 90069 efx [0.0, 6.0, 12.0, 18.0, 24.0] cost [45000000.0, 160000000.0, 600000000.0, 2300000000.0] gem 
+11016 ps_ball2 수확기 +1 (II) pre ps_atk2 req None T 2 max 1 cid 90057 efx [0.0, 1.0, 0.0, 0.0, 0.0] cost [61000000.0, 0.0, 0.0, 0.0] gem 
+13024 ed_score3 타격 점수 III pre ed_score2p req ed_score2p T 3 max 3 cid 90016 efx [0.0, 100.0, 200.0, 300.0, 0.0] cost [940000000.0, 3500000000.0, 13000000000.0, 0.0] gem 
+13025 ed_bonus3 수확량 III pre ed_bonus2p req ed_bonus2p T 3 max 3 cid 90017 efx [0.0, 100.0, 200.0, 300.0, 0.0] cost [1700000000.0, 6100000000.0, 23000000000.0, 0.0] gem 
+11009 ps_heavy 무더기 파쇄 pre ps_atk2p req None T 3 max 2 cid 90074 efx [1.0, 1.5, 2.0, 0.0, 0.0] cost [5500000000.0, 22000000000.0, 0.0, 0.0] gem 
+11020 ps_atk3p 공격력 III+ pre ps_crit2 req ps_atk3 T 3 max 3 cid 90070 efx [0.0, 6.0, 12.0, 18.0, 0.0] cost [8300000000.0, 31000000000.0, 120000000000.0, 0.0] gem 
+11011 bl 회전 칼날 pre ps_size req None T 2 max 4 cid 90063 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [20000000000.0, 77000000000.0, 130000000000.0, 500000000000.0] gem 
+13010 ed_giant 거대 버섯 pre ed_rare req None T 3 max 2 cid 90022 efx [0.08, 0.18, 0.28, 0.0, 0.0] cost [30000000000.0, 120000000000.0, 0.0, 0.0] gem 
+12005 md_chef 꼬마 건축가 pre md_combo req None T 3 max 2 cid 90033 efx [1.0, 0.92, 0.8464, 0.0, 0.0] cost [43000000000.0, 160000000000.0, 0.0, 0.0] gem 
+12015 split 분열 pre sharpen req None T 3 max 4 cid 90037 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [43000000000.0, 160000000000.0, 330000000000.0, 1300000000000.0] gem 
+13026 ed_score3p 타격 점수 III+ pre ed_score3 req ed_score3 T 3 max 3 cid 90018 efx [0.0, 100.0, 200.0, 300.0, 0.0] cost [50000000000.0, 190000000000.0, 660000000000.0, 0.0] gem 
+11023 ps_crit2 치명타 피해 pre ps_atk3 req ps_crit T 3 max 2 cid 90073 efx [3.0, 4.0, 5.0, 0.0, 0.0] cost [55000000000.0, 72000000000.0, 0.0, 0.0] gem 
+12006 md_stump 숲 장치 강화 pre md_combo req None T 3 max 2 cid 90034 efx [1.0, 1.8, 2.6, 0.0, 0.0] cost [61000000000.0, 230000000000.0, 0.0, 0.0] gem 
+13027 ed_bonus3p 수확량 III+ pre ed_bonus3 req ed_bonus3 T 3 max 3 cid 90019 efx [0.0, 100.0, 200.0, 300.0, 0.0] cost [82000000000.0, 310000000000.0, 1200000000000.0, 0.0] gem 
+13005 ed_trade 단골 손님 pre ed_price req None T 3 max 2 cid 90020 efx [1.0, 1.3, 1.6, 0.0, 0.0] cost [120000000000.0, 430000000000.0, 0.0, 0.0] gem 
+13009 ed_gold 황금 변종 pre ed_rare req None T 3 max 2 cid 90021 efx [0.01, 0.03, 0.05, 0.0, 0.0] cost [120000000000.0, 430000000000.0, 0.0, 0.0] gem 
+11021 ps_atk4 공격력 IV pre ps_power req ps_atk3p T 3 max 3 cid 90071 efx [0.0, 15.0, 30.0, 45.0, 0.0] cost [140000000000.0, 540000000000.0, 1400000000000.0, 0.0] gem 
+13013 ed_multi 배수 획득 pre ed_bonus req None T 3 max 2 cid 90023 efx [0.0, 0.1, 0.2, 0.0, 0.0] cost [370000000000.0, 600000000000.0, 0.0, 0.0] gem 
+12030 clone 분신 수확기 pre burst req None T 3 max 4 cid 90040 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [370000000000.0, 600000000000.0, 600000000000.0, 1800000000000.0] gem 
+12042 shock 충격파 pre clone req None T 3 max 4 cid 90044 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [600000000000.0, 770000000000.0, 770000000000.0, 2000000000000.0] gem 
+12036 bolt 연쇄 번개 pre magnet req None T 3 max 4 cid 90042 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [770000000000.0, 880000000000.0, 880000000000.0, 2400000000000.0] gem 
+12039 tornado 회오리 pre split req None T 3 max 4 cid 90043 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [880000000000.0, 990000000000.0, 990000000000.0, 2400000000000.0] gem 
+11022 ps_ball3 수확기 +2 (III) pre ps_atk3 req None T 3 max 4 cid 90072 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [990000000000.0, 1400000000000.0, 2000000000000.0, 3000000000000.0] gem 
+12050 fest 풍년 pre shock req None T 3 max 4 cid 90049 efx [0.0, 1.0, 2.0, 3.0, 4.0] cost [1200000000000.0, 1300000000000.0, 1400000000000.0, 4100000000000.0] gem 
+11032 inf_atk 끝없는 투지 pre ps_atk4 req ps_atk4 T 3 max 0 cid 90088 efx [1.0, 1.07, 0.0, 0.0, 0.0] cost [3630000000000.0, 3905880000000.0, 0.0, 0.0] gem 
+13032 inf_gold 끝없는 풍년 pre ed_score3p req ed_score3p T 3 max 0 cid 90089 efx [1.0, 1.04, 0.0, 0.0, 0.0] cost [3630000000000.0, 3905880000000.0, 0.0, 0.0] gem 
+
+BOSS_EVERY 10.0 보스가 나오는 스테이지 간격
+BOSS_FAIL_GOLD 0.8 보스에게 졌을 때 그 판 골드 배율
+BOSS_REWARD_MUL 2.0 보스 처치 보상: 골드는 max(이번 판, 직전 일반 판 골드)의, 버섯은 이번 판에 딴 것의 이 배수만큼 더 줌
+BOSS_HP_K 1.0 보스 체력 = 레전드리 체력 × 이 값 × 지역 배율 × 보스 배율
+BOSS_GEM_BASE 5.0 보스 처치 균사석 = 이 값 + BOSS_GEM_STEP × (스테이지 / BOSS_EVERY)
+BOSS_GEM_STEP 5.0 보스 처치 균사석 증가량
+CLEANER_HEAL 0.03 숲 속의 청소부: 회복량(최대 체력 비율)
+CLEANER_INT 3.0 숲 속의 청소부: 회복 간격(초)
+ANGEL_PURGE_INT 2.0 죽음의 천사: 임시 수확기를 없애는 간격(초)
+MOVER_SPD 260.0 움직이는 버섯: 이동 속도(px/초)
+POWER_ATK 0.2 기운 북돋기: 위력 단계당 공격력 +비율
+POWER_SKILL 0.05 기운 북돋기: 위력 단계당 스킬 발동률 +
+BAR_CLONE_DUR 5.0 분신 바 기본 지속시간(초)
+BAR_CLONE_MAX 2.0 분신 바 최대 개수
+STUMP_ATK_MUL 1.5 그루터기 공격력 배율
+STUMP_ATK_DUR 5.0 그루터기 공격력 버프 시간(초)
+ZONE_STEP 10.0 지역이 바뀔 때 버섯 체력·점수·수확 배율
+STAGE_GROWTH 1.01 스테이지마다 곱하는 배율
+COMBO_WINDOW 1.5 콤보가 이어지는 시간(초)
+BOSS_SCORE_MUL 0.05 보스 타격 골드 배율(점수·동전 수확기). 보스를 못 잡은 판은 보스 전 일반 판보다 손해 — 일반 스테이지에서 성장하고 오라는 허들
+BOSS_LOOP_HP_MUL 220.0 보스가 한 바퀴 돈 뒤(스테이지 60~) 보스 체력 배율 (움직이는 버섯 Hp_Mul과 분리)
+{'Boss_ID': 6001, 'Boss_Key': 'king', 'Boss_Name': '대왕송이', 'Str_Group_ID': 29001, 'Cat': 'ed', 'Look': '송이버섯', 'Color': '#c9a27a', 'Hp_Mul': 1.0}
+{'Boss_ID': 6002, 'Boss_Key': 'cleaner', 'Boss_Name': '숲 속의 청소부', 'Str_Group_ID': 29002, 'Cat': 'md', 'Look': '선녀낙엽버섯', 'Color': '#7ad07a', 'Hp_Mul': 0.35}
+{'Boss_ID': 6003, 'Boss_Key': 'angel', 'Boss_Name': '죽음의 천사', 'Str_Group_ID': 29003, 'Cat': 'ps', 'Look': '독우산광대버섯', 'Color': '#b48cff', 'Hp_Mul': 65.0}
+{'Boss_ID': 6004, 'Boss_Key': 'phantom', 'Boss_Name': '환상 버섯', 'Str_Group_ID': 29004, 'Cat': 'ps', 'Look': '광대버섯', 'Color': '#ff6b6b', 'Hp_Mul': 400.0}
+{'Boss_ID': 6005, 'Boss_Key': 'mover', 'Boss_Name': '움직이는 버섯', 'Str_Group_ID': 29005, 'Cat': 'md', 'Look': '동충하초', 'Color': '#f2a64a', 'Hp_Mul': 200.0}
+{'Wea_ID': 5001, 'Wea_Key': 'clear', 'Wea_Name': '맑음', 'Str_Group_ID': 28001, 'Wea_Rate': 1, 'Weader_Type': 1, 'Icon': 'w_clear', 'Fav_Mul': 1.0, 'Fav_Tier': -1, 'Fav': ''}
+{'Wea_ID': 5002, 'Wea_Key': 'rain', 'Wea_Name': '보슬비', 'Str_Group_ID': 28002, 'Wea_Rate': 1, 'Weader_Type': 1, 'Icon': 'w_rain', 'Fav_Mul': 3.0, 'Fav_Tier': -1, 'Fav': '먹물버섯,이끼꽃버섯,목이버섯,흰목이'}
+{'Wea_ID': 5003, 'Wea_Key': 'moon', 'Wea_Name': '보름달 밤', 'Str_Group_ID': 28003, 'Wea_Rate': 1, 'Weader_Type': 1, 'Icon': 'w_moon', 'Fav_Mul': 4.0, 'Fav_Tier': -1, 'Fav': '화경버섯,독우산광대버섯,송이버섯,송로버섯,갈색고리갓버섯'}
+{'Wea_ID': 5004, 'Wea_Key': 'storm', 'Wea_Name': '폭우', 'Str_Group_ID': 28004, 'Wea_Rate': 1, 'Weader_Type': 0, 'Icon': 'w_storm', 'Fav_Mul': 1.0, 'Fav_Tier': -1, 'Fav': ''}
+{'Wea_ID': 5005, 'Wea_Key': 'wind', 'Wea_Name': '포자 바람', 'Str_Group_ID': 28005, 'Wea_Rate': 1, 'Weader_Type': 0, 'Icon': 'w_wind', 'Fav_Mul': 3.0, 'Fav_Tier': -1, 'Fav': '말불버섯,목도리방귀버섯,광대버섯,뱀껍질광대버섯,알광대버섯,개나리광대버섯,독우산광대버섯,마귀광대버섯'}
+{'Wea_ID': 5006, 'Wea_Key': 'cold', 'Wea_Name': '한파', 'Str_Group_ID': 28006, 'Wea_Rate': 1, 'Weader_Type': 0, 'Icon': 'w_cold', 'Fav_Mul': 1.0, 'Fav_Tier': -1, 'Fav': ''}
+{'Ball_ID': 1001, 'Ball_Key': 'sam', 'Ball_Name': '오래된 낫', 'Ball_Str': 10001, 'Ball_Type': '기본형', 'Ball_Look': '검게 산화된 날과 호두나무 손잡이의 낡은 낫', 'Ball_Unlock': 0.0, 'Ball_LvGold': 1500.0, 'Ball_Efx_ID': 2001}
+{'Ball_ID': 1002, 'Ball_Key': 'saw', 'Ball_Name': '절삭 수리검', 'Ball_Str': 10002, 'Ball_Type': '속도형', 'Ball_Look': '은빛 합금 날의 작은 수리검', 'Ball_Unlock': 1600000000.0, 'Ball_LvGold': 1950000000.0, 'Ball_Efx_ID': 2002}
+{'Ball_ID': 1003, 'Ball_Key': 'hoe', 'Ball_Name': '약초 괭이', 'Ball_Str': 10003, 'Ball_Type': '치명타형', 'Ball_Look': '흑철 날 끝이 송곳처럼 뾰족한 괭이', 'Ball_Unlock': 61000000000.0, 'Ball_LvGold': 76000000000.0, 'Ball_Efx_ID': 2003}
+{'Ball_ID': 1004, 'Ball_Key': 'mill', 'Ball_Name': '회전칼날 수확기', 'Ball_Str': 10004, 'Ball_Type': '범위형', 'Ball_Look': '동그라미 + 회전 칼날', 'Ball_Unlock': 99000000000000.0, 'Ball_LvGold': 120000000000000.0, 'Ball_Efx_ID': 2004}
+{'Ball_ID': 1005, 'Ball_Key': 'spore', 'Ball_Name': '분열 수확기', 'Ball_Str': 10005, 'Ball_Type': '분열형', 'Ball_Look': '포자가 맺힌 버섯 갓', 'Ball_Unlock': 2200000000000.0, 'Ball_LvGold': 2800000000000.0, 'Ball_Efx_ID': 2005}
+{'Ball_ID': 1006, 'Ball_Key': 'bell', 'Ball_Name': '방울 수확기', 'Ball_Str': 10006, 'Ball_Type': '울림형', 'Ball_Look': '큰 도토리 방울', 'Ball_Unlock': 210000000000000.0, 'Ball_LvGold': 260000000000000.0, 'Ball_Efx_ID': 2006}
+{'Ball_ID': 1007, 'Ball_Key': 'coin', 'Ball_Name': '엽전 수확기', 'Ball_Str': 10007, 'Ball_Type': '재물형', 'Ball_Look': '구멍 뚫린 큰 엽전', 'Ball_Unlock': 58000.0, 'Ball_LvGold': 72500.0, 'Ball_Efx_ID': 2007}
+{'Ball_ID': 1008, 'Ball_Key': 'gold', 'Ball_Name': '황금 수확기', 'Ball_Str': 10008, 'Ball_Type': '보상', 'Ball_Look': '금빛 낫', 'Ball_Unlock': -1.0, 'Ball_LvGold': 15000.0, 'Ball_Efx_ID': 2008}

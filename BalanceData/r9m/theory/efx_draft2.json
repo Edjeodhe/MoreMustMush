@@ -1,0 +1,553 @@
+{
+ "_note": "2차 보정(실측) — 키 → Efx_Lv0..N. 구조·가격·칼럼 그대로. 밸런스설계/이론_9m.md \"2차 보정(실측)\"",
+ "rows": {
+  "ps_blade1": [
+   1,
+   3
+  ],
+  "ps_blade2": [
+   3,
+   8
+  ],
+  "ps_blade3": [
+   8,
+   50
+  ],
+  "ps_blade4": [
+   50,
+   450
+  ],
+  "ps_blade5": [
+   450,
+   3000
+  ],
+  "ed_hunt1": [
+   0,
+   1.2,
+   2.5,
+   5.0
+  ],
+  "ed_hunt2": [
+   5.0,
+   6.7
+  ],
+  "ed_hunt3": [
+   6.7,
+   21
+  ],
+  "ed_haggle1": [
+   0,
+   6
+  ],
+  "ed_haggle2": [
+   6,
+   15
+  ],
+  "ed_haggle3": [
+   15,
+   28
+  ],
+  "ed_regular1": [
+   0,
+   26
+  ],
+  "ed_regular2": [
+   26,
+   310
+  ],
+  "ed_regular3": [
+   310,
+   350
+  ],
+  "ps_crit1": [
+   0,
+   0.02
+  ],
+  "ps_crit2": [
+   0.02,
+   0.04
+  ],
+  "ps_crit3": [
+   0.04,
+   0.06
+  ],
+  "ps_crit4": [
+   0.06,
+   0.1
+  ],
+  "ps_crit5": [
+   0.1,
+   0.15
+  ],
+  "ps_critdmg1": [
+   2.0,
+   2.5
+  ],
+  "ps_critdmg2": [
+   2.5,
+   3.0
+  ],
+  "ps_critdmg3": [
+   3.0,
+   4.0
+  ],
+  "ps_stamina1": [
+   0,
+   5
+  ],
+  "ps_stamina2": [
+   5,
+   9
+  ],
+  "ps_stamina3": [
+   9,
+   13
+  ],
+  "ps_stamina4": [
+   13,
+   17
+  ],
+  "ps_stamina5": [
+   17,
+   21
+  ],
+  "ps_size1": [
+   0,
+   0.15
+  ],
+  "ps_size2": [
+   0.15,
+   0.3
+  ],
+  "ps_size3": [
+   0.3,
+   0.45
+  ],
+  "ps_wind1": [
+   0,
+   0.12
+  ],
+  "ps_wind2": [
+   0.12,
+   0.24
+  ],
+  "ps_wind3": [
+   0.24,
+   0.36
+  ],
+  "ed_hand11": [
+   0,
+   0.05
+  ],
+  "ed_hand12": [
+   0.05,
+   1.0
+  ],
+  "ed_hand13": [
+   1.0,
+   26
+  ],
+  "ed_hand21": [
+   0,
+   36
+  ],
+  "ed_hand22": [
+   36,
+   46
+  ],
+  "ed_hand23": [
+   46,
+   166
+  ],
+  "ed_hand31": [
+   0,
+   266
+  ],
+  "ed_hand32": [
+   266,
+   366
+  ],
+  "ed_hand33": [
+   366,
+   666
+  ],
+  "ed_hand41": [
+   0,
+   466
+  ],
+  "ed_hand42": [
+   466,
+   566
+  ],
+  "ed_hand43": [
+   566,
+   666
+  ],
+  "ps_tools": [
+   0,
+   1,
+   3,
+   5,
+   7
+  ]
+ },
+ "draft1": {
+  "ps_blade2": [
+   3,
+   5
+  ],
+  "ps_blade3": [
+   5,
+   18
+  ],
+  "ps_blade4": [
+   18,
+   40
+  ],
+  "ps_blade5": [
+   40,
+   110
+  ],
+  "ed_hunt1": [
+   0,
+   0.2,
+   0.4,
+   0.6
+  ],
+  "ed_hunt2": [
+   0.6,
+   4.6
+  ],
+  "ed_hunt3": [
+   4.6,
+   22
+  ],
+  "ed_haggle1": [
+   0,
+   0.9
+  ],
+  "ed_haggle2": [
+   0.9,
+   1.15
+  ],
+  "ed_haggle3": [
+   1.15,
+   1.4
+  ],
+  "ed_regular1": [
+   0,
+   0.3
+  ],
+  "ed_regular2": [
+   0.3,
+   8.0
+  ],
+  "ed_regular3": [
+   8.0,
+   9.0
+  ],
+  "ps_tools": [
+   0,
+   1,
+   2,
+   3,
+   4
+  ]
+ },
+ "income_steps": {
+  "hunt1": {
+   "G_req": 6.6,
+   "hunt": 5.0,
+   "haggle": 0.0,
+   "regular": 0.0,
+   "G": 6.6
+  },
+  "haggle1": {
+   "G_req": 69.8,
+   "hunt": 5.0,
+   "haggle": 6,
+   "regular": 0.0,
+   "G": 42.6
+  },
+  "haggle2": {
+   "G_req": 111.0,
+   "hunt": 5.0,
+   "haggle": 15,
+   "regular": 0.0,
+   "G": 96.6
+  },
+  "haggle3": {
+   "G_req": 188.3,
+   "hunt": 5.0,
+   "haggle": 28,
+   "regular": 0.0,
+   "G": 174.6
+  },
+  "hunt2": {
+   "G_req": 222.8,
+   "hunt": 6.7,
+   "haggle": 28,
+   "regular": 0.0,
+   "G": 224.1
+  },
+  "regular1": {
+   "G_req": 424.2,
+   "hunt": 6.7,
+   "haggle": 28,
+   "regular": 26,
+   "G": 424.3
+  },
+  "regular2": {
+   "G_req": 2635.7,
+   "hunt": 6.7,
+   "haggle": 28,
+   "regular": 310,
+   "G": 2611.1
+  },
+  "hunt3": {
+   "G_req": 7396.6,
+   "hunt": 21,
+   "haggle": 28,
+   "regular": 310,
+   "G": 7460.2
+  },
+  "regular3": {
+   "G_req": 8315.1,
+   "hunt": 21,
+   "haggle": 28,
+   "regular": 350,
+   "G": 8340.2
+  }
+ },
+ "boss_need": {
+  "10": {
+   "pmax": 8640,
+   "balls": 1,
+   "blade_need": 0.37835497835497833
+  },
+  "20": {
+   "pmax": 990000,
+   "balls": 1,
+   "blade_need": 1.7151515151515149
+  },
+  "30": {
+   "pmax": 1098000000,
+   "balls": 1,
+   "blade_need": 171.0017316017316
+  },
+  "40": {
+   "pmax": 6750000000,
+   "balls": 2,
+   "blade_need": 408.4147186147186
+  },
+  "50": {
+   "pmax": 540000000000,
+   "balls": 6,
+   "blade_need": 1409.8253968253969
+  },
+  "60": {
+   "pmax": 1800000000000,
+   "balls": 6,
+   "blade_need": 1630.5916305916305
+  },
+  "70": {
+   "pmax": 3690000000000,
+   "balls": 8,
+   "blade_need": 5043.290043290042
+  }
+ },
+ "predict": [
+  {
+   "stage": 5,
+   "pmax_old": 234,
+   "G": 42.6,
+   "net_pred": 3100.0,
+   "net_old": 1220.0,
+   "atk_pred": 3.3,
+   "atk_old": 3.9199999984353786,
+   "balls_pred": 1,
+   "balls_old": 1
+  },
+  {
+   "stage": 10,
+   "pmax_old": 8640,
+   "G": 96.6,
+   "net_pred": 31400.0,
+   "net_old": 29300.0,
+   "atk_pred": 8.8,
+   "atk_old": 5.599999997764826,
+   "balls_pred": 1,
+   "balls_old": 3,
+   "boss_kill_s": 0.7
+  },
+  {
+   "stage": 15,
+   "pmax_old": 59400,
+   "G": 174.6,
+   "net_pred": 376000.0,
+   "net_old": 142991.0,
+   "atk_pred": 8.8,
+   "atk_old": 12.299999952316284,
+   "balls_pred": 1,
+   "balls_old": 3
+  },
+  {
+   "stage": 20,
+   "pmax_old": 990000,
+   "G": 174.6,
+   "net_pred": 13200000.0,
+   "net_old": 7500000.0,
+   "atk_pred": 8.8,
+   "atk_old": 20.24999976158142,
+   "balls_pred": 1,
+   "balls_old": 3,
+   "boss_kill_s": 3.2
+  },
+  {
+   "stage": 25,
+   "pmax_old": 64800000,
+   "G": 424.3,
+   "net_pred": 500000000.0,
+   "net_old": 304082102.0,
+   "atk_pred": 55.0,
+   "atk_old": 36.899999560788274,
+   "balls_pred": 1,
+   "balls_old": 3
+  },
+  {
+   "stage": 30,
+   "pmax_old": 1098000000,
+   "G": 424.3,
+   "net_pred": 1190000000.0,
+   "net_old": 988000000.0,
+   "atk_pred": 495.0,
+   "atk_old": 42.29999939817935,
+   "balls_pred": 1,
+   "balls_old": 4,
+   "boss_kill_s": 5.7
+  },
+  {
+   "stage": 35,
+   "pmax_old": 2052000000,
+   "G": 424.3,
+   "net_pred": 1450000000.0,
+   "net_old": 2132034732.0,
+   "atk_pred": 495.0,
+   "atk_old": 93.9299985241145,
+   "balls_pred": 1,
+   "balls_old": 4
+  },
+  {
+   "stage": 40,
+   "pmax_old": 6750000000,
+   "G": 424.3,
+   "net_pred": 3210000000.0,
+   "net_old": 3500000000.0,
+   "atk_pred": 495.0,
+   "atk_old": 95.32499849293382,
+   "balls_pred": 2,
+   "balls_old": 4,
+   "boss_kill_s": 13.6
+  },
+  {
+   "stage": 45,
+   "pmax_old": 18900000000,
+   "G": 424.3,
+   "net_pred": 32900000000.0,
+   "net_old": 125216733240.0,
+   "atk_pred": 495.0,
+   "atk_old": 97.64999844096602,
+   "balls_pred": 2,
+   "balls_old": 4
+  },
+  {
+   "stage": 50,
+   "pmax_old": 540000000000,
+   "G": 2611.1,
+   "net_pred": 638000000000.0,
+   "net_old": 633000000000.0,
+   "atk_pred": 3300.0,
+   "atk_old": 238.70999613292517,
+   "balls_pred": 6,
+   "balls_old": 4,
+   "boss_kill_s": 7.0
+  },
+  {
+   "stage": 55,
+   "pmax_old": 792000000000,
+   "G": 7460.2,
+   "net_pred": 1920000000000.0,
+   "net_old": 1031858305746.0,
+   "atk_pred": 3300.0,
+   "atk_old": 246.37499575763943,
+   "balls_pred": 6,
+   "balls_old": 4
+  },
+  {
+   "stage": 60,
+   "pmax_old": 1800000000000,
+   "G": 7460.2,
+   "net_pred": 2280000000000.0,
+   "net_old": 2690000000000.0,
+   "atk_pred": 3300.0,
+   "atk_old": 252.94499561078848,
+   "balls_pred": 6,
+   "balls_old": 5,
+   "boss_kill_s": 8.2
+  },
+  {
+   "stage": 65,
+   "pmax_old": 2700000000000,
+   "G": 7460.2,
+   "net_pred": 3200000000000.0,
+   "net_old": 1686761140883.0,
+   "atk_pred": 3300.0,
+   "atk_old": 272.99444525116684,
+   "balls_pred": 8,
+   "balls_old": 8
+  },
+  {
+   "stage": 70,
+   "pmax_old": 3690000000000,
+   "G": 7460.2,
+   "net_pred": 3360000000000.0,
+   "net_old": 3750000000000.0,
+   "atk_pred": 3300.0,
+   "atk_old": 290.85389494049554,
+   "balls_pred": 8,
+   "balls_old": 8,
+   "boss_kill_s": 25.2
+  }
+ ],
+ "b_bar_inversion": [
+  {
+   "band": "21-30",
+   "F_old": 56.0,
+   "settle_old": 2.0,
+   "G_new": 15.679999999999998,
+   "per_ball_sec_ratio": 2.74,
+   "b_bar": 4.2
+  },
+  {
+   "band": "31-40",
+   "F_old": 366.0,
+   "settle_old": 2.0,
+   "G_new": 15.679999999999998,
+   "per_ball_sec_ratio": 7.49,
+   "b_bar": 9.6
+  }
+ ],
+ "assume": {
+  "K_DPS": 7.0,
+  "T_KILL": 15.0,
+  "AB_DUR": 3.0,
+  "H_over_1e10": "flat (측정 밖)",
+  "ps_tools": [
+   0,
+   1,
+   3,
+   5,
+   7
+  ]
+ }
+}

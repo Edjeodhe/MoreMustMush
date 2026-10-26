@@ -1,0 +1,12 @@
+{
+  "String": {
+    "201032": {
+      "Str_KR": "공격력 IV를 다 올린 뒤에도 계속 강해져요. 레벨마다 공격력이 일정하게 더해지고, 최대 레벨이 없어요.",
+      "Str_EN": "Keep getting stronger even after maxing Attack IV. Each level adds a fixed amount of Attack, and there is no max level.",
+      "Str_JA": "攻撃力IVを上げきったあとも強くなり続けます。レベルごとに攻撃力が一定ずつ足され、最大レベルはありません。",
+      "Str_RU": "Усиливает атаку и после максимума «Атаки IV»: каждый уровень добавляет одинаковую прибавку к атаке, максимального уровня нет.",
+      "Str_UK": "Атака зростає й після максимуму «Атаки IV»: кожен рівень додає однакову прибавку до атаки, максимуму немає.",
+      "Str_PT": "Fica cada vez mais forte mesmo depois de maximizar “Ataque IV”. Cada nível soma um valor fixo ao ataque, e não há nível máximo."
+    }
+  }
+}

@@ -1,0 +1,108 @@
+내부 1~13 (n 78) 고정 {'zone': 1.0} | 상수 -0.53 dur +1.23 score +1.30 price +0.15 cols +0.60 atk -0.06 combo +2.02 | RMSE(ln) 0.294 (×1.34)
+내부 1~13 (n 78) 고정 {'zone': 1.0, 'score': 1.0, 'price': 1.0} | 상수 +0.40 dur +0.74 cols +0.73 atk +0.00 combo +2.43 | RMSE(ln) 0.302 (×1.35)
+내부 5~23 (n 108) 고정 {'zone': 1.0} | 상수 +0.18 dur +0.10 score +1.89 price +1.48 cols +0.22 balls +1.55 atk +0.23 combo +6.67 | RMSE(ln) 0.420 (×1.52)
+내부 5~23 (n 108) 고정 {'zone': 1.0, 'score': 1.0, 'price': 1.0} | 상수 +0.28 dur +0.34 cols +0.38 balls +1.47 atk +0.58 combo +6.41 | RMSE(ln) 0.426 (×1.53)
+내부 1~23 (n 132) 고정 {'zone': 1.0} | 상수 +0.14 dur +0.41 score +1.44 price +0.24 cols +0.43 balls +1.51 atk +0.25 combo +6.84 | RMSE(ln) 0.411 (×1.51)
+내부 1~23 (n 132) 고정 {'zone': 1.0, 'score': 1.0, 'price': 1.0} | 상수 +1.16 dur -0.04 cols +0.63 balls +1.55 atk +0.41 combo +6.55 | RMSE(ln) 0.417 (×1.52)
+내부 15~53 (n 216) 고정 {'zone': 1.0} | 상수 -16.14 dur +6.49 score +0.83 price -2.09 cols +0.36 balls +0.48 atk +0.55 combo +5.61 | RMSE(ln) 0.409 (×1.51)
+내부 15~53 (n 216) 고정 {'zone': 1.0, 'score': 1.0, 'price': 1.0} | 상수 +0.55 dur +0.57 cols +0.48 balls +1.58 atk +0.41 combo +4.98 | RMSE(ln) 0.467 (×1.60)
+
+시드 1~6 내부 1~16: 판 net | 판 시작 특징 | 이 판 뒤 산 것
+s1 R 1  net      16 gold      5 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 18 | power:0>1
+s1 R 2  net      23 gold     13 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 21 | ed_score:0>1
+s1 R 3  net      64 gold     30 | dur 10.0 sc 2 pr 1.10 cols 2 atk 1.10 combo 1.30 made 28 | ed_cols:0>1;ps_dur:0>1
+s1 R 4  net      81 gold     33 | dur 12.0 sc 2 pr 1.10 cols 3 atk 1.10 combo 1.30 made 35 | power:1>2;ed_price:0>1
+s1 R 5  net     116 gold     45 | dur 12.0 sc 2 pr 1.40 cols 3 atk 1.10 combo 1.30 made 34 | ed_score:1>2;md_bar:0>1
+s1 R 6  net     157 gold     67 | dur 12.5 sc 3 pr 1.40 cols 3 atk 1.10 combo 1.30 made 33 | ed_cols:1>2;ps_atk:0>1
+s1 R 7  net     289 gold    122 | dur 13.0 sc 3 pr 1.40 cols 3 atk 2.75 combo 1.30 made 26 | ps_dur:1>2;ed_price:1>2
+s1 R 8  net     419 gold     73 | dur 15.5 sc 3 pr 1.70 cols 4 atk 2.75 combo 1.30 made 44 | power:2>3;md_bar:1>2;md_map:0>1
+s1 R 9  net     468 gold    136 | dur 16.0 sc 3 pr 1.70 cols 4 atk 2.75 combo 1.30 made 29 | ed_score:2>3;dev_stump:0>1
+s1 R10  net     390 gold     85 | dur 16.5 sc 4 pr 1.70 cols 4 atk 2.80 combo 1.30 made 35 | ed_cols:2>3;ps_atk:1>2
+s1 R11  net     506 gold    105 | dur 17.0 sc 4 pr 1.70 cols 6 atk 3.92 combo 1.30 made 45 | md_combo:0>1;ed_regen:0>1
+s1 R12  net     685 gold    232 | dur 17.5 sc 4 pr 1.70 cols 5 atk 3.92 combo 1.45 made 36 | ps_dur:2>3;ed_rare0:0>1
+s1 R13  net     894 gold    100 | dur 21.0 sc 4 pr 1.70 cols 5 atk 3.92 combo 1.45 made 60 | ed_price:2>3;md_map:1>2;dev_moss:0>1
+s1 R14B net    2534 gold    447 | dur 18.5 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.45 made 0 | power:3>4;md_bar:2>3;ps_size:0>1;ps_spd:0>1;ed_bonus:0>1
+s1 R15  net    2132 gold    194 | dur 22.0 sc 4 pr 2.00 cols 8 atk 3.92 combo 1.45 made 94 | ed_cols:3>4;md_combo:1>2;ed_regen:1>2;accel:0>1
+s1 R16  net   21287 gold   1214 | dur 22.6 sc 4 pr 2.00 cols 9 atk 3.92 combo 1.60 made 129 | ps_dur:3>4;ps_atk:2>3;md_map:2>4;md_combo:2>3;ed_regen:2>3;ed_rare0:1>3;ps_size:1>3;ps_spd:1>3;ed_bonus:1>2;ps_ball:0>1;dev_acorn:0>1;pierce:0>1;md_kid:0>1;burst:0>1
+s2 R 1  net      24 gold     13 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 18 | power:0>1
+s2 R 2  net      46 gold     24 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 24 | ed_score:0>1;ed_cols:0>1
+s2 R 3  net      84 gold      3 | dur 10.0 sc 2 pr 1.10 cols 3 atk 1.10 combo 1.30 made 25 | power:1>2;ps_dur:0>1;ed_price:0>1
+s2 R 4  net     113 gold     12 | dur 12.0 sc 2 pr 1.40 cols 3 atk 1.10 combo 1.30 made 26 | ed_score:1>2;md_bar:0>1
+s2 R 5  net     193 gold     70 | dur 12.0 sc 3 pr 1.40 cols 3 atk 1.10 combo 1.30 made 28 | ed_cols:1>2;ps_atk:0>1
+s2 R 6  net     269 gold    105 | dur 12.5 sc 3 pr 1.40 cols 3 atk 2.75 combo 1.30 made 35 | ps_dur:1>2;ed_price:1>2
+s2 R 7  net     212 gold     29 | dur 15.0 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 37 | power:2>3;md_map:0>1
+s2 R 8  net     240 gold     89 | dur 15.5 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 35 | md_bar:1>2
+s2 R 9  net     240 gold    131 | dur 16.0 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 22 | dev_stump:0>1
+s2 R10  net     308 gold     16 | dur 16.5 sc 3 pr 1.70 cols 5 atk 2.80 combo 1.30 made 50 | ed_score:2>3;ps_atk:1>2
+s2 R11  net     679 gold    236 | dur 17.0 sc 4 pr 1.70 cols 5 atk 3.92 combo 1.30 made 54 | ed_cols:2>3;md_combo:0>1
+s2 R12  net     760 gold    186 | dur 17.5 sc 4 pr 1.70 cols 7 atk 3.92 combo 1.45 made 76 | ps_dur:2>3;ed_regen:0>1;ed_rare0:0>1
+s2 R13  net    1325 gold     89 | dur 21.0 sc 4 pr 1.70 cols 6 atk 3.92 combo 1.45 made 68 | ed_price:2>3;md_bar:2>3;md_map:1>2;dev_moss:0>1
+s2 R14B net    2992 gold    165 | dur 18.5 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.45 made 0 | power:3>4;ed_cols:3>4;md_combo:1>2;ps_size:0>1;ps_spd:0>1;ed_bonus:0>1
+s2 R15  net    3439 gold    229 | dur 22.0 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.60 made 84 | ps_dur:3>4;md_map:2>3;ed_regen:1>2;ed_rare0:1>2;accel:0>1
+s2 R16  net   11442 gold    179 | dur 26.5 sc 4 pr 2.00 cols 9 atk 3.92 combo 1.60 made 123 | ps_atk:2>3;md_combo:2>3;ed_regen:2>3;ps_size:1>2;ps_spd:1>2;ed_bonus:1>2;ps_ball:0>1;dev_acorn:0>1;pierce:0>1;md_kid:0>1;burst:0>1
+s3 R 1  net      25 gold     14 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 19 | power:0>1
+s3 R 2  net      23 gold      2 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 26 | ed_score:0>1;ed_cols:0>1
+s3 R 3  net      75 gold     14 | dur 10.0 sc 2 pr 1.10 cols 3 atk 1.10 combo 1.30 made 33 | ps_dur:0>1;ed_price:0>1
+s3 R 4  net     105 gold     27 | dur 12.0 sc 2 pr 1.40 cols 3 atk 1.10 combo 1.30 made 32 | power:1>2;md_bar:0>1
+s3 R 5  net     105 gold     19 | dur 12.0 sc 2 pr 1.40 cols 3 atk 1.10 combo 1.30 made 28 | ed_score:1>2;ps_atk:0>1
+s3 R 6  net     170 gold     14 | dur 12.5 sc 3 pr 1.40 cols 3 atk 2.75 combo 1.30 made 33 | ed_cols:1>2;ps_dur:1>2
+s3 R 7  net     247 gold    126 | dur 15.0 sc 3 pr 1.40 cols 4 atk 2.75 combo 1.30 made 45 | ed_price:1>2
+s3 R 8  net     237 gold     75 | dur 15.5 sc 3 pr 1.70 cols 4 atk 2.75 combo 1.30 made 39 | power:2>3;md_map:0>1
+s3 R 9  net     252 gold    147 | dur 16.0 sc 3 pr 1.70 cols 4 atk 2.75 combo 1.30 made 44 | md_bar:1>2
+s3 R10  net     274 gold     16 | dur 16.5 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 35 | ed_score:2>3;dev_stump:0>1
+s3 R11  net     274 gold     74 | dur 17.0 sc 4 pr 1.70 cols 4 atk 2.80 combo 1.30 made 24 | ps_atk:1>2
+s3 R12  net     898 gold    261 | dur 17.5 sc 4 pr 1.70 cols 5 atk 3.92 combo 1.30 made 55 | ed_cols:2>3;md_combo:0>1;ed_regen:0>1
+s3 R13  net     613 gold     10 | dur 18.0 sc 4 pr 1.70 cols 5 atk 3.92 combo 1.45 made 54 | ps_dur:2>3;md_map:1>2;ed_rare0:0>1
+s3 R14B net    1611 gold    100 | dur 21.5 sc 4 pr 1.70 cols 6 atk 3.92 combo 1.45 made 0 | ed_price:2>3;md_bar:2>3;dev_moss:0>1;ps_size:0>1
+s3 R15  net    1160 gold    369 | dur 22.0 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.45 made 80 | power:3>4;ps_spd:0>1
+s3 R16  net    2141 gold    260 | dur 22.6 sc 4 pr 2.00 cols 6 atk 3.92 combo 1.45 made 60 | ed_cols:3>4;md_combo:1>2;ed_regen:1>2;ed_bonus:0>1
+s4 R 1  net      16 gold      5 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 12 | power:0>1
+s4 R 2  net      40 gold     10 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 34 | ed_score:0>1;ed_cols:0>1
+s4 R 3  net      49 gold     32 | dur 10.0 sc 2 pr 1.10 cols 3 atk 1.10 combo 1.30 made 21 | ps_dur:0>1
+s4 R 4  net     124 gold     28 | dur 12.0 sc 2 pr 1.10 cols 3 atk 1.10 combo 1.30 made 27 | power:1>2;ed_price:0>1;md_bar:0>1
+s4 R 5  net     113 gold     28 | dur 12.0 sc 2 pr 1.40 cols 3 atk 1.10 combo 1.30 made 29 | ed_score:1>2;ps_atk:0>1
+s4 R 6  net     125 gold     77 | dur 12.5 sc 3 pr 1.40 cols 3 atk 2.75 combo 1.30 made 24 | ed_cols:1>2
+s4 R 7  net     192 gold     35 | dur 13.0 sc 3 pr 1.40 cols 3 atk 2.75 combo 1.30 made 24 | ps_dur:1>2;ed_price:1>2
+s4 R 8  net     347 gold     94 | dur 15.5 sc 3 pr 1.70 cols 3 atk 2.75 combo 1.30 made 37 | power:2>3;md_map:0>1
+s4 R 9  net     278 gold    192 | dur 16.0 sc 3 pr 1.70 cols 5 atk 2.80 combo 1.30 made 49 | md_bar:1>2
+s4 R10  net     438 gold      9 | dur 16.5 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 32 | ed_score:2>3;ps_atk:1>2;dev_stump:0>1
+s4 R11  net     444 gold    228 | dur 17.0 sc 4 pr 1.70 cols 5 atk 3.92 combo 1.30 made 55 | ed_cols:2>3
+s4 R12  net     696 gold    168 | dur 17.5 sc 4 pr 1.70 cols 6 atk 3.92 combo 1.30 made 43 | ps_dur:2>3;md_combo:0>1;ed_regen:0>1
+s4 R13  net     821 gold     53 | dur 21.0 sc 4 pr 1.70 cols 6 atk 3.92 combo 1.45 made 53 | ed_price:2>3;md_map:1>2;ed_rare0:0>1
+s4 R14B net     388 gold     63 | dur 21.5 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.45 made 0 | dev_moss:0>1
+s4 R14B net    2174 gold     50 | dur 21.5 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.45 made 66 | power:3>4;md_bar:2>3;ps_size:0>1;ps_spd:0>1;ed_bonus:0>1
+s4 R14B net    4630 gold    180 | dur 21.5 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.45 made 0 | ed_cols:3>4;ps_dur:3>4;md_map:2>3;md_combo:1>2;ed_regen:1>2;ed_rare0:1>2;accel:0>1
+s4 R15  net    2266 gold     26 | dur 26.0 sc 4 pr 2.00 cols 9 atk 3.92 combo 1.60 made 109 | ps_size:1>2;ps_ball:0>1;dev_acorn:0>1
+s4 R16  net   22636 gold    390 | dur 26.5 sc 4 pr 2.00 cols 9 atk 3.92 combo 1.60 made 202 | ps_atk:2>3;md_map:3>4;md_combo:2>3;ed_regen:2>3;ed_rare0:2>3;ps_size:2>3;ps_spd:1>3;ed_bonus:1>2;accel:1>2;ps_ball:1>2;pierce:0>2;md_kid:0>1;burst:0>1
+s5 R 1  net      41 gold     15 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 18 | power:0>1;ed_score:0>1
+s5 R 2  net      78 gold     10 | dur 10.0 sc 2 pr 1.10 cols 2 atk 1.10 combo 1.30 made 27 | ed_cols:0>1;ps_dur:0>1;ed_price:0>1
+s5 R 3  net     143 gold      7 | dur 12.0 sc 2 pr 1.40 cols 3 atk 1.10 combo 1.30 made 36 | power:1>2;ed_score:1>2;md_bar:0>1
+s5 R 4  net     148 gold     20 | dur 12.0 sc 3 pr 1.40 cols 3 atk 1.12 combo 1.30 made 23 | ed_cols:1>2;ps_atk:0>1
+s5 R 5  net     123 gold     44 | dur 12.0 sc 3 pr 1.40 cols 3 atk 2.80 combo 1.30 made 28 | ps_dur:1>2
+s5 R 6  net     115 gold     24 | dur 14.5 sc 3 pr 1.40 cols 3 atk 2.80 combo 1.30 made 27 | ed_price:1>2
+s5 R 7  net     402 gold    138 | dur 15.0 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 34 | power:2>3;md_map:0>1
+s5 R 8  net     169 gold    127 | dur 15.5 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 33 | md_bar:1>2
+s5 R 9  net     502 gold      8 | dur 16.0 sc 3 pr 1.70 cols 5 atk 2.80 combo 1.30 made 43 | ed_score:2>3;ps_atk:1>2;dev_stump:0>1
+s5 R10  net     889 gold    186 | dur 16.5 sc 4 pr 1.70 cols 4 atk 3.92 combo 1.30 made 42 | ed_cols:2>3;md_combo:0>1;ed_regen:0>1
+s5 R11  net     714 gold     36 | dur 17.0 sc 4 pr 1.70 cols 6 atk 3.92 combo 1.45 made 47 | ps_dur:2>3;md_map:1>2;ed_rare0:0>1
+s5 R12  net    1025 gold    341 | dur 20.5 sc 4 pr 1.70 cols 7 atk 3.92 combo 1.45 made 66 | ed_price:2>3;dev_moss:0>1
+s5 R13  net     971 gold     79 | dur 21.0 sc 4 pr 2.00 cols 6 atk 3.92 combo 1.45 made 58 | md_bar:2>3;ps_size:0>1;ps_spd:0>1
+s5 R14B net    2334 gold    334 | dur 18.5 sc 4 pr 2.00 cols 6 atk 3.92 combo 1.45 made 0 | power:3>4;ed_cols:3>4;md_combo:1>2;ed_bonus:0>1
+s5 R15  net    3472 gold    431 | dur 22.0 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.60 made 86 | ps_dur:3>4;md_map:2>3;ed_regen:1>2;ed_rare0:1>2;accel:0>1
+s5 R16  net    2220 gold    231 | dur 26.6 sc 4 pr 2.00 cols 10 atk 3.92 combo 1.60 made 132 | ps_size:1>2;ps_ball:0>1;dev_acorn:0>1
+s6 R 1  net      21 gold     10 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 20 | power:0>1
+s6 R 2  net      25 gold      0 | dur 10.0 sc 1 pr 1.10 cols 2 atk 1.10 combo 1.30 made 20 | ed_score:0>1;ed_cols:0>1
+s6 R 3  net     163 gold      8 | dur 10.0 sc 2 pr 1.10 cols 3 atk 1.10 combo 1.30 made 31 | power:1>2;ps_dur:0>1;ed_price:0>1;md_bar:0>1
+s6 R 4  net     128 gold     23 | dur 12.0 sc 2 pr 1.40 cols 3 atk 1.10 combo 1.30 made 25 | ed_score:1>2;ps_atk:0>1
+s6 R 5  net     197 gold     45 | dur 12.0 sc 3 pr 1.40 cols 3 atk 2.80 combo 1.30 made 30 | ed_cols:1>2;ps_dur:1>2
+s6 R 6  net     225 gold      0 | dur 14.5 sc 3 pr 1.40 cols 4 atk 2.80 combo 1.30 made 45 | ed_price:1>2;md_map:0>1
+s6 R 7  net     254 gold    101 | dur 15.0 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 33 | power:2>3
+s6 R 8  net     235 gold    156 | dur 15.5 sc 3 pr 1.70 cols 5 atk 2.80 combo 1.30 made 55 | md_bar:1>2
+s6 R 9  net     256 gold      7 | dur 16.0 sc 3 pr 1.70 cols 4 atk 2.80 combo 1.30 made 32 | ed_score:2>3;dev_stump:0>1
+s6 R10  net     511 gold     77 | dur 16.5 sc 4 pr 1.70 cols 4 atk 2.80 combo 1.30 made 30 | ed_cols:2>3;ps_atk:1>2
+s6 R11  net     991 gold     24 | dur 17.0 sc 4 pr 1.70 cols 6 atk 3.92 combo 1.30 made 60 | ps_dur:2>3;md_combo:0>1;ed_regen:0>1;ed_rare0:0>1
+s6 R12  net    1274 gold    272 | dur 20.6 sc 4 pr 1.70 cols 5 atk 3.92 combo 1.45 made 53 | ed_price:2>3;md_map:1>2;dev_moss:0>1
+s6 R13  net    1390 gold    429 | dur 21.1 sc 4 pr 2.00 cols 8 atk 3.92 combo 1.45 made 87 | md_bar:2>3;ps_size:0>1;ps_spd:0>1
+s6 R14B net    3167 gold    257 | dur 21.6 sc 4 pr 2.00 cols 7 atk 3.92 combo 1.45 made 0 | power:3>4;ed_cols:3>4;md_combo:1>2;ed_regen:1>2;ed_bonus:0>1;accel:0>1
+s6 R15  net    6306 gold    336 | dur 22.1 sc 4 pr 2.00 cols 9 atk 3.92 combo 1.60 made 129 | ps_dur:3>4;ps_atk:2>3;md_map:2>3;ed_rare0:1>2;ps_size:1>2;ps_spd:1>2;ps_ball:0>1;dev_acorn:0>1
+s6 R16  net   10379 gold    185 | dur 26.6 sc 4 pr 2.00 cols 9 atk 5.04 combo 1.60 made 214 | md_map:3>4;md_combo:2>3;ed_regen:2>3;ps_size:2>3;ed_bonus:1>2;pierce:0>1;md_kid:0>1;burst:0>1

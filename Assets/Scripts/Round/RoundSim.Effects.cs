@@ -28,10 +28,11 @@ namespace MoreMush
             FreeQuery(q);
         }
 
+        // 연쇄 번개 (꼬마·장식 sparkP): 가까운 버섯 2개로 튄다, 피해 공격력×1
         void ChainBolt(Shroom m0, Ball b, string src)
         {
-            int P = st.sk["bolt"].P, n = 2 + P;
-            double dmg = st.atk * st.sk["bolt"].pm * st.skillDmg * Wk(b);
+            int n = 2;
+            double dmg = st.atk * st.skillDmg * Wk(b);
             var hit = RentSet(); hit.Add(m0);   // 맞힌 버섯 (끝나면 돌려준다. 번개가 수확으로 다른 번개를 부를 수 있어 공용 하나를 쓰지 않는다)
             var pts = new List<Vector2> { new Vector2(m0.x, m0.y) };
             float cx = m0.x, cy = m0.y;
@@ -71,22 +72,65 @@ namespace MoreMush
             if (w < list.Count) list.RemoveRange(w, list.Count - w);
         }
 
-        void SpawnTornado(Ball b, string side)
+        // 포자 폭발: 필드의 모든 버섯에 공격력 × BURST_ATK
+        void FieldBurst(Ball b)
         {
-            if (tornados.Count >= 4) return;
-            var sk = st.sk["tornado"]; float hh = (float)NF.tornado_h(sk.P);
-            float dir = side == "l" ? 1 : side == "r" ? -1 : (b.x < 960 ? 1 : -1);
-            tornados.Add(new Tornado { y = U.Clamp(b.y, FY0 + hh / 2, NO_SPAWN_Y), h = hh, x = dir > 0 ? FX0 : FX1, dir = dir, dmg = st.atk * 2 * sk.pm * st.skillDmg * Wk(b), b = b });
-            SkillFx("tornado", b.x, b.y); Snd.Skill(420);
+            double dmg = st.atk * BURST_ATK * st.skillDmg * Wk(b);
+            for (int i = 0, n = shrooms.Count; i < n; i++)
+            {
+                var m = shrooms[i];
+                if (m.dead || m.grow < 0.5f) continue;
+                Damage(m, dmg, b, "skill", src: "md_burst");
+                if (parts.Count < 200) AddPart(m.x, m.y, U.Rand(-60, 60), U.Rand(-120, -40), 0.4f, U.Hex("#ffb347"), 4);
+            }
+            rings.Add(new Ring { x = b.x, y = b.y, r = 260, dur = 0.35f, col = "#ffb347" });
+            flash = Mathf.Max(flash, 0.25f);
+            SkillFx("md_burst", b.x, b.y); Snd.Skill(180);
         }
 
-        void MakeWave(float x, float y, int depth, Ball b)
+        // 연속 번개: 살아 있는 군락 하나를 골라 하늘에서 번개, 그 군락의 버섯 모두에 공격력 × BOLT_ATK (군락이 없으면 아무 버섯 하나)
+        void ColonyBolt(Ball b)
         {
-            var sk = st.sk["shock"];
-            waves.Add(new Wave { x = x, y = y, max = (float)NF.shock_r(sk.P), dmg = st.atk * sk.pm * st.skillDmg * Wk(b), depth = depth, b = b, hit = RentSet() });
-            if (depth > maxChain) maxChain = depth;
-            if (depth > 1) AddLabel(Loc.F("연쇄 {0}", depth), x, y - 30, "#ffd0a0", 18 + depth, true);
-            Snd.Skill(260 + depth * 40);
+            Colony col = colonies.Count > 0 ? colonies[U.RandI(0, colonies.Count - 1)] : null;
+            double dmg = st.atk * BOLT_ATK * st.skillDmg * Wk(b);
+            float tx, ty;
+            if (col != null)
+            {
+                tx = col.x; ty = col.y;
+                foreach (var m in col.members.ToList()) if (!m.dead) Damage(m, dmg, b, "skill", src: "md_bolt");
+            }
+            else
+            {
+                var alive = shrooms.Where(x => !x.dead && !x.boss).ToList();
+                if (alive.Count == 0) return;
+                var m = U.Pick(alive); tx = m.x; ty = m.y;
+                Damage(m, dmg, b, "skill", src: "md_bolt");
+            }
+            if (bolts.Count < 40) bolts.Add(new Bolt { pts = new List<Vector2> { new Vector2(tx + 50, ty - 420), new Vector2(tx + 20, ty - 200), new Vector2(tx, ty) }, t = 0.25f, big = true, col = "#fff36b" });
+            SkillFx("md_bolt", tx, ty); Snd.Skill(900);
+        }
+
+        // 회오리: 그 군락에 tornadoDur초 동안 DOT_TICK마다 공격력 × DOT_ATK (같은 군락에 겹치면 시간만 새로)
+        void ColonyDot(Colony col, Ball b)
+        {
+            double dmg = st.atk * DOT_ATK * st.skillDmg * Wk(b);
+            foreach (var d in dots) if (d.col == col) { d.t = (float)st.tornadoDur; d.dmg = Math.Max(d.dmg, dmg); return; }
+            dots.Add(new Dot { col = col, t = (float)st.tornadoDur, tick = DOT_TICK, dmg = dmg, b = b });
+            SkillFx("md_tornado", col.x, col.y); Snd.Skill(420);
+        }
+
+        void UpdateDots(float h)
+        {
+            for (int i = 0, n = dots.Count; i < n; i++)
+            {
+                var d = dots[i];
+                d.t -= h; d.tick -= h;
+                if (d.tick > 0 || d.t < 0) continue;
+                d.tick += DOT_TICK;
+                rings.Add(new Ring { x = d.col.x, y = d.col.y, r = d.col.R * 1.1f, dur = 0.3f, col = "#b8f0e0", quiet = true });
+                foreach (var m in d.col.members) if (!m.dead) Damage(m, d.dmg, d.b, "skill", src: "md_tornado");
+            }
+            dots.RemoveAll(d => d.t <= 0 || d.col.alive <= 0);
         }
 
         // 균사석 낙하: 살아 있는 버섯 하나를 골라 그 자리에 결정이 떨어져 범위 피해
@@ -151,6 +195,7 @@ namespace MoreMush
             }
             for (int wi = 0; wi < waves.Count; wi++) if (waves[wi].t >= 0.4f) { ReturnSet(waves[wi].hit); waves[wi].hit = null; }
             waves.RemoveAll(w => w.t >= 0.4f);
+            UpdateDots(h);
             // 회오리
             for (int ti = 0, tnN = tornados.Count; ti < tnN; ti++)
             {
@@ -264,7 +309,7 @@ namespace MoreMush
             if (phase == "run")
             {
                 if (!DBG.infinite) timeLeft -= h;
-                festOn = st.sk["fest"].on && timeLeft <= 5;
+                festOn = st.fest && timeLeft <= 5;   // 할아버지의 전설
                 if (timeLeft <= 0) { timeLeft = 0; phase = "end"; endT = 1.5f; festOn = false; Snd.Record(); }
             }
             foreach (var m in shrooms)
@@ -416,8 +461,12 @@ namespace MoreMush
             foreach (var k in RECORD_KEYS) { double cur = CurRec(k), old = G.rec.Get(k); if (cur > old) { s.recs.Add((k, old, cur)); G.rec.Set(k, cur); } }
             G.rounds++;
             // 스테이지: 보스 스테이지는 보스를 쓰러뜨려야 넘어간다. 지면 그 스테이지에 머물고 보스 도전이 꺼진다(파밍). G.stage는 내부 판 번호, 보스 판정은 콘텐츠 스테이지
-            if (BossRound && !bossCleared) { G.bossOn = false; G.bossFailed = true; }   // 처음 지면 보스 도전 버튼이 열린다 (Unlock.BOSS)
-            else if (!aborted && (!IsBossStage(ContentStage(G.stage)) || BossRound)) G.stage++;
+            // 끈기(Defs.GritMul): 반복 보스 스테이지에서 못 잡고 끝난 판마다 쌓인다. 진 판 +1 · 파밍 판 +2 · 지금 끝내기 0, 스테이지가 오르면 0
+            bool grit = GritOn(ContentStage(G.stage));
+            if (!grit) G.bossGrit = 0;
+            if (BossRound && !bossCleared) { G.bossOn = false; G.bossFailed = true; if (grit && !aborted) G.bossGrit += 1; }   // 처음 지면 보스 도전 버튼이 열린다 (Unlock.BOSS)
+            else if (!aborted && (!IsBossStage(ContentStage(G.stage)) || BossRound)) { G.stage++; G.bossGrit = 0; }
+            else if (grit && !aborted) G.bossGrit += 2;   // 보스 스테이지 파밍 판
             s.nextStage = G.stage;
             QuestOnRound(harvests, picks, maxCombo);
             s.stored = StoreRound(bossShrooms > 0);

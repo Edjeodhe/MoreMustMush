@@ -43,7 +43,7 @@
 | 이벤트 | data |
 |---|---|
 | `session_start` | `first`, `sessions`, `bal`(세이브가 있으면) |
-| `stage_end` | `stage`, `result`(clear·fail·early_exit), `boss`, `score`, `in`, `out`, `bal`, `etc`, `up`[[Upg_ID, 레벨]], `codex`[버섯 번호], `gem`, `out_gem`, `boss_hp`(보스 fail·early_exit), `sec`(early_exit) |
+| `stage_end` | `stage`, `result`(clear·fail·early_exit), `boss`, `score`, `in`, `out`, `bal`, `etc`, `up`[[Upg_ID, 레벨]], `codex`[버섯 번호], `gem`, `out_gem`, `boss_hp`(보스 fail·early_exit), `sec`(early_exit), `grit`(끈기 점수, 반복 보스 스테이지에서 0보다 클 때) |
 | (스테이지 묶음) | 1~20스테이지는 판마다. 21스테이지부터 보스 구간(21~30 …)의 클리어를 모아 보스 클리어 때 한 줄: `stage`·`result`·`boss`·`bal`·`gem`·`score`는 마지막 판, `stage0`·`score0`은 첫 판, `in`·`out`·`etc`·`out_gem`은 합계, `up`은 나중 레벨, `codex`는 이어 붙임, `c`(판 수). 보스 실패·중도 포기는 그 판만 바로. 엔딩 뒤에는 세션마다 한 줄(`post`:1, `nf` 실패·중도 포기 수). 모으던 것은 앱이 뒤로 갈 때·다음 접속 때 보낸다 |
 | `tree_up` | `id`(ring·stage·unlock_<꼬마>·klv_<꼬마>·awaken_<꼬마>·deco_<장식>), `lv`, `out`, `bal`, 균사석을 쓰면 `out_gem`·`gem` |
 | `tree_build` | `id`(장식), `out`, `bal`, `out_gem`·`gem` |

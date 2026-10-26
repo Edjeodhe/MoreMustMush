@@ -1,0 +1,85 @@
+== seed 1 rows 1500
+first reach: {10: (12, 8.0), 20: (22, 15.0), 30: (32, 23.3), 40: (57, 45.9), 50: (130, 117.2), 60: (142, 129.0), 70: (152, 138.9), 80: (177, 164.4), 90: (229, 220.1), 100: (1061, 1123.7)}
+last: i 1500 disp 100 playMin 1600.5 atk 95930.998505540148 balls 14 gold 1224674606959339 net 96170907023298
+boss fails: {30: 7, 40: 22, 50: 1, 70: 6, 80: 14, 90: 274, 100: 147}
+rounds with buy 330 avg buys 0.096
+inf_ buys 257 first [('167', 70, 'md_grand:3>4;inf_spd:0>1')]
+md_grand [('79', 40, ['md_grand:0>2']), ('120', 40, ['md_grand:2>3']), ('167', 70, ['md_grand:3>4'])]
+ed_legend [('172', 75, ['ed_legend:0>1']), ('219', 80, ['ed_legend:1>3'])]
+ps_tools [('110', 40, ['ps_tools:0>1']), ('134', 52, ['ps_tools:1>2']), ('142', 60, ['ps_tools:2>3']), ('173', 76, ['ps_tools:3>4'])]
+last buy round 174 buys last200 0.0
+net median 11~20 3.21e+04 n 10 old None
+net median 21~30 1.45e+07 n 25 old None
+net median 31~40 3.4e+08 n 73 old None
+net median 41~50 9.89e+09 n 12 old 226000000000.0
+net median 51~60 1.19e+11 n 10 old 1300000000000.0
+net median 61~70 1.83e+11 n 25 old 2780000000000.0
+net median 71~80 2.25e+13 n 52 old 56500000000000.0
+net median 81~90 4.51e+13 n 832 old 173000000000000.0
+net median 91~100 5.78e+13 n 449 old 238000000000000.0
+first boss try disp 10 i 12 king left 0.0 fightT 4.5 maxHp 43.747410907374437
+first boss try disp 20 i 22 cleaner left 0.0 fightT 2.93 maxHp 198.12986787273914
+first boss try disp 30 i 32 angel left 0.661 fightT 23.1 maxHp 19750.657373195059
+first boss try disp 40 i 57 phantom left 0.616 fightT 25.13 maxHp 187158.821556115
+first boss try disp 50 i 130 mover left 0.85 fightT 29.3 maxHp 977009.00307557371
+first boss try disp 60 i 142 king left 0.0 fightT 13.73 maxHp 1129589.6303943063
+first boss try disp 70 i 152 cleaner left 0.435 fightT 29.6 maxHp 4679136.3688823078
+first boss try disp 80 i 177 angel left 0.921 fightT 31.1 maxHp 109989458.49560389
+first boss try disp 90 i 229 phantom left 0.872 fightT 35.1 maxHp 490250202.907641
+first boss try disp 100 i 1061 mover left 0.853 fightT 32.5 maxHp 1289944461.4855883
+== seed 2 rows 1500
+first reach: {10: (12, 8.0), 20: (22, 14.7), 30: (32, 22.9), 40: (52, 41.4), 50: (108, 96.0), 60: (122, 109.7), 70: (132, 119.6), 80: (152, 140.2), 90: (198, 189.8), 100: (955, 1016.8)}
+last: i 1500 disp 100 playMin 1612.2 atk 95245.498624853717 balls 14 gold 226468217144395 net 125922780094103
+boss fails: {30: 5, 40: 17, 50: 2, 70: 4, 80: 12, 90: 249, 100: 182}
+rounds with buy 320 avg buys 0.096
+inf_ buys 248 first [('144', 72, 'inf_spd:0>1')]
+md_grand [('72', 40, ['md_grand:0>2']), ('98', 40, ['md_grand:2>3']), ('142', 70, ['md_grand:3>4'])]
+ed_legend [('147', 75, ['ed_legend:0>1']), ('188', 80, ['ed_legend:1>3'])]
+ps_tools [('97', 40, ['ps_tools:0>1']), ('113', 51, ['ps_tools:1>2']), ('122', 60, ['ps_tools:2>3']), ('148', 76, ['ps_tools:3>4'])]
+last buy round 148 buys last200 0.0
+net median 11~20 9.47e+03 n 10 old None
+net median 21~30 1.17e+07 n 20 old None
+net median 31~40 3.89e+08 n 56 old None
+net median 41~50 8.7e+09 n 14 old 226000000000.0
+net median 51~60 1.19e+11 n 10 old 1300000000000.0
+net median 61~70 1.68e+11 n 20 old 2780000000000.0
+net median 71~80 2.58e+13 n 46 old 56500000000000.0
+net median 81~90 4.65e+13 n 757 old 173000000000000.0
+net median 91~100 5.75e+13 n 555 old 238000000000000.0
+first boss try disp 10 i 12 king left 0.0 fightT 1.03 maxHp 43.747410907374437
+first boss try disp 20 i 22 cleaner left 0.0 fightT 1.27 maxHp 198.12986787273914
+first boss try disp 30 i 32 angel left 0.608 fightT 23.33 maxHp 19750.657373195059
+first boss try disp 40 i 52 phantom left 0.581 fightT 28.3 maxHp 156304.83518843428
+first boss try disp 50 i 108 mover left 0.853 fightT 28.93 maxHp 977009.00307557371
+first boss try disp 60 i 122 king left 0.0 fightT 22.23 maxHp 1129589.6303943063
+first boss try disp 70 i 132 cleaner left 0.69 fightT 29.6 maxHp 4679136.3688823078
+first boss try disp 80 i 152 angel left 0.867 fightT 34.5 maxHp 109989458.49560389
+first boss try disp 90 i 198 phantom left 0.86 fightT 35.4 maxHp 490250202.907641
+first boss try disp 100 i 955 mover left 0.816 fightT 35.9 maxHp 1289944461.4855883
+== seed 3 rows 1500
+first reach: {10: (12, 8.0), 20: (22, 15.0), 30: (32, 23.3), 40: (48, 38.0), 50: (106, 94.5), 60: (118, 106.3), 70: (128, 116.3), 80: (156, 144.8), 90: (199, 191.1)}
+last: i 1500 disp 90 playMin 1612.5 atk 89489.9986314028 balls 14 gold 975991178656027 net 47200243969177
+boss fails: {30: 3, 40: 18, 50: 1, 70: 7, 80: 11, 90: 434}
+rounds with buy 324 avg buys 0.096
+inf_ buys 252 first [('146', 70, 'md_grand:3>4;inf_spd:0>1')]
+md_grand [('72', 40, ['md_grand:0>2']), ('96', 40, ['md_grand:2>3']), ('146', 70, ['md_grand:3>4'])]
+ed_legend [('150', 74, ['ed_legend:0>1']), ('189', 80, ['ed_legend:1>3'])]
+ps_tools [('95', 40, ['ps_tools:0>1']), ('109', 51, ['ps_tools:1>2']), ('119', 61, ['ps_tools:2>3']), ('152', 76, ['ps_tools:3>4'])]
+last buy round 153 buys last200 0.0
+net median 11~20 1.96e+04 n 10 old None
+net median 21~30 1.04e+07 n 16 old None
+net median 31~40 2.51e+08 n 58 old None
+net median 41~50 1e+10 n 12 old 226000000000.0
+net median 51~60 1.05e+11 n 10 old 1300000000000.0
+net median 61~70 1.58e+11 n 28 old 2780000000000.0
+net median 71~80 1.89e+13 n 43 old 56500000000000.0
+net median 81~90 4.14e+13 n 1311 old 173000000000000.0
+first boss try disp 10 i 12 king left 0.0 fightT 2.57 maxHp 43.747410907374437
+first boss try disp 20 i 22 cleaner left 0.0 fightT 3.1 maxHp 198.12986787273914
+first boss try disp 30 i 32 angel left 0.64 fightT 23.2 maxHp 19750.657373195059
+first boss try disp 40 i 48 phantom left 0.484 fightT 27.9 maxHp 156017.07617705685
+first boss try disp 50 i 106 mover left 0.846 fightT 28.93 maxHp 977009.00307557371
+first boss try disp 60 i 118 king left 0.0 fightT 14.9 maxHp 1129589.6303943063
+first boss try disp 70 i 128 cleaner left 0.642 fightT 29.83 maxHp 4679136.3688823078
+first boss try disp 80 i 156 angel left 0.894 fightT 34.73 maxHp 109989458.49560389
+first boss try disp 90 i 199 phantom left 0.908 fightT 32.4 maxHp 490250202.907641

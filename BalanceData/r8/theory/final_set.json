@@ -1,0 +1,33 @@
+{
+ "Upgrade": {
+  "ed_cols": {
+   "Efx_Lv0": 4,
+   "Efx_Lv1": 7,
+   "Efx_Lv2": 9,
+   "Efx_Lv3": 11,
+   "Efx_Lv4": 12
+  }
+ },
+ "Boss": {
+  "king": {
+   "Hp_Mul": 1.0
+  },
+  "cleaner": {
+   "Hp_Mul": 0.2
+  },
+  "angel": {
+   "Hp_Mul": 30
+  },
+  "phantom": {
+   "Hp_Mul": 105
+  },
+  "mover": {
+   "Hp_Mul": 100
+  }
+ },
+ "Const": {
+  "BOSS_LOOP_HP_MUL": {
+   "Value": 110
+  }
+ }
+}

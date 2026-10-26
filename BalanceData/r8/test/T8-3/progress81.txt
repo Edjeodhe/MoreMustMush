@@ -1,0 +1,64 @@
+[11:47:07] start items=snap,eff,m DB MMM_DB_Ver.07.xlsx
+[11:47:20] snap s1
+[11:47:33] snap s2
+[11:47:47] snap s3
+[11:48:01] snap s4
+[11:48:14] snap s5
+[11:48:28] snap s6
+[11:48:28] done snap
+[11:48:28] done eff
+[11:48:29] m s1 boss34 lag0
+[11:48:30] m s1 boss34 lag4
+[11:48:31] m s1 boss34 lag8
+[11:48:32] m s1 boss44 lag0
+[11:48:34] m s1 boss44 lag4
+[11:48:37] m s1 boss44 lag8
+[11:48:42] m s1 boss54 lag0
+[11:48:47] m s1 boss54 lag4
+[11:48:50] m s1 boss54 lag8
+[11:48:51] m s2 boss34 lag0
+[11:48:52] m s2 boss34 lag4
+[11:48:52] m s2 boss34 lag8
+[11:48:54] m s2 boss44 lag0
+[11:48:56] m s2 boss44 lag4
+[11:48:58] m s2 boss44 lag8
+[11:49:03] m s2 boss54 lag0
+[11:49:07] m s2 boss54 lag4
+[11:49:09] m s2 boss54 lag8
+[11:49:10] m s3 boss34 lag0
+[11:49:11] m s3 boss34 lag4
+[11:49:12] m s3 boss34 lag8
+[11:49:14] m s3 boss44 lag0
+[11:49:15] m s3 boss44 lag4
+[11:49:18] m s3 boss44 lag8
+[11:49:22] m s3 boss54 lag0
+[11:49:26] m s3 boss54 lag4
+[11:49:28] m s3 boss54 lag8
+[11:49:29] m s4 boss34 lag0
+[11:49:30] m s4 boss34 lag4
+[11:49:31] m s4 boss34 lag8
+[11:49:32] m s4 boss44 lag0
+[11:49:34] m s4 boss44 lag4
+[11:49:37] m s4 boss44 lag8
+[11:49:42] m s4 boss54 lag0
+[11:49:46] m s4 boss54 lag4
+[11:49:48] m s4 boss54 lag8
+[11:49:49] m s5 boss34 lag0
+[11:49:50] m s5 boss34 lag4
+[11:49:50] m s5 boss34 lag8
+[11:49:52] m s5 boss44 lag0
+[11:49:54] m s5 boss44 lag4
+[11:49:56] m s5 boss44 lag8
+[11:50:00] m s5 boss54 lag0
+[11:50:04] m s5 boss54 lag4
+[11:50:07] m s5 boss54 lag8
+[11:50:08] m s6 boss34 lag0
+[11:50:09] m s6 boss34 lag4
+[11:50:10] m s6 boss34 lag8
+[11:50:11] m s6 boss44 lag0
+[11:50:13] m s6 boss44 lag4
+[11:50:15] m s6 boss44 lag8
+[11:50:21] m s6 boss54 lag0
+[11:50:25] m s6 boss54 lag4
+[11:50:28] m s6 boss54 lag8
+[11:50:28] done m

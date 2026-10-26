@@ -1,0 +1,11 @@
+15:40:57 i 0 stage 1 play 0.7
+15:40:57 i 10 stage 11 play 8.3
+15:40:58 i 20 stage 21 play 18.0
+15:41:00 i 30 stage 31 play 28.6
+15:41:06 i 40 stage 41 play 40.0
+15:41:12 i 50 stage 51 play 51.6
+15:41:21 i 60 stage 61 play 63.2
+15:41:30 i 70 stage 71 play 74.9
+15:41:42 i 80 stage 81 play 86.6
+15:41:54 i 90 stage 91 play 98.7
+15:42:07 i 100 stage 101 play 110.9
