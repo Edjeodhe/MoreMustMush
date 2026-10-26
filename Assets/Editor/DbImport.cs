@@ -71,6 +71,23 @@ namespace MoreMush.EditorTools
             return msg;
         }
 
+        // 지금 db.json의 _source (파일이 없거나 읽지 못하면 null). 엑셀에서 만든 db.json은 "MMM_DB_Ver.NN.xlsx" 그대로다
+        public static string CurrentSource()
+        {
+            if (!File.Exists(OutPath)) return null;
+            try
+            {
+                using (var r = new JsonTextReader(new StreamReader(OutPath)))
+                    while (r.Read())
+                        if (r.TokenType == JsonToken.PropertyName && (string)r.Value == "_source" && r.Depth == 1) return r.ReadAsString();
+            }
+            catch (Exception e) { Debug.LogWarning($"[DB] {OutPath}의 _source를 읽지 못했어요: {e.Message}"); }
+            return null;
+        }
+
+        // 엑셀이 아니라 도구(밸런스 스크립트 등)로 만든 db.json인가: _source가 엑셀 파일 이름 하나가 아니다
+        public static bool MadeByTool(string source) => File.Exists(OutPath) && (source == null || !VerName.IsMatch(source));
+
         static List<Dictionary<string, object>> Table(string sheet, List<string[]> rows, List<string> errors)
         {
             var list = new List<Dictionary<string, object>>();
@@ -105,13 +122,26 @@ namespace MoreMush.EditorTools
         }
     }
 
-    // 엑셀 파일이 저장되면 db.json을 다시 만든다
+    // 엑셀 파일이 저장되면 db.json을 다시 만든다.
+    // 단, 지금 db.json이 도구로 만든 것(_source가 엑셀 파일 이름이 아님)이면 덮지 않고 경고만 띄운다:
+    // 브랜치를 바꾸거나 받을 때 엑셀이 다시 임포트되면 엑셀보다 앞선 db.json이 옛 엑셀 값으로 덮여 Defs가 죽었다 (2026-10-26 KHD).
+    // 엑셀 값으로 덮어야 하면 메뉴 MoreMush/DB/가져오기를 직접 실행한다
     public class DbImportWatcher : AssetPostprocessor
     {
         static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)
         {
             if (!imported.Any(p => p.StartsWith(DbImport.DbDir + "/") && p.EndsWith(".xlsx") && !Path.GetFileName(p).StartsWith("~$"))) return;
-            EditorApplication.delayCall += () => DbImport.Import();
+            EditorApplication.delayCall += () =>
+            {
+                string src = DbImport.CurrentSource();
+                if (DbImport.MadeByTool(src))
+                {
+                    Debug.LogWarning($"[DB] 엑셀이 다시 임포트됐지만 db.json을 덮지 않았어요: 지금 db.json은 엑셀이 아니라 도구로 만든 것이에요 (_source: {src ?? "없음"}).\n" +
+                        $"엑셀({Path.GetFileName(DbImport.LatestDb() ?? "없음")}) 값으로 바꾸려면 메뉴 MoreMush/DB/가져오기를 실행하세요");
+                    return;
+                }
+                DbImport.Import();
+            };
         }
     }
 
