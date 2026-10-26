@@ -212,7 +212,7 @@ namespace MoreMush
         {
             readonly DecoWindow w;
             readonly GameObject go; readonly Image bg, thumb; readonly GameObject badge;
-            readonly TMP_Text name, stars, kind, effect, mainLabel, subLabel;
+            readonly TMP_Text name, stars, kind, effect, mainLabel, subLabel, badgeLabel;
             readonly Button main, sub;
             Deco d;
 
@@ -223,6 +223,7 @@ namespace MoreMush
                 bg = t.GetComponent<Image>();
                 thumb = SceneUI.Find(t, "Thumb")?.GetComponent<Image>();
                 badge = SceneUI.Find(t, "Badge")?.gameObject;
+                badgeLabel = SceneUI.TextIn(SceneUI.Find(t, "Badge"));
                 name = SceneUI.TextIn(SceneUI.Find(t, "Name"));
                 stars = SceneUI.TextIn(SceneUI.Find(t, "Stars"));
                 kind = SceneUI.TextIn(SceneUI.Find(t, "Kind"));
@@ -246,6 +247,7 @@ namespace MoreMush
                     thumb.color = own ? ON : new Color(0.25f, 0.22f, 0.2f, 0.55f);   // 아직 없으면 실루엣
                 }
                 UIUtil.Show(badge, placed);
+                UIUtil.SetText(badgeLabel, Loc.T("배치 중"));   // 프리팹에 박힌 한국어 대신 언어에 맞게
                 UIUtil.SetText(name, d.n);
                 UIUtil.SetText(stars, own ? new string('★', DecoStar(d.id)) + "<color=#d9c9b0>" + new string('★', DECO_STAR_MAX - DecoStar(d.id)) + "</color>" : DECO_GRADES[d.grade].n);
                 UIUtil.SetText(kind, (d.hang ? Loc.T("걸이형") : Loc.T("설치형")) + " · " + Loc.F("{0} 세트", SPC[d.of].n));
