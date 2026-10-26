@@ -34,7 +34,7 @@ namespace MoreMush
     public static partial class Game
     {
         public static SaveData G;
-        public static class DBG { public static bool open, infinite, allSeeds, allNodes; public static int speed = 1; }   // allNodes: 개발자 치트 — 업그레이드 노드 선행 조건 무시
+        public static class DBG { public static bool open, infinite, allSeeds, allNodes, allDecos; public static int speed = 1; }   // allNodes: 개발자 치트 — 업그레이드 노드 선행 조건 무시 · allDecos: 장식 칸을 장식 수만큼
 
         public static void SaveGame() => SaveIO.Save(G);
 

@@ -42,6 +42,7 @@ namespace MoreMush
             new Cheat(Key.S, "dbg-spd", "cycle", "라운드 배속 1→2→4→8"),
             new Cheat(Key.I, "dbg-inf", null, "라운드 시간 무한 켜기/끄기"),
             new Cheat(Key.T, "dbg-grow", null, "세계수 한 단계 성장 (비용 없이 진화)"),
+            new Cheat(Key.D, "dbg-decos", null, "장식 모두 얻어 나무에 배치 켜기/끄기"),
             // 정령은 하나씩 키운다 (다른 정령은 1단계 모습 그대로 두고 비교할 수 있게)
             new Cheat(Key.C, "dbg-kid", null, "키울 정령 고르기 (다음 정령)"),
             new Cheat(Key.V, "dbg-kidup", "1", "고른 정령 별 +1 (없으면 합류부터)"),
@@ -256,6 +257,34 @@ namespace MoreMush
                     G.farm.klv[id] = d > 0 ? System.Math.Max(KLv(id), 10 * a1) : System.Math.Min(KLv(id), KLV.Cap(a1));
                     DecoSlotsEnsure();
                     Saved(KidText(kid));
+                    break;
+                }
+                case "dbg-decos":
+                {
+                    // 켜기: 장식 칸을 장식 수만큼 늘리고, 없는 장식은 ★1로 얻어 전부 배치 (설치형은 짝수 칸·걸이형은 홀수 칸)
+                    // 끄기: 칸 수를 원래대로 되돌리고 넘치는 칸의 장식만 뺀다 (얻은 장식은 그대로)
+                    DBG.allDecos = !DBG.allDecos;
+                    BagSettle();
+                    var f = G.farm;
+                    if (DBG.allDecos)
+                    {
+                        foreach (var d in DECOS) if (!DecoOwned(d.id)) f.decoStar[d.id] = 1;
+                        DecoSlotsEnsure();
+                        var hang = new System.Collections.Generic.Queue<string>(System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(DECOS, d => d.hang), d => d.id));
+                        var stand = new System.Collections.Generic.Queue<string>(System.Linq.Enumerable.Select(System.Linq.Enumerable.Where(DECOS, d => !d.hang), d => d.id));
+                        for (int i = 0; i < f.decoSlots.Count; i++)
+                        {
+                            var q = DecoSlotHang(i) ? hang : stand;
+                            f.decoSlots[i] = q.Count > 0 ? q.Dequeue() : null;
+                        }
+                        Saved($"장식 {DECOS.Length}종 모두 배치 (칸 {DecoSlotCount()})");
+                    }
+                    else
+                    {
+                        int n = DecoSlotCount();
+                        if (f.decoSlots.Count > n) f.decoSlots.RemoveRange(n, f.decoSlots.Count - n);
+                        Saved($"장식 모두 배치 끔 (칸 {n})");
+                    }
                     break;
                 }
                 case "dbg-nodes": DBG.allNodes = !DBG.allNodes; Saved(DBG.allNodes ? "업그레이드 노드 모두 해금 (선행 조건 무시)" : "업그레이드 노드 모두 해금 끔"); break;

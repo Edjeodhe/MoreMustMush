@@ -38,7 +38,8 @@ namespace MoreMush
         public static bool KidSetDone(string kid) => DECOS.Where(d => d.of == kid).All(d => DecoPlaced(d.id));
 
         // 장식 슬롯: 단계별 수 + 꼬마 Lv 합계 보상. 짝수 번째는 설치형(뿌리 주변), 홀수 번째는 걸이형(가지·수관)
-        public static int DecoSlotCount() => WT.decoSlots[Stage() - 1] + KLvSteps();
+        // 개발자 치트(DBG.allDecos)를 켜면 장식 전부를 놓을 수 있게 장식 수만큼 (설치형·걸이형이 12개씩이라 번갈아 딱 맞는다)
+        public static int DecoSlotCount() => Math.Max(WT.decoSlots[Stage() - 1] + KLvSteps(), DBG.allDecos ? DECOS.Length : 0);
         public static bool DecoSlotHang(int i) => i % 2 == 1;
         public static void DecoSlotsEnsure()
         {
