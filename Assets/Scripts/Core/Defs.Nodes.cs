@@ -56,6 +56,14 @@ namespace MoreMush
             public static double gm_herb(int L) => V("gm_herb", L);              // 수확 보따리 배율
             public static double gm_gourmet(int L) => V("gm_gourmet", L);           // 나무버섯 균사석 배율
             public static double gm_farm(int L) => V("gm_farm", L);
+            // 싱크 노드 (최대 레벨 없음, DB Efx_MaxLv = 0, 줄 키 = 노드 키): 레벨마다 (Efx_Lv1 − 1)씩 '더한다' (덧셈: 곱이면 레벨 100+에서 수천 배가 된다, 사용자 2026-10-23)
+            public static double inf_atk(int L) => Inf("inf_atk", L);             // 공격력 ×(1 + (Efx_Lv1 − 1)L) (끝없는 투지)
+            public static double inf_gold(int L) => Inf("inf_gold", L);           // 정산 골드 ×(1 + 0.04L) (끝없는 풍년, 점수→골드에만)
+            public static double inf_sdmg(int L) => Inf("inf_sdmg", L);           // 스킬 피해 합 +(Efx_Lv1 − 1)L (끝없는 위력)
+            public static double inf_srate(int L) => Inf("inf_srate", L);         // 스킬 발동률 ×(1 + (Efx_Lv1 − 1)L) (끝없는 기세)
+            public static double inf_spd(int L) => Inf("inf_spd", L);             // 수확기 속도 합 +(Efx_Lv1 − 1)L (끝없는 질주)
+            public static int inf_ball(int L) => (int)Math.Round(Inf("inf_ball", L)) - 1;   // 영구 수확기 +L개 (끝없는 동료, Efx_Lv1 2)
+            public static double Inf(string id, int L) => L <= 0 || !NODE.TryGetValue(id, out var n) ? 1 : 1 + (n.infMul - 1) * Math.Min(L, n.infCap);
             // 스킬 범위 공식 (예전 스킬 노드). 지금 트리에서는 쓰지 않는다
             public static double burst_r(int P) => 80 + 25 * P;
             public static double tornado_h(int P) => 50 + 22 * P;
@@ -181,7 +189,7 @@ namespace MoreMush
                     if (skill != key) throw new InvalidOperationException($"[DB] Upgrade {key}: 스킬 노드는 Upg_Key와 Skill이 같아야 해요 ({skill})");
                     eff = SkillNodeEffect(s);
                 }
-                else if (nodeEff.TryGetValue(line, out var fmt)) { string k = key; eff = L => fmt(V(k, L)); }
+                else if (nodeEff.TryGetValue(line, out var fmt)) { string k = key; if (inf) eff = L => fmt(NF.Inf(k, L)); else eff = L => fmt(V(k, L)); }
                 else throw new InvalidOperationException($"[DB] Upgrade {key}: 코드에 효과가 없는 줄 {line}이에요 (새 효과는 코드가 필요해요, Defs.Nodes.cs NodeEffects)");
                 if (inf)
                 {
@@ -347,6 +355,13 @@ namespace MoreMush
             E["ps_combo"] = v => Loc.F("콤보 계수 {0}", P(v));
             E["ps_tools"] = v => Loc.F("수확기 장착 칸 {0}개", 1 + v);
             // ── 세계수 (가지 wt, 트리 밖)
+            // ── 싱크 (v = 1 + (Efx_Lv1 − 1)L). 위력·질주는 합에 더하므로 실제 효과(%p)로 보인다
+            E["inf_atk"] = v => Loc.F("공격력 ×{0}", F(v));
+            E["inf_gold"] = v => Loc.F("정산 골드 ×{0}", F(v));
+            E["inf_sdmg"] = v => Loc.F("스킬 피해 +{0}%p", F((v - 1) * 100));
+            E["inf_srate"] = v => Loc.F("스킬 발동률 ×{0}", F(v));
+            E["inf_spd"] = v => Loc.F("수확기 속도 +{0}%p", F((v - 1) * 100));
+            E["inf_ball"] = v => Loc.F("영구 수확기 +{0}개", U.JsRound(v - 1));
             E["md_chef"] = v => Loc.F("꼬마 공방 제작 시간 ×{0}", F(v));
             E["gm_spore"] = v => Loc.F("나무버섯을 딸 때 {0} 확률로 균사석 +2", U.Pct(v));
             E["gm_gourmet"] = v => Loc.F("나무버섯 균사석 ×{0}", F(v));

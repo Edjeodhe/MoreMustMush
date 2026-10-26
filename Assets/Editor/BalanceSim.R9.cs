@@ -69,6 +69,26 @@ namespace MoreMush.EditorTools
             return res;
         }
 
+        // 균사석 노드 구매(봇): 일괄 강화(BulkBuy)는 균사석 레벨을 건너뛰므로, 사람이 손으로 사는 것처럼 살 수 있는 균사석 레벨을 가장 싼 것부터 산다 (r9m)
+        public static bool BOT_GEMS = false;
+        static void BotBuyGems()
+        {
+            for (int guard = 0; guard < 200; guard++)
+            {
+                Node best = null; double bc = double.PositiveInfinity;
+                foreach (var n in NODES)
+                {
+                    if (!(n.br == "ed" || n.br == "md" || n.br == "ps")) continue;
+                    var s = NodeState(n); if (s != "avail" && s != "owned") continue;
+                    if (!ParentOk(n)) continue;
+                    var c = NodeCost(n, Lv(n.id));
+                    if (c.gem <= 0 || !CanAfford(c)) continue;
+                    if (c.gem < bc) { bc = c.gem; best = n; }
+                }
+                if (best == null || !BuyNode(best, false)) break;
+            }
+        }
+
         // lagBosses: 표시 보스 번호(예 60,70..100) 목록, lag: 몇 판 전 상태, lagReps: 반복
         public static string ProgressionR9(int seed, float skill, int maxStage, int bossEnd, int maxRounds, string outDir, string tag, int lag, int lagReps, int[] lagBosses)
         {
@@ -87,7 +107,7 @@ namespace MoreMush.EditorTools
                 var ph = new PhaseLog();
                 var sb = new StringBuilder();
                 botFarm = 0; botBoughtSinceFail = false;
-                sb.AppendLine($"조건: 시드 {seed} · SKILL {skill} · 보스 {(BOSS_GATE ? "관문" : "실제 판(봇 조준)")} · 지역 이동 {(GAME_ZONE ? "게임" : "봇")} · 프리셋 {TUNE.id} · TUT {TUT_ROUNDS} · DB {Db.Data._source} · lag {lag}");
+                sb.AppendLine($"조건: 시드 {seed} · SKILL {skill} · 보스 {(BOSS_GATE ? "관문" : "실제 판(봇 조준)")} (BOSS_GATE {BOSS_GATE}) · 지역 이동 {(GAME_ZONE ? "게임" : "봇")} (GAME_ZONE {GAME_ZONE}) · 프리셋 {TUNE.id} · 튜토리얼 판 TUT_ROUNDS {TUT_ROUNDS} · 균사석 구매 {(BOT_GEMS ? "봇이 산다(가장 싼 것부터)" : "안 함")} · DB {Db.Data._source} · lag {lag}");
                 for (int i = 0; i < maxRounds; i++)
                 {
                     if (StageNow() > maxStage) { sb.AppendLine("멈춤: 스테이지 상한"); break; }
@@ -99,6 +119,7 @@ namespace MoreMush.EditorTools
                     int before = GoldLevels();
                     var nodesBefore = new Dictionary<string, int>(G.nodes);
                     BulkBuy(new[] { "ed", "md", "ps" }, 0, false);
+                    if (BOT_GEMS) BotBuyGems();
                     G.play += r.duration + OVERHEAD_SEC;
                     int bought = GoldLevels() - before;
                     if (bought > 0) botBoughtSinceFail = true;

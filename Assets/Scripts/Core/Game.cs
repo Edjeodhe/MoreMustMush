@@ -181,10 +181,11 @@ namespace MoreMush
                 Node best = null; double bc = double.PositiveInfinity;
                 foreach (var n in NODES)
                 {
-                    if (!brs.Contains(n.br) || n.gem) continue;
+                    if (!brs.Contains(n.br)) continue;
                     var s = NodeState(n); if (s != "avail" && s != "owned") continue;
                     if (!ParentOk(n)) continue;   // 산 노드라도 선행(부모·최대 레벨 선행)이 안 맞으면 더 못 올린다
-                    double c = NodeCost(n, Lv(n.id)).gold; if (c < bc) { bc = c; best = n; }
+                    var nc = NodeCost(n, Lv(n.id)); if (nc.gem > 0) continue;   // 다음 레벨이 균사석이면 건너뛴다 (사냥 준비는 1레벨만 골드)
+                    double c = nc.gold; if (c < bc) { bc = c; best = n; }
                 }
                 if (best == null || G.gold - bc < reserve) break;
                 G.gold -= bc; G.nodes[best.id] = Lv(best.id) + 1; levels++; spent += bc;
@@ -203,7 +204,7 @@ namespace MoreMush
 
         // ===== 수확기·날씨 =====
         // 장착 칸 = 영구 핀볼 수. 수확기는 종류마다 한 칸씩, 남은 칸은 기본 수확기로 채운다
-        public static int HvSlots() => 1 + (int)Math.Round(LineV("ps_tools"));   // 장인의 도구 (균사석)
+        public static int HvSlots() => 1 + (int)Math.Round(LineV("ps_tools")) + NF.inf_ball(Lv("inf_ball"));   // 장인의 도구 (균사석)
         public static List<string> OnHvs() => HARVESTERS.Where(h => HvOn(h.id)).Select(h => h.id).ToList();
         // 켠 수확기가 장착 칸보다 많으면 라운드를 시작할 수 없다
         public static bool HvOver() => OnHvs().Count > HvSlots();
@@ -245,8 +246,8 @@ namespace MoreMush
             st.zoneMul = ZoneMul(st.theme.id, cst);
             // 공격력 = 날 갈기(기본 1 포함) × (1 + 퍼센트 보너스 합)
             double atkFlat = LineV("ps_blade") + (SetDone("poison") ? 3 : 0);
-            st.atk = atkFlat * (1 + 0.1 + ab["atk"] + tb.atk);
-            double spd = (1 + LineV("ps_wind") + ab["spd"] + tb.spd) * (wId == "storm" ? 0.8 : 1);
+            st.atk = atkFlat * (1 + 0.1 + ab["atk"] + tb.atk) * NF.inf_atk(Lv("inf_atk"));
+            double spd = (1 + LineV("ps_wind") + ab["spd"] + tb.spd + (NF.inf_spd(Lv("inf_spd")) - 1)) * (wId == "storm" ? 0.8 : 1);
             st.spdMul = spd;
             st.launch = TUNE.launch * spd;
             st.minSpd = TUNE.min * spd;
@@ -288,12 +289,12 @@ namespace MoreMush
             st.wanderMul = 1.5 * (SetDone("cordy") ? 1.5 : 1);
             st.poisonMul = SetDone("amanita") ? 1.3 : 1;
             st.jellySlow = SetDone("jelly") ? 0.75 : 0.55;
-            st.skillDmg = 1 + (SetDone("herb") ? 0.25 : 0) + ab["skillDmg"];
+            st.skillDmg = 1 + (SetDone("herb") ? 0.25 : 0) + ab["skillDmg"] + (NF.inf_sdmg(Lv("inf_sdmg")) - 1);
             st.sporeP = 0.25 * (wId == "wind" ? 2 : 1);
             st.debuffDur = 3 * (wId == "wind" ? 2 : 1);
             st.goldBonus = 1 + GoldenSetBonus();
             st.harvestMul *= INCOME_MUL;
-            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab) + tb.gold) * WtGoldMul();
+            st.goldMul = st.goldBonus * SCORE_GOLD * (1 + SettleBonus(ab) + tb.gold) * NF.inf_gold(Lv("inf_gold")) * WtGoldMul();
             st.giantP = 0;   // 거대 버섯 삭제 (A안)
             // 회전 칼날: 수확기 둘레를 도는 꼬마 수확기 n개 = 칼날이 n배 자주 벤다. 피해 = 공격력 × (10% + 회전 회오리)
             int kids = (int)Math.Round(LineV("ps_kid"));
@@ -310,8 +311,9 @@ namespace MoreMush
             st.springDur = LineV("md_spring"); st.pierceDur = LineV("md_pierce"); st.homingDur = LineV("md_homing"); st.healDur = LineV("md_heal");
             st.splitDur = LineV("md_split"); st.feverDur = LineV("md_fever"); st.cloneDur = LineV("ps_clone"); st.wisdomP = LineV("md_wisdom");
             st.cloneMax = Math.Max(1, (int)Math.Round(LineV("ps_mirror")));
-            st.poisonP = LineV("md_poison"); st.burstP = LineV("md_burst"); st.boltP = LineV("md_bolt");
-            st.tornadoP = LineV("md_tornado"); st.tornadoDur = 2 + LineLv("md_tornado");   // 3·4·5초
+            double srate = NF.inf_srate(Lv("inf_srate"));   // 끝없는 기세: 수확기 스킬 발동률 배율
+            st.poisonP = LineV("md_poison") * srate; st.burstP = LineV("md_burst") * srate; st.boltP = LineV("md_bolt") * srate;
+            st.tornadoP = LineV("md_tornado") * srate; st.tornadoDur = 2 + LineLv("md_tornado");   // 3·4·5초
             st.moltP = LineV("md_molt"); st.legendP = LineV("md_grand"); st.flexP = LineV("ed_flex");
             st.fest = LineV("ed_legend") > 0;
             st.festMul = 1 + LineV("ed_legend");

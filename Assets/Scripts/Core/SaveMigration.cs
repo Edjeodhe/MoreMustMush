@@ -260,12 +260,6 @@ namespace MoreMush
                 }
                 g.nodes.Remove(kv.Key);
             }
-            foreach (var id in new[] { "inf_atk", "inf_gold" })
-            {
-                if (!g.nodes.TryGetValue(id, out int L)) continue;
-                for (int i = 0; i < Math.Min(L, 20000) && !double.IsInfinity(gold); i++) gold += Math.Ceiling(RETIRED_V11_SINK0 * Math.Pow(RETIRED_V11_SINK_K, i) * Defs.COST_MUL);
-                g.nodes.Remove(id);
-            }
             if (g.nodes.TryGetValue(Defs.ROOT_NODE, out int p) && p > 1)
             {
                 for (int i = 1; i < Math.Min(p, RETIRED_V11_POWER.Length); i++) gold += Math.Ceiling(RETIRED_V11_POWER[i] * Defs.COST_MUL);

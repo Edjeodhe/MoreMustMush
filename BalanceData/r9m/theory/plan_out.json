@@ -1,0 +1,1076 @@
+{
+ "plan": [
+  {
+   "key": "ed_hunt1",
+   "line": "ed_hunt",
+   "L": 1,
+   "t": 2.0,
+   "price": 19.0,
+   "income": 29.435
+  },
+  {
+   "key": "ps_blade1",
+   "line": "ps_blade",
+   "L": 1,
+   "t": 3.0,
+   "price": 24.0,
+   "income": 42.680749999999996
+  },
+  {
+   "key": "md_spring1",
+   "line": "md_spring",
+   "L": 1,
+   "t": 3.0,
+   "price": 24.0,
+   "income": 42.680749999999996
+  },
+  {
+   "key": "ed_haggle1",
+   "line": "ed_haggle",
+   "L": 1,
+   "t": 3.0,
+   "price": 25.0,
+   "income": 42.680749999999996
+  },
+  {
+   "key": "ed_hunt1",
+   "line": "ed_hunt",
+   "L": 2,
+   "t": 4.0,
+   "price": 30.0,
+   "income": 61.88708749999999
+  },
+  {
+   "key": "ps_crit1",
+   "line": "ps_crit",
+   "L": 1,
+   "t": 4.4,
+   "price": 31.0,
+   "income": 61.88708749999999
+  },
+  {
+   "key": "ps_blade2",
+   "line": "ps_blade",
+   "L": 2,
+   "t": 4.6,
+   "price": 32.0,
+   "income": 61.88708749999999
+  },
+  {
+   "key": "ps_crit2",
+   "line": "ps_crit",
+   "L": 2,
+   "t": 4.8,
+   "price": 35.0,
+   "income": 61.88708749999999
+  },
+  {
+   "key": "ps_wind1",
+   "line": "ps_wind",
+   "L": 1,
+   "t": 5.0,
+   "price": 38.0,
+   "income": 89.73627687499999
+  },
+  {
+   "key": "ps_stamina1",
+   "line": "ps_stamina",
+   "L": 1,
+   "t": 5.0,
+   "price": 39.0,
+   "income": 89.73627687499999
+  },
+  {
+   "key": "ps_size1",
+   "line": "ps_size",
+   "L": 1,
+   "t": 5.5,
+   "price": 40.0,
+   "income": 89.73627687499999
+  },
+  {
+   "key": "md_pierce1",
+   "line": "md_pierce",
+   "L": 1,
+   "t": 6.5,
+   "price": 49.0,
+   "income": 130.11760146874997
+  },
+  {
+   "key": "md_spring2",
+   "line": "md_spring",
+   "L": 2,
+   "t": 6.65,
+   "price": 51.0,
+   "income": 130.11760146874997
+  },
+  {
+   "key": "md_env1",
+   "line": "md_env",
+   "L": 1,
+   "t": 7.5,
+   "price": 75.0,
+   "income": 188.67052212968744
+  },
+  {
+   "key": "ed_hunt1",
+   "line": "ed_hunt",
+   "L": 3,
+   "t": 8.0,
+   "price": 94.0,
+   "income": 273.5722570880468
+  },
+  {
+   "key": "md_poison1",
+   "line": "md_poison",
+   "L": 1,
+   "t": 8.5,
+   "price": 97.0,
+   "income": 273.5722570880468
+  },
+  {
+   "key": "ps_stamina2",
+   "line": "ps_stamina",
+   "L": 2,
+   "t": 9.0,
+   "price": 100.0,
+   "income": 396.67977277766784
+  },
+  {
+   "key": "ed_view1",
+   "line": "ed_view",
+   "L": 1,
+   "t": 9.5,
+   "price": 100.0,
+   "income": 396.67977277766784
+  },
+  {
+   "key": "ps_combo1",
+   "line": "ps_combo",
+   "L": 1,
+   "t": 10.0,
+   "price": 150.0,
+   "income": 575.1856705276183
+  },
+  {
+   "key": "ps_hug1",
+   "line": "ps_hug",
+   "L": 1,
+   "t": 10.5,
+   "price": 150.0,
+   "income": 575.1856705276183
+  },
+  {
+   "key": "md_spring3",
+   "line": "md_spring",
+   "L": 3,
+   "t": 11.0,
+   "price": 180.0,
+   "income": 718.9820881595228
+  },
+  {
+   "key": "md_fever1",
+   "line": "md_fever",
+   "L": 1,
+   "t": 11.5,
+   "price": 180.0,
+   "income": 718.9820881595228
+  },
+  {
+   "key": "ps_wind2",
+   "line": "ps_wind",
+   "L": 2,
+   "t": 11.6,
+   "price": 190.0,
+   "income": 718.9820881595228
+  },
+  {
+   "key": "ps_size2",
+   "line": "ps_size",
+   "L": 2,
+   "t": 11.8,
+   "price": 200.0,
+   "income": 718.9820881595228
+  },
+  {
+   "key": "ed_hand11",
+   "line": "ed_hand1",
+   "L": 1,
+   "t": 12.0,
+   "price": 220.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_size3",
+   "line": "ps_size",
+   "L": 3,
+   "t": 12.0,
+   "price": 230.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_hug2",
+   "line": "ps_hug",
+   "L": 2,
+   "t": 12.2,
+   "price": 240.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_combo2",
+   "line": "ps_combo",
+   "L": 2,
+   "t": 12.2,
+   "price": 250.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_wind3",
+   "line": "ps_wind",
+   "L": 3,
+   "t": 12.2,
+   "price": 250.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_clone1",
+   "line": "ps_clone",
+   "L": 1,
+   "t": 12.4,
+   "price": 260.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_combo3",
+   "line": "ps_combo",
+   "L": 3,
+   "t": 12.4,
+   "price": 280.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ed_more1",
+   "line": "ed_more",
+   "L": 1,
+   "t": 12.5,
+   "price": 280.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_hug3",
+   "line": "ps_hug",
+   "L": 3,
+   "t": 12.6,
+   "price": 280.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_combo4",
+   "line": "ps_combo",
+   "L": 4,
+   "t": 12.6,
+   "price": 320.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_combo5",
+   "line": "ps_combo",
+   "L": 5,
+   "t": 12.8,
+   "price": 370.0,
+   "income": 898.7276101994036
+  },
+  {
+   "key": "ps_kid1",
+   "line": "ps_kid",
+   "L": 1,
+   "t": 13.0,
+   "price": 310.0,
+   "income": 1123.4095127492544
+  },
+  {
+   "key": "ps_tools",
+   "line": "ps_tools",
+   "L": 1,
+   "t": 13.0,
+   "price": 320.0,
+   "income": 1123.4095127492544
+  },
+  {
+   "key": "md_poison2",
+   "line": "md_poison",
+   "L": 2,
+   "t": 13.5,
+   "price": 330.0,
+   "income": 1123.4095127492544
+  },
+  {
+   "key": "ed_epic1",
+   "line": "ed_epic",
+   "L": 1,
+   "t": 14.0,
+   "price": 350.0,
+   "income": 1404.261890936568
+  },
+  {
+   "key": "ed_hand12",
+   "line": "ed_hand1",
+   "L": 2,
+   "t": 14.5,
+   "price": 360.0,
+   "income": 1404.261890936568
+  },
+  {
+   "key": "ed_epic1",
+   "line": "ed_epic",
+   "L": 2,
+   "t": 15.0,
+   "price": 420.0,
+   "income": 1755.3273636707102
+  },
+  {
+   "key": "ed_haggle2",
+   "line": "ed_haggle",
+   "L": 2,
+   "t": 15.0,
+   "price": 430.0,
+   "income": 1755.3273636707102
+  },
+  {
+   "key": "ed_epic1",
+   "line": "ed_epic",
+   "L": 3,
+   "t": 15.5,
+   "price": 480.0,
+   "income": 1755.3273636707102
+  },
+  {
+   "key": "ps_crit3",
+   "line": "ps_crit",
+   "L": 3,
+   "t": 17.6,
+   "price": 1400.0,
+   "income": 2742.6990057354847
+  },
+  {
+   "key": "ps_kid2",
+   "line": "ps_kid",
+   "L": 2,
+   "t": 17.8,
+   "price": 1500.0,
+   "income": 2742.6990057354847
+  },
+  {
+   "key": "md_pierce2",
+   "line": "md_pierce",
+   "L": 2,
+   "t": 18.0,
+   "price": 1500.0,
+   "income": 3428.373757169356
+  },
+  {
+   "key": "ps_blade3",
+   "line": "ps_blade",
+   "L": 3,
+   "t": 18.0,
+   "price": 1600.0,
+   "income": 3428.373757169356
+  },
+  {
+   "key": "md_pierce3",
+   "line": "md_pierce",
+   "L": 3,
+   "t": 18.5,
+   "price": 1800.0,
+   "income": 3428.373757169356
+  },
+  {
+   "key": "md_homing1",
+   "line": "md_homing",
+   "L": 1,
+   "t": 19.0,
+   "price": 2100.0,
+   "income": 4285.467196461695
+  },
+  {
+   "key": "ps_stamina3",
+   "line": "ps_stamina",
+   "L": 3,
+   "t": 19.0,
+   "price": 2100.0,
+   "income": 4285.467196461695
+  },
+  {
+   "key": "md_bolt1",
+   "line": "md_bolt",
+   "L": 1,
+   "t": 19.5,
+   "price": 2400.0,
+   "income": 4285.467196461695
+  },
+  {
+   "key": "md_env2",
+   "line": "md_env",
+   "L": 2,
+   "t": 21.5,
+   "price": 15000.0,
+   "income": 26784.16997788559
+  },
+  {
+   "key": "md_poison3",
+   "line": "md_poison",
+   "L": 3,
+   "t": 22.0,
+   "price": 22000.0,
+   "income": 33480.21247235699
+  },
+  {
+   "key": "ed_haggle3",
+   "line": "ed_haggle",
+   "L": 3,
+   "t": 22.0,
+   "price": 23000.0,
+   "income": 33480.21247235699
+  },
+  {
+   "key": "md_molt1",
+   "line": "md_molt",
+   "L": 1,
+   "t": 22.5,
+   "price": 27000.0,
+   "income": 33480.21247235699
+  },
+  {
+   "key": "ed_regen1",
+   "line": "ed_regen",
+   "L": 1,
+   "t": 23.67,
+   "price": 43000.0,
+   "income": 41850.26559044623
+  },
+  {
+   "key": "md_homing2",
+   "line": "md_homing",
+   "L": 2,
+   "t": 27.0,
+   "price": 44000.0,
+   "income": 65852.203127709
+  },
+  {
+   "key": "md_heal1",
+   "line": "md_heal",
+   "L": 1,
+   "t": 27.67,
+   "price": 46000.0,
+   "income": 65852.203127709
+  },
+  {
+   "key": "ps_critdmg1",
+   "line": "ps_critdmg",
+   "L": 1,
+   "t": 27.8,
+   "price": 47000.0,
+   "income": 65852.203127709
+  },
+  {
+   "key": "ps_blade4",
+   "line": "ps_blade",
+   "L": 4,
+   "t": 28.0,
+   "price": 48000.0,
+   "income": 73754.46750303409
+  },
+  {
+   "key": "md_molt2",
+   "line": "md_molt",
+   "L": 2,
+   "t": 28.33,
+   "price": 50000.0,
+   "income": 73754.46750303409
+  },
+  {
+   "key": "ps_kidatk1",
+   "line": "ps_kidatk",
+   "L": 1,
+   "t": 28.8,
+   "price": 51000.0,
+   "income": 73754.46750303409
+  },
+  {
+   "key": "ps_stamina4",
+   "line": "ps_stamina",
+   "L": 4,
+   "t": 29.0,
+   "price": 53000.0,
+   "income": 82605.00360339819
+  },
+  {
+   "key": "ps_tools",
+   "line": "ps_tools",
+   "L": 2,
+   "t": 29.0,
+   "price": 55000.0,
+   "income": 82605.00360339819
+  },
+  {
+   "key": "ed_view2",
+   "line": "ed_view",
+   "L": 2,
+   "t": 29.67,
+   "price": 56000.0,
+   "income": 82605.00360339819
+  },
+  {
+   "key": "ed_flex1",
+   "line": "ed_flex",
+   "L": 1,
+   "t": 29.8,
+   "price": 58000.0,
+   "income": 82605.00360339819
+  },
+  {
+   "key": "ed_regular1",
+   "line": "ed_regular",
+   "L": 1,
+   "t": 30.0,
+   "price": 60000.0,
+   "income": 92517.60403580598
+  },
+  {
+   "key": "ed_regen2",
+   "line": "ed_regen",
+   "L": 2,
+   "t": 30.33,
+   "price": 61000.0,
+   "income": 92517.60403580598
+  },
+  {
+   "key": "ed_hand21",
+   "line": "ed_hand2",
+   "L": 1,
+   "t": 31.8,
+   "price": 63000.0,
+   "income": 103619.71652010271
+  },
+  {
+   "key": "ed_hunt2",
+   "line": "ed_hunt",
+   "L": 4,
+   "t": 32.0,
+   "price": 65000.0,
+   "income": 116054.08250251504
+  },
+  {
+   "key": "md_tornado1",
+   "line": "md_tornado",
+   "L": 1,
+   "t": 32.33,
+   "price": 67000.0,
+   "income": 116054.08250251504
+  },
+  {
+   "key": "ed_view3",
+   "line": "ed_view",
+   "L": 3,
+   "t": 33.0,
+   "price": 78000.0,
+   "income": 129980.57240281686
+  },
+  {
+   "key": "ed_hand13",
+   "line": "ed_hand1",
+   "L": 3,
+   "t": 33.67,
+   "price": 85000.0,
+   "income": 129980.57240281686
+  },
+  {
+   "key": "ed_more2",
+   "line": "ed_more",
+   "L": 2,
+   "t": 34.33,
+   "price": 130000.0,
+   "income": 145578.2410911549
+  },
+  {
+   "key": "md_wisdom1",
+   "line": "md_wisdom",
+   "L": 1,
+   "t": 37.67,
+   "price": 180000.0,
+   "income": 204526.94709971413
+  },
+  {
+   "key": "md_wisdom2",
+   "line": "md_wisdom",
+   "L": 2,
+   "t": 38.33,
+   "price": 240000.0,
+   "income": 229070.18075167984
+  },
+  {
+   "key": "md_fever2",
+   "line": "md_fever",
+   "L": 2,
+   "t": 38.48,
+   "price": 270000.0,
+   "income": 229070.18075167984
+  },
+  {
+   "key": "md_burst1",
+   "line": "md_burst",
+   "L": 1,
+   "t": 39.0,
+   "price": 280000.0,
+   "income": 256558.60244188146
+  },
+  {
+   "key": "ed_more3",
+   "line": "ed_more",
+   "L": 3,
+   "t": 39.67,
+   "price": 290000.0,
+   "income": 256558.60244188146
+  },
+  {
+   "key": "ed_flex2",
+   "line": "ed_flex",
+   "L": 2,
+   "t": 40.33,
+   "price": 300000.0,
+   "income": 287345.63473490725
+  },
+  {
+   "key": "md_burst2",
+   "line": "md_burst",
+   "L": 2,
+   "t": 43.0,
+   "price": 330000.0,
+   "income": 403699.9279168439
+  },
+  {
+   "key": "ed_epic2",
+   "line": "ed_epic",
+   "L": 4,
+   "t": 44.33,
+   "price": 470000.0,
+   "income": 452143.91926686524
+  },
+  {
+   "key": "ed_flex3",
+   "line": "ed_flex",
+   "L": 3,
+   "t": 44.8,
+   "price": 540000.0,
+   "income": 452143.91926686524
+  },
+  {
+   "key": "ps_blade5",
+   "line": "ps_blade",
+   "L": 5,
+   "t": 45.0,
+   "price": 2400000.0,
+   "income": 2025604.7583155564
+  },
+  {
+   "key": "ed_regular2",
+   "line": "ed_regular",
+   "L": 2,
+   "t": 45.0,
+   "price": 2500000.0,
+   "income": 2025604.7583155564
+  },
+  {
+   "key": "ed_sky1",
+   "line": "ed_sky",
+   "L": 1,
+   "t": 45.67,
+   "price": 2600000.0,
+   "income": 2025604.7583155564
+  },
+  {
+   "key": "md_env3",
+   "line": "md_env",
+   "L": 3,
+   "t": 49.67,
+   "price": 3800000.0,
+   "income": 3187328.30291765
+  },
+  {
+   "key": "md_homing3",
+   "line": "md_homing",
+   "L": 3,
+   "t": 50.45,
+   "price": 5100000.0,
+   "income": 3569807.6992677683
+  },
+  {
+   "key": "md_tornado2",
+   "line": "md_tornado",
+   "L": 2,
+   "t": 51.36,
+   "price": 5300000.0,
+   "income": 3783996.1612238344
+  },
+  {
+   "key": "md_split1",
+   "line": "md_split",
+   "L": 1,
+   "t": 52.27,
+   "price": 5500000.0,
+   "income": 4011035.9308972647
+  },
+  {
+   "key": "md_molt3",
+   "line": "md_molt",
+   "L": 3,
+   "t": 53.18,
+   "price": 5600000.0,
+   "income": 4251698.086751101
+  },
+  {
+   "key": "ed_hand22",
+   "line": "ed_hand2",
+   "L": 2,
+   "t": 54.6,
+   "price": 5800000.0,
+   "income": 4506799.971956166
+  },
+  {
+   "key": "ed_hand23",
+   "line": "ed_hand2",
+   "L": 3,
+   "t": 54.8,
+   "price": 6700000.0,
+   "income": 4506799.971956166
+  },
+  {
+   "key": "ps_crit4",
+   "line": "ps_crit",
+   "L": 4,
+   "t": 55.0,
+   "price": 6100000.0,
+   "income": 4777207.970273537
+  },
+  {
+   "key": "ed_hunt3",
+   "line": "ed_hunt",
+   "L": 5,
+   "t": 55.0,
+   "price": 6300000.0,
+   "income": 4777207.970273537
+  },
+  {
+   "key": "ed_sky2",
+   "line": "ed_sky",
+   "L": 2,
+   "t": 55.91,
+   "price": 6500000.0,
+   "income": 4777207.970273537
+  },
+  {
+   "key": "ed_unique1",
+   "line": "ed_unique",
+   "L": 1,
+   "t": 56.82,
+   "price": 6700000.0,
+   "income": 5063840.448489949
+  },
+  {
+   "key": "ps_tools",
+   "line": "ps_tools",
+   "L": 3,
+   "t": 58.0,
+   "price": 6900000.0,
+   "income": 5689731.127923308
+  },
+  {
+   "key": "ps_clone2",
+   "line": "ps_clone",
+   "L": 2,
+   "t": 59.55,
+   "price": 7100000.0,
+   "income": 6031114.995598706
+  },
+  {
+   "key": "md_heal2",
+   "line": "md_heal",
+   "L": 2,
+   "t": 61.36,
+   "price": 7300000.0,
+   "income": 6776560.809054707
+  },
+  {
+   "key": "md_wisdom3",
+   "line": "md_wisdom",
+   "L": 3,
+   "t": 61.51,
+   "price": 7500000.0,
+   "income": 6776560.809054707
+  },
+  {
+   "key": "ed_regen3",
+   "line": "ed_regen",
+   "L": 3,
+   "t": 62.27,
+   "price": 7800000.0,
+   "income": 7183154.45759799
+  },
+  {
+   "key": "ed_hand31",
+   "line": "ed_hand3",
+   "L": 1,
+   "t": 64.09,
+   "price": 8000000.0,
+   "income": 8070992.348557102
+  },
+  {
+   "key": "ed_hand41",
+   "line": "ed_hand4",
+   "L": 1,
+   "t": 64.6,
+   "price": 8200000.0,
+   "income": 8070992.348557102
+  },
+  {
+   "key": "ed_hand42",
+   "line": "ed_hand4",
+   "L": 2,
+   "t": 64.8,
+   "price": 9500000.0,
+   "income": 8070992.348557102
+  },
+  {
+   "key": "ed_gold1",
+   "line": "ed_gold",
+   "L": 1,
+   "t": 65.0,
+   "price": 8800000.0,
+   "income": 8555251.889470529
+  },
+  {
+   "key": "ed_regular3",
+   "line": "ed_regular",
+   "L": 3,
+   "t": 65.0,
+   "price": 9000000.0,
+   "income": 8555251.889470529
+  },
+  {
+   "key": "ps_tools",
+   "line": "ps_tools",
+   "L": 4,
+   "t": 66.0,
+   "price": 9300000.0,
+   "income": 9068567.00283876
+  },
+  {
+   "key": "md_heal3",
+   "line": "md_heal",
+   "L": 3,
+   "t": 66.82,
+   "price": 9600000.0,
+   "income": 9068567.00283876
+  },
+  {
+   "key": "md_bolt2",
+   "line": "md_bolt",
+   "L": 2,
+   "t": 67.73,
+   "price": 9800000.0,
+   "income": 9612681.023009086
+  },
+  {
+   "key": "ed_hand32",
+   "line": "ed_hand3",
+   "L": 2,
+   "t": 68.64,
+   "price": 10000000.0,
+   "income": 10189441.884389631
+  },
+  {
+   "key": "ed_unique2",
+   "line": "ed_unique",
+   "L": 2,
+   "t": 69.55,
+   "price": 10000000.0,
+   "income": 10800808.39745301
+  },
+  {
+   "key": "ps_crit5",
+   "line": "ps_crit",
+   "L": 5,
+   "t": 69.8,
+   "price": 11000000.0,
+   "income": 10800808.39745301
+  },
+  {
+   "key": "ps_stamina5",
+   "line": "ps_stamina",
+   "L": 5,
+   "t": 70.0,
+   "price": 11000000.0,
+   "income": 11448856.901300192
+  },
+  {
+   "key": "ed_unique3",
+   "line": "ed_unique",
+   "L": 3,
+   "t": 70.45,
+   "price": 12000000.0,
+   "income": 11448856.901300192
+  },
+  {
+   "key": "ps_kid3",
+   "line": "ps_kid",
+   "L": 3,
+   "t": 72.27,
+   "price": 12000000.0,
+   "income": 12863935.614300897
+  },
+  {
+   "key": "ps_clone3",
+   "line": "ps_clone",
+   "L": 3,
+   "t": 73.18,
+   "price": 12000000.0,
+   "income": 13635771.751158953
+  },
+  {
+   "key": "ps_kidatk2",
+   "line": "ps_kidatk",
+   "L": 2,
+   "t": 74.09,
+   "price": 12000000.0,
+   "income": 14453918.05622849
+  },
+  {
+   "key": "ps_kidatk3",
+   "line": "ps_kidatk",
+   "L": 3,
+   "t": 75.0,
+   "price": 49000000.0,
+   "income": 61284612.558408804
+  },
+  {
+   "key": "ps_critdmg2",
+   "line": "ps_critdmg",
+   "L": 2,
+   "t": 75.0,
+   "price": 50000000.0,
+   "income": 61284612.558408804
+  },
+  {
+   "key": "md_burst3",
+   "line": "md_burst",
+   "L": 3,
+   "t": 75.91,
+   "price": 52000000.0,
+   "income": 61284612.558408804
+  },
+  {
+   "key": "md_tornado3",
+   "line": "md_tornado",
+   "L": 3,
+   "t": 76.82,
+   "price": 54000000.0,
+   "income": 64961689.311913334
+  },
+  {
+   "key": "md_split2",
+   "line": "md_split",
+   "L": 2,
+   "t": 77.73,
+   "price": 55000000.0,
+   "income": 68859390.67062813
+  },
+  {
+   "key": "md_split3",
+   "line": "md_split",
+   "L": 3,
+   "t": 78.64,
+   "price": 63000000.0,
+   "income": 72990954.11086582
+  },
+  {
+   "key": "md_bolt3",
+   "line": "md_bolt",
+   "L": 3,
+   "t": 79.55,
+   "price": 80000000.0,
+   "income": 77370411.35751776
+  },
+  {
+   "key": "ed_sky3",
+   "line": "ed_sky",
+   "L": 3,
+   "t": 81.36,
+   "price": 130000000.0,
+   "income": 86933394.20130697
+  },
+  {
+   "key": "ed_gold2",
+   "line": "ed_gold",
+   "L": 2,
+   "t": 82.27,
+   "price": 140000000.0,
+   "income": 92149397.85338539
+  },
+  {
+   "key": "ed_hand33",
+   "line": "ed_hand3",
+   "L": 3,
+   "t": 86.82,
+   "price": 170000000.0,
+   "income": 116336491.66777253
+  },
+  {
+   "key": "ed_gold3",
+   "line": "ed_gold",
+   "L": 3,
+   "t": 87.73,
+   "price": 170000000.0,
+   "income": 123316681.16783889
+  },
+  {
+   "key": "ps_mirror",
+   "line": "ps_mirror",
+   "L": 1,
+   "t": 88.64,
+   "price": 180000000.0,
+   "income": 130715682.03790922
+  },
+  {
+   "key": "ps_critdmg3",
+   "line": "ps_critdmg",
+   "L": 3,
+   "t": 90.0,
+   "price": 180000000.0,
+   "income": 146872140.33779484
+  },
+  {
+   "key": "md_fever3",
+   "line": "md_fever",
+   "L": 3,
+   "t": 90.45,
+   "price": 190000000.0,
+   "income": 146872140.33779484
+  },
+  {
+   "key": "ed_hand43",
+   "line": "ed_hand4",
+   "L": 3,
+   "t": 91.36,
+   "price": 190000000.0,
+   "income": 155684468.75806254
+  },
+  {
+   "key": "ed_god",
+   "line": "ed_god",
+   "L": 1,
+   "t": 92.27,
+   "price": 240000000.0,
+   "income": 165025536.8835463
+  }
+ ]
+}

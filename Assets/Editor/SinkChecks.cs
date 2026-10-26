@@ -33,18 +33,18 @@ namespace MoreMush.EditorTools
             // 균사 트리 A안(2026-10-19)에는 싱크 노드가 없다 (무한 확장은 미정). 다시 넣으면 아래 검사가 돈다 (ComputeStats에 효과도 다시 이어야 한다)
             if (!NODE.TryGetValue("inf_atk", out var atk) || !NODE.TryGetValue("inf_gold", out var gold) || !NODE.ContainsKey("inf_sdmg")) return "SKIP: 싱크 노드(inf_atk·inf_gold)가 DB에 없어요 (균사 트리 A안: 무한 확장 미정)";
             Check(atk.inf && gold.inf && atk.max == 0 && gold.max == 0, "싱크 2개가 inf·max 0으로 만들어짐");
-            Check(atk.req == "ps_atk4" && gold.req == "ed_score3p", "열림 조건 = ps_atk4·ed_score3p 최대");
+            Check(atk.req == "ps_blade5" && gold.req == "ed_regular3", "열림 조건 = ps_blade5·ed_regular3 최대 (균사 트리 A안)");
             Check(Math.Abs(atk.infCostK - 1.06) < 1e-9 && atk.infMul > 1 && gold.infMul > 1, $"가격 ×1.06 · 효과 레벨당 +{atk.infMul - 1:0.###} / +{gold.infMul - 1:0.###}");
             Check(NodeCost(atk, 0).gold == Math.Ceiling(atk.infCost0 * COST_MUL) && NodeCost(atk, 0).gem == 0, "1레벨 가격 = Cost_Lv1");
             var capCost = NodeCost(atk, atk.infCap).gold;
             Check(atk.infCap > 1000 && !double.IsInfinity(capCost) && !double.IsNaN(capCost), $"상한 {atk.infCap}레벨 가격이 유한함 ({capCost:E2})");
-            Check(!double.IsInfinity(Math.Pow(atk.infMul, atk.infCap)), "효과: 상한에서도 유한");
+            Check(!double.IsInfinity(NF.Inf("inf_atk", atk.infCap)), "효과(덧셈): 상한에서도 유한");
             Check(!NODES.Any(n => n.req != null && NODE[n.req].inf), "싱크를 '최대 레벨로 열기' 선행으로 쓰는 노드 없음");
 
             // 9회차 싱크 4개: 열림 조건과 효과 상한 (INF_CAP)
             var sdmg = NODE["inf_sdmg"]; var srate = NODE["inf_srate"]; var spd = NODE["inf_spd"]; var ball = NODE["inf_ball"];
             Check(new[] { sdmg, srate, spd, ball }.All(n => n.inf && n.max == 0), "새 싱크 4개가 inf·max 0으로 만들어짐");
-            Check(sdmg.req == "fest" && srate.req == "fest" && spd.req == "ps_ball3" && ball.req == "ps_ball3", "열림 조건 = 축제(fest)·영구 수확기 III 최대");
+            Check(sdmg.req == "md_burst3" && srate.req == "md_burst3" && spd.req == "ps_blade5" && ball.req == "ps_tools", "열림 조건 = 포자 폭발 3 · 날 갈기 5 · 장인의 도구 최대 (균사 트리 A안)");
             Check(srate.infCap == 50 && spd.infCap == 50 && ball.infCap == 6 && sdmg.infCap > 1000, $"효과 상한: 기세 {srate.infCap} · 질주 {spd.infCap} · 동료 {ball.infCap} · 위력 없음({sdmg.infCap})");
 
             // 반복 보스 체력: 60부터 300까지 보스마다 오르기만 한다 (바퀴가 바뀌어도)

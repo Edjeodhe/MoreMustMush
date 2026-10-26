@@ -1,0 +1,4 @@
+조건: preset tuned · GAME_ZONE True · BOSS_GATE False · TUT_ROUNDS 2 · BOT_GEMS True · maxRounds 1500 · DB MMM_DB_Ver.08.xlsx + 균사트리 A안 15차 (Test_JS2 병합) + 싱크 6개 복원 · 트리 골드 가격 oldmap (옛 가격 분포 이식) + Efx efx_draft2.json (이론_9m) · ps_tools 골드
+k06 seed 1 done (134s)
+k06 seed 2 done (134s)
+k06 seed 3 done (130s)
