@@ -49,6 +49,19 @@ namespace MoreMush
         SpriteRenderer[] renderers;
         bool shownSilhouette;
 
+        // 지금 보이는 그림 전체(갓·머리·몸·팔다리·모자)의 월드 범위. 세계수에서 정령을 짚는 범위로 쓴다. 보이는 그림이 없으면 false
+        public bool PictureBounds(out Bounds b)
+        {
+            b = default; bool any = false;
+            if (renderers == null) return false;
+            foreach (var sr in renderers)
+            {
+                if (sr == null || !sr.enabled || sr.sprite == null || !sr.gameObject.activeInHierarchy) continue;
+                if (any) b.Encapsulate(sr.bounds); else { b = sr.bounds; any = true; }
+            }
+            return any;
+        }
+
         void Awake()
         {
             renderers = GetComponentsInChildren<SpriteRenderer>(true);

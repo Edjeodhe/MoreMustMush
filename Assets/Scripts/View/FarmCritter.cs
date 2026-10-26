@@ -32,6 +32,9 @@ namespace MoreMush
         [System.NonSerialized] public Rect sayRect;
         float sayFeetX, sayFeetY;
 
+        // 짚는 범위 (농장 px, y 아래로) = 지난 Draw에서 그려진 그림 전체. 아직 안 그렸으면 빈 사각형
+        [System.NonSerialized] public Rect hitRect;
+
         public void Draw(FarmView.Critter p, float now, string hat, bool hovered)
         {
             int e = Awaken(p.id);   // 각성 ★ = 진화 모습
@@ -82,6 +85,7 @@ namespace MoreMush
             rigGroup.sortingOrder = order;
             if (!rig.gameObject.activeSelf) rig.gameObject.SetActive(true);
             builder.enabled = false;
+            hitRect = rig.PictureBounds(out var pb) ? new Rect(pb.min.x * P, -pb.max.y * P, pb.size.x * P, pb.size.y * P) : default;
 
             shadow.enabled = p.y >= HARV.y0 - 30 && p.state != "held" && p.state != "perch" && p.state != "pick" && !(p.state == "climb" && p.pathI > 0);   // 나무 위·들린 동안은 그림자 없음
             shadow.transform.localPosition = new Vector3(ox / P, -2 / P, 0);

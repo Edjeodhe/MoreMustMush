@@ -381,13 +381,26 @@ namespace MoreMush
             return false;
         }
 
+        // 그려진 그림 전체(FarmCritter.hitRect: 갓·머리·몸·다리)를 짚는다. 정령 그림은 화각에 따라 Zoom^0.75배로 커지는데
+        // 예전 원 판정은 1배 크기 그대로라 큰 단계에서는 하체만 잡혔다. 겹치면 앞에 그려진 정령, 같은 층이면 그림 가운데가 가까운 정령
         Critter CritterAt(float x, float y)
         {
-            Critter best = null; float bd = 1e9f;
-            foreach (var p in crits)
+            Critter best = null; float bd = 1e9f; int bo = int.MinValue;
+            for (int i = 0; i < crits.Count; i++)
             {
-                float R = Radius(p.id), d = U.D2(x, y, p.x, p.y - R * 0.9f);
-                if (d < R * 1.25f * R * 1.25f && d < bd) { best = p; bd = d; }
+                var p = crits[i];
+                var fc = critPool.Get(i);
+                var r = fc.hitRect;
+                int o = fc.rigGroup.sortingOrder;
+                float d;
+                if (r.width > 0) { if (!r.Contains(new Vector2(x, y))) continue; d = U.D2(x, y, r.center.x, r.center.y); }
+                else
+                {
+                    // 아직 안 그린 정령 (나온 첫 프레임): 예전 원을 그림 배율만큼 키워서
+                    float R = Radius(p.id) * Mathf.Pow(Zoom, 0.75f); d = U.D2(x, y, p.x, p.y - R * 0.9f);
+                    if (d >= R * 1.25f * R * 1.25f) continue;
+                }
+                if (o > bo || (o == bo && d < bd)) { best = p; bd = d; bo = o; }
             }
             return best;
         }
