@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +12,7 @@ namespace MoreMush
     // 배치된 창이 없으면 임시 창(TempDialog)을 만든다 — 옵션 창이 배치되면 자동으로 그쪽을 쓴다.
     public class OptionWindow
     {
-        // 씬마다 덧붙이는 버튼: 배치된 창에서는 name으로 찾고, 임시 창에는 label로 만든다
+        // 씬마다 덧붙이는 버튼: 배치된 창에서는 name으로 찾고, 임시 창에는 label(한국어 원문, 창이 번역한다)로 만든다
         public struct Extra
         {
             public string name, label; public UnityAction action;
@@ -56,21 +57,27 @@ namespace MoreMush
             var canvas = TempDialog.RootCanvas(scene);
             if (canvas == null) { Debug.LogWarning("[Option] 캔버스가 없어 옵션 창을 만들 수 없어요"); return; }
             // 위에서 아래로: 돌아가기 · 소리 설정(효과음·배경음·음소거) · 씬별 버튼 · 메인 메뉴 · 게임 종료
-            Root = TempDialog.BuildColumn(canvas, "OptionPanel", Loc.T("설정"), out var col);
-            TempDialog.ColumnButton(col, Loc.T("돌아가기"), onClose);
-            TempDialog.ColumnLabel(col, Loc.T("소리 설정"));
-            sfx = TempDialog.ColumnSlider(col, Loc.T("효과음"), Snd.SfxVol, v => Snd.SetSfx(v));
-            bgm = TempDialog.ColumnSlider(col, Loc.T("배경음"), Snd.BgmVol, v => Snd.BgmVol = v);
+            // 글자마다 한국어 원문을 기억해 두고 열 때(Refresh) 지금 언어로 다시 적는다 (예전엔 만든 때의 언어로 남았다)
+            var keyOf = new Dictionary<string, string>();
+            string K(string ko) { string s = Loc.T(ko); keyOf[s] = ko; return s; }
+            Root = TempDialog.BuildColumn(canvas, "OptionPanel", K("설정"), out var col);
+            TempDialog.ColumnButton(col, K("돌아가기"), onClose);
+            TempDialog.ColumnLabel(col, K("소리 설정"));
+            sfx = TempDialog.ColumnSlider(col, K("효과음"), Snd.SfxVol, v => Snd.SetSfx(v));
+            bgm = TempDialog.ColumnSlider(col, K("배경음"), Snd.BgmVol, v => Snd.BgmVol = v);
             muteLabel = TempDialog.ColumnButton(col, MuteText(), ToggleMute);
-            foreach (var e in extras) if (e.name != "Button_Back") TempDialog.ColumnButton(col, e.label, e.action);
+            foreach (var e in extras) if (e.name != "Button_Back") TempDialog.ColumnButton(col, K(e.label), e.action);
             if (scene.name != Scenes.MainMenu)
-                TempDialog.ColumnButton(col, Loc.T("메인 메뉴"), () => { Snd.Ui(); Close(); App.Go(Scenes.MainMenu); });
+                TempDialog.ColumnButton(col, K("메인 메뉴"), () => { Snd.Ui(); Close(); App.Go(Scenes.MainMenu); });
 #if !UNITY_WEBGL
-            TempDialog.ColumnButton(col, Loc.T("게임 종료"), () => { Snd.Ui(); App.Quit(); });   // 웹은 브라우저 탭을 닫을 수 없어 뺀다 (HideOnWeb과 같은 이유)
+            TempDialog.ColumnButton(col, K("게임 종료"), () => { Snd.Ui(); App.Quit(); });   // 웹은 브라우저 탭을 닫을 수 없어 뺀다 (HideOnWeb과 같은 이유)
 #endif
+            foreach (var t in Root.GetComponentsInChildren<TMP_Text>(true))
+                if (t != muteLabel && keyOf.TryGetValue(t.text, out var ko)) tempTexts.Add((t, ko));
         }
 
         Slider sfx, bgm;
+        readonly List<(TMP_Text text, string ko)> tempTexts = new List<(TMP_Text, string)>();   // 임시 창 글자와 그 한국어 원문
 
         static string MuteText() => Snd.muted ? Loc.T("음소거: 켜짐") : Loc.T("음소거: 꺼짐");
 
@@ -79,6 +86,7 @@ namespace MoreMush
         // 소리 글자·음량을 지금 상태로 (M 키로도 바뀌므로 열 때마다)
         public void Refresh()
         {
+            foreach (var (t, ko) in tempTexts) UIUtil.SetText(t, Loc.T(ko));
             if (muteLabel != null) muteLabel.text = MuteText();
             if (sfx != null) sfx.SetValueWithoutNotify(Snd.SfxVol);
             if (bgm != null) bgm.SetValueWithoutNotify(Snd.BgmVol);

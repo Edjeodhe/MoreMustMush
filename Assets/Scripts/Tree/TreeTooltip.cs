@@ -14,7 +14,7 @@ namespace MoreMush
         public void Hide() { if (gameObject.activeSelf) gameObject.SetActive(false); }
 
         // 마우스를 올려 둔 동안 매 프레임 불린다. 노드·레벨·상태·살 수 있는지가 그대로면 글자는 다시 만들지 않고 위치만 옮긴다
-        string shownId, shownS; int shownL = -1; bool shownPoorGold, shownPoorGem;
+        string shownId, shownS, shownLang; int shownL = -1; bool shownPoorGold, shownPoorGem;   // shownLang: 언어를 바꾼 뒤 같은 노드를 다시 짚으면 옛 언어 글자가 남았다
 
         public void Show(Node n, Vector2 at)
         {
@@ -23,8 +23,8 @@ namespace MoreMush
             bool more = !AtMax(n, L);
             var cc = more ? NodeCost(n, L) : default;
             bool poorGold = G.gold + 1e-9 < cc.gold, poorGem = G.gem + 1e-9 < cc.gem;
-            if (n.id == shownId && L == shownL && s == shownS && poorGold == shownPoorGold && poorGem == shownPoorGem) { Place(at); return; }
-            shownId = n.id; shownL = L; shownS = s; shownPoorGold = poorGold; shownPoorGem = poorGem;
+            if (n.id == shownId && L == shownL && s == shownS && poorGold == shownPoorGold && poorGem == shownPoorGem && shownLang == Loc.Lang) { Place(at); return; }
+            shownId = n.id; shownL = L; shownS = s; shownPoorGold = poorGold; shownPoorGem = poorGem; shownLang = Loc.Lang;
             title.text = (n.gem ? UIUtil.Ic("gem") + " " : "") + n.n;
             title.color = U.Hex(n.gem ? "#2a9a74" : CATS[n.br].color);
             lv.text = n.inf ? $"LVL {L} / ∞" : $"LVL {L} / {n.max}";

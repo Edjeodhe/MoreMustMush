@@ -24,6 +24,8 @@ namespace MoreMush
         static readonly string[] NAV = { "Button_MushTree", "Button_MushDex", "Button_Harvesters" };
         const int NAV_SORT_ABOVE = 1;   // 팝업(루트 캔버스) 바로 위 — 너무 높으면 옵션·로딩 같은 다른 UI까지 덮는다
         static readonly System.Text.RegularExpressions.Regex STAGE_MARK = new System.Text.RegularExpressions.Regex(@"\bN\b");   // Stage_Text에 적어 둔 자리 표시 ("N Stage" → "12 Stage", 낱말 N 하나만)
+        // 씬에 영어로 적어 둔 버튼 글자 (LocText 없음 — 폰트는 TextLangFont가 바꾼다). 영어에서는 적어 둔 그대로, 다른 언어에서는 이 한국어 원문의 번역
+        static readonly (string obj, string ko)[] LABELS = { ("Button_MushTree", "세계수"), ("Button_MushDex", "도감"), ("Button_Harvesters", "수확기"), ("Button_StageStart", "시작하기") };
 
         CurrencyBar currency;
         HarvesterShop shop;
@@ -37,6 +39,7 @@ namespace MoreMush
         GameObject[] popups = new GameObject[0];
         TMP_Text stageText;
         string stageFormat;
+        (TMP_Text text, string authored, string ko)[] labels;
 
         void Awake()
         {
@@ -47,6 +50,7 @@ namespace MoreMush
 
             stageText = SceneUI.Need(scene, "Stage_Text")?.GetComponent<TMP_Text>();
             stageFormat = stageText != null ? stageText.text : null;
+            labels = LABELS.Select(l => (t: SceneUI.TextIn(SceneUI.Find(scene, l.obj)), l.ko)).Where(l => l.t != null).Select(l => (l.t, l.t.text, l.ko)).ToArray();
 
             SceneUI.Bind(scene, "Button_StageStart", StartRound);
             SceneUI.Bind(scene, "Button_MushTree", ToOutGame);
@@ -84,13 +88,14 @@ namespace MoreMush
             Progress();
             ApplyUnlocks();
             RenderStage();
+            RenderLabels();
             currency.Tick();
         }
 
         void OnEnable() => Loc.Changed += OnLang;
         void OnDisable() { Loc.Changed -= OnLang; if (current != null) CloseAll(); }   // 열린 팝업의 모달 카운트를 남기지 않는다
 
-        void OnLang() { RenderStage(); shop?.Render(); dex?.LangChanged(); quest.Render(); shownClaimable = -1; RenderQuestButton(); }
+        void OnLang() { RenderStage(); RenderLabels(); shop?.Render(); dex?.LangChanged(); quest.Render(); shownClaimable = -1; RenderQuestButton(); }
 
         void Update()
         {
@@ -107,7 +112,12 @@ namespace MoreMush
         {
             if (stageText == null || G == null) return;
             string n = StageNow().ToString();
-            UIUtil.SetText(stageText, STAGE_MARK.IsMatch(stageFormat) ? STAGE_MARK.Replace(stageFormat, n, 1) : n);
+            UIUtil.SetText(stageText, Loc.Lang == "en" && STAGE_MARK.IsMatch(stageFormat) ? STAGE_MARK.Replace(stageFormat, n, 1) : Loc.F("스테이지 {0}", n));
+        }
+
+        void RenderLabels()
+        {
+            foreach (var l in labels) UIUtil.SetText(l.text, Loc.Lang == "en" ? l.authored : Loc.T(l.ko));
         }
 
         // 1스테이지(튜토리얼) 클리어 뒤 처음 오면 첫 노드를 살 골드를 보장한다 (기획서: "첫 노드만 해금 가능한 재화").

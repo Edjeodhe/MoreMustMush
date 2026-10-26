@@ -18933,20 +18933,20 @@
       "Str_Group_ID": 23033,
       "Str_Name": "upg:ed_rare0:name",
       "Str_KR": "희귀 포자",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Rare Spores",
+      "Str_JA": "レア胞子",
+      "Str_RU": "Редкие споры",
+      "Str_UK": "Рідкісні спори"
     },
     {
       "Str_ID": 203033,
       "Str_Group_ID": 23033,
       "Str_Name": "upg:ed_rare0:desc",
       "Str_KR": "에픽 이상 버섯이 더 자주 돋아요. 다 올리면 숲의 본래 빈도가 돼요.",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Epic and higher mushrooms sprout more often. At max level, the forest returns to its natural rate.",
+      "Str_JA": "エピック以上のキノコがよく生えるようになります。最大まで上げると森本来の頻度になります。",
+      "Str_RU": "Эпические и более редкие грибы вырастают чаще. На максимуме лес возвращается к своей обычной частоте.",
+      "Str_UK": "Епічні й рідкісніші гриби з'являються частіше. На максимумі ліс повертається до своєї звичайної частоти."
     },
     {
       "Str_ID": 901322,
@@ -18973,80 +18973,80 @@
       "Str_Group_ID": 91324,
       "Str_Name": "ui",
       "Str_KR": "에픽 이상 가중치 ×{0}",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Epic and above weight x{0}",
+      "Str_JA": "エピック以上の重み ×{0}",
+      "Str_RU": "Вес эпических и выше x{0}",
+      "Str_UK": "Вага епічних і вище ×{0}"
     },
     {
       "Str_ID": 901325,
       "Str_Group_ID": 91325,
       "Str_Name": "ui",
       "Str_KR": "언어",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Language",
+      "Str_JA": "言語",
+      "Str_RU": "Язык",
+      "Str_UK": "Мова"
     },
     {
       "Str_ID": 901326,
       "Str_Group_ID": 91326,
       "Str_Name": "ui",
       "Str_KR": "소리 설정",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Sound Settings",
+      "Str_JA": "サウンド設定",
+      "Str_RU": "Настройки звука",
+      "Str_UK": "Налаштування звуку"
     },
     {
       "Str_ID": 901327,
       "Str_Group_ID": 91327,
       "Str_Name": "ui",
       "Str_KR": "효과음",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "SFX",
+      "Str_JA": "効果音",
+      "Str_RU": "Эффекты",
+      "Str_UK": "Ефекти"
     },
     {
       "Str_ID": 901328,
       "Str_Group_ID": 91328,
       "Str_Name": "ui",
       "Str_KR": "배경음",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Music",
+      "Str_JA": "BGM",
+      "Str_RU": "Музыка",
+      "Str_UK": "Музика"
     },
     {
       "Str_ID": 901329,
       "Str_Group_ID": 91329,
       "Str_Name": "ui",
       "Str_KR": "메인 메뉴",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Main Menu",
+      "Str_JA": "メインメニュー",
+      "Str_RU": "Главное меню",
+      "Str_UK": "Головне меню"
     },
     {
       "Str_ID": 901330,
       "Str_Group_ID": 91330,
       "Str_Name": "ui",
       "Str_KR": "음소거: 켜짐",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Mute: On",
+      "Str_JA": "ミュート:オン",
+      "Str_RU": "Без звука: вкл.",
+      "Str_UK": "Без звуку: увімк."
     },
     {
       "Str_ID": 901331,
       "Str_Group_ID": 91331,
       "Str_Name": "ui",
       "Str_KR": "음소거: 꺼짐",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": ""
+      "Str_EN": "Mute: Off",
+      "Str_JA": "ミュート:オフ",
+      "Str_RU": "Без звука: выкл.",
+      "Str_UK": "Без звуку: вимк."
     },
     {
       "Str_ID": 901332,

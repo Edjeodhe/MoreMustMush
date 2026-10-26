@@ -95,7 +95,7 @@ namespace MoreMush
             craftWin = new WorkshopWindow(FarmWin.Spawn(scene, "WorkshopWindow"), onChange);
             kidInfo = new KidInfoCard(FarmWin.Spawn(scene, "KidInfoCard"), kidWin, onChange);
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
-                new OptionWindow.Extra("Button_Back", Loc.T("돌아가기"), ToMainGame));
+                new OptionWindow.Extra("Button_Back", "돌아가기", ToMainGame));
             BackButton(scene);
         }
 
