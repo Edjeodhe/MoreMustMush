@@ -44,6 +44,20 @@ namespace MoreMush.EditorTools
             EditorApplication.Exit(code);
         }
 
+        // 배치 -executeMethod MoreMush.EditorTools.ReleaseBuild.BatchWebGL : WebGL만 빌드 (결과 Builds/build_report.txt)
+        public static void BatchWebGL()
+        {
+            int code = 0; string text;
+            var origTarget = EditorUserBuildSettings.activeBuildTarget;
+            var origGroup = BuildPipeline.GetBuildTargetGroup(origTarget);
+            try { text = WebGL(); if (text.Contains("결과: 실패")) code = 1; }
+            catch (Exception e) { text = "실패: " + e; code = 1; }
+            finally { Restore(origTarget, origGroup); }
+            Directory.CreateDirectory(Out("Builds"));
+            File.WriteAllText(Out("Builds/build_report.txt"), text);
+            EditorApplication.Exit(code);
+        }
+
         // WebGL → Windows 순서로 빌드하고 원래 활성 타깃으로 복귀
         public static string All()
         {
@@ -90,7 +104,7 @@ namespace MoreMush.EditorTools
                     targetGroup = BuildTargetGroup.WebGL,
                     options = dev ? BuildOptions.Development : BuildOptions.None,
                 };
-                var rep = BuildPipeline.BuildPlayer(opt);
+                var rep = BuildWithoutLooseArt(opt);
                 bool ok = Report(sb, rep);
                 if (ok)
                 {
@@ -124,7 +138,7 @@ namespace MoreMush.EditorTools
                     targetGroup = BuildTargetGroup.Standalone,
                     options = dev ? BuildOptions.Development : BuildOptions.None,
                 };
-                var rep = BuildPipeline.BuildPlayer(opt);
+                var rep = BuildWithoutLooseArt(opt);
                 bool ok = Report(sb, rep);
                 if (ok)
                 {
@@ -137,6 +151,40 @@ namespace MoreMush.EditorTools
             catch (Exception e) { sb.AppendLine("결과: 실패 (예외) " + e); }
             finally { Restore(origTarget, origGroup); }
             return sb.ToString();
+        }
+
+        // Resources 안의 그림은 아틀라스에 묶여도 원본 텍스처가 통째로 따로 들어간다 (2026-10-23 WebGL 214MB, itch 200MB 제한).
+        // 게임은 SpriteDB 참조로만 그림을 불러오니, 빌드하는 동안만 Art/Dream을 Resources 밖으로 옮겨 아틀라스만 남긴다 (GUID 그대로)
+        const string ArtDir = "Assets/Resources/Art/Dream";
+        const string StashRoot = "Assets/_BuildStash";
+        const string StashDir = StashRoot + "/Dream";
+
+        static BuildReport BuildWithoutLooseArt(BuildPlayerOptions opt)
+        {
+            StashArt();
+            try { return BuildPipeline.BuildPlayer(opt); }
+            finally { RestoreArt(); }
+        }
+
+        static void StashArt()
+        {
+            if (!AssetDatabase.IsValidFolder(ArtDir)) return;
+            if (!AssetDatabase.IsValidFolder(StashRoot)) AssetDatabase.CreateFolder("Assets", "_BuildStash");
+            string error = AssetDatabase.MoveAsset(ArtDir, StashDir);
+            if (!string.IsNullOrEmpty(error)) throw new InvalidOperationException("Art/Dream 임시 이동 실패: " + error);
+        }
+
+        // 빌드 중 에디터가 죽어 옮긴 그림이 남아 있으면 다음 로드 때 되돌린다
+        [InitializeOnLoadMethod]
+        static void RecoverStash() => EditorApplication.delayCall += RestoreArt;
+
+        static void RestoreArt()
+        {
+            if (!AssetDatabase.IsValidFolder(StashDir)) return;
+            if (AssetDatabase.IsValidFolder(ArtDir)) { Debug.LogError($"[MoreMush] {StashDir}와 {ArtDir}가 둘 다 있다 — 직접 합칠 것"); return; }
+            string error = AssetDatabase.MoveAsset(StashDir, ArtDir);
+            if (!string.IsNullOrEmpty(error)) { Debug.LogError("[MoreMush] Art/Dream 되돌리기 실패: " + error); return; }
+            AssetDatabase.DeleteAsset(StashRoot);
         }
 
         static bool Report(StringBuilder sb, BuildReport rep)

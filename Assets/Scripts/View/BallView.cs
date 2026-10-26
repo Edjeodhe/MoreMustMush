@@ -26,7 +26,8 @@ namespace MoreMush
             transform.localPosition = Art.P(b.x, b.y);
 
             var skin = Game.HvSkinOn(b.hv);
-            body.sprite = SpriteDB.Get("Harvesters/", skin != null ? skin.id : b.hv) ?? SpriteDB.Get("Harvesters/", HvLook(b.hv));
+            var bodySp = SpriteDB.Get("Harvesters/", skin != null ? skin.id : b.hv) ?? SpriteDB.Get("Harvesters/", HvLook(b.hv));
+            if (!ReferenceEquals(body.sprite, bodySp)) body.sprite = bodySp;   // 같은 그림을 다시 넣으면 렌더러를 매 프레임 다시 준비한다
             Art.FitPx(body, b.r * 2.3f);
             body.transform.localRotation = Quaternion.Euler(0, 0, -b.ang * Mathf.Rad2Deg);
             body.color = new Color(1, 1, 1, b.perm ? 1 : Mathf.Min(0.85f, b.life));

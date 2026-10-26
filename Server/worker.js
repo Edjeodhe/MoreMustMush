@@ -8,7 +8,7 @@
 const MAX_BYTES = 20 * 1024;
 const MAX_ITEMS = 50;
 const DATA_MAX = 4000;
-const EVENTS = new Set(["session_start", "stage_end", "tree_up", "tree_build", "quest_clear", "ftue", "crash", "error", "game_clear"]);
+const EVENTS = new Set(["session_start", "stage_end", "tree_up", "tree_build", "tree_act", "quest_clear", "ftue", "crash", "error", "game_clear"]);
 const RESULTS = new Set(["clear", "fail", "early_exit"]);
 const UID_RE = /^[0-9a-f]{32}$/;
 const BIG = 1e40;          // 재화가 이보다 크면 비정상 (후반 골드는 1e20 이상까지 간다)
@@ -29,6 +29,14 @@ export default {
     const url = new URL(request.url);
     if (!env.MMM_LOG_KEY || url.searchParams.get("k") !== env.MMM_LOG_KEY) return reply("forbidden", 403);
 
+    // IP당 요청 제한 (Rate Limiting 바인딩 MMM_LIMIT: 60초에 60번). DB를 쓰지 않고 Cloudflare 위치별 메모리로 센다.
+    // 바인딩이 없으면 건너뛴다. 막히면 429 → 클라는 큐에 남겨 두고 나중에 다시 보낸다
+    if (env.MMM_LIMIT) {
+      const ip = request.headers.get("cf-connecting-ip") || "?";
+      const { success } = await env.MMM_LIMIT.limit({ key: ip });
+      if (!success) return reply("too many", 429);
+    }
+
     const len = Number(request.headers.get("content-length") || 0);
     if (len > MAX_BYTES) return reply("too large", 413);
     const text = await request.text();
@@ -41,12 +49,19 @@ export default {
 
     const now = Date.now();
     const stmts = [];
+    let odd = null;   // 이상치: 저장하지 않고 suspect에 uid·사유만 남긴다 (클라에는 ok를 줘서 다시 보내지 않게)
+    const uid0 = items[0] && items[0].uid;
     for (const it of items) {
+      // 모르는 이벤트(새 클라가 서버보다 먼저 나간 경우)는 그 건만 건너뛴다. 묶음 전체를 400으로 내면 클라가 한 건씩 다시 보내 요청이 50배가 된다
+      if (it && typeof it === "object" && typeof it.event === "string" && !EVENTS.has(it.event)) continue;
       const err = check(it);
       if (err) return reply("bad item: " + err, 400);
+      const why = it.uid !== uid0 ? "mixed_uid" : weird(it);
+      if (why) { odd = odd || { uid: it.uid, why: it.event + ":" + why }; continue; }
       stmts.push(toStatement(env, it, now));
     }
-    await env.MMM_DB.batch(stmts);
+    if (odd) stmts.push(env.MMM_DB.prepare("INSERT OR REPLACE INTO suspect (uid, reason, ts) VALUES (?, ?, ?)").bind(odd.uid, odd.why.slice(0, 64), now));
+    if (stmts.length) await env.MMM_DB.batch(stmts);
     return reply("ok");
   },
 };
@@ -82,6 +97,26 @@ function check(it) {
     if (d.up !== undefined && !Array.isArray(d.up)) return "data.up";
     if (d.codex !== undefined && !Array.isArray(d.codex)) return "data.codex";
   }
+  return null;
+}
+
+// ===== 이상치 (DB를 읽지 않는다) =====
+// 형식은 맞지만 정상 클라가 보낼 수 없는 값. 키가 클라에 들어 있어 누구나 보낼 수 있으므로, 지표가 오염되지 않게 저장하지 않는다.
+//   한 묶음은 한 기기(uid)에서만 온다 · eid는 "세션-번호" · 묶음 줄(c)과 단계·레벨은 게임 규칙 범위 안
+const BOSS_EVERY = 10;
+function int(v, lo, hi) { return Number.isInteger(v) && v >= lo && v <= hi; }
+
+function weird(it) {
+  if (it.session !== undefined && !it.eid.startsWith(it.session + "-")) return "eid";
+  const d = it.data || {};
+  if (d.c !== undefined && !int(d.c, 1, d.post ? 100000 : 10000)) return "c";
+  if (it.event === "stage_end") {
+    if (d.stage0 !== undefined && !d.post && !(int(d.stage0, 1, d.stage) && d.stage - d.stage0 < BOSS_EVERY)) return "stage0";
+    if (d.codex !== undefined && d.codex.length > 200) return "codex";
+    if (d.up !== undefined && d.up.length > 500) return "up";
+  }
+  if (it.event === "ftue" && !int(d.step, 1, 5)) return "step";
+  if (it.event === "tree_up" && !int(d.lv, 0, 1000000)) return "lv";
   return null;
 }
 

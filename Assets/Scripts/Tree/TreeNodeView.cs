@@ -122,23 +122,26 @@ namespace MoreMush
                 link.textureMode = owned ? LineTextureMode.Stretch : LineTextureMode.Tile;
             }
 
-            glow.transform.localScale = pulse.transform.localScale = body.transform.localScale = border.transform.localScale = Vector3.one * sc;
-            Show(qmark, locked);
-            Show(badge, !locked);
-            Show(inner, !locked);
-            Show(label, labelOn);
-            Show(line2, labelOn);
-
             // dream set: one slot picture per state (UI/Slots) instead of stacked glow / pulse / ring / disc circles
             var slot = Slot(n, st);
-            if (slot != null)
+            // 크기·켜고 끄기·슬롯 그림은 상태(호버 = sc 포함)가 바뀔 때만 (노드 108개가 매 프레임 Transform 400여 번을 쓰고 있었다)
+            if (dirty)
             {
-                if (body.sprite != slot) body.sprite = slot;
-                Art.FitPx(body, (r * 2 + SLOT_PAD) * sc);
-                body.color = Color.white;
-                border.enabled = glow.enabled = pulse.enabled = false;
+                glow.transform.localScale = pulse.transform.localScale = body.transform.localScale = border.transform.localScale = Vector3.one * sc;
+                Show(qmark, locked);
+                Show(badge, !locked);
+                Show(inner, !locked);
+                Show(label, labelOn);
+                Show(line2, labelOn);
+                if (slot != null)
+                {
+                    if (body.sprite != slot) body.sprite = slot;
+                    Art.FitPx(body, (r * 2 + SLOT_PAD) * sc);
+                    body.color = Color.white;
+                    border.enabled = glow.enabled = pulse.enabled = false;
+                }
             }
-            else
+            if (slot == null)
             {
                 body.transform.localScale = Vector3.one * (r * 2 / Art.PPU) * sc;
                 border.transform.localScale = Vector3.one * ((r * 2 + 4) / Art.PPU) * sc;
@@ -227,9 +230,9 @@ namespace MoreMush
                     label.fontSize = (n.sub ? 15 : 18) / 10f;
                     label.color = n.gem ? U.Hex("#2f8a6a") : st == "poor" ? U.Hex("#8a7a66") : INK;
                     label.transform.localPosition = Art.P(0, r + 14);
-                    string lvTxt = n.inf ? $"Lv {L}" : n.max > 1 ? $"Lv {L}/{n.max}" : "";   // 싱크: 레벨 칸 없이 'Lv N' (사용자 결정 2026-10-13)
+                    string lvTxt = n.inf ? Loc.F("Lv {0}", L) : n.max > 1 ? Loc.F("Lv {0}/{1}", L, n.max) : "";   // 싱크: 레벨 칸 없이 'Lv N' (사용자 결정 2026-10-13)
                     string costTxt = cost.gold > 0 && cost.gem > 0 ? Loc.F("{0}G + 균사석 {1}", U.Fmt(cost.gold), U.Fmt(cost.gem)) : cost.gold > 0 ? $"{U.Fmt(cost.gold)}G" : cost.gem > 0 ? Loc.F("균사석 {0}", U.Fmt(cost.gem)) : "";
-                    line2.text = st == "max" ? (n.inf ? $"MAX {L}" : n.max > 1 ? $"MAX {L}/{n.max}" : "MAX") : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
+                    line2.text = st == "max" ? (n.inf ? Loc.F("MAX {0}", L) : n.max > 1 ? Loc.F("MAX {0}/{1}", L, n.max) : Loc.T("MAX")) : $"{lvTxt}{(lvTxt != "" ? " · " : "")}{costTxt}";
                     line2.color = st == "buy" ? TXT_BUY : st == "poor" ? TXT_POOR : TXT_MAX;
                     line2.transform.localPosition = Art.P(0, r + 32);
                 }

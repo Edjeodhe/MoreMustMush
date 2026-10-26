@@ -1,0 +1,1 @@
+return "preset="+MoreMush.Defs.TUNE.id+" play="+UnityEngine.Application.isPlaying+" compiling="+UnityEditor.EditorApplication.isCompiling+" heal="+MoreMush.Defs.CLEANER_HEAL+" hp="+string.Join(",", System.Linq.Enumerable.Select(MoreMush.Defs.BOSS.Values, b=>b.id+":"+b.hpMul));

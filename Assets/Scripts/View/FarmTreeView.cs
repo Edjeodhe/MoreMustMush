@@ -20,8 +20,8 @@ namespace MoreMush
         public readonly List<Slot> slots = new List<Slot>();
         public readonly List<Vector2> decoPos = new List<Vector2>();
         readonly List<SpriteRenderer> fruitR = new List<SpriteRenderer>(), glowR = new List<SpriteRenderer>(), decoR = new List<SpriteRenderer>();
+        (int, int, int, int) shownKey; bool laidOut;
         readonly Dictionary<int, Rect> decoRect = new Dictionary<int, Rect>();   // 슬롯 → 놓인 장식이 그려진 자리 (무대 px, y 아래 +)
-        string shownKey;
         float widthPx, heightPx, footV = 1;   // footV = 그림에서 땅에 닿는 선 (v, 아래 1)
 
         public float Top => WT.y - footV * heightPx;
@@ -31,8 +31,10 @@ namespace MoreMush
         // 슬롯 자리: 구역 영역 안에 왼쪽부터 고르게, 위아래로 살짝 엇갈리게
         void Layout()
         {
-            string key = $"{Stage()}|{MushSlotCount()}|{DecoSlotCount()}|{Ring()}";
-            if (key == shownKey) return;
+            // 프레임마다 여러 번 불려(그리기·마우스 판정) 문자열 키 대신 숫자 묶음으로 비교한다
+            var key = (Stage(), MushSlotCount(), DecoSlotCount(), Ring());
+            if (laidOut && key == shownKey) return;
+            laidOut = true;
             shownKey = key;
             int pic = WT.Picture(Stage());
             var sp = SpriteDB.Get("Farm/Tree/tree_" + pic);
@@ -100,7 +102,7 @@ namespace MoreMush
             var s = slots[i];
             double cycle = s.mush.time / System.Math.Max(0.01, GrowMul(s.zone));
             double t = now / 1000 / cycle + s.phase;
-            bool worked = KidsIn(s.zone).Count > 0;
+            bool worked = KidsInCount(s.zone) > 0;
             return worked ? (float)(t - System.Math.Floor(t)) : 1;
         }
 

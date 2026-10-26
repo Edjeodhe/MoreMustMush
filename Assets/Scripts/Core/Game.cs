@@ -55,12 +55,15 @@ namespace MoreMush
             return b;
         }
 
+        // 내부 판 번호 (튜토리얼 T1~T4 포함, 1부터). 화면 글자는 Defs.StageLabel
         public static int StageNow() => G != null ? G.stage : 1;
+        // 콘텐츠(표시) 스테이지: 보스·지역·체력 성장은 이것으로 판정한다 (튜토리얼 판은 1, Defs.ContentStage)
+        public static int ContentNow() => ContentStage(StageNow());
         // 이번 라운드가 보스 라운드인가: 보스 스테이지에서 보스 도전이 켜져 있을 때
-        public static bool BossRoundNext() => G != null && G.bossOn && IsBossStage(StageNow());
-        // 보스 스테이지는 보스를 쓰러뜨려야 넘어가므로, 지나온 보스 스테이지는 모두 쓰러뜨린 것이다
-        public static bool BossCleared(int stage) => StageNow() > stage;
-        public static bool ThemeOpen(Theme t) => StageNow() >= t.from;
+        public static bool BossRoundNext() => G != null && G.bossOn && IsBossStage(ContentNow());
+        // 보스 스테이지는 보스를 쓰러뜨려야 넘어가므로, 지나온 보스 스테이지는 모두 쓰러뜨린 것이다 (stage = 콘텐츠 스테이지)
+        public static bool BossCleared(int stage) => ContentNow() > stage;
+        public static bool ThemeOpen(Theme t) => ContentNow() >= t.from;
         public static Theme LatestTheme() => THEMES.Where(ThemeOpen).Last();
 
         public static int StarOf(string id)
@@ -90,7 +93,7 @@ namespace MoreMush
         public static string UnlockText(Species sp)
         {
             if (sp.init) return Loc.T("처음부터 등장");
-            if (sp.boss > 0) return Loc.F("스테이지 {0} 보스({1})를 쓰러뜨리면 해금 (현재 스테이지 {2})", sp.boss, BossAt(sp.boss).n, StageNow());
+            if (sp.boss > 0) return Loc.F("스테이지 {0} 보스({1})를 쓰러뜨리면 해금 (현재 스테이지 {2})", sp.boss, BossAt(sp.boss).n, StageLabel(StageNow()));
             if (sp.theme != null) { var t = THEME[sp.theme]; return Loc.F("{0} 지역 전용 (스테이지 {1}부터, 그 지역에서만 등장)", t.n, t.from); }
             double have = G.codex.TryGetValue(sp.afterId, out var e) ? e.n : 0;
             var pre = SP[sp.afterId];
@@ -116,7 +119,7 @@ namespace MoreMush
         {
             // 레벨별 가격 (엑셀 DB Upgrade_Cost: Cost_Lv = 골드, Gem_Lv = 균사석)
             gold = L < n.costs.Length ? Math.Ceiling(n.costs[L] * COST_MUL) : 0,
-            gem = L < n.gems.Length && n.gems[L] > 0 ? Math.Ceiling(n.gems[L] * COST_MUL) : 0,
+            gem = L < n.gems.Length && n.gems[L] > 0 ? Math.Ceiling(n.gems[L]) : 0,   // 균사석은 COST_MUL을 곱하지 않는다
         };
         public static bool CanAfford(Cost c) => !double.IsInfinity(c.gold) && !double.IsNaN(c.gold) && G.gold + 1e-9 >= c.gold && G.gem + 1e-9 >= c.gem;
         static void Pay(Cost c) { G.gold -= c.gold; G.gem -= c.gem; }
@@ -221,7 +224,8 @@ namespace MoreMush
             st.hvStar = st.hvs.Distinct().ToDictionary(id => id, id => G.hv.TryGetValue(id, out var s) ? s : 1);
             // 노드·코어·별 능력치·꼬마 보너스는 더하고, 날씨(라운드마다 바뀌는 조건)만 곱한다
             // 지역 배율: 버섯 체력·점수·수확 개수가 함께 커진다
-            st.zoneMul = ZoneMul(st.theme.id, st.stage);
+            int cst = ContentStage(st.stage);   // 콘텐츠 스테이지 (튜토리얼 4판 오프셋). st.stage는 내부 판 번호
+            st.zoneMul = ZoneMul(st.theme.id, cst);
             // 공격력 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합)
             double atkFlat = 1 + NF.ps_atk(Lv("ps_atk")) + NF.ps_atk2(Lv("ps_atk2")) + NF.ps_atk2p(Lv("ps_atk2p")) + NF.ps_atk3(Lv("ps_atk3")) + NF.ps_atk3p(Lv("ps_atk3p")) + NF.ps_atk4(Lv("ps_atk4")) + (SetDone("poison") ? 3 : 0);
             st.atk = atkFlat * (1 + 0.1 + ab["atk"] + tb.atk) * NF.gm_atk(Lv("gm_atk")) * NF.inf_atk(Lv("inf_atk"));
@@ -231,7 +235,7 @@ namespace MoreMush
             st.minSpd = TUNE.min * spd;
             st.ballR = TUNE.ball0 * BALL_SCALE * (NF.ps_size(Lv("ps_size")) + ab["size"]);
             st.barLen = (150 * (NF.md_bar(Lv("md_bar")) + NF.ps_bar(Lv("ps_bar")) + 0.1 + ab["bar"] + tb.bar) + (SetDone("shelf") ? 40 : 0)) * NF.gm_bar(Lv("gm_bar")) * (wId == "cold" ? 0.75 : 1);   // 최대 필드 폭의 1/3 (RoundSim.Start)
-            double baseTime = st.stage <= EARLY_TIME_STAGES ? EARLY_SEC : BASE_TIME + StageTime(st.stage);   // 초반은 10초 + 시간 노드
+            double baseTime = st.stage <= EARLY_TIME_STAGES ? EARLY_SEC : BASE_TIME + StageTime(cst);   // 초반(내부 판 1~4)은 10초 + 시간 노드, 성장은 콘텐츠 스테이지로
             st.duration = baseTime + NF.ps_dur(Lv("ps_dur")) + NF.ps_dur2(Lv("ps_dur2")) + ab["dur"] + tb.dur - (wId == "cold" ? 3 : 0);
             st.crit = NF.ps_crit(Lv("ps_crit")) + (SetDone("coral") ? 0.05 : 0) + ab["crit"] + tb.crit;
             st.critMul = NF.ps_crit2(Lv("ps_crit2"));
@@ -240,17 +244,18 @@ namespace MoreMush
             st.scoreFlat = NF.ed_score(Lv("ed_score")) + NF.ed_score1p(Lv("ed_score1p")) + NF.ed_score2(Lv("ed_score2")) + NF.ed_score2p(Lv("ed_score2p")) + NF.ed_score3(Lv("ed_score3")) + NF.ed_score3p(Lv("ed_score3p"));
             st.scoreMul = (1 + (SetDone("cook") ? 0.5 : 0) + ab["score"]) * st.zoneMul;
             st.maxCol = Math.Max(1, (int)Math.Ceiling((ColCount(Lv("ed_cols")) + NF.ed_cols2(Lv("ed_cols2")) + tb.colsN) * (1 + ab["cols"] + tb.cols) * (wId == "rain" ? 1.2 : 1)));
-            st.regen = NF.ed_regen(Lv("ed_regen")) / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1) * (wId == "storm" ? 2 : 1);
+            st.regen = NF.ed_regen(Lv("ed_regen")) / (1 + ab["regen"]) / (wId == "rain" ? 2 : 1);   // 7회차: 폭우 재생 ×2 뺌 (새 배치 규칙에서 실제 손해가 커서, 검증_7 7-2)
             st.rareMul = (NF.ed_rare(Lv("ed_rare")) + ab["rare"]) * NF.ed_rare0(Lv("ed_rare0"));   // 희귀 포자: 안 사면 에픽 이상이 1/5
-            st.stageMul = 1 + 0.03 * (st.stage - 1);
+            // 7회차 7-2: 예전 재생 대기열이 큰 일반 군락을 걸러 희귀가 많이 남던 효과(숨은 거르기)를 보이는 규칙으로 옮겼다 — 21~30 기울기 0.06, 상한 2.4(c 48부터 예전 식과 같음)
+            st.stageMul = Math.Max(1 + 0.03 * (cst - 1), Math.Min(1 + 0.06 * (cst - 1), 2.4));
             // 수확 개수 = (기본 1 + 단계 노드 고정값) × (1 + 퍼센트 보너스 합) × 균사석 × 지역 배율
             double harvFlat = 1 + NF.ed_bonus(Lv("ed_bonus")) + NF.ed_bonus1p(Lv("ed_bonus1p")) + NF.ed_bonus2(Lv("ed_bonus2")) + NF.ed_bonus2p(Lv("ed_bonus2p")) + NF.ed_bonus3(Lv("ed_bonus3")) + NF.ed_bonus3p(Lv("ed_bonus3p"));
             st.harvestMul = harvFlat * (1 + ab["harvest"]) * NF.gm_harvest(Lv("gm_harvest")) * st.zoneMul;
             st.multiP = MultiRate(Lv("ed_multi"));
             st.priceMul = PriceMul(ab);
             st.colMax = NF.ed_size(Lv("ed_size"));
-            st.zoom = MAP_ZOOM[Lv("md_map")];
-            double area = Math.Pow(1 / (st.zoom * st.zoom), 0.7);
+            st.zoom = Lv("md_map2") > 0 ? MapZoom2() : MAP_ZOOM[Lv("md_map")];   // md_map2 = 필드 넓히기 마지막 한 칸 (형제 노드)
+            double area = Math.Pow(1 / (st.zoom * st.zoom), COL_AREA_EXP);
             st.maxCol = Math.Max(1, (int)U.JsRound(st.maxCol * area));
             st.golden = (NF.ed_gold(Lv("ed_gold")) + (SetDone("glow") ? 0.01 : 0) + ab["golden"] + tb.goldenP) * tb.goldenMul * (wId == "moon" ? 3 : 1);
             st.sparkP = tb.spark;   // 연쇄 번개 (꼬마·장식): bolt 스킬이 없어도 친다
@@ -288,10 +293,11 @@ namespace MoreMush
             foreach (var id in SKILL_IDS) { var si = SkillInfoOf(id); si.p *= (1 + ab["skill"] + tb.skill) * NF.gm_skill(Lv("gm_skill")); st.sk[id] = si; }
             st.burstR = NF.burst_r(st.sk["burst"].P) + (SetDone("fart") ? 30 : 0);
             st.festMul = 2 * st.sk["fest"].pm;
-            st.shroomHp = st.zoneMul;
+            st.shroomHp = st.zoneMul * EarlyHpMul(st.stage);   // 초반 판은 버섯 체력을 낮춘다 (Defs.EarlyHpMul, 내부 판 번호)
+            if (SIM_HP1) st.shroomHp = 1;   // 시뮬 전용 (기본 꺼짐)
             // 보스 체력은 고른 지역이 아니라 그 스테이지의 최신 지역 기준 (예전 지역을 골라 쉽게 잡지 못하게)
             st.boss = boss;
-            if (boss != null) st.bossHp = BossHp(boss, LatestTheme().id, st.stage);
+            if (boss != null) st.bossHp = BossHp(boss, LatestTheme().id, cst);
             return st;
         }
     }

@@ -75,11 +75,11 @@ namespace MoreMush
             {
                 var b = BOSS[s.bossId];
                 return s.bossCleared
-                    ? Loc.F("보스 {0} 처치! 스테이지 {1} 열림", b.n, s.nextStage)
+                    ? Loc.F("보스 {0} 처치! 스테이지 {1} 열림", b.n, StageLabel(s.nextStage))
                     : $"<color=#d04a3a>{Loc.F("보스 {0}에게 졌어요… 골드 −{1}", b.n, U.Fmt(s.bossPenalty))}</color>";
             }
             if (s.aborted) return Loc.T("수확이 도중에 중단되어 스테이지가 완료되지 않습니다.");
-            return s.nextStage > s.stage ? Loc.F("스테이지 {0} 완료 → 스테이지 {1}", s.stage, s.nextStage) : null;
+            return s.nextStage > s.stage ? Loc.F("스테이지 {0} 완료 → 스테이지 {1}", StageLabel(s.stage), StageLabel(s.nextStage)) : null;
         }
 
         static void Skin(Image im, string sprite, Color fallback)

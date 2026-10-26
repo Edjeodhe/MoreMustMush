@@ -22,5 +22,21 @@ namespace MoreMush
             var off = new Vector2((Screen.width - SIZE.x * s) / 2, (Screen.height - SIZE.y * s) / 2);
             return new Vector2((screen.x - off.x) / s, SIZE.y - (screen.y - off.y) / s);
         }
+
+        // 스테이지 픽셀 → 화면 좌표 (FromScreen의 반대)
+        public static Vector2 ToScreen(RectTransform rect, Camera cam, Vector2 stage)
+        {
+            if (rect != null)
+            {
+                var canvas = rect.GetComponentInParent<Canvas>();
+                var camForUI = canvas != null && canvas.rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : cam;
+                var r = rect.rect;
+                var world = rect.TransformPoint(new Vector3(r.xMin + stage.x, r.yMax - stage.y, 0));
+                return RectTransformUtility.WorldToScreenPoint(camForUI, world);
+            }
+            float s = Mathf.Min(Screen.width / SIZE.x, Screen.height / SIZE.y);
+            var off = new Vector2((Screen.width - SIZE.x * s) / 2, (Screen.height - SIZE.y * s) / 2);
+            return new Vector2(off.x + stage.x * s, off.y + (SIZE.y - stage.y) * s);
+        }
     }
 }

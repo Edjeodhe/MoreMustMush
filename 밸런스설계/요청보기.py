@@ -3,7 +3,7 @@
 내이름을 주면 나에게 온 열린 요청과 내 요청에 달린 답만, 없으면 전체(메인 조율용)를 보여 준다."""
 import io, os, re, sys
 
-NAMES = ["manager", "research", "theory", "verify", "test"]
+NAMES = ["manager", "research", "theory", "verify", "test", "review"]
 DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "현황")
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 

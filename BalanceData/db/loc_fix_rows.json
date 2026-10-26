@@ -1,0 +1,194 @@
+{
+ "String": [
+  {
+   "Str_ID": 901324,
+   "Str_Group_ID": 91324,
+   "Str_Name": "ui",
+   "Str_KR": "언어",
+   "Str_EN": "Language",
+   "Str_JA": "言語",
+   "Str_RU": "Язык",
+   "Str_UK": "Мова"
+  },
+  {
+   "Str_ID": 901325,
+   "Str_Group_ID": 91325,
+   "Str_Name": "ui",
+   "Str_KR": "소리 설정",
+   "Str_EN": "Sound Settings",
+   "Str_JA": "サウンド設定",
+   "Str_RU": "Настройки звука",
+   "Str_UK": "Налаштування звуку"
+  },
+  {
+   "Str_ID": 901326,
+   "Str_Group_ID": 91326,
+   "Str_Name": "ui",
+   "Str_KR": "효과음",
+   "Str_EN": "Sound Effects",
+   "Str_JA": "効果音",
+   "Str_RU": "Звуковые эффекты",
+   "Str_UK": "Звукові ефекти"
+  },
+  {
+   "Str_ID": 901327,
+   "Str_Group_ID": 91327,
+   "Str_Name": "ui",
+   "Str_KR": "배경음",
+   "Str_EN": "Music",
+   "Str_JA": "BGM",
+   "Str_RU": "Музыка",
+   "Str_UK": "Музика"
+  },
+  {
+   "Str_ID": 901328,
+   "Str_Group_ID": 91328,
+   "Str_Name": "ui",
+   "Str_KR": "메인 메뉴",
+   "Str_EN": "Main Menu",
+   "Str_JA": "メインメニュー",
+   "Str_RU": "Главное меню",
+   "Str_UK": "Головне меню"
+  },
+  {
+   "Str_ID": 901329,
+   "Str_Group_ID": 91329,
+   "Str_Name": "ui",
+   "Str_KR": "음소거: 켜짐",
+   "Str_EN": "Mute: On",
+   "Str_JA": "ミュート:オン",
+   "Str_RU": "Без звука: вкл.",
+   "Str_UK": "Без звуку: увімк."
+  },
+  {
+   "Str_ID": 901330,
+   "Str_Group_ID": 91330,
+   "Str_Name": "ui",
+   "Str_KR": "음소거: 꺼짐",
+   "Str_EN": "Mute: Off",
+   "Str_JA": "ミュート:オフ",
+   "Str_RU": "Без звука: выкл.",
+   "Str_UK": "Без звуку: вимк."
+  },
+  {
+   "Str_ID": 901331,
+   "Str_Group_ID": 91331,
+   "Str_Name": "ui",
+   "Str_KR": "에픽 이상 가중치 ×{0}",
+   "Str_EN": "Epic and above weight ×{0}",
+   "Str_JA": "エピック以上の重み ×{0}",
+   "Str_RU": "Вес эпических и выше ×{0}",
+   "Str_UK": "Вага епічних і вище ×{0}"
+  },
+  {
+   "Str_ID": 901332,
+   "Str_Group_ID": 91332,
+   "Str_Name": "ui",
+   "Str_KR": "얻은 점수 → 골드 (×{0})",
+   "Str_EN": "Score Earned → Gold (×{0})",
+   "Str_JA": "獲得スコア→ゴールド (×{0})",
+   "Str_RU": "Очки → золото (×{0})",
+   "Str_UK": "Отримані бали → золото (×{0})"
+  },
+  {
+   "Str_ID": 901333,
+   "Str_Group_ID": 91333,
+   "Str_Name": "ui",
+   "Str_KR": "신기록! {0} {1}",
+   "Str_EN": "New record! {0} {1}",
+   "Str_JA": "新記録!{0} {1}",
+   "Str_RU": "Новый рекорд! {0} {1}",
+   "Str_UK": "Новий рекорд! {0} {1}"
+  },
+  {
+   "Str_ID": 901334,
+   "Str_Group_ID": 91334,
+   "Str_Name": "ui",
+   "Str_KR": "보스 {0} 처치! 스테이지 {1} 열림",
+   "Str_EN": "Boss {0} defeated! Stage {1} unlocked",
+   "Str_JA": "ボス{0}を倒した!ステージ{1}が解放されました",
+   "Str_RU": "Босс {0} побеждён! Открыт этап {1}",
+   "Str_UK": "Боса {0} переможено! Відкрито етап {1}"
+  },
+  {
+   "Str_ID": 901335,
+   "Str_Group_ID": 91335,
+   "Str_Name": "ui",
+   "Str_KR": "보스 {0}에게 졌어요… 골드 −{1}",
+   "Str_EN": "Defeated by Boss {0}… Gold −{1}",
+   "Str_JA": "ボス{0}に負けました…ゴールド −{1}",
+   "Str_RU": "Босс {0} победил… Золото −{1}",
+   "Str_UK": "Бос {0} переміг… Золото −{1}"
+  },
+  {
+   "Str_ID": 901336,
+   "Str_Group_ID": 91336,
+   "Str_Name": "ui",
+   "Str_KR": "보스 {0}에게 졌어요… 골드 −{1} (−{2}%)",
+   "Str_EN": "Defeated by Boss {0}… Gold −{1} (−{2}%)",
+   "Str_JA": "ボス{0}に負けました…ゴールド −{1} (−{2}%)",
+   "Str_RU": "Босс {0} победил… Золото −{1} (−{2}%)",
+   "Str_UK": "Бос {0} переміг… Золото −{1} (−{2}%)"
+  },
+  {
+   "Str_ID": 901337,
+   "Str_Group_ID": 91337,
+   "Str_Name": "ui",
+   "Str_KR": "눌러서 확인해 보세요",
+   "Str_EN": "Tap to check it out",
+   "Str_JA": "タップして確認してみましょう",
+   "Str_RU": "Нажми, чтобы посмотреть",
+   "Str_UK": "Натисни, щоб подивитися"
+  },
+  {
+   "Str_ID": 901338,
+   "Str_Group_ID": 91338,
+   "Str_Name": "ui",
+   "Str_KR": "{0} 완성! 강화 재료로 보관했어요",
+   "Str_EN": "{0} complete! Stored as upgrade material",
+   "Str_JA": "{0}ができあがり!強化素材として保管しました",
+   "Str_RU": "Готово: {0}! Сохранено как материал для улучшения",
+   "Str_UK": "Готово: {0}! Збережено як матеріал для вдосконалення"
+  },
+  {
+   "Str_ID": 901339,
+   "Str_Group_ID": 91339,
+   "Str_Name": "ui",
+   "Str_KR": "오늘 즉시 완료를 다 썼어요",
+   "Str_EN": "You've used up all instant finishes today",
+   "Str_JA": "今日の即完了はすべて使い切りました",
+   "Str_RU": "Мгновенные завершения на сегодня закончились",
+   "Str_UK": "Миттєві завершення на сьогодні закінчилися"
+  },
+  {
+   "Str_ID": 901340,
+   "Str_Group_ID": 91340,
+   "Str_Name": "ui",
+   "Str_KR": "꼬마가 합류하면 열려요",
+   "Str_EN": "Opens when a Little One joins",
+   "Str_JA": "ちびっこが仲間入りしたら開きます",
+   "Str_RU": "Откроется, когда присоединится малыш",
+   "Str_UK": "Відкриється, коли приєднається малюк"
+  },
+  {
+   "Str_ID": 901341,
+   "Str_Group_ID": 91341,
+   "Str_Name": "ui",
+   "Str_KR": "{0} 합류 시 해금",
+   "Str_EN": "Unlocks when {0} joins",
+   "Str_JA": "{0}が仲間入りしたら解放",
+   "Str_RU": "Откроется, когда присоединится {0}",
+   "Str_UK": "Відкриється, коли приєднається {0}"
+  },
+  {
+   "Str_ID": 901342,
+   "Str_Group_ID": 91342,
+   "Str_Name": "ui",
+   "Str_KR": "빈 칸",
+   "Str_EN": "Empty slot",
+   "Str_JA": "空き枠",
+   "Str_RU": "Пустой слот",
+   "Str_UK": "Порожній слот"
+  }
+ ]
+}

@@ -368,7 +368,9 @@ namespace MoreMush
             evoBlinkT -= dt;
             bool blink = evoBlinkT < 0.12f;
             if (evoBlinkT <= 0) evoBlinkT = blinkEvery * Random.Range(0.7f, 1.3f);
-            var face = EvoSprite(l.face + EvoFace(blink, shut)) ?? EvoSprite(l.face + "normal");
+            // 얼굴 키는 SpriteDB.Key로 기억해 둔 문자열을 쓴다 (정령마다 매 프레임 이어붙이지 않게)
+            string fk = l.face ?? "";
+            var face = EvoSprite(SpriteDB.Key(fk, EvoFace(blink, shut))) ?? EvoSprite(SpriteDB.Key(fk, "normal"));
             var fsr = head ? evoHeadFace : evoBodyFace;
             if (fsr.sprite != face) fsr.sprite = face;
         }

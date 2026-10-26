@@ -1,0 +1,2 @@
+{"success":false,"message":"Compilation failed","data":{"errors":["Line 36: `MoreMush.Game' does not contain a definition for `BossAt'","Line 50: The left-hand side of an assignment must be a variable, a property or an indexer"],"compiler":"codedom"}}
+

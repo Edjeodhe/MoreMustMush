@@ -206,8 +206,10 @@ namespace MoreMush
         public static bool Hidden(Node n)
         {
             string s = NodeState(n);
-            return (s == "hidden" || s == "locked") && !HasOwnedDescendant(n.id);
+            return (s == "hidden" || s == "locked") && !HasOwnedDescendant(n.id) || Tutorial.HidesNode(n);
         }
+
+        public TreeNodeView Find(string id) => byId.TryGetValue(id, out var nv) ? nv : null;
 
         // 레벨 있는 노드의 조상 집합. 노드마다 매 프레임 불리므로 한 프레임에 한 번만 다시 센다 (노드 90개 × 깊이 정도)
         static readonly HashSet<string> ownedAnc = new HashSet<string>();

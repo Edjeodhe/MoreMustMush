@@ -18,6 +18,7 @@ namespace MoreMush
         public GameObject resetConfirm;
 
         OptionWindow optionWin;
+        LangWindow langWin;
 
         void Awake()
         {
@@ -29,6 +30,7 @@ namespace MoreMush
             if (resetConfirm == null) resetConfirm = FindByName("ResetConfirm");
             WirePanel(resetConfirm, ("Button_Yes", OnResetYes), ("Button_No", CloseAll));
             optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); CloseAll(); });
+            langWin = LangWindow.For(gameObject.scene, CloseAll);
             CloseAll();
         }
 
@@ -71,15 +73,15 @@ namespace MoreMush
 
         void OnExit() { Snd.Ui(); App.Quit(); }
 
-        // 지구본 버튼: 언어 고르기 창
-        void OnLang() { Snd.Ui(); LangPopup.Open(gameObject.scene); }
+        // 지구본 버튼: 언어 선택 창 (LangWindow)
+        void OnLang() { Snd.Ui(); CloseAll(); langWin.Open(); }
 
         void Update()
         {
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb == null || !kb.escapeKey.wasPressedThisFrame) return;
             // Esc: 열린 창이 있으면 닫고, 없으면 옵션 창
-            bool anyOpen = optionWin.IsOpen || (resetConfirm != null && resetConfirm.activeSelf);
+            bool anyOpen = optionWin.IsOpen || langWin.IsOpen || (resetConfirm != null && resetConfirm.activeSelf);
             if (anyOpen) { Snd.Ui(); CloseAll(); } else OnOption();
         }
 
@@ -96,6 +98,7 @@ namespace MoreMush
         {
             if (resetConfirm != null) resetConfirm.SetActive(false);
             optionWin?.Close();
+            langWin?.Close();
         }
 
         GameObject EnsureConfirm()

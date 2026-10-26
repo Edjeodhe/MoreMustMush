@@ -81,6 +81,7 @@ namespace MoreMush
             double exp = TributeAllValue();
             if (exp <= 0) return 0;
             F.store.Clear(); F.exp += exp;
+            Telemetry.TreeAct("tribute", null, exp, 0, 0);
             SaveGame();
             return exp;
         }
@@ -148,8 +149,9 @@ namespace MoreMush
 
         public static int KLv(string kid) => G?.farm?.klv != null && F.klv.TryGetValue(kid, out var l) ? l : 1;
         public static int Awaken(string kid) => G?.farm?.awaken != null && F.awaken.TryGetValue(kid, out var a) ? a : 0;
-        public static int KLvSum() => KidsOwned().Sum(k => KLv(k.id));
-        public static int KLvSteps() => KLV.sumAt.Count(a => KLvSum() >= a);
+        // 세계수 화면이 프레임마다 여러 번 부른다 → LINQ·리스트 없이 센다 (예전 Count 람다는 원소마다 KLvSum을 다시 돌렸다)
+        public static int KLvSum() { int s = 0; foreach (var k in KIDS) if (HasSpecial(k.id)) s += KLv(k.id); return s; }
+        public static int KLvSteps() { int s = KLvSum(), n = 0; foreach (var a in KLV.sumAt) if (s >= a) n++; return n; }
 
         public enum KidFail { None, NotOwned, Max, Cap, Gold, Gem, Lv, Owned, Stage }   // Stage = 세계수 단계가 아직 낮다
         public static double KLvCost(string kid) => KLv(kid) >= KLV.max ? 0 : KLV.Cost(KLv(kid));
@@ -166,6 +168,7 @@ namespace MoreMush
             BagSettle();
             double c = KLvCost(kid);
             G.gold -= c; F.klv[kid] = KLv(kid) + 1;
+            Telemetry.TreeUp("klv_" + kid, F.klv[kid], c, 0);
             DecoSlotsEnsure();   // Lv 합계 보상 (장식 슬롯)
             SaveGame();
             return true;
@@ -213,6 +216,7 @@ namespace MoreMush
             if (!HasSpecial(kid) || !KID.ContainsKey(kid) || !SP.ContainsKey(sp ?? "") || !StoreTake(sp, n)) return -1;
             int lv0 = AffLv(kid);
             AffAdd(kid, GiftValue(kid, sp) * n);
+            Telemetry.TreeAct("gift", kid, GiftValue(kid, sp) * n, n, 0);
             SaveGame();
             return AffLv(kid) - lv0;
         }
@@ -221,8 +225,11 @@ namespace MoreMush
         public static bool ZoneOpen(string zone) => ZONE.TryGetValue(zone ?? "", out var z) && Stage() >= z.open;
         public static string ZoneOf(string kid) => G?.farm?.zone != null && F.zone.TryGetValue(kid, out var z) && ZoneOpen(z) ? z : null;
         public static List<string> KidsIn(string zone) => KidsOwned().Where(k => ZoneOf(k.id) == zone).Select(k => k.id).ToList();
+        // KidsIn(zone).Count·Contains와 같지만 리스트를 만들지 않는다 (세계수 화면이 슬롯마다 매 프레임 부른다)
+        public static int KidsInCount(string zone) { int n = 0; foreach (var k in KIDS) if (HasSpecial(k.id) && ZoneOf(k.id) == zone) n++; return n; }
+        public static bool KidIn(string kid, string zone) { foreach (var k in KIDS) if (k.id == kid) return HasSpecial(kid) && ZoneOf(kid) == zone; return false; }
         public static int ZoneCapacity() => HARV.ZoneCap(Stage()) + (KLvSum() >= KLV.sumAt[1] ? 1 : 0) + (KLvSum() >= KLV.sumAt[3] ? 1 : 0);
-        public static bool ZoneRoom(string zone) => KidsIn(zone).Count < ZoneCapacity();
+        public static bool ZoneRoom(string zone) => KidsInCount(zone) < ZoneCapacity();
 
         // 꼬마를 구역에 보낸다 (zone = null이면 쉬게 한다)
         public static bool Assign(string kid, string zone)
@@ -262,7 +269,7 @@ namespace MoreMush
         // 나무버섯 성장 속도 (구역마다): 나이테 · 장식 · 이슬 꼬마 · 균사 트리 노드
         public static double GrowMul(string zone)
         {
-            double m = 1 + WT.ringGrow * (Ring() - 1) + DecoSum("grow") + (KidsIn(zone).Contains("dew") ? KID["dew"].tv : 0);
+            double m = 1 + WT.ringGrow * (Ring() - 1) + DecoSum("grow") + (KidIn("dew", zone) ? KID["dew"].tv : 0);
             return m / NF.gm_farm(Lv("gm_farm"));
         }
 
@@ -335,29 +342,62 @@ namespace MoreMush
                     r.gold += z.gold; r.gem += z.gem; r.n += z.n;
                 }
                 double all = (1 + DecoSum("bagEff")) * NF.gm_herb(Lv("gm_herb"));
-                r.gold *= all * (1 + DecoSum("treeGold"));
-                r.gem *= all * (1 + DecoSum("gem")) * NF.gm_gourmet(Lv("gm_gourmet"));
-                r.n *= all;
+                double mul = WT.bagMul[Math.Min(Stage(), WT.bagMul.Length) - 1];
+                r.gold = BagGold(r.gold * all * (1 + DecoSum("treeGold")));
+                r.gem *= all * mul * (1 + DecoSum("gem")) * NF.gm_gourmet(Lv("gm_gourmet"));
+                r.n *= all * mul;
             }
             finally { MemoEnd(began); }
             return r;
         }
 
+        // 보따리 골드/초: 일반 판 골드/초(평활) × 단계 비율 × 효율항(기준 배치 대비 나무버섯 골드, 1 위로는 제곱근·상한 bagEffMax).
+        // 판 기록이 없으면 0 — 골드는 직접 플레이해야 기준이 오른다
+        static double BagGold(double raw)
+        {
+            if (!(raw > 0) || !(G.bagGoldPerSec > 0)) return 0;   // NaN도 0으로
+            int i = Math.Min(Stage(), WT.bagRatio.Length) - 1;
+            double x = raw * 3600 / WT.bagRefGoldH[i];
+            double eff = x <= 1 ? x : Math.Min(WT.bagEffMax, Math.Sqrt(x));
+            return G.bagGoldPerSec * WT.bagRatio[i] * eff * BagCodexMul();
+        }
+
+        // 도감 보너스 (골드만): 모은 종 비율만큼, 도감을 다 채우면 ×(1 + bagCodexMax)
+        public static double BagCodexMul() => SP_TOTAL <= 0 ? 1 : 1 + WT.bagCodexMax * SPECIES.Count(sp => Harvested(sp.id)) / SP_TOTAL;
+
+        // 일반 판이 끝날 때 보따리 골드 기준을 갱신한다. 그때까지 쌓인 몫은 먼저 옛 기준으로 넣는다
+        public static void BagBaseUpdate(double roundGold, double timeMax)
+        {
+            if (G == null || !(roundGold >= 0) || !(timeMax > 0) || double.IsInfinity(roundGold) || double.IsInfinity(timeMax)) return;
+            BagSettle();
+            double now = roundGold / (timeMax + WT.bagRoundGap);
+            G.bagGoldPerSec = G.bagGoldPerSec <= 0 ? now : G.bagGoldPerSec * WT.bagBaseKeep + now * (1 - WT.bagBaseKeep);
+        }
+
         // ===== 수확 보따리 =====
         public static double BagCapSec() => (HARV.bagHours + (HasSpecial("rock") ? KID["rock"].tv2 : 0) + DecoSum("bagH")) * 3600;
 
-        // 지금까지의 수확을 보따리에 넣는다 (보관 시간이 다 차면 더 쌓이지 않는다)
+        // 지금까지의 수확을 보따리에 넣는다 (보관 시간이 다 차면 더 쌓이지 않는다).
+        // 세계수가 열린 것으로 기록되기 전(Unlock.Newly)에는 시계만 지금으로 당겨 둔다 — 해금 전 시간은 쌓이지 않는다
         public static void BagSettle()
         {
             if (G?.farm == null) return;
             var b = F.bag; double now = Now();
-            if (b.t <= 0 || b.t > now) { b.t = now; return; }
+            if (b.t <= 0 || b.t > now || !Unlock.Opened(Unlock.WORLDTREE)) { b.t = now; return; }
             double dt = (now - b.t) / 1000, use = Math.Max(0, Math.Min(dt, BagCapSec() - b.sec));
             b.t = now;
             if (use <= 0) return;
             var r = BagRate();
+            if (r.gold <= 0 && r.gem <= 0) return;   // 받을 게 없으면 보관 시간도 채우지 않는다 (꽉 찬 빈 보따리로 막히지 않게)
             b.gold += r.gold * use; b.gem += r.gem * use; b.n += r.n * use; b.sec += use;
         }
+        // 세계수가 막 열렸을 때: 해금 전에 쌓였던 보따리를 비우고 지금부터 다시 잰다
+        public static void BagRestart()
+        {
+            if (G?.farm == null) return;
+            F.bag = new SaveData.Bag { t = Now() };
+        }
+
         public static bool BagFull() => G?.farm != null && F.bag.sec >= BagCapSec() - 1;
         public static bool BagReady() => G?.farm != null && (Math.Floor(F.bag.gold) >= HARV.bagMinClaim || Math.Floor(F.bag.gem) >= 1);
 

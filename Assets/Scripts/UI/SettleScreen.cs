@@ -115,9 +115,9 @@ namespace MoreMush
             Clear(unlockList); Clear(newsList);
             foreach (var id in s.unlocks) Card(unlockCards, unlockList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("해금"), "unlock");
             unlockBox.SetActive(unlockList.Count > 0);
-            foreach (var id in s.newSpecies) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "");
-            foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, Loc.F("황금 {0}", SP[id].n), "NEW", "gold");
-            foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, "NEW", "star");
+            foreach (var id in s.newSpecies) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("NEW"), "");
+            foreach (var id in s.newGolden) Card(newsCards, newsList, SpriteDB.Single(id), 3, Loc.F("황금 {0}", SP[id].n), Loc.T("NEW"), "gold");
+            foreach (var (id, st) in s.newStars) Card(newsCards, newsList, SpriteDB.Single(id), 0, SP[id].n, Loc.T("NEW"), "star");
             newsBox.SetActive(newsList.Count > 0);
             var recs = s.recs.Select(r => Loc.F("신기록! {0} <color=#3b2414>{1}</color>", RECORD_NAMES[r.k], U.Fmt(r.v)) + (r.old > 0 ? " <size=70%><color=#8a6a4a>" + Loc.F("(이전 {0})", U.Fmt(r.old)) + "</color></size>" : "")).ToList();
             var bossLine = BossLine(s);
@@ -139,14 +139,14 @@ namespace MoreMush
             {
                 var b = BOSS[s.bossId];
                 return s.bossCleared
-                    ? Loc.F("{0} 보스 {1} 처치! 스테이지 {2} 열림", UIUtil.Ic(BOSS_ICON), b.n, s.nextStage) + "\n<size=80%>" +
+                    ? Loc.F("{0} 보스 {1} 처치! 스테이지 {2} 열림", UIUtil.Ic(BOSS_ICON), b.n, StageLabel(s.nextStage)) + "\n<size=80%>" +
                       Loc.F("처치 보상: {0}+{1} · {2}+{3} · 버섯 +{4}개", UIUtil.Ic("gold"), U.Fmt(s.bossGold), UIUtil.Ic("gem"), s.bossGem, U.Fmt(s.bossShrooms)) + "</size>"
                     : $"<color=#d04a3a>{Loc.F("보스 {0}에게 졌어요… 골드 −{1} (−{2}%)", b.n, U.Fmt(s.bossPenalty), Mathf.RoundToInt((float)(1 - BOSS_FAIL_GOLD) * 100))}</color>\n<size=80%>" +
                       Loc.T("보스 도전이 꺼졌어요. 이 스테이지에서 파밍하다가 균사 트리의 보스 도전 버튼으로 다시 도전하세요") + "</size>";
             }
             if (s.aborted) return Loc.T("수확이 도중에 중단되어 스테이지가 완료되지 않습니다.");
-            if (IsBossStage(s.stage)) return Loc.F("스테이지 {0} 보스가 기다려요 (보스 도전 꺼짐 · 파밍 중)", s.stage);
-            return s.nextStage > s.stage ? Loc.F("스테이지 {0} 완료 → 스테이지 {1}", s.stage, s.nextStage) : null;
+            if (IsBossStage(ContentStage(s.stage))) return Loc.F("스테이지 {0} 보스가 기다려요 (보스 도전 꺼짐 · 파밍 중)", StageLabel(s.stage));
+            return s.nextStage > s.stage ? Loc.F("스테이지 {0} 완료 → 스테이지 {1}", StageLabel(s.stage), StageLabel(s.nextStage)) : null;
         }
 
         // 줄 수를 다 줄여도 화면을 넘으면(기록·지역 알림이 많을 때 등) 비율을 유지한 채 축소한다.
@@ -302,7 +302,7 @@ namespace MoreMush
                 foreach (var kv in d.OrderByDescending(x => x.Value.dmg))
                 {
                     double pct = total > 0 ? kv.Value.dmg / total * 100 : 0;
-                    sb.Append($"{name(kv.Key)}<pos=45%>{pct:0.0}%<pos=62%>{U.Fmt(kv.Value.dmg)}<pos=78%>{kv.Value.hits}<pos=89%>{kv.Value.kills}\n");
+                    sb.Append($"{name(kv.Key)}<pos=45%>{pct.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)}%<pos=62%>{U.Fmt(kv.Value.dmg)}<pos=78%>{kv.Value.hits}<pos=89%>{kv.Value.kills}\n");
                 }
                 sb.Append('\n');
             }

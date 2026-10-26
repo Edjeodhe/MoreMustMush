@@ -12,7 +12,7 @@ namespace MoreMush.EditorTools
 {
     // 밸런스 측정용 헤드리스 봇. RoundSim을 에디터에서 직접 돌려 라운드 수입을 잰다.
     // 실제 세이브(PlayerPrefs)와 Game.G는 실행이 끝나면 원래대로 되돌린다.
-    public static class BalanceSim
+    public static partial class BalanceSim
     {
         public class RoundResult
         {
@@ -82,7 +82,7 @@ namespace MoreMush.EditorTools
             var st = ComputeStats("clear", THEMES[0].id);
             string best = THEMES[0].id;
             foreach (var t in THEMES)
-                if (ThemeOpen(t) && st.atk >= 0.5 * TIERS[0].hp * ZoneMul(t.id, StageNow())) best = t.id;
+                if (ThemeOpen(t) && st.atk >= 0.5 * TIERS[0].hp * ZoneMul(t.id, ContentNow())) best = t.id;
             return best;
         }
 
@@ -90,7 +90,7 @@ namespace MoreMush.EditorTools
         {
             if (autoZone) G.theme = PickZone();
             else if (!THEME.TryGetValue(G.theme ?? "", out var th) || !ThemeOpen(th)) G.theme = LatestTheme().id;
-            var boss = BossRoundNext() ? BossAt(StageNow()) : null;
+            var boss = BossRoundNext() ? BossAt(ContentNow()) : null;
             string w = RollWeather(boss != null);
             var R = RoundSim.Start(w, G.theme, boss);
             var res = new RoundResult { stage = StageNow(), weather = w, duration = R.st.duration, cols = R.st.maxCol, zone = G.theme, atk = R.st.atk, balls = R.st.permBalls, boss = boss?.id };
@@ -155,6 +155,7 @@ namespace MoreMush.EditorTools
             public List<int> buysR = new List<int>();        // 그 판 뒤 산 레벨 수
             public List<double> gateR = new List<double>();  // 보스 관문 예상 처치 시간(초), 관문 안 쓰면 -1
             public int[] doneR = new int[4];                 // 단계별 다 산 판 (판 수, 스테이지가 아님)
+            public double maxBuyGold;                        // 지금까지 강화를 살 때 가진 골드의 최댓값 (체크포인트 재사용 판정)
             public void Set(int stage, double income, int bought, double value = 0, double killRate = 0, string zoneId = "")
             {
                 while (inc.Count < stage) { inc.Add(0); buys.Add(0); }
@@ -186,9 +187,14 @@ namespace MoreMush.EditorTools
         static readonly string[] ATK_KEYS = { "ps_atk", "ps_atk2", "ps_atk2p", "ps_atk3", "ps_atk3p", "ps_atk4", "inf_atk", "ps_crit", "ps_crit2", "ps_heavy", "gm_atk", "gm_boss", "ps_spd", "ps_ball", "ps_ball2", "ps_ball3", "ps_dur", "ps_dur2" };
         static int AtkLevels() => ATK_KEYS.Where(NODE.ContainsKey).Sum(Lv);
 
+        // 마지막 Progression 호출에서 실제로 돈 판 수 (BalanceJob이 시간 예산만큼 묶어 부를 때 남은 판을 센다)
+        public static int LastPlayed;
+        public static bool LastHitStop;   // 마지막 호출이 멈출 스테이지(stopStage)에 닿아 끝났는가
+
         public static string Progression(int rounds, bool resume = false, int seed = 1, float skill = SKILL, double maxWallSec = 20, int every = 1, int stopStage = 0)
         {
             LoadPriceTable();
+            LastPlayed = 0; LastHitStop = false;
             return Sandbox(() =>
             {
                 G = resume && File.Exists(StatePath(seed)) ? JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(StatePath(seed))) : new SaveData();
@@ -196,31 +202,35 @@ namespace MoreMush.EditorTools
                 var sb = new StringBuilder();
                 var sw = System.Diagnostics.Stopwatch.StartNew();
                 if (!resume) { botFarm = 0; botBoughtSinceFail = false; }
+                // 상태·기록 파일은 판마다가 아니라 호출이 끝날 때 한 번 쓴다
                 if (!resume) Log(sb, $"조건: 시드 {seed} · 바 오차 {skill} · 보스 {(BOSS_GATE ? $"관문 H0={GATE_H} KB={GATE_KB} MOVER_H={GATE_MOVER_H} TAU={GATE_TAU} T0={GATE_T0} 환상×{GATE_PHANTOM_K}" : "실제 판(봇 조준)")} · 프리셋 {TUNE.id} · DB {Db.Data._source}");
+                if (!resume) Log(sb, $"R = 내부 판 번호(튜토리얼 T1~T{TUT_ROUNDS} 포함). 표시 스테이지 = R − {TUT_ROUNDS}, 첫 보스(표시 {FIRST_BOSS_STAGE}) = R{RoundOfStage(FIRST_BOSS_STAGE)}");
                 if (!resume) Log(sb, "판 | 누적 | 지역 | 시간 | 핀볼 | 공격력 | 점수골드 | 수확 | 보유골드 | 산 레벨 | 초반/중반/후반");
                 for (int i = 0; i < rounds; i++)
                 {
-                    if (sw.Elapsed.TotalSeconds > maxWallSec || (stopStage > 0 && StageNow() > stopStage)) break;
+                    if (stopStage > 0 && StageNow() > stopStage) { LastHitStop = true; break; }
+                    if (sw.Elapsed.TotalSeconds > maxWallSec) break;
                     var rnd = new System.Random(seed * 1000 + G.rounds); UnityEngine.Random.InitState(seed * 1000 + G.rounds);
                     // 봇의 보스 재도전: 지고 나면 파밍하다가, 무언가 사고 나서 또는 3판마다 다시 켠다
                     // 관문 모드는 결정적이라(공격력이 그대로면 또 진다) 공격 관련 노드를 산 다음 판 또는 5판마다 (theory 재도전 규칙)
-                    if (IsBossStage(StageNow()) && !G.bossOn && (botBoughtSinceFail || ++botFarm >= (BOSS_GATE ? 5 : 3))) { G.bossOn = true; botFarm = 0; botBoughtSinceFail = false; }
+                    if (IsBossStage(ContentNow()) && !G.bossOn && (botBoughtSinceFail || ++botFarm >= (BOSS_GATE ? 5 : 3))) { G.bossOn = true; botFarm = 0; botBoughtSinceFail = false; }
                     var r = PlayRound(rnd, skill, !GAME_ZONE);
                     // 버섯 판매·마을 의뢰는 v3에서 없어졌다. 판 수입은 정산 골드뿐이다 (SELL 설정은 이제 효과 없음)
                     double sold = 0;
                     int before = GoldLevels(), atkBefore = AtkLevels();
+                    if (G.gold > ph.maxBuyGold) ph.maxBuyGold = G.gold;   // 체크포인트 재사용 판정용
                     BulkBuy(new[] { "ed", "md", "ps" }, 0, false);
                     // 추정 플레이 시간(초). 관문 처치 판은 처치 시각 + 끝 연출 1.5초에 끝난다
                     G.play += (r.gateT >= 0 && r.bossCleared ? Math.Min(r.duration, r.gateT + 1.5) : r.duration) + OVERHEAD_SEC;
                     int bought = GoldLevels() - before;
                     if (BOSS_GATE ? AtkLevels() > atkBefore : bought > 0) botBoughtSinceFail = true;
                     if (r.boss != null && !r.bossCleared) botBoughtSinceFail = false;   // 패배 뒤에 산 것만 센다
-                    if (r.boss != null) Log(sb,$"  보스 R{r.stage} {BOSS[r.boss].nKo}: {(r.bossCleared ? "처치" : r.gateT >= 0 ? "실패" : $"실패 (남은 체력 {r.bossHpLeft:P0})")}{(r.gateT >= 0 ? $" · 관문 예상 {r.gateT:F1}s / 판 {r.duration:F0}s" : "")}");
+                    if (r.boss != null) Log(sb,$"  보스 R{r.stage} {BOSS[r.boss].nKo}: {(r.bossCleared ? "처치" : r.gateT >= 0 ? "실패" : $"실패 (남은 체력 {r.bossHpLeft:P0})")}{(r.gateT >= 0 ? $" · 관문 예상 {r.gateT:F1}s / 판 {r.duration:F0}s" : "")} · 표시 스테이지 {StageLabel(r.stage)}");
                     ph.rounds++; if (bought > 0) ph.buyRounds++;
                     // 스테이지 수입도 정산 net(보스 처치 보상·패배 감액 포함). 2회차부터 — 1회차 기록(scoreGold + bonus)과 비교할 때 주의
                     ph.Set(r.stage, r.net + sold, bought, r.value, r.spawned > 0 ? (double)r.harvests / r.spawned : 0, r.zone);
                     ph.incR.Add(r.net); ph.stageR.Add(r.stage); ph.playR.Add(G.play); ph.atkR.Add(r.atk); ph.buysR.Add(bought); ph.gateR.Add(r.gateT);
-                    ph.bossR.Add(r.boss != null ? (r.bossCleared ? 1 : -1) : IsBossStage(r.stage) ? 2 : 0);
+                    ph.bossR.Add(r.boss != null ? (r.bossCleared ? 1 : -1) : IsBossStage(ContentStage(r.stage)) ? 2 : 0);
                     ph.SetTiers(r.stage, r.madeT, r.killT);
                     string marks = "";
                     for (int t = 1; t <= 3; t++)
@@ -230,10 +240,13 @@ namespace MoreMush.EditorTools
                     }
                     if (r.stage % every == 0 || r.stage <= 10 || marks != "")
                         Log(sb, $"R{r.stage} | {G.play / 60:F0}분 | {THEME[r.zone].nKo} | {r.duration:F0}s | {r.balls} | {U.Fmt(r.atk)} | {U.Fmt(r.scoreGold)} | {r.harvests} | {U.Fmt(G.gold)} | +{bought} | {GoldLevels(1)}/{GoldLevelsMax(1)} {GoldLevels(2)}/{GoldLevelsMax(2)} {GoldLevels(3)}/{GoldLevelsMax(3)} | 도감 {CodexCount()} 별 {SPECIES.Sum(sp => StarOf(sp.id))} 최고등급 {SPECIES.Where(IsUnlockedSp).Max(sp => sp.t)} 황금 {GoldenCount()}{marks}");
-                    File.WriteAllText(StatePath(seed), JsonConvert.SerializeObject(G));
-                    File.WriteAllText(PhasePath(seed), JsonConvert.SerializeObject(ph));
+                    LastPlayed++;
+                    if (CkptEvery > 0 && G.rounds % CkptEvery == 0) SaveCkpt(seed, ph);
                 }
-                Log(sb, $"(무언가 산 판 {ph.buyRounds}/{ph.rounds} · 이번 호출 {sw.Elapsed.TotalSeconds:F1}s)");
+                // 예외가 나면 반쯤 돈 판을 남기지 않도록 끝까지 돈 경우에만 쓴다 (작업은 Tick이 예외를 잡고 멈춘다)
+                File.WriteAllText(StatePath(seed), JsonConvert.SerializeObject(G));
+                File.WriteAllText(PhasePath(seed), JsonConvert.SerializeObject(ph));
+                Log(sb, $"(무언가 산 판 {ph.buyRounds}/{ph.rounds} · 이번 호출 {LastPlayed}판 {sw.Elapsed.TotalSeconds:F1}s)");
                 return sb.ToString();
             });
         }
@@ -303,8 +316,9 @@ namespace MoreMush.EditorTools
             (new[] { "ed_score", "ed_score1p", "ed_score2", "ed_score2p", "ed_score3", "ed_score3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
             (new[] { "ed_bonus", "ed_bonus1p", "ed_bonus2", "ed_bonus2p", "ed_bonus3", "ed_bonus3p" }, new[] { 1.0, 1, 10, 10, 100, 100 }, CROSS),
         };
-        // 1단계 형제(I → I+)는 줄 규칙에서 뺀다: 1단계 가격은 밸런스 3회차 사다리(DB)로 고정했고, I의 끝이 싸서 I+ 첫 레벨이 ×4를 넘는다 (verify#12 안 a)
-        public static bool FreeSibling(double[] per, int t) => t == 1 && per[1] == per[0];
+        // 줄의 첫 경계(I → I+, 공격력은 I → II)는 줄 규칙에서 뺀다: 1단계 가격은 밸런스 3회차 사다리(DB)로 고정했고, I의 끝이 싸서 다음 첫 레벨이 ×4를 넘는다 (verify#12 안 a).
+        // 공격력 I은 4회차 F안(2026-10-19, theory R4-2)으로 싸게 쪼개 효율 넘김(cross)을 못 지키므로 I → II 경계도 뺀다
+        public static bool FreeSibling(double[] per, int t) => t == 1;
         public const double CROSS = 0.66;   // 조사 원칙 P7(다음 단계 효율 ≥ ×1.5) + 반올림 여유. 0.7(×1.43)은 I→II 세 곳이 ×1.5에 못 미쳤다(검증 2026-10-08)
         // 같은 노드 안에서 다음 레벨은 앞 레벨의 NODE_STEP_MAX배를 넘지 않는다 (한 노드 가격이 한 번에 크게 뛰지 않게)
         public const double NODE_STEP_MAX = 4;
@@ -589,7 +603,7 @@ namespace MoreMush.EditorTools
                 {
                     var n = NODE[ids[t]];
                     var cs = Enumerable.Range(0, n.max).Select(l => NodeCost(n, l).gold / per[t]).ToList();
-                    if (t > 0) { total++; if (cs[0] < lastPer) ok++; }
+                    if (t > 0 && !FreeSibling(per, t)) { total++; if (cs[0] < lastPer) ok++; }
                     lastPer = cs.Last();
                     parts.Add($"{n.nKo}: " + string.Join(" → ", cs.Select(c => U.Fmt(c))));
                 }

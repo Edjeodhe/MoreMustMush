@@ -1,0 +1,17 @@
+state,map,weather,dev,step,calls,msMean,msMax,found,ptsNote
+late_clear,1.00,clear,False,8,200,8.038,11.744,200,max18 colonies17 colS0.804
+late_clear,1.00,clear,False,16,200,2.061,3.177,200,max18 colonies17 colS0.804
+late_clear,1.00,clear,False,24,200,0.923,1.492,200,max18 colonies17 colS0.804
+late_clear,1.00,clear,False,32,200,0.533,0.937,200,max18 colonies17 colS0.804
+late_rain_dev3,1.00,rain,True,8,200,9.440,12.753,200,max22 colonies21 colS0.731
+late_rain_dev3,1.00,rain,True,16,200,2.376,3.724,200,max22 colonies21 colS0.731
+late_rain_dev3,1.00,rain,True,24,200,1.105,1.869,200,max22 colonies21 colS0.731
+late_rain_dev3,1.00,rain,True,32,200,0.645,1.406,200,max22 colonies21 colS0.731
+L0_rain_dev3,1.68,rain,True,8,200,1.790,2.511,200,max9 colonies8 colS0.452
+L0_rain_dev3,1.68,rain,True,16,200,0.481,1.223,200,max9 colonies8 colS0.452
+L0_rain_dev3,1.68,rain,True,24,200,0.208,0.449,200,max9 colonies8 colS0.452
+L0_rain_dev3,1.68,rain,True,32,200,0.145,0.401,200,max9 colonies8 colS0.452
+L4_cols4II2_rain_dev3,1.00,rain,True,8,200,9.987,13.241,200,max20 colonies19 colS0.650
+L4_cols4II2_rain_dev3,1.00,rain,True,16,200,2.537,4.483,200,max20 colonies19 colS0.650
+L4_cols4II2_rain_dev3,1.00,rain,True,24,200,1.167,1.874,200,max20 colonies19 colS0.650
+L4_cols4II2_rain_dev3,1.00,rain,True,32,200,0.668,1.234,200,max20 colonies19 colS0.650

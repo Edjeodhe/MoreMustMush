@@ -16,6 +16,7 @@ namespace MoreMush
         readonly List<SpriteRenderer> dots = new List<SpriteRenderer>();
         static readonly int HolesId = Shader.PropertyToID("_Holes"), CountId = Shader.PropertyToID("_Count"), ColorId = Shader.PropertyToID("_Color");
         readonly Vector4[] holes = new Vector4[65];
+        const int MOBILE_HOLES = 12;
         MaterialPropertyBlock mpb;
         string shownWeather;
         readonly Vector3[] linePoints = new Vector3[40];
@@ -57,8 +58,10 @@ namespace MoreMush
                 mask.transform.localScale = new Vector3(W / Art.PPU, H / Art.PPU, 1);
                 int n = 0;
                 const float rad = 260;
-                foreach (var b in R.balls) { if (n >= 64) break; holes[n++] = new Vector4(b.x, b.y, rad, 0); }
+                // 셰이더가 화면 전체 픽셀마다 구멍 수만큼 돈다 → 모바일은 구멍을 줄인다 (바 먼저, 공은 리스트 앞의 수확기부터)
+                int max = Application.isMobilePlatform ? MOBILE_HOLES : holes.Length;
                 holes[n++] = new Vector4(R.barX, RoundSim.BAR_Y, 240, 1);
+                foreach (var b in R.balls) { if (n >= max) break; holes[n++] = new Vector4(b.x, b.y, rad, 0); }
                 mask.GetPropertyBlock(mpb);
                 mpb.SetVectorArray(HolesId, holes);
                 mpb.SetInt(CountId, n);

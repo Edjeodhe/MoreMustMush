@@ -1,0 +1,1728 @@
+{
+ "String": {
+  "900305": {
+   "Str_EN": "Wood Blewit",
+   "Str_UK": "Рядовка фіолетова"
+  },
+  "900230": {
+   "Str_EN": "Flowerpot Parasol",
+   "Str_JA": "コガネキヌカラカサタケ",
+   "Str_RU": "Лейкокопринус жёлтый",
+   "Str_UK": "Горщиковий жовтик"
+  },
+  "900205": {
+   "Str_EN": "Parrot Waxcap",
+   "Str_JA": "ワカクサタケ"
+  },
+  "900210": {
+   "Str_EN": "Deadly Dapperling",
+   "Str_JA": "キツネノカラカサ"
+  },
+  "900249": {
+   "Str_EN": "Willow Bracket",
+   "Str_RU": "Трутовик ложный",
+   "Str_UK": "Несправжній трутовик"
+  },
+  "900261": {
+   "Str_EN": "Poison Fire Coral",
+   "Str_RU": "Красный олений рог"
+  },
+  "900248": {
+   "Str_EN": "Red-Belted Conk",
+   "Str_JA": "ツガサルノコシカケ",
+   "Str_RU": "Трутовик окаймлённый"
+  },
+  "900308": {
+   "Str_EN": "Green-Cracking Russula",
+   "Str_RU": "Сыроежка зеленоватая",
+   "Str_UK": "Сироїжка зеленувата"
+  },
+  "900347": {
+   "Str_EN": "Veiled Polypore",
+   "Str_JA": "ヒトクチタケ",
+   "Str_UK": "Грибок-шматочок"
+  },
+  "900394": {
+   "Str_EN": "Lilac Bonnet",
+   "Str_JA": "サクラタケ",
+   "Str_RU": "Мицена чистая",
+   "Str_UK": "Міцена чиста"
+  },
+  "900413": {
+   "Str_EN": "False Morel",
+   "Str_JA": "シャグマアミガサタケ",
+   "Str_RU": "Строчок обыкновенный",
+   "Str_UK": "Диявольський строчок"
+  },
+  "900328": {
+   "Str_EN": "Pale yellow branches split like a broom. An autumn forest mushroom eaten after blanching.",
+   "Str_UK": "Блідо-жовті гілки розходяться віником. Осінній лісовий гриб, який їдять бланшованим."
+  },
+  "900300": {
+   "Str_EN": "A trumpet-shaped mushroom with an apricot scent. In Korea it's named after the golden oriole.",
+   "Str_RU": "Гриб-трубочка с абрикосовым ароматом. На Западе его зовут шантрель."
+  },
+  "900359": {
+   "Str_EN": "White, fur-like spines hang down like icicles."
+  },
+  "900363": {
+   "Str_EN": "A wide half-moon shelf big enough for a monkey to sit on.",
+   "Str_UK": "Велика широка півкругла полиця, на якій вмістилася б мавпа."
+  },
+  "900917": {
+   "Str_EN": "Inside Jelly Mushrooms"
+  },
+  "900938": {
+   "Str_EN": "Sacred Rune Tree"
+  },
+  "203022": {
+   "Str_EN": "Adds even more colonies after Colony Count is maxed.",
+   "Str_RU": "Добавляет ещё колоний после максимума «Числа колоний».",
+   "Str_UK": "Ще більше колоній після максимуму «Кількість колоній»."
+  },
+  "203023": {
+   "Str_EN": "Raises round-end gold even further after Payout Bonus is maxed.",
+   "Str_RU": "После максимума «Бонуса итогов» ещё сильнее увеличивает золото в конце раунда.",
+   "Str_UK": "Золото в кінці раунду зростає ще більше після максимуму «Бонус виплати»."
+  },
+  "202053": {
+   "Str_EN": "Boosts the per-combo multiplier even further after Combo Factor is maxed.",
+   "Str_RU": "После максимума «Коэффициента комбо» ещё сильнее увеличивает множитель за комбо.",
+   "Str_UK": "Множник за комбо зростає ще більше після максимуму «Коефіцієнт комбо»."
+  },
+  "201018": {
+   "Str_EN": "Extends round time even further after Duration is maxed.",
+   "Str_RU": "После максимума «Длительности» ещё сильнее увеличивает время раунда.",
+   "Str_UK": "Час раунду збільшується ще більше після максимуму «Тривалість»."
+  },
+  "201005": {
+   "Str_EN": "The slow and weaken debuffs from touching spore clouds wear off faster."
+  },
+  "201024": {
+   "Str_EN": "A special node unlocked with Mycelium Stones. Poisonous mushrooms release fewer spore clouds, and slow and weaken debuffs wear off faster."
+  },
+  "202061": {
+   "Str_EN": "Each time a permanent harvester hits the bar, Attack and skill trigger chance briefly go up. A key early-game buff that rewards active bar play.",
+   "Str_RU": "Каждый раз, когда постоянный сборщик ударяется о планку, атака и шанс навыков ненадолго растут. Важный бафф начала игры: чем активнее ты отбиваешь, тем он сильнее."
+  },
+  "201021": {
+   "Str_EN": "Adds the most of all. Max it out to unlock Endless Grit."
+  },
+  "301032": {
+   "Str_EN": "Endless Grit"
+  },
+  "301030": {
+   "Str_EN": "Mycelium Grit"
+  },
+  "900572": {
+   "Str_EN": "Every mushroom growing on the World Tree is fully grown right now. <color=#8a6a4a>(Costs one round's income in gold per {0} min of total time left)</color>",
+   "Str_UK": "Усі гриби на Світовому дереві виростуть миттєво. <color=#8a6a4a>(Золото в розмірі прибутку за раунд за кожні {0} хв загального часу, що лишився)</color>"
+  },
+  "900609": {
+   "Str_EN": "★ Star Bonus: <b>{0}</b> {1} per star · Now {2}"
+  },
+  "900614": {
+   "Str_EN": "★ Star Bonus: {0} ({1} per star)"
+  },
+  "900510": {
+   "Str_EN": "Unlocks after harvesting {0} ({1}/{2})",
+   "Str_RU": "Откроется после сбора: {0} {1}/{2}"
+  },
+  "901043": {
+   "Str_EN": "Refunded {0} Mycelium Stones and {1} gold spent on buildings and Little One stars"
+  },
+  "901100": {
+   "Str_EN": "<b>{0}</b>: \"Bring me {1} ×{2}!\"",
+   "Str_RU": "<b>{0}</b>: «Принеси: {1}, {2} шт.!»",
+   "Str_UK": "<b>{0}</b>: «Принеси {1} ×{2}!»"
+  },
+  "901174": {
+   "Str_EN": "Gave {1} ×{2} to {0}!",
+   "Str_UK": "{0} отримує подарунок: {1} ×{2}"
+  },
+  "901111": {
+   "Str_EN": "Discover species in the Collection to open the Little One Workshop ({0}/{1})"
+  },
+  "901179": {
+   "Str_EN": "Discover more mushrooms to open the Workshop"
+  },
+  "901208": {
+   "Str_EN": "You need {1}{2} to bring {0} (you have {3})",
+   "Str_RU": "Чтобы позвать малыша ({0}), нужно {1}{2} (сейчас {3})",
+   "Str_UK": "Щоб привести малюка ({0}), потрібно {1}{2} (зараз {3})"
+  },
+  "901211": {
+   "Str_EN": "You need {0}{1} to level up"
+  },
+  "901215": {
+   "Str_EN": "You need {1}{2} for ★{0} Evolution (you have {3})"
+  },
+  "303008": {
+   "Str_EN": "Rare Spawn Rate",
+   "Str_RU": "Шанс редких грибов"
+  },
+  "303013": {
+   "Str_EN": "Triple Harvest",
+   "Str_JA": "3倍収穫"
+  },
+  "900524": {
+   "Str_EN": "Triple harvest!",
+   "Str_JA": "3倍ゲット!"
+  },
+  "900983": {
+   "Str_EN": "Uncommon",
+   "Str_RU": "Необычное"
+  },
+  "900823": {
+   "Str_EN": "Today's Weather: Clear",
+   "Str_RU": "Погода сегодня: ясно",
+   "Str_UK": "Погода сьогодні: ясно"
+  },
+  "901046": {
+   "Str_EN": "Joins when the World Tree reaches Tier {0}."
+  },
+  "901051": {
+   "Str_EN": "Growth · Tier {0} {1}"
+  },
+  "901061": {
+   "Str_EN": "<b>Evolve → Tier {0} {1}</b>"
+  },
+  "900600": {
+   "Str_EN": "Owned · Owned Bonus: {0}"
+  },
+  "900702": {
+   "Str_EN": "Owned Bonus: {0}"
+  },
+  "900018": {
+   "Str_EN": "Nothing beats a little damp~"
+  },
+  "900035": {
+   "Str_EN": "...I'm solid.",
+   "Str_RU": "...Я крепкий."
+  },
+  "900057": {
+   "Str_EN": "Tap tap! I'll build it in no time!",
+   "Str_JA": "とんてんかん! すぐ建てるよ!"
+  },
+  "900785": {
+   "Str_EN": "I'll build it! Tap tap!"
+  },
+  "900788": {
+   "Str_EN": "All done! What do you think?"
+  },
+  "900015": {
+   "Str_EN": "I was born during a thunderstorm!"
+  },
+  "900042": {
+   "Str_EN": "I love it here on the World Tree!",
+   "Str_RU": "Здесь, у Мирового древа, так здорово!"
+  },
+  "901320": {
+   "Str_EN": "Mmm, smells like mushrooms!"
+  },
+  "900116": {
+   "Str_EN": "Temporary harvesters: {0} (6 sec)"
+  },
+  "900119": {
+   "Str_EN": "Small temporary harvesters: {0}, 4 sec"
+  },
+  "900534": {
+   "Str_EN": "Clones left: {0}!",
+   "Str_RU": "Осталось двойников: {0}!",
+   "Str_UK": "Залишилось двійників: {0}!"
+  },
+  "901292": {
+   "Str_EN": "Slots: {0}"
+  },
+  "901071": {
+   "Str_EN": "<b>Tree Mushroom Slots: {0}</b>"
+  },
+  "900513": {
+   "Str_EN": "Diamonds converted into Mycelium Stones: {0}",
+   "Str_UK": "Алмази перетворено на міцелієві камені: {0}"
+  },
+  "900200": {
+   "Str_EN": "Harvest mushrooms ({n} times)",
+   "Str_JA": "キノコを{n}回、収穫する",
+   "Str_RU": "Собрать грибы ({n} р.)",
+   "Str_UK": "Збери гриби (×{n})"
+  },
+  "900201": {
+   "Str_EN": "Harvest {m} ({n} times)",
+   "Str_JA": "{m}を{n}回、収穫する",
+   "Str_RU": "Сбор: {m} — {n} р.",
+   "Str_UK": "Збери: {m} ×{n}"
+  },
+  "202042": {
+   "Str_EN": "When harvesting a mushroom, it has a chance to spread a shockwave, and mushrooms harvested by the shockwave cause more shockwaves (up to 8 chains).",
+   "Str_UK": "Під час збору гриба є шанс поширити ударну хвилю, і гриби, зібрані хвилею, породжують нові хвилі (до 8 ступенів)."
+  },
+  "900123": {
+   "Str_EN": "Radius {0}, damage Attack ×{1}, up to 8 chains",
+   "Str_UK": "Радіус {0}, шкода: атака ×{1}, ланцюг до 8 ступенів"
+  },
+  "900188": {
+   "Str_EN": "Lv2: range & speed · Lv3: power · Lv4: all of the above +1",
+   "Str_JA": "Lv2:範囲と速度・Lv3:威力・Lv4:すべてさらに一段階"
+  },
+  "900611": {
+   "Str_EN": "{0} · HP {1} · Yield {2} (Cluster: HP ×5, Yield ×7–10)",
+   "Str_JA": "{0}・HP{1}・収穫量{2}(塊:HP×5、収穫×7〜10)",
+   "Str_RU": "{0} · ОЗ {1} · урожай {2} (куча: ОЗ ×5, урожай ×7–10)",
+   "Str_UK": "{0} · HP {1} · врожай {2} (купка: HP ×5, збір ×7–10)"
+  },
+  "900547": {
+   "Str_EN": "Current Stage {0} · {1}"
+  },
+  "900639": {
+   "Str_EN": "It's fully grown!"
+  },
+  "900664": {
+   "Str_EN": "Boss Challenge Off · Boss stages are farm-only"
+  },
+  "900956": {
+   "Str_EN": "A balanced zone where shelf and cluster mushrooms grow evenly",
+   "Str_UK": "Збалансована зона, де рівномірно ростуть полицеві й гронисті гриби"
+  },
+  "901068": {
+   "Str_EN": "Granary mushrooms are the ones you picked in rounds. They're also used for Little One gifts and Favors"
+  },
+  "901109": {
+   "Str_EN": "3 new Favors arrive every day. Favorite mushrooms show up more often depending on region and weather",
+   "Str_JA": "お願いは毎日3つずつ新しく届きます。好きなキノコはエリア・天気によって出やすくなります",
+   "Str_RU": "Каждый день приходят 3 новые просьбы. Любимые грибы чаще встречаются в зависимости от местности и погоды",
+   "Str_UK": "Щодня приходять 3 нові прохання. Улюблені гриби частіше трапляються залежно від локації й погоди"
+  },
+  "901027": {
+   "Str_EN": "Title: \"Forest Artisan\"",
+   "Str_RU": "Титул «Мастер леса»"
+  },
+  "901081": {
+   "Str_EN": "Title: \"Little One Leader\"",
+   "Str_RU": "Титул «Капитан малышей»"
+  },
+  "901064": {
+   "Str_EN": "Not enough Gold"
+  },
+  "901065": {
+   "Str_EN": "Not enough Mycelium Stones",
+   "Str_UK": "Бракує міцелієвих каменів"
+  },
+  "901139": {
+   "Str_EN": "Upgrade: 1 duplicate decoration · {0}"
+  },
+  "901301": {
+   "Str_EN": "Not enough upgrade material (1 duplicate decoration)"
+  },
+  "900808": {
+   "Str_EN": "Workshop (needs 10 species)",
+   "Str_RU": "Мастерская (атлас: 10 видов)"
+  },
+  "900520": {
+   "Str_EN": "Acorns lit! Score ×2"
+  },
+  "900740": {
+   "Str_EN": "Tap: Speed"
+  },
+  "900741": {
+   "Str_EN": "Tap·F·RMB: Speed"
+  },
+  "900763": {
+   "Str_EN": "Little One Yet to Join",
+   "Str_JA": "まだ仲間入りしていないちびっこ"
+  },
+  "900136": {
+   "Str_EN": "Epic+ odds {0}"
+  },
+  "900813": {
+   "Str_EN": "Not enough resources",
+   "Str_JA": "通貨が足りない"
+  },
+  "900594": {
+   "Str_EN": "<color={0}>{1}Golden Collection</color> <color=#8a7a6a>{2}/{3}</color>  <size=80%><color=#8a7a6a>5 species: Gold +10% · 15 species: +25% · Golden Harvester · {3} species: +60%</color></size>"
+  },
+  "900624": {
+   "Str_EN": "All 10 species of Little Ones have joined"
+  },
+  "201008": {
+   "Str_EN": "The chance of a critical hit when hitting a mushroom. Critical hits deal ×3 damage and score (boosted further by the Critical Damage node)."
+  },
+  "900077": {
+   "Str_EN": "Little One favor interval −{0}"
+  },
+  "900065": {
+   "Str_EN": "Chance of Mycelium Stone +1 when granting a favor +{0}",
+   "Str_JA": "お願いをかなえたとき菌糸石 +1 の確率 +{0}",
+   "Str_RU": "Шанс +1 камня мицелия за исполнение просьбы +{0}",
+   "Str_UK": "Шанс міцелієвого каменя +1 за виконане прохання +{0}"
+  },
+  "900066": {
+   "Str_EN": "Chance of Mycelium Stone +1 when picking a mushroom +{0}",
+   "Str_JA": "キノコを採るとき菌糸石 +1 の確率 +{0}",
+   "Str_RU": "Шанс +1 камня мицелия за сбор гриба +{0}",
+   "Str_UK": "Шанс міцелієвого каменя +1 за зірваний гриб +{0}"
+  },
+  "900148": {
+   "Str_EN": "When a permanent harvester hits the bar, {0} chance to spawn 1 small temporary harvester (8s)",
+   "Str_RU": "Когда постоянный сборщик ударяется о планку: шанс {0} на 1 малого временного сборщика (8 с)"
+  },
+  "900175": {
+   "Str_EN": "All mushroom yields ×{0}",
+   "Str_RU": "Урожай всех грибов ×{0}"
+  },
+  "900186": {
+   "Str_EN": "All skill trigger chances ×{0}",
+   "Str_RU": "Шанс всех навыков ×{0}"
+  },
+  "900191": {
+   "Str_EN": "Swing: when harvesting a mushroom, {0} chance to also cut one nearby mushroom (Attack ×2)",
+   "Str_RU": "Взмах: при сборе гриба шанс {0} заодно срезать один соседний гриб (атака ×2)"
+  },
+  "900193": {
+   "Str_EN": "Pressure Point: hitting an Epic or higher mushroom has a {0} chance for a guaranteed critical hit (Damage and score ×3)",
+   "Str_RU": "Удар в уязвимое место: при попадании по грибу эпической редкости и выше шанс {0} на гарантированный крит (урон и очки ×3)"
+  },
+  "900194": {
+   "Str_EN": "Grinding: always wears a small spinning blade (range {0}px); when the blade cuts, {1} chance to get a mushroom shard (extra harvest)",
+   "Str_RU": "Перемол: всегда носит малое вращающееся лезвие (радиус {0}px); когда лезвие режет, шанс {1} получить кусочек гриба (доп. сбор)"
+  },
+  "900195": {
+   "Str_EN": "Cell Division: hitting a mushroom has a {0} chance to summon a small harvester with 50% stats (disappears after {1} hits)",
+   "Str_UK": "Поділ клітин: під час удару по грибу шанс {0} викликати малого збирача з 50% характеристик (зникає після ударів: {1})"
+  },
+  "900196": {
+   "Str_EN": "Jingle: each mushroom hit sends out a small shockwave (radius {0}, damage Attack ×{1})",
+   "Str_RU": "Динь-динь: каждое попадание по грибу рождает малую ударную волну (радиус {0}, урон: атака ×{1})"
+  },
+  "900197": {
+   "Str_EN": "Jingle Jangle: gain gold each time it touches a mushroom ({0} of that mushroom's value)",
+   "Str_UK": "Дзень-дзелень: отримуй золото щоразу, коли збирач торкається гриба ({0} від вартості гриба)"
+  },
+  "900198": {
+   "Str_EN": "Golden Touch: a hit mushroom has a {0} chance to turn into a golden variant"
+  },
+  "900218": {
+   "Str_EN": "The start of the mushroom hunt. A damp forest floor",
+   "Str_UK": "Початок грибного полювання. Волога лісова підстилка"
+  },
+  "900225": {
+   "Str_EN": "A night forest where glowing mushrooms shine under the moonlight. The field is a little dark"
+  },
+  "900238": {
+   "Str_EN": "A town swallowed by giant mushrooms. The end of the story"
+  },
+  "900975": {
+   "Str_EN": "In rounds: Colonies +{0}"
+  },
+  "900976": {
+   "Str_EN": "In rounds: Time limit +{0}s"
+  },
+  "900977": {
+   "Str_EN": "In rounds: Harvester speed +{0}",
+   "Str_JA": "ラウンドの収穫機速度 +{0}",
+   "Str_RU": "Скорость сборщиков в раунде: +{0}",
+   "Str_UK": "Швидкість збирачів у раунді: +{0}"
+  },
+  "900978": {
+   "Str_EN": "In rounds: Attack +{0}"
+  },
+  "900979": {
+   "Str_EN": "In rounds: Slide Bar length +{0}"
+  },
+  "900980": {
+   "Str_EN": "In rounds: Chain Lightning chance +{0}",
+   "Str_JA": "ラウンドの連鎖雷の確率 +{0}",
+   "Str_RU": "Шанс цепной молнии в раунде: +{0}",
+   "Str_UK": "Шанс ланцюгової блискавки в раунді: +{0}"
+  },
+  "900981": {
+   "Str_EN": "In rounds: Golden variant chance ×{0}"
+  },
+  "900982": {
+   "Str_EN": "In rounds: All skill trigger chances +{0}"
+  },
+  "901016": {
+   "Str_EN": "In rounds: Critical chance +{0}",
+   "Str_JA": "ラウンドのクリティカル率 +{0}",
+   "Str_RU": "Шанс крита в раунде: +{0}",
+   "Str_UK": "Шанс критичного удару в раунді +{0}"
+  },
+  "901022": {
+   "Str_EN": "In rounds: Golden variant chance +{0}",
+   "Str_JA": "ラウンドの黄金変種の確率 +{0}",
+   "Str_RU": "Шанс золотого варианта в раунде: +{0}",
+   "Str_UK": "Шанс золотого різновиду в раунді +{0}"
+  },
+  "203009": {
+   "Str_EN": "The chance a mushroom appears as a golden variant. Golden mushrooms give Score ×10 and Harvest ×5, and are recorded as Golden in the Collection.",
+   "Str_RU": "Шанс, что гриб окажется золотым вариантом. Золотые грибы дают очки ×10, урожай ×5 и записываются в Атлас как золотые.",
+   "Str_UK": "Шанс, що гриб буде золотим різновидом. Золоті гриби дають бали ×10, врожай ×5 і записуються в Колекції як золоті."
+  },
+  "900657": {
+   "Str_EN": "Mushroom Collection: {0} species complete! (The ending cutscene comes in Phase 3)",
+   "Str_UK": "Колекцію грибів заповнено! Видів: {0} (фінальну сцену додамо в 3-му оновленні)"
+  },
+  "900866": {
+   "Str_EN": "<sprite name=\"book\"> Mushroom Collection",
+   "Str_UK": "<sprite name=\"book\"> Колекція грибів"
+  },
+  "900913": {
+   "Str_EN": "Mushroom Collection: {0} species complete!",
+   "Str_UK": "Колекцію грибів заповнено! Видів: {0}"
+  },
+  "900181": {
+   "Str_EN": "Spore debuff duration ×{0} · Poisonous Mushroom spore cloud ×{1}",
+   "Str_JA": "胞子デバフの持続 ×{0}・毒キノコの胞子の雲 ×{1}",
+   "Str_RU": "Длительность дебаффов спор ×{0} · споровые облака ядовитых грибов ×{1}"
+  },
+  "900244": {
+   "Str_EN": "Poisonous Mushroom yield +30%"
+  },
+  "900868": {
+   "Str_EN": "Poisonous Mushrooms"
+  },
+  "303012": {
+   "Str_EN": "Yield I"
+  },
+  "303017": {
+   "Str_EN": "Yield I+"
+  },
+  "303019": {
+   "Str_EN": "Yield II"
+  },
+  "303021": {
+   "Str_EN": "Yield II+"
+  },
+  "303025": {
+   "Str_EN": "Yield III"
+  },
+  "303027": {
+   "Str_EN": "Yield III+"
+  },
+  "900448": {
+   "Str_EN": "Yield"
+  },
+  "203012": {
+   "Str_EN": "Increases the number of mushrooms gained per harvest. Max it out to unlock Yield I+."
+  },
+  "203017": {
+   "Str_EN": "Adds harvest count once more in units of 1. Max it out to unlock Yield II."
+  },
+  "203019": {
+   "Str_EN": "Adds to the number of mushrooms gained per harvest in units of 10. Max it out to unlock Yield II+."
+  },
+  "203021": {
+   "Str_EN": "Adds harvest count once more in units of 10. Max it out to unlock Yield III."
+  },
+  "203025": {
+   "Str_EN": "Adds to the number of mushrooms gained per harvest in units of 100. Max it out to unlock Yield III+."
+  },
+  "900473": {
+   "Str_EN": "King Ember Mushroom"
+  },
+  "900475": {
+   "Str_EN": "King Zappy Mushroom"
+  },
+  "900477": {
+   "Str_EN": "King Dew Mushroom"
+  },
+  "900479": {
+   "Str_EN": "King Coin Mushroom"
+  },
+  "900481": {
+   "Str_EN": "King Stardrop Mushroom"
+  },
+  "900483": {
+   "Str_EN": "King Sprout Mushroom"
+  },
+  "900485": {
+   "Str_EN": "King Moonlight Mushroom"
+  },
+  "900487": {
+   "Str_EN": "King Breeze Mushroom"
+  },
+  "900489": {
+   "Str_EN": "King Pebble Mushroom"
+  },
+  "900491": {
+   "Str_EN": "King Chestnut Mushroom"
+  },
+  "900237": {
+   "Str_EN": "Ruined Mushroom City",
+   "Str_RU": "Руины грибного города",
+   "Str_UK": "Зруйноване грибне місто"
+  },
+  "900966": {
+   "Str_EN": "Thunderstorm · Ruined Mushroom City",
+   "Str_RU": "Гроза · Руины грибного города",
+   "Str_UK": "Гроза · Зруйноване грибне місто"
+  },
+  "900968": {
+   "Str_EN": "Forest · Ruined Mushroom City",
+   "Str_RU": "Лес · Руины грибного города",
+   "Str_UK": "Ліс · Зруйноване грибне місто"
+  },
+  "900974": {
+   "Str_EN": "Moonlit Night · Ruined Mushroom City",
+   "Str_JA": "月夜・キノコ廃墟の街",
+   "Str_RU": "Лунная ночь · Руины грибного города",
+   "Str_UK": "Місячна ніч · Зруйноване грибне місто"
+  },
+  "900670": {
+   "Str_EN": "No Little Ones need a favor right now"
+  },
+  "900671": {
+   "Str_EN": "Looked after {0} Little Ones! Mycelium Stone +{1}",
+   "Str_UK": "Доглянуто малюків: {0}! Міцелієвий камінь +{1}"
+  },
+  "900677": {
+   "Str_EN": "{0} joined! A new Little One arrives at the World Tree"
+  },
+  "900678": {
+   "Str_EN": "All the Little Ones are busy building"
+  },
+  "900679": {
+   "Str_EN": "When the World Tree levels up, Little Ones join and pick mushrooms for you"
+  },
+  "900681": {
+   "Str_EN": "The Little Ones are off to pick {0} mushrooms!"
+  },
+  "900685": {
+   "Str_EN": "No idle Little Ones (all are building)"
+  },
+  "900766": {
+   "Str_EN": "Dress them up once a Little One joins"
+  },
+  "900850": {
+   "Str_EN": "Tap a mushroom and a Little One will go pick it. A new mushroom grows right back in its place."
+  },
+  "900878": {
+   "Str_EN": "Use Mycelium Stones to change how Little Ones and Harvesters look. Skins you buy can be worn or taken off anytime. Little one skins show on the ranch, fields, and diner; Harvester skins show on the Harvesters in a round. (Stats stay the same)",
+   "Str_UK": "Міцелієві камені змінюють вигляд малюків і збирачів. Куплені скіни можна вдягати й знімати будь-коли. Скіни малюків видно на ранчо, полях і в закусочній; скіни збирачів видно на збирачах у раунді. (Характеристики не змінюються)"
+  },
+  "900882": {
+   "Str_EN": "Build with Mycelium Stones. An idle Little One goes to build it and can't work the fields until it's done. Each building has a set size and max count, and building one gives a small permanent stat boost.",
+   "Str_UK": "Будуй за міцелієві камені. Вільний малюк іде будувати й не працює на полях, доки не закінчить. Кожна споруда має свій розмір і макс. кількість, а кожна збудована дає невеликий постійний бонус до характеристик."
+  },
+  "900178": {
+   "Str_EN": "Auto Harvest rewards ×{0}",
+   "Str_JA": "自動収穫ほうび ×{0}",
+   "Str_RU": "Награды автосбора ×{0}"
+  },
+  "900459": {
+   "Str_EN": "Owned Bonus: Auto Harvest gold +10%"
+  },
+  "900465": {
+   "Str_EN": "Owned Bonus: Auto Harvest Mycelium Stone +10%",
+   "Str_UK": "Бонус: міцелієвий камінь з автозбору +10%"
+  },
+  "900690": {
+   "Str_EN": "Auto Harvest reward! {0}+{1} {2}+{3}"
+  },
+  "900453": {
+   "Str_EN": "Owned Bonus: When Little Ember picks a mushroom, Mycelium Stone +20%",
+   "Str_UK": "Бонус: коли Малюк Жаринка зриває гриб, міцелієвий камінь +20%"
+  },
+  "900455": {
+   "Str_EN": "Owned Bonus: All building construction speed +10%"
+  },
+  "900457": {
+   "Str_EN": "Owned Bonus: World Tree mushroom growth time −5%"
+  },
+  "900461": {
+   "Str_EN": "Owned Bonus: Chance of +1 Mycelium Stone when granting a favor +5%",
+   "Str_JA": "所持効果:お願いをかなえたとき菌糸石+1の確率+5%",
+   "Str_UK": "Бонус: шанс +1 міцелієвого каменя за прохання +5%"
+  },
+  "900463": {
+   "Str_EN": "Owned Bonus: Chance of +1 Mycelium Stone when picking mushrooms +20%",
+   "Str_JA": "所持効果:キノコを採るとき菌糸石+1の確率+20%",
+   "Str_UK": "Бонус: шанс +1 міцелієвого каменя за зірваний гриб +20%"
+  },
+  "900467": {
+   "Str_EN": "Owned Bonus: All Little Ones' mushroom-picking speed +10%"
+  },
+  "900469": {
+   "Str_EN": "Owned Bonus: Construction time −20% when Little Pebble builds"
+  },
+  "900471": {
+   "Str_EN": "Owned Bonus: World Tree mushroom Mycelium Stone +5%",
+   "Str_UK": "Бонус: міцелієвий камінь з грибів Світового дерева +5%"
+  },
+  "900143": {
+   "Str_EN": "+{0}× per combo",
+   "Str_RU": "+{0}× за комбо",
+   "Str_UK": "+{0}× за комбо"
+  },
+  "900149": {
+   "Str_EN": "+{0}× more per Combo",
+   "Str_RU": "+{0}× за комбо сверху",
+   "Str_UK": "Ще +{0}× за комбо"
+  },
+  "900151": {
+   "Str_EN": "Build time ×{0}",
+   "Str_RU": "Время стройки ×{0}"
+  },
+  "900163": {
+   "Str_EN": "{0} (Damage and score ×3)",
+   "Str_RU": "{0} (урон и очки ×3)"
+  },
+  "900165": {
+   "Str_EN": "Attack ×{0} for 3 seconds after the round starts",
+   "Str_RU": "Атака ×{0} на 3 с после начала раунда"
+  },
+  "900167": {
+   "Str_EN": "Radius +{0}px · every {1}s · Damage Attack ×{2}",
+   "Str_JA": "半径 +{0}px・{1}秒ごと・ダメージ 攻撃力×{2}",
+   "Str_RU": "Радиус +{0}px · каждые {1} с · урон: атака ×{2}",
+   "Str_UK": "Радіус +{0}px · кожні {1} с · шкода: атака ×{2}"
+  },
+  "900173": {
+   "Str_EN": "Critical damage and score ×{0}",
+   "Str_RU": "Критический урон и очки ×{0}"
+  },
+  "900174": {
+   "Str_EN": "Colony Cluster and Giant Mushroom damage ×{0}",
+   "Str_RU": "Урон по кучкам колоний и гигантским грибам ×{0}",
+   "Str_UK": "Шкода по купках колоній і гігантських грибах ×{0}"
+  },
+  "900177": {
+   "Str_EN": "World Tree Mushroom Mycelium Stones ×{0}",
+   "Str_RU": "Камни мицелия с гриба Мирового древа ×{0}"
+  },
+  "900179": {
+   "Str_EN": "World Tree Mushroom growth time ×{0}",
+   "Str_RU": "Время роста грибов Мирового древа ×{0}"
+  },
+  "900180": {
+   "Str_EN": "Every {0}s a Mycelium Stone falls, dealing Attack ×{2} damage in radius {1}",
+   "Str_RU": "Каждые {0} с падает камень мицелия: урон — атака ×{2} в радиусе {1}",
+   "Str_UK": "Кожні {0} с падає міцелієвий камінь, шкода: атака ×{2} в радіусі {1}"
+  },
+  "900182": {
+   "Str_EN": "Attack ×{0}",
+   "Str_RU": "Атака ×{0}"
+  },
+  "900183": {
+   "Str_EN": "Damage to bosses ×{0}",
+   "Str_RU": "Урон по боссам ×{0}"
+  },
+  "900187": {
+   "Str_EN": "Bar length ×{0} (up to 1/3 of field width)",
+   "Str_RU": "Длина планки ×{0} (до 1/3 ширины поля)"
+  },
+  "308002": {
+   "Str_EN": "Colony regrowth speed ×2, Colony sites +20%",
+   "Str_JA": "群落の再生速度 ×2、群落数 +20%",
+   "Str_RU": "Скорость возрождения колоний ×2, колонии +20%"
+  },
+  "308003": {
+   "Str_EN": "The field darkens and glowing Mushrooms shine, golden variants ×3",
+   "Str_RU": "Поле темнеет, светящиеся грибы сияют, золотые варианты ×3",
+   "Str_UK": "Поле темніє, сяйні гриби світяться, золоті різновиди ×3"
+  },
+  "308004": {
+   "Str_EN": "Harvester speed ×0.8, Colony regrowth is 2× slower",
+   "Str_RU": "Скорость сборщиков ×0.8, колонии возрождаются в 2 раза медленнее"
+  },
+  "308005": {
+   "Str_EN": "Mushrooms release spores 2× as often, and slow and weaken debuffs last 2× longer"
+  },
+  "308006": {
+   "Str_EN": "Bar length ×0.75, time limit -3s",
+   "Str_RU": "Длина планки ×0.75, лимит времени −3 с"
+  },
+  "900255": {
+   "Str_EN": "Eased Jelly slowdown (×0.55 → ×0.75)"
+  },
+  "900126": {
+   "Str_EN": "On every bar hit, for {0} sec Attack +{1}% · Skill trigger chance +{2}%",
+   "Str_JA": "バーに当たるたびに{0}秒間 攻撃力 +{1}%・スキル発動率 +{2}%",
+   "Str_RU": "При каждом ударе о планку на {0} с атака +{1}% · шанс навыков +{2}%",
+   "Str_UK": "Після кожного удару по планці на {0} с: атака +{1}% · шанс навичок +{2}%"
+  },
+  "900171": {
+   "Str_EN": "Bar Skill trigger chance +{0}%",
+   "Str_JA": "バースキルの発動率 +{0}%",
+   "Str_RU": "Шанс навыков планки +{0}%",
+   "Str_UK": "Шанс навичок планки +{0}%"
+  },
+  "900259": {
+   "Str_EN": "Golden variant chance +1%",
+   "Str_JA": "黄金変種の確率 +1%",
+   "Str_RU": "Шанс золотого варианта +1%",
+   "Str_UK": "Шанс золотого різновиду +1%"
+  },
+  "900262": {
+   "Str_EN": "Critical chance +5%",
+   "Str_JA": "クリティカル率 +5%",
+   "Str_RU": "Шанс крита +5%",
+   "Str_UK": "Шанс криту +5%"
+  },
+  "900860": {
+   "Str_EN": "Buys the cheapest upgrades first, as many as your gold allows, all at once. Only unlocked nodes count (including the Core, excluding Mycelium Stone nodes).\nTo max out just one node, <b>Shift+Click</b> or <b>Right-Click</b> it in the Mycelium Tree.",
+   "Str_JA": "いちばん安い強化から、ゴールドの許す分だけ一気に買います。解放済みのノードだけが対象です(コアを含み、菌糸石ノードを除く)。\nノード1つだけを上限まで上げるには、菌糸ツリーでそのノードを<b>Shift+クリック</b>または<b>右クリック</b>してください。",
+   "Str_RU": "Покупает самые дешёвые улучшения подряд, на всё золото сразу. Учитываются только открытые узлы (включая Ядро, без узлов камней мицелия).\nЧтобы довести до максимума один узел, сделай по нему <b>Shift+клик</b> или <b>правый клик</b> в Древе мицелия.",
+   "Str_UK": "Купує найдешевші покращення першими, стільки, скільки дозволяє золото, усе одразу. Враховуються лише відкриті вузли (разом із Ядром, крім вузлів міцелієвого каменя).\nЩоб прокачати до максимуму лише один вузол, клацни по ньому в Дереві міцелію, утримуючи <b>Shift</b>, або <b>правою кнопкою</b>."
+  },
+  "901331": {
+   "Str_EN": "Epic+ odds ×{0}"
+  },
+  "201022": {
+   "Str_JA": "恒久収穫機をさらに最大2つ増やします。"
+  },
+  "900496": {
+   "Str_JA": "さすらい:群落がフィールドを動き回ります(スコア×1.5)",
+   "Str_RU": "Бродячие: колония бродит по полю (очки ×1,5)"
+  },
+  "900492": {
+   "Str_JA": "ゼリー(通過):はね返らずに通り抜け、いくつもまとめてヒットします"
+  },
+  "900203": {
+   "Str_JA": "デイリー依頼を{n}個クリアする",
+   "Str_RU": "Выполнить ежедневных заданий: {n}",
+   "Str_UK": "Щоденні завдання: виконай {n}"
+  },
+  "901157": {
+   "Str_JA": "経験値が足りません (倉庫のキノコをお供えするか、依頼をこなしましょう)",
+   "Str_RU": "Не хватает опыта (принеси грибы из кладовой или выполняй задания)",
+   "Str_UK": "Бракує досвіду (піднеси гриби з комори або виконуй завдання)"
+  },
+  "900743": {
+   "Str_JA": "発射したあとは、画面を指で左右になぞってすぐ打ち返しましょう(動かさなくても大丈夫です)",
+   "Str_RU": "После запуска проведи пальцем по экрану влево-вправо, чтобы сразу отбить сборщика (можно и не двигаться)"
+  },
+  "900744": {
+   "Str_JA": "発射したあとは、マウスを左右に動かしてすぐ打ち返しましょう(動かさなくても大丈夫です)",
+   "Str_RU": "После запуска двигай мышью влево-вправо, чтобы сразу отбить сборщика (можно и не двигаться)"
+  },
+  "901220": {
+   "Str_JA": "今すぐ終える"
+  },
+  "900908": {
+   "Str_JA": "収穫を途中でやめるため、ステージはクリアになりません。"
+  },
+  "900972": {
+   "Str_JA": "月夜・満月の夜"
+  },
+  "900002": {
+   "Str_JA": "シバフタケ",
+   "Str_RU": "Опёнок луговой",
+   "Str_UK": "Опеньок луговий"
+  },
+  "900215": {
+   "Str_JA": "タマゴテングタケモドキ"
+  },
+  "900252": {
+   "Str_JA": "ハナサナギタケ"
+  },
+  "900429": {
+   "Str_JA": "シロオニタケ"
+  },
+  "900001": {
+   "Str_JA": "マツタケ"
+  },
+  "900219": {
+   "Str_JA": "シイタケ"
+  },
+  "900333": {
+   "Str_JA": "ウミマツタケ"
+  },
+  "900329": {
+   "Str_JA": "月光シイタケ"
+  },
+  "900372": {
+   "Str_JA": "カバノアナタケ"
+  },
+  "900389": {
+   "Str_JA": "ドクベニタケ"
+  },
+  "900399": {
+   "Str_JA": "キヌジョウゴタケ"
+  },
+  "900433": {
+   "Str_JA": "ヒカゲタケ"
+  },
+  "900431": {
+   "Str_JA": "月光クヌギタケ",
+   "Str_UK": "Місячна міцена"
+  },
+  "900245": {
+   "Str_JA": "サルノコシカケのなかま"
+  },
+  "900334": {
+   "Str_JA": "(ファンタジー)磯の岩のすき間に育つ、しょっぱいマツタケです。"
+  },
+  "900323": {
+   "Str_JA": "韓国では「一にコウタケ、二にシイタケ、三にマツタケ」と言われるほど香りの強い秋のキノコです。"
+  },
+  "900294": {
+   "Str_JA": "太くて白い軸のぷりぷりしたキノコです。韓国では「大きなヒラタケ」とも呼ばれます。",
+   "Str_RU": "Пухлый гриб с толстой белой ножкой. Ещё её называют вешенкой степной.",
+   "Str_UK": "Пухкий гриб з товстою білою ніжкою. Ще його називають великою гливою."
+  },
+  "900346": {
+   "Str_JA": "灰褐色の花びらのような傘が束になって重なります。見つけた人が舞い踊るほど喜んだのが名前の由来といわれます。",
+   "Str_RU": "Серо-коричневые шляпки, похожие на лепестки, растут пучком внахлёст. Ещё его называют грифолой курчавой.",
+   "Str_UK": "Сіро-бурі пелюсткоподібні капелюшки нашаровуються купкою. Японською зветься майтаке."
+  },
+  "900367": {
+   "Str_JA": "松の木につく棚キノコです。ふちが黄色と赤の帯になっています。"
+  },
+  "900369": {
+   "Str_JA": "漆を塗ったように赤くつやつやした、腎臓の形のキノコです。",
+   "Str_UK": "Ниркоподібний гриб із червоним блиском, наче лакований."
+  },
+  "900376": {
+   "Str_JA": "柳などにつく、かたいひづめ形のキノコです。表面が細かくひび割れます。"
+  },
+  "900381": {
+   "Str_JA": "白樺にだけつく、白い棚キノコです。"
+  },
+  "900383": {
+   "Str_JA": "(ファンタジー)夜だけ地面から顔を出してさまよう、青いこん棒です。"
+  },
+  "900386": {
+   "Str_JA": "(ファンタジー)海水にひたしてもしおれない、ピンク色のサンゴ形のキノコです。"
+  },
+  "900388": {
+   "Str_JA": "(ファンタジー)さびた鉄骨に張りついて育った霊芝です。鉄のにおいがします。",
+   "Str_UK": "(Фентезі) Рейші, що виросло на іржавих балках. Пахне залізом."
+  },
+  "900396": {
+   "Str_JA": "むらさき色がかった、小さくてほっそりした傘のキノコです。",
+   "Str_UK": "Маленький тоненький капелюшок із фіолетовим відтінком."
+  },
+  "900401": {
+   "Str_JA": "真っ白な絹のような、じょうご形のキノコです。"
+  },
+  "900403": {
+   "Str_JA": "食べると汗がだらだら出るといわれる、茶色いとんがり帽子のキノコです。"
+  },
+  "900406": {
+   "Str_JA": "赤い傘に白いいぼ模様。おとぎ話に出てくるあのキノコです。",
+   "Str_UK": "Червоний капелюшок з білими бородавочками. Той самий гриб із казок."
+  },
+  "900412": {
+   "Str_JA": "オリーブ色の傘と白いつば。命にかかわる猛毒キノコです。",
+   "Str_UK": "Оливковий капелюшок і біла спідничка. Смертельно отруйний гриб."
+  },
+  "900418": {
+   "Str_JA": "じょうご形の茶色いキノコです。食べると手足が火傷したように痛みます。"
+  },
+  "900421": {
+   "Str_JA": "レンギョウのように黄色い傘を持つテングタケのなかまです。",
+   "Str_RU": "Мухомор с ярко-жёлтой, как форзиция, шляпкой.",
+   "Str_UK": "Мухомор із капелюшком, жовтим, як форзиція."
+  },
+  "900423": {
+   "Str_JA": "茶色い傘に白いいぼが散らばったテングタケのなかまです。",
+   "Str_UK": "Мухомор із білими бородавочками на коричневому капелюшку."
+  },
+  "900427": {
+   "Str_JA": "炎のような赤い指の形をしています。さわるだけでも危険です。"
+  },
+  "900430": {
+   "Str_JA": "白い傘にとげのようないぼがならんだ、毒キノコです。",
+   "Str_UK": "Отруйний гриб із білим капелюшком, вкритим колючими бородавками."
+  },
+  "900432": {
+   "Str_JA": "(ファンタジー)夜になると緑色に光る、小さなクヌギタケです。",
+   "Str_UK": "(Фентезі) Маленька міцена, що вночі світиться зеленим."
+  },
+  "900434": {
+   "Str_JA": "牛や馬のふんの上に育つ、灰褐色のベル形キノコです。"
+  },
+  "900436": {
+   "Str_JA": "(ファンタジー)クラゲのように半透明でぷるぷるしています。さわるとちくっとします。"
+  },
+  "900438": {
+   "Str_JA": "(ファンタジー)コンクリートを突き破って育った灰色のテングタケです。物語の最後の毒です。"
+  },
+  "900016": {
+   "Str_JA": "傘がぴーんと逆立つ気分だよ!"
+  },
+  "900058": {
+   "Str_JA": "トンカチ仕事は得意だよ!"
+  },
+  "900012": {
+   "Str_JA": "たき火を見てぼーっとする? ぼくが火だよ!"
+  },
+  "900074": {
+   "Str_JA": "ほのかに光るキノコのランタンふたつです。",
+   "Str_UK": "Пара ніжних грибних ліхтариків."
+  },
+  "900078": {
+   "Str_JA": "キノコのたき火台"
+  },
+  "900994": {
+   "Str_JA": "石のたき火台"
+  },
+  "900162": {
+   "Str_JA": "ラウンド時間 さらに+{0}秒"
+  },
+  "300004": {
+   "Str_JA": "丸い輪と回転ブレードです"
+  },
+  "900554": {
+   "Str_JA": "スキル・キノコを打つと発動率で自動発動",
+   "Str_UK": "Навичка · спрацьовує автоматично з певним шансом під час удару по грибах"
+  },
+  "900556": {
+   "Str_JA": "スキル・壁ではね返ると発動率で自動発動",
+   "Str_UK": "Навичка · спрацьовує автоматично з певним шансом під час відскоку від стін"
+  },
+  "900962": {
+   "Str_JA": "配置中のエリアのキノコ再生速度 +20%"
+  },
+  "900582": {
+   "Str_JA": "少々お待ちください"
+  },
+  "900605": {
+   "Str_JA": "解放されました!フィールドで探して収穫してみましょう。"
+  },
+  "900706": {
+   "Str_JA": "いっぱいになりました!進化できます",
+   "Str_RU": "Заполнено! Можно эволюционировать"
+  },
+  "900754": {
+   "Str_JA": "(これまで{0})"
+  },
+  "900634": {
+   "Str_JA": "みんなのお世話"
+  },
+  "900526": {
+   "Str_JA": "{0} {1} {2}星! {3} {4}"
+  },
+  "900667": {
+   "Str_JA": "{0} {1} 最大!刃がふえました"
+  },
+  "201007": {
+   "Str_JA": "ラウンド開始から3秒間、攻撃力が上がります。最初に発射した収穫機で一気に稼ぐのにぴったりです。"
+  },
+  "900253": {
+   "Str_JA": "さすらい群落のスコア +50%",
+   "Str_RU": "Очки бродячих +50%"
+  },
+  "900523": {
+   "Str_JA": "黄金!"
+  },
+  "901188": {
+   "Str_JA": "通貨が足りません"
+  },
+  "900796": {
+   "Str_JA": "巨大キノコにおおわれた村と、ベテランキノコハンターの収穫機"
+  },
+  "901193": {
+   "Str_JA": "巨大キノコにおおわれた村、ベテランキノコハンターの収穫機",
+   "Str_RU": "Городок, заросший гигантскими грибами: сборщик опытного грибника",
+   "Str_UK": "Село, вкрите велетенськими грибами: збирач бувалого грибника"
+  },
+  "901194": {
+   "Str_JA": "収穫機をつかんで後ろに引いて離すと発射!",
+   "Str_RU": "Возьми сборщика, оттяни назад и отпусти, чтобы запустить!",
+   "Str_UK": "Утримуй збирача, відтягни назад і відпусти — запуск!"
+  },
+  "900190": {
+   "Str_JA": "Lv2:発動率・Lv3:威力・Lv4:発動率と威力"
+  },
+  "900087": {
+   "Str_JA": "自動収穫ほうび +{0}"
+  },
+  "900616": {
+   "Str_JA": "収穫機{0}・キノコ{1}・群落{2}/{3}"
+  },
+  "900493": {
+   "Str_JA": "胞子ぷしゅー:当たると確率で胞子の雲(鈍足)",
+   "Str_UK": "Спорохмарка: після влучання шанс на хмару спор (уповільнення)"
+  },
+  "900495": {
+   "Str_JA": "胞子ぷしゅー:当たると確率で胞子の雲(鈍足+弱体)",
+   "Str_UK": "Спорохмарка: після влучання шанс на хмару спор (уповільнення + ослаблення)"
+  },
+  "900531": {
+   "Str_JA": "一時収穫機{0}個が消えました!"
+  },
+  "900540": {
+   "Str_JA": "解放"
+  },
+  "900559": {
+   "Str_JA": "一時収穫機はバーバフを受けません",
+   "Str_RU": "Временные сборщики не получают баффы планки",
+   "Str_UK": "Тимчасові збирачі не отримують бафів планки"
+  },
+  "900622": {
+   "Str_JA": "一時収穫機"
+  },
+  "900747": {
+   "Str_JA": "ボーナスゴールド <size=70%><color=#8a6a4a>(銭の収穫機)</color></size>"
+  },
+  "900749": {
+   "Str_JA": "{0}新しいエリアが解放:<color=#2a6ab8>{1}</color>"
+  },
+  "900758": {
+   "Str_JA": "{0}ボス{1}を倒した!ステージ{2}が解放",
+   "Str_UK": "{0}: боса {1} переможено! Етап {2} відкрито"
+  },
+  "900079": {
+   "Str_JA": "キノコの傘の形をしたたき火台で、ぽかぽかの火が燃えています。"
+  },
+  "900156": {
+   "Str_JA": "加速・澄んだ胞子膜の持続 {0}、刃研ぎ {1}ヒット",
+   "Str_UK": "Прискорення й чиста спорова завіса тривають {0}, гостріння: {1} уд."
+  },
+  "201011": {
+   "Str_JA": "収穫機のまわりに回転ブレードが現れ、範囲内のキノコに定期的にダメージを与えます。"
+  },
+  "900580": {
+   "Str_JA": "1時間あたり{0}{1}  {2}{3} <size=80%><color=#8a6a4a>(ステージ・キノコ小屋・ちびっこの効果・「自動収穫の拡張」でふえます)</color></size>",
+   "Str_RU": "В час: {0}{1}  {2}{3} <size=80%><color=#8a6a4a>(растёт с этапами, грибной хижиной, бонусами малышей и улучшением «Расширение автосбора»)</color></size>"
+  },
+  "900516": {
+   "Str_JA": "収穫機の装備枠ができました。星の高い収穫機{0}個だけオンにしてあります(工房で変えられます)",
+   "Str_UK": "З'явилися слоти для збирачів. Увімкнено лише збирачів із найбільшою кількістю зірок: {0} (змінити можна в майстерні)"
+  },
+  "900773": {
+   "Str_JA": "収穫機ごとに<color=#3a8a2a>固有能力</color>が違います。恒久収穫機にはそれぞれ<color=#3a8a2a>装備枠</color>が1つあり、オンにした収穫機が1枠ずつ使います(同じ種類は1つだけ)。残りの枠は基本収穫機が埋め、分裂・分身でできた収穫機は基本収穫機の分身(攻撃力20%)です。",
+   "Str_RU": "У каждого сборщика своя <color=#3a8a2a>особая способность</color>. У каждого постоянного сборщика есть один <color=#3a8a2a>слот</color>, и каждый включённый сборщик занимает один слот (каждого вида только один). Свободные слоты занимают обычные сборщики, а сборщики от Раздвоения или Двойника — это двойники обычного сборщика (20% атаки)."
+  },
+  "901195": {
+   "Str_JA": "菌糸石でちびっこと収穫機の見た目を変えます。買ったスキンはいつでも着たり脱いだりできます。ちびっこスキンは牧場・畑・食堂に、収穫機スキンはラウンドの収穫機に表示されます。(能力は変わりません)",
+   "Str_RU": "За камни мицелия меняй облик малышей и сборщиков. Купленные скины можно надевать и снимать в любой момент. Скины малышей видны на ферме, в полях и в закусочной, скины сборщиков — на сборщиках в раунде. (Характеристики не меняются)",
+   "Str_UK": "Міцелієві камені змінюють вигляд малюків і збирачів. Куплені скіни можна вдягати й знімати будь-коли. Скіни малюків видно на ранчо, полях і в закусочній; скіни збирачів видно на збирачах у раунді. (Характеристики не змінюються)"
+  },
+  "900117": {
+   "Str_JA": "バーに当たるたびにデバフ解除・{0}秒保護",
+   "Str_UK": "Знімає дебафи за кожним ударом по планці · захист {0} с"
+  },
+  "900142": {
+   "Str_JA": "フィールド {0}×{1}・画面拡大 ×{2}"
+  },
+  "900144": {
+   "Str_JA": "ラウンドごとに1個・ぶつかると{0}秒 攻撃力 ×{1}",
+   "Str_UK": "1 за раунд · після удару {0} с атака ×{1}"
+  },
+  "900146": {
+   "Str_JA": "ラウンドごとに1個・通ると2秒加速",
+   "Str_RU": "1 за раунд · при пролёте ускорение на 2 с",
+   "Str_UK": "1 за раунд · під час проходу прискорення на 2 с"
+  },
+  "900147": {
+   "Str_JA": "ラウンドごとに1個・3つともオンで5秒 スコア ×2 (1回)",
+   "Str_UK": "1 за раунд · усі три увімкнути: бали ×2 на 5 с (раз)"
+  },
+  "900155": {
+   "Str_JA": "発動率 {0}・"
+  },
+  "900172": {
+   "Str_JA": "気力アップ 攻撃力 +{0}%・発動率 +{1}%",
+   "Str_RU": "Прилив сил: атака +{0}% · шанс +{1}%",
+   "Str_UK": "Атака підбадьорення +{0}% · шанс навичок +{1}%"
+  },
+  "203031": {
+   "Str_RU": "Особый узел за камни мицелия. Умножает итоговое золото.",
+   "Str_UK": "Особливий вузол, що відкривається міцелієвими каменями. Множить золото виплати."
+  },
+  "201032": {
+   "Str_RU": "Усиливает атаку и после максимума «Атаки IV»: каждый уровень умножает атаку, максимального уровня нет.",
+   "Str_UK": "Атака зростає й після максимуму «Атаки IV»: кожен рівень множить атаку, максимуму немає."
+  },
+  "203032": {
+   "Str_RU": "Даже после максимума «Очков за удар III+» итоговое золото (золото, полученное за очки) продолжает расти. Максимального уровня нет."
+  },
+  "901169": {
+   "Str_RU": "Иду в зону «{0}»!"
+  },
+  "901209": {
+   "Str_RU": "Нажми ещё раз: позвать малыша ({2}) за {0}{1}",
+   "Str_UK": "Натисни ще раз: привести малюка ({2}) за {0}{1}"
+  },
+  "901249": {
+   "Str_RU": "Позвать за {0}"
+  },
+  "901266": {
+   "Str_RU": "Подарок ({0}): {1} ×{2}",
+   "Str_UK": "{0}: подарунок {1} ×{2}"
+  },
+  "900665": {
+   "Str_RU": "Открыто: {0}! Добавлено в свободный слот"
+  },
+  "900666": {
+   "Str_RU": "Открыто: {0}! Слотов нет — пока выключено"
+  },
+  "900786": {
+   "Str_RU": "Готово: {0}!"
+  },
+  "900787": {
+   "Str_RU": "Готово: {0}! {1}"
+  },
+  "901181": {
+   "Str_RU": "Готово: {0}! Поставь на Мировое древо в разделе «Украшение»"
+  },
+  "901182": {
+   "Str_RU": "Готово: {0}! Сохранено как материал для улучшения"
+  },
+  "901282": {
+   "Str_RU": "Готово: {0}! · Материал для улучшения +1"
+  },
+  "901185": {
+   "Str_RU": "Впервые поставлено: {0}! {1}+{2} · {3}: привязанность +{4}"
+  },
+  "901299": {
+   "Str_RU": "Видов: {0}",
+   "Str_UK": "Видів: {0}"
+  },
+  "900428": {
+   "Str_RU": "Маленький и скромный на вид, но с тем же смертельным ядом, что и у белой поганки.",
+   "Str_UK": "Маленький і скромний на вигляд, але має ту саму смертельну отруту, що й Смердючий мухомор."
+  },
+  "900532": {
+   "Str_RU": "Призваны двойники!",
+   "Str_UK": "Двійників прикликано!"
+  },
+  "900791": {
+   "Str_RU": "Двойник: {0}",
+   "Str_UK": "Двійник: {0}"
+  },
+  "900922": {
+   "Str_RU": "Сборщик-двойник (навык)",
+   "Str_UK": "Збирач-двійник (навичка)"
+  },
+  "900449": {
+   "Str_RU": "Итоговое золото"
+  },
+  "303003": {
+   "Str_RU": "Бонус итогов",
+   "Str_UK": "Бонус виплати"
+  },
+  "303023": {
+   "Str_RU": "Бонус итогов II",
+   "Str_UK": "Бонус виплати II"
+  },
+  "303031": {
+   "Str_RU": "Итоги мицелия",
+   "Str_UK": "Міцелієва виплата"
+  },
+  "900132": {
+   "Str_RU": "Итоговое золото {0}",
+   "Str_UK": "Золото виплати {0}"
+  },
+  "900135": {
+   "Str_RU": "Итоговое золото +{0}%",
+   "Str_UK": "Золото виплати +{0}%"
+  },
+  "900184": {
+   "Str_RU": "Итоговое золото ×{0}",
+   "Str_UK": "Золото виплати ×{0}"
+  },
+  "301004": {
+   "Str_RU": "Скорость сборщика"
+  },
+  "900553": {
+   "Str_RU": "Бафф планки · срабатывает, когда постоянный сборщик ударяет по планке",
+   "Str_UK": "Баф планки · спрацьовує, коли постійний збирач б'є по планці"
+  },
+  "901196": {
+   "Str_RU": "Улучшения Древа мицелия"
+  },
+  "900061": {
+   "Str_RU": "Когда Малыш Уголёк собирает грибы: камни мицелия +{0}"
+  },
+  "900069": {
+   "Str_RU": "Когда строит Малыш Камешек: время стройки −{0}"
+  },
+  "900094": {
+   "Str_RU": "Малыш-лава"
+  },
+  "900095": {
+   "Str_RU": "Малыш-неон"
+  },
+  "900096": {
+   "Str_RU": "Малыш-снежинка"
+  },
+  "900097": {
+   "Str_RU": "Малыш-богач"
+  },
+  "900098": {
+   "Str_RU": "Малыш-галактика"
+  },
+  "900099": {
+   "Str_RU": "Малыш-сакура"
+  },
+  "900100": {
+   "Str_RU": "Малыш-солнышко"
+  },
+  "900101": {
+   "Str_RU": "Малыш-облачко"
+  },
+  "900102": {
+   "Str_RU": "Малыш-самоцвет"
+  },
+  "900103": {
+   "Str_RU": "Малыш-шоколадка",
+   "Str_UK": "Полунично-шоколадний малюк"
+  },
+  "100003": {
+   "Str_RU": "Мотыга травника"
+  },
+  "900256": {
+   "Str_RU": "Пыхи и дымок"
+  },
+  "900353": {
+   "Str_RU": "Трутовик зонтичный",
+   "Str_UK": "Парасольковий трутовик"
+  },
+  "900331": {
+   "Str_RU": "Шампиньон луговой",
+   "Str_UK": "Печериця лучна"
+  },
+  "900659": {
+   "Str_RU": "Не удалось прочитать сохранение, начата новая игра (старое сохранение сохранено отдельно)"
+  },
+  "900802": {
+   "Str_RU": "Главное меню"
+  },
+  "900893": {
+   "Str_RU": "В главное меню"
+  },
+  "900011": {
+   "Str_RU": "Ой, горячо! А, нет — это же я горячий!"
+  },
+  "900014": {
+   "Str_RU": "Бзз-бзз! Тронешь — ударит током!"
+  },
+  "900036": {
+   "Str_RU": "Уж катиться-то я умею!"
+  },
+  "900038": {
+   "Str_RU": "Щелбан хочешь? Шучу!"
+  },
+  "900054": {
+   "Str_RU": "Посажу споры одну за другой!",
+   "Str_UK": "Спори посаджу акуратненько!"
+  },
+  "900113": {
+   "Str_RU": "Поздняя игра"
+  },
+  "900120": {
+   "Str_RU": "Тянется к ближайшим грибам: {0}°/с в течение 1 с"
+  },
+  "301009": {
+   "Str_RU": "Крушитель куч",
+   "Str_UK": "Розтрощувач купок"
+  },
+  "301031": {
+   "Str_RU": "Крушитель боссов"
+  },
+  "301029": {
+   "Str_RU": "Усиление «Прилива сил»"
+  },
+  "900192": {
+   "Str_RU": "Рикошет: каждый отскок от стены или планки добавляет +{0} к урону следующего удара (до {1} раз, сбрасывается при попадании)",
+   "Str_UK": "Рикошетний зріз: кожне відбиття від стіни чи планки додає +{0} шкоди наступному удару (макс. накопичень: {1}, витрачається після удару)"
+  },
+  "202058": {
+   "Str_RU": "Открывает лесное устройство Моховая тропа. В каждом раунде ставится одна; сборщики, пролетевшие по ней, ненадолго ускоряются."
+  },
+  "900207": {
+   "Str_RU": "Снежный гриб"
+  },
+  "900311": {
+   "Str_RU": "Шимеджи"
+  },
+  "900286": {
+   "Str_RU": "Гриб с потрескавшейся, как панцирь черепахи, шляпкой зовут «цветочным шиитаке» и очень ценят."
+  },
+  "900291": {
+   "Str_RU": "Похож на человеческое ухо; даже высушенный, снова становится мягким в воде."
+  },
+  "900530": {
+   "Str_RU": "Восстановлено {0}%"
+  },
+  "900533": {
+   "Str_RU": "Остался оригинал! (осталось: {0})"
+  },
+  "900598": {
+   "Str_RU": "Присоединится, когда Мировое древо достигнет ур. {0}.",
+   "Str_UK": "Приєднається, коли Світове дерево досягне рів. {0}."
+  },
+  "900707": {
+   "Str_RU": "Заполнено"
+  },
+  "901144": {
+   "Str_RU": "Заполнено!"
+  },
+  "900732": {
+   "Str_RU": "Победи, пока не вышло время! {0}"
+  },
+  "900775": {
+   "Str_RU": "Привязанность на максимуме! Я могу эволюционировать!"
+  },
+  "900784": {
+   "Str_RU": "Перемещено!"
+  },
+  "900863": {
+   "Str_RU": "Лекарственный мицелий",
+   "Str_UK": "Лікарський міцелій"
+  },
+  "900919": {
+   "Str_RU": "{0}: звон"
+  },
+  "900937": {
+   "Str_RU": "Замшелое древо"
+  },
+  "901006": {
+   "Str_RU": "Рунная стела"
+  },
+  "901014": {
+   "Str_RU": "Скорость движения малышей +{0}"
+  },
+  "901036": {
+   "Str_RU": "Время изготовления в Мастерской малышей ×{0}"
+  },
+  "901067": {
+   "Str_RU": "Любимые грибы этой стадии (подношение ×2): {0}"
+  },
+  "901069": {
+   "Str_RU": "Поднести всё"
+  },
+  "901099": {
+   "Str_RU": "Собирай грибы в раундах, и малыши будут просить тебя о помощи"
+  },
+  "901164": {
+   "Str_RU": "Чтобы расти дальше, нужно пробуждение"
+  },
+  "901165": {
+   "Str_RU": "Меня переполняет сила!",
+   "Str_UK": "Сила так і вирує!"
+  },
+  "900509": {
+   "Str_RU": "Только в местности {0} (с этапа {1}, встречается только там)"
+  },
+  "901271": {
+   "Str_RU": "Украшения для древа",
+   "Str_UK": "Декор для дерева"
+  },
+  "901284": {
+   "Str_RU": "Лимит на сегодня исчерпан"
+  },
+  "303007": {
+   "Str_RU": "Возрождение колоний"
+  },
+  "202060": {
+   "Str_RU": "Когда постоянный сборщик ударяется о планку, есть шанс, что на короткое время после каждого отскока от планки он полетит прямо к ближайшей грибной колонии (на этапах с боссом — к боссу). Лесные устройства и планку не выбирает целью.",
+   "Str_UK": "Коли постійний збирач б'є по планці, є шанс, що на короткий час після кожного відбиття він летітиме прямо до найближчої грибної колонії (на босових етапах — до боса). Лісові пристрої й планку він не обирає ціллю."
+  },
+  "900125": {
+   "Str_RU": "{0} с после каждого отскока от планки летит к ближайшей колонии (на этапах с боссом — к боссу)",
+   "Str_UK": "{0} с після кожного відбиття від планки летить до найближчої колонії (на босових етапах — до боса)"
+  },
+  "203002": {
+   "Str_RU": "Добавляет фиксированные очки за каждый удар по грибу. В конце раунда очки превращаются в золото. Прокачай до максимума, чтобы открыть Очки за удар I+."
+  },
+  "203016": {
+   "Str_RU": "Ещё раз добавляет очки удара по 1. Прокачай до максимума, чтобы открыть Очки за удар II."
+  },
+  "203018": {
+   "Str_RU": "Добавляет очки удара по 10. Прокачай до максимума, чтобы открыть Очки за удар II+."
+  },
+  "203020": {
+   "Str_RU": "Ещё раз добавляет очки удара по 10. Прокачай до максимума, чтобы открыть Очки за удар III."
+  },
+  "203024": {
+   "Str_RU": "Добавляет очки удара по 100. Прокачай до максимума, чтобы открыть Очки за удар III+."
+  },
+  "303002": {
+   "Str_RU": "Очки за удар I"
+  },
+  "303016": {
+   "Str_RU": "Очки за удар I+"
+  },
+  "303018": {
+   "Str_RU": "Очки за удар II"
+  },
+  "303020": {
+   "Str_RU": "Очки за удар II+"
+  },
+  "303024": {
+   "Str_RU": "Очки за удар III"
+  },
+  "303026": {
+   "Str_RU": "Очки за удар III+"
+  },
+  "900264": {
+   "Str_RU": "Очки за удар +50%"
+  },
+  "900365": {
+   "Str_RU": "Шарик на звёздчатом воротничке выпускает споры, как смешной «пф-ф»."
+  },
+  "900384": {
+   "Str_RU": "Растёт на лужайке круглым кольцом. Его ещё зовут «ведьмино кольцо».",
+   "Str_UK": "Росте круглим кільцем на галявині. Його ще називають відьминим колом."
+  },
+  "900425": {
+   "Str_RU": "Сплошь белый зонтик. Его зовут «Ангел смерти»."
+  },
+  "900760": {
+   "Str_RU": "Вызов боссу выключен. Пофарми на этом этапе, а потом снова брось вызов кнопкой «Вызов боссу» в Древе мицелия"
+  },
+  "901082": {
+   "Str_RU": "Титул <b>«Капитан малышей»</b> · Все награды за сумму ур. получены"
+  },
+  "901131": {
+   "Str_RU": "Пусто · Нажми «Заменить», чтобы поставить украшение"
+  },
+  "900350": {
+   "Str_UK": "Порія"
+  },
+  "201025": {
+   "Str_UK": "Ще більше подовжує ковзну планку. Сумується з вузлом «Ширина планки», максимум — 1/3 ширини поля."
+  },
+  "900617": {
+   "Str_UK": "Швидкість {0} · Відкриття {1} · Нескінченність {2} · Баланс {3}"
+  },
+  "900258": {
+   "Str_UK": "Сяйний ліс"
+  },
+  "900565": {
+   "Str_UK": "{0}: +{1} рів. одразу!"
+  },
+  "901287": {
+   "Str_UK": "Краса: {0} · Макс."
+  },
+  "901288": {
+   "Str_UK": "{0}/{1}"
+  },
+  "901289": {
+   "Str_UK": "<b>Краса: {0}</b>"
+  },
+  "901290": {
+   "Str_UK": "Далі (краса {0}): {1}"
+  },
+  "901269": {
+   "Str_UK": "Колекція: {0}/{1}"
+  },
+  "900544": {
+   "Str_UK": "{0} · {1}: через {2} ет."
+  },
+  "900247": {
+   "Str_UK": "Кіноварний трутовик"
+  },
+  "900921": {
+   "Str_UK": "Міні-збирач від Розділення"
+  },
+  "900443": {
+   "Str_UK": "Шанс навичок"
+  },
+  "900555": {
+   "Str_UK": "Навичка · спрацьовує автоматично з певним шансом під час збору грибів"
+  },
+  "900557": {
+   "Str_UK": "Навичка · пробиває з певним шансом під час удару по твердих грибах"
+  },
+  "202004": {
+   "Str_UK": "Щоразу, коли збирач б'є по планці, нарощується комбо, і кожне комбо збільшує множник балів. Це збільшує приріст множника. Якщо збирач торкнеться нижньої стіни, комбо перерветься."
+  },
+  "202036": {
+   "Str_UK": "Під час удару по грибу є шанс, що блискавка перестрибне на гриби поблизу й завдасть безперервної шкоди."
+  },
+  "202033": {
+   "Str_UK": "Під час удару по грибу є шанс, що збирач 1 секунду летітиме, загинаючи траєкторію до найближчих грибів."
+  },
+  "900092": {
+   "Str_UK": "Лікарський гриб"
+  },
+  "900275": {
+   "Str_UK": "Лікарський"
+  },
+  "900169": {
+   "Str_UK": "Швидкість під час відбиття від планки {0}"
+  },
+  "900176": {
+   "Str_UK": "Під час збору гриба зі Світового дерева шанс {0} на міцелієвий камінь +2"
+  },
+  "900320": {
+   "Str_UK": "Червоний і вологий, як бичачий язик, а на розрізі точить червоний сік."
+  },
+  "900494": {
+   "Str_UK": "Спорохмарка: після влучання шанс на хмару спор (ослаблення)"
+  },
+  "900965": {
+   "Str_UK": "Міцелієвий камінь +20% під час збору"
+  },
+  "900969": {
+   "Str_UK": "Під час збору ланцюгом збирає 2 сусідні гриби"
+  },
+  "901020": {
+   "Str_UK": "Шанс подвоїти під час збору: {0}"
+  },
+  "901037": {
+   "Str_UK": "Шанс міцелієвого каменя +2 під час збору деревного гриба: {0}"
+  },
+  "201023": {
+   "Str_UK": "Збільшує множник шкоди й балів у разі критичного удару."
+  },
+  "900009": {
+   "Str_UK": "Дай смаколик"
+  },
+  "900541": {
+   "Str_UK": "{0} зол. + міцелієвий камінь {1}"
+  },
+  "900645": {
+   "Str_UK": "Усі виросли"
+  },
+  "900683": {
+   "Str_UK": "Усі гриби виросли!"
+  },
+  "900680": {
+   "Str_UK": "Достиглих грибів немає"
+  },
+  "900289": {
+   "Str_UK": "Дрібні капелюшки купчаться на довгих тонких ніжках. У природі він жовто-бурий."
+  },
+  "900222": {
+   "Str_UK": "Плаский трутовик"
+  },
+  "900321": {
+   "Str_UK": "Саркодон"
+  },
+  "900352": {
+   "Str_UK": "Бульбоподібна грудка, що росте під землею, прикріплена до коренів сосни. Усередині біла."
+  },
+  "900361": {
+   "Str_UK": "Підковоподібний, щороку додає по шару, як річні кільця."
+  },
+  "900023": {
+   "Str_UK": "Загадав бажання? Я ж падуча зірка!"
+  },
+  "900084": {
+   "Str_UK": "Маленький фонтанчик, де вода дзюрчить із грибного капелюшка."
+  },
+  "900050": {
+   "Str_UK": "Наш дідусь — найкращий!"
+  },
+  "901167": {
+   "Str_UK": "Блиск-блиск… Я пробудився!"
+  },
+  "900522": {
+   "Str_UK": "Поділ клітин"
+  },
+  "900535": {
+   "Str_UK": "Боса {0} переможено!"
+  },
+  "900929": {
+   "Str_UK": "Знищено"
+  },
+  "900820": {
+   "Str_UK": "20,0 с"
+  },
+  "901221": {
+   "Str_UK": "Область полотна на основі 1920×1080 (екран → координати сцени). Якщо порожньо, увесь екран вважається 1920×1080"
+  },
+  "303032": {
+   "Str_UK": "Нескінченний урожай"
+  },
+  "901313": {
+   "Str_UK": "Куди йдеш?"
+  },
+  "900415": {
+   "Str_UK": "Червонувато-коричневий капелюшок зі зморшками, як мозок. Легко сплутати зі зморшком."
+  },
+  "900408": {
+   "Str_UK": "На капелюшку візерунок, схожий на зміїну луску."
+  },
+  "900441": {
+   "Str_UK": "Шанс криту"
+  },
+  "202059": {
+   "Str_UK": "Відкриває лісовий пристрій Жолудевий перемикач. Щораунду з'являється один, і якщо увімкнути всі три жолуді, 5 секунд бали ×2 (раз за раунд)."
+  },
+  "900663": {
+   "Str_UK": "Виклик боса увімк. · На етапі {0} битва з босом"
+  },
+  "900585": {
+   "Str_UK": "{0}×{1} кл. · {2}/{3} · {4}{5}"
+  },
+  "900646": {
+   "Str_UK": "Перенести {0} <size=70%>({1}×{2} кл.)</size>"
+  },
+  "900649": {
+   "Str_UK": "{0} <size=70%>({1}×{2} кл. · {3}{4} · {5})</size>"
+  },
+  "202030": {
+   "Str_UK": "Під час збору гриба є шанс, що з'явиться малий збирач-двійник."
+  },
+  "202039": {
+   "Str_UK": "Під час відбиття від стіни є шанс, що смерч промайне горизонтально по полю."
+  },
+  "203029": {
+   "Str_UK": "Особливий вузол, що відкривається міцелієвими каменями. Дає шанс отримати більше міцелієвих каменів під час збору грибів зі Світового дерева."
+  },
+  "203030": {
+   "Str_UK": "Особливий вузол, що відкривається міцелієвими каменями. Більше міцелієвих каменів під час збору грибів зі Світового дерева."
+  },
+  "201002": {
+   "Str_UK": "Додає фіксоване значення до шкоди, яку збирач завдає грибу під час удару. Шкода більшості навичок теж залежить від атаки. Якщо прокачати до кінця, відкриється Атака II."
+  },
+  "203013": {
+   "Str_UK": "Під час збору гриба є шанс потроїти врожай."
+  },
+  "900542": {
+   "Str_UK": "Міцелієвий камінь {0}"
+  },
+  "900566": {
+   "Str_UK": "Бракує міцелієвих каменів (їх дає Світове дерево)"
+  },
+  "900570": {
+   "Str_UK": "Будується: {0}. Можна завершити просто зараз за міцелієві камені. <color=#8a6a4a>(1 міцелієвий камінь за кожні {1} хв, що лишилися)</color>"
+  },
+  "900625": {
+   "Str_UK": "Міцелієвий камінь +100"
+  },
+  "900668": {
+   "Str_UK": "Бракує міцелієвих каменів"
+  },
+  "900674": {
+   "Str_UK": "Бракує золота або міцелієвих каменів"
+  },
+  "900709": {
+   "Str_UK": "· Нагорода за прохання: міцелієвий камінь ×{0} {1} · іноді +1, а коли слот прихильності заповнюється, +{2}"
+  },
+  "900711": {
+   "Str_UK": "· Бонус прихильності: <b>{0}%</b> шанс на міцелієвий камінь +1~{1} за прохання"
+  },
+  "900814": {
+   "Str_UK": "Вузол міцелієвого каменя"
+  },
+  "900503": {
+   "Str_UK": "{0} год {1} хв"
+  },
+  "900579": {
+   "Str_UK": "Накопичено: {0} год {1} хв <size=75%><color=#8a6a4a>/ макс. {2} год</color></size>"
+  },
+  "900583": {
+   "Str_UK": "{0} дн {1} год"
+  },
+  "900886": {
+   "Str_UK": "0 год 0 хв"
+  },
+  "900949": {
+   "Str_UK": "Полицевий деревний гриб"
+  },
+  "900954": {
+   "Str_UK": "Багато полицевих слотів і короткий шлях"
+  },
+  "901010": {
+   "Str_UK": "Врожай полицевих деревних грибів +{0}"
+  },
+  "900118": {
+   "Str_UK": "Радіус {0}, шкода: атака ×{1}"
+  },
+  "900121": {
+   "Str_UK": "Цілей поблизу: {0}, шкода: атака ×{1}"
+  },
+  "900122": {
+   "Str_UK": "Висота смуги {0}, шкода: атака ×{1}"
+  }
+ }
+}

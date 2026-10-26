@@ -1,0 +1,12 @@
+{
+ "Upgrade": [
+  {"Upg_ID": 12066, "Upg_Key": "md_map2", "Upg_Name": "필드 넓히기 II", "Str_Group_ID": 22066, "Upg_Pre": 12002, "Upg_Req": 12002, "Branch": "md", "Type": "map_zoom", "Efx_MaxLv": 1, "Cost_ID": 90091, "Tier": 1, "Sub": 0, "Skill": "", "Icon": "", "Color": "", "Efx_Lv0": 1.1, "Efx_Lv1": 1.0, "Efx_Lv2": 0, "Efx_Lv3": 0, "Efx_Lv4": 0}
+ ],
+ "Upgrade_Cost": [
+  {"Cost_ID": 90091, "Cost_Lv1": 4000, "Cost_Lv2": 0, "Cost_Lv3": 0, "Cost_Lv4": 0, "Gem_Lv1": 0, "Gem_Lv2": 0, "Gem_Lv3": 0, "Gem_Lv4": 0}
+ ],
+ "String": [
+  {"Str_ID": 302066, "Str_Group_ID": 22066, "Str_Name": "upg:md_map2:name", "Str_KR": "필드 넓히기 II", "Str_EN": "Widen Field II", "Str_JA": "フィールド拡張 II", "Str_RU": "Расширить поле II", "Str_UK": "Розширення поля II", "Str_PT": "Ampliar Campo II"},
+  {"Str_ID": 202066, "Str_Group_ID": 22066, "Str_Name": "upg:md_map2:desc", "Str_KR": "필드를 원래 크기까지 마저 넓혀요. 군락지와 숲 장치가 더 들어가요.", "Str_EN": "Widens the field the rest of the way to its original size. More colonies and forest gadgets fit.", "Str_JA": "フィールドを元の大きさまで広げきります。群落や森のしかけがさらに入ります。", "Str_RU": "Расширяет поле до исходного размера. Помещается больше колоний и лесных устройств.", "Str_UK": "Розширює поле до початкового розміру. Вміщується більше колоній і лісових пристроїв.", "Str_PT": "Amplia o campo até o tamanho original. Cabem mais colônias e engenhocas da floresta."}
+ ]
+}

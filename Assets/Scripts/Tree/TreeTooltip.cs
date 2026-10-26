@@ -27,7 +27,7 @@ namespace MoreMush
             shownId = n.id; shownL = L; shownS = s; shownPoorGold = poorGold; shownPoorGem = poorGem; shownLang = Loc.Lang;
             title.text = (n.gem ? UIUtil.Ic("gem") + " " : "") + n.n;
             title.color = U.Hex(n.gem ? "#2a9a74" : CATS[n.br].color);
-            lv.text = n.inf ? $"LVL {L} / ∞" : $"LVL {L} / {n.max}";
+            lv.text = n.inf ? Loc.F("LVL {0} / ∞", L) : Loc.F("LVL {0} / {1}", L, n.max);
             desc.text = Iconize(n.d);
             string costTxt = "", noteTxt = "";
             if (s == "locked" || s == "hidden")   // hidden: 레벨 있는 자손 때문에 보이는 조상

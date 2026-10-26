@@ -42,7 +42,15 @@ namespace MoreMush
         public static QuestDef QuestDefOf(QuestProg p) => QUEST.TryGetValue(p.id ?? "", out var d) ? d : null;
         public static bool QuestDone(QuestProg p) => QuestDefOf(p) is QuestDef d && p.prog >= d.target;
         public static bool QuestClaimable(QuestProg p) => !p.claimed && QuestDone(p);
-        public static int QuestClaimableCount() => G?.quest == null ? 0 : G.quest.daily.Concat(G.quest.weekly).Count(QuestClaimable);
+        // 업그레이드 화면이 매 프레임 부른다 → Concat·람다 없이 센다
+        public static int QuestClaimableCount()
+        {
+            if (G?.quest == null) return 0;
+            int n = 0;
+            foreach (var p in G.quest.daily) if (QuestClaimable(p)) n++;
+            foreach (var p in G.quest.weekly) if (QuestClaimable(p)) n++;
+            return n;
+        }
 
         public static string QuestText(QuestProg p)
         {

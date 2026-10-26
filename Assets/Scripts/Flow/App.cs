@@ -57,6 +57,7 @@ namespace MoreMush
         {
             I = null; notified = null; returned = null; queued.Clear(); pendingAway = 0; modalCount = 0;
             G = null;
+            leavingScene = default; leavingRoots.Clear();
             RoundFlow.Reset();
         }
 
@@ -77,6 +78,7 @@ namespace MoreMush
 
         static void OnSceneLoaded(Scene s, LoadSceneMode mode)
         {
+            if (mode == LoadSceneMode.Additive && leavingScene.IsValid()) SwapFrom(s);
             modalCount = 0;            // 씬이 바뀌면 이전 씬의 창은 사라진다
             TextFit.ApplyScene(s);     // 글자가 배치한 칸을 넘지 않게 + 언어에 맞는 폰트로
         }
@@ -89,7 +91,16 @@ namespace MoreMush
 #endif
         }
 
-        static bool InGame => G != null && SceneManager.GetActiveScene().name != Scenes.MainMenu;
+        static bool InGame => G != null && !OnMainMenu();
+
+        // Scene.name은 부를 때마다 새 문자열을 만든다 (매 프레임 Update) → 활성 씬이 바뀔 때만 이름을 읽는다
+        static int menuCheckedScene = -1; static bool onMenu;
+        static bool OnMainMenu()
+        {
+            var s = SceneManager.GetActiveScene();
+            if (s.handle != menuCheckedScene) { menuCheckedScene = s.handle; onMenu = s.name == Scenes.MainMenu; }
+            return onMenu;
+        }
 
         void Update()
         {
@@ -136,11 +147,48 @@ namespace MoreMush
             }
         }
 
-        // 저장하고 씬을 옮긴다
+        // 씬을 떠나기 직전 (아직 씬 오브젝트가 살아 있을 때). RoundView가 풀을 씬 밖에 맡긴다
+        public static event System.Action Leaving;
+
+        // 떠나는 씬 (새 씬을 Additive로 올리는 중). 새 씬이 올라오면 SwapFrom이 내린다
+        static Scene leavingScene;
+        static readonly System.Collections.Generic.HashSet<GameObject> leavingRoots = new System.Collections.Generic.HashSet<GameObject>();
+
+        // 저장하고 씬을 옮긴다.
+        // LoadScene(Single)은 이전 씬을 내릴 때 UnloadUnusedAssets와 강제 전체 GC를 돌려 이동마다 200ms 넘게 멈췄다 →
+        // 새 씬을 Additive로 올리고 이전 씬은 UnloadSceneAsync로 내린다 (전체 GC 없음, 평소 GC는 점진 모드가 나눠서 한다).
+        // 새 씬이 올라올 때까지 이전 씬은 그대로 그려진다 (빈 화면 없음)
         public static void Go(string scene)
         {
+            if (leavingScene.IsValid()) return;   // 이미 옮기는 중 (같은 프레임에 두 번 눌림)
             if (G != null) SaveGame();
-            SceneManager.LoadScene(scene);
+            try { Leaving?.Invoke(); } catch (System.Exception e) { Debug.LogException(e); }
+            leavingScene = SceneManager.GetActiveScene();
+            leavingRoots.Clear();
+            foreach (var r in leavingScene.GetRootGameObjects())
+            {
+                leavingRoots.Add(r);
+                // 새 씬의 EventSystem이 켜질 때 둘이 되지 않게 (입력은 어차피 이번 프레임으로 끝난다)
+                foreach (var es in r.GetComponentsInChildren<UnityEngine.EventSystems.EventSystem>()) es.enabled = false;
+            }
+            SceneManager.LoadScene(scene, LoadSceneMode.Additive);
+        }
+
+        // 새 씬의 Awake·OnEnable이 끝난 직후 (Start 전): 이전 씬을 끄고 새 씬을 활성 씬으로, 이전 씬은 비동기로 내린다
+        static void SwapFrom(Scene next)
+        {
+            var old = leavingScene;
+            leavingScene = default;
+            // 새 씬의 Awake가 부모 없이 만든 오브젝트는 아직 활성 씬이던 이전 씬에 생겼다 → 새 씬으로 옮긴다
+            foreach (var r in old.GetRootGameObjects())
+                if (!leavingRoots.Contains(r)) SceneManager.MoveGameObjectToScene(r, next);
+            // 카메라·EventSystem·AudioListener·캔버스가 겹치지 않게 이전 씬은 바로 끈다 (OnDisable에서 구독도 풀린다)
+            foreach (var r in leavingRoots) if (r != null) r.SetActive(false);
+            leavingRoots.Clear();
+            SceneManager.SetActiveScene(next);
+            var op = SceneManager.UnloadSceneAsync(old);
+            // 메뉴로 갈 때만 쓰지 않는 에셋을 정리한다 (Additive 이동은 정리하지 않아서, 오래 놀면 쌓일 수 있다. 메뉴는 잠깐 멈춰도 괜찮다)
+            if (op != null && next.name == Scenes.MainMenu) op.completed += _ => Resources.UnloadUnusedAssets();
         }
 
         // 세이브를 불러오거나 새로 만든다. MainMenu의 Start가 쓰고,
@@ -155,6 +203,7 @@ namespace MoreMush
                 if (G == null)
                 {
                     G = new SaveData();
+                    Telemetry.ResetSnap();   // 새로 시작하므로 stage_end 차이 계산 기준도 0부터
                     if (SaveIO.LastLoadFailed) Notify(Loc.T("세이브를 읽지 못해 새로 시작해요 (이전 세이브는 따로 보관했어요)"));
                 }
                 else if (G.seenT > 0) away = Now() - G.seenT;   // 껐다 켠 동안 꼬마들이 채운 보따리
