@@ -124,7 +124,7 @@ namespace MoreMush
             for (int i = 0; i < decoPos.Count; i++)
             {
                 if (decoRect.ContainsKey(i)) continue;
-                if (Mathf.Abs(x - decoPos[i].x) < 60 * ZoomK && y < decoPos[i].y + 10 && y > decoPos[i].y - 120 * ZoomK) return i;
+                if (Mathf.Abs(x - decoPos[i].x) < 60 * DecoK && y < decoPos[i].y + 10 && y > decoPos[i].y - 120 * DecoK) return i;
             }
             return -1;
         }
@@ -208,6 +208,8 @@ namespace MoreMush
         }
 
         // 장식 크기 (무대 px, 긴 변). 웹 편집기(Tools/tree-layout)도 같은 값으로 그린다
-        float DecoPx(Deco d) => (d.hang ? 95 : 115) * ZoomK;
+        // 2026-10-26 나무 그림을 키운 단계(WT.grow)는 장식도 같은 배율로 키운다 (자리는 도면 비율이라 이미 따라간다)
+        float DecoK => ZoomK * WT.grow[WT.Picture(Stage())];
+        float DecoPx(Deco d) => (d.hang ? 95 : 115) * DecoK;
     }
 }

@@ -21,6 +21,7 @@ def _floats(name):
 
 WIDTH = _floats("width")            # WT.width (stage px)
 ZOOM = _floats("zoom")              # WT.zoom
+GROW = _floats("grow")              # WT.grow (picture-only enlargement: decos grow with it)
 MUSH_SLOTS = [int(x) for x in _floats("mushSlots")]
 DECO_SLOTS = [int(x) for x in _floats("decoSlots")]
 BEAUTY_SLOTS = 2                    # BeautyStep "slots" (+2 mushroom slots)
@@ -56,7 +57,7 @@ def zone_slots(pic, total=None):
 
 def deco_px(d, pic):
     """FarmTreeView.DecoPx: long side of a deco in stage px."""
-    return (95 if d["hang"] else 115) * ZOOM[pic]
+    return (95 if d["hang"] else 115) * ZOOM[pic] * GROW[pic]
 
 
 def fruit_px(pic):

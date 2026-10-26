@@ -2,7 +2,7 @@
 // 세계수 도면 편집기 서버 (내장 모듈만): node Tools/tree-layout/serve.mjs [포트=5179]
 //   GET  /                  → Tools/tree-layout/index.html
 //   GET  /<프로젝트 경로>    → 프로젝트 루트의 파일 (나무·장식 그림, tree_layout.json)
-//   GET  /api/defs          → C# 정의에서 읽은 값 {width, zoom, mushSlots, beautySlots, climbFrom, join, decos, zones} (tree_defs.py와 같은 정규식)
+//   GET  /api/defs          → C# 정의에서 읽은 값 {width, zoom, grow, mushSlots, beautySlots, climbFrom, join, decos, zones} (tree_defs.py와 같은 정규식)
 //   POST /api/save          → 본문 JSON 글자를 Assets/Resources/Rig/tree_layout.json에 저장 (전에 Temp/tree_layout.bak.<시각>.json 백업)
 import http from "node:http";
 import fs from "node:fs";
@@ -26,7 +26,7 @@ function defs() {
   const zones = [...farm.matchAll(/new Zone \{ id = "(\w+)", n = "([^"]*)".*?open = (\d+), weight = (\d+)/g)]
     .map((m) => ({ id: m[1], n: m[2], open: Number(m[3]), weight: Number(m[4]) }));
   const climbFrom = Number(/climbFrom\s*=\s*(\d+)/.exec(farm)[1]);
-  return { width: nums("width"), zoom: nums("zoom"), mushSlots: nums("mushSlots"), beautySlots: 2, climbFrom, join, decos, zones };
+  return { width: nums("width"), zoom: nums("zoom"), grow: nums("grow"), mushSlots: nums("mushSlots"), beautySlots: 2, climbFrom, join, decos, zones };
 }
 
 function stamp() {

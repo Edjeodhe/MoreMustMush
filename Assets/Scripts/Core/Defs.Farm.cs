@@ -32,6 +32,8 @@ namespace MoreMush
             // 폭은 그림 비율에서 나온다 (Tools/art/install_tree_stages.py가 계산). 2026-10-20 도면 가이드로 1~8단계 다시 그림(v11)
             // 2026-10-26 사용자: 8단계는 휠 최대 축소에서 나무가 작아 보여 그림만 1.15배 (1907 → 2193, 비율·도면 자리는 그림을 따라 같이 커진다)
             public static readonly float[] width = { 270, 278, 415, 596, 923, 1079, 1416, 2193 };
+            // 그림만 키운 배율 (위 width에 이미 곱해 있다): 나무에 붙는 장식도 같이 키운다. 정령 크기·화각은 그대로
+            public static readonly float[] grow = { 1, 1, 1, 1, 1, 1, 1, 1.15f };
             // 단계별 카메라 화각 배율: 땅(화면 아래)은 고정하고 위·양옆으로 넓어진다. 겹친 큰 배경(FarmView.BG_LAYERS)이 3.8배까지 덮는다
             public static readonly float[] zoom = { 1f, 1.12f, 1.26f, 1.42f, 1.6f, 1.8f, 2.02f, 2.28f };
             public const float x = 820, y = 720;                  // 나무 밑동 (화면 좌표): 배경 빈터의 밝은 자리 (장식도 이 자리를 중심으로 놓였다)

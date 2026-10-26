@@ -1,5 +1,5 @@
 // 세계수 도면 편집기 (Assets/Resources/Rig/tree_layout.json). 좌표는 게임 나무 그림 Farm/Tree/tree_<pic>.png의 비율 (u 오른쪽, v 아래).
-// 크기 규칙은 게임과 같다: 장식 긴 변 = (걸이형 95 · 설치형 115) × 화각 × s (무대 px), 나무버섯 = (34 + 20·pic/7) × 화각, 나무 너비 = WT.width.
+// 크기 규칙은 게임과 같다: 장식 긴 변 = (걸이형 95 · 설치형 115) × 화각 × 그림 배율(WT.grow) × s (무대 px), 나무버섯 = (34 + 20·pic/7) × 화각, 나무 너비 = WT.width.
 const $ = (id) => document.getElementById(id);
 const cv = $("cv"), ctx = cv.getContext("2d");
 const TREE = "/Assets/Resources/Art/Dream/Farm/Tree/tree_";
@@ -18,7 +18,7 @@ function img(url) {
 const P = () => data.pics.find((p) => p.pic === pic);
 const treeImg = () => img(TREE + pic + ".png");
 const decosFor = (pc) => D.decos.filter((d) => D.join.slice(0, pc + 1).includes(d.of));
-const decoPx = (d) => (d.hang ? 95 : 115) * D.zoom[pic];
+const decoPx = (d) => (d.hang ? 95 : 115) * D.zoom[pic] * (D.grow?.[pic] ?? 1);
 const fruitPx = () => (34 + 20 * pic / (D.width.length - 1)) * D.zoom[pic];
 // 서 있는 정령 (무대 px): 1배 화각 110 × 155, 화각^0.75로 커진다 (tree_defs.spirit_px)
 const spiritPx = () => [110, 155].map((s) => s * Math.pow(D.zoom[pic], 0.75));
