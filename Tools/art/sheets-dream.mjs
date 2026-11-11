@@ -527,56 +527,15 @@ const LETTER_WORDS = [
 ];
 const lettering = [
   ...[["ko", 1, "Korean Hangul"], ["en", 2, "English"]].map(([lang, col, script]) => ({
-    id: `lettering_${lang}`, lettering: true, rows: 2, cols: 5, out: `UI/Lettering/${lang}`, refs: [PILOT],
+    id: `lettering_${lang}`, lettering: true, rows: 2, cols: 5, out: `Text/${lang}`, refs: [PILOT],
     subject: LETTER + LETTER_WARM + ` The words are ${script}; spell every letter exactly.`,
     items: LETTER_WORDS.map((w) => [w[0], `the words "${w[col]}"`]),
   })),
   {
-    id: "lettering_fx", lettering: true, rows: 1, cols: 5, out: "UI/Lettering", refs: [PILOT],
+    id: "lettering_fx", lettering: true, rows: 1, cols: 5, out: "Text", refs: [PILOT],
     subject: LETTER + " PALE letters: near-white cream fill with light grey watercolor shading and a soft mid-grey edge, so the game can tint them any colour. Spell every letter exactly.",
     items: [["fever", `the word "FEVER!"`], ["super_fever", `the words "SUPER FEVER!!"`], ["super_combo", `the words "SUPER COMBO!"`], ["combo", `the word "COMBO"`], ["new", `the word "NEW"`]],
-  },
-  {
-    // field damage numbers: RoundView spells them out of these glyphs (TMP sprite asset "DmgDigits"), tinted per tier
-    // NOT the bubbly headline lettering: the damage-number typeface of digits_v1 (approved shape), repainted matte and
-    // muted so it sits in the watercolor field (v1 read glossy and sticker-like). Ids: u* = capital, l* = lowercase
-    // (Windows file names ignore case). Also every unit suffix U.Fmt writes: K M B T Qa Qi Sx Sp Oc No Dc.
-    id: "digits", lettering: true, rig: true, rows: 5, cols: 6, out: "UI/Digits", refs: [PILOT, raw("digits_v1"), raw("bg_field")],
-    subject: "Damage-number font glyphs for a soft dreamy watercolor game, painted with the SAME brushes and paper as the meadow background: ONE single character per cell, all from one matching typeface. Keep the typeface of the reference numerals sheet (heavy, condensed, chunky numerals leaning forward in an italic slant with softly rounded corners) but repaint it fully MATTE: flat transparent watercolor washes on rough paper, visible paper grain and gentle pigment pooling at the stroke edges, slightly irregular hand-painted edges. Fill: very pale warm off-white paper colour with faint grey-beige watercolor mottling (no white highlight, no shine, no gradient sheen) so the game can tint it. Edge: a medium-thick soft warm sepia-brown painted rim (muted, NOT near-black, NOT a crisp vector outline), with a faint soft sepia shadow offset down-right that fades like wet paint. Capital letters and digits are the same height; lowercase letters have a smaller x-height (about two-thirds) and 'p' has a descender. No glow, no 3D bevel, no gloss, no sparkle, no saturated colour, no ornaments, no extra marks.",
-    items: [
-      ...[..."0123456789"].map((d) => [`d${d}`, `the digit "${d}"`]),
-      ["plus", `a plus sign "+" (half the digit height)`],
-      ["dot", `a small round period "." (only a dot)`],
-      ["comma", `a small comma ","`],
-      ["excl", `an exclamation mark "!"`],
-      ["lx", `a lowercase letter "x"`],
-      ...[..."KMBTGQSOND"].map((c) => [`u${c.toLowerCase()}`, `the capital letter "${c}"`]),
-      ...[..."aipco"].map((c) => [`l${c}`, `the lowercase letter "${c}"`]),
-    ],
-  },
-  {
-    // in-round combo counter skin (MapleStory damage-skin style): RoundView spells "12 COMBO" out of these glyphs
-    // (TMP sprite asset "ComboDigits", MoreMush/Build Combo Digit Sprite Asset). Two colour sets of the digits typeface:
-    // n* = everyday honey gold, c* = critical hit (rose-crimson with a gold rim, sparkle glints). Not tinted by the game.
-    id: "combo_skin", lettering: true, rig: true, rows: 5, cols: 5, out: "UI/Combo", refs: [raw("digits"), PILOT],
-    subject: "Combo-counter font glyphs (a game 'damage skin') for a soft dreamy watercolor game: ONE single character or word per cell. Use EXACTLY the typeface of the attached numerals sheet (heavy, condensed, chunky numerals leaning forward in an italic slant with softly rounded corners, thick painted rim, faint soft shadow offset down-right) and the same rough-paper watercolor texture, but painted in two COLOUR SETS. GOLD SET: fill is a warm honey-gold watercolor wash, pale butter-cream at the top melting into deeper apricot-amber at the bottom, with a soft pale highlight stroke along the upper-left inside edge; rim is a thick warm chestnut-brown painted edge. CRIT SET (fancier, for critical hits): fill is a rich rose-coral watercolor wash melting into deep crimson-magenta at the bottom with a soft pale pink highlight stroke; a thick glowing honey-gold painted rim, and outside it a thin deep plum edge; two or three tiny white four-point sparkle glints painted on the corners of each glyph. Both sets: digits all the same height, matte painted look with visible paper grain and pigment pooling, no vector gloss, no 3D bevel, no drop shadow on the ground, nothing else in the cells.",
-    items: [
-      ...[..."0123456789"].map((d) => [`n${d}`, `the digit "${d}" in the GOLD SET`]),
-      ...[..."0123456789"].map((d) => [`c${d}`, `the digit "${d}" in the CRIT SET`]),
-      ["combo_n", `the word "COMBO" in the GOLD SET (letters about two-thirds of the digit height, same slanted typeface)`],
-      ["combo_c", `the word "COMBO" in the CRIT SET (letters about two-thirds of the digit height, same slanted typeface)`],
-      ["critical", `the word "CRITICAL!" in the CRIT SET (letters about two-thirds of the digit height, same slanted typeface)`],
-    ],
-  },
-  {
-    // the big centre banner when the harvest chain reaches fever (RoundView.Combo): lv 1 gold, lv 2 crit colours
-    id: "combo_banner", lettering: true, rows: 1, cols: 2, out: "UI/Combo", refs: [raw("combo_skin"), PILOT],
-    subject: "Big headline lettering for a soft dreamy watercolor game, painted EXACTLY like the attached combo-counter glyph sheet: the same heavy chunky italic slanted typeface with softly rounded corners, thick painted rim, faint soft shadow down-right, rough-paper watercolor texture. Each cell holds the words \"SUPER\" on the first line and \"COMBO!\" on the second line, centred, the two lines touching a little, slightly arched upward.",
-    items: [
-      ["super_combo_n", `"SUPER COMBO!" in the GOLD SET colours of the attached sheet (honey-gold wash, pale butter top, apricot-amber bottom, thick chestnut-brown rim)`],
-      ["super_combo_c", `"SUPER COMBO!" in the CRIT SET colours of the attached sheet (rose-coral to crimson-magenta wash, thick honey-gold rim with a thin deep plum edge outside, a few tiny white four-point sparkle glints)`],
-    ],
-  },
+  },
 ];
 
 // Backgrounds: the ground / sky only; framing scenery is placed separately from Env (ArtDecor) for depth.

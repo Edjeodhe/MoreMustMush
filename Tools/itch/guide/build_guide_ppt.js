@@ -50,9 +50,9 @@ const shadow = () => ({ type: 'outer', color: '263A2C', opacity: 0.18, blur: 6, 
 // ---------- 1. 표지 + 핵심 루프
 pres.addSection({ title: '소개' });
 let s = pres.addSlide({ masterName: 'COVER', sectionTitle: '소개' });
-s.addImage({ path: ROOT + '/Art/Raw_Soft/bg_title.png', x: 4.9, y: 0, w: 5.1, h: 5.625, sizing: { type: 'cover', w: 5.1, h: 5.625 }, objectName: 'Hero background' });
-s.addImage({ path: ROOT + '/Art/Raw_Soft/grandpa_full.png', x: 4.75, y: 2.35, w: 3.3, h: 3.3, objectName: 'Grandpa' });
-s.addImage({ path: ROOT + '/Art/StyleRef/logo.png', x: 0.45, y: 0.35, w: 3.5, h: 1.92, objectName: 'Logo' });
+s.addImage({ path: ROOT + '/Art/Ref/bg_title.png', x: 4.9, y: 0, w: 5.1, h: 5.625, sizing: { type: 'cover', w: 5.1, h: 5.625 }, objectName: 'Hero background' });
+s.addImage({ path: ROOT + '/Art/Ref/grandpa_full.png', x: 4.75, y: 2.35, w: 3.3, h: 3.3, objectName: 'Grandpa' });
+s.addImage({ path: ROOT + '/Art/Ref/logo.png', x: 0.45, y: 0.35, w: 3.5, h: 1.92, objectName: 'Logo' });
 s.addText('플레이 가이드', { placeholder: 'title' });
 s.addText(lines(['거대 버섯에 뒤덮인 마을.', '노련한 버섯 사냥꾼이 되어 수확기를 튕겨', '버섯을 쓸어 담고, 더 크게 성장하세요.']), { placeholder: 'body' });
 // 핵심 루프: 발사 → 수확 → 골드 → 강화
