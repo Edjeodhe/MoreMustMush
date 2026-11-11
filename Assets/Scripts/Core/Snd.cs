@@ -27,6 +27,15 @@ namespace MoreMush
         public static float BgmVol { get => PlayerPrefs.GetFloat(BgmPref, 1); set { PlayerPrefs.SetFloat(BgmPref, Mathf.Clamp01(value)); PlayerPrefs.Save(); } }
         static float sfxCache = -1;   // Tone마다 PlayerPrefs를 읽지 않게
         public static void SetSfx(float v) { SfxVol = v; sfxCache = Mathf.Clamp01(v); }
+        // 설정 창의 배경음·효과음 켜짐/꺼짐 (기기에 남긴다). 효과음이 꺼지면 Tone이 아무 소리도 내지 않는다. 배경음은 곡이 붙으면 이 값을 쓴다
+        const string SfxOnPref = "mmm_sfx_on", BgmOnPref = "mmm_bgm_on";
+        static int sfxOnCache = -1;
+        public static bool SfxOn
+        {
+            get { if (sfxOnCache < 0) sfxOnCache = PlayerPrefs.GetInt(SfxOnPref, 1); return sfxOnCache == 1; }
+            set { sfxOnCache = value ? 1 : 0; PlayerPrefs.SetInt(SfxOnPref, sfxOnCache); PlayerPrefs.Save(); }
+        }
+        public static bool BgmOn { get => PlayerPrefs.GetInt(BgmOnPref, 1) == 1; set { PlayerPrefs.SetInt(BgmOnPref, value ? 1 : 0); PlayerPrefs.Save(); } }
         const int RATE = 44100;
 
         static readonly Dictionary<string, float> last = new Dictionary<string, float>();
@@ -56,7 +65,7 @@ namespace MoreMush
 
         public static void Tone(float f, float d = 0.08f, Wave type = Wave.Sine, float v = 1, float slide = 0, string key = null, float gap = 0.035f)
         {
-            if (muted || I == null) return;
+            if (muted || !SfxOn || I == null) return;
             float now = Time.unscaledTime;
             if (key != null) { if (last.TryGetValue(key, out var l) && now - l < gap) return; last[key] = now; }
             var clip = Clip(Mathf.Round(f), d, type, slide);

@@ -6,19 +6,18 @@ namespace MoreMush
 {
     // MainMenu 씬 컨트롤러. 배치는 씬에서 사람이 하고, 여기서는 버튼에 기능만 연결한다.
     // 버튼은 이름으로 찾는다 (인스펙터에 직접 끌어 넣으면 그쪽이 우선):
-    //   Button_Start · Button_Reset · Button_Option · Button_Exit · Button_Lang
+    //   Button_Start · Button_Reset · Button_Option · Button_Exit (언어는 설정 창 안)
     // 확인 창(선택): ResetConfirm 안에 Button_Yes / Button_No, 옵션 창(선택): OptionPanel 안에 Button_Close / Button_Mute.
     // 두 창이 씬에 없으면 코드가 간단한 창을 만들어 쓴다 (TempDialog). 옵션 창은 모든 씬 공용(OptionWindow), Esc로 열고 닫는다.
     public class MainMenu : MonoBehaviour
     {
         [Header("Buttons (비우면 이름으로 찾음)")]
-        public Button start, reset, option, exit, lang;
+        public Button start, reset, option, exit;
 
         [Header("Panels (비워도 됨)")]
         public GameObject resetConfirm;
 
         OptionWindow optionWin;
-        LangWindow langWin;
 
         void Awake()
         {
@@ -26,11 +25,9 @@ namespace MoreMush
             reset = Bind(reset, "Button_Reset", OnReset);
             option = Bind(option, "Button_Option", OnOption);
             exit = Bind(exit, "Button_Exit", OnExit);
-            lang = Bind(lang, "Button_Lang", OnLang);
             if (resetConfirm == null) resetConfirm = FindByName("ResetConfirm");
             WirePanel(resetConfirm, ("Button_Yes", OnResetYes), ("Button_No", CloseAll));
             optionWin = OptionWindow.For(gameObject.scene, () => { Snd.Ui(); CloseAll(); });
-            langWin = LangWindow.For(gameObject.scene, CloseAll);
             CloseAll();
         }
 
@@ -73,15 +70,12 @@ namespace MoreMush
 
         void OnExit() { Snd.Ui(); App.Quit(); }
 
-        // 지구본 버튼: 언어 선택 창 (LangWindow)
-        void OnLang() { Snd.Ui(); CloseAll(); langWin.Open(); }
-
         void Update()
         {
             var kb = UnityEngine.InputSystem.Keyboard.current;
             if (kb == null || !kb.escapeKey.wasPressedThisFrame) return;
             // Esc: 열린 창이 있으면 닫고, 없으면 옵션 창
-            bool anyOpen = optionWin.IsOpen || langWin.IsOpen || (resetConfirm != null && resetConfirm.activeSelf);
+            bool anyOpen = optionWin.IsOpen || (resetConfirm != null && resetConfirm.activeSelf);
             if (anyOpen) { Snd.Ui(); CloseAll(); } else OnOption();
         }
 
@@ -98,7 +92,6 @@ namespace MoreMush
         {
             if (resetConfirm != null) resetConfirm.SetActive(false);
             optionWin?.Close();
-            langWin?.Close();
         }
 
         GameObject EnsureConfirm()

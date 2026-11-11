@@ -105,7 +105,7 @@ namespace MoreMush
             {
                 if (!(buffer[i] is Button b) || b.TryGetComponent<UIButtonFx>(out _)) continue;
                 // Dim overlays and click-catching popup containers are not visible controls.
-                if (b.name == "Dim" || b.name == "Box" || b.name == "LangPanel" || b.name == "LangPopup") continue;
+                if (b.name == "Dim" || b.name == "Box") continue;
                 b.gameObject.AddComponent<UIButtonFx>();
             }
             System.Array.Clear(buffer, 0, count);

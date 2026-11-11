@@ -6,86 +6,118 @@ using UnityEngine.UI;
 
 namespace MoreMush
 {
-    // 옵션 창 (모든 씬, Esc로 열고 닫는다). 씬에 배치된 OptionPanel이 있으면 그것을 쓴다:
-    //   안의 Button_Close(또는 Exit) = 닫기, Button_Mute = 소리 켜고 끄기, Button_Quit = 게임 종료, 그 밖의 버튼은 Extra의 이름으로 찾아 잇는다.
-    // 배치된 창이 없으면 임시 창(TempDialog)을 만든다 — 옵션 창이 배치되면 자동으로 그쪽을 쓴다.
+    // 설정 창 (모든 씬, Esc로 열고 닫는다). 2026-11-11 시안: 왼쪽 "소리"(배경음·효과음) · 오른쪽 "게임"(언어·연출 간소화) + 아래 버튼 줄.
+    // 창 찾는 순서: ① 씬에 배치된 OptionPanel ② 프리팹 Resources/UI/OptionPanel (손으로 고치는 원본) ③ 없으면 OptionPanelBuilder가 코드로 만든다.
+    // 이름으로 찾아 잇는다 (OptionPanelBuilder 맨 위 목록). 아래 버튼: 메인 메뉴 · 지금 끝내기(라운드만) · 계속하기 —
+    // 지금 끝내기가 없는 씬에서는 나머지 둘이 붙어서 가운데 (버튼 줄의 HorizontalLayoutGroup).
     public class OptionWindow
     {
-        // 씬마다 덧붙이는 버튼: 배치된 창에서는 name으로 찾고, 임시 창에는 label(한국어 원문 = 번역 키)로 만든다
+        // 씬마다 덧붙이는 버튼: 창 안에서 name으로 찾는다 (지금 끝내기 = Button_EndNow)
         public struct Extra
         {
             public string name, label; public UnityAction action;
             public Extra(string name, string label, UnityAction action) { this.name = name; this.label = label; this.action = action; }
         }
 
+        public const string PrefabPath = "UI/OptionPanel";   // Resources 안 경로
+
         public GameObject Root { get; private set; }
         public bool IsOpen => Root != null && Root.activeSelf;
 
-        TMP_Text muteLabel, simpleLabel;
+        Slider sfx, bgm;
+        Button tSfx, tBgm, tSimple, langBtn;
+        Image iconBgm, iconSfx;   // 켜짐 = 색, 꺼짐 = 회색 (UI/icon_bgm_on·off, icon_sfx_on·off)
+        GameObject langList;
+        readonly Button[] langItems = new Button[Loc.LANGS.Length];
+        TMP_Text muteLabel;   // 옛 배치 창(Button_Mute)용
         bool counted;   // App 모달 수에 넣었나 (Open/Close를 직접 쓰는 씬)
 
         public static OptionWindow For(Scene scene, UnityAction onClose, params Extra[] extras)
         {
             var w = new OptionWindow();
             var placed = SceneUI.Find(scene, "OptionPanel");
-            if (placed != null) w.WirePlaced(placed.gameObject, onClose, extras);
-            else w.BuildTemp(scene, onClose, extras);
-            if (w.Root != null) w.Root.SetActive(false);
+            GameObject root = placed != null ? placed.gameObject : null;
+            if (root == null)
+            {
+                var canvas = TempDialog.RootCanvas(scene);
+                if (canvas == null) { Debug.LogWarning("[Option] 캔버스가 없어 설정 창을 만들 수 없어요"); return w; }
+                var prefab = Resources.Load<GameObject>(PrefabPath);
+                root = prefab != null ? Object.Instantiate(prefab, canvas.transform, false) : OptionPanelBuilder.Build(canvas.transform);
+                root.name = "OptionPanel";
+            }
+            w.Wire(root, scene, onClose, extras);
+            w.Root.SetActive(false);
             return w;
         }
 
-        void WirePlaced(GameObject root, UnityAction onClose, Extra[] extras)
+        void Wire(GameObject root, Scene scene, UnityAction onClose, Extra[] extras)
         {
             Root = root;
-            var close = SceneUI.Find(root.transform, "Button_Close") ?? SceneUI.Find(root.transform, "Exit");
+            var t = root.transform;
+            var close = SceneUI.Find(t, "Button_Close") ?? SceneUI.Find(t, "Exit");
             if (close != null) SceneUI.Bind(close, onClose);
-            var quit = SceneUI.Find(root.transform, "Button_Quit");
-            if (quit != null) SceneUI.Bind(quit, () => { Snd.Ui(); App.Quit(); });
-            var mute = SceneUI.Find(root.transform, "Button_Mute");
-            if (mute != null) { SceneUI.Bind(mute, ToggleMute); muteLabel = SceneUI.TextIn(mute); }
+            var cont = SceneUI.Find(t, "Button_Continue");
+            if (cont != null) SceneUI.Bind(cont, onClose);
+
+            var main = SceneUI.Find(t, "Button_Main");
+            if (main != null)
+            {
+                if (scene.name == Scenes.MainMenu) main.gameObject.SetActive(false);   // 메인 메뉴에서는 갈 곳이 없다
+                else SceneUI.Bind(main, () => { Snd.Ui(); Close(); App.Go(Scenes.MainMenu); });
+            }
+            // 지금 끝내기 등 씬별 버튼: 넘겨받은 것만 보이고, 넘겨받지 않은 Button_EndNow는 숨긴다 (메인 메뉴·계속하기가 가운데로 붙는다)
+            var endNow = SceneUI.Find(t, "Button_EndNow");
+            if (endNow != null) endNow.gameObject.SetActive(false);
             foreach (var e in extras)
             {
-                var t = SceneUI.Find(root.transform, e.name);
-                if (t != null) SceneUI.Bind(t, e.action);
-                else Debug.LogWarning($"[Option] 배치된 OptionPanel 안에 '{e.name}' 버튼이 없어요");
+                var b = SceneUI.Find(t, e.name);
+                if (b == null) continue;   // 이 창에 없는 버튼 (예: 세계수의 Button_Back)은 넘어간다
+                b.gameObject.SetActive(true);
+                SceneUI.Bind(b, e.action);
             }
+
+            bgm = SliderIn(t, "Slider_Bgm", Snd.BgmVol, v => Snd.BgmVol = v);
+            sfx = SliderIn(t, "Slider_Sfx", Snd.SfxVol, v => Snd.SetSfx(v));
+            tBgm = BindBtn(t, "Toggle_Bgm", () => { Snd.BgmOn = !Snd.BgmOn; Snd.Ui(); Refresh(); });
+            tSfx = BindBtn(t, "Toggle_Sfx", () => { Snd.SfxOn = !Snd.SfxOn; Snd.Ui(); Refresh(); });
+            iconBgm = SceneUI.Find(t, "Row_Bgm")?.Find("Icon")?.GetComponent<Image>();
+            iconSfx = SceneUI.Find(t, "Row_Sfx")?.Find("Icon")?.GetComponent<Image>();
+            tSimple = BindBtn(t, "Toggle_Simple", () => { FxPrefs.Simple = !FxPrefs.Simple; Snd.Ui(); Refresh(); });
+
+            // 언어: 지금 언어 버튼을 누르면 목록을 펼치고, 고르면 바꾸고 접는다
+            langList = SceneUI.Find(t, "LangList")?.gameObject;
+            langBtn = BindBtn(t, "Dropdown_Lang", () => { Snd.Ui(); if (langList != null) { langList.SetActive(!langList.activeSelf); langList.transform.SetAsLastSibling(); } });
+            for (int i = 0; i < Loc.LANGS.Length; i++)
+            {
+                string code = Loc.LANGS[i];
+                langItems[i] = BindBtn(t, "Lang_" + code, () => { Snd.Ui(); Loc.SetLang(code); if (langList != null) langList.SetActive(false); Refresh(); });
+            }
+            if (langList != null) langList.SetActive(false);
+            // 다른 곳에서 언어가 바뀌어도 열려 있는 창의 언어 이름·켜짐/꺼짐 글자를 맞춘다 (씬이 내려가 Root가 없어지면 아무것도 안 한다)
+            Loc.Changed += () => { if (Root != null && Root.activeSelf) Refresh(); };
+
+            // 옛 배치 창 호환
+            var quit = SceneUI.Find(t, "Button_Quit");
+            if (quit != null) SceneUI.Bind(quit, () => { Snd.Ui(); App.Quit(); });
+            var mute = SceneUI.Find(t, "Button_Mute");
+            if (mute != null) { SceneUI.Bind(mute, () => { Snd.muted = !Snd.muted; Snd.Ui(); Refresh(); }); muteLabel = SceneUI.TextIn(mute); }
         }
 
-        void BuildTemp(Scene scene, UnityAction onClose, Extra[] extras)
+        static Button BindBtn(Transform root, string name, UnityAction action)
         {
-            var canvas = TempDialog.RootCanvas(scene);
-            if (canvas == null) { Debug.LogWarning("[Option] 캔버스가 없어 옵션 창을 만들 수 없어요"); return; }
-            // 위에서 아래로: 돌아가기 · 소리 설정(효과음·배경음·음소거) · 연출 간소화 · 씬별 버튼 · 메인 메뉴 · 게임 종료
-            // 글자는 한국어 원문을 키로 LocText에 맡긴다: 창은 씬을 열 때 한 번 만들어지므로, 언어가 바뀌면(Loc.Changed) LocText가 다시 번역한다
-            Root = TempDialog.BuildColumn(canvas, "OptionPanel", "설정", out var col);
-            foreach (var t in Root.GetComponentsInChildren<TMP_Text>(true)) if (t.name == "Title") TempDialog.Localize(t, "설정");
-            TempDialog.Localize(TempDialog.ColumnButton(col, "돌아가기", onClose), "돌아가기");
-            TempDialog.Localize(TempDialog.ColumnLabel(col, "소리 설정"), "소리 설정");
-            sfx = TempDialog.ColumnSlider(col, "효과음", Snd.SfxVol, v => Snd.SetSfx(v));
-            TempDialog.Localize(sfx.transform.parent.Find("Name")?.GetComponent<TMP_Text>(), "효과음");
-            bgm = TempDialog.ColumnSlider(col, "배경음", Snd.BgmVol, v => Snd.BgmVol = v);
-            TempDialog.Localize(bgm.transform.parent.Find("Name")?.GetComponent<TMP_Text>(), "배경음");
-            muteLabel = TempDialog.ColumnButton(col, MuteKey(), ToggleMute);
-            TempDialog.Localize(muteLabel, MuteKey());
-            simpleLabel = TempDialog.ColumnButton(col, SimpleKey(), ToggleSimple);
-            TempDialog.Localize(simpleLabel, SimpleKey());
-            foreach (var e in extras) if (e.name != "Button_Back") TempDialog.Localize(TempDialog.ColumnButton(col, e.label, e.action), e.label);
-            if (scene.name != Scenes.MainMenu)
-                TempDialog.Localize(TempDialog.ColumnButton(col, "메인 메뉴", () => { Snd.Ui(); Close(); App.Go(Scenes.MainMenu); }), "메인 메뉴");
-#if !UNITY_WEBGL
-            TempDialog.Localize(TempDialog.ColumnButton(col, "게임 종료", () => { Snd.Ui(); App.Quit(); }), "게임 종료");   // 웹은 브라우저 탭을 닫을 수 없어 뺀다 (HideOnWeb과 같은 이유)
-#endif
+            var t = SceneUI.Find(root, name);
+            return t != null ? SceneUI.Bind(t, action) : null;
         }
 
-        Slider sfx, bgm;
-
-        static string MuteKey() => Snd.muted ? "음소거: 켜짐" : "음소거: 꺼짐";
-
-        void ToggleMute() { Snd.muted = !Snd.muted; Snd.Ui(); Refresh(); }
-
-        static string SimpleKey() => FxPrefs.Simple ? "연출 간소화: 켜짐" : "연출 간소화: 꺼짐";
-
-        void ToggleSimple() { FxPrefs.Simple = !FxPrefs.Simple; Snd.Ui(); Refresh(); }
+        static Slider SliderIn(Transform root, string name, float value, UnityAction<float> onChange)
+        {
+            var t = SceneUI.Find(root, name);
+            if (t == null || !t.TryGetComponent<Slider>(out var s)) return null;
+            s.onValueChanged.RemoveAllListeners();
+            s.minValue = 0; s.maxValue = 1; s.SetValueWithoutNotify(value);
+            s.onValueChanged.AddListener(onChange);
+            return s;
+        }
 
         static void SetKey(TMP_Text label, string key)
         {
@@ -94,14 +126,60 @@ namespace MoreMush
             else label.text = Loc.T(key);
         }
 
-        // 소리 글자·음량을 지금 상태로 (M 키로도 바뀌므로 열 때마다)
+        // 소리 아이콘: 켜짐 = 색 그림(…on), 꺼짐·음소거 = 회색 그림(…off)
+        static void SetIcon(Image im, string key, bool on)
+        {
+            if (im == null) return;
+            var sp = SpriteDB.Get(key + (on ? "on" : "off"));
+            if (sp == null) return;
+            if (im.sprite != sp) im.sprite = sp;
+            im.enabled = true;
+        }
+
+        // 켜짐 = 초록(btn_go), 꺼짐 = 나무(btn_wood)
+        static void SetToggle(Button b, bool on)
+        {
+            if (b == null) return;
+            var img = b.GetComponent<Image>();
+            var sp = SpriteDB.Get(on ? "UI/btn_go" : "UI/btn_wood");
+            if (img != null && sp != null) img.sprite = sp;
+            var t = SceneUI.TextIn(b.transform);
+            SetKey(t, on ? "켜짐" : "꺼짐");
+            TempDialog.SkinButtonText(t, on ? "btn_go" : "btn_wood");
+        }
+
+        // 지금 상태로 (M 키·언어 변경으로도 바뀌므로 열 때마다)
         public void Refresh()
         {
-            // 음소거 글자는 상태에 따라 키가 바뀐다: LocText가 있으면 키만 바꿔 번역을 맡기고(언어가 바뀌어도 따라간다), 없으면 지금 언어로 넣는다
-            SetKey(muteLabel, MuteKey());
-            SetKey(simpleLabel, SimpleKey());
+            SetToggle(tBgm, Snd.BgmOn);
+            SetToggle(tSfx, Snd.SfxOn);
+            SetIcon(iconBgm, "UI/icon_bgm_", Snd.BgmOn && !Snd.muted);
+            SetIcon(iconSfx, "UI/icon_sfx_", Snd.SfxOn && !Snd.muted);
+            SetToggle(tSimple, FxPrefs.Simple);
             if (sfx != null) sfx.SetValueWithoutNotify(Snd.SfxVol);
             if (bgm != null) bgm.SetValueWithoutNotify(Snd.BgmVol);
+            if (muteLabel != null) SetKey(muteLabel, Snd.muted ? "음소거: 켜짐" : "음소거: 꺼짐");
+            // 언어: 지금 언어 이름 + ▼, 목록은 지금 언어만 초록. 언어 이름은 그 언어의 제목 폰트로 (없는 글자가 대체 폰트로 벌어지지 않게)
+            if (langBtn != null) LangLabel(SceneUI.TextIn(langBtn.transform), Loc.Lang, Loc.LANG_NAME[Loc.Lang] + " ▼", "btn_wood");
+            for (int i = 0; i < langItems.Length; i++)
+            {
+                if (langItems[i] == null) continue;
+                string code = Loc.LANGS[i]; bool cur = code == Loc.Lang;
+                var img = langItems[i].GetComponent<Image>();
+                var sp = SpriteDB.Get(cur ? "UI/btn_go" : "UI/btn_wood");
+                if (img != null && sp != null) img.sprite = sp;
+                LangLabel(SceneUI.TextIn(langItems[i].transform), code, Loc.LANG_NAME[code], cur ? "btn_go" : "btn_wood");
+            }
+        }
+
+        static void LangLabel(TMP_Text t, string code, string text, string skin)
+        {
+            if (t == null) return;
+            if (t.TryGetComponent<LocText>(out var lt)) Object.Destroy(lt);   // 언어 이름은 번역하지 않는다
+            UIUtil.SetText(t, text);
+            var face = LocFonts.I?.FaceFor(code, LocFonts.Role.Title);
+            if (face?.font != null && t.font != face.font) { t.font = face.font; t.fontSharedMaterial = face.font.material; }
+            TempDialog.SkinButtonText(t, skin);
         }
 
         // 직접 여닫는 씬용 (MainGame은 자기 팝업 관리로 Root만 쓴다)
@@ -109,6 +187,7 @@ namespace MoreMush
         {
             if (Root == null) return;
             Refresh();
+            if (langList != null) langList.SetActive(false);
             Root.SetActive(true);
             Root.transform.SetAsLastSibling();
             if (!counted) { counted = true; App.ModalPush(); }
@@ -249,6 +328,31 @@ namespace MoreMush
             slider.fillRect = fill.rectTransform; slider.handleRect = handle.rectTransform; slider.targetGraphic = handle;
             slider.minValue = 0; slider.maxValue = 1; slider.value = value;
             slider.onValueChanged.AddListener(onChange);
+            return slider;
+        }
+
+        // 가로 막대 하나 (0~1). 이름 칸 없이 막대만 — 설정 창(OptionPanelBuilder)이 쓴다
+        internal static Slider MakeSlider(Transform parent, string name)
+        {
+            var s = new GameObject(name, typeof(RectTransform), typeof(Slider));
+            s.transform.SetParent(parent, false);
+            // 그림: 바탕 UI/progress_back · 채움 UI/progress_fill2 (9-slice) · 손잡이 UI/badge_round (사용자 2026-11-11). 그림이 없으면 단색
+            var back = Part(s.transform, "Background", new Color(0.78f, 0.68f, 0.52f)); Stretch(back.rectTransform); back.raycastTarget = true;
+            Skin(back, "progress_back", new Color(0.78f, 0.68f, 0.52f)); FitBorder(back, 30, 1f);
+            var area = new GameObject("Fill Area", typeof(RectTransform)).GetComponent<RectTransform>();
+            area.SetParent(s.transform, false); Stretch(area);
+            var fill = Part(area, "Fill", new Color(0.55f, 0.36f, 0.2f)); Stretch(fill.rectTransform);
+            Skin(fill, "progress_fill2", new Color(0.55f, 0.36f, 0.2f)); FitBorder(fill, 30, 1f);
+            var hArea = new GameObject("Handle Slide Area", typeof(RectTransform)).GetComponent<RectTransform>();
+            hArea.SetParent(s.transform, false); Stretch(hArea); hArea.offsetMin = new Vector2(16, 0); hArea.offsetMax = new Vector2(-16, 0);
+            var handle = Part(hArea, "Handle", new Color(0.36f, 0.22f, 0.12f));
+            Skin(handle, "badge_round", new Color(0.36f, 0.22f, 0.12f)); handle.type = Image.Type.Simple; handle.preserveAspect = true;
+            handle.rectTransform.sizeDelta = new Vector2(44, 0);
+            handle.rectTransform.anchorMin = new Vector2(0, -0.35f); handle.rectTransform.anchorMax = new Vector2(0, 1.35f);
+            handle.raycastTarget = true;
+            var slider = s.GetComponent<Slider>();
+            slider.fillRect = fill.rectTransform; slider.handleRect = handle.rectTransform; slider.targetGraphic = handle;
+            slider.minValue = 0; slider.maxValue = 1; slider.value = 1;
             return slider;
         }
 

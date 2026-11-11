@@ -11,8 +11,8 @@ namespace MoreMush
 {
     // MainGame 씬 (업그레이드). 사람이 배치한 캔버스에 기능만 잇는다 — UI를 코드로 만들지 않는다.
     // 이름으로 찾는 것:
-    //   Gold_UI_BG/Gold_Img·Ston_Img 안의 글자 = 골드·균사석
-    //   Button_Option · Button_Lang(언어 선택 창 LangPanel, LangWindow) · Button_StageStart · Stage_Text
+    //   Gold_UI_BG/Gold_Img · Ston_UI_BG/Ston_Img 안의 글자 = 골드·균사석
+    //   Button_Option · Button_StageStart · Stage_Text
     //   Button_MushTree(세계수 씬) · Button_MushDex(도감 팝업) · Button_Harvesters(공방 팝업)
     //   Button_Quest(의뢰 창, 지금 배치된 이름은 Quset — 둘 다 찾는다, 글자 = "의뢰" + 받을 수 있는 수)
     //   Button_Boss(보스 도전 켜고 끄기, 보스에게 처음 지면 보인다). 배치 전이면 Button_StageStart를 복제해 스테이지 패널 위에 임시로 둔다
@@ -32,7 +32,6 @@ namespace MoreMush
         GameObject option, current;   // current = 지금 열린 팝업
         OptionWindow optionWin;       // 옵션 창 (배치 전이면 임시 창)
         QuestWindow quest;            // 의뢰 창 (배치 전이면 임시 창)
-        LangWindow langWin;           // 언어 선택 창 (배치 전이면 임시 창)
         GameObject tree, dexButton, treeButton, questButton, bossButton;   // 해금 전엔 숨긴다
         TMP_Text questLabel, bossLabel;
         Image bossFrame;
@@ -59,7 +58,6 @@ namespace MoreMush
             SceneUI.Bind(scene, "Button_MushDex", () => Toggle(dex != null ? dex.root : null));
             SceneUI.Bind(scene, "Button_Harvesters", () => Toggle(shop != null ? shop.root : null));
             SceneUI.Bind(scene, "Button_Option", () => Toggle(option));
-            SceneUI.Bind(scene, "Button_Lang", () => Toggle(langWin != null ? langWin.Root : null));
 
             var shopRoot = SceneUI.Need(scene, "Harvesters");
             if (shopRoot != null) shop = new HarvesterShop(shopRoot, () => currency.Tick());
@@ -71,8 +69,7 @@ namespace MoreMush
             var qb = SceneUI.Find(scene, "Button_Quest") ?? SceneUI.Find(scene, "Quset");
             if (qb == null) Debug.LogWarning("[MainGame] 의뢰 버튼(Button_Quest)이 씬에 없어요");
             else { SceneUI.Bind(qb, () => Toggle(quest.Root)); questButton = qb.gameObject; questLabel = SceneUI.TextIn(qb); }
-            langWin = LangWindow.For(scene, CloseAll);   // 고르거나 바깥을 누르면 닫힌다
-            popups = new[] { shopRoot, dexRoot, option, quest.Root, langWin.Root };
+            popups = new[] { shopRoot, dexRoot, option, quest.Root };
             foreach (var p in new[] { shopRoot, dexRoot }) BindExit(p);   // 옵션·의뢰 창은 OptionWindow·QuestWindow가 닫기를 잇는다
 
             foreach (var n in NAV) LiftAbovePopups(SceneUI.Find(scene, n));
@@ -246,7 +243,6 @@ namespace MoreMush
             if (dex != null && popup == dex.root) dex.Open();
             if (popup == option) optionWin.Refresh();
             if (popup == quest.Root) quest.Open();
-            if (popup == langWin.Root) langWin.Refresh();
         }
 
         void CloseAll()

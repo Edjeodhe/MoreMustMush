@@ -4617,6 +4617,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 53f21b38d3a5cf842b885580aeb51876, type: 3}
   - key: UI/basket
     sprite: {fileID: 21300000, guid: 1162824440861ec46a928bdeacc8d60d, type: 3}
+  - key: UI/bookmark_eat
+    sprite: {fileID: 21300000, guid: 65b3dd317ea863c40abbc7e63229f605, type: 3}
+  - key: UI/bookmark_on
+    sprite: {fileID: 21300000, guid: 6cbe70ae3854fd840b0e5e7993ea68b1, type: 3}
+  - key: UI/bookmark_poison
+    sprite: {fileID: 21300000, guid: 42680362ceabefb4eb881211833226ad, type: 3}
+  - key: UI/bookmarki_heal
+    sprite: {fileID: 21300000, guid: a2a6c3fe295ff3f4dbcc806bd8ae50fb, type: 3}
   - key: UI/btn_blue
     sprite: {fileID: 21300000, guid: fb2534658da06594d8522ce0d44096ff, type: 3}
   - key: UI/btn_close
@@ -4639,6 +4647,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7bc26bcb0a392174fa7b1bc279722f40, type: 3}
   - key: UI/hp_fill
     sprite: {fileID: 21300000, guid: 27864a0d1b9287741b63730b4954d20f, type: 3}
+  - key: UI/icon_bgm_off
+    sprite: {fileID: 21300000, guid: cc9d8de5092fe9644ac8b326c4144d09, type: 3}
+  - key: UI/icon_bgm_on
+    sprite: {fileID: 21300000, guid: 82d60820289ec1a4284fa0c738aa488f, type: 3}
+  - key: UI/icon_sfx_off
+    sprite: {fileID: 21300000, guid: b64f0daf489315d48ae09d0cffd3e589, type: 3}
+  - key: UI/icon_sfx_on
+    sprite: {fileID: 21300000, guid: 6c572920fc3387244ad88684187c92db, type: 3}
   - key: UI/kid_unknown
     sprite: {fileID: 21300000, guid: c543878811c4e8649bed2cfc79aa37b1, type: 3}
   - key: UI/logo
@@ -4655,6 +4671,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ee3d441486c7c334598dbbee016b2779, type: 3}
   - key: UI/progress_fill
     sprite: {fileID: 21300000, guid: 0625b14c779382446bf908d97a58d380, type: 3}
+  - key: UI/progress_fill2
+    sprite: {fileID: 21300000, guid: b25552351c5fb1e4d975895680b14f8e, type: 3}
   - key: UI/rail_active
     sprite: {fileID: 21300000, guid: dd8ccb5c0f5563d41ba611fde7dbd5c9, type: 3}
   - key: UI/rail_item
