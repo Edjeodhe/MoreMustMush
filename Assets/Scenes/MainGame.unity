@@ -338,6 +338,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &10676415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1077,6 +1078,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &16795735 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -1098,6 +1100,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &17473125 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -1119,6 +1122,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &18145991
 GameObject:
   m_ObjectHideFlags: 0
@@ -1651,6 +1655,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &33479332 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -1672,6 +1677,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &33953105 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -1693,6 +1699,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &39839023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1748,6 +1755,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &39839026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1764,6 +1772,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &39839027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2075,6 +2084,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &43090574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2221,6 +2231,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &45572941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2237,6 +2248,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &45572942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2614,6 +2626,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &50857118
 GameObject:
   m_ObjectHideFlags: 0
@@ -2863,6 +2876,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &59727487 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -2884,6 +2898,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &66234304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -2905,6 +2920,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &66802927 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -2926,6 +2942,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &68292869
 GameObject:
   m_ObjectHideFlags: 0
@@ -3316,6 +3333,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &74667063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3998,6 +4016,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &92144759
 GameObject:
   m_ObjectHideFlags: 0
@@ -4286,6 +4305,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &101124891
 GameObject:
   m_ObjectHideFlags: 0
@@ -4553,6 +4573,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &114800482
 GameObject:
   m_ObjectHideFlags: 0
@@ -4745,6 +4766,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &116674789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4761,6 +4783,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &116674790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5154,6 +5177,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &121540095
 GameObject:
   m_ObjectHideFlags: 0
@@ -5315,6 +5339,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &126784908
 GameObject:
   m_ObjectHideFlags: 0
@@ -5886,6 +5911,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &146361008 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -5907,6 +5933,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &148043250
 GameObject:
   m_ObjectHideFlags: 0
@@ -6068,6 +6095,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &150712172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -6089,6 +6117,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &156929893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6256,6 +6285,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &165607024 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -6277,6 +6307,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &168181449 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -6298,6 +6329,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &169371035
 GameObject:
   m_ObjectHideFlags: 0
@@ -6572,6 +6604,7 @@ MonoBehaviour:
   preset: -1
   key: "\uC124\uBA85"
   authored: Description
+  keepPlacedFont: 0
 --- !u!1 &175023176
 GameObject:
   m_ObjectHideFlags: 0
@@ -6916,6 +6949,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &187840810
 GameObject:
   m_ObjectHideFlags: 0
@@ -7074,6 +7108,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &189093727
 GameObject:
   m_ObjectHideFlags: 0
@@ -7456,6 +7491,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &194546299 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -7477,6 +7513,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &195838917 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -7498,6 +7535,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &198059115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -7519,6 +7557,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &200029048 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -7540,6 +7579,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &201190057
 GameObject:
   m_ObjectHideFlags: 0
@@ -7698,6 +7738,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &204859015 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -7719,6 +7760,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &205200355 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -7740,6 +7782,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &206885368 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -7761,6 +7804,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &210308785
 GameObject:
   m_ObjectHideFlags: 0
@@ -8312,6 +8356,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &229701935
 GameObject:
   m_ObjectHideFlags: 0
@@ -8771,6 +8816,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &257558781 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -8792,6 +8838,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &259452794
 GameObject:
   m_ObjectHideFlags: 0
@@ -9039,6 +9086,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &265761566
 GameObject:
   m_ObjectHideFlags: 0
@@ -9135,6 +9183,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &271722404
 GameObject:
   m_ObjectHideFlags: 0
@@ -9281,6 +9330,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &277664970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9297,6 +9347,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &277664971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9706,6 +9757,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &286792913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9722,6 +9774,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &286792914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10348,6 +10401,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &303162733 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -10369,6 +10423,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &305399197
 GameObject:
   m_ObjectHideFlags: 0
@@ -10527,6 +10582,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &314399037
 GameObject:
   m_ObjectHideFlags: 0
@@ -10663,6 +10719,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &338850704
 GameObject:
   m_ObjectHideFlags: 0
@@ -10899,6 +10956,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &345912836
 GameObject:
   m_ObjectHideFlags: 0
@@ -11474,6 +11532,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &351461522
 GameObject:
   m_ObjectHideFlags: 0
@@ -11661,6 +11720,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &352509247
 GameObject:
   m_ObjectHideFlags: 0
@@ -11762,6 +11822,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &355648430
 GameObject:
   m_ObjectHideFlags: 0
@@ -11817,6 +11878,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &355648433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11833,6 +11895,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &355648434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12073,6 +12136,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &362854528
 GameObject:
   m_ObjectHideFlags: 0
@@ -12244,6 +12308,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &368187132
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12445,6 +12510,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &369381524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12461,6 +12527,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &369381525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12766,6 +12833,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &372741354
 GameObject:
   m_ObjectHideFlags: 0
@@ -13252,6 +13320,7 @@ MonoBehaviour:
   preset: -1
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!1 &378545868
 GameObject:
   m_ObjectHideFlags: 0
@@ -13469,6 +13538,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &386879597
 GameObject:
   m_ObjectHideFlags: 0
@@ -13718,6 +13788,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &396985087
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14357,6 +14428,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &404205238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14373,6 +14445,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &404205239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14538,6 +14611,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &408094564
 GameObject:
   m_ObjectHideFlags: 0
@@ -14570,7 +14644,6 @@ RectTransform:
   m_Children:
   - {fileID: 1958804}
   - {fileID: 2141865138}
-  - {fileID: 1058231260}
   - {fileID: 581789510}
   - {fileID: 729861471}
   - {fileID: 402797410}
@@ -14966,6 +15039,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &418443357
 GameObject:
   m_ObjectHideFlags: 0
@@ -15643,6 +15717,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &431620365
 GameObject:
   m_ObjectHideFlags: 0
@@ -15935,6 +16010,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &437190082
 GameObject:
   m_ObjectHideFlags: 0
@@ -16362,6 +16438,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &446459440 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -16383,6 +16460,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &452744095
 GameObject:
   m_ObjectHideFlags: 0
@@ -16624,6 +16702,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &457172679 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -16645,6 +16724,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &457224994 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -16666,6 +16746,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &461584112
 GameObject:
   m_ObjectHideFlags: 0
@@ -17210,126 +17291,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467362832}
-  m_CullTransparentMesh: 1
---- !u!1 &470230012
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 470230013}
-  - component: {fileID: 470230016}
-  - component: {fileID: 470230015}
-  - component: {fileID: 470230014}
-  m_Layer: 0
-  m_Name: Button_Lang
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &470230013
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470230012}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1058231260}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 63, y: 63}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &470230014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470230012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 470230015}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &470230015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470230012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4560c42fa5c543340918318d2bf0050e, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &470230016
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470230012}
   m_CullTransparentMesh: 1
 --- !u!1 &470800537
 GameObject:
@@ -17911,6 +17872,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &478511295 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -17932,6 +17894,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &483914559
 GameObject:
   m_ObjectHideFlags: 0
@@ -18335,6 +18298,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &491367275
 GameObject:
   m_ObjectHideFlags: 0
@@ -18432,6 +18396,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &495168067
 GameObject:
   m_ObjectHideFlags: 0
@@ -18608,6 +18573,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &496707106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18624,6 +18590,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &496707107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18823,6 +18790,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &500917320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18839,6 +18807,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &500917321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19004,6 +18973,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &503390673
 GameObject:
   m_ObjectHideFlags: 0
@@ -19059,6 +19029,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &503390676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19075,6 +19046,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &503390677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19274,6 +19246,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &508296281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19290,6 +19263,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &508296282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19489,6 +19463,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &509268377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19505,6 +19480,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &509268378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19704,6 +19680,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &511333818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19720,6 +19697,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &511333819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20213,6 +20191,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &517237215
 GameObject:
   m_ObjectHideFlags: 0
@@ -20329,6 +20308,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &518048293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20345,6 +20325,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &518048294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20677,6 +20658,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &525549131
 GameObject:
   m_ObjectHideFlags: 0
@@ -20835,6 +20817,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &533521274
 GameObject:
   m_ObjectHideFlags: 0
@@ -21219,6 +21202,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &536152356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21235,6 +21219,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &536152357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21433,6 +21418,7 @@ MonoBehaviour:
   preset: -1
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &539398108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22056,6 +22042,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &553491323
 GameObject:
   m_ObjectHideFlags: 0
@@ -22153,6 +22140,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &558701369
 GameObject:
   m_ObjectHideFlags: 0
@@ -22254,6 +22242,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &560188305
 GameObject:
   m_ObjectHideFlags: 0
@@ -22541,6 +22530,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &567267329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22557,6 +22547,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &567267330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22722,6 +22713,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &569350501 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -22743,6 +22735,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &572178721
 GameObject:
   m_ObjectHideFlags: 0
@@ -22798,6 +22791,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &572178724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22814,6 +22808,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &572178725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23153,6 +23148,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &572982691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23169,6 +23165,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &572982692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23334,6 +23331,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &574274292 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -23355,6 +23353,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &578838319
 GameObject:
   m_ObjectHideFlags: 0
@@ -23410,6 +23409,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &578838322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23426,6 +23426,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &578838323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23810,6 +23811,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &587518641 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -23831,6 +23833,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &595442044
 GameObject:
   m_ObjectHideFlags: 0
@@ -24018,6 +24021,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &604195154
 GameObject:
   m_ObjectHideFlags: 0
@@ -24844,6 +24848,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &621018170 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -24865,6 +24870,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &623388302
 GameObject:
   m_ObjectHideFlags: 0
@@ -24920,6 +24926,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &623388305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24936,6 +24943,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &623388306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25381,6 +25389,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &632884594
 GameObject:
   m_ObjectHideFlags: 0
@@ -25535,6 +25544,7 @@ MonoBehaviour:
   preset: -1
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &633453353
 GameObject:
   m_ObjectHideFlags: 0
@@ -25631,6 +25641,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &637723657
 GameObject:
   m_ObjectHideFlags: 0
@@ -26150,6 +26161,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &656550152
 GameObject:
   m_ObjectHideFlags: 0
@@ -26311,6 +26323,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &662387582 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -26332,6 +26345,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &665031176 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -26353,6 +26367,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &670612071
 GameObject:
   m_ObjectHideFlags: 0
@@ -26605,6 +26620,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &678065738
 GameObject:
   m_ObjectHideFlags: 0
@@ -26889,6 +26905,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &682233314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26905,6 +26922,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &682233315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27195,6 +27213,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &684741463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27211,6 +27230,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &684741464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27588,6 +27608,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &698350706
 GameObject:
   m_ObjectHideFlags: 0
@@ -27857,6 +27878,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &702639127
 GameObject:
   m_ObjectHideFlags: 0
@@ -28106,6 +28128,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &707588857
 GameObject:
   m_ObjectHideFlags: 0
@@ -28875,6 +28898,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &719121413
 GameObject:
   m_ObjectHideFlags: 0
@@ -29112,6 +29136,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &724624885
 GameObject:
   m_ObjectHideFlags: 0
@@ -29230,7 +29255,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -4.907837, y: -6.817627}
+  m_AnchoredPosition: {x: -4.907959, y: -6.817627}
   m_SizeDelta: {x: -368.083, y: -207.05}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &725137405
@@ -29292,6 +29317,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &729861470
 GameObject:
   m_ObjectHideFlags: 0
@@ -29434,6 +29460,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &734797965
 GameObject:
   m_ObjectHideFlags: 0
@@ -29577,6 +29604,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &740959510
 GameObject:
   m_ObjectHideFlags: 0
@@ -29689,6 +29717,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &748942840
 GameObject:
   m_ObjectHideFlags: 0
@@ -30050,6 +30079,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &758249329 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -30071,6 +30101,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &760513609
 GameObject:
   m_ObjectHideFlags: 0
@@ -30217,9 +30248,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.00020800531
+    y: 0
     width: 1
-    height: 0.999584
+    height: 1
   near clip plane: 0.1
   far clip plane: 100
   field of view: 60
@@ -30289,6 +30320,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &769377454
 GameObject:
   m_ObjectHideFlags: 0
@@ -30344,6 +30376,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &769377457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30360,6 +30393,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &769377458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30922,6 +30956,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &780415814
 GameObject:
   m_ObjectHideFlags: 0
@@ -31180,6 +31215,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &787631388
 GameObject:
   m_ObjectHideFlags: 0
@@ -31462,6 +31498,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &796734957 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -31483,6 +31520,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &800953882
 GameObject:
   m_ObjectHideFlags: 0
@@ -31595,6 +31633,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &802461459
 GameObject:
   m_ObjectHideFlags: 0
@@ -31691,6 +31730,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &808068969
 GameObject:
   m_ObjectHideFlags: 0
@@ -32107,6 +32147,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &823600963
 GameObject:
   m_ObjectHideFlags: 0
@@ -32309,6 +32350,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &826884708 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -32330,6 +32372,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &828804027
 GameObject:
   m_ObjectHideFlags: 0
@@ -32747,6 +32790,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &841879494
 GameObject:
   m_ObjectHideFlags: 0
@@ -32938,6 +32982,7 @@ MonoBehaviour:
   preset: -1
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &842221634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33350,7 +33395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -4.907837, y: -53.960022}
+  m_AnchoredPosition: {x: -4.907959, y: -53.95996}
   m_SizeDelta: {x: -368.08, y: -301.33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &846802775
@@ -33704,6 +33749,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &856151297
 GameObject:
   m_ObjectHideFlags: 0
@@ -33876,6 +33922,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &870413054 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -33897,6 +33944,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &872142599
 GameObject:
   m_ObjectHideFlags: 0
@@ -34579,6 +34627,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &886622963
 GameObject:
   m_ObjectHideFlags: 0
@@ -34631,6 +34680,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &895582519
 GameObject:
   m_ObjectHideFlags: 0
@@ -34927,6 +34977,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &898759195 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -34948,6 +34999,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &899064680 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -34969,6 +35021,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &900375847
 GameObject:
   m_ObjectHideFlags: 0
@@ -35130,6 +35183,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &903148714
 GameObject:
   m_ObjectHideFlags: 0
@@ -35464,6 +35518,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &914982687 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -35485,6 +35540,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &918801456
 GameObject:
   m_ObjectHideFlags: 0
@@ -35639,6 +35695,7 @@ MonoBehaviour:
   preset: -1
   key: "\uD6A8\uACFC"
   authored: Effect
+  keepPlacedFont: 0
 --- !u!1 &919520261 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -35660,6 +35717,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &924227271 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -35681,6 +35739,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &924528009
 GameObject:
   m_ObjectHideFlags: 0
@@ -35922,6 +35981,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &927336975
 GameObject:
   m_ObjectHideFlags: 0
@@ -36064,6 +36124,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &928362273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36231,6 +36292,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &930429648
 GameObject:
   m_ObjectHideFlags: 0
@@ -36604,6 +36666,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &941863084 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -36625,6 +36688,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &941941714
 GameObject:
   m_ObjectHideFlags: 0
@@ -37411,6 +37475,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &955392055
 GameObject:
   m_ObjectHideFlags: 0
@@ -37762,6 +37827,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &968714335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37778,6 +37844,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &968714336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38171,6 +38238,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &977155981
 GameObject:
   m_ObjectHideFlags: 0
@@ -38478,6 +38546,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &981453294 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -38499,6 +38568,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &986471305
 GameObject:
   m_ObjectHideFlags: 0
@@ -38938,6 +39008,7 @@ MonoBehaviour:
   preset: 0
   key: "\uADE0\uC0AC"
   authored: Mycelium
+  keepPlacedFont: 0
 --- !u!1 &991924313
 GameObject:
   m_ObjectHideFlags: 0
@@ -39489,6 +39560,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1004175076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39505,6 +39577,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1004175077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39670,6 +39743,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1006765542
 GameObject:
   m_ObjectHideFlags: 0
@@ -39725,6 +39799,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1006765545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39741,6 +39816,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1006765546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40370,6 +40446,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1013563812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40386,6 +40463,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1013563813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40653,6 +40731,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1022565215
 GameObject:
   m_ObjectHideFlags: 0
@@ -40711,6 +40790,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1024930254
 GameObject:
   m_ObjectHideFlags: 0
@@ -40841,6 +40921,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1025654591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40857,6 +40938,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1025654592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41162,6 +41244,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1035114085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41741,6 +41824,7 @@ MonoBehaviour:
   preset: 0
   key: "\uADE0\uC0AC"
   authored: Mycelium
+  keepPlacedFont: 0
 --- !u!1 &1036913564
 GameObject:
   m_ObjectHideFlags: 0
@@ -41963,6 +42047,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1041748685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41979,6 +42064,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1041748686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42357,6 +42443,7 @@ MonoBehaviour:
   preset: -1
   key: "\uBA54\uBAA8"
   authored: Note
+  keepPlacedFont: 0
 --- !u!1 &1048995935
 GameObject:
   m_ObjectHideFlags: 0
@@ -42834,6 +42921,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1054978091
 GameObject:
   m_ObjectHideFlags: 0
@@ -43000,82 +43088,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1056117118}
   m_CullTransparentMesh: 1
---- !u!1 &1058231259
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1058231260}
-  - component: {fileID: 1058231262}
-  - component: {fileID: 1058231261}
-  m_Layer: 0
-  m_Name: Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1058231260
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058231259}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 470230013}
-  m_Father: {fileID: 408094565}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -204, y: -49.99997}
-  m_SizeDelta: {x: 96, y: 96}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1058231261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058231259}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7dcf923d6f659684b90e32107f9a736d, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1058231262
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058231259}
-  m_CullTransparentMesh: 1
 --- !u!1 &1058530242
 GameObject:
   m_ObjectHideFlags: 0
@@ -43203,6 +43215,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1061344190
 GameObject:
   m_ObjectHideFlags: 0
@@ -43594,6 +43607,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1073970998
 GameObject:
   m_ObjectHideFlags: 0
@@ -43736,6 +43750,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1080960915
 GameObject:
   m_ObjectHideFlags: 0
@@ -44485,6 +44500,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1109832364 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -44506,6 +44522,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1110518186 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -44527,6 +44544,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1113410834 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -44548,6 +44566,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1116845272 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -44569,6 +44588,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1118082853
 GameObject:
   m_ObjectHideFlags: 0
@@ -45186,6 +45206,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1140688662
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45789,6 +45810,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1152616483
 GameObject:
   m_ObjectHideFlags: 0
@@ -45960,6 +45982,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1158518274
 GameObject:
   m_ObjectHideFlags: 0
@@ -46479,6 +46502,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1181488546 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -46500,6 +46524,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1182865596
 GameObject:
   m_ObjectHideFlags: 0
@@ -46796,6 +46821,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1184964762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46812,6 +46838,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1184964763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47598,6 +47625,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1195437538
 GameObject:
   m_ObjectHideFlags: 0
@@ -47653,6 +47681,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1195437541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47669,6 +47698,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1195437542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48111,6 +48141,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1201033820
 GameObject:
   m_ObjectHideFlags: 0
@@ -48305,6 +48336,7 @@ MonoBehaviour:
   preset: -1
   key: "\uB2EB\uAE30"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1201667747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48426,6 +48458,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1207743136
 GameObject:
   m_ObjectHideFlags: 0
@@ -48522,6 +48555,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1209129917
 GameObject:
   m_ObjectHideFlags: 0
@@ -48683,6 +48717,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1211063808
 GameObject:
   m_ObjectHideFlags: 0
@@ -48844,6 +48879,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1221620431 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -48865,6 +48901,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1224619029
 GameObject:
   m_ObjectHideFlags: 0
@@ -49026,6 +49063,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1226466724
 GameObject:
   m_ObjectHideFlags: 0
@@ -49184,6 +49222,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1230684826
 GameObject:
   m_ObjectHideFlags: 0
@@ -50624,6 +50663,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1255051594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50640,6 +50680,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1255051595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51234,6 +51275,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1261411030 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -51255,6 +51297,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1263876124
 GameObject:
   m_ObjectHideFlags: 0
@@ -51310,6 +51353,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1263876127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51326,6 +51370,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1263876128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52109,6 +52154,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1279925687 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -52130,6 +52176,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1280612749 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -52151,6 +52198,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1282529213 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -52172,6 +52220,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1283222527 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -52193,6 +52242,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1283880100 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -52214,6 +52264,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1285704735
 GameObject:
   m_ObjectHideFlags: 0
@@ -52694,6 +52745,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1305547174
 GameObject:
   m_ObjectHideFlags: 0
@@ -53626,6 +53678,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1345006555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53642,6 +53695,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1345006556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53807,6 +53861,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1346247843
 GameObject:
   m_ObjectHideFlags: 0
@@ -54095,6 +54150,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1358396001 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -54116,6 +54172,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1359614786
 GameObject:
   m_ObjectHideFlags: 0
@@ -54478,6 +54535,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1365804499 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -54499,6 +54557,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1370550098
 GameObject:
   m_ObjectHideFlags: 0
@@ -54995,6 +55054,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1378350600
 GameObject:
   m_ObjectHideFlags: 0
@@ -55215,6 +55275,7 @@ MonoBehaviour:
   preset: -1
   key: "\uBC1B\uAE30"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1386628269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55450,6 +55511,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1388718247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55466,6 +55528,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1388718248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55811,6 +55874,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1391308859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55827,6 +55891,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1391308860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56524,6 +56589,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1400156756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56540,6 +56606,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1400156757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56976,6 +57043,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1410860555
 GameObject:
   m_ObjectHideFlags: 0
@@ -57228,6 +57296,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1413203728 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -57249,6 +57318,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1415710787
 GameObject:
   m_ObjectHideFlags: 0
@@ -57444,6 +57514,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1417919367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57460,6 +57531,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1417919368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57625,6 +57697,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1422549014 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -57646,6 +57719,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1424977259
 GameObject:
   m_ObjectHideFlags: 0
@@ -57701,6 +57775,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1424977262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57717,6 +57792,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1424977263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58007,6 +58083,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1428983948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58023,6 +58100,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1428983949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58188,6 +58266,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1431902241 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -58209,6 +58288,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1435116001
 GameObject:
   m_ObjectHideFlags: 0
@@ -58310,6 +58390,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1438895612 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -58331,6 +58412,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1440186078
 GameObject:
   m_ObjectHideFlags: 0
@@ -58704,6 +58786,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1446811154
 GameObject:
   m_ObjectHideFlags: 0
@@ -58834,6 +58917,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1449058498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58850,6 +58934,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1449058499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59215,6 +59300,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1451367232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59231,6 +59317,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1451367233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59471,6 +59558,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1454320462
 GameObject:
   m_ObjectHideFlags: 0
@@ -59934,6 +60022,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1469741080 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -59955,6 +60044,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1471288434
 GameObject:
   m_ObjectHideFlags: 0
@@ -60396,6 +60486,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1475120244
 GameObject:
   m_ObjectHideFlags: 0
@@ -60691,6 +60782,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1478066052 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -60712,6 +60804,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1478151213
 GameObject:
   m_ObjectHideFlags: 0
@@ -60767,6 +60860,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1478151216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60783,6 +60877,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1478151217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61197,6 +61292,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1480605721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61213,6 +61309,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1480605722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61378,6 +61475,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1483247310
 GameObject:
   m_ObjectHideFlags: 0
@@ -61777,6 +61875,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1498830771
 GameObject:
   m_ObjectHideFlags: 0
@@ -61908,6 +62007,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1502924735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61924,6 +62024,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1502924736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62089,6 +62190,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1508431667
 GameObject:
   m_ObjectHideFlags: 0
@@ -62416,6 +62518,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1515416745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -62437,6 +62540,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1522983403
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62638,6 +62742,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1523343921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62654,6 +62759,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1523343922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62853,6 +62959,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1523908388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62869,6 +62976,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1523908389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63114,6 +63222,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1534127404 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -63135,6 +63244,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1535860782
 GameObject:
   m_ObjectHideFlags: 0
@@ -63282,6 +63392,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1546077663 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -63303,6 +63414,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1550911379
 GameObject:
   m_ObjectHideFlags: 0
@@ -63358,6 +63470,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1550911382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63374,6 +63487,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1550911383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64292,6 +64406,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1564295272
 GameObject:
   m_ObjectHideFlags: 0
@@ -64346,6 +64461,7 @@ MonoBehaviour:
   preset: -1
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1564295275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64501,6 +64617,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1567895019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64517,6 +64634,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1567895020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64682,6 +64800,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1569788032
 GameObject:
   m_ObjectHideFlags: 0
@@ -65059,6 +65178,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1581996588 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -65080,6 +65200,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1585483074
 GameObject:
   m_ObjectHideFlags: 0
@@ -65496,6 +65617,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1590543810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65512,6 +65634,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1590543811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65677,6 +65800,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1596805536 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -65698,6 +65822,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1605327397
 GameObject:
   m_ObjectHideFlags: 0
@@ -66729,6 +66854,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1621944645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66745,6 +66871,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1621944646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66985,6 +67112,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1632160037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67403,6 +67531,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1638354235
 GameObject:
   m_ObjectHideFlags: 0
@@ -67711,6 +67840,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1644196400 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -67732,6 +67862,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1644475572 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -67753,6 +67884,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1644890863 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -67774,6 +67906,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1646107909 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -67795,6 +67928,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1646219924
 GameObject:
   m_ObjectHideFlags: 0
@@ -67850,6 +67984,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1646219927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67866,6 +68001,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1646219928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68106,6 +68242,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1658493007
 GameObject:
   m_ObjectHideFlags: 0
@@ -68218,6 +68355,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1668076504
 GameObject:
   m_ObjectHideFlags: 0
@@ -68273,6 +68411,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1668076507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68289,6 +68428,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1668076508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68488,6 +68628,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1670243159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68504,6 +68645,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1670243160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68970,6 +69112,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1684012136 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -68991,6 +69134,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1684805322 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -69012,6 +69156,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1685011214
 GameObject:
   m_ObjectHideFlags: 0
@@ -69868,6 +70013,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1700202241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69884,6 +70030,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1700202242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70049,6 +70196,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1705944432 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -70070,6 +70218,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1705993847
 GameObject:
   m_ObjectHideFlags: 0
@@ -70687,6 +70836,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1711590165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70703,6 +70853,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1711590166
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70976,6 +71127,7 @@ MonoBehaviour:
   preset: -1
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1716760270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71097,6 +71249,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1718911427
 GameObject:
   m_ObjectHideFlags: 0
@@ -71255,6 +71408,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1720744712
 GameObject:
   m_ObjectHideFlags: 0
@@ -71310,6 +71464,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1720744715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71326,6 +71481,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1720744716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71582,6 +71738,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1730884310
 GameObject:
   m_ObjectHideFlags: 0
@@ -71883,6 +72040,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1736263499
 GameObject:
   m_ObjectHideFlags: 0
@@ -72020,6 +72178,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1736816695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72036,6 +72195,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1736816696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72378,6 +72538,7 @@ MonoBehaviour:
   preset: 0
   key: "\uADE0\uC0AC"
   authored: Mycelium
+  keepPlacedFont: 0
 --- !u!1 &1737765586
 GameObject:
   m_ObjectHideFlags: 0
@@ -73160,6 +73321,7 @@ MonoBehaviour:
   preset: -1
   key: "\uBE44\uC6A9"
   authored: Cost
+  keepPlacedFont: 0
 --- !u!1 &1751626556
 GameObject:
   m_ObjectHideFlags: 0
@@ -73430,6 +73592,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1753751641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73446,6 +73609,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1753751642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73645,6 +73809,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1757042708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73661,6 +73826,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &1757042709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74914,6 +75080,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1777780903
 GameObject:
   m_ObjectHideFlags: 0
@@ -75177,6 +75344,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1784794576
 GameObject:
   m_ObjectHideFlags: 0
@@ -75319,6 +75487,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1785795532
 GameObject:
   m_ObjectHideFlags: 0
@@ -75416,6 +75585,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1792223686
 GameObject:
   m_ObjectHideFlags: 0
@@ -75724,6 +75894,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1803398107
 GameObject:
   m_ObjectHideFlags: 0
@@ -75779,6 +75950,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1803398110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75795,6 +75967,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1803398111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76325,6 +76498,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1813751271 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -76346,6 +76520,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1815251159 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -76367,6 +76542,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1815399863 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -76388,6 +76564,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1815887658
 GameObject:
   m_ObjectHideFlags: 0
@@ -76443,6 +76620,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1815887661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76459,6 +76637,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1815887662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77786,6 +77965,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1843590334
 GameObject:
   m_ObjectHideFlags: 0
@@ -78386,6 +78566,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1859769310 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -78407,6 +78588,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1863776522 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -78428,6 +78610,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1873492668
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78798,6 +78981,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1880828400
 GameObject:
   m_ObjectHideFlags: 0
@@ -79200,6 +79384,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1901858850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -79631,6 +79816,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1918237258
 GameObject:
   m_ObjectHideFlags: 0
@@ -79792,6 +79978,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1920281963
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -79959,6 +80146,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1923294930
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80126,6 +80314,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1926906374 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6143272113781911192, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -80147,6 +80336,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1930712480
 GameObject:
   m_ObjectHideFlags: 0
@@ -80380,6 +80570,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1945009178
 GameObject:
   m_ObjectHideFlags: 0
@@ -80432,6 +80623,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1949640470
 GameObject:
   m_ObjectHideFlags: 0
@@ -80736,6 +80928,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1960308289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80903,6 +81096,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1001 &1974098820
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -81429,6 +81623,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1983045428
 GameObject:
   m_ObjectHideFlags: 0
@@ -81541,6 +81736,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1987814045
 GameObject:
   m_ObjectHideFlags: 0
@@ -81869,6 +82065,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1994174879
 GameObject:
   m_ObjectHideFlags: 0
@@ -82063,6 +82260,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &1996906837 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -82084,6 +82282,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &1999000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82100,6 +82299,7 @@ MonoBehaviour:
   preset: -1
   key: "\uB3C4\uAC10"
   authored: MushDex
+  keepPlacedFont: 0
 --- !u!114 &1999000002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82116,6 +82316,7 @@ MonoBehaviour:
   preset: -1
   key: "\uC138\uACC4\uC218"
   authored: MushTree
+  keepPlacedFont: 0
 --- !u!114 &1999000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82132,6 +82333,7 @@ MonoBehaviour:
   preset: -1
   key: "\uC2DC\uC791\uD558\uAE30"
   authored: Stage Start
+  keepPlacedFont: 0
 --- !u!1 &2000525001 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -82153,6 +82355,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2003150078
 GameObject:
   m_ObjectHideFlags: 0
@@ -82249,6 +82452,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2012099332
 GameObject:
   m_ObjectHideFlags: 0
@@ -82361,6 +82565,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2015043432
 GameObject:
   m_ObjectHideFlags: 0
@@ -82487,6 +82692,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2017225842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82503,6 +82709,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2017225843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82701,6 +82908,7 @@ MonoBehaviour:
   preset: -1
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2018632555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82856,6 +83064,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2020618731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82872,6 +83081,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2020618732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83253,6 +83463,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2030637901
 GameObject:
   m_ObjectHideFlags: 0
@@ -83531,6 +83742,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2036702278
 GameObject:
   m_ObjectHideFlags: 0
@@ -83769,6 +83981,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2049305718
 GameObject:
   m_ObjectHideFlags: 0
@@ -83824,6 +84037,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2049305721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83840,6 +84054,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2049305722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84333,6 +84548,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2053942062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84349,6 +84565,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2053942063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84606,6 +84823,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2055417292
 GameObject:
   m_ObjectHideFlags: 0
@@ -84702,6 +84920,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2065380495
 GameObject:
   m_ObjectHideFlags: 0
@@ -84757,6 +84976,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!114 &2065380498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84773,6 +84993,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: Node
+  keepPlacedFont: 0
 --- !u!114 &2065380499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85071,6 +85292,7 @@ MonoBehaviour:
   preset: -1
   key: "\uACF5\uBC29"
   authored: Harvesters
+  keepPlacedFont: 0
 --- !u!1 &2065440265
 GameObject:
   m_ObjectHideFlags: 0
@@ -85232,6 +85454,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2069449696 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -85253,6 +85476,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2072933879
 GameObject:
   m_ObjectHideFlags: 0
@@ -85414,6 +85638,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2076277089 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -85435,6 +85660,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2079477696 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -85456,6 +85682,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2088285648 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5102154666962279685, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -85477,6 +85704,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2091678511
 GameObject:
   m_ObjectHideFlags: 0
@@ -86097,6 +86325,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2106949143
 GameObject:
   m_ObjectHideFlags: 0
@@ -86355,6 +86584,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2109681126 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -86376,6 +86606,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2111205365 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5380037545938362125, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -86397,6 +86628,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2111548420 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -86418,6 +86650,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2114207365
 GameObject:
   m_ObjectHideFlags: 0
@@ -86560,6 +86793,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2120263505 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6026079463842335563, guid: 6ced5b88c678a2b43b1ed735a987c7cd, type: 3}
@@ -86581,6 +86815,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2121732118
 GameObject:
   m_ObjectHideFlags: 0
@@ -86678,6 +86913,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2123261416
 GameObject:
   m_ObjectHideFlags: 0
@@ -87070,6 +87306,7 @@ MonoBehaviour:
   preset: 0
   key: "\uB178\uB4DC"
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2125373839
 GameObject:
   m_ObjectHideFlags: 0
@@ -87231,6 +87468,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &2129999829
 GameObject:
   m_ObjectHideFlags: 0
@@ -87861,7 +88099,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -100, y: -49.99997}
+  m_AnchoredPosition: {x: -72, y: -72}
   m_SizeDelta: {x: 96, y: 96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2141865139
@@ -88058,6 +88296,7 @@ MonoBehaviour:
   preset: 0
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

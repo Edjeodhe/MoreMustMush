@@ -30,8 +30,6 @@ namespace MoreMush.EditorTools
             ["MainMenu"] = new[]
             {
                 R("Canvas/Menu_BG", "Backgrounds/bg_title"),
-                R("Canvas/Menu_BG/Panel", "UI/btn_round"),
-                R("Canvas/Menu_BG/Panel/Button_Lang", "Icons/lang", aspect: true),
                 R("Canvas/Button_Start", "UI/btn_go", GREEN_INK, fs: 44),
                 R("Canvas/Button_Reset", "UI/btn_danger", CREAM, fs: 36),
                 R("Canvas/Button_Option", "UI/btn_wood", INK, fs: 36),
@@ -44,8 +42,6 @@ namespace MoreMush.EditorTools
                 R("Canvas/MainBG/Gold_UI_BG/Ston_Img", "Icons/gem", INK, aspect: true),
                 R("Canvas/MainBG/Button_Option", "UI/btn_round"),
                 R("Canvas/MainBG/Button_Option/Img", "Icons/option", aspect: true),
-                R("Canvas/MainBG/Panel", "UI/btn_round"),
-                R("Canvas/MainBG/Panel/Button_Lang", "Icons/lang", aspect: true),
                 R("Canvas/MainBG/Stage_Image", "UI/panel_wood", INK),
                 R("Canvas/MainBG/Stage_Image/Button_StageStart", "UI/btn_go", GREEN_INK),
                 R("Canvas/MainBG/Button_Harvesters", "UI/btn_wood", INK),
@@ -142,7 +138,6 @@ namespace MoreMush.EditorTools
             FitButtons(scene);
             ScaleTags(scene);
             if (name == "MainGame") AlignMainGame(scene);
-            if (name == "MainMenu") RoundIcon(Find(scene, "Canvas/Menu_BG/Panel"), Find(scene, "Canvas/Menu_BG/Panel/Button_Lang"), null, 110);
             EditorSceneManager.MarkSceneDirty(scene);
             return n;
         }
@@ -388,7 +383,6 @@ namespace MoreMush.EditorTools
             var bar = Find(scene, "Canvas/MainBG/Gold_UI_BG") as RectTransform;
             float top = bar != null ? Center(bar).y : float.NaN;
             RoundIcon(Find(scene, "Canvas/MainBG/Button_Option"), Find(scene, "Canvas/MainBG/Button_Option/Img"), top, ROUND);
-            RoundIcon(Find(scene, "Canvas/MainBG/Panel"), Find(scene, "Canvas/MainBG/Panel/Button_Lang"), top, ROUND);
             var nav = Find(scene, "Canvas/MainBG/Button_MushTree") as RectTransform;
             var quest = Find(scene, "Canvas/Quset") as RectTransform;
             if (nav != null && quest != null)
