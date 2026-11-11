@@ -9249,7 +9249,7 @@
       "Str_Group_ID": 90093,
       "Str_Name": "ui",
       "Str_KR": "독버섯",
-      "Str_EN": "Poisonous Mushroom",
+      "Str_EN": "Poisonous",
       "Str_JA": "毒キノコ",
       "Str_RU": "Ядовитый гриб",
       "Str_UK": "Отруйний гриб",
@@ -29318,6 +29318,28 @@
       "Str_RU": "",
       "Str_UK": "",
       "Str_PT": ""
+    },
+    {
+      "Str_ID": 901436,
+      "Str_Group_ID": 91436,
+      "Str_Name": "ui",
+      "Str_KR": "휴식",
+      "Str_EN": "Rest",
+      "Str_JA": "お休み",
+      "Str_RU": "Отдых",
+      "Str_UK": "Відпочинок",
+      "Str_PT": "Descanso"
+    },
+    {
+      "Str_ID": 901437,
+      "Str_Group_ID": 91437,
+      "Str_Name": "ui",
+      "Str_KR": "{0}에 자리가 없어요 (최대 {1})",
+      "Str_EN": "No room in {0} (max {1})",
+      "Str_JA": "{0}に空きがありません(最大{1})",
+      "Str_RU": "В зоне «{0}» нет мест (макс. {1})",
+      "Str_UK": "У зоні «{0}» немає місць (макс. {1})",
+      "Str_PT": "Sem vaga na zona “{0}” (máx. {1})"
     }
   ]
 }
