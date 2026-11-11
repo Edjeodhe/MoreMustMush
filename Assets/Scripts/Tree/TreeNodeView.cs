@@ -77,7 +77,30 @@ namespace MoreMush
         }
 
 
-        public void Draw(Vector2? parentPos, float now, bool hover, float camZ, float dt)
+        float feedbackScale = 1f, feedbackGold;
+        Color restingBodyColor;
+        bool tinted;
+
+        public void Draw(Vector2? parentPos, float now, bool hover, float camZ, float dt, bool pressed = false)
+        {
+            if (tinted && body != null) body.color = restingBodyColor;
+            float step = 1f - Mathf.Exp(-22f * dt);
+            float oldScale = feedbackScale;
+            feedbackScale = Mathf.Lerp(feedbackScale, pressed ? 0.94f : 1f, step);
+            if (Mathf.Abs(feedbackScale - (pressed ? 0.94f : 1f)) < 0.0001f) feedbackScale = pressed ? 0.94f : 1f;
+            feedbackGold = Mathf.Lerp(feedbackGold, pressed ? 0.7f : hover ? 0.3f : 0f, step);
+            if (oldScale != feedbackScale) shownS = null;
+            DrawBase(parentPos, now, hover, camZ, dt);
+            if (body != null)
+            {
+                restingBodyColor = body.color;
+                var gold = Color.Lerp(Color.white, TreeUpgradeFx.Gold, feedbackGold);
+                body.color = restingBodyColor * gold;
+                tinted = true;
+            }
+        }
+
+        void DrawBase(Vector2? parentPos, float now, bool hover, float camZ, float dt)
         {
             var n = Node;
             string s = NodeState(n);
@@ -95,7 +118,7 @@ namespace MoreMush
             var brc = U.Hex(CATS[n.br].color);
             float r = Radius(n);
             var me = TreePos;
-            float sc = hover ? 1.15f : 1;
+            float sc = feedbackScale;
             bool locked = st == "locked";
             bool labelOn = !locked && (!n.sub || hover || camZ > 0.8f || n.core);
             bool dirty = growAnim >= 0 || s != shownS || st != shownSt || L != shownL || hover != shownHover || labelOn != shownLabel || shownLang != Loc.Lang;

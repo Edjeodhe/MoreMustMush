@@ -169,7 +169,7 @@ namespace MoreMush
         }
 
         // 여러 레벨을 한 번에 사도 저장(JSON 직렬화 + PlayerPrefs 쓰기)은 한 번만 한다
-        public static int BuyMax(Node n) { int k = 0; while (k < 10000 && BuyNode(n, false)) k++; if (k > 0) SaveGame(); return k; }   // 싱크는 상한이 없어 반복 상한을 둔다
+        public static int BuyMax(Node n, bool save = true) { int k = 0; while (k < 10000 && BuyNode(n, false)) k++; if (k > 0 && save) SaveGame(); return k; }   // 싱크는 상한이 없어 반복 상한을 둔다
 
         // 가장 싼 강화부터 산다. dry = true면 결과만 계산하고 되돌린다.
         public static (int levels, double spent) BulkBuy(ICollection<string> brs, double reserve, bool dry)

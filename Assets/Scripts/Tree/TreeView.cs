@@ -29,16 +29,42 @@ namespace MoreMush
         public float camX, camY, camZ = 0.95f;
         readonly List<TreeNodeView> nodes = new List<TreeNodeView>();
         readonly Dictionary<string, TreeNodeView> byId = new Dictionary<string, TreeNodeView>();
-        TreeNodeView hover, sel;
+        TreeNodeView hover, sel, pressedNode, pendingUpgradeFx;
         Vector2? dragStart; Vector2 dragCam; bool dragMoved;
         float pressT = -1; bool pressDone;
         float pinchD, pinchZ; bool pinching;
+        SaveData pendingSave;
+        float saveAfter, saveDeadline;
+
+        void QueueSave()
+        {
+            if (pendingSave == null) saveDeadline = Time.unscaledTime + 0.75f;
+            pendingSave = G;
+            saveAfter = Time.unscaledTime + 0.15f;
+        }
+
+        void FlushSave()
+        {
+            if (pendingSave == null) return;
+            SaveIO.Save(pendingSave);
+            pendingSave = null;
+        }
+
+        void LateUpdate()
+        {
+            if (pendingSave != null && (Time.unscaledTime >= saveAfter || Time.unscaledTime >= saveDeadline)) FlushSave();
+        }
+        void OnDisable() => FlushSave();
+        void OnApplicationPause(bool paused) { if (paused) FlushSave(); }
+        void OnApplicationFocus(bool focused) { if (!focused) FlushSave(); }
+        void OnApplicationQuit() => FlushSave();
 
         void Awake()
         {
             content.GetComponentsInChildren(true, nodes);
             SyncNodes();
             foreach (var n in nodes) byId[n.nodeId] = n;
+            if (nodes.Count > 0) TreeUpgradeFx.Prepare(nodes[0]);
         }
 
         // 씬의 노드 오브젝트를 DB 트리에 맞춘다 (균사 트리 A안): 없는 노드는 있는 노드를 복제해 만들고, 트리에 없는 노드(지운 노드·세계수 wt)는 지우고,
@@ -100,7 +126,7 @@ namespace MoreMush
 
             HandleInput();
             ClampCam();
-            foreach (var nv in nodes) nv.Draw(ParentPos(nv.Node), now, hover == nv, camZ, dt);
+            foreach (var nv in nodes) nv.Draw(ParentPos(nv.Node), now, hover == nv, camZ, dt, pressedNode == nv && !dragMoved);
         }
 
         bool trunksOff;
@@ -135,6 +161,8 @@ namespace MoreMush
 
         void HandleInput()
         {
+            if (App.ModalOpen || !Application.isFocused) { pressedNode = pendingUpgradeFx = null; }
+            if (!Application.isFocused) { hover = null; dragStart = null; pressT = -1; return; }
             // 팝업이 열리면 진행 중이던 드래그·핀치·길게 누르기를 버린다 (놓는 입력을 못 받으므로)
             if (App.ModalOpen) { tooltip.Hide(); hover = sel = null; dragStart = null; pinching = false; pressT = -1; pressDone = false; return; }
             var ts = Touchscreen.current;
@@ -143,6 +171,7 @@ namespace MoreMush
             if (ts != null) for (int i = 0; i < ts.touches.Count; i++) if (ts.touches[i].press.isPressed) pressed++;
             if (pressed >= 2)
             {
+                pressedNode = pendingUpgradeFx = null; hover = null;
                 var tt = ts.touches.Where(t => t.press.isPressed).Take(2).Select(t => StageSpace.FromScreen(stageRect, cam, t.position.ReadValue())).ToArray();
                 float d = Vector2.Distance(tt[0], tt[1]); Vector2 mid = (tt[0] + tt[1]) / 2;
                 if (!pinching) { pinching = true; pinchD = Mathf.Max(1, d); pinchZ = camZ; dragStart = null; pressT = -1; }
@@ -155,7 +184,8 @@ namespace MoreMush
             if (pinching) { pinching = false; return; }
 
             var p = Pointer.current;
-            if (p == null) return;
+            if (p == null) { pressedNode = null; return; }
+            if (!p.press.isPressed) pressedNode = null;
             bool isMouse = p is Mouse;
             var s = StageSpace.FromScreen(stageRect, cam, p.position.ReadValue());
             bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();   // -1 = 지금 포인터 (터치 id는 0이 아니라 0을 넘기면 UI 위 판정이 틀렸다)
@@ -177,13 +207,14 @@ namespace MoreMush
             if (p.press.wasPressedThisFrame && !overUI)
             {
                 dragStart = s; dragCam = new Vector2(camX, camY); dragMoved = false;
+                pressedNode = Hit(s);
                 if (!isMouse) { pressT = Time.unscaledTime; pressDone = false; }
             }
             if (dragStart.HasValue && p.press.isPressed)
             {
                 var d = s - dragStart.Value;
                 if (Mathf.Abs(d.x) + Mathf.Abs(d.y) > 5) dragMoved = true;
-                if (dragMoved) { camX = dragCam.x - d.x / camZ; camY = dragCam.y - d.y / camZ; }
+                if (dragMoved) { pressedNode = pendingUpgradeFx = null; camX = dragCam.x - d.x / camZ; camY = dragCam.y - d.y / camZ; }
                 // 길게 누르기 = 끝까지 강화
                 if (!isMouse && pressT >= 0 && !dragMoved && Time.unscaledTime - pressT > 0.5f && !pressDone)
                 {
@@ -200,6 +231,7 @@ namespace MoreMush
             }
             if (dragStart.HasValue && p.press.wasReleasedThisFrame)
             {
+                if (pendingUpgradeFx != null) { TreeUpgradeFx.Play(pendingUpgradeFx); pendingUpgradeFx = null; }
                 bool moved = dragMoved; dragStart = null; pressT = -1;
                 if (pressDone) { pressDone = false; return; }
                 if (moved) return;
@@ -220,10 +252,13 @@ namespace MoreMush
             if (st == "locked" || st == "hidden") { Snd.Err(); App.Notify(n.needMax ? Loc.T("앞 단계를 최대 레벨까지 올려야 열려요") : Loc.T("선행 노드를 먼저 사야 열려요")); return; }
             if (st == "max") return;
             int before = Lv(n.id);
-            int k = max ? BuyMax(n) : BuyNode(n) ? 1 : 0;
+            int k = max ? BuyMax(n, false) : BuyNode(n, false) ? 1 : 0;
             if (k > 0)
             {
+                QueueSave();
                 Snd.Buy(); if (before == 0) nv.growAnim = 0;
+                if (Pointer.current != null && Pointer.current.press.isPressed) pendingUpgradeFx = nv;
+                else TreeUpgradeFx.Play(nv);
                 tooltip.Show(n, s);
                 if (k > 1) App.Notify(Loc.F("{0} +{1}단계 한 번에 강화!", n.n, k));
             }

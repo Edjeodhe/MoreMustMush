@@ -11,6 +11,13 @@ namespace MoreMush
         public RectTransform rect;
         public TMP_Text title, lv, desc, eff, cost, note;
 
+        void Awake()
+        {
+            // A moving tooltip is visual only and must never swallow the next node click.
+            foreach (var graphic in GetComponentsInChildren<UnityEngine.UI.Graphic>(true))
+                graphic.raycastTarget = false;
+        }
+
         public void Hide() { if (gameObject.activeSelf) gameObject.SetActive(false); }
 
         // 마우스를 올려 둔 동안 매 프레임 불린다. 노드·레벨·상태·살 수 있는지가 그대로면 글자는 다시 만들지 않고 위치만 옮긴다
