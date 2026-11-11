@@ -30,6 +30,8 @@ namespace MoreMush
         public static int PresetOfName(Material m) => m == null ? -1 : Array.FindIndex(PRESETS, p => m.name.EndsWith(p));
 
         static LocFonts inst;
+        // 콤보·대미지 숫자 글꼴 (ONEMobilePOP). 숫자·영문 단위만 쓰니 언어와 상관없이 그대로 쓴다
+        public static TMP_FontAsset NumberFont => I != null && I.koEnTitleFonts.Length > 0 ? I.koEnTitleFonts[0] : null;
         public static LocFonts I => inst != null ? inst : inst = Resources.Load<LocFonts>("Loc/LocFonts");
 
         public Face FaceFor(string lang, Role role)

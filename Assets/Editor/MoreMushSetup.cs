@@ -244,10 +244,15 @@ namespace MoreMush.EditorTools
         {
             const float H = 128;
             var src = ResolvedArt().Where(kv => kv.Key.StartsWith("UI/Combo/")).ToDictionary(kv => Path.GetFileName(kv.Key), kv => kv.Value)
-                .Where(kv => (kv.Key.Length == 2 && (kv.Key[0] == 'n' || kv.Key[0] == 'c')) || kv.Key == "combo_n" || kv.Key == "combo_c" || kv.Key == "critical")
+                .Where(kv => (kv.Key.Length == 2 && (kv.Key[0] == 'n' || kv.Key[0] == 'c')) || kv.Key == "combo_n" || kv.Key == "combo_c")
                 .ToDictionary(kv => kv.Key, kv => kv.Value);
+            const string critWord = "Assets/Resources/Art/effect/text/critical.png";   // 글자 이펙트는 effect/text에 모은다 (사용자 2026-11-11)
+            if (File.Exists(critWord)) src["critical"] = critWord;
             if (src.Count == 0) { Debug.LogWarning("[MoreMush] no UI/Combo art"); return; }
             var texs = src.ToDictionary(kv => kv.Key, kv => LoadReadable(kv.Value));
+            // the COMBO word of both sets is the watercolor lettering Art/effect/text/combo.png (사용자 2026-11-11), cut to its painted area
+            const string comboWord = "Assets/Resources/Art/effect/text/combo.png";
+            if (File.Exists(comboWord)) { var w = Trim(LoadReadable(comboWord)); texs["combo_n"] = w; texs["combo_c"] = w; }
             float K(char set)
             {
                 var hs = texs.Where(kv => kv.Key.Length == 2 && kv.Key[0] == set).Select(kv => kv.Value.height).OrderBy(h => h).ToList();
@@ -255,9 +260,10 @@ namespace MoreMush.EditorTools
             }
             float kn = K('n'), kc = K('c');
             var names = texs.Keys.OrderBy(n => n, System.StringComparer.Ordinal).ToList();
-            // the painted COMBO word is about half a digit tall; a little bigger reads better next to the number
-            float Word(string n) => n.StartsWith("combo") ? 1.3f : 1;
-            var scaled = names.ToDictionary(n => n, n => Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * (n[0] == 'n' || n == "combo_n" ? kn : kc) * Word(n))));
+            // the COMBO word stands 0.8 digit tall next to the number
+            var scaled = names.ToDictionary(n => n, n => n.StartsWith("combo")
+                ? Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * H * 0.8f / texs[n].height))
+                : Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * (n[0] == 'n' ? kn : kc))));
             PackSpriteAsset("ComboDigits", names, scaled, H, (n, h) => h);
         }
 
@@ -339,6 +345,20 @@ namespace MoreMush.EditorTools
             var t = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             t.LoadImage(File.ReadAllBytes(path));
             return t;
+        }
+
+        // cuts the transparent margin off (alpha under 8 counts as empty)
+        static Texture2D Trim(Texture2D t)
+        {
+            var px = t.GetPixels32();
+            int w = t.width, h = t.height, x0 = w, y0 = h, x1 = -1, y1 = -1;
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++)
+                    if (px[y * w + x].a >= 8) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+            if (x1 < x0) return t;
+            var o = new Texture2D(x1 - x0 + 1, y1 - y0 + 1, TextureFormat.RGBA32, false);
+            o.SetPixels(t.GetPixels(x0, y0, o.width, o.height)); o.Apply();
+            return o;
         }
 
         static Texture2D Fit(Texture2D src, int max)

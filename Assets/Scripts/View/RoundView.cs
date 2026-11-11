@@ -42,6 +42,8 @@ namespace MoreMush
         Pool<SpriteRenderer> fxPool;            // one-shot effects (R.fxs): hit bursts, spawn puffs, bar dust
         Sprite[] fxSp;                          // by FxShape
         Sprite[] hitFrames;                     // flipbook burst FX/hit_0..4 (FxShape.HitAnim)
+        Sprite[] contactFrames;
+        float contactCanvasUnits;
         // the FX slicer fits every frame to the same canvas, so the burst's growth is put back here
         static readonly float[] HitFrameScale = { 0.5f, 0.82f, 1f, 1.12f, 1.2f };
         Material brushMat;                      // 번개·회오리·베기 선에 붓 결 (FX/brush)
@@ -179,7 +181,7 @@ namespace MoreMush
         static string warmText;
         void WarmText(TextSlot sl)
         {
-            warmText ??= (DmgDigits.Spell("+999.99Qa!") ?? "+999.99Qa!") + " " + (DmgDigits.Numbers("+12.3B") ?? "+12.3B") + " 새 버섯! 황금 버섯 배수 획득";
+            warmText ??= "+999.99Qa! +12.3B 새 버섯! 황금 버섯 배수 획득";
             sl.tmp.text = warmText;
             sl.tmp.ForceMeshUpdate(true, true);
         }
@@ -213,6 +215,9 @@ namespace MoreMush
             fxSp = new Sprite[fxKeys.Length];
             for (int i = 0; i < fxKeys.Length; i++) fxSp[i] = fxKeys[i] != null ? SpriteDB.Get(fxKeys[i]) : null;
             fxSp[0] = dotSp;
+            contactFrames = Resources.LoadAll<Sprite>("Art/effect/impact/hit_beige");
+            System.Array.Sort(contactFrames, (a, b) => string.CompareOrdinal(a.name, b.name));
+            contactCanvasUnits = contactFrames.Length > 0 ? contactFrames[0].rect.width / contactFrames[0].pixelsPerUnit : 1f;
             var brush = SpriteDB.Get("FX/brush");
             if (brush != null) brushMat = brushShared != null ? brushShared : brushShared = new Material(linePrefab.sharedMaterial) { mainTexture = brush.texture };
         }
@@ -394,7 +399,7 @@ namespace MoreMush
                 if (s.sprite != want) s.sprite = want;
                 float pop = splashSp == null ? 1 : k < 0.12f ? 0.6f + k / 0.12f * 0.65f : 1.25f - 0.65f * (k - 0.12f) / 0.88f;
                 s.transform.localPosition = Art.P(p.x, p.y);
-                s.transform.localScale = Vector3.one * (p.size * 2 / Art.PPU * pop * (leaf ? 1.9f : chip ? 1.6f : twinkle ? 2.6f : 1));
+                s.transform.localScale = Vector3.one * (p.size * 2 / Art.PPU * pop * (leaf ? 1.9f : chip ? 1.6f : twinkle ? 1.3f : 1));
                 s.transform.localRotation = leaf || chip ? Quaternion.Euler(0, 0, (h % 360) + p.t * ((h & 8) != 0 ? 420 : -420)) : Quaternion.identity;
                 var c = p.col; c.a *= 1 - k * k; s.color = c;
             }
@@ -544,7 +549,6 @@ namespace MoreMush
 
         // damage numbers on the pale field: cream / sky / violet / gold, muted to the watercolour field (the painted
         // glyphs multiply these, so full-strength colours read as glossy stickers)
-        static readonly string[] TierCols = { "#f7efe0", "#a9cfe8", "#cfb8e6", "#f0d07c" };
         static readonly float[] TierSizes = { 22, 25, 30, 38 };
 
         // 필드 글자: 글자 하나는 사라질 때까지 같은 TMP 칸을 쓴다. 예전처럼 목록 순서로 칸을 맡기면 앞 글자가 사라질 때마다
@@ -563,22 +567,27 @@ namespace MoreMush
             foreach (var t in R.texts)
             {
                 float life = t.tier >= 2 ? 1.2f : 0.8f, k = t.t / life;
-                float size = TierSizes[t.tier] * (t.crit ? 1.2f : 1);
+                float size = TierSizes[t.tier] * (t.crit ? 1.2f : 1) * TEXT_K;
                 // pop: easeOutBack from small over 0.18 s (after NKK popups), crits overshoot harder; shrinks a little at the end
                 float c = t.crit ? 3.4f : 2.4f, e = Mathf.Clamp01(t.t / 0.18f) - 1;
                 float pop = Mathf.Max(0.05f, 1 + (c + 1) * e * e * e + c * e * e) * (k > 0.75f ? 1 - (k - 0.75f) * 0.8f : 1);
-                string col = t.coin || t.golden ? "#efcb6a" : t.crit ? "#e8705c" : TierCols[t.tier];
+                string col = t.coin ? "#efcb6a" : t.crit ? ComboDigits.SuperHex : ComboDigits.ComboHex;   // 숫자 색 = 콤보 글자 그림 색 (치명은 SuperCombo 색)
                 // 값이 바뀌지 않으니 한 번만 만든다
-                t.view ??= t.coin ? DmgDigits.Spell($"+{U.FmtN(t.v, 1)}G") ?? $"+{U.FmtN(t.v, 1)}G" : HitView(t);
+                t.view ??= t.coin ? $"+{U.FmtN(t.v, 1)}G" : HitView(t);
                 Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
             bool noSkillLabel = FxPrefs.Simple;
             foreach (var l in R.labels)
-                if (!(noSkillLabel && l.skill)) Text(l, l.view ??= DmgDigits.Numbers(l.text) ?? l.text, l.x, l.y, l.size, l.t < 0.12f ? 0.5f + l.t * 4 : 1, l.col, l.t > 1 ? (1.4f - l.t) / 0.4f : 1, z);
+            {
+                if (noSkillLabel && l.skill) continue;
+                float lp = l.t < 0.12f ? 0.5f + l.t * 4 : 1, la = l.t > 1 ? (1.4f - l.t) / 0.4f : 1;
+                var main = Text(l, l.view ??= LabelView(l.text), l.x, l.y, l.size * TEXT_K, lp, l.col, la, z);
+                if (l.tag != null) Tag(main, l.tagKey, l.tag, l.size * TEXT_K * TAG_K, lp, la, z);
+            }
             foreach (var b in R.balls)
                 if (b.combo >= 3 && b.perm)
                 {
-                    if (!comboStr.TryGetValue(b.combo, out var cs)) comboStr[b.combo] = cs = DmgDigits.Spell("x" + b.combo) ?? "x" + b.combo;
+                    if (!comboStr.TryGetValue(b.combo, out var cs)) comboStr[b.combo] = cs = "x" + b.combo;
                     Text(b, cs, b.x, b.y - b.r - 14, 16, 1, "#fff3b0", 1, z);
                 }
             // 보스 이름·남은 체력 (체력 막대 위)
@@ -588,10 +597,35 @@ namespace MoreMush
                 if (bm.dead) continue;
                 int pct = Mathf.CeilToInt((float)(bm.hp / bm.maxHp) * 100);
                 if (!bossStr.TryGetValue(bm, out var bs) || bs.pct != pct || bs.lang != Loc.Lang)
-                    bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + "  " + (DmgDigits.Numbers(pct + "%") ?? pct + "%"));
-                Text(bm, bs.s, bm.x, bm.y + bm.r * 1.2f + 30, bm.bossClone ? 20 : 26, 1, R.Boss.col, 1, z);
+                    bossStr[bm] = bs = (pct, Loc.Lang, (bm.bossClone ? Loc.F("{0}의 분신", R.Boss.n) : R.Boss.n) + "  " + pct + "%");
+                Text(bm, bs.s, bm.x, bm.y + bm.r * 1.2f + 30, (bm.bossClone ? 20 : 26) * TEXT_K, 1, R.Boss.col, 1, z);
             }
             ReleaseTexts(false);
+        }
+
+        // 필드 글자 크기 배율: 콤보(수확기 위 x3) 말고 대미지 숫자·라벨·보스 글자는 75% (사용자 2026-11-11)
+        const float TEXT_K = 0.75f;
+
+        // NEW! · NEW RECORD! 표: 글자 왼쪽 위 모서리에 걸쳐 반시계로 15도 기울여 붙는다 (사용자 2026-11-11)
+        const float TAG_K = 0.6f, TAG_TILT = 15;
+        const string TAG_COL = "#db4e50";
+        void Tag(TextMeshProUGUI main, object key, string s, float size, float pop, float alpha, float z)
+        {
+            var t = Text(key, s, 0, 0, size, pop, TAG_COL, alpha, z, 4);
+            var mp = main.rectTransform.anchoredPosition;
+            float mw = main.preferredWidth * pop, mh = main.preferredHeight * pop;
+            float tw = t.preferredWidth * pop, th = t.preferredHeight * pop;
+            t.rectTransform.anchoredPosition = mp + new Vector2(-mw * 0.5f + tw * 0.2f, mh * 0.5f + th * 0.15f);
+            t.rectTransform.localRotation = Quaternion.Euler(0, 0, TAG_TILT);
+        }
+
+        // "새 버섯! 표고버섯" → "새 버섯!" / "표고버섯" 두 줄: 첫 느낌표 뒤에 글이 더 있으면 줄을 바꾼다 (사용자 2026-11-11)
+        static string LabelView(string s)
+        {
+            if (s == null) return s;
+            int i = s.IndexOf("! ", System.StringComparison.Ordinal), j = s.IndexOf('！');
+            if (j >= 0 && j + 1 < s.Length && (i < 0 || j < i)) return s.Substring(0, j + 1) + "\n" + s.Substring(j + 1).TrimStart();
+            return i >= 0 && i + 2 < s.Length ? s.Substring(0, i + 1) + "\n" + s.Substring(i + 2).TrimStart() : s;
         }
 
         // 데미지는 + 없이 1000부터 단위 표기(1.25K·300K·4.5M, 1 아래 피해가 "0"으로 보이지 않게 올림), 점수(그루터기)는 +.
@@ -599,15 +633,13 @@ namespace MoreMush
         static string HitView(FloatText t)
         {
             string n = t.dmg ? U.Fmt(System.Math.Ceiling(t.v), 1000) : "+" + U.Fmt(t.v);
-            string num = DmgDigits.Spell(n);
-            if (num == null) return t.crit ? Loc.T("치명!") + " " + n : n;
-            if (!t.crit) return num;
+            if (!t.crit) return n;
             string tag = ComboDigits.Critical;
-            return tag != null ? "<size=" + CRIT_TAG + "%>" + tag + "</size><br>" + num : num + DmgDigits.Spell("!");
+            return tag != null ? "<size=" + CRIT_TAG + "%>" + tag + "</size><br>" + n : n + "!";
         }
         const int CRIT_TAG = 140;   // CRITICAL! 글자 크기 (%). 글자 그림이 숫자 높이의 약 절반이라 140%여도 숫자 높이의 약 3/4
 
-        void Text(object key, string s, float x, float y, float size, float pop, string col, float alpha, float z)
+        TextMeshProUGUI Text(object key, string s, float x, float y, float size, float pop, string col, float alpha, float z, int styleOf = -1)
         {
             if (!slotOf.TryGetValue(key, out var sl))
             {
@@ -626,13 +658,22 @@ namespace MoreMush
             // fixed headline words (거대 버섯 수확! · 분신 소환! · 황금!) show their hand-lettered image instead
             if (sChanged || (sl.letter != null && sl.letter.rectTransform.sizeDelta.y != fs * 1.4f)) sl.letter = Lettering.Apply(t, FieldLetter(s), 1.4f);
             if (!ReferenceEquals(sl.col, col)) { sl.col = col; t.color = U.Hex(col); }
-            int style = key is FloatText ? 1 : 0;
+            int style = styleOf >= 0 ? styleOf : key is FloatText sf ? (sf.crit ? 3 : 1) : key is Ball ? 2 : 0;   // 1·2·3 = 숫자 (ONE Mobile POP + 콤보 글자 그림 색 외곽선, 3 = 치명), 0 = 글자, 4 = NEW! 표
             if (sl.style != style)
             {
                 // numbers get a thicker outline than labels so they read over mushrooms and the light ground
                 sl.style = style;
-                t.outlineWidth = style == 1 ? 0.3f : 0.2f;
-                t.outlineColor = new Color32(0x3a, 0x26, 0x1c, 255);
+                // 글자도 ONE Mobile POP + 테두리 (사용자 2026-11-11). POP에 글자가 없는 언어(한·영 밖)의 라벨은 그 언어 폰트
+                bool usePop = LocFonts.NumberFont != null && (style != 0 || Loc.Lang == "ko" || Loc.Lang == "en");
+                if (!usePop)
+                {
+                    LocFonts.Apply(t, fieldRole, fieldPreset);
+                    t.outlineWidth = 0.2f;
+                    t.outlineColor = ComboDigits.LabelEdge;
+                }
+                else if (style == 4) ComboDigits.Outline(t, ComboDigits.TagEdge, 0.3f);
+                else if (style == 0) ComboDigits.Outline(t, ComboDigits.LabelEdge, 0.25f);
+                else ComboDigits.Style(t, style == 3);
             }
             t.canvasRenderer.SetAlpha(Mathf.Clamp01(alpha));
             if (sl.letter != null) sl.letter.canvasRenderer.SetAlpha(Mathf.Clamp01(alpha));
@@ -640,6 +681,7 @@ namespace MoreMush
             t.rectTransform.anchoredPosition = new Vector2(x * z, -y * z);
             // numbers tilt a little each way as they pop (crits more); labels stay level
             t.rectTransform.localRotation = key is FloatText ft ? Quaternion.Euler(0, 0, (ft.crit ? 11 : 6) * Mathf.Sin(ft.y * 0.37f + ft.v.GetHashCode()) * Mathf.Clamp01(ft.t / 0.18f)) : Quaternion.identity;
+            return t;
         }
 
         // One-shot effects: they burst open fast and fade while they finish growing (ease-out), so hits read as a
@@ -649,6 +691,23 @@ namespace MoreMush
             int n = 0;
             foreach (var f in R.fxs)
             {
+                if (f.shape == FxShape.ContactHit)
+                {
+                    if (contactFrames.Length == 0) continue;
+                    float progress = Mathf.Clamp01(f.t / f.dur);
+                    var frame = contactFrames[Mathf.Min(contactFrames.Length - 1, (int)(progress * contactFrames.Length))];
+                    var hit = fxPool.Get(n++);
+                    if (hit.sprite != frame) hit.sprite = frame;
+                    // Use the full frame canvas so the painted growth/shrink is preserved.
+                    float fit = f.size / Art.PPU / contactCanvasUnits;
+                    hit.transform.localPosition = Art.P(f.x, f.y);
+                    hit.transform.localScale = new Vector3(fit, fit, 1);
+                    hit.transform.localRotation = Quaternion.identity;
+                    float alpha = Mathf.Clamp01(progress / 0.08f) * (1f - Mathf.SmoothStep(0, 1, (progress - 0.65f) / 0.35f));
+                    hit.color = new Color(1, 1, 1, alpha);
+                    hit.sortingOrder = 4150;
+                    continue;
+                }
                 var sp = fxSp[(int)f.shape];
                 float fk = f.t / f.dur, frameK = 1;
                 if (f.shape == FxShape.HitAnim && hitFrames[0] != null)
@@ -702,7 +761,7 @@ namespace MoreMush
 
         // 글자 칸의 언어 폰트: 프리팹의 LocText는 칸을 켜고 끌 때마다 Loc.Changed 구독·해제로 할당이 생겨 떼어 내고, 같은 역할로 여기서 맞춘다
         static LocFonts.Role fieldRole = LocFonts.Role.Title; static int fieldPreset = -1;
-        void ApplyTextFonts() { foreach (var sl in textSlots) LocFonts.Apply(sl.tmp, fieldRole, fieldPreset); }
+        void ApplyTextFonts() { foreach (var sl in textSlots) { LocFonts.Apply(sl.tmp, fieldRole, fieldPreset); sl.style = -1; } }
 
         TextSlot NewTextSlot()
         {

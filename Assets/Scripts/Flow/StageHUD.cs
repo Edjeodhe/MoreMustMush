@@ -41,7 +41,7 @@ namespace MoreMush
             weatherIcon = SceneUI.Find(scene, "WeatherIcon")?.GetComponent<Image>();
             combo = SceneUI.TextIn(SceneUI.Find(scene, "Cur_Combo"));
             SceneUI.Find(scene, "ComboGhost")?.gameObject.SetActive(false);   // 콤보 뒤 큰 잔상은 뺐다 (사용자 2026-10-23). 씬 오브젝트는 남겨 둔다
-            if (combo != null) comboHome = combo.rectTransform.anchoredPosition;
+            if (combo != null) { comboHome = combo.rectTransform.anchoredPosition; combo.rectTransform.localRotation = Quaternion.Euler(0, 0, RoundView.ComboTilt); }
             speed = SceneUI.TextIn(SceneUI.Find(scene, "SpeedText"));
             gimmick = SceneUI.Find(scene, "StageGimmick")?.gameObject;
             gimmickName = SceneUI.TextIn(SceneUI.Find(scene, "GimmickName"));
@@ -191,25 +191,26 @@ namespace MoreMush
                     comboPow = comboDrop ? 1 : Mathf.Min(1.6f, 1 + Mathf.Log(Mathf.Max(1, c), 2) * 0.08f) * (comboHot ? 1.5f : 1);
                     comboDir = -comboDir;
                 }
+                ComboDigits.Style(combo, comboHot);
                 UIUtil.SetText(combo, ComboText(c, comboHot));
             }
             if (comboT > 1.2f) return;
             float t = comboT += Time.unscaledDeltaTime;
-            if (comboHot && t > 0.45f) { comboHot = false; UIUtil.SetText(combo, ComboText(shownCombo, false)); }
+            if (comboHot && t > 0.45f) { comboHot = false; ComboDigits.Style(combo, false); UIUtil.SetText(combo, ComboText(shownCombo, false)); }
             var rt = combo.rectTransform;
             if (t > 1.2f || comboDrop)
             {
                 // 끊김(또는 끝): 납작하게 눌렸다가 다시 선다
                 float sq = t > 1.2f ? 0 : Mathf.Exp(-t * 8) * Mathf.Cos(t * 18);
                 rt.localScale = new Vector3(1 + 0.25f * sq, 1 - 0.35f * sq, 1);
-                rt.localRotation = Quaternion.identity;
+                rt.localRotation = Quaternion.Euler(0, 0, RoundView.ComboTilt);
                 rt.anchoredPosition = comboHome + new Vector2(0, t > 1.2f ? 0 : -16 * Mathf.Exp(-t * 9));
                 return;
             }
             float p = comboPow;
             float s = 1 + 0.6f * p * Mathf.Exp(-t * 9) * Mathf.Cos(t * 26);
             rt.localScale = new Vector3(s, s, 1);
-            rt.localRotation = Quaternion.Euler(0, 0, comboDir * 12 * p * Mathf.Exp(-t * 10) * Mathf.Cos(t * 22));
+            rt.localRotation = Quaternion.Euler(0, 0, RoundView.ComboTilt + comboDir * 12 * p * Mathf.Exp(-t * 10) * Mathf.Cos(t * 22));
             float amp = 7 * p * Mathf.Exp(-t * 13);
             rt.anchoredPosition = comboHome + new Vector2(Mathf.Sin(t * 95) * amp, 22 * p * Mathf.Exp(-t * 12) * Mathf.Cos(t * 20));
         }

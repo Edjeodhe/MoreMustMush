@@ -328,7 +328,8 @@ namespace MoreMush
             m.squish = 1;
             if (m.hpLag < 0 || m.hitT > 0.5f) m.hpLag = hpBefore;   // the trail starts where the bar was before this burst
             m.hitT = 0;
-            if (crit && m.hp > 0) { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.HitAnim, m.x, m.y, m.r * 2.6f, 0.18f, new Color(1, 0.72f, 0.6f, 1), FxR(0, 360), 0); AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 2.4f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }
+            if (crit && m.hp > 0) shake = Mathf.Max(shake, 0.22f);
+            if (crit && m.hp > 0 && kind != "direct") { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.HitAnim, m.x, m.y, m.r * 2.6f, 0.18f, new Color(1, 0.72f, 0.6f, 1), FxR(0, 360), 0); AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 2.4f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }
             // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
             double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
             if (st.flexP > 0 && U.Chance((float)st.flexP)) { sc *= 3; SkillFx("ed_flex", m.x, m.y); }   // 플렉스: 점수 3배
@@ -452,26 +453,26 @@ namespace MoreMush
             if (e.n <= 0)
             {
                 e.first = G.rounds + 1; newSpecies.Add(sp.id); codexShake = 1;
-                AddLabel(Loc.F("새 버섯! {0}", sp.n), m.x, m.y - 50, "#fff7c2", 30);
+                AddLabel(sp.n, m.x, m.y - 50, "#fff7c2", 30, tag: "NEW!");   // 새 버섯: 이름 왼쪽 위에 NEW! (사용자 2026-11-11)
             }
             e.n++;
             int star1 = StarOf(sp.id);
             if (star1 > star0)
             {
                 newStars.Add((sp.id, star1));
-                AddLabel(Loc.F("{0} {1} {2}성! {3} {4}", new string('★', star1), sp.n, star1, AB[sp.ab].n, AbFmt(sp.ab, AbPerStar(sp))), m.x, m.y - 80, "#ffe36e", 26);
+                AddLabel($"★{star1} {sp.n}! {AB[sp.ab].n} {AbFmt(sp.ab, AbPerStar(sp))}", m.x, m.y - 80, "#ffe36e", 26);   // "★2 표고버섯!" / 효과 (사용자 2026-11-11)
             }
             if (m.golden && !e.gold) { e.gold = true; newGolden.Add(sp.id); AddLabel(Loc.F("황금 {0}!", sp.n), m.x, m.y - 80, "#ffd23a", 30); }
             if (m.giant) e.giant = true;
-            // 연출: 버섯이 퐁 터지며 구름·조각·고리 (색은 갈래 색과 그 버섯의 갓 색)
+            // 연출: 버섯이 퐁 터지며 물감·조각 (색은 갈래 색과 그 버섯의 갓 색). 구름(Puff)은 디버프 포자 버섯(spore)만, 고리는 없다 (사용자 2026-11-11)
             var col = U.Hex(CATS[sp.c].color);
             var cap = m.golden ? U.Hex("#ffd23a") : U.Hex(sp.c1);
             float big = m.giant ? 2.2f : m.cluster ? 1.5f : 1;
-            AddFx(FxShape.Puff, m.x, m.y, m.r * 2.6f * big, 0.45f, new Color(cap.r * 0.5f + 0.5f, cap.g * 0.5f + 0.5f, cap.b * 0.5f + 0.5f, 0.9f), FxR(0, 360), 40);
-            AddFx(FxShape.Impact, m.x, m.y, m.r * 2.2f * big, 0.22f, new Color(cap.r, cap.g, cap.b, 0.95f), FxR(0, 360), 0);
-            AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 3f * big, 0.32f, new Color(col.r, col.g, col.b, 0.95f), FxR(0, 360), 0);
+            if (m.spore != null) AddFx(FxShape.Puff, m.x, m.y, m.r * 2.6f * big, 0.45f, new Color(cap.r * 0.5f + 0.5f, cap.g * 0.5f + 0.5f, cap.b * 0.5f + 0.5f, 0.9f), FxR(0, 360), 40);
+            float wet = m.cluster ? 0.5f : 1;   // 군락(무더기)이 터질 때 물감 튀는 그림(Impact·HitAnim)만 50% (사용자 2026-11-11, 75%→50%)
+            AddFx(FxShape.Impact, m.x, m.y, m.r * 2.2f * big * wet, 0.22f, new Color(cap.r, cap.g, cap.b, 0.95f), FxR(0, 360), 0);
             // the pop: a flipbook burst, a spray of twinkles (white to the cap colour), a beat of hitstop and a kick
-            AddFx(FxShape.HitAnim, m.x, m.y - m.r * 0.2f, m.r * 3.4f * big, 0.2f, new Color(1, 0.97f, 0.86f, 1), FxR(0, 360), 0);
+            AddFx(FxShape.HitAnim, m.x, m.y - m.r * 0.2f, m.r * 3.4f * big * wet, 0.2f, new Color(1, 0.97f, 0.86f, 1), FxR(0, 360), 0);
             int nt = m.giant ? 16 : m.cluster ? 9 : 5 + sp.t;
             for (int i = 0; i < nt; i++)
             {
@@ -503,7 +504,6 @@ namespace MoreMush
             {
                 AddLabel($"+{U.Fmt(drop)} {CATS[sp.c].name}", m.x, m.y - m.r - 10, CATS[sp.c].light, 30);
                 if (balls.Count < 8) shake = Mathf.Max(shake, 0.15f);
-                rings.Add(new Ring { x = m.x, y = m.y, r = m.r * 2.2f, dur = 0.35f, col = CATS[sp.c].color });
                 Snd.Tone(300, 0.18f, Snd.Wave.Sine, 0.7f, 2.2f, "heap", 0.05f);
             }
             if (m.giant) { hitstop = 0.3f; hitstopCd = 0.8f; flash = 0.8f; shake = 1; Snd.Rare(); giant = null; AddLabel(Loc.T("거대 버섯 수확!"), m.x, m.y - 120, "#ffffff", 44); }
@@ -542,7 +542,7 @@ namespace MoreMush
 
         public void AddPart(float x, float y, float vx, float vy, float life, Color col, float size, FxShape shape = FxShape.Dot)
         {
-            if (parts.Count > 260) return;
+            if (parts.Count >= 260) return;
             var p = partFree.Count > 0 ? partFree.Pop() : new Part();   // 사라진 조각을 다시 쓴다 (모든 칸을 새로 채운다)
             p.x = x; p.y = y; p.vx = vx; p.vy = vy; p.t = 0; p.life = life; p.col = col; p.size = size; p.shape = (byte)shape;
             parts.Add(p);
@@ -558,35 +558,44 @@ namespace MoreMush
         // size: px across; rise: px/s it drifts up
         public void AddFx(FxShape shape, float x, float y, float size, float dur, Color col, float rot, float rise)
         {
-            if (fxs.Count > 90) return;
-            var f = fxFree.Count > 0 ? fxFree.Pop() : new Fx();   // 효과 난수(FxR·FxChance)는 예전과 같은 순서로 뽑는다
+            Fx f;
+            if (fxs.Count >= 90)
+            {
+                if (shape != FxShape.ContactHit) return;
+                // Keep the newest contact visible without growing the prewarmed renderer pool.
+                f = fxs[0];
+                fxs.RemoveAt(0);
+            }
+            else f = fxFree.Count > 0 ? fxFree.Pop() : new Fx();
             f.shape = shape; f.x = x; f.y = y; f.t = 0; f.size = size; f.dur = dur; f.col = col; f.rot = rot; f.rise = rise; f.spin = FxR(-40, 40); f.flip = FxChance(0.5f);
             fxs.Add(f);
         }
 
-        // a harvester hits a mushroom: a punchy burst at the contact point, tinted by the mushroom, bigger for rarer ones
+        // Compact six-frame contact pop; damage text and harvest/death effects remain separate.
         void HitFx(Shroom m, Ball b)
         {
-            float dx = b.x - m.x, dy = b.y - m.y, d = Mathf.Max(1, Mathf.Sqrt(dx * dx + dy * dy));
-            float cx = m.x + dx / d * m.r * 0.8f, cy = m.y + dy / d * m.r * 0.8f;
-            m.kx = -dx / d; m.ky = -dy / d;   // pushed away from the harvester
-            float k = 1 + m.sp.t * 0.18f + (m.giant || m.boss ? 0.6f : 0);
-            // the pale field swallows white bursts: the outer burst takes the mushroom's own cap colour, a small warm
-            // cream core sits on top, the streak is butter yellow
-            var cap = U.Hex(m.sp.c1);
-            AddFx(FxShape.Impact, cx, cy, 58 * k, 0.2f, new Color(cap.r, cap.g, cap.b, 0.95f), FxR(0, 360), 0);
-            AddFx(FxShape.Impact, cx, cy, 32 * k, 0.15f, new Color(1, 0.96f, 0.82f, 1f), FxR(0, 360), 0);
-            float ang = Mathf.Atan2(-dy, -dx) * Mathf.Rad2Deg;   // streak points away from the harvester
-            AddFx(FxShape.Streak, cx, cy, 60 * k, 0.16f, new Color(1, 0.9f, 0.55f, 0.9f), ang, 0);
-            if (parts.Count < 200)
-                for (int i = 0; i < 2; i++)
-                    AddPart(cx, cy, -dx / d * FxR(80, 200) + FxR(-60, 60), -dy / d * FxR(80, 200) - 80, 0.4f, U.Hex(m.sp.c1), 4, FxShape.Chip);
+            float dx = b.x - m.x, dy = b.y - m.y;
+            float d = Mathf.Sqrt(dx * dx + dy * dy);
+            if (d < 0.001f) { dx = -b.dx; dy = -b.dy; d = Mathf.Sqrt(dx * dx + dy * dy); }
+            if (d < 0.001f) { dx = 0; dy = -1; d = 1; }
+            float nx = dx / d, ny = dy / d;
+            float cx = m.x + nx * m.r, cy = m.y + ny * m.r;
+            m.kx = -nx; m.ky = -ny;
+            float size = Mathf.Clamp(Mathf.Min(m.r, b.r) * 1.6f, 20f, 38f) * 2;   // 타격 이펙트 2배 (사용자 2026-11-11)
+            AddFx(FxShape.ContactHit, cx, cy, size, 0.3f, Color.white, 0, 0);
+            // Retain the loose sparkles alongside the sprite burst (separate pooled particles).
+            for (int i = 0; i < 2 && parts.Count < 260; i++)
+            {
+                float angle = FxR(0, U.TAU), speed = FxR(70, 140);
+                AddPart(cx, cy, Mathf.Cos(angle) * speed, Mathf.Sin(angle) * speed - 70,
+                    0.3f, new Color(1, 0.9f, 0.65f, 1), FxR(5, 9), FxShape.Twinkle);
+            }
         }
 
-        public void AddLabel(string text, float x, float y, string col, float size, bool skill = false)   // skill: 스킬 이름 글자 (연출 간소화 때 안 그린다)
+        public void AddLabel(string text, float x, float y, string col, float size, bool skill = false, string tag = null)   // skill: 스킬 이름 글자 (연출 간소화 때 안 그린다), tag: 왼쪽 위 작은 표
         {
             if (labels.Count > 10) labels.RemoveAt(0);
-            labels.Add(new Label { text = text, x = U.Clamp(x, 120, WW - 120), y = U.Clamp(y, 80, WH - 60), col = col, size = size, skill = skill });
+            labels.Add(new Label { text = text, x = U.Clamp(x, 120, WW - 120), y = U.Clamp(y, 80, WH - 60), col = col, size = size, skill = skill, tag = tag, tagKey = tag != null ? new object() : null });
         }
     }
 }

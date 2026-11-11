@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 namespace MoreMush
 {
-    // Hand-lettered headline images for the few fixed words a font cannot carry (Dream set, sheets lettering_*):
-    // UI/Lettering/<lang>/<id> for translated words, UI/Lettering/<id> for language-free ones (FEVER!, COMBO).
+    // Hand-lettered headline images for the few fixed words a font cannot carry. 글자 이펙트 그림은 모두 Resources/Art/effect/text에 둔다
+    // (사용자 2026-11-11): <lang>/<id> for translated words, <id> for language-free ones (FEVER!, COMBO).
     // Apply() shows the image in place of a TMP text and hides the text; a language without the image keeps the font.
     public static class Lettering
     {
@@ -18,6 +18,7 @@ namespace MoreMush
 
         public static string IdOf(string literal) => literal != null && BY_TEXT.TryGetValue(literal, out var id) ? id : null;
 
+        const string Root = "Art/effect/text/";
         static string cacheLang;
         static readonly Dictionary<string, Sprite> cache = new Dictionary<string, Sprite>();
 
@@ -27,7 +28,7 @@ namespace MoreMush
             if (id == null) return null;
             if (cacheLang != Loc.Lang) { cacheLang = Loc.Lang; cache.Clear(); }
             if (!cache.TryGetValue(id, out var sp))
-                cache[id] = sp = SpriteDB.Get("UI/Lettering/" + Loc.Lang + "/" + id) ?? SpriteDB.Get("UI/Lettering/" + id);
+                cache[id] = sp = Resources.Load<Sprite>(Root + Loc.Lang + "/" + id) ?? Resources.Load<Sprite>(Root + id);
             return sp;
         }
 

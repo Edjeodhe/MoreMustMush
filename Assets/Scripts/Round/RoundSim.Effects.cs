@@ -296,7 +296,7 @@ namespace MoreMush
                 if (!newRec.Contains(k) && prev > 0 && CurRec(k) > prev)
                 {
                     newRec.Add(k);
-                    AddLabel(Loc.F("신기록! {0}", RECORD_NAMES[k]), WW / 2, WH * 0.28f, "#ffef7a", 40);
+                    AddLabel(RECORD_NAMES[k], WW / 2, WH * 0.28f, "#ffef7a", 40, tag: "NEW RECORD!");   // 기록 이름 왼쪽 위에 NEW RECORD! (사용자 2026-11-11)
                     Snd.Record();
                 }
             }

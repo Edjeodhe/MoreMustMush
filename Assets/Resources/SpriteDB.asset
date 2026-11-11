@@ -4733,8 +4733,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 99f7037f65939254f913cfeb3ee82187, type: 3}
   - key: UI/Combo/combo_n
     sprite: {fileID: 21300000, guid: b95c59401a9b3cd4d9372175c6c8e8ff, type: 3}
-  - key: UI/Combo/critical
-    sprite: {fileID: 21300000, guid: 8ff590c131e57864ba72a2ffe30da5b6, type: 3}
   - key: UI/Combo/n0
     sprite: {fileID: 21300000, guid: 2a7ca730cca7a4f48a4a0ab3cfaa4d57, type: 3}
   - key: UI/Combo/n1
@@ -4755,10 +4753,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 598c75d4bae99d0418adbb4e624ee476, type: 3}
   - key: UI/Combo/n9
     sprite: {fileID: 21300000, guid: b23c8948cb9ec2243b4acb9f85ab3dee, type: 3}
-  - key: UI/Combo/super_combo_c
-    sprite: {fileID: 21300000, guid: d7aacdcc251817d4c84b8262ebf23dda, type: 3}
-  - key: UI/Combo/super_combo_n
-    sprite: {fileID: 21300000, guid: 4485171afb783f84b88d81238dbdd2ae, type: 3}
   - key: UI/Dex/dex_card
     sprite: {fileID: 21300000, guid: f26c2ee38c671e441a521773f163b96a, type: 3}
   - key: UI/Dex/dex_card_empty
@@ -4843,56 +4837,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 5a5035fb0499e9944a2c2914b3e99d90, type: 3}
   - key: UI/Digits/ut
     sprite: {fileID: 21300000, guid: a8aaed167d6f74043843cf2a2c82ebdf, type: 3}
-  - key: UI/Lettering/combo
-    sprite: {fileID: 21300000, guid: acd0b5ea9999291478bdb14d2a89f535, type: 3}
-  - key: UI/Lettering/en/acorn
-    sprite: {fileID: 21300000, guid: ecfdb61420b292c4a8a43cbaefd08ace, type: 3}
-  - key: UI/Lettering/en/clone
-    sprite: {fileID: 21300000, guid: fd3d68959f01b0746bdb1d1896439705, type: 3}
-  - key: UI/Lettering/en/crit
-    sprite: {fileID: 21300000, guid: da40361b87257e7478b21a117946a398, type: 3}
-  - key: UI/Lettering/en/giant
-    sprite: {fileID: 21300000, guid: b2b555f01f2308847b1af78305d4b966, type: 3}
-  - key: UI/Lettering/en/golden
-    sprite: {fileID: 21300000, guid: 03d2dc812f41df0458f235c27a5a370a, type: 3}
-  - key: UI/Lettering/en/harvest_end
-    sprite: {fileID: 21300000, guid: 258e874c10c5f9145a8aa22af2419e22, type: 3}
-  - key: UI/Lettering/en/multi
-    sprite: {fileID: 21300000, guid: 9740b41a795ee4a4480f551e08ec9e2d, type: 3}
-  - key: UI/Lettering/en/pause
-    sprite: {fileID: 21300000, guid: d80a9a5a6c4980c498a76aac32f3cd5c, type: 3}
-  - key: UI/Lettering/en/settle_done
-    sprite: {fileID: 21300000, guid: 3d6828ce9ec1db94b96e2702f43c83d7, type: 3}
-  - key: UI/Lettering/en/settle_stop
-    sprite: {fileID: 21300000, guid: f5a4347ec8457034f8b6f75fdecde24b, type: 3}
-  - key: UI/Lettering/fever
-    sprite: {fileID: 21300000, guid: 6540924e1a2a42244a7aa204d49798dd, type: 3}
-  - key: UI/Lettering/ko/acorn
-    sprite: {fileID: 21300000, guid: 5f022737131e4c84081f9ed11656854a, type: 3}
-  - key: UI/Lettering/ko/clone
-    sprite: {fileID: 21300000, guid: 6ef47600626cad546b5dfb6d3966f082, type: 3}
-  - key: UI/Lettering/ko/crit
-    sprite: {fileID: 21300000, guid: 43e721554580c914bb51c2af017562ee, type: 3}
-  - key: UI/Lettering/ko/giant
-    sprite: {fileID: 21300000, guid: 28e603128b040bf439c044aa4d0f6501, type: 3}
-  - key: UI/Lettering/ko/golden
-    sprite: {fileID: 21300000, guid: 5e27258fbb413ed43b7197797646bb38, type: 3}
-  - key: UI/Lettering/ko/harvest_end
-    sprite: {fileID: 21300000, guid: be1f547f2127b9448aa0b5f1dc304ded, type: 3}
-  - key: UI/Lettering/ko/multi
-    sprite: {fileID: 21300000, guid: a1f143d60438dfa4abd2e497e0816b1a, type: 3}
-  - key: UI/Lettering/ko/pause
-    sprite: {fileID: 21300000, guid: ef47aafb9e6bdcd4aa9ba151d898502e, type: 3}
-  - key: UI/Lettering/ko/settle_done
-    sprite: {fileID: 21300000, guid: 4d5287b9a4e54c64db238b5d8337e108, type: 3}
-  - key: UI/Lettering/ko/settle_stop
-    sprite: {fileID: 21300000, guid: 5a43bf68f54580f46b49e1301013362f, type: 3}
-  - key: UI/Lettering/new
-    sprite: {fileID: 21300000, guid: a3d72796d319a974abcdc1f9d6ef5ab2, type: 3}
-  - key: UI/Lettering/super_combo
-    sprite: {fileID: 21300000, guid: 5d5050b33ab6efb4b99e6dc3462218f9, type: 3}
-  - key: UI/Lettering/super_fever
-    sprite: {fileID: 21300000, guid: 739cb797f054f1c47a2e0a5d013edf12, type: 3}
   - key: UI/Slots/slot_buy
     sprite: {fileID: 21300000, guid: 29bf40992398b9c4d9a556a2745391dc, type: 3}
   - key: UI/Slots/slot_core
