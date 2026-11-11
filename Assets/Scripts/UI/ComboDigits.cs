@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace MoreMush
 {
-    // Combo counter skin (sheet "combo_skin", sprite asset Resources/Sprite Assets/ComboDigits built by
-    // MoreMush/Build Combo Digit Sprite Asset): "12 COMBO" spelled in the gold set, or the critical set, and the
-    // CRITICAL! word over critical damage numbers. The glyphs keep
-    // their painted colours (no tint). Without the asset it returns null and the caller keeps the font.
+    // 콤보 글자: 숫자는 ONE Mobile POP 폰트(Style·Outline), 그 옆 "Combo!" 낱말은 그림 글리프(스프라이트 에셋
+    // Resources/Sprite Assets/ComboDigits, MoreMush/Build Combo Digit Sprite Asset이 Art/Text/combo.png로 만든다).
+    // 에셋이 없으면 Spell은 null을 돌려주고 부르는 쪽이 글자로 쓴다.
     public static class ComboDigits
     {
-        // 숫자는 그림 글자를 버리고 폰트(LocFonts.NumberFont = ONE Mobile POP)로 쓴다. 색은 글자 그림(Art/effect/text/combo·super_combo)의 색 (사용자 2026-11-11)
+        // 숫자는 그림 글자를 버리고 폰트(LocFonts.NumberFont = ONE Mobile POP)로 쓴다. 색은 글자 그림(Art/Text/combo·super_combo)의 색 (사용자 2026-11-11)
         public const string ComboHex = "#f4d4a3", SuperHex = "#f5aa85";
         static readonly Color32 ComboEdge = new Color32(0xdb, 0x9a, 0x4e, 255), SuperEdge = new Color32(0xbe, 0x4d, 0x26, 255);   // 글자 그림의 외곽선 색
         public static readonly Color32 LabelEdge = new Color32(0x6a, 0x37, 0x1c, 255);   // 필드 라벨 글자 테두리 (갈색 #6a371c, 사용자 2026-11-11)
@@ -61,8 +60,6 @@ namespace MoreMush
             }
         }
 
-        // the CRITICAL! word shown over critical damage numbers (null without the asset or the glyph)
-        public static string Critical => Ready && asset.GetSpriteIndexFromName("critical") >= 0 ? "<sprite=\"ComboDigits\" name=\"critical\">" : null;
 
         static void Glyph(string g) => sb.Append("<sprite=\"ComboDigits\" name=\"").Append(g).Append("\">");
 

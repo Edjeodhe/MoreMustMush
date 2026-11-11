@@ -1,6 +1,6 @@
 // 세계수 창 3종(공방·꼬마·성장) + 목록 팝업 + 꼬마 정보 카드 프리팹을 만든다 (2026-10-20 시안 Art/Raw_Dream/concept/ui_mock_*.png).
 // Unity MCP execute_code로 C#을 보내 프리팹(Assets/Resources/UI/<이름>.prefab)을 만들고 저장한다. 코드(GrowWindow·KidWindow·WorkshopWindow·
-// FarmListPopup·KidInfoCard)는 여기서 붙인 이름으로 찾는다. 그림 = Art/Dream/UI/Window (sheets-dream ui_window·ui_window_icons).
+// FarmListPopup·KidInfoCard)는 여기서 붙인 이름으로 찾는다. 그림 = Art/UI/Window (sheets-dream ui_window·ui_window_icons).
 //   node Tools/scene/build-farm-windows.mjs            # 전부
 //   node Tools/scene/build-farm-windows.mjs GrowWindow # 하나만
 // 다시 돌리면 그 프리팹을 새로 만든다 (손으로 고친 것은 덮인다).
@@ -12,7 +12,7 @@ TMPro.TMP_FontAsset FONT = null;
 foreach (var g in UnityEditor.AssetDatabase.FindAssets("ONEMobilePOP SDF t:TMP_FontAsset")) { var fa = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(UnityEditor.AssetDatabase.GUIDToAssetPath(g)); if (fa != null && fa.name == "ONEMobilePOP SDF") FONT = fa; }
 var INK = new UnityEngine.Color(0.33f, 0.22f, 0.14f);
 var SOFT = new UnityEngine.Color(0.55f, 0.42f, 0.3f);
-System.Func<string, UnityEngine.Sprite> SP = n => UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Sprite>("Assets/Resources/Art/Dream/" + n + ".png");
+System.Func<string, UnityEngine.Sprite> SP = n => UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Sprite>("Assets/Resources/Art/" + n + ".png");
 System.Func<string, UnityEngine.Transform, UnityEngine.RectTransform> N = (name, parent) => { var g = new UnityEngine.GameObject(name, typeof(UnityEngine.RectTransform)); if (parent != null) g.transform.SetParent(parent, false); return (UnityEngine.RectTransform)g.transform; };
 // anchor = pivot = (ax, ay); (x, y) = offset from that anchor, +y up
 System.Action<UnityEngine.RectTransform, float, float, float, float, float, float> P = (rt, ax, ay, x, y, w, h) => { rt.anchorMin = rt.anchorMax = rt.pivot = new UnityEngine.Vector2(ax, ay); rt.anchoredPosition = new UnityEngine.Vector2(x, y); rt.sizeDelta = new UnityEngine.Vector2(w, h); };

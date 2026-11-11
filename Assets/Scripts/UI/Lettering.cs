@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MoreMush
 {
-    // Hand-lettered headline images for the few fixed words a font cannot carry. 글자 이펙트 그림은 모두 Resources/Art/effect/text에 둔다
+    // Hand-lettered headline images for the few fixed words a font cannot carry. 글자 이펙트 그림은 모두 Resources/Art/Text에 둔다
     // (사용자 2026-11-11): <lang>/<id> for translated words, <id> for language-free ones (FEVER!, COMBO).
     // Apply() shows the image in place of a TMP text and hides the text; a language without the image keeps the font.
     public static class Lettering
@@ -18,7 +18,7 @@ namespace MoreMush
 
         public static string IdOf(string literal) => literal != null && BY_TEXT.TryGetValue(literal, out var id) ? id : null;
 
-        const string Root = "Art/effect/text/";
+        const string Root = "Art/Text/";
         static string cacheLang;
         static readonly Dictionary<string, Sprite> cache = new Dictionary<string, Sprite>();
 

@@ -215,7 +215,7 @@ namespace MoreMush
             fxSp = new Sprite[fxKeys.Length];
             for (int i = 0; i < fxKeys.Length; i++) fxSp[i] = fxKeys[i] != null ? SpriteDB.Get(fxKeys[i]) : null;
             fxSp[0] = dotSp;
-            contactFrames = Resources.LoadAll<Sprite>("Art/effect/impact/hit_beige");
+            contactFrames = Resources.LoadAll<Sprite>("Art/FX/Impact/hit_beige");
             System.Array.Sort(contactFrames, (a, b) => string.CompareOrdinal(a.name, b.name));
             contactCanvasUnits = contactFrames.Length > 0 ? contactFrames[0].rect.width / contactFrames[0].pixelsPerUnit : 1f;
             var brush = SpriteDB.Get("FX/brush");
@@ -232,12 +232,12 @@ namespace MoreMush
 
         static float EaseOut(float k) { k = 1 - Mathf.Clamp01(k); return 1 - k * k * k; }
 
-        // impact 폴더의 6칸 가로 시트 (Art/effect/impact/<name>), 이름순 프레임. 없으면 빈 배열
+        // impact 폴더의 6칸 가로 시트 (Art/FX/Impact/<name>), 이름순 프레임. 없으면 빈 배열
         static readonly Dictionary<string, Sprite[]> impactSheets = new Dictionary<string, Sprite[]>();
         static Sprite[] ImpactFrames(string name)
         {
             if (impactSheets.TryGetValue(name, out var fr)) return fr;
-            fr = Resources.LoadAll<Sprite>("Art/effect/impact/" + name);
+            fr = Resources.LoadAll<Sprite>("Art/FX/Impact/" + name);
             System.Array.Sort(fr, (a, b) => string.CompareOrdinal(a.name, b.name));
             return impactSheets[name] = fr;
         }
@@ -582,7 +582,8 @@ namespace MoreMush
                 string col = t.coin ? "#efcb6a" : t.crit ? ComboDigits.SuperHex : ComboDigits.ComboHex;   // 숫자 색 = 콤보 글자 그림 색 (치명은 SuperCombo 색)
                 // 값이 바뀌지 않으니 한 번만 만든다
                 t.view ??= t.coin ? $"+{U.FmtN(t.v, 1)}G" : HitView(t);
-                Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
+                var num = Text(t, t.view, t.x, t.y, size, pop, col, k > 0.7f ? (1 - k) / 0.3f : 1, z);
+                if (t.crit && !t.coin) CritTag(num, t.critKey ??= new object(), size, pop, k > 0.7f ? (1 - k) / 0.3f : 1, z);
             }
             bool noSkillLabel = FxPrefs.Simple;
             foreach (var l in R.labels)
@@ -627,6 +628,18 @@ namespace MoreMush
             t.rectTransform.localRotation = Quaternion.Euler(0, 0, TAG_TILT);
         }
 
+        // 치명타 숫자 위 CRITICAL!: NEW!처럼 폰트 글자(빨강 + 크림 테두리), 숫자보다 작게, 가로 75%로 눌러 숫자 위 가운데에 (사용자 2026-11-11)
+        const float CRIT_K = 0.45f, CRIT_SQUEEZE = 0.75f;
+        void CritTag(TextMeshProUGUI num, object key, float numSize, float pop, float alpha, float z)
+        {
+            var t = Text(key, "CRITICAL!", 0, 0, numSize * CRIT_K, pop, TAG_COL, alpha, z, 4);
+            var rot = num.rectTransform.localRotation;
+            float nh = num.preferredHeight * pop, th = t.preferredHeight * pop;
+            t.rectTransform.anchoredPosition = num.rectTransform.anchoredPosition + (Vector2)(rot * new Vector3(0, (nh + th) * 0.45f, 0));
+            t.rectTransform.localRotation = rot;
+            t.rectTransform.localScale = new Vector3(pop * CRIT_SQUEEZE, pop, 1);
+        }
+
         // "새 버섯! 표고버섯" → "새 버섯!" / "표고버섯" 두 줄: 첫 느낌표 뒤에 글이 더 있으면 줄을 바꾼다 (사용자 2026-11-11)
         static string LabelView(string s)
         {
@@ -637,15 +650,12 @@ namespace MoreMush
         }
 
         // 데미지는 + 없이 1000부터 단위 표기(1.25K·300K·4.5M, 1 아래 피해가 "0"으로 보이지 않게 올림), 점수(그루터기)는 +.
-        // 치명타는 숫자 위에 숫자보다 작은 CRITICAL! 그림 글자(ComboDigits), 그 글자가 없으면 숫자 뒤 느낌표
+        // 치명타는 숫자 위에 작은 CRITICAL! 폰트 글자 (CritTag)
         static string HitView(FloatText t)
         {
             string n = t.dmg ? U.Fmt(System.Math.Ceiling(t.v), 1000) : "+" + U.Fmt(t.v);
-            if (!t.crit) return n;
-            string tag = ComboDigits.Critical;
-            return tag != null ? "<size=" + CRIT_TAG + "%>" + tag + "</size><br>" + n : n + "!";
+            return n;   // 치명타 CRITICAL! 글자는 따로 그린다 (CritTag)
         }
-        const int CRIT_TAG = 140;   // CRITICAL! 글자 크기 (%). 글자 그림이 숫자 높이의 약 절반이라 140%여도 숫자 높이의 약 3/4
 
         TextMeshProUGUI Text(object key, string s, float x, float y, float size, float pop, string col, float alpha, float z, int styleOf = -1)
         {

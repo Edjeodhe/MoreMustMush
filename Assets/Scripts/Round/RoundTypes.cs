@@ -104,9 +104,9 @@ namespace MoreMush
     public class Ring { public float x, y, r, t, dur; public string col; public bool quiet; }
     public class Part { public float x, y, vx, vy, t, life, size; public Color col; public byte shape; }   // shape: FxShape
     // one-shot sprite effects (hit bursts, spawn puffs, bar dust); the view draws them, the sim only ages them
-    public enum FxShape : byte { Dot, Chip, Leaf, Impact, ImpactRing, Puff, Dust, Streak, Sprout, Drop, HitAnim, Twinkle, DotRing, ContactHit, BossIn, BossOut, SplashBlue, SplashOrange, SplashBeige }   // BossIn·BossOut: 보스 뒤 등장·격파 플립북 (Art/effect/boss/entrance·defeat), Splash*: 물 튀김 6프레임 (impact/splash_skyblue·orange·beige)
+    public enum FxShape : byte { Dot, Chip, Leaf, Impact, ImpactRing, Puff, Dust, Streak, Sprout, Drop, HitAnim, Twinkle, DotRing, ContactHit, BossIn, BossOut, SplashBlue, SplashOrange, SplashBeige }   // BossIn·BossOut: 보스 뒤 등장·격파 플립북 (Art/FX/Boss/entrance·defeat), Splash*: 물 튀김 6프레임 (impact/splash_skyblue·orange·beige)
     public class Fx { public FxShape shape; public float x, y, t, dur, size, rot, spin, rise; public Color col; public bool flip; }
-    public class FloatText { public float x, y, vx, vy, t; public double v; public int tier; public bool crit, golden, coin, dmg; public string view; }   // dmg: v가 점수가 아니라 준 피해 · view: 화면이 만든 글자 (시뮬레이션은 읽지 않음)
+    public class FloatText { public float x, y, vx, vy, t; public double v; public int tier; public bool crit, golden, coin, dmg; public string view; public object critKey; }   // dmg: v가 점수가 아니라 준 피해 · view: 화면이 만든 글자 · critKey: CRITICAL! 글자 칸 키 (시뮬레이션은 읽지 않음)
     // 콤보 숫자 (데미지 스킨): 수확기 하나에 하나, 버섯을 맞힐 때마다 n·crit·자리를 새로 쓰고 t를 0으로 되돌린다 (화면이 다시 튀게 그린다)
     public class Label { public string text; public float x, y, size, t; public string col; public string view; public bool skill; public string tag; public object tagKey; }   // tag: 글자 왼쪽 위에 기울여 붙는 작은 표 (NEW! · NEW RECORD!), tagKey: 그 표의 글자 칸 키   // view: 화면이 만든 글자 (숫자만 그림 글자)
     public class Flyer { public float x, y, sx, sy, tx, ty, t, dur; public Species sp; public bool golden, clock, done; public string cat; }

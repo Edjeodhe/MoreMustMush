@@ -132,7 +132,8 @@ namespace MoreMush
                 if (R.hitstop > 0) R.hitstop -= dt;
                 else
                 {
-                    float total = dt * Speed * Game.DBG.speed;
+                    // 보스 등장·격파 연출 동안은 4배속이어도 2배속으로 (연출이 너무 빨리 지나가 안 보였다, 사용자 2026-11-11)
+                    float total = dt * (R.BossFxSlow ? Mathf.Min(Speed, 2) : Speed) * Game.DBG.speed;
                     simWatch.Restart();
                     while (total > 1e-6f && RoundSim.R != null)
                     {

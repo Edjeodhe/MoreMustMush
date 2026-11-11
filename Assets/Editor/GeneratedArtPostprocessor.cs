@@ -1,17 +1,18 @@
 using UnityEditor;
 
-// Images dropped into the art set folders (Tools/art/build-art.mjs) import as ready-to-use 2D sprites.
+// Images dropped into the art folder (Resources/Art, Tools/art/build-art.mjs) import as ready-to-use 2D sprites.
 public class GeneratedArtPostprocessor : AssetPostprocessor
 {
-    private static readonly string[] k_ArtFolders = { "Assets/ArtArchive/Generated/", "Assets/ArtArchive/Soft/", "Assets/ArtArchive/Doodle/", "Assets/Resources/Art/Dream/" };
+    private static readonly string[] k_ArtFolders = { "Assets/Resources/Art/" };
 
     private void OnPreprocessTexture()
     {
         if (!System.Array.Exists(k_ArtFolders, f => assetPath.StartsWith(f))) return;
         var importer = (TextureImporter)assetImporter;
 
-        // FX shapes (circle, soft, ring, square) are exactly one world unit wide so code can scale them by size
-        if (assetPath.Contains("/FX/"))
+        // FX shapes (circle, soft, ring, square) are exactly one world unit wide so code can scale them by size.
+        // 하위 폴더(FX/Impact·Boss·Wind·Growth: 플립북·시트)는 코드가 그림 폭으로 크기를 맞추므로 건드리지 않는다
+        if (System.IO.Path.GetDirectoryName(assetPath).Replace(System.IO.Path.DirectorySeparatorChar, '/') == "Assets/Resources/Art/FX")
         {
             importer.GetSourceTextureWidthAndHeight(out int fw, out _);
             importer.spritePixelsPerUnit = fw;

@@ -17,8 +17,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: dd79618117a5ac14a9c7e91bf8e11005, type: 3}
   - key: Backgrounds/bg_forest
     sprite: {fileID: 21300000, guid: 2b0b060626732904dbad4322d6e80006, type: 3}
-  - key: Backgrounds/bg_kitchen
-    sprite: {fileID: 21300000, guid: ddf6777c963c7a1448369116eb577e7f, type: 3}
   - key: Backgrounds/bg_night
     sprite: {fileID: 21300000, guid: 3297d07da5f287b4ba152df939537f22, type: 3}
   - key: Backgrounds/bg_ranch
@@ -1381,16 +1379,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 9ec739ba0da248d5bbdcb84c0af85ee5, type: 3}
   - key: Characters/Rig2/gen_dew_0_cap
     sprite: {fileID: 21300000, guid: 3fcfffd295294430994438936fc03423, type: 3}
-  - key: Characters/Rig2/gen_dew_0_face_blink
-    sprite: {fileID: 21300000, guid: 46c7f4c7772e42ef8517643515657825, type: 3}
-  - key: Characters/Rig2/gen_dew_0_face_effort
-    sprite: {fileID: 21300000, guid: 65783e4c4b87402b99e03560808a705a, type: 3}
-  - key: Characters/Rig2/gen_dew_0_face_happy
-    sprite: {fileID: 21300000, guid: faf1eee1884c40bc84c479bc204d120b, type: 3}
-  - key: Characters/Rig2/gen_dew_0_face_normal
-    sprite: {fileID: 21300000, guid: f4bce3d26939404692befaafc924db6a, type: 3}
-  - key: Characters/Rig2/gen_dew_0_face_surprise
-    sprite: {fileID: 21300000, guid: 3457c550f719416d8b983a228f67db0c, type: 3}
   - key: Characters/Rig2/gen_dew_0_footL
     sprite: {fileID: 21300000, guid: 693ff4013aa6469a8cdf041b89756781, type: 3}
   - key: Characters/Rig2/gen_dew_0_footR
@@ -1547,16 +1535,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f0cacaa451814db1a14be91c46f42c49, type: 3}
   - key: Characters/Rig2/gen_fire_0_cap
     sprite: {fileID: 21300000, guid: ccc1604c6fdf482781b8e9969d38f7b8, type: 3}
-  - key: Characters/Rig2/gen_fire_0_face_blink
-    sprite: {fileID: 21300000, guid: 2c1292a274874a4f92147e2bdaebaa2b, type: 3}
-  - key: Characters/Rig2/gen_fire_0_face_effort
-    sprite: {fileID: 21300000, guid: 7f452f9a9e0b47c39925d93e23774a5d, type: 3}
-  - key: Characters/Rig2/gen_fire_0_face_happy
-    sprite: {fileID: 21300000, guid: 445a71ddb6644dee9ecc999460e5b2ef, type: 3}
-  - key: Characters/Rig2/gen_fire_0_face_normal
-    sprite: {fileID: 21300000, guid: 5bb7e4a1747b4afba4136444d00730fd, type: 3}
-  - key: Characters/Rig2/gen_fire_0_face_surprise
-    sprite: {fileID: 21300000, guid: 08ba0778a5764bbcb9ec7c14915c1a5c, type: 3}
   - key: Characters/Rig2/gen_fire_0_footL
     sprite: {fileID: 21300000, guid: 9f52d5a95ab84073bc6c6cad70c3bcdd, type: 3}
   - key: Characters/Rig2/gen_fire_0_footR
@@ -1577,16 +1555,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 0f304a495e474249a5fc48f161fe77f4, type: 3}
   - key: Characters/Rig2/gen_fire_1_cap
     sprite: {fileID: 21300000, guid: d4ca51a31bea490fbb78d8dd9a2c4f6f, type: 3}
-  - key: Characters/Rig2/gen_fire_1_face_blink
-    sprite: {fileID: 21300000, guid: 72751efa66654d61a006aad47020c383, type: 3}
-  - key: Characters/Rig2/gen_fire_1_face_effort
-    sprite: {fileID: 21300000, guid: dde4181a12a045c5b7723a2758bbc229, type: 3}
-  - key: Characters/Rig2/gen_fire_1_face_happy
-    sprite: {fileID: 21300000, guid: b2da61f8a09545ea9b0345511698cf4d, type: 3}
-  - key: Characters/Rig2/gen_fire_1_face_normal
-    sprite: {fileID: 21300000, guid: 77d1ced307ca440cb0ba2a4c77d92d03, type: 3}
-  - key: Characters/Rig2/gen_fire_1_face_surprise
-    sprite: {fileID: 21300000, guid: b72e940c9ffb4dceb7a620a49942e159, type: 3}
   - key: Characters/Rig2/gen_fire_1_footL
     sprite: {fileID: 21300000, guid: a0efb223ea8c42d2b72c70429f3e3f36, type: 3}
   - key: Characters/Rig2/gen_fire_1_footR
@@ -1701,16 +1669,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: cde698f2d4544db1b4460ed6899e1bde, type: 3}
   - key: Characters/Rig2/gen_leaf_0_cap
     sprite: {fileID: 21300000, guid: 9b89c95660f84571a2adefc367208c15, type: 3}
-  - key: Characters/Rig2/gen_leaf_0_face_blink
-    sprite: {fileID: 21300000, guid: 2ab87059c8534b7699f16c79cb9ec2f2, type: 3}
-  - key: Characters/Rig2/gen_leaf_0_face_effort
-    sprite: {fileID: 21300000, guid: 8672495e81f845daa9214a16611ce3e6, type: 3}
-  - key: Characters/Rig2/gen_leaf_0_face_happy
-    sprite: {fileID: 21300000, guid: 96a833ac125445f2baddc012af90093e, type: 3}
-  - key: Characters/Rig2/gen_leaf_0_face_normal
-    sprite: {fileID: 21300000, guid: e3f44d188acf4f03bad78f2b8d585c38, type: 3}
-  - key: Characters/Rig2/gen_leaf_0_face_surprise
-    sprite: {fileID: 21300000, guid: 3e5103c131e04ef88586f8fbede8fba0, type: 3}
   - key: Characters/Rig2/gen_leaf_0_footL
     sprite: {fileID: 21300000, guid: d8d5d06bf70d41cf8acc41152492c856, type: 3}
   - key: Characters/Rig2/gen_leaf_0_footR
@@ -1731,16 +1689,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 86390e886e0c48799f049ff853785cbf, type: 3}
   - key: Characters/Rig2/gen_leaf_1_cap
     sprite: {fileID: 21300000, guid: d38f5684fef345f9b16654156459b90d, type: 3}
-  - key: Characters/Rig2/gen_leaf_1_face_blink
-    sprite: {fileID: 21300000, guid: 0234c6bb44874fc5b0be125890e52d37, type: 3}
-  - key: Characters/Rig2/gen_leaf_1_face_effort
-    sprite: {fileID: 21300000, guid: e19add3123284165aac68083d412d53b, type: 3}
-  - key: Characters/Rig2/gen_leaf_1_face_happy
-    sprite: {fileID: 21300000, guid: 42da566f29b44f5aa2aca67bc7986ed8, type: 3}
-  - key: Characters/Rig2/gen_leaf_1_face_normal
-    sprite: {fileID: 21300000, guid: 3e3902589106476a9520df1d5b075588, type: 3}
-  - key: Characters/Rig2/gen_leaf_1_face_surprise
-    sprite: {fileID: 21300000, guid: df2f1a72d88a485b96f709bca3adfb28, type: 3}
   - key: Characters/Rig2/gen_leaf_1_footL
     sprite: {fileID: 21300000, guid: 29f5a664fd18495db3e42af11c1115c5, type: 3}
   - key: Characters/Rig2/gen_leaf_1_footR
@@ -2099,16 +2047,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 5318592526824dce9a9d99912e4e8049, type: 3}
   - key: Characters/Rig2/gen_rock_2_side_chest
     sprite: {fileID: 21300000, guid: d49de0081a7c4aa681e4f8bf7f9dc5ac, type: 3}
-  - key: Characters/Rig2/gen_rock_2_side_face_blink
-    sprite: {fileID: 21300000, guid: 191bc7db59ad4e158c78d60975217e95, type: 3}
-  - key: Characters/Rig2/gen_rock_2_side_face_effort
-    sprite: {fileID: 21300000, guid: 8d0be460b1e54aa3bfe753661072ab8f, type: 3}
-  - key: Characters/Rig2/gen_rock_2_side_face_happy
-    sprite: {fileID: 21300000, guid: ce6b74711f314325975f893561ebfa75, type: 3}
-  - key: Characters/Rig2/gen_rock_2_side_face_normal
-    sprite: {fileID: 21300000, guid: 0894880ef4f4423490b5ffd5b25da3a4, type: 3}
-  - key: Characters/Rig2/gen_rock_2_side_face_surprise
-    sprite: {fileID: 21300000, guid: e1c22451abdf4f8c9c9c1b44a4eff2a3, type: 3}
   - key: Characters/Rig2/gen_rock_2_side_head
     sprite: {fileID: 21300000, guid: 35df2e3750b24ed5a5ec79b47f0e1ca5, type: 3}
   - key: Characters/Rig2/gen_rock_2_side_head_cap
@@ -2255,16 +2193,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 0b616ee4ad7141d59f6922d95600f7a6, type: 3}
   - key: Characters/Rig2/gen_spark_2_side_chest
     sprite: {fileID: 21300000, guid: 7e1dc00afd594c92bceb083285b91b45, type: 3}
-  - key: Characters/Rig2/gen_spark_2_side_face_blink
-    sprite: {fileID: 21300000, guid: 47e13264ca9a4a509ea8112a343a6aab, type: 3}
-  - key: Characters/Rig2/gen_spark_2_side_face_effort
-    sprite: {fileID: 21300000, guid: d0e21f93953142b59b4529f97405b1fc, type: 3}
-  - key: Characters/Rig2/gen_spark_2_side_face_happy
-    sprite: {fileID: 21300000, guid: cf4ce187f4e14b29b32e80157803d6b5, type: 3}
-  - key: Characters/Rig2/gen_spark_2_side_face_normal
-    sprite: {fileID: 21300000, guid: 51121a49acec42658d1228bdbc02d897, type: 3}
-  - key: Characters/Rig2/gen_spark_2_side_face_surprise
-    sprite: {fileID: 21300000, guid: 82baa7aa990c43c5b4dc16d1306eb814, type: 3}
   - key: Characters/Rig2/gen_spark_2_side_head
     sprite: {fileID: 21300000, guid: 6d081a1c91d347a7b885b3dfdbdff018, type: 3}
   - key: Characters/Rig2/gen_spark_2_side_head_cap
@@ -2657,24 +2585,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e3c4255393f3450792a158e5c9fa6c16, type: 3}
   - key: Characters/Rig2/r2_dew_2_face_surprise
     sprite: {fileID: 21300000, guid: 3de3c5a3009c4ef39611bef4cb31862c, type: 3}
-  - key: Characters/Rig2/r2_dew_2_forearm
-    sprite: {fileID: 21300000, guid: ce52612d398c4fc2b9e35faecf08021f, type: 3}
-  - key: Characters/Rig2/r2_dew_2_hand
-    sprite: {fileID: 21300000, guid: b4e2718f764c460790dd24f8d86dd403, type: 3}
-  - key: Characters/Rig2/r2_dew_2_leg
-    sprite: {fileID: 21300000, guid: a41d870b501c46f997f6548df97d07ff, type: 3}
-  - key: Characters/Rig2/r2_dew_2_shin
-    sprite: {fileID: 21300000, guid: a1dba63b69d44e059d419625a119096d, type: 3}
-  - key: Characters/Rig2/r2_dew_2_shoe
-    sprite: {fileID: 21300000, guid: 1a41169fbdda452a8d8dada2f055f2af, type: 3}
   - key: Characters/Rig2/r2_dew_2_skirt
     sprite: {fileID: 21300000, guid: 5ec178604e9e4b98a18778d3c5610ff0, type: 3}
   - key: Characters/Rig2/r2_dew_2_skirt_climb
     sprite: {fileID: 21300000, guid: 146c6bb3b6cc419a9242fba191d7cad4, type: 3}
   - key: Characters/Rig2/r2_dew_2_skirt_pick
     sprite: {fileID: 21300000, guid: b28c667d519546d19a84a85b0057a39c, type: 3}
-  - key: Characters/Rig2/r2_dew_2_thigh
-    sprite: {fileID: 21300000, guid: f5876117beef48a3b375d5f9835a769e, type: 3}
   - key: Characters/Rig2/r2_dew_3_chest
     sprite: {fileID: 21300000, guid: e494cc4637024927b936b71d234210b7, type: 3}
   - key: Characters/Rig2/r2_dew_3_chest_pick
@@ -2689,22 +2605,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 3cf3745d06fd434699a0dfa4d2e0d91a, type: 3}
   - key: Characters/Rig2/r2_dew_3_face_surprise
     sprite: {fileID: 21300000, guid: f8895725e940417fbf6f42a314ee2edd, type: 3}
-  - key: Characters/Rig2/r2_dew_3_forearm
-    sprite: {fileID: 21300000, guid: d3f39c15b12848f7b15c0f8ccb22b48a, type: 3}
-  - key: Characters/Rig2/r2_dew_3_hand
-    sprite: {fileID: 21300000, guid: fe207b1c913a40e49c0cf17ffbfd3b3b, type: 3}
-  - key: Characters/Rig2/r2_dew_3_leg
-    sprite: {fileID: 21300000, guid: 1a64784c547a4684bf2dc851762b8b71, type: 3}
-  - key: Characters/Rig2/r2_dew_3_shin
-    sprite: {fileID: 21300000, guid: 3553d7f368294d80aca1dd947e032d44, type: 3}
-  - key: Characters/Rig2/r2_dew_3_shoe
-    sprite: {fileID: 21300000, guid: 700616e8e84c4e8b8460ba89ef874bba, type: 3}
   - key: Characters/Rig2/r2_dew_3_skirt
     sprite: {fileID: 21300000, guid: d8a6dc3bf6534e4cae9633294d8323d0, type: 3}
   - key: Characters/Rig2/r2_dew_3_skirt_pick
     sprite: {fileID: 21300000, guid: e4965d4cf64a45239b30022e8f326818, type: 3}
-  - key: Characters/Rig2/r2_dew_3_thigh
-    sprite: {fileID: 21300000, guid: be29bdeb56c94315ad0a6d8af6cfb776, type: 3}
   - key: Characters/Rig2/r2_fire_0_cap
     sprite: {fileID: 21300000, guid: a5b13cf6151540e0a2c81d2614e6ce28, type: 3}
   - key: Characters/Rig2/r2_fire_0_face_blink
@@ -2761,24 +2665,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 88de9f0153c24351bfb2f3ac8b8ef575, type: 3}
   - key: Characters/Rig2/r2_fire_2_face_surprise
     sprite: {fileID: 21300000, guid: f5c2c1b7853647a48f8a47357f875cb5, type: 3}
-  - key: Characters/Rig2/r2_fire_2_forearm
-    sprite: {fileID: 21300000, guid: dc2b912cc19e4e1bb6c1c3f39a6cbdbd, type: 3}
-  - key: Characters/Rig2/r2_fire_2_hand
-    sprite: {fileID: 21300000, guid: 8fb9bb2352274a9899e0e6a44bcc9b44, type: 3}
-  - key: Characters/Rig2/r2_fire_2_leg
-    sprite: {fileID: 21300000, guid: 235cf5e432b84b61a0e62144e89f6b16, type: 3}
-  - key: Characters/Rig2/r2_fire_2_shin
-    sprite: {fileID: 21300000, guid: f7ffffae0ee7491881b26f34d594237a, type: 3}
-  - key: Characters/Rig2/r2_fire_2_shoe
-    sprite: {fileID: 21300000, guid: 259bcdaeb72840f6b3798e29c3183881, type: 3}
   - key: Characters/Rig2/r2_fire_2_skirt
     sprite: {fileID: 21300000, guid: 19a782c291c74443ae582a3aaa2af8e2, type: 3}
   - key: Characters/Rig2/r2_fire_2_skirt_climb
     sprite: {fileID: 21300000, guid: 39ea1028f45940a68a256ad776cd3412, type: 3}
   - key: Characters/Rig2/r2_fire_2_skirt_pick
     sprite: {fileID: 21300000, guid: c2de3cd67c764c88996328dc488af2fd, type: 3}
-  - key: Characters/Rig2/r2_fire_2_thigh
-    sprite: {fileID: 21300000, guid: adbec0c069aa4452a5357bc5337d8586, type: 3}
   - key: Characters/Rig2/r2_fire_3_chest
     sprite: {fileID: 21300000, guid: 856c1939f76f47179f184f9869e58d73, type: 3}
   - key: Characters/Rig2/r2_fire_3_chest_pick
@@ -2793,22 +2685,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 409c2b3cc85e48818dc5111d3b6322e0, type: 3}
   - key: Characters/Rig2/r2_fire_3_face_surprise
     sprite: {fileID: 21300000, guid: 70f670828bc84a3db977a6753e8ea6ef, type: 3}
-  - key: Characters/Rig2/r2_fire_3_forearm
-    sprite: {fileID: 21300000, guid: 1295b0f91c7644cb848ef7183cf18a52, type: 3}
-  - key: Characters/Rig2/r2_fire_3_hand
-    sprite: {fileID: 21300000, guid: 6d85d8b1a3284eaca23a8a4cc3fc0946, type: 3}
-  - key: Characters/Rig2/r2_fire_3_leg
-    sprite: {fileID: 21300000, guid: c47169f3ec7943dd84d7249655e4a202, type: 3}
-  - key: Characters/Rig2/r2_fire_3_shin
-    sprite: {fileID: 21300000, guid: 4773e3d4b248474aa9fc363792dcfb19, type: 3}
-  - key: Characters/Rig2/r2_fire_3_shoe
-    sprite: {fileID: 21300000, guid: c3929a73500b4e37af0641742cd3d11b, type: 3}
   - key: Characters/Rig2/r2_fire_3_skirt
     sprite: {fileID: 21300000, guid: c0b02e3940174bd38e97116d2a231714, type: 3}
   - key: Characters/Rig2/r2_fire_3_skirt_pick
     sprite: {fileID: 21300000, guid: afa1dece700a49cf8a4cb085b499c5a0, type: 3}
-  - key: Characters/Rig2/r2_fire_3_thigh
-    sprite: {fileID: 21300000, guid: 0996a5482684488bba2ba21279a734cc, type: 3}
   - key: Characters/Rig2/r2_leaf_0_cap
     sprite: {fileID: 21300000, guid: bc066d2f1e4a4190912bbf0518640656, type: 3}
   - key: Characters/Rig2/r2_leaf_0_face_blink
@@ -2865,24 +2745,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 49aea93e0eb546a0aa37af9ec3c4e8c9, type: 3}
   - key: Characters/Rig2/r2_leaf_2_face_surprise
     sprite: {fileID: 21300000, guid: ffc5508f87f34c23b705d5d8c401a9b9, type: 3}
-  - key: Characters/Rig2/r2_leaf_2_forearm
-    sprite: {fileID: 21300000, guid: 4230b33cefb74435973a21c57926792b, type: 3}
-  - key: Characters/Rig2/r2_leaf_2_hand
-    sprite: {fileID: 21300000, guid: 7a915773f2a2431495f42e2127f11cc6, type: 3}
-  - key: Characters/Rig2/r2_leaf_2_leg
-    sprite: {fileID: 21300000, guid: ec88e4db6bc349da89d4fbcccba53f6d, type: 3}
-  - key: Characters/Rig2/r2_leaf_2_shin
-    sprite: {fileID: 21300000, guid: 9aa742aa8b074825a99b77589f31d217, type: 3}
-  - key: Characters/Rig2/r2_leaf_2_shoe
-    sprite: {fileID: 21300000, guid: 97f0ead1ec524add96ca821f5be5aa37, type: 3}
   - key: Characters/Rig2/r2_leaf_2_skirt
     sprite: {fileID: 21300000, guid: 6ac56a3a835d4251899d986598e7613b, type: 3}
   - key: Characters/Rig2/r2_leaf_2_skirt_climb
     sprite: {fileID: 21300000, guid: 7c87dc2c196c437ea7311a3ea7528058, type: 3}
   - key: Characters/Rig2/r2_leaf_2_skirt_pick
     sprite: {fileID: 21300000, guid: c95615d8253a423694517f8b635b6440, type: 3}
-  - key: Characters/Rig2/r2_leaf_2_thigh
-    sprite: {fileID: 21300000, guid: 467dfb7faed04635b20a08d40bfcf895, type: 3}
   - key: Characters/Rig2/r2_leaf_3_chest
     sprite: {fileID: 21300000, guid: 5823c7316f8b4d67808d88dcf97133f7, type: 3}
   - key: Characters/Rig2/r2_leaf_3_chest_pick
@@ -2897,22 +2765,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 674028e129a547bc85416ee8a7901b14, type: 3}
   - key: Characters/Rig2/r2_leaf_3_face_surprise
     sprite: {fileID: 21300000, guid: a06c35cd94ed4186a2bd4d3608ad371b, type: 3}
-  - key: Characters/Rig2/r2_leaf_3_forearm
-    sprite: {fileID: 21300000, guid: e2f415dc85464ddfb6b8f9d9c521a0cd, type: 3}
-  - key: Characters/Rig2/r2_leaf_3_hand
-    sprite: {fileID: 21300000, guid: e7e79e2f16b74955bcdc4162123cc60d, type: 3}
-  - key: Characters/Rig2/r2_leaf_3_leg
-    sprite: {fileID: 21300000, guid: fe017ed045e348868ece563daf078f57, type: 3}
-  - key: Characters/Rig2/r2_leaf_3_shin
-    sprite: {fileID: 21300000, guid: 6e861199421c4e149c3ad448c22578f0, type: 3}
-  - key: Characters/Rig2/r2_leaf_3_shoe
-    sprite: {fileID: 21300000, guid: 4e66ab0af83b40b1a0abb2d1ea5d25c8, type: 3}
   - key: Characters/Rig2/r2_leaf_3_skirt
     sprite: {fileID: 21300000, guid: 932ff8efad4b42f5b2423ab2d1f32fc2, type: 3}
   - key: Characters/Rig2/r2_leaf_3_skirt_pick
     sprite: {fileID: 21300000, guid: ad006bf104eb4c53ac718f9d7f3e7012, type: 3}
-  - key: Characters/Rig2/r2_leaf_3_thigh
-    sprite: {fileID: 21300000, guid: 6892e2ef9659410fb5090931abf9f2cf, type: 3}
   - key: Characters/Rig2/r2_moon_0_cap
     sprite: {fileID: 21300000, guid: 2fe8ae16eda9471ba6b7e03074cd840f, type: 3}
   - key: Characters/Rig2/r2_moon_0_face_blink
@@ -2969,24 +2825,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 46d9b67f537a4c0d8c72c2f04a666158, type: 3}
   - key: Characters/Rig2/r2_moon_2_face_surprise
     sprite: {fileID: 21300000, guid: 89f0651815fd4f84966bccc6c55c8fdd, type: 3}
-  - key: Characters/Rig2/r2_moon_2_forearm
-    sprite: {fileID: 21300000, guid: 591a29e0b574473782150d14157458fa, type: 3}
-  - key: Characters/Rig2/r2_moon_2_hand
-    sprite: {fileID: 21300000, guid: 6a38798ec995430bb50e5113ba00d399, type: 3}
-  - key: Characters/Rig2/r2_moon_2_leg
-    sprite: {fileID: 21300000, guid: a6038720fb7d4c9d8f2eb7494e693d19, type: 3}
-  - key: Characters/Rig2/r2_moon_2_shin
-    sprite: {fileID: 21300000, guid: c0020487eec84a3db0f1c5da880a1405, type: 3}
-  - key: Characters/Rig2/r2_moon_2_shoe
-    sprite: {fileID: 21300000, guid: 16c8ccb64ac0451e9d4f34b90098831c, type: 3}
   - key: Characters/Rig2/r2_moon_2_skirt
     sprite: {fileID: 21300000, guid: 0c658428d38d41ad9375ea342af295c8, type: 3}
   - key: Characters/Rig2/r2_moon_2_skirt_climb
     sprite: {fileID: 21300000, guid: 3603f10150dd4159b3ffc36e2c31a03f, type: 3}
   - key: Characters/Rig2/r2_moon_2_skirt_pick
     sprite: {fileID: 21300000, guid: 60468ba00d424d869a20311415b245e2, type: 3}
-  - key: Characters/Rig2/r2_moon_2_thigh
-    sprite: {fileID: 21300000, guid: c6232a63ee324bc2846f997d6ee4618b, type: 3}
   - key: Characters/Rig2/r2_moon_3_chest
     sprite: {fileID: 21300000, guid: 40ee1dae25b04490bc182a22de5898c1, type: 3}
   - key: Characters/Rig2/r2_moon_3_chest_pick
@@ -3001,22 +2845,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 2206ffdddbbe4478850ab412257c9747, type: 3}
   - key: Characters/Rig2/r2_moon_3_face_surprise
     sprite: {fileID: 21300000, guid: 8328a8426ab0491f9686990eb7699aff, type: 3}
-  - key: Characters/Rig2/r2_moon_3_forearm
-    sprite: {fileID: 21300000, guid: 659da3d2fa584da69c1a6ee2d71d3658, type: 3}
-  - key: Characters/Rig2/r2_moon_3_hand
-    sprite: {fileID: 21300000, guid: 3ef998b0e29849b98f17df0a379dcaca, type: 3}
-  - key: Characters/Rig2/r2_moon_3_leg
-    sprite: {fileID: 21300000, guid: 23a7ba37745c43aea4c3d63289839809, type: 3}
-  - key: Characters/Rig2/r2_moon_3_shin
-    sprite: {fileID: 21300000, guid: 63e4eefe05494b7eb39a15cd9403c3c3, type: 3}
-  - key: Characters/Rig2/r2_moon_3_shoe
-    sprite: {fileID: 21300000, guid: 2d92fc1b868a483886ecf683d1edf05c, type: 3}
   - key: Characters/Rig2/r2_moon_3_skirt
     sprite: {fileID: 21300000, guid: 4641589079a14785ad40e850e1843b46, type: 3}
   - key: Characters/Rig2/r2_moon_3_skirt_pick
     sprite: {fileID: 21300000, guid: 84511f5ab02d4172a3bb2249e227d638, type: 3}
-  - key: Characters/Rig2/r2_moon_3_thigh
-    sprite: {fileID: 21300000, guid: 67478841e8a840019e4724d38bd5ab23, type: 3}
   - key: Characters/Rig2/r2_rock_0_cap
     sprite: {fileID: 21300000, guid: 2df478a08a5646d6a4b1881692cf9eb9, type: 3}
   - key: Characters/Rig2/r2_rock_0_face_blink
@@ -3073,24 +2905,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6704a3e0cb4141509441476820019d6d, type: 3}
   - key: Characters/Rig2/r2_rock_2_face_surprise
     sprite: {fileID: 21300000, guid: de9c05e1c1634fb7ad39303a18f0cd90, type: 3}
-  - key: Characters/Rig2/r2_rock_2_forearm
-    sprite: {fileID: 21300000, guid: d8ca4fc9fdc642369fb6052a0a6c72af, type: 3}
-  - key: Characters/Rig2/r2_rock_2_hand
-    sprite: {fileID: 21300000, guid: c58ba8fe6ce14f3489b65d435f8441f0, type: 3}
-  - key: Characters/Rig2/r2_rock_2_leg
-    sprite: {fileID: 21300000, guid: 06a53a17941b47fba0488f1ff39ee1cf, type: 3}
-  - key: Characters/Rig2/r2_rock_2_shin
-    sprite: {fileID: 21300000, guid: 834cb1291b424d86b8db5889809d908e, type: 3}
-  - key: Characters/Rig2/r2_rock_2_shoe
-    sprite: {fileID: 21300000, guid: d132e2e3197f449180b16fa7185cfe4a, type: 3}
   - key: Characters/Rig2/r2_rock_2_skirt
     sprite: {fileID: 21300000, guid: f9b46a7228ef405cb6c6d87f1b3b81ed, type: 3}
   - key: Characters/Rig2/r2_rock_2_skirt_climb
     sprite: {fileID: 21300000, guid: 1e9e5f7e641a4746ac37d9f451f2c481, type: 3}
   - key: Characters/Rig2/r2_rock_2_skirt_pick
     sprite: {fileID: 21300000, guid: 3bf76c3855014116b6fe58bcbe90270e, type: 3}
-  - key: Characters/Rig2/r2_rock_2_thigh
-    sprite: {fileID: 21300000, guid: dd5032f1ee96472783658b491828385f, type: 3}
   - key: Characters/Rig2/r2_rock_3_chest
     sprite: {fileID: 21300000, guid: 8d39388486ac45d3b5959ca02a796d8c, type: 3}
   - key: Characters/Rig2/r2_rock_3_chest_pick
@@ -3105,22 +2925,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: dc3dea302bdc44af842c6d6573121025, type: 3}
   - key: Characters/Rig2/r2_rock_3_face_surprise
     sprite: {fileID: 21300000, guid: e88a3ba403a14e02b372071fc9977b1a, type: 3}
-  - key: Characters/Rig2/r2_rock_3_forearm
-    sprite: {fileID: 21300000, guid: d97d0817a9934d3d9d916336bc4ce291, type: 3}
-  - key: Characters/Rig2/r2_rock_3_hand
-    sprite: {fileID: 21300000, guid: 8649b6c8d41641ba89647f2e4120a825, type: 3}
-  - key: Characters/Rig2/r2_rock_3_leg
-    sprite: {fileID: 21300000, guid: 9fb1ef6529134a7aae0b801d99565036, type: 3}
-  - key: Characters/Rig2/r2_rock_3_shin
-    sprite: {fileID: 21300000, guid: 7adabf3118f5478fb443f2927281a841, type: 3}
-  - key: Characters/Rig2/r2_rock_3_shoe
-    sprite: {fileID: 21300000, guid: dd0627e7cc2042449a50d6ffdce4a655, type: 3}
   - key: Characters/Rig2/r2_rock_3_skirt
     sprite: {fileID: 21300000, guid: 5e277d75e37d419bb03b02020a5cc6c2, type: 3}
   - key: Characters/Rig2/r2_rock_3_skirt_pick
     sprite: {fileID: 21300000, guid: a50a9bbe7d3748ad8d7b57daa4c7c30b, type: 3}
-  - key: Characters/Rig2/r2_rock_3_thigh
-    sprite: {fileID: 21300000, guid: 45a28a3ac1c443399f4649a52acc9321, type: 3}
   - key: Characters/Rig2/r2_spark_0_cap
     sprite: {fileID: 21300000, guid: 80d40834998e465fa26cfd7739c1823f, type: 3}
   - key: Characters/Rig2/r2_spark_0_face_blink
@@ -3177,24 +2985,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 3acc44dc3d024bb484b42b30b34456c8, type: 3}
   - key: Characters/Rig2/r2_spark_2_face_surprise
     sprite: {fileID: 21300000, guid: 54bb23e0828d4f398378433e6862212e, type: 3}
-  - key: Characters/Rig2/r2_spark_2_forearm
-    sprite: {fileID: 21300000, guid: a0810761bf614afba73293e82185cfb0, type: 3}
-  - key: Characters/Rig2/r2_spark_2_hand
-    sprite: {fileID: 21300000, guid: dc6d4ceb1e6f485c9f5451810a502eea, type: 3}
-  - key: Characters/Rig2/r2_spark_2_leg
-    sprite: {fileID: 21300000, guid: 68561cf09a54466bacfdef8136b9ce59, type: 3}
-  - key: Characters/Rig2/r2_spark_2_shin
-    sprite: {fileID: 21300000, guid: 7d876f970c614c5ea30c547d24750af1, type: 3}
-  - key: Characters/Rig2/r2_spark_2_shoe
-    sprite: {fileID: 21300000, guid: aee611cb5924469f8b9fa59902e3cf02, type: 3}
   - key: Characters/Rig2/r2_spark_2_skirt
     sprite: {fileID: 21300000, guid: 7a406409cfc24dcf99964a6932843bb3, type: 3}
   - key: Characters/Rig2/r2_spark_2_skirt_climb
     sprite: {fileID: 21300000, guid: 0e3f8797445a40359fe1e59573f88252, type: 3}
   - key: Characters/Rig2/r2_spark_2_skirt_pick
     sprite: {fileID: 21300000, guid: 34b0ddb042ed4fa490b729db5fb8cb9c, type: 3}
-  - key: Characters/Rig2/r2_spark_2_thigh
-    sprite: {fileID: 21300000, guid: db6226ae09fb4b55ad4207ce29b6bc3b, type: 3}
   - key: Characters/Rig2/r2_spark_3_chest
     sprite: {fileID: 21300000, guid: 5effba6674ab4759832af44ec632cc32, type: 3}
   - key: Characters/Rig2/r2_spark_3_chest_pick
@@ -3209,22 +3005,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ba10495677444abd91b0e3ba4e1d6db7, type: 3}
   - key: Characters/Rig2/r2_spark_3_face_surprise
     sprite: {fileID: 21300000, guid: 52e58298fe504162b911433f53d8fc6e, type: 3}
-  - key: Characters/Rig2/r2_spark_3_forearm
-    sprite: {fileID: 21300000, guid: 7227eeb7c24a487a93644b8b1f505600, type: 3}
-  - key: Characters/Rig2/r2_spark_3_hand
-    sprite: {fileID: 21300000, guid: 6e7e20a9c7b140bc87578a8f0f898740, type: 3}
-  - key: Characters/Rig2/r2_spark_3_leg
-    sprite: {fileID: 21300000, guid: f60b490af9ad4f50adb757239160c744, type: 3}
-  - key: Characters/Rig2/r2_spark_3_shin
-    sprite: {fileID: 21300000, guid: 04e22eaabbb249e38a4e19584847c505, type: 3}
-  - key: Characters/Rig2/r2_spark_3_shoe
-    sprite: {fileID: 21300000, guid: f6f1b681bfab41a3b85abb53031ab104, type: 3}
   - key: Characters/Rig2/r2_spark_3_skirt
     sprite: {fileID: 21300000, guid: ce70b386b289406b9e49866ad10637b6, type: 3}
   - key: Characters/Rig2/r2_spark_3_skirt_pick
     sprite: {fileID: 21300000, guid: dc144a105b99445ba42ff9db3cf2d26c, type: 3}
-  - key: Characters/Rig2/r2_spark_3_thigh
-    sprite: {fileID: 21300000, guid: e13f4cfa90004ba5a62b6414888024ab, type: 3}
   - key: Characters/Rig2/r2_star_0_cap
     sprite: {fileID: 21300000, guid: c25c34f394c64417a4668cf914f41cd1, type: 3}
   - key: Characters/Rig2/r2_star_0_face_blink
@@ -3273,24 +3057,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 3ba7aa61c14b4a2c95f8ce1c033801e4, type: 3}
   - key: Characters/Rig2/r2_star_2_face_normal
     sprite: {fileID: 21300000, guid: c9211fd3397a4f438ed0fb6d031d8571, type: 3}
-  - key: Characters/Rig2/r2_star_2_forearm
-    sprite: {fileID: 21300000, guid: 0447d97177b9469e983528dbe500064a, type: 3}
-  - key: Characters/Rig2/r2_star_2_hand
-    sprite: {fileID: 21300000, guid: 2a18d0998ff84cf6a6592845578a1e07, type: 3}
-  - key: Characters/Rig2/r2_star_2_leg
-    sprite: {fileID: 21300000, guid: d99bdcb9d3364b75978efbf990d7ea95, type: 3}
-  - key: Characters/Rig2/r2_star_2_shin
-    sprite: {fileID: 21300000, guid: b41f31a41f8c4f638dc516fe8c2e067b, type: 3}
-  - key: Characters/Rig2/r2_star_2_shoe
-    sprite: {fileID: 21300000, guid: 1589cc8ab69c4b67b42d82827ed6af86, type: 3}
   - key: Characters/Rig2/r2_star_2_skirt
     sprite: {fileID: 21300000, guid: 8a3fa3d9842b460aa53fcbd17e508681, type: 3}
   - key: Characters/Rig2/r2_star_2_skirt_climb
     sprite: {fileID: 21300000, guid: 9057d44800984d10be6fc92928816b68, type: 3}
   - key: Characters/Rig2/r2_star_2_skirt_pick
     sprite: {fileID: 21300000, guid: 703273397f2f4a4481e681b8ebde0a8f, type: 3}
-  - key: Characters/Rig2/r2_star_2_thigh
-    sprite: {fileID: 21300000, guid: 1be2eccb06f44fc9a676e498c3620e15, type: 3}
   - key: Characters/Rig2/r2_star_3_chest
     sprite: {fileID: 21300000, guid: f566335793a5464cbf66ee0e64e09c11, type: 3}
   - key: Characters/Rig2/r2_star_3_chest_pick
@@ -3305,22 +3077,10 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: a917a3656e964f5a8b814bed3f3bea7f, type: 3}
   - key: Characters/Rig2/r2_star_3_face_surprise
     sprite: {fileID: 21300000, guid: 4ecd0077b0ec445d8358a146c42e7a50, type: 3}
-  - key: Characters/Rig2/r2_star_3_forearm
-    sprite: {fileID: 21300000, guid: daf3d11137874d0ba25ffe91e6a610e4, type: 3}
-  - key: Characters/Rig2/r2_star_3_hand
-    sprite: {fileID: 21300000, guid: 6dffac5311bf49fabd181ee95f8d1796, type: 3}
-  - key: Characters/Rig2/r2_star_3_leg
-    sprite: {fileID: 21300000, guid: 802f2ec3530d41e4ba7bb5e7e7830382, type: 3}
-  - key: Characters/Rig2/r2_star_3_shin
-    sprite: {fileID: 21300000, guid: 5f6513d2369143f883e89cba0b3ff93e, type: 3}
-  - key: Characters/Rig2/r2_star_3_shoe
-    sprite: {fileID: 21300000, guid: 20dc151db38e47d0a8ba7d3a97a1af86, type: 3}
   - key: Characters/Rig2/r2_star_3_skirt
     sprite: {fileID: 21300000, guid: 99669bdb6f6544fab5540f579101f2fd, type: 3}
   - key: Characters/Rig2/r2_star_3_skirt_pick
     sprite: {fileID: 21300000, guid: aa7006f78866458a96ed0bded5797bf2, type: 3}
-  - key: Characters/Rig2/r2_star_3_thigh
-    sprite: {fileID: 21300000, guid: 31a6f8000b1e4074beac5a82201e5e77, type: 3}
   - key: Characters/Rig2/r2_wind_0_cap
     sprite: {fileID: 21300000, guid: 742059093f214661ab1c9122c2cef0d2, type: 3}
   - key: Characters/Rig2/r2_wind_0_face_blink
@@ -3369,46 +3129,22 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 0cf415178e1f4ffe8e4c5f3517fb8a6a, type: 3}
   - key: Characters/Rig2/r2_wind_2_face_normal
     sprite: {fileID: 21300000, guid: 3dee2072095e48cb80f15c5cf35062f0, type: 3}
-  - key: Characters/Rig2/r2_wind_2_forearm
-    sprite: {fileID: 21300000, guid: c1b9510f0d154627b586f68f025f9b16, type: 3}
-  - key: Characters/Rig2/r2_wind_2_hand
-    sprite: {fileID: 21300000, guid: f947114215dd4102abf6d05fd4c712c1, type: 3}
-  - key: Characters/Rig2/r2_wind_2_leg
-    sprite: {fileID: 21300000, guid: 88c4003c9e994a7fb15afb26bf350473, type: 3}
-  - key: Characters/Rig2/r2_wind_2_shin
-    sprite: {fileID: 21300000, guid: cc0128ba0f6b4d70aae9c0b5907d0fd4, type: 3}
-  - key: Characters/Rig2/r2_wind_2_shoe
-    sprite: {fileID: 21300000, guid: c30e0163811647d9b578ab1d6cb2eb59, type: 3}
   - key: Characters/Rig2/r2_wind_2_skirt
     sprite: {fileID: 21300000, guid: 4d909a6332954ddb9f7df4a44a55b302, type: 3}
   - key: Characters/Rig2/r2_wind_2_skirt_climb
     sprite: {fileID: 21300000, guid: 151bd3242e4143d386c62e5302591f34, type: 3}
   - key: Characters/Rig2/r2_wind_2_skirt_pick
     sprite: {fileID: 21300000, guid: 8487dd2710b340a09fe4db8009a14350, type: 3}
-  - key: Characters/Rig2/r2_wind_2_thigh
-    sprite: {fileID: 21300000, guid: 160b12d333c849cb819c81fe8e9a75d7, type: 3}
   - key: Characters/Rig2/r2_wind_3_chest
     sprite: {fileID: 21300000, guid: 2cc90fa76c1e4bcca57a2476ea815a10, type: 3}
   - key: Characters/Rig2/r2_wind_3_chest_pick
     sprite: {fileID: 21300000, guid: c6ccd4d45ebc46f7ac5343789c38d5d9, type: 3}
   - key: Characters/Rig2/r2_wind_3_face_normal
     sprite: {fileID: 21300000, guid: f74dbdbd31ee4cc1951b5a20937e8f6b, type: 3}
-  - key: Characters/Rig2/r2_wind_3_forearm
-    sprite: {fileID: 21300000, guid: 0b25fbcaa5144f22837f3dbc57d033d4, type: 3}
-  - key: Characters/Rig2/r2_wind_3_hand
-    sprite: {fileID: 21300000, guid: ee17e93849294fb18adbe489e1a3980a, type: 3}
-  - key: Characters/Rig2/r2_wind_3_leg
-    sprite: {fileID: 21300000, guid: 79ffefeb7e024f9e912f20ee9efe9611, type: 3}
-  - key: Characters/Rig2/r2_wind_3_shin
-    sprite: {fileID: 21300000, guid: 91647d391add4634bd0023836c0be500, type: 3}
-  - key: Characters/Rig2/r2_wind_3_shoe
-    sprite: {fileID: 21300000, guid: 2c471788e03c464eb6bed1933b4ea283, type: 3}
   - key: Characters/Rig2/r2_wind_3_skirt
     sprite: {fileID: 21300000, guid: 1c820c83fcbf4cb8ad5292d163fa9067, type: 3}
   - key: Characters/Rig2/r2_wind_3_skirt_pick
     sprite: {fileID: 21300000, guid: 9773957c48ee4d1c8827dde138e07411, type: 3}
-  - key: Characters/Rig2/r2_wind_3_thigh
-    sprite: {fileID: 21300000, guid: 5008bbf436174e5199c94a82db579d5c, type: 3}
   - key: Characters/Spirits/p_dew_arm
     sprite: {fileID: 21300000, guid: 05b950fd5e4c0124b8eb28350745bbd9, type: 3}
   - key: Characters/Spirits/p_dew_arm_lo
@@ -3875,10 +3611,76 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 4223456b3a5c1e948b0253c988318256, type: 3}
   - key: Env/twig
     sprite: {fileID: 21300000, guid: d330066e0ab7bf04e8b0b6cba4f532c2, type: 3}
+  - key: FX/Boss/defeat/frame_01
+    sprite: {fileID: 21300000, guid: 1e4f8a17c130a184eb33002615519915, type: 3}
+  - key: FX/Boss/defeat/frame_02
+    sprite: {fileID: 21300000, guid: c600b3a3246cd8b4d8f3214f25cb65d6, type: 3}
+  - key: FX/Boss/defeat/frame_03
+    sprite: {fileID: 21300000, guid: 05a75d3d92025a340b9438a18e0bf44d, type: 3}
+  - key: FX/Boss/defeat/frame_04
+    sprite: {fileID: 21300000, guid: ea6036af67e90914a8ccc5812feed601, type: 3}
+  - key: FX/Boss/defeat/frame_05
+    sprite: {fileID: 21300000, guid: cb9c1f6a15f18fe4ea81226fe22487d5, type: 3}
+  - key: FX/Boss/defeat/frame_06
+    sprite: {fileID: 21300000, guid: 9c070d9c5464c6e4c9dabc9eb95149b7, type: 3}
+  - key: FX/Boss/defeat/frame_07
+    sprite: {fileID: 21300000, guid: b520b6028cafc174294cd7b20ddbf129, type: 3}
+  - key: FX/Boss/defeat/frame_08
+    sprite: {fileID: 21300000, guid: b7ed1c7a48447a74483f0bfcdfd75bbe, type: 3}
+  - key: FX/Boss/defeat/frame_09
+    sprite: {fileID: 21300000, guid: ec7fe7348f721354786de9f138dbe124, type: 3}
+  - key: FX/Boss/defeat/frame_10
+    sprite: {fileID: 21300000, guid: 1f3900498877ff2488c2281cb720a892, type: 3}
+  - key: FX/Boss/defeat/frame_11
+    sprite: {fileID: 21300000, guid: e0038a70a1c5b7c44ac20d55a59548aa, type: 3}
+  - key: FX/Boss/defeat/frame_12
+    sprite: {fileID: 21300000, guid: 4d7c6b38b8f21fa47941922338cf46e3, type: 3}
+  - key: FX/Boss/entrance/frame_01
+    sprite: {fileID: 21300000, guid: 13118359b59a15148aefc3192084c7d0, type: 3}
+  - key: FX/Boss/entrance/frame_02
+    sprite: {fileID: 21300000, guid: a02dd85cb21540d44a181b68e85664d4, type: 3}
+  - key: FX/Boss/entrance/frame_03
+    sprite: {fileID: 21300000, guid: ff7d5a2b9095b4747a0937204e293097, type: 3}
+  - key: FX/Boss/entrance/frame_04
+    sprite: {fileID: 21300000, guid: 9c1bd6e10780f714ca9c3c4d0e29e0d4, type: 3}
+  - key: FX/Boss/entrance/frame_05
+    sprite: {fileID: 21300000, guid: 9ac7b1e1c59b9af4094a04f1401fbc45, type: 3}
+  - key: FX/Boss/entrance/frame_06
+    sprite: {fileID: 21300000, guid: a3574e13b37136a4a8d7d528c2c98067, type: 3}
+  - key: FX/Boss/entrance/frame_07
+    sprite: {fileID: 21300000, guid: 93ae4652ae5a222459761569a6287161, type: 3}
+  - key: FX/Boss/entrance/frame_08
+    sprite: {fileID: 21300000, guid: 414ebb83b2f4bbf43911bfa6c025606d, type: 3}
+  - key: FX/Boss/entrance/frame_09
+    sprite: {fileID: 21300000, guid: 74e7273a45b6f274c96904e1bb75c6ea, type: 3}
+  - key: FX/Boss/entrance/frame_10
+    sprite: {fileID: 21300000, guid: baf60e3557c288e438df68b8a2ca8adb, type: 3}
+  - key: FX/Boss/entrance/frame_11
+    sprite: {fileID: 21300000, guid: 76b68360d7b741548b103d1e1f12ddd7, type: 3}
+  - key: FX/Boss/entrance/frame_12
+    sprite: {fileID: 21300000, guid: 76743e2b109d88e41a015620791e241d, type: 3}
+  - key: FX/Growth/level_up_arrow
+    sprite: {fileID: 21300000, guid: 757a4e5c6744af7429b2302dfba20f9f, type: 3}
+  - key: FX/Growth/sparkle_01
+    sprite: {fileID: 21300000, guid: 55cebf35c3b0600449e771d6b8827f2f, type: 3}
+  - key: FX/Growth/sparkle_02
+    sprite: {fileID: 21300000, guid: 4654c458fd5a8e1458ec50ae290fb644, type: 3}
+  - key: FX/Growth/sparkle_03
+    sprite: {fileID: 21300000, guid: 5aa93d23789bdab4f9db36177fb430ec, type: 3}
+  - key: FX/Impact/critical_orange
+    sprite: {fileID: 7515357072684481883, guid: 6c86153335efbe64180b8d2e054b2542, type: 3}
+  - key: FX/Impact/hit_beige
+    sprite: {fileID: 8489981335609746889, guid: fa32d5b13b2432d4eb3bd4bac01b1de0, type: 3}
+  - key: FX/Impact/splash_beige
+    sprite: {fileID: -7231946954261079755, guid: 2848362ef1e2f814085364737c20482a, type: 3}
+  - key: FX/Impact/splash_orange
+    sprite: {fileID: -405852027381172351, guid: fe5f5501e3074f24987bf671d46d5b94, type: 3}
+  - key: FX/Impact/splash_skyblue
+    sprite: {fileID: 4607217567913313109, guid: 12b14deef8b95404ab7a53dae7490fd1, type: 3}
+  - key: FX/Wind/wind_orbit
+    sprite: {fileID: 21300000, guid: bd6949cf1f6374f44a6e902c0ff7edef, type: 3}
   - key: FX/brush
     sprite: {fileID: 21300000, guid: a89846542351ec24b8b165b0b5311cf5, type: 3}
-  - key: FX/build_grid
-    sprite: {fileID: 21300000, guid: 1674479cdab87b34baf93101d32d9f10, type: 3}
   - key: FX/chip
     sprite: {fileID: 21300000, guid: 778e3b7c907c06e49b10b80398153d19, type: 3}
   - key: FX/circle
@@ -3889,8 +3691,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 19ab5292d78cf1a409476648f766853f, type: 3}
   - key: FX/dust
     sprite: {fileID: 21300000, guid: 97d46b008b6b525418096a4e6670db63, type: 3}
-  - key: FX/fever_edge
-    sprite: {fileID: 21300000, guid: 58ed43b828ae1ec4da25d2eaecc05310, type: 3}
   - key: FX/flame_0
     sprite: {fileID: 21300000, guid: 3218d4f3ffaba634688e1d5fcf7b2b6e, type: 3}
   - key: FX/flame_1
@@ -3929,8 +3729,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: c1d4225258b519b438cdd2a66bfcd390, type: 3}
   - key: FX/sprout
     sprite: {fileID: 21300000, guid: 50557b60d918f30479e0936bb830636f, type: 3}
-  - key: FX/square
-    sprite: {fileID: 21300000, guid: 1a04737655ccbdd49bcbb95786643a9f, type: 3}
   - key: FX/streak
     sprite: {fileID: 21300000, guid: 09dea24b4919dbf4288d33547ecc72c9, type: 3}
   - key: FX/tree_soil
@@ -3939,50 +3737,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7d4bda141443d8c48a421c3954eb3fa7, type: 3}
   - key: FX/vignette
     sprite: {fileID: 21300000, guid: fae02c227d883074e852cc2a69e3d287, type: 3}
-  - key: Farm/Field/crop_ed
-    sprite: {fileID: 21300000, guid: f3860f1098325df4c915745e61538d44, type: 3}
-  - key: Farm/Field/crop_md
-    sprite: {fileID: 21300000, guid: e8b9da30b7e4b4445a8f79e2a2f14711, type: 3}
-  - key: Farm/Field/crop_ps
-    sprite: {fileID: 21300000, guid: e1e12b6e446e1fc49a5e604ec265bf30, type: 3}
-  - key: Farm/Field/tile_grass
-    sprite: {fileID: 21300000, guid: 74491762bbd199d40aacfc2bd7d22ce2, type: 3}
-  - key: Farm/Field/tile_grow
-    sprite: {fileID: 21300000, guid: 1403c848f7074f44a83a13cf7cfb3a07, type: 3}
-  - key: Farm/Field/tile_soil
-    sprite: {fileID: 21300000, guid: 8d891e1bc22fd7b408488549686c4ed3, type: 3}
-  - key: Farm/Field/tile_sprout
-    sprite: {fileID: 21300000, guid: 6dac4768116367f4ca872378ea589963, type: 3}
-  - key: Farm/Field/tool_0
-    sprite: {fileID: 21300000, guid: 4fff3b47481568e4a9cd0c8f70d045be, type: 3}
-  - key: Farm/Field/tool_1
-    sprite: {fileID: 21300000, guid: e8ecc85520dcd9a4aa6fe11171729920, type: 3}
-  - key: Farm/Field/tool_2
-    sprite: {fileID: 21300000, guid: 7be4907602b22384f9ed1c6bc546cc28, type: 3}
-  - key: Farm/Field/tool_3
-    sprite: {fileID: 21300000, guid: 49a539064c1a06643ae18bdcb0b7c67e, type: 3}
-  - key: Farm/Field/tool_4
-    sprite: {fileID: 21300000, guid: 19ac037fe1945ea47b7026605dea8cc2, type: 3}
-  - key: Farm/Icons/dish_cure
-    sprite: {fileID: 21300000, guid: 79afa7be35b66b0479be7fccef0e3230, type: 3}
-  - key: Farm/Icons/dish_fog
-    sprite: {fileID: 21300000, guid: 73ff5c4a2c751a448a89d4c91d3d8bbb, type: 3}
-  - key: Farm/Icons/dish_hotpot
-    sprite: {fileID: 21300000, guid: 3f9943e81be23224787c544fdd0d0612, type: 3}
-  - key: Farm/Icons/dish_jap
-    sprite: {fileID: 21300000, guid: 003343a5a2f1a2d48b1f0b2ed9737783, type: 3}
-  - key: Farm/Icons/dish_reishi
-    sprite: {fileID: 21300000, guid: a40174b7c3ff66044821dd5a24888792, type: 3}
-  - key: Farm/Icons/dish_songi
-    sprite: {fileID: 21300000, guid: dbc90da4210fc4d40928137019cea895, type: 3}
-  - key: Farm/Icons/dish_soup
-    sprite: {fileID: 21300000, guid: 0bc2ee351ca051847b38054615706583, type: 3}
-  - key: Farm/Icons/dish_tea
-    sprite: {fileID: 21300000, guid: 31f15f3b0ccb1d747aa561c19c42085c, type: 3}
-  - key: Farm/Icons/dish_truffle
-    sprite: {fileID: 21300000, guid: 70cfd22800e09f7498a9cf7ff0e16690, type: 3}
-  - key: Farm/Icons/dish_venom
-    sprite: {fileID: 21300000, guid: 4ace641087a9e94409a443cc25844156, type: 3}
   - key: Farm/Icons/fx_heart
     sprite: {fileID: 21300000, guid: 9ba98b3ed2bf13c439a008742b612a84, type: 3}
   - key: Farm/Icons/fx_note
@@ -4001,40 +3755,14 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: cd82919bcf4e3484fb9bcc043f81b9cb, type: 3}
   - key: Farm/Icons/req_water
     sprite: {fileID: 21300000, guid: 04cf9411f2b85ef46afb9cd8b7b42d93, type: 3}
-  - key: Farm/Icons/tool_knife
-    sprite: {fileID: 21300000, guid: 8aae36112f95e8e4a8f7c4c9166f0d5b, type: 3}
-  - key: Farm/Icons/tool_ladle
-    sprite: {fileID: 21300000, guid: b4b6759b560e65540a9a24666ab198e6, type: 3}
-  - key: Farm/Icons/tool_plate
-    sprite: {fileID: 21300000, guid: 48a31d24d36fcb3418820e4312ceae08, type: 3}
   - key: Farm/Props/auto_reward
     sprite: {fileID: 21300000, guid: 9b475c9dee15fc241a30f09d82527453, type: 3}
-  - key: Farm/Props/counter
-    sprite: {fileID: 21300000, guid: 917feb9c86f3e9b48921f1d8bcfa6891, type: 3}
-  - key: Farm/Props/dc_bed
-    sprite: {fileID: 21300000, guid: c1f535b007917834b91fa469a366763c, type: 3}
-  - key: Farm/Props/dc_fire
-    sprite: {fileID: 21300000, guid: 6ab46bfd98473384f97d41b87d8a9ae6, type: 3}
-  - key: Farm/Props/dc_house
-    sprite: {fileID: 21300000, guid: cfd8fa60a6a9ccf428d5790935139984, type: 3}
-  - key: Farm/Props/dc_lamp
-    sprite: {fileID: 21300000, guid: 94cefef1ab8915c439491af5749eb090, type: 3}
-  - key: Farm/Props/dc_statue
-    sprite: {fileID: 21300000, guid: 3118f8290a8cab14cb6021fe7e88997d, type: 3}
-  - key: Farm/Props/dc_swing
-    sprite: {fileID: 21300000, guid: d646ceb097e801e4eb6e658a1a4ee347, type: 3}
-  - key: Farm/Props/dc_table
-    sprite: {fileID: 21300000, guid: 61b71e08acb08ec47a0617f32cd951f0, type: 3}
-  - key: Farm/Props/dc_well
-    sprite: {fileID: 21300000, guid: 3383c00097572bc4494a380b7b826ed3, type: 3}
   - key: Farm/Props/dew_chime
     sprite: {fileID: 21300000, guid: a8d946d16f286814899a132a76be2b61, type: 3}
   - key: Farm/Props/dew_pond
     sprite: {fileID: 21300000, guid: 5b9f132576aedc948b1bf9462ef0ff1e, type: 3}
   - key: Farm/Props/dew_spring
     sprite: {fileID: 21300000, guid: e2151f082ede5b246b771fcfc7f2b0bb, type: 3}
-  - key: Farm/Props/dining
-    sprite: {fileID: 21300000, guid: 75c8a2183eb18494c974c16980d508c2, type: 3}
   - key: Farm/Props/fire_brazier
     sprite: {fileID: 21300000, guid: e606c71fc8354cf42948640bb9483259, type: 3}
   - key: Farm/Props/fire_candle
@@ -4059,8 +3787,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6ed910d1644281445b32e40f219cb682, type: 3}
   - key: Farm/Props/rock_table
     sprite: {fileID: 21300000, guid: 9549eb4bc8074b846ad45587e1785882, type: 3}
-  - key: Farm/Props/scarecrow
-    sprite: {fileID: 21300000, guid: e1048ad16a09bcc4fa93254c1b34f1d5, type: 3}
   - key: Farm/Props/spark_bell
     sprite: {fileID: 21300000, guid: cbed8ba85305fc849902f2e339863415, type: 3}
   - key: Farm/Props/spark_lamp
@@ -4073,8 +3799,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: b20e0b308a9428c4ea8ef003183b5c96, type: 3}
   - key: Farm/Props/star_rune
     sprite: {fileID: 21300000, guid: 413bf623b56916649a14a6a6b0bc3f52, type: 3}
-  - key: Farm/Props/stove
-    sprite: {fileID: 21300000, guid: c218c53bad2266b4e985577c63cfa40f, type: 3}
   - key: Farm/Props/wind_catcher
     sprite: {fileID: 21300000, guid: 6bc3767727bf3eb46b4433319cfb1990, type: 3}
   - key: Farm/Props/wind_mill
@@ -4351,8 +4075,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e4ef6262c55578d4b89d568ec67057bf, type: 3}
   - key: Icons/t_sea
     sprite: {fileID: 21300000, guid: 606d7f9a607d718459b0833705f66d03, type: 3}
-  - key: Icons/tax
-    sprite: {fileID: 21300000, guid: 89962682c7f95c643aab96f331162518, type: 3}
   - key: Icons/trophy
     sprite: {fileID: 21300000, guid: d08a94d324c067a45a28296ff130b074, type: 3}
   - key: Icons/w_autumn
@@ -4715,50 +4437,68 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 4952b15ab7b720b4eaf9d8e3e8454a3e, type: 3}
   - key: Props/warn_shadow
     sprite: {fileID: 21300000, guid: c2c526b0f8e1f1c47aa9b459195b5a26, type: 3}
-  - key: UI/Combo/c0
-    sprite: {fileID: 21300000, guid: c4c4cb5f86b2be4458ac8db65e73431d, type: 3}
-  - key: UI/Combo/c1
-    sprite: {fileID: 21300000, guid: 588baec6ffa4215418e0f8ac6a5be275, type: 3}
-  - key: UI/Combo/c2
-    sprite: {fileID: 21300000, guid: 656de92fa08a3ba4dab9bf1eb5b93d4b, type: 3}
-  - key: UI/Combo/c3
-    sprite: {fileID: 21300000, guid: 8b7f83db6207ec344af36525c5efc7c4, type: 3}
-  - key: UI/Combo/c4
-    sprite: {fileID: 21300000, guid: b8e0d327a405fab49979e52bff310c1b, type: 3}
-  - key: UI/Combo/c5
-    sprite: {fileID: 21300000, guid: 3af39d99084a1cb44aff8af56c412b82, type: 3}
-  - key: UI/Combo/c6
-    sprite: {fileID: 21300000, guid: 0da223c1b2b8b0a49b46814efc68f1db, type: 3}
-  - key: UI/Combo/c7
-    sprite: {fileID: 21300000, guid: a565e07ca32bf7042b2a95de026d35a7, type: 3}
-  - key: UI/Combo/c8
-    sprite: {fileID: 21300000, guid: 9247ac0edf3249d4d826a130ff838fe2, type: 3}
-  - key: UI/Combo/c9
-    sprite: {fileID: 21300000, guid: 579e12976e9f1804ea87a03b8adc1d3f, type: 3}
-  - key: UI/Combo/combo_c
-    sprite: {fileID: 21300000, guid: 99f7037f65939254f913cfeb3ee82187, type: 3}
-  - key: UI/Combo/combo_n
-    sprite: {fileID: 21300000, guid: b95c59401a9b3cd4d9372175c6c8e8ff, type: 3}
-  - key: UI/Combo/n0
-    sprite: {fileID: 21300000, guid: 2a7ca730cca7a4f48a4a0ab3cfaa4d57, type: 3}
-  - key: UI/Combo/n1
-    sprite: {fileID: 21300000, guid: 32eb1bc97b9aaf245a3840fd881baf7a, type: 3}
-  - key: UI/Combo/n2
-    sprite: {fileID: 21300000, guid: 2f3a6868c8d5d3042857fc1930973c34, type: 3}
-  - key: UI/Combo/n3
-    sprite: {fileID: 21300000, guid: 195076f29e41a304d93dad5007d5cdfb, type: 3}
-  - key: UI/Combo/n4
-    sprite: {fileID: 21300000, guid: d574e68ff6404624ab293495b7e29121, type: 3}
-  - key: UI/Combo/n5
-    sprite: {fileID: 21300000, guid: 4bd790c7d21d8c04d9567acef542caba, type: 3}
-  - key: UI/Combo/n6
-    sprite: {fileID: 21300000, guid: 7dc3f856d466fd64799a85f98b17d08c, type: 3}
-  - key: UI/Combo/n7
-    sprite: {fileID: 21300000, guid: b1987a12c0aa94e4d92df0925bb416c8, type: 3}
-  - key: UI/Combo/n8
-    sprite: {fileID: 21300000, guid: 598c75d4bae99d0418adbb4e624ee476, type: 3}
-  - key: UI/Combo/n9
-    sprite: {fileID: 21300000, guid: b23c8948cb9ec2243b4acb9f85ab3dee, type: 3}
+  - key: Text/boss_entrance_en
+    sprite: {fileID: 21300000, guid: 90cf8c5b37588bb438b47fc6b02518e3, type: 3}
+  - key: Text/boss_entrance_ja
+    sprite: {fileID: 21300000, guid: 4f0a59b752c44634c99db9bd1322e0de, type: 3}
+  - key: Text/boss_entrance_ko
+    sprite: {fileID: 21300000, guid: d7405894bb547194f8b45605800c0146, type: 3}
+  - key: Text/boss_entrance_pt-BR
+    sprite: {fileID: 21300000, guid: 3f098c6f3df582a4cafd2aa14b01f3e3, type: 3}
+  - key: Text/boss_entrance_ru
+    sprite: {fileID: 21300000, guid: 746787ef5e7e2fe4cb9b02d96c206365, type: 3}
+  - key: Text/boss_entrance_uk
+    sprite: {fileID: 21300000, guid: d921ca59be784be4f9f956a817082481, type: 3}
+  - key: Text/combo
+    sprite: {fileID: 21300000, guid: a1c94fd3b2592574395e3670ec656ee5, type: 3}
+  - key: Text/en/acorn
+    sprite: {fileID: 21300000, guid: ecfdb61420b292c4a8a43cbaefd08ace, type: 3}
+  - key: Text/en/clone
+    sprite: {fileID: 21300000, guid: fd3d68959f01b0746bdb1d1896439705, type: 3}
+  - key: Text/en/crit
+    sprite: {fileID: 21300000, guid: da40361b87257e7478b21a117946a398, type: 3}
+  - key: Text/en/giant
+    sprite: {fileID: 21300000, guid: b2b555f01f2308847b1af78305d4b966, type: 3}
+  - key: Text/en/golden
+    sprite: {fileID: 21300000, guid: 03d2dc812f41df0458f235c27a5a370a, type: 3}
+  - key: Text/en/harvest_end
+    sprite: {fileID: 21300000, guid: 258e874c10c5f9145a8aa22af2419e22, type: 3}
+  - key: Text/en/multi
+    sprite: {fileID: 21300000, guid: 9740b41a795ee4a4480f551e08ec9e2d, type: 3}
+  - key: Text/en/pause
+    sprite: {fileID: 21300000, guid: d80a9a5a6c4980c498a76aac32f3cd5c, type: 3}
+  - key: Text/en/settle_done
+    sprite: {fileID: 21300000, guid: 3d6828ce9ec1db94b96e2702f43c83d7, type: 3}
+  - key: Text/en/settle_stop
+    sprite: {fileID: 21300000, guid: f5a4347ec8457034f8b6f75fdecde24b, type: 3}
+  - key: Text/fever
+    sprite: {fileID: 21300000, guid: 6540924e1a2a42244a7aa204d49798dd, type: 3}
+  - key: Text/ko/acorn
+    sprite: {fileID: 21300000, guid: 5f022737131e4c84081f9ed11656854a, type: 3}
+  - key: Text/ko/clone
+    sprite: {fileID: 21300000, guid: 6ef47600626cad546b5dfb6d3966f082, type: 3}
+  - key: Text/ko/crit
+    sprite: {fileID: 21300000, guid: 43e721554580c914bb51c2af017562ee, type: 3}
+  - key: Text/ko/giant
+    sprite: {fileID: 21300000, guid: 28e603128b040bf439c044aa4d0f6501, type: 3}
+  - key: Text/ko/golden
+    sprite: {fileID: 21300000, guid: 5e27258fbb413ed43b7197797646bb38, type: 3}
+  - key: Text/ko/harvest_end
+    sprite: {fileID: 21300000, guid: be1f547f2127b9448aa0b5f1dc304ded, type: 3}
+  - key: Text/ko/multi
+    sprite: {fileID: 21300000, guid: a1f143d60438dfa4abd2e497e0816b1a, type: 3}
+  - key: Text/ko/pause
+    sprite: {fileID: 21300000, guid: ef47aafb9e6bdcd4aa9ba151d898502e, type: 3}
+  - key: Text/ko/settle_done
+    sprite: {fileID: 21300000, guid: 4d5287b9a4e54c64db238b5d8337e108, type: 3}
+  - key: Text/ko/settle_stop
+    sprite: {fileID: 21300000, guid: 5a43bf68f54580f46b49e1301013362f, type: 3}
+  - key: Text/new
+    sprite: {fileID: 21300000, guid: a3d72796d319a974abcdc1f9d6ef5ab2, type: 3}
+  - key: Text/super_combo
+    sprite: {fileID: 21300000, guid: e73f64e8e0dcef54c8b28ab8acd977ed, type: 3}
+  - key: Text/super_fever
+    sprite: {fileID: 21300000, guid: 739cb797f054f1c47a2e0a5d013edf12, type: 3}
   - key: UI/Dex/dex_card
     sprite: {fileID: 21300000, guid: f26c2ee38c671e441a521773f163b96a, type: 3}
   - key: UI/Dex/dex_card_empty
@@ -4783,66 +4523,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 769b4119319cb7640bb742ce9ac5e068, type: 3}
   - key: UI/Dex/tag_wood
     sprite: {fileID: 21300000, guid: 9fe2cb6b235a0de4dbb081a36eb494cc, type: 3}
-  - key: UI/Digits/comma
-    sprite: {fileID: 21300000, guid: 91c6ea4eee19d6940bf65614ea251f3b, type: 3}
-  - key: UI/Digits/d0
-    sprite: {fileID: 21300000, guid: 78be1e3cd1b1a3f42aba9fca4b92adc4, type: 3}
-  - key: UI/Digits/d1
-    sprite: {fileID: 21300000, guid: 4326c40e377e0ee4ab0dc95955219400, type: 3}
-  - key: UI/Digits/d2
-    sprite: {fileID: 21300000, guid: 91fc7c7fa3cf86c4891a15e32c345336, type: 3}
-  - key: UI/Digits/d3
-    sprite: {fileID: 21300000, guid: bbcd03d26f7f23246924a66566e2fef8, type: 3}
-  - key: UI/Digits/d4
-    sprite: {fileID: 21300000, guid: 75f2ac5569e445d4680e2b12d27f7a11, type: 3}
-  - key: UI/Digits/d5
-    sprite: {fileID: 21300000, guid: 0772157e811e6544faf3271f03d884a7, type: 3}
-  - key: UI/Digits/d6
-    sprite: {fileID: 21300000, guid: bd1867173142f6449b949ad0905f9c06, type: 3}
-  - key: UI/Digits/d7
-    sprite: {fileID: 21300000, guid: b6868f23ad0fbb444a922cd3d084acfc, type: 3}
-  - key: UI/Digits/d8
-    sprite: {fileID: 21300000, guid: 3c3befcfd4caa98438403eb5adf172c4, type: 3}
-  - key: UI/Digits/d9
-    sprite: {fileID: 21300000, guid: e064ea795521f7b4e9537f3ea3535d4f, type: 3}
-  - key: UI/Digits/dot
-    sprite: {fileID: 21300000, guid: 784a1984d10496a479ac6ebb84d044a6, type: 3}
-  - key: UI/Digits/excl
-    sprite: {fileID: 21300000, guid: 4aa8ab1d68b56884da41f773cfb58760, type: 3}
-  - key: UI/Digits/la
-    sprite: {fileID: 21300000, guid: f949179c43a24bf4085c6f11d5c7373e, type: 3}
-  - key: UI/Digits/lc
-    sprite: {fileID: 21300000, guid: d122b4d015f2eed45b26e705eeddbe37, type: 3}
-  - key: UI/Digits/li
-    sprite: {fileID: 21300000, guid: 52f02893808d23f4889eb40d30fb8d04, type: 3}
-  - key: UI/Digits/lo
-    sprite: {fileID: 21300000, guid: 66dae75167f6ba34782e6333a73b07c8, type: 3}
-  - key: UI/Digits/lp
-    sprite: {fileID: 21300000, guid: 06a8de57ea147b64e82eb0acbdf5c797, type: 3}
-  - key: UI/Digits/lx
-    sprite: {fileID: 21300000, guid: b5d5d87fb12c2a247954760c311c374f, type: 3}
-  - key: UI/Digits/plus
-    sprite: {fileID: 21300000, guid: f11c877b19592804db0b3b365f85cff1, type: 3}
-  - key: UI/Digits/ub
-    sprite: {fileID: 21300000, guid: 54f22ab2fd7bcdd4c95b55a9ac7b61b1, type: 3}
-  - key: UI/Digits/ud
-    sprite: {fileID: 21300000, guid: 66c2f44e033e90745aa76fa10d820b5b, type: 3}
-  - key: UI/Digits/ug
-    sprite: {fileID: 21300000, guid: 21d3bd1f23810c54a9ece7322baffa7b, type: 3}
-  - key: UI/Digits/uk
-    sprite: {fileID: 21300000, guid: 480a8e76c7ffde4419b317c75afa73ad, type: 3}
-  - key: UI/Digits/um
-    sprite: {fileID: 21300000, guid: e36b0f9be83c13f4c83cd01c311f5273, type: 3}
-  - key: UI/Digits/un
-    sprite: {fileID: 21300000, guid: 770ab26ff3c0650448e753d56b304172, type: 3}
-  - key: UI/Digits/uo
-    sprite: {fileID: 21300000, guid: 374b5f432108f7249baa913a3dcb2dcc, type: 3}
-  - key: UI/Digits/uq
-    sprite: {fileID: 21300000, guid: 153a54c762f883849b797ef307e915bc, type: 3}
-  - key: UI/Digits/us
-    sprite: {fileID: 21300000, guid: 5a5035fb0499e9944a2c2914b3e99d90, type: 3}
-  - key: UI/Digits/ut
-    sprite: {fileID: 21300000, guid: a8aaed167d6f74043843cf2a2c82ebdf, type: 3}
   - key: UI/Slots/slot_buy
     sprite: {fileID: 21300000, guid: 29bf40992398b9c4d9a556a2745391dc, type: 3}
   - key: UI/Slots/slot_core

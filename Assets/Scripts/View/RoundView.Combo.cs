@@ -21,7 +21,7 @@ namespace MoreMush
         static Sprite[] BannerBurst()
         {
             if (bannerBurst != null) return bannerBurst;
-            bannerBurst = Resources.LoadAll<Sprite>("Art/effect/impact/critical_orange");
+            bannerBurst = Resources.LoadAll<Sprite>("Art/FX/Impact/critical_orange");
             System.Array.Sort(bannerBurst, (a, b) => string.CompareOrdinal(a.name, b.name));
             return bannerBurst;
         }
@@ -103,7 +103,7 @@ namespace MoreMush
             {
                 banner.key = m;
                 banner.transform.SetAsLastSibling();
-                // 글자 그림은 프리팹에 걸린 Art/effect/text/super_combo 하나. 아래 "25 Combo!" 수와 뒤 색 빛(glow)은 뺐다 (사용자 2026-11-11)
+                // 글자 그림은 프리팹에 걸린 Art/Text/super_combo 하나. 아래 "25 Combo!" 수와 뒤 색 빛(glow)은 뺐다 (사용자 2026-11-11)
                 if (banner.num != null) banner.num.gameObject.SetActive(false);
                 if (banner.glow != null) banner.glow.gameObject.SetActive(false);
                 ScatterSparks();
@@ -134,7 +134,7 @@ namespace MoreMush
             }
             if (banner.ring != null)
             {
-                // 글씨 뒤 터짐: 원형 고리 대신 Art/effect/impact/critical_orange 6프레임 플립북, 꽂힌 순간부터 사라질 때까지 (사용자 2026-11-11)
+                // 글씨 뒤 터짐: 원형 고리 대신 Art/FX/Impact/critical_orange 6프레임 플립북, 꽂힌 순간부터 사라질 때까지 (사용자 2026-11-11)
                 var fr = BannerBurst();
                 float k = Mathf.Clamp01((t - IN) / FX_LIFE);
                 bool on = t >= IN && k < 1 && fr.Length > 0;

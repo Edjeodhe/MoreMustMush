@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace MoreMush
 {
-    // All effect assets live under Resources/Art/effect.
+    // Growth effect art lives under Resources/Art/FX/Growth.
     public class TreeUpgradeFx : MonoBehaviour
     {
         public static readonly Color Gold = new Color(1f, 0.75f, 0.24f, 1f);
         public const float Duration = 0.5f;
-        const string Root = "Art/effect/growth/";
+        const string Root = "Art/FX/Growth/";
         static Sprite arrowSprite;
         static readonly Sprite[] sparkleSprites = new Sprite[3];
         readonly SpriteRenderer[] sparks = new SpriteRenderer[8];

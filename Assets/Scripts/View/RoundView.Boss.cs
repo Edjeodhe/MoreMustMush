@@ -4,9 +4,9 @@ using UnityEngine.UI;
 namespace MoreMush
 {
     // 보스 등장·격파 연출 (사용자 2026-11-11)
-    //   등장: 보스 뒤 플립북 Art/effect/boss/entrance (0.5초, RoundSim FxShape.BossIn). 보스는 #463765 실루엣으로 덮였다가 원래 색으로 (ShroomView) + 0.15초 뒤 화면 맨 앞에 언어별 "보스 등장!"
-    //         글자 그림 Art/effect/text/boss_entrance_<lang>: 작게 나타나 확 커졌다가 줄어들며 땅! 박힌다 (0.3초), 잠깐 머물다 빠르게 사라진다
-    //   격파: 게임이 멈추고 보스 뒤 플립북 Art/effect/boss/defeat (0.5초, FxShape.BossOut), 0.3초에 보스가 터진다 (RoundSim.StepBossDeath)
+    //   등장: 보스 뒤 플립북 Art/FX/Boss/entrance (0.5초, RoundSim FxShape.BossIn). 보스는 #463765 실루엣으로 덮였다가 원래 색으로 (ShroomView) + 0.15초 뒤 화면 맨 앞에 언어별 "보스 등장!"
+    //         글자 그림 Art/Text/boss_entrance_<lang>: 작게 나타나 확 커졌다가 줄어들며 땅! 박힌다 (0.3초), 잠깐 머물다 빠르게 사라진다
+    //   격파: 게임이 멈추고 보스 뒤 플립북 Art/FX/Boss/defeat (0.5초, FxShape.BossOut), 0.3초에 보스가 터진다 (RoundSim.StepBossDeath)
     public partial class RoundView
     {
         static Sprite[] bossInFrames, bossOutFrames;
@@ -31,7 +31,7 @@ namespace MoreMush
         {
             ref var arr = ref entrance ? ref bossInFrames : ref bossOutFrames;
             if (arr != null) return arr;
-            string dir = entrance ? "Art/effect/boss/entrance/frame_" : "Art/effect/boss/defeat/frame_";
+            string dir = entrance ? "Art/FX/Boss/entrance/frame_" : "Art/FX/Boss/defeat/frame_";
             var list = new System.Collections.Generic.List<Sprite>();
             for (int i = 1; i <= 64; i++)
             {
@@ -46,7 +46,7 @@ namespace MoreMush
         static Sprite BossTitleSprite(string lang)
         {
             string key = lang == "pt" ? "pt-BR" : lang;
-            return Resources.Load<Sprite>("Art/effect/text/boss_entrance_" + key) ?? Resources.Load<Sprite>("Art/effect/text/boss_entrance_en");
+            return Resources.Load<Sprite>("Art/Text/boss_entrance_" + key) ?? Resources.Load<Sprite>("Art/Text/boss_entrance_en");
         }
 
         const float TITLE_W = 760;                    // 글자 그림 폭 (필드 px)

@@ -21,6 +21,9 @@ namespace MoreMush
         // 끝나면 보스·연출을 모두 지우고 "수확 끝!" (사용자 2026-11-11)
         public const float BOSS_DEATH_DUR = 0.5f, BOSS_POP_AT = 0.3f;
         public float bossDeathT = -1;   // 격파 연출 시계 (없으면 -1)
+        // 등장 연출("보스 등장!" 글자가 박혔다 사라질 때까지 ≈ 0.15 + 0.3 + 1.0 + 0.1초)·격파 연출 중: 화면 배속을 2배까지로 묶는다 (StageController)
+        public const float BOSS_INTRO_SLOW_T = 1.55f;
+        public bool BossFxSlow => bossDeathT >= 0 || (bossIntroT >= 0 && bossIntroT < BOSS_INTRO_SLOW_T);
         Shroom bossDying;
 
         // 보스 몸의 실루엣 정도 (1 = #463765로 덮임, 0 = 원래 색). 분신·늦게 나온 몸은 0

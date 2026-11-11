@@ -11,9 +11,9 @@ namespace MoreMush.EditorTools
     // One-time project setup for generated art and fonts. Menu: MoreMush/...
     public static class MoreMushSetup
     {
-        // Art sets, later ones win: Doodle (outlined cel set) > Soft (watercolor) > Generated for the same key.
-        // 옛 세트(Generated·Soft·Doodle)는 Resources 밖 ArtArchive에 둔다: Dream에 없는 키만 SpriteDB가 GUID로 물어 빌드에 들어가고, 덮인 그림은 빌드에서 빠진다.
-        public static readonly string[] ArtRoots = { "Assets/ArtArchive/Generated", "Assets/ArtArchive/Soft", "Assets/ArtArchive/Doodle", "Assets/Resources/Art/Dream" };
+        // 게임 그림은 한 세트(Resources/Art) 뿐이다. 키 = 이 폴더 안의 경로 ("Icons/gold", "Characters/Evo/evo_dew_0" …).
+        // 2026-11-11 정리: 옛 세트(ArtArchive Generated·Soft·Doodle)와 Dream 단계를 없앴다 (씬이 아직 가리키는 옛 그림만 Assets/Art/Legacy)
+        public static readonly string[] ArtRoots = { "Assets/Resources/Art" };
 
         // key ("Icons/gold") → asset path of the sprite the game uses for it
         public static SortedDictionary<string, string> ResolvedArt()
@@ -40,7 +40,7 @@ namespace MoreMush.EditorTools
             RebuildSpriteDB();
             BuildFontAssets();
             BuildIconSpriteAsset();
-            BuildDigitSpriteAsset();
+            BuildComboSpriteAsset();
             BuildMaterials();
             Debug.Log("[MoreMush] setup done");
         }
@@ -209,61 +209,18 @@ namespace MoreMush.EditorTools
             Debug.Log($"[MoreMush] icon sprite asset: {names.Count} icons");
         }
 
-        // ===== Damage number glyphs (sheet "digits" → UI/Digits/*): <sprite="DmgDigits" name="d7" tint=1> =====
-        // The slicer crops every glyph tight, so the baseline is put back here: digits and letters stand on it at one
-        // common height (median digit height), + and x sit centred on the digit middle, . and , sit low.
-        [MenuItem("MoreMush/Build Damage Digit Sprite Asset")]
-        public static void BuildDigitSpriteAsset()
-        {
-            const float H = 128;   // digit height in the atlas
-            var src = ResolvedArt().Where(kv => kv.Key.StartsWith("UI/Digits/")).ToDictionary(kv => Path.GetFileName(kv.Key), kv => kv.Value);
-            if (src.Count == 0) { Debug.LogWarning("[MoreMush] no UI/Digits art"); return; }
-            var texs = src.ToDictionary(kv => kv.Key, kv => Bleach(LoadReadable(kv.Value)));
-            var digitH = texs.Where(kv => kv.Key.Length == 2 && kv.Key[0] == 'd').Select(kv => kv.Value.height).OrderBy(h => h).ToList();
-            float k = H / (digitH.Count > 0 ? digitH[digitH.Count / 2] : texs.Values.Max(t => t.height));
-            var names = texs.Keys.OrderBy(n => n, System.StringComparer.Ordinal).ToList();
-            var scaled = names.ToDictionary(n => n, n => Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * k)));
-            // everything stands on the baseline at its painted height (lowercase keeps its smaller x-height),
-            // except + (centred on the digit middle), the comma and p (hang below it)
-            PackSpriteAsset("DmgDigits", names, scaled, H, (n, h) => n switch
-            {
-                "plus" => H * 0.5f + h * 0.5f,
-                "comma" => h * 0.55f,
-                "lp" => h * 0.72f,
-                _ => h,
-            });
-        }
-
-        // Combo counter skin (sheet "combo_skin" → UI/Combo/*): <sprite="ComboDigits" name="n7">, not tinted.
-        // n* = everyday gold set, c* = critical set; each set is scaled so its median digit is H tall (the crit
-        // digits carry sparkles and a wider rim, so they are measured on their own), the COMBO words go with their
-        // set's digits, critical (the word over critical damage numbers) goes with the crit set at its painted size.
-        // super_combo_* are shown as Images, not glyphs.
+        // 콤보 글자 (TMP 스프라이트 에셋 Resources/Sprite Assets/ComboDigits): 숫자는 폰트로 쓰고(ComboDigits.Style),
+        // 숫자 옆 "Combo!" 낱말만 그림 글리프 combo_n·combo_c로 둔다. 그림은 Resources/Art/Text/combo.png (2026-11-11 정리)
         [MenuItem("MoreMush/Build Combo Digit Sprite Asset")]
         public static void BuildComboSpriteAsset()
         {
             const float H = 128;
-            var src = ResolvedArt().Where(kv => kv.Key.StartsWith("UI/Combo/")).ToDictionary(kv => Path.GetFileName(kv.Key), kv => kv.Value)
-                .Where(kv => (kv.Key.Length == 2 && (kv.Key[0] == 'n' || kv.Key[0] == 'c')) || kv.Key == "combo_n" || kv.Key == "combo_c")
-                .ToDictionary(kv => kv.Key, kv => kv.Value);
-            const string critWord = "Assets/Resources/Art/effect/text/critical.png";   // 글자 이펙트는 effect/text에 모은다 (사용자 2026-11-11)
-            if (File.Exists(critWord)) src["critical"] = critWord;
-            if (src.Count == 0) { Debug.LogWarning("[MoreMush] no UI/Combo art"); return; }
-            var texs = src.ToDictionary(kv => kv.Key, kv => LoadReadable(kv.Value));
-            // the COMBO word of both sets is the watercolor lettering Art/effect/text/combo.png (사용자 2026-11-11), cut to its painted area
-            const string comboWord = "Assets/Resources/Art/effect/text/combo.png";
-            if (File.Exists(comboWord)) { var w = Trim(LoadReadable(comboWord)); texs["combo_n"] = w; texs["combo_c"] = w; }
-            float K(char set)
-            {
-                var hs = texs.Where(kv => kv.Key.Length == 2 && kv.Key[0] == set).Select(kv => kv.Value.height).OrderBy(h => h).ToList();
-                return H / (hs.Count > 0 ? hs[hs.Count / 2] : H);
-            }
-            float kn = K('n'), kc = K('c');
-            var names = texs.Keys.OrderBy(n => n, System.StringComparer.Ordinal).ToList();
-            // the COMBO word stands 0.8 digit tall next to the number
-            var scaled = names.ToDictionary(n => n, n => n.StartsWith("combo")
-                ? Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * H * 0.8f / texs[n].height))
-                : Fit(texs[n], Mathf.RoundToInt(Mathf.Max(texs[n].width, texs[n].height) * (n[0] == 'n' ? kn : kc))));
+            const string comboWord = "Assets/Resources/Art/Text/combo.png";
+            if (!File.Exists(comboWord)) { Debug.LogWarning("[MoreMush] no " + comboWord); return; }
+            var w = Trim(LoadReadable(comboWord));
+            var word = Fit(w, Mathf.RoundToInt(Mathf.Max(w.width, w.height) * H * 0.8f / w.height));   // 숫자 높이의 0.8
+            var names = new List<string> { "combo_c", "combo_n" };
+            var scaled = new Dictionary<string, Texture2D> { ["combo_c"] = word, ["combo_n"] = word };
             PackSpriteAsset("ComboDigits", names, scaled, H, (n, h) => h);
         }
 
