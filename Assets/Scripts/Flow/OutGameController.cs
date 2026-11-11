@@ -31,7 +31,7 @@ namespace MoreMush
         const float TICK = 1;   // 보따리·보관 시간 갱신 간격 (초)
         const int TAB_CRAFT = 2;   // TAB_NAMES의 공방
         const int TAB_DECO = 3;    // 꾸미기 = 화면 아래 구역 탭 창 (DecoWindow)
-        static readonly string[] TAB_NAMES = { "성장", "꼬마", "공방", "꾸미기" };
+        static readonly string[] TAB_NAMES = { "성장", "꼬마", "제작소", "꾸미기" };   // 2026-11-11: 공방 → 제작소 (메인의 공방은 수확기)
 
         CurrencyBar currency;
         WorkshopPanel workshop;

@@ -26178,11 +26178,11 @@
       "Str_Group_ID": 91414,
       "Str_Name": "ui",
       "Str_KR": "작은 제작소",
-      "Str_EN": "",
-      "Str_JA": "",
-      "Str_RU": "",
-      "Str_UK": "",
-      "Str_PT": ""
+      "Str_EN": "Little Workshop",
+      "Str_JA": "小さな製作所",
+      "Str_RU": "Маленькая мастерская",
+      "Str_UK": "Маленька майстерня",
+      "Str_PT": "Pequena Oficina"
     },
     {
       "Str_ID": 901415,
@@ -29340,6 +29340,17 @@
       "Str_RU": "В зоне «{0}» нет мест (макс. {1})",
       "Str_UK": "У зоні «{0}» немає місць (макс. {1})",
       "Str_PT": "Sem vaga na zona “{0}” (máx. {1})"
+    },
+    {
+      "Str_ID": 901438,
+      "Str_Group_ID": 91438,
+      "Str_Name": "ui",
+      "Str_KR": "제작소",
+      "Str_EN": "Workshop",
+      "Str_JA": "製作所",
+      "Str_RU": "Мастерская",
+      "Str_UK": "Майстерня",
+      "Str_PT": "Oficina"
     }
   ]
 }

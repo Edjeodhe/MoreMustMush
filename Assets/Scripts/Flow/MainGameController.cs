@@ -13,7 +13,7 @@ namespace MoreMush
     // 이름으로 찾는 것:
     //   Gold_UI_BG/Gold_Img · Ston_UI_BG/Ston_Img 안의 글자 = 골드·균사석
     //   Button_Option · Button_StageStart · Stage_Text
-    //   Button_MushTree(세계수 씬) · Button_MushDex(도감 팝업) · Button_Harvesters(공방 팝업)
+    //   Button_MushTree(세계수 씬) · Button_MushDex(도감 팝업) · Button_Harvesters(수확기 팝업, 버튼 글자 "수확기")
     //   Button_Quest(의뢰 창, 지금 배치된 이름은 Quset — 둘 다 찾는다, 글자 = "의뢰" + 받을 수 있는 수)
     //   Button_Boss(보스 도전 켜고 끄기, 보스에게 처음 지면 보인다). 배치 전이면 Button_StageStart를 복제해 스테이지 패널 위에 임시로 둔다
     //   팝업: Harvesters(공방, HarvesterShop) · MushDex(도감, MushDexPopup) (각 팝업 안의 Exit = 닫기) · 옵션 팝업 OptionPanel(있으면) · 의뢰 QuestPanel(있으면, QuestWindow)
@@ -172,12 +172,19 @@ namespace MoreMush
                 b = Instantiate(startButton.gameObject, startButton.parent).transform;
                 b.name = "Button_Boss";
                 b.SetSiblingIndex(startButton.GetSiblingIndex());
-                var srt = (RectTransform)startButton; var brt = (RectTransform)b;
-                // 출발 버튼이 놓인 스테이지 패널(부모)의 위쪽 가장자리에서 BOSS_GAP만큼 띄운다 (패널 안의 "N Stage" 글자와 겹치지 않게)
+                var brt = (RectTransform)b;
+                // 출발 버튼은 스테이지 판 전체를 덮는 투명 버튼이라(2026-11-11) 보스 버튼은 자기 초록 그림·크기를 따로 갖는다
+                var bimg = b.GetComponent<Image>();
+                var go = SpriteDB.Get("UI/btn_go");
+                if (bimg != null && go != null) { bimg.sprite = go; bimg.type = Image.Type.Sliced; bimg.color = Color.white; bimg.pixelsPerUnitMultiplier = 1; }
+                var bbtn = b.GetComponent<Button>(); if (bbtn != null) bbtn.targetGraphic = bimg;
+                brt.anchorMin = brt.anchorMax = brt.pivot = new Vector2(0.5f, 0.5f);
+                brt.sizeDelta = new Vector2(456, 112);
+                // 스테이지 판(부모)의 위쪽 가장자리에서 BOSS_GAP만큼 띄운다
                 var prt = (RectTransform)startButton.parent;
-                float anchorY = Mathf.Lerp(prt.rect.yMin, prt.rect.yMax, brt.anchorMin.y);
-                brt.anchoredPosition = new Vector2(srt.anchoredPosition.x, prt.rect.yMax + BOSS_GAP - BOSS_SPRITE_PAD + brt.rect.height * brt.pivot.y - anchorY);
+                brt.anchoredPosition = new Vector2(0, prt.rect.yMax + BOSS_GAP - BOSS_SPRITE_PAD + brt.rect.height * 0.5f);
                 var lbl = SceneUI.TextIn(b);
+                if (lbl != null) { var lr = lbl.rectTransform; lr.anchorMin = Vector2.zero; lr.anchorMax = Vector2.one; lr.offsetMin = lr.offsetMax = Vector2.zero; lbl.color = new Color(0.122f, 0.251f, 0.09f); }
                 // 두 줄이 알약 모양 둥근 끝·아래 투명 여백 밖으로 나가지 않게: 좌우 60, 위 12·아래 20 비우고 출발 버튼 글자(40)보다 커지지 않게
                 if (lbl != null)
                 {
