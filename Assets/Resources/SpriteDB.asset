@@ -4625,6 +4625,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 42680362ceabefb4eb881211833226ad, type: 3}
   - key: UI/bookmarki_heal
     sprite: {fileID: 21300000, guid: a2a6c3fe295ff3f4dbcc806bd8ae50fb, type: 3}
+  - key: UI/btn_active
+    sprite: {fileID: 21300000, guid: bab795d9643048d7be341af673abc433, type: 3}
   - key: UI/btn_blue
     sprite: {fileID: 21300000, guid: fb2534658da06594d8522ce0d44096ff, type: 3}
   - key: UI/btn_close

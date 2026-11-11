@@ -80,6 +80,7 @@ namespace MoreMush.EditorTools
                 ["UI/Window/done_badge"] = (w, h) => new Vector4(h * 1.1f, h * 0.4f, h / 2, h * 0.4f),
                 ["UI/btn_wood"] = (w, h) => Uniform(w, h, 0.42f),
                 ["UI/btn_go"] = (w, h) => Uniform(w, h, 0.42f),
+                ["UI/btn_active"] = (w, h) => Uniform(w, h, 0.42f),   // btn_go를 노랗게 칠한 것 (켜진 수확기)
                 ["UI/btn_danger"] = (w, h) => Uniform(w, h, 0.42f),
                 // doodle 4th-pass kit (beige pastel base + accent buttons/panels)
                 ["UI/btn_orange"] = (w, h) => Uniform(w, h, 0.42f),

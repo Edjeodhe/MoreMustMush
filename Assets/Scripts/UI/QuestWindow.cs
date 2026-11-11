@@ -91,6 +91,7 @@ namespace MoreMush
 
             // 리본·닫기는 창 위 끝에 고정 (레이아웃 밖)
             title = TempDialog.Ribbon(box.transform, "", Vector2.zero, 560);
+            MatchRibbonTitle(title, 560);   // 글자는 옵션·도감·수확기 리본 제목과 같게
             Pin(title.transform.parent as RectTransform, new Vector2(0, -28));   // 위 끝에 걸치되 화면 밖으로 안 나가게
             var close = TempDialog.SkinButton(box.transform, "Exit", "", onClose, "btn_close", 1, out var closeT);
             closeT.gameObject.SetActive(false);
@@ -103,6 +104,25 @@ namespace MoreMush
             Line(box.transform, "Weekly", ROW_H, out weeklyLabel, out weeklyReset, 36, null);
             for (int i = 3; i < ROWS; i++) rows[i] = QuestLine(box.transform, i);
             Line(box.transform, "Tree", ROW_H, out treeLabel, out treeExp, 32, "panel_mint");
+        }
+
+        // 리본 제목 글자를 옵션 창 프리팹(Resources/UI/OptionPanel)의 리본 제목과 같게: ONE Mobile POP + 테두리 머티리얼, 보통 굵기·흰색.
+        // 크기·자리는 리본 폭 비율대로. 다른 언어에서는 LocText가 그 언어 제목 폰트로 바꾸되 테두리는 그대로 입힌다
+        static void MatchRibbonTitle(TMP_Text t, float ribbonW)
+        {
+            var pf = Resources.Load<GameObject>(OptionWindow.PrefabPath);
+            var src = pf != null ? pf.transform.Find("Box/Ribbon/Title")?.GetComponent<TMP_Text>() : null;
+            if (t == null || src == null || !(src.transform.parent is RectTransform srcRib)) return;
+            float k = ribbonW / srcRib.sizeDelta.x;
+            t.rectTransform.sizeDelta = src.rectTransform.sizeDelta * k;
+            t.rectTransform.anchoredPosition = src.rectTransform.anchoredPosition * k;
+            if (!t.TryGetComponent<LocText>(out var lt)) lt = t.gameObject.AddComponent<LocText>();
+            lt.role = LocFonts.Role.Title; lt.preset = -1;
+            t.font = src.font; t.fontSharedMaterial = src.fontSharedMaterial;   // LocText를 붙일 때 바뀐 폰트를 되돌린 뒤 keepPlacedFont로 고정
+            t.fontStyle = src.fontStyle; t.color = src.color;
+            t.enableAutoSizing = src.enableAutoSizing; t.fontSizeMax = src.fontSizeMax * k; t.fontSizeMin = src.fontSizeMin * k; t.fontSize = t.fontSizeMax;
+            lt.keepPlacedFont = true;
+            lt.Apply();
         }
 
         // 창 위 가운데를 기준으로 놓는다 (y = 위 끝에서)

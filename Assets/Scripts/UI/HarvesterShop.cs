@@ -9,7 +9,7 @@ namespace MoreMush
     // 수확기 상점(공방) 팝업. 배치한 카드 Harvesters (1)~(8)이 HARVESTERS 순서대로 수확기 하나씩을 맡는다.
     // 카드 구성 (이름으로 찾음): Image(아이콘) · Stars(Star1~5, 그림과 설명 사이) · Panel(이름) · Panel (1)(설명) · Button_Buy · Button_Upg
     //   Stars: 강화 단계(★)만큼 별 그림을 앞에서부터 켠다 (가운데 정렬). 없는 카드는 설명 첫 줄에 ★☆ 글자로
-    //   Button_Buy: 미보유면 구매, 보유하면 장착 켜기/끄기
+    //   Button_Buy: 미보유면 구매, 보유하면 장착 켜기/끄기. 켜져 있으면 노란 버튼(UI/btn_active)
     //   Button_Upg: 다음 ★ 강화
     // 다시 그리기는 팝업을 열 때 · 버튼을 누른 뒤 · 언어를 바꿀 때 · 열려 있는 동안 재화가 바뀔 때만 (MainGameController가 부른다).
     public class HarvesterShop
@@ -83,12 +83,15 @@ namespace MoreMush
             readonly TMP_Text title, desc, buyText, upgText;
             readonly Button buy, upg;
             readonly GameObject[] stars;   // Stars/Star1~5 (배치 전이면 빈 배열)
+            readonly Image buyImg;          // 켜진 수확기면 노란 btn_active, 아니면 배치한 그림
+            readonly Sprite buySprite;
+            readonly Color buyTextColor;
+            static readonly Color ACTIVE_TEXT = new Color(0.40f, 0.26f, 0.04f);   // 노란 버튼 위 진한 갈색 글자
 
             public Card(HarvesterShop shop, Transform t, string id)
             {
                 this.id = id;
-                FixSquashedLayout(t as RectTransform);
-                SquareBoxes(t);
+                FixSquashedLayout(t as RectTransform);   // 설명 박스·버튼 그림은 씬에 배치한 그대로 쓴다 (예전엔 사각형으로 바꿨다)
                 icon = SceneUI.Need(t, "Image")?.GetComponent<Image>();
                 title = SceneUI.TextIn(SceneUI.Need(t, "Panel"));
                 desc = SceneUI.TextIn(SceneUI.Need(t, "Panel (1)"));
@@ -98,6 +101,9 @@ namespace MoreMush
                 upg = SceneUI.Bind(u, () => shop.Upgrade(id));
                 buyText = SceneUI.TextIn(b);
                 upgText = SceneUI.TextIn(u);
+                buyImg = b != null ? b.GetComponent<Image>() : null;
+                buySprite = buyImg != null ? buyImg.sprite : null;
+                buyTextColor = buyText != null ? buyText.color : Color.black;
                 var st = t.Find("Stars");
                 var list = new System.Collections.Generic.List<GameObject>();
                 if (st != null) foreach (Transform s in st) list.Add(s.gameObject);
@@ -143,24 +149,6 @@ namespace MoreMush
                     var bt = SceneUI.TextIn(b);
                     if (bt != null) { bt.enableAutoSizing = true; bt.fontSizeMin = 12; bt.fontSizeMax = 22; }
                 }
-            }
-
-            // 설명 바탕(초록)과 해금·★ 버튼을 둥근 그림 대신 테두리 있는 네모로
-            static readonly Color DescBg = new Color(0.80f, 0.89f, 0.72f), DescLine = new Color(0.42f, 0.58f, 0.36f),
-                                  BuyBg = new Color(0.47f, 0.69f, 0.36f), UpgBg = new Color(0.87f, 0.73f, 0.58f), BtnLine = new Color(0.45f, 0.30f, 0.18f);
-            static void SquareBoxes(Transform card)
-            {
-                Square(card.Find("Panel (1)"), DescBg, DescLine);
-                Square(card.Find("Button_Buy"), BuyBg, BtnLine);
-                Square(card.Find("Button_Upg"), UpgBg, BtnLine);
-            }
-
-            static void Square(Transform t, Color bg, Color line)
-            {
-                if (t == null || !t.TryGetComponent<Image>(out var im)) return;
-                im.sprite = null; im.type = Image.Type.Simple; im.color = bg;
-                if (!t.TryGetComponent<Outline>(out var o)) o = t.gameObject.AddComponent<Outline>();
-                o.effectColor = line; o.effectDistance = new Vector2(3, -3);
             }
 
             // "이름: 설명" → "설명" (콜론이 없으면 그대로)
@@ -212,6 +200,11 @@ namespace MoreMush
                     if (buy != null) buy.interactable = canOn;
                     UIUtil.SetText(buyText, on ? Loc.T("켜짐") : canOn ? Loc.T("꺼짐") : Loc.T("칸 없음"));
                 }
+                // 켜진(장착한) 수확기 = 노란 버튼
+                bool active = S > 0 && on;
+                var activeSprite = active ? SpriteDB.Get("UI/btn_active") : null;
+                if (buyImg != null) buyImg.sprite = activeSprite != null ? activeSprite : buySprite;
+                if (buyText != null) buyText.color = activeSprite != null ? ACTIVE_TEXT : buyTextColor;
 
                 // 강화
                 var lc = S > 0 ? HvLevelCost(h) : null;

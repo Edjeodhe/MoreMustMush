@@ -17,14 +17,11 @@ namespace MoreMush
     //   Button_Quest(의뢰 창, 지금 배치된 이름은 Quset — 둘 다 찾는다, 글자 = "의뢰" + 받을 수 있는 수)
     //   Button_Boss(보스 도전 켜고 끄기, 보스에게 처음 지면 보인다). 배치 전이면 Button_StageStart를 복제해 스테이지 패널 위에 임시로 둔다
     //   팝업: Harvesters(공방, HarvesterShop) · MushDex(도감, MushDexPopup) (각 팝업 안의 Exit = 닫기) · 옵션 팝업 OptionPanel(있으면) · 의뢰 QuestPanel(있으면, QuestWindow)
-    // 팝업이 떠 있어도 아래쪽 이동 버튼(MushTree·MushDex·Harvesters)은 눌린다. 다른 곳으로 가면 열린 팝업은 닫힌다.
+    // 아래쪽 버튼(의뢰·세계수·도감·공방)은 팝업 뒤에 그린다 (씬 순서: 버튼이 팝업보다 앞). 팝업에 가리지 않은 곳은 눌리고, 다른 곳으로 가면 열린 팝업은 닫힌다.
     // 업그레이드 트리: 임시로 옛 월드 트리(TreeWorld, TreeView)를 씬에 둔다. 트리 UI가 배치되면 바꾼다.
     // 기능 해금(Unlock): 트리는 1스테이지 클리어 뒤, 도감·세계수·의뢰 버튼은 조건을 채우면 보인다.
     public class MainGameController : MonoBehaviour
     {
-        // 팝업보다 위에 그리고 눌리게 할 이동 버튼 (팝업 위 정렬 순서)
-        static readonly string[] NAV = { "Button_MushTree", "Button_MushDex", "Button_Harvesters" };
-        const int NAV_SORT_ABOVE = 1;   // 팝업(루트 캔버스) 바로 위 — 너무 높으면 옵션·로딩 같은 다른 UI까지 덮는다
 
         CurrencyBar currency;
         HarvesterShop shop;
@@ -72,7 +69,6 @@ namespace MoreMush
             popups = new[] { shopRoot, dexRoot, option, quest.Root };
             foreach (var p in new[] { shopRoot, dexRoot }) BindExit(p);   // 옵션·의뢰 창은 OptionWindow·QuestWindow가 닫기를 잇는다
 
-            foreach (var n in NAV) LiftAbovePopups(SceneUI.Find(scene, n));
             treeView = FindFirstObjectByType<TreeView>(FindObjectsInactive.Include);
             tree = treeView != null ? treeView.gameObject : null;
             if (tree == null) Debug.LogWarning("[MainGame] 업그레이드 트리(TreeView)가 씬에 없어요");
@@ -259,20 +255,6 @@ namespace MoreMush
             if (popup == null) return;
             var exit = SceneUI.Find(popup.transform, "Exit");
             if (exit != null) SceneUI.Bind(exit, () => { Snd.Ui(); CloseAll(); });
-        }
-
-        // 팝업이 화면을 덮어도 이 버튼은 위에 그려지고 눌리게: 버튼에만 정렬 순서를 올린 캔버스를 붙인다 (UI를 만들지는 않는다)
-        static void LiftAbovePopups(Transform t)
-        {
-            if (t == null) return;
-            var parent = t.parent != null ? t.parent.GetComponentInParent<Canvas>() : null;
-            var c = t.GetComponent<Canvas>();
-            if (c == null) c = t.gameObject.AddComponent<Canvas>();
-            c.overrideSorting = true;
-            c.sortingOrder = (parent != null ? parent.rootCanvas.sortingOrder : 0) + NAV_SORT_ABOVE;
-            // 새 캔버스는 셰이더 채널이 비어 있어 TMP 외곽선·굵기가 달라 보일 수 있다 → 부모 것을 그대로
-            if (parent != null) c.additionalShaderChannels = parent.rootCanvas.additionalShaderChannels;
-            if (t.GetComponent<GraphicRaycaster>() == null) t.gameObject.AddComponent<GraphicRaycaster>();
         }
 
         // ===== 이동 =====
