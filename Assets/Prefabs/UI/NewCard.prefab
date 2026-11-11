@@ -154,6 +154,7 @@ MonoBehaviour:
   preset: -1
   key: 
   authored: 
+  keepPlacedFont: 0
 --- !u!1 &6020263831010177747
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,8 +192,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 96.125, y: -35}
-  m_SizeDelta: {x: 48.25, y: 50}
+  m_AnchoredPosition: {x: 153.35501, y: -35}
+  m_SizeDelta: {x: 162.71, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5577733839646498036
 CanvasRenderer:
@@ -344,6 +345,7 @@ MonoBehaviour:
   preset: -1
   key: "\uC591\uC1A1\uC774"
   authored: Button Mushroom
+  keepPlacedFont: 0
 --- !u!1 &6680306048607872902
 GameObject:
   m_ObjectHideFlags: 0
