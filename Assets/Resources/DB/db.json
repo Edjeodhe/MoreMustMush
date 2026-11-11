@@ -9853,12 +9853,12 @@
       "Str_ID": 202006,
       "Str_Group_ID": 22006,
       "Str_Name": "upg:md_stump:desc",
-      "Str_KR": "숲 장치 효과를 키워요: 그루터기 점수·공격력 증가, 도토리 점수 ×2 지속시간, 이끼 길 가속.",
-      "Str_EN": "Boosts forest gadget effects: Stump score and attack increase, Acorn Score ×2 duration, and Moss Path speed-up.",
-      "Str_JA": "森のしかけの効果を高めます。切り株のスコア・攻撃力アップ、どんぐりのスコア ×2の持続時間、苔の道の加速です。",
-      "Str_RU": "Усиливает лесные устройства: очки и атаку от Пня, длительность очков ×2 от Жёлудя и ускорение Моховой тропы.",
-      "Str_UK": "Посилює лісові пристрої: бали й атаку від пенька, тривалість ×2 балів від жолудя, прискорення від мохової стежки.",
-      "Str_PT": "Aumenta os efeitos das engenhocas da floresta: pontos e ataque do Toco, duração do ×2 de pontos do Botão de Bolota e aceleração da Trilha de Musgo."
+      "Str_KR": "숲 장치 효과를 키워요: 그루터기 점수·공격력 증가, 도토리 점수 ×2 지속시간, 꽃밭 가속.",
+      "Str_EN": "Boosts forest gadget effects: Stump score and attack increase, Acorn Score ×2 duration, and Flower Bed speed-up.",
+      "Str_JA": "森のしかけの効果を高めます。切り株のスコア・攻撃力アップ、どんぐりのスコア ×2の持続時間、花畑の加速です。",
+      "Str_RU": "Усиливает лесные устройства: очки и атаку от Пня, длительность очков ×2 от Жёлудя и ускорение Цветочной поляны.",
+      "Str_UK": "Посилює лісові пристрої: бали й атаку від пенька, тривалість ×2 балів від жолудя, прискорення від квіткової галявини.",
+      "Str_PT": "Aumenta os efeitos das engenhocas da floresta: pontos e ataque do Toco, duração do ×2 de pontos do Botão de Bolota e aceleração da Canteiro de Flores."
     },
     {
       "Str_ID": 202008,
@@ -9930,12 +9930,12 @@
       "Str_ID": 202058,
       "Str_Group_ID": 22058,
       "Str_Name": "upg:dev_moss:desc",
-      "Str_KR": "숲 장치 이끼 길을 해금해요. 라운드마다 하나가 놓이고, 지나간 수확기가 잠시 빨라져요.",
-      "Str_EN": "Unlocks the Moss Path forest gadget. One is placed each round, and harvesters passing over it briefly speed up.",
-      "Str_JA": "森のしかけ「苔の道」を解放します。ラウンドごとに1つ置かれ、通り過ぎた収穫機は少しの間速くなります。",
-      "Str_RU": "Открывает лесное устройство Моховая тропа. В каждом раунде ставится одна; сборщики, пролетевшие по ней, ненадолго ускоряются.",
-      "Str_UK": "Відкриває лісовий пристрій Моховий шлях. Щораунду з'являється один, і збирачі, що пройшли по ньому, ненадовго прискорюються.",
-      "Str_PT": "Desbloqueia a Engenhoca da Floresta “Trilha de Musgo”. Uma é colocada por rodada, e os coletores que passam por ela aceleram por pouco tempo."
+      "Str_KR": "숲 장치 꽃밭을 해금해요. 라운드마다 하나가 놓이고, 지나간 수확기가 잠시 빨라져요.",
+      "Str_EN": "Unlocks the Flower Bed forest gadget. One is placed each round, and harvesters passing over it briefly speed up.",
+      "Str_JA": "森のしかけ「花畑」を解放します。ラウンドごとに1つ置かれ、通り過ぎた収穫機は少しの間速くなります。",
+      "Str_RU": "Открывает лесное устройство Цветочная поляна. В каждом раунде ставится одна; сборщики, пролетевшие по ней, ненадолго ускоряются.",
+      "Str_UK": "Відкриває лісовий пристрій Квіткова галявина. Щораунду з'являється одна, і збирачі, що пройшли по ній, ненадовго прискорюються.",
+      "Str_PT": "Desbloqueia a Engenhoca da Floresta “Canteiro de Flores”. Um é colocado por rodada, e os coletores que passam por ele aceleram por pouco tempo."
     },
     {
       "Str_ID": 202059,
@@ -11250,12 +11250,12 @@
       "Str_ID": 302058,
       "Str_Group_ID": 22058,
       "Str_Name": "upg:dev_moss:name",
-      "Str_KR": "이끼 길",
-      "Str_EN": "Moss Path",
-      "Str_JA": "苔の道",
-      "Str_RU": "Моховая тропа",
-      "Str_UK": "Моховий шлях",
-      "Str_PT": "Trilha de Musgo"
+      "Str_KR": "꽃밭",
+      "Str_EN": "Flower Bed",
+      "Str_JA": "花畑",
+      "Str_RU": "Цветочная поляна",
+      "Str_UK": "Квіткова галявина",
+      "Str_PT": "Canteiro de Flores"
     },
     {
       "Str_ID": 900146,

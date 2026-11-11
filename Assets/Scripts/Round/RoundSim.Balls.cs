@@ -100,6 +100,7 @@ namespace MoreMush
 
         void UpdateBall(Ball b, float h)
         {
+            if (b.stopT > 0) { b.stopT -= h; return; }   // 버섯을 터뜨린 수확기만 멈춤 (다른 수확기·연출은 그대로 움직인다)
             b.accel -= h; b.moss -= h; b.slow -= h; b.weak -= h; b.pierceT -= h; b.homeT -= h; b.powT -= h; b.clear -= h; b.magnet -= h; b.stumpAtk -= h; b.stumpT -= h; b.bladeFx -= h;
             b.feverT -= h; b.wisT -= h;
             if (!b.perm)
@@ -329,7 +330,7 @@ namespace MoreMush
             if (m.hpLag < 0 || m.hitT > 0.5f) m.hpLag = hpBefore;   // the trail starts where the bar was before this burst
             m.hitT = 0;
             if (crit && m.hp > 0) shake = Mathf.Max(shake, 0.22f);
-            if (crit && m.hp > 0 && kind != "direct") { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.HitAnim, m.x, m.y, m.r * 2.6f, 0.18f, new Color(1, 0.72f, 0.6f, 1), FxR(0, 360), 0); AddFx(FxShape.ImpactRing, m.x, m.y, m.r * 2.4f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }
+            if (crit && m.hp > 0 && kind != "direct") { shake = Mathf.Max(shake, 0.22f); AddFx(FxShape.SplashOrange, m.x, m.y, m.r * 2.6f, 0.25f, Color.white, 0, 0); AddFx(FxShape.Impact, m.x, m.y, m.r * 1.2f, 0.28f, new Color(1, 0.55f, 0.42f, 0.9f), FxR(0, 360), 0); }   // 물 튀김 = 새 물방울(주황), 원형 고리 자리 = 예전 물감 튀김 (사용자 2026-11-11)
             // 보스 타격 점수는 BOSS_SCORE_MUL배. 기획 의도: 보스를 못 잡은 판은 보스 전 일반 판보다 손해 → 일반 스테이지에서 성장하고 오라는 허들 (보상은 처치해야 받는다)
             double sc = (TIERS[m.sp.t].score + st.scoreFlat) * ScoreMulFor(m, b) * (crit ? critMul : 1) * scoreF * (m.boss ? BOSS_SCORE_MUL : 1);
             if (st.flexP > 0 && U.Chance((float)st.flexP)) { sc *= 3; SkillFx("ed_flex", m.x, m.y); }   // 플렉스: 점수 3배
@@ -469,10 +470,10 @@ namespace MoreMush
             var cap = m.golden ? U.Hex("#ffd23a") : U.Hex(sp.c1);
             float big = m.giant ? 2.2f : m.cluster ? 1.5f : 1;
             if (m.spore != null) AddFx(FxShape.Puff, m.x, m.y, m.r * 2.6f * big, 0.45f, new Color(cap.r * 0.5f + 0.5f, cap.g * 0.5f + 0.5f, cap.b * 0.5f + 0.5f, 0.9f), FxR(0, 360), 40);
-            float wet = m.cluster ? 0.5f : 1;   // 군락(무더기)이 터질 때 물감 튀는 그림(Impact·HitAnim)만 50% (사용자 2026-11-11, 75%→50%)
-            AddFx(FxShape.Impact, m.x, m.y, m.r * 2.2f * big * wet, 0.22f, new Color(cap.r, cap.g, cap.b, 0.95f), FxR(0, 360), 0);
-            // the pop: a flipbook burst, a spray of twinkles (white to the cap colour), a beat of hitstop and a kick
-            AddFx(FxShape.HitAnim, m.x, m.y - m.r * 0.2f, m.r * 3.4f * big * wet, 0.2f, new Color(1, 0.97f, 0.86f, 1), FxR(0, 360), 0);
+            float wet = m.cluster ? 0.5f : 1;   // 군락(무더기)이 터질 때 물 튀김만 50% (사용자 2026-11-11, 75%→50%)
+            // 물 튀김: 예전 물감(Impact)·흰 물보라(HitAnim) 대신 새 물방울 6프레임, 갓 색에 가까운 색 (사용자 2026-11-11)
+            AddFx(SplashOf(cap), m.x, m.y - m.r * 0.2f, m.r * 3.4f * big * wet, 0.3f, Color.white, 0, 0);
+            // the pop: a spray of twinkles (white to the cap colour), a beat of hitstop and a kick
             int nt = m.giant ? 16 : m.cluster ? 9 : 5 + sp.t;
             for (int i = 0; i < nt; i++)
             {
@@ -480,7 +481,8 @@ namespace MoreMush
                 var tc = Color.Lerp(Color.white, cap, FxR(0.2f, 0.8f));
                 AddPart(m.x, m.y, Mathf.Cos(ta) * ts, Mathf.Sin(ta) * ts - 220, FxR(0.4f, 0.7f), tc, FxR(5, 9), FxShape.Twinkle);
             }
-            if (!m.giant && popStopCd <= 0) { hitstop = Mathf.Max(hitstop, m.cluster ? 0.05f : 0.025f); popStopCd = 0.22f; }
+            // 멈춤은 그 버섯을 터뜨린 수확기만 (예전에는 화면 전체가 멈춰 버벅거려 보였다, 사용자 2026-11-11)
+            if (b != null) b.stopT = Mathf.Max(b.stopT, m.giant ? 0.3f : sp.t == 3 ? 0.12f : sp.t == 2 ? 0.06f : m.cluster ? 0.05f : 0.025f);
             if (!m.giant && balls.Count < 8) shake = Mathf.Max(shake, m.cluster ? 0.3f : 0.14f);
             int nc = m.giant ? 14 : m.cluster ? 8 : 4 + sp.t;
             for (int i = 0; i < nc; i++)
@@ -506,10 +508,9 @@ namespace MoreMush
                 if (balls.Count < 8) shake = Mathf.Max(shake, 0.15f);
                 Snd.Tone(300, 0.18f, Snd.Wave.Sine, 0.7f, 2.2f, "heap", 0.05f);
             }
-            if (m.giant) { hitstop = 0.3f; hitstopCd = 0.8f; flash = 0.8f; shake = 1; Snd.Rare(); giant = null; AddLabel(Loc.T("거대 버섯 수확!"), m.x, m.y - 120, "#ffffff", 44); }
+            if (m.giant) { flash = 0.8f; shake = 1; Snd.Rare(); giant = null; AddLabel(Loc.T("거대 버섯 수확!"), m.x, m.y - 120, "#ffffff", 44); }
             else if (sp.t >= 2)
             {
-                if (hitstopCd <= 0) { hitstop = Mathf.Max(hitstop, sp.t == 3 ? 0.12f : 0.06f); hitstopCd = 0.6f; }
                 if (flashCd <= 0) { flash = Mathf.Max(flash, sp.t == 3 ? 0.25f : 0.1f); flashCd = 1.2f; }
                 Snd.Rare();
             }
@@ -569,6 +570,13 @@ namespace MoreMush
             else f = fxFree.Count > 0 ? fxFree.Pop() : new Fx();
             f.shape = shape; f.x = x; f.y = y; f.t = 0; f.size = size; f.dur = dur; f.col = col; f.rot = rot; f.rise = rise; f.spin = FxR(-40, 40); f.flip = FxChance(0.5f);
             fxs.Add(f);
+        }
+
+        // 색 → 물방울 시트: 파랑·초록 계열은 하늘색, 진한 색은 주황, 연한 색은 베이지
+        public static FxShape SplashOf(Color c)
+        {
+            Color.RGBToHSV(c, out float h, out float s, out _);
+            return h > 0.38f && h < 0.8f ? FxShape.SplashBlue : s > 0.45f ? FxShape.SplashOrange : FxShape.SplashBeige;
         }
 
         // Compact six-frame contact pop; damage text and harvest/death effects remain separate.

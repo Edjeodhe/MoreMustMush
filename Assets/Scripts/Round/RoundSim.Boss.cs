@@ -12,6 +12,19 @@ namespace MoreMush
     {
         public readonly List<Shroom> bosses = new List<Shroom>();   // 본체 + 분신. 죽은 것도 남겨 둔다 (클리어 판정·화면용)
         public bool bossCleared;
+        // 보스 등장 연출 시계 (보스가 나온 뒤 흐른 시간, 없으면 -1). 화면이 BOSS_TITLE_AT에 "보스 등장!" 글자를 띄우고, 글자가 박히는 순간 화면이 흔들린다
+        public float bossIntroT = -1;
+        public const float BOSS_IN_DUR = 0.5f, BOSS_TITLE_AT = 0.15f, BOSS_TITLE_LAND = 0.2f;
+        // 보스 실루엣(#463765)이 걷히는 구간 (등장 시계 기준): REVEAL_AT까지 실루엣, BOSS_IN_DUR에 원래 색
+        public const float BOSS_REVEAL_AT = 0.2f;
+        // 격파: 마지막 보스가 쓰러지면 게임이 멈추고 BOSS_DEATH_DUR 동안 격파 연출, BOSS_POP_AT에 보스가 터지고(기존 연출),
+        // 끝나면 보스·연출을 모두 지우고 "수확 끝!" (사용자 2026-11-11)
+        public const float BOSS_DEATH_DUR = 0.5f, BOSS_POP_AT = 0.3f;
+        public float bossDeathT = -1;   // 격파 연출 시계 (없으면 -1)
+        Shroom bossDying;
+
+        // 보스 몸의 실루엣 정도 (1 = #463765로 덮임, 0 = 원래 색). 분신·늦게 나온 몸은 0
+        public float BossDark(Shroom m) => !m.boss || m.bossClone || bossIntroT < 0 ? 0 : 1 - Mathf.Clamp01((bossIntroT - BOSS_REVEAL_AT) / (BOSS_IN_DUR - BOSS_REVEAL_AT));
         public float bossClearT;   // 클리어 연출 시각 (runT)
         float bossHealT, bossPurgeT;
         int bossSplits;
@@ -29,7 +42,9 @@ namespace MoreMush
             double hp = st.bossHp;
             bosses.Add(MakeBossBody(def, x, y, hp, false));
             bossHealT = CLEANER_INT; bossPurgeT = ANGEL_PURGE_INT;
-            AddLabel(Loc.F("보스 {0} 등장!", def.n), x, y - BOSS_R - 60, "#ffffff", 44);
+            // 등장 연출: 보스 뒤 플립북 0.3초 + 0.15초 뒤 화면 앞 "보스 등장!" 글자 그림 (예전 "보스 {0} 등장!" 글자 대신, 사용자 2026-11-11)
+            bossIntroT = 0;
+            AddFx(FxShape.BossIn, x, y, BOSS_R * 2 * 2.6f, BOSS_IN_DUR, Color.white, 0, 0);
             AddLabel(def.gimmick, x, y - BOSS_R - 20, def.col, 24);
         }
 
@@ -194,28 +209,59 @@ namespace MoreMush
 
         void BossDown(Shroom m, Ball b)
         {
-            if (m.dead) return;
-            m.dead = true; m.hp = 0;
-            var col = U.Hex(st.boss.col);
-            for (int i = 0; i < 50; i++) { float a = U.Rand(0, U.TAU), s = U.Rand(80, 600); AddPart(m.x, m.y, Mathf.Cos(a) * s, Mathf.Sin(a) * s - 60, U.Rand(0.3f, 0.8f), i % 3 != 0 ? col : Color.white, 7); }
-            rings.Add(new Ring { x = m.x, y = m.y, r = m.r * 2.4f, dur = 0.45f, col = st.boss.col });
-            ComboHit();
-            if (bossCleared) return;   // 이미 클리어한 뒤에 남은 몸을 쓰러뜨려도 다시 클리어하지 않는다
+            if (m.dead || m == bossDying) return;
             int left = 0; bool mainLeft = false;
-            foreach (var x in bosses) if (!x.dead) { left++; if (!x.bossClone) mainLeft = true; }
-            if (left > 0)
+            foreach (var x in bosses) if (!x.dead && x != m) { left++; if (!x.bossClone) mainLeft = true; }
+            if (left > 0 || bossCleared)
             {
+                // 분신·본체가 남았다: 그 몸만 바로 터진다 (격파 플립북 + 기존 터짐)
+                AddFx(FxShape.BossOut, m.x, m.y, m.r * 2 * 3f, BOSS_DEATH_DUR, Color.white, 0, 0);
+                BossPop(m);
+                ComboHit();
+                if (bossCleared) return;   // 이미 클리어한 뒤에 남은 몸을 쓰러뜨려도 다시 클리어하지 않는다
                 Snd.Rare();
                 AddLabel(mainLeft ? Loc.F("본체가 남았어요! (남은 {0})", left) : Loc.F("분신이 {0}마리 남았어요!", left), m.x, m.y - m.r - 30, "#ffffff", 28);
                 return;
             }
+            // 마지막 보스: 게임이 멈추고 보스 뒤에 격파 플립북. 터짐·보상은 BOSS_POP_AT에, 정리와 "수확 끝!"은 BOSS_DEATH_DUR에 (StepBossDeath)
+            m.hp = 0;
+            bossDying = m; bossDeathT = 0;
             bossCleared = true; bossClearT = runT;
-            BossLegendDrop(m);
-            hitstop = 0.35f; hitstopCd = 0.8f; flash = 0.9f; shake = 1;
-            AddLabel(Loc.F("보스 {0} 처치!", st.boss.n), WW / 2, WH * 0.3f, "#fff7c2", 54);
-            AddLabel(Loc.T("다음 스테이지가 열렸어요"), WW / 2, WH * 0.3f + 60, "#ffe36e", 28);
+            AddFx(FxShape.BossOut, m.x, m.y, m.r * 2 * 3f, BOSS_DEATH_DUR, Color.white, 0, 0);
+            ComboHit();
+            shake = Mathf.Max(shake, 0.4f);
             Snd.Record();
-            // 보스를 쓰러뜨리면 남은 시간과 관계없이 라운드를 바로 끝낸다 (끝 연출 1.5초 뒤 정산, 시간이 다 된 때와 같음)
+        }
+
+        // 보스가 터지는 기존 연출: 조각이 사방으로, 보스 색 고리
+        void BossPop(Shroom m)
+        {
+            m.dead = true; m.hp = 0;
+            var col = U.Hex(st.boss.col);
+            for (int i = 0; i < 50; i++) { float a = U.Rand(0, U.TAU), s = U.Rand(80, 600); AddPart(m.x, m.y, Mathf.Cos(a) * s, Mathf.Sin(a) * s - 60, U.Rand(0.3f, 0.8f), i % 3 != 0 ? col : Color.white, 7); }
+            rings.Add(new Ring { x = m.x, y = m.y, r = m.r * 2.4f, dur = 0.45f, col = st.boss.col });
+        }
+
+        // 격파 연출 동안: 게임(시간·수확기·버섯)은 멈추고 연출만 흐른다 (SimFrame이 부른다)
+        void StepBossDeath(float h)
+        {
+            float was = bossDeathT; bossDeathT += h;
+            if (was < BOSS_POP_AT && bossDeathT >= BOSS_POP_AT)
+            {
+                BossPop(bossDying);
+                BossLegendDrop(bossDying);
+                shake = 1; flash = Mathf.Max(flash, 0.35f);
+            }
+            if (bossDeathT < BOSS_DEATH_DUR) return;
+            // 끝: 보스도 다른 연출도 없는 화면에서 "수확 끝!" (끝 연출 1.5초 뒤 정산, 시간이 다 된 때와 같음)
+            bossDeathT = -1; bossDying = null;
+            shrooms.RemoveAll(x => x.dead);
+            foreach (var f in fxs) fxFree.Push(f);
+            fxs.Clear();
+            foreach (var p in parts) partFree.Push(p);
+            parts.Clear();
+            rings.Clear(); labels.Clear(); texts.Clear(); flyers.Clear(); bolts.Clear(); embers.Clear();
+            feverMsg = null; shake = 0; flash = 0;
             if (phase == "run") { phase = "end"; endT = 1.5f; festOn = false; }
         }
     }

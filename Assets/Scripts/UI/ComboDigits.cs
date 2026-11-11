@@ -15,7 +15,9 @@ namespace MoreMush
         static readonly Color32 ComboEdge = new Color32(0xdb, 0x9a, 0x4e, 255), SuperEdge = new Color32(0xbe, 0x4d, 0x26, 255);   // 글자 그림의 외곽선 색
         public static readonly Color32 LabelEdge = new Color32(0x6a, 0x37, 0x1c, 255);   // 필드 라벨 글자 테두리 (갈색 #6a371c, 사용자 2026-11-11)
         public static readonly Color32 TagEdge = new Color32(0xff, 0xf7, 0xe8, 255);     // NEW! 표 테두리 (#db4e50 글자에 밝은 크림)
-        static readonly System.Collections.Generic.Dictionary<(uint, int), Material> outlineMat = new System.Collections.Generic.Dictionary<(uint, int), Material>();
+        // (색, 두께)별 재질. 몇 개뿐이라 배열을 훑는다 (사전의 튜플 키가 부를 때마다 메모리를 잡았다)
+        struct OutlineEntry { public Color32 edge; public float width; public Material mat; }
+        static readonly System.Collections.Generic.List<OutlineEntry> outlineMat = new System.Collections.Generic.List<OutlineEntry>();
 
         // 숫자 글꼴 + 글자 그림과 같은 색 외곽선 (super: SuperCombo 그림의 외곽선 색)
         public static void Style(TMP_Text t, bool super) => Outline(t, super ? SuperEdge : ComboEdge, 0.3f);
@@ -27,15 +29,21 @@ namespace MoreMush
             var f = LocFonts.NumberFont;
             if (t == null || f == null) return;
             if (t.font != f) t.font = f;
-            var key = (((uint)edge.r << 24) | ((uint)edge.g << 16) | ((uint)edge.b << 8) | edge.a, Mathf.RoundToInt(width * 1000));
-            if (!outlineMat.TryGetValue(key, out var m) || m == null)
+            Material m = null;
+            for (int i = 0; i < outlineMat.Count; i++)
             {
-                m = new Material(f.material) { name = f.name + " Outline " + key.Item1.ToString("x8"), hideFlags = HideFlags.HideAndDontSave };
+                var e = outlineMat[i];
+                if (e.width == width && e.edge.r == edge.r && e.edge.g == edge.g && e.edge.b == edge.b && e.edge.a == edge.a) { m = e.mat; break; }
+            }
+            if (m == null)
+            {
+                m = new Material(f.material) { name = f.name + " Outline", hideFlags = HideFlags.HideAndDontSave };
                 m.EnableKeyword("OUTLINE_ON");
                 m.SetFloat(ShaderUtilities.ID_OutlineWidth, width);
                 m.SetFloat(ShaderUtilities.ID_FaceDilate, width * 0.5f);   // 외곽선이 글자 속을 파먹지 않게 바깥으로 민다
                 m.SetColor(ShaderUtilities.ID_OutlineColor, edge);
-                outlineMat[key] = m;
+                outlineMat.RemoveAll(e => e.mat == null);
+                outlineMat.Add(new OutlineEntry { edge = edge, width = width, mat = m });
             }
             if (t.fontSharedMaterial != m) t.fontSharedMaterial = m;
         }

@@ -16,6 +16,8 @@ namespace MoreMush
         public SpriteRenderer[] debuff = new SpriteRenderer[4];
 
         Vector3[] trailPoints = new Vector3[32];
+        static Sprite wind; static bool windLoaded;
+        static Sprite Wind() { if (!windLoaded) { windLoaded = true; wind = Resources.Load<Sprite>("Art/effect/wind/wind_orbit"); } return wind; }
         string auraKey;
         Color skinAura;
 
@@ -50,10 +52,14 @@ namespace MoreMush
             blade.enabled = (st.blade || b.hv == "mill") && !busy;
             if (blade.enabled)
             {
+                // 수확기 둘레를 도는 바람: Art/effect/wind/wind_orbit (예전 FX/ring_thin, 사용자 2026-11-11)
+                var wsp = Wind();
+                if (wsp != null && !ReferenceEquals(blade.sprite, wsp)) blade.sprite = wsp;
+                float unit = blade.sprite != null ? blade.sprite.rect.width / blade.sprite.pixelsPerUnit : 1;
                 float rr = R.BladeRadius(b);
-                blade.transform.localScale = Vector3.one * (rr * 2 / Art.PPU);
-                blade.transform.localRotation = Quaternion.Euler(0, 0, -now * 6 * Mathf.Rad2Deg);
-                blade.color = b.bladeFx > 0 ? new Color(1, 1, 1, 0.55f) : new Color(230 / 255f, 230 / 255f, 1, 0.2f);
+                blade.transform.localScale = Vector3.one * (rr * 2 * 0.75f / Art.PPU / unit);   // 바람 그림은 칼날 범위의 75% (사용자 2026-11-11)
+                blade.transform.localRotation = Quaternion.Euler(0, 0, now * 6 * Mathf.Rad2Deg);   // 그림의 꼬리 방향으로 돈다
+                blade.color = new Color(1, 1, 1, b.bladeFx > 0 ? 1 : 0.6f);
             }
 
             // 버프 빛이 우선, 없으면 수확기 스킨의 은은한 빛

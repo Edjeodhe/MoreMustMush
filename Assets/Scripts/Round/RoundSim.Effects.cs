@@ -249,6 +249,12 @@ namespace MoreMush
             foreach (var p in parts) { p.t += h; p.x += p.vx * h; p.y += p.vy * h; p.vy += (p.shape == (byte)FxShape.Chip ? 900 : 500) * h; p.vx *= 0.97f; }
             Recycle(parts, partFree, p => p.t >= p.life);
             foreach (var f in fxs) { f.t += h; f.y -= f.rise * h; f.rot += f.spin * h; }
+            if (bossIntroT >= 0 && bossIntroT < 3)
+            {
+                float was = bossIntroT; bossIntroT += h;
+                const float land = BOSS_TITLE_AT + BOSS_TITLE_LAND;
+                if (was < land && bossIntroT >= land) shake = Mathf.Max(shake, 0.5f);   // "보스 등장!"이 땅! 박히는 순간
+            }
             Recycle(fxs, fxFree, f => f.t >= f.dur);
             barKick = Mathf.Max(0, barKick - h * 4);
             if (popStopCd > 0) popStopCd -= h;
@@ -306,6 +312,7 @@ namespace MoreMush
         public void SimFrame(float h)
         {
             t += h;
+            if (bossDeathT >= 0) { StepBossDeath(h); if (bossDeathT >= 0) UpdateFx(h); return; }   // 보스 격파 연출: 게임은 멈추고 연출만
             if (phase == "run")
             {
                 if (!DBG.infinite) timeLeft -= h;
@@ -343,6 +350,8 @@ namespace MoreMush
         }
 
         // ===== 콤보·피버 =====
+        // 가운데 SUPER COMBO! 배너가 떠 있는 시간: 꽂히자마자 퍼지며 사라진다 (예전 1.6초, 사용자 2026-11-11)
+        public const float FEVER_MSG_DUR = 0.55f;
         double FeverMul() => fever > 0 ? FEVER[fever - 1].mul : 1;
         public double FeverMulPublic => FeverMul();
 
@@ -374,7 +383,7 @@ namespace MoreMush
             chainBump = Mathf.Max(0, chainBump - h * 6);
             feverK += (fever - feverK) * Mathf.Min(1, h * (fever > feverK ? 6 : 2.5f));
             if (chain > 0) flameInt += (FlameIntensity(chain) - flameInt) * Mathf.Min(1, h * 4);
-            if (feverMsg != null) { feverMsg.t += h; if (feverMsg.t > 1.6f) feverMsg = null; }
+            if (feverMsg != null) { feverMsg.t += h; if (feverMsg.t > FEVER_MSG_DUR) feverMsg = null; }
             // 불티 (화면 좌표)
             float k = feverK;
             if (k > 0.05f)

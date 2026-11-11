@@ -74,7 +74,7 @@ namespace MoreMush
         public static readonly string[] DEVICE_TYPES = { "stump", "moss", "acorn" };
         public static readonly LocMap DEVICE_NAME = new LocMap(new Dictionary<string, string>
         {
-            ["stump"] = "그루터기 범퍼", ["moss"] = "이끼 길", ["acorn"] = "도토리 스위치",
+            ["stump"] = "그루터기 범퍼", ["moss"] = "꽃밭", ["acorn"] = "도토리 스위치",
         });
         // 그루터기에 튕긴 수확기: 공격력 ×(1 + (STUMP_ATK_MUL-1)×숲 장치 강화), STUMP_ATK_DUR초 (다시 맞으면 시간만 갱신)
         public static readonly float STUMP_ATK_MUL = (float)Db.C("STUMP_ATK_MUL"), STUMP_ATK_DUR = (float)Db.C("STUMP_ATK_DUR");   // 전투 기획서 Ver05: 예시 5초

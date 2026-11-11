@@ -14,8 +14,8 @@ namespace MoreMush
         [ScenePath("World/Round/Field/Decor")] public Transform decor;   // 지역별 테두리 장식 묶음 (자식 이름 = 지역 id, 없으면 forest)
         public Transform deviceRoot, shroomRoot, fxRoot, ballRoot, flyerRoot;
         public SpriteRenderer bar;
-        // 바 그림(UI/bar_log, 수채화 통나무) 전체 높이: 통나무 몸통 ≈ 20px + 위로 솟은 잎, 아래는 같은 만큼 투명 여백 (몸통이 판정 줄 가운데에 온다)
-        const float BAR_VIS_H = 39;
+        // 바 그림(UI/bar_log, 나무 손잡이 + 쇠날, 2026-11-11 교체) 높이. 그림이 위아래 꽉 차서 예전(통나무 몸통 20px + 잎) 39px보다 줄였다
+        const float BAR_VIS_H = 32;
         public SpriteRenderer giantWarn;
         public SpriteRenderer festTint;
         public LineRenderer acornFrame;
@@ -232,6 +232,16 @@ namespace MoreMush
 
         static float EaseOut(float k) { k = 1 - Mathf.Clamp01(k); return 1 - k * k * k; }
 
+        // impact 폴더의 6칸 가로 시트 (Art/effect/impact/<name>), 이름순 프레임. 없으면 빈 배열
+        static readonly Dictionary<string, Sprite[]> impactSheets = new Dictionary<string, Sprite[]>();
+        static Sprite[] ImpactFrames(string name)
+        {
+            if (impactSheets.TryGetValue(name, out var fr)) return fr;
+            fr = Resources.LoadAll<Sprite>("Art/effect/impact/" + name);
+            System.Array.Sort(fr, (a, b) => string.CompareOrdinal(a.name, b.name));
+            return impactSheets[name] = fr;
+        }
+
         // one watercolor sprite of the ring pool: FX sprites are one world unit wide, so scale = diameter in units
         SpriteRenderer Blot(ref int n, Sprite sp, float x, float y, float diameter, Color c, float rot, int order)
         {
@@ -256,6 +266,7 @@ namespace MoreMush
         // live: 이번 프레임에 시뮬레이션이 진행됐는지 (일시정지·창·히트스톱이면 false → 흔들림·반짝이를 멈춘다)
         public void Draw(RoundSim R, bool live = true)
         {
+            if (!ReferenceEquals(prewarmedFor, R)) { prewarmedFor = R; Prewarm(R); }
             float now = Time.time;
             var st = R.st;
             float z = RoundSim.ZOOM;
@@ -314,17 +325,14 @@ namespace MoreMush
                 // instant and fades; quiet rings (every bell hit) stay thin and small
                 for (int ri = Mathf.Max(0, R.rings.Count - MAX_RINGS); ri < R.rings.Count; ri++)
                 {
+                    // 원형 고리 대신 예전 물 튀김(물감 그림 FX/impact)을 고리 색으로: 확 퍼졌다 옅어진다 (사용자 2026-11-11)
                     var r = R.rings[ri];
-                    float k = r.t / r.dur, e = EaseOut(k);
+                    var isp = fxSp[(int)FxShape.Impact] ?? splashSp;
+                    if (isp == null) continue;
+                    float k = Mathf.Clamp01(r.t / r.dur), e = EaseOut(k);
                     var c = U.Hex(r.col); c.a = (1 - k) * (1 - k) * (r.quiet ? 0.7f : 0.95f);
                     float rot = (r.x * 7 + r.y * 3) % 360;
-                    Blot(ref nr, r.quiet ? ringThinSp : ringSp, r.x, r.y, 2 * r.r * (0.35f + 0.75f * e), c, rot, 3040);
-                    if (!r.quiet && k < 0.3f)
-                    {
-                        float p = k / 0.3f;
-                        var sc = c; sc.a = (1 - p) * 0.75f;
-                        Blot(ref nr, splashSp, r.x, r.y, r.r * (0.7f + 0.9f * EaseOut(p)), sc, rot + 40, 3041);
-                    }
+                    Blot(ref nr, isp, r.x, r.y, r.r * (0.45f + 0.75f * e) * (r.quiet ? 0.7f : 1), c, rot, 3040);   // 번지는 물감 크기 50% (사용자 2026-11-11)
                 }
                 foreach (var w in R.waves)
                 {
@@ -691,15 +699,34 @@ namespace MoreMush
             int n = 0;
             foreach (var f in R.fxs)
             {
-                if (f.shape == FxShape.ContactHit)
+                if (f.shape == FxShape.BossIn || f.shape == FxShape.BossOut)
                 {
-                    if (contactFrames.Length == 0) continue;
+                    // 보스 등장·격파 플립북: 보스(1000 + y) 뒤에 그린다. 그림 한 장이 정사각 캔버스라 크기 = 캔버스 한 변
+                    var frames = BossFrames(f.shape == FxShape.BossIn);
+                    if (frames.Length == 0) continue;
+                    float pk = Mathf.Clamp01(f.t / f.dur);
+                    var bf = frames[Mathf.Min(frames.Length - 1, (int)(pk * frames.Length))];
+                    var bs = fxPool.Get(n++);
+                    if (bs.sprite != bf) bs.sprite = bf;
+                    float bfit = f.size / Art.PPU / (bf.rect.width / bf.pixelsPerUnit);
+                    bs.transform.localPosition = Art.P(f.x, f.y);
+                    bs.transform.localScale = new Vector3(bfit, bfit, 1);
+                    bs.transform.localRotation = Quaternion.identity;
+                    bs.color = Color.white;
+                    bs.sortingOrder = 950;
+                    continue;
+                }
+                if (f.shape == FxShape.ContactHit || f.shape >= FxShape.SplashBlue)
+                {
+                    var cf = f.shape == FxShape.SplashBlue ? ImpactFrames("splash_skyblue") : f.shape == FxShape.SplashOrange ? ImpactFrames("splash_orange")
+                           : f.shape == FxShape.SplashBeige ? ImpactFrames("splash_beige") : contactFrames;
+                    if (cf.Length == 0) continue;
                     float progress = Mathf.Clamp01(f.t / f.dur);
-                    var frame = contactFrames[Mathf.Min(contactFrames.Length - 1, (int)(progress * contactFrames.Length))];
+                    var frame = cf[Mathf.Min(cf.Length - 1, (int)(progress * cf.Length))];
                     var hit = fxPool.Get(n++);
                     if (hit.sprite != frame) hit.sprite = frame;
                     // Use the full frame canvas so the painted growth/shrink is preserved.
-                    float fit = f.size / Art.PPU / contactCanvasUnits;
+                    float fit = f.size / Art.PPU / (frame.rect.width / frame.pixelsPerUnit);
                     hit.transform.localPosition = Art.P(f.x, f.y);
                     hit.transform.localScale = new Vector3(fit, fit, 1);
                     hit.transform.localRotation = Quaternion.identity;

@@ -19,6 +19,11 @@ namespace MoreMush
         // 예전에는 처음 체력바를 보일 때 HpLag를 Instantiate했다 (라운드 중 생성 끊김) → 프리팹에 넣어 둔다
         bool UsePills() => hpLag != null;
 
+        // 보스 등장 실루엣 색 #463765 (사용자 2026-11-11): 몸통 재질(SpriteFx)의 실루엣 색만 바꾼 보스 전용 사본. 버섯끼리 묶어 그리는 재질은 그대로 둔다
+        static readonly Color BossShade = new Color32(0x46, 0x37, 0x65, 255);
+        static Material bossMat;
+        Material baseMat;
+
         static float BackOut(float t) { const float c = 1.9f; t -= 1; return 1 + (c + 1) * t * t * t + c * t * t; }
 
         // a pill w x h field pixels centred at (x, y): scaled so its height is h, so the round ends stay round
@@ -71,11 +76,20 @@ namespace MoreMush
             if (!ReferenceEquals(body.sprite, bodySp)) body.sprite = bodySp;
             float size = big ? m.r * 2.4f : heap ? m.r * 2.25f : m.r * 2.35f;
             body.sortingOrder = order;
+            if (baseMat == null) baseMat = body.sharedMaterial;
+            float dark = 0;
+            if (m.boss)
+            {
+                if (bossMat == null && baseMat != null) { bossMat = new Material(baseMat) { name = baseMat.name + " Boss", hideFlags = HideFlags.HideAndDontSave }; bossMat.SetColor("_DarkColor", BossShade); }
+                if (bossMat != null && body.sharedMaterial != bossMat) body.sharedMaterial = bossMat;
+                dark = RoundSim.R != null ? RoundSim.R.BossDark(m) : 0;
+            }
+            else if (baseMat != null && body.sharedMaterial != baseMat) body.sharedMaterial = baseMat;
             // 보스는 맞을 때 하얗게 번쩍, 환상 버섯 분신은 반투명
             // every hit flashes the mushroom white for a moment (bosses a little longer)
             // 효과는 정점 색으로 (몸통 재질 = SpriteFx): 속성 블록을 붙이지 않아 버섯끼리 묶어 그린다
             float hitFlash = m.hitT < 0.08f ? 0.75f * (1 - m.hitT / 0.08f) : 0;
-            body.color = Art.FxColor(m.golden ? 1 : 0, Mathf.Max(hitFlash, m.boss ? m.squish * 0.5f : 0), m.bossClone ? 0.7f + 0.15f * Mathf.Sin(now * 6) : 1);
+            body.color = Art.FxColor(m.golden ? 1 : 0, Mathf.Max(hitFlash, m.boss ? m.squish * 0.5f : 0), m.bossClone ? 0.7f + 0.15f * Mathf.Sin(now * 6) : 1, dark);
             // 말랑한 몸: 밑동은 고정, 갓이 천천히 흔들리고 맞으면 출렁인다 (버섯마다 위상이 다름)
             float phase = m.x * 0.013f + m.y * 0.021f;
             float lean = Mathf.Sin(now * (big ? 1.1f : 1.7f) + phase) * (heap ? 0.02f : 0.035f)

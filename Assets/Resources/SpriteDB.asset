@@ -4685,6 +4685,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 68d0957215f97854a83df89d9749cab0, type: 3}
   - key: Props/crack
     sprite: {fileID: 21300000, guid: 02e7b28369e33a64e8b9b9c8c0f38f7d, type: 3}
+  - key: Props/flower_0
+    sprite: {fileID: 21300000, guid: 24c5d1dd1ec148b45a63154fc0986cba, type: 3}
+  - key: Props/flower_1
+    sprite: {fileID: 21300000, guid: c969d10a76bbf3140ba804b4eb7f7dda, type: 3}
+  - key: Props/flower_2
+    sprite: {fileID: 21300000, guid: cb007ac43d342f34b8b8b2f7caa23373, type: 3}
   - key: Props/flowers
     sprite: {fileID: 21300000, guid: 97e0acc892df75e4db48c26b3ab62863, type: 3}
   - key: Props/leaf
