@@ -44,9 +44,12 @@ namespace MoreMush
             public static readonly float[] width = { 270, 278, 415, 596, 923, 1079, 1416, 2193 };
             // 단계별 카메라 화각 배율: 땅(화면 아래)은 고정하고 위·양옆으로 넓어진다. 겹친 큰 배경(FarmView.BG_LAYERS)이 3.8배까지 덮는다
             public static readonly float[] zoom = { 1f, 1.12f, 1.26f, 1.42f, 1.6f, 1.8f, 2.02f, 2.28f };
-            public const float x = 820, y = 720;                  // 나무 밑동 (화면 좌표): 배경 빈터의 밝은 자리 (장식도 이 자리를 중심으로 놓였다)
+            // 나무 밑동 (화면 좌표). 2026-11-11 세계수를 화면 가운데로: 820 → 960 (카메라는 그대로 가운데).
+            // 배경 그림의 밝은 빈터는 820에 그려져 있어서 배경·장식을 bgShift만큼 같이 오른쪽으로 옮긴다 (FarmView.SetupBackground · 씬의 Farm/Decor)
+            public const float x = 960, y = 720;
+            public const float bgShift = 140;
             public const int climbFrom = 4;                       // 정령이 나무에 오르는 단계 (2026-10-20 사용자). 그 전에는 땅에서 손 닿는 버섯만 딴다
-            public const float camX = 960;                        // 화각이 넓어질 때 카메라 중심 x (무대 가운데, 큰 배경이 양옆을 덮는다)
+            public const float camX = 960;                        // 화각이 넓어질 때 카메라 중심 x (무대 가운데, 큰 배경이 양옆을 덮는다). 다른 씬과 같은 가운데
             public const int order = 880;
             public const int craftBase = 2;                       // 동시 제작 슬롯 (4·6·8단계에 +1)
             public static int CraftSlots(int stage) => craftBase + (stage >= 4 ? 1 : 0) + (stage >= 6 ? 1 : 0) + (stage >= 8 ? 1 : 0);

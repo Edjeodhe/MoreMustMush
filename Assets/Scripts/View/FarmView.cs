@@ -62,6 +62,13 @@ namespace MoreMush
 
         void Awake()
         {
+            // UI 캔버스 아래에 놓여 있으면 루트로 꺼낸다 (카메라를 따라다니면 단계별 넓게 보기·휠 확대가 안 보인다). 무대 원점 = 월드 원점
+            if (GetComponentInParent<Canvas>(true) != null)
+            {
+                transform.SetParent(null, false);
+                transform.localPosition = Vector3.zero; transform.localRotation = Quaternion.identity; transform.localScale = Vector3.one;
+                Debug.LogWarning("[Farm] 세계수 월드가 UI 캔버스 아래에 있어 루트로 꺼냈어요 (씬에서도 루트로 옮겨 주세요)");
+            }
             I = this;
             critPool = new Pool<FarmCritter>(critterTemplate, critterLayer);
             partPool = new Pool<SpriteRenderer>(partTemplate, fx);
@@ -524,7 +531,7 @@ namespace MoreMush
         };
         readonly List<SpriteRenderer> bgLayers = new List<SpriteRenderer>();
 
-        void OnEnable() { snapZoom = true; viewTarget = 1; viewFocusOn = false; ResetView(); SetupBackground(); if (vignette != null) vignette.SetActive(true); }
+        void OnEnable() { space = transform; snapZoom = true; viewTarget = 1; viewFocusOn = false; ResetView(); SetupBackground(); if (vignette != null) vignette.SetActive(true); }
         void OnDisable() { Zoom = 1; ResetView(); ApplyCamera(); if (vignette != null) vignette.SetActive(false); }
 
         void SetupBackground()
@@ -532,13 +539,11 @@ namespace MoreMush
             var bg = transform.Find("Background")?.GetComponent<SpriteRenderer>();
             var core = SpriteDB.Get("Backgrounds/bg_ranch_core");
             if (bg == null || core == null) return;
-            if (bg.sprite != core)
-            {
-                bg.sprite = core;
-                float k = 1920f / Art.PPU / core.bounds.size.x;
-                bg.transform.localScale = new Vector3(k, k, 1);
-                bg.transform.localPosition = new Vector3(9.6f, -5.4f, bg.transform.localPosition.z);
-            }
+            if (bg.sprite != core) bg.sprite = core;
+            float k = 1920f / Art.PPU / core.bounds.size.x;
+            bg.transform.localScale = new Vector3(k, k, 1);
+            // 배경의 빈터(820)가 나무 밑동(WT.x = 960) 밑에 오게 bgShift만큼 오른쪽으로 (2026-11-11)
+            bg.transform.localPosition = new Vector3((960 + WT.bgShift) / Art.PPU, -5.4f, bg.transform.localPosition.z);
             for (int i = 0; i < BG_LAYERS.Length; i++)
             {
                 var sp = SpriteDB.Get(BG_LAYERS[i].key);
@@ -557,7 +562,7 @@ namespace MoreMush
                 l.sprite = sp;
                 float kw = R.width / Art.PPU / sp.bounds.size.x;
                 l.transform.localScale = new Vector3(kw, kw, 1);
-                l.transform.localPosition = new Vector3((R.x + R.width / 2) / Art.PPU, -(R.y + R.height / 2) / Art.PPU, bg.transform.localPosition.z + 0.1f * (i + 1));
+                l.transform.localPosition = new Vector3((R.x + R.width / 2 + WT.bgShift) / Art.PPU, -(R.y + R.height / 2) / Art.PPU, bg.transform.localPosition.z + 0.1f * (i + 1));
             }
         }
 
@@ -610,7 +615,7 @@ namespace MoreMush
             var p = focusKid != null ? Find(focusKid) : null;
             if (p == null) { focusKid = null; return; }
             float vh = 1080 * Zoom * viewTarget, vw = vh * (Camera.main != null ? Camera.main.aspect : 16f / 9);
-            viewGoto = new Vector2(p.x + 0.17f * vw, p.y - 0.08f * vh);
+            viewGoto = new Vector2(p.x - 0.17f * vw, p.y - 0.08f * vh);   // 꼬마 목록·정보 카드가 왼쪽에 뜨니 꼬마는 화면 오른쪽 가운데쯤 (2026-11-11)
         }
         static float viewLift;
 
@@ -757,9 +762,23 @@ namespace MoreMush
         }
 
         // ===== input =====
+        // 화면 → 무대 px (이 오브젝트 기준: 씬에서 Farm을 옮겨 놓아도 맞는다).
+        // Farm은 씬 맨 위(루트)에 원점으로 둔다. UI 캔버스(Screen Space - Camera) 아래에 두면 카메라를 따라다녀서
+        // 단계마다 넓게 보기·휠 확대가 화면에 안 나타난다 (2026-11-11 바로잡음)
+        static Transform space;
+
+        // 세계수 위 한 점의 월드 좌표: t = 0 밑동 … 1 꼭대기 (UI를 나무에 붙일 때. 나무가 자라거나 화면이 넓어져도 따라간다)
+        public Vector3 TreeWorld(float t)
+        {
+            if (tree == null) return transform.TransformPoint(new Vector3(WT.x / Art.PPU, -WT.y / Art.PPU, 0));
+            _ = tree.Height;   // 그림 크기 계산 (Layout)
+            float y = Mathf.Lerp(WT.y, tree.Top, t);
+            return transform.TransformPoint(new Vector3(WT.x / Art.PPU, -y / Art.PPU, 0));
+        }
         public static Vector2 ToStage(Vector2 screen)
         {
             var w = Camera.main.ScreenToWorldPoint(new Vector3(screen.x, screen.y, 10));
+            if (space != null) { var l = space.InverseTransformPoint(new Vector3(w.x, w.y, space.position.z)); return new Vector2(l.x * Art.PPU, -l.y * Art.PPU); }
             return new Vector2(w.x * Art.PPU, -w.y * Art.PPU);
         }
 

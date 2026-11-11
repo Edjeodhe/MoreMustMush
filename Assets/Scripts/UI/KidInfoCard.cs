@@ -36,7 +36,7 @@ namespace MoreMush
             if (root == null) return;
             SceneUI.Bind(SceneUI.Find(root.transform, "Exit"), () => { Snd.Ui(); Close(); });
             SceneUI.Bind(SceneUI.Find(root.transform, "Button_Zone"), () => { Snd.Ui(); SetPicking(!picking); });
-            SceneUI.Bind(SceneUI.Find(root.transform, "Button_Gift"), () => { Snd.Ui(); kids?.Open(); kids?.OpenAffection(id); });
+            SceneUI.Bind(SceneUI.Find(root.transform, "Button_Gift"), () => { Snd.Ui(); kids?.OpenAffection(id); });   // 꼬마 탭 창은 열지 않고 호감도 팝업만
             foreach (var b in root.GetComponentsInChildren<Button>(true))
             {
                 if (b.name != "Zone_Button") continue;

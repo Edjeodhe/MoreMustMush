@@ -74,16 +74,23 @@ namespace MoreMush.EditorTools
             },
             ["OutGame"] = new[]
             {
-                R("Canvas/UP_Panel/Gold", "Icons/gold", INK, aspect: true),
-                R("Canvas/UP_Panel/수확석", "Icons/gem", INK, aspect: true),
-                R("Canvas/UP_Panel", "UI/bar_top", INK),
-                R("Canvas/Panel/Button_Bag", "UI/basket", INK, aspect: true),
-                R("Canvas/Panel", "UI/panel_paper", INK),
-                R("Canvas/Down_Panel/Image", null),            // 꼬마 칸·접기 손잡이: 아래에서 따로
-                R("Canvas/Down_Panel", "UI/panel_wood"),
+                // 2026-11-11 메인 화면처럼: 위 재화 칸 둘 · 오른쪽 위 톱니 · 아래 탭 한 줄 · 오른쪽 아래 돌아가기 · 가운데 바구니
+                R("Canvas/Gold_UI_BG/Gold_Img", "Icons/gold", INK, aspect: true),
+                R("Canvas/Gold_UI_BG", "UI/bar_top"),
+                R("Canvas/Ston_UI_BG/Ston_Img", "Icons/gem", INK, aspect: true),
+                R("Canvas/Ston_UI_BG", "UI/bar_top"),
+                R("Canvas/Button_Option/Img", "Icons/option", aspect: true),
+                R("Canvas/Button_Option", "UI/btn_round"),
+                R("Canvas/Button_Bag/Ribbon", "UI/ribbon"),
+                R("Canvas/Button_Bag/Timer/Icon", "Icons/clock", aspect: true),
+                R("Canvas/Button_Bag/Timer", "UI/panel_paper", INK),
+                R("Canvas/Button_Bag", "UI/basket_empty", aspect: true),
+                R("Canvas/Down_Panel/Mush_Kid", "UI/kid_button", aspect: true),
+                R("Canvas/Down_Panel", "UI/panel_paper", INK),
                 R("Canvas/Down_hidden_Panel/*", null),
                 R("Canvas/Down_hidden_Panel", "UI/panel_wood"),
-                R("Canvas/Button_Group/*", "UI/rail_item", INK, tab: true),
+                R("Canvas/Button_Group/*", "UI/btn_wood", INK),
+                R("Canvas/Button_Back", "UI/sign_arrow", CREAM, aspect: true),   // 나무 화살표 팻말 (오른쪽 아래)
             },
             ["Stage"] = new[]
             {
@@ -222,17 +229,9 @@ namespace MoreMush.EditorTools
 
         static void OutGameExtras(UnityEngine.SceneManagement.Scene scene)
         {
-            // 위 막대 안 글자(보관 시간 등)도 진한 글자로
-            var up = Find(scene, "Canvas/UP_Panel");
-            if (up != null) foreach (var t in up.GetComponentsInChildren<TMP_Text>(true)) { Undo.RecordObject(t, "Dream UI"); t.color = INK; }
-            var bag = Find(scene, "Canvas/Panel");
-            if (bag != null) foreach (var t in bag.GetComponentsInChildren<TMP_Text>(true)) { Undo.RecordObject(t, "Dream UI"); t.color = INK; }
-            // 접기 손잡이(검은 세로 막대)
-            var down = Find(scene, "Canvas/Down_Panel");
-            if (down != null)
-                foreach (Transform c in down)
-                    if (c.TryGetComponent<Image>(out var img) && img.sprite == null)
-                    { Undo.RecordObject(img, "Dream UI"); img.sprite = Sp("UI/chip"); img.type = Image.Type.Sliced; img.color = Hex("#a07850"); }
+            // 바구니 아래 보관 시간 글자는 진한 글자로 (리본 위 보관 골드는 흰 글자 + 테두리 그대로)
+            var timer = Find(scene, "Canvas/Button_Bag/Timer");
+            if (timer != null) foreach (var t in timer.GetComponentsInChildren<TMP_Text>(true)) { Undo.RecordObject(t, "Dream UI"); t.color = INK; }
         }
 
         // ===== 버튼 크기를 글자에 맞춘다 (9-slice라 늘려도 테두리 그대로) =====
