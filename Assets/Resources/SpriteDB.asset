@@ -4617,6 +4617,12 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 53f21b38d3a5cf842b885580aeb51876, type: 3}
   - key: UI/basket
     sprite: {fileID: 21300000, guid: 1162824440861ec46a928bdeacc8d60d, type: 3}
+  - key: UI/basket_empty
+    sprite: {fileID: 21300000, guid: eb254744ada1fb947b4bf31f257f1ca8, type: 3}
+  - key: UI/basket_full
+    sprite: {fileID: 21300000, guid: 64fe7a0d88fdeb84483b451baf02cfa9, type: 3}
+  - key: UI/basket_half
+    sprite: {fileID: 21300000, guid: f35202070ccdf11418a259845d8d9b25, type: 3}
   - key: UI/bookmark_eat
     sprite: {fileID: 21300000, guid: 65b3dd317ea863c40abbc7e63229f605, type: 3}
   - key: UI/bookmark_on
@@ -4655,6 +4661,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: b64f0daf489315d48ae09d0cffd3e589, type: 3}
   - key: UI/icon_sfx_on
     sprite: {fileID: 21300000, guid: 6c572920fc3387244ad88684187c92db, type: 3}
+  - key: UI/kid_button
+    sprite: {fileID: 21300000, guid: b030436b77d8c4e48affe9bf1bac855b, type: 3}
   - key: UI/kid_unknown
     sprite: {fileID: 21300000, guid: c543878811c4e8649bed2cfc79aa37b1, type: 3}
   - key: UI/logo
@@ -4679,6 +4687,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: d0dd7f7dd9af0604baaef38c6039e65d, type: 3}
   - key: UI/ribbon
     sprite: {fileID: 21300000, guid: 8e51669dab2c2c04598eedaa32e7578f, type: 3}
+  - key: UI/ribbon2
+    sprite: {fileID: 21300000, guid: 681c91273f917fa45bca408d950ad163, type: 3}
   - key: UI/sign_arrow
     sprite: {fileID: 21300000, guid: 70d76c7d271f5b94d8ddbb82526eea96, type: 3}
   - key: UI/tooltip

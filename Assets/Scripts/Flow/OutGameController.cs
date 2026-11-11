@@ -10,16 +10,18 @@ namespace MoreMush
 {
     // OutGame 씬 (세계수). 사람이 배치한 캔버스에 기능만 잇는다 — UI를 코드로 만들지 않는다.
     // 이름으로 찾는 것:
-    //   UP_Panel/Gold·수확석 안의 글자 = 골드·균사석 · UP_Panel/Text (TMP) (1) = 보따리 보관 시간
-    //   Button_Bag = 수확 보따리 받기 (쌓인 게 있을 때만 눌린다)
-    //   Down_Panel(늘 보임)을 누르면 Down_hidden_Panel(펼침)이 켜지고, 다시 누르면 꺼진다. 펼침 안의 칸 = 정령 (CRITTER_JOIN 순서, 칸 하나 = 정령 하나)
-    //     있는 정령 = 그림 · 열렸지만 아직 안 데려온 정령 = 검은 실루엣 · 안 열린 정령 = 배치한 빈칸 그림.
+    //   Gold_UI_BG/Gold_Img · Ston_UI_BG/Ston_Img 안의 글자 = 골드·균사석 (메인 화면과 같은 모양) · Button_Option = 설정 창
+    //   Button_Bag = 바구니 (누르면 수확 보따리 받기). 자리는 코드가 매 프레임 세계수 위(BAG_ON_TREE)에 맞춘다 — 씬의 Pos는 쓰지 않는다. 보관 30분 이상 = 반 찬 그림, 1시간 이상 = 가득 찬 그림 (UI/basket_empty·half·full)
+    //     Button_Bag/Ribbon 안의 글자 = 보관된 골드(균사석) · Button_Bag/Timer 안의 글자 = 보관 시간 / 최대
+    //   Down_Panel(왼쪽 아래 꼬마버섯 탭)을 누르면 그 위로 Down_hidden_Panel(2열 5행)이 켜지고, 다시 누르면 꺼진다.
+    //     칸 = 정령 (CRITTER_JOIN 순서, 위 줄부터 왼쪽 → 오른쪽, 칸 하나 = 정령 하나)
+    //     데려온 정령 = 수채화 그림 · 아직 아닌 정령 = 같은 그림에 진한 회색 실루엣 · 정령이 없는 칸 = 꼬마버섯 그림 실루엣.
     //     누르면 (정령 창이 배치되기 전 임시): 안 데려온 정령 = 균사석으로 데려오기, 있는 정령 = 골드로 Lv 업, Lv 상한이면 균사석으로 진화(각성).
     //     균사석을 쓰는 일은 한 번 눌러 값을 보여 주고, 3초 안에 다시 누르면 한다
-    //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 → 세계수 탭 창(FarmTabWindow, 배치된 FarmTabPanel 또는 임시 창). 같은 탭을 다시 누르면 닫힘
+    //   Button_Group 안의 버튼 = 성장 · 꼬마 · 공방 · 꾸미기 탭 (아래 한 줄, 왼쪽 → 오른쪽) → 세계수 탭 창(FarmTabWindow, 배치된 FarmTabPanel 또는 임시 창). 같은 탭을 다시 누르면 닫힘
     //   Workshop_Panel = 꼬마 공방 (WorkshopPanel 참고). 배치돼 있으면 공방 탭은 세계수 탭 창 대신 이 창을 연다
     //   꾸미기 탭 = 화면 아래 구역 탭 창 (DecoWindow, 프리팹 Resources/UI/DecoPanel). 프리팹이 없으면 세계수 탭 창의 꾸미기
-    //   Button_Back = MainGame으로 돌아가기. 배치돼 있지 않으면 왼쪽 아래에 임시 나무 화살표 팻말(UI/sign_arrow)을 만든다
+    //   Button_Back = MainGame으로 돌아가기 (오른쪽 아래, 메인의 시작 버튼 자리). 배치돼 있지 않으면 왼쪽 아래에 임시 나무 화살표 팻말(UI/sign_arrow)을 만든다
     // 세계수 월드(FarmView)는 씬에 있으면 연다. Esc = MainGame으로.
     public class OutGameController : MonoBehaviour
     {
@@ -33,8 +35,14 @@ namespace MoreMush
 
         CurrencyBar currency;
         WorkshopPanel workshop;
-        TMP_Text storeText, bagText;
-        Button bag;
+        TMP_Text storeText, amountText;
+        Image bagImg;
+        Sprite[] baskets;                  // 바구니: 빈 · 반 · 가득 (보관 시간에 따라)
+        int basketShown = -1;
+        const double HALF_SEC = 1800, FULL_SEC = 3600;   // 30분 · 1시간
+        RectTransform bagRt;
+        // 바구니는 세계수 가운데에서 살짝 위에 붙는다 (0 밑동 … 1 꼭대기). 나무가 자라거나 단계마다 화면이 넓어져도 따라간다 (사용자 2026-11-11)
+        const float BAG_ON_TREE = 0.6f;
         GameObject fold, unfold;           // Down_Panel · Down_hidden_Panel
         readonly List<Image> kidSlots = new List<Image>();
         readonly List<Sprite> kidBlank = new List<Sprite>();   // 배치한 빈칸 그림 (아직 없는 꼬마)
@@ -46,7 +54,7 @@ namespace MoreMush
         GrowWindow growWin; KidWindow kidWin; WorkshopWindow craftWin; KidInfoCard kidInfo; FarmListPopup listPopup;
         int armed = -1; float armedT;      // 균사석을 쓰기 전 확인: 한 번 누른 칸과 그 시각
         const float ARM_SEC = 3;
-        static readonly Color SILHOUETTE = new Color(0.08f, 0.09f, 0.14f, 0.85f);
+        Sprite noKid;   // 정령이 없는 칸 = 꼬마버섯 그림 실루엣
         OptionWindow optionWin;   // Esc = 옵션 창 (돌아가기 버튼 포함). MainGame으로 돌아가는 버튼이 배치되기 전까지 여기서 돌아간다
         float tickT;
         TMP_Text backLabel;       // 돌아가기 팻말 글자 (언어가 바뀌면 다시 쓴다)
@@ -54,13 +62,16 @@ namespace MoreMush
         void Awake()
         {
             var scene = gameObject.scene;
-            var up = SceneUI.Need(scene, "UP_Panel");
-            currency = new CurrencyBar(SceneUI.TextIn(SceneUI.Need(up?.transform, "Gold")), SceneUI.TextIn(SceneUI.Need(up?.transform, "수확석")));
-            storeText = up != null ? up.transform.Find("Text (TMP) (1)")?.GetComponent<TMP_Text>() : null;   // Gold·수확석 안의 같은 이름 글자와 헷갈리지 않게 바로 아래 것만
+            currency = new CurrencyBar(SceneUI.TextIn(SceneUI.Need(scene, "Gold_Img")?.transform), SceneUI.TextIn(SceneUI.Need(scene, "Ston_Img")?.transform));
 
             var bagT = SceneUI.Need(scene, "Button_Bag")?.transform;
-            bag = SceneUI.Bind(bagT, ClaimBag);
-            bagText = SceneUI.TextIn(bagT);
+            SceneUI.Bind(bagT, ClaimBag);   // 비어 있어도 눌린다 (비었다고 알려 준다)
+            bagImg = bagT != null ? bagT.GetComponent<Image>() : null;
+            bagRt = bagT as RectTransform;
+            amountText = bagT != null ? SceneUI.TextIn(bagT.Find("Ribbon")) : null;
+            storeText = bagT != null ? SceneUI.TextIn(bagT.Find("Timer")) : null;
+            baskets = new[] { SpriteDB.Get("UI/basket_empty"), SpriteDB.Get("UI/basket_half"), SpriteDB.Get("UI/basket_full") };
+            noKid = SpriteDB.Get("UI/kid_button");
 
             fold = SceneUI.Need(scene, "Down_Panel");
             unfold = SceneUI.Need(scene, "Down_hidden_Panel");
@@ -70,7 +81,7 @@ namespace MoreMush
             {
                 foreach (Transform c in unfold.transform)
                     if (c.TryGetComponent<Image>(out var img)) { img.preserveAspect = true; kidSlots.Add(img); }   // 정령 그림은 가로세로 비가 제각각(0.6~1.2) → 칸에 늘리지 않고 비율대로
-                kidSlots.Sort((a, b) => Order(a.transform, b.transform, true));
+                kidSlots.Sort(Grid);   // 2열 5행: 위 줄부터, 줄 안에서는 왼쪽 → 오른쪽
                 foreach (var s in kidSlots) kidBlank.Add(s.sprite);
                 for (int i = 0; i < kidSlots.Count; i++) { int k = i; Clickable(kidSlots[i].gameObject, () => KidSlot(k)); }
                 FoldButton(unfold.transform);   // 칸을 다 모은 뒤에 (닫기 버튼이 정령 칸으로 세어지지 않게)
@@ -81,7 +92,7 @@ namespace MoreMush
             {
                 foreach (Transform c in group.transform)
                     if (c.TryGetComponent<Button>(out var b)) tabs.Add(b);
-                tabs.Sort((a, b) => Order(a.transform, b.transform, false));   // 위 → 아래
+                tabs.Sort((a, b) => Order(a.transform, b.transform, true));   // 왼쪽 → 오른쪽
                 for (int i = 0; i < tabs.Count; i++) { int k = i; tabs[i].onClick.AddListener(() => OpenTab(k)); }
             }
             var ws = SceneUI.Find(scene, "Workshop_Panel");
@@ -97,6 +108,7 @@ namespace MoreMush
             kidInfo = new KidInfoCard(FarmWin.Spawn(scene, "KidInfoCard"), kidWin, onChange);
             optionWin = OptionWindow.For(scene, () => { Snd.Ui(); optionWin.Close(); },
                 new OptionWindow.Extra("Button_Back", "돌아가기", ToMainGame));
+            SceneUI.Bind(SceneUI.Find(scene, "Button_Option"), () => optionWin.Toggle());
             BackButton(scene);
         }
 
@@ -168,6 +180,23 @@ namespace MoreMush
             }
         }
 
+        // 카메라가 움직인 뒤(FarmView.Update)에 바구니를 나무 위 자리로
+        void LateUpdate()
+        {
+            if (farm == null || bagRt == null) return;
+            var cam = Camera.main; var parent = bagRt.parent as RectTransform;
+            if (cam == null || parent == null) return;
+            var canvas = bagRt.GetComponentInParent<Canvas>();
+            var uiCam = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
+            Vector2 screen = cam.WorldToScreenPoint(farm.TreeWorld(BAG_ON_TREE));
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, screen, uiCam, out var local))
+            {
+                // 앵커가 어디든 부모 안의 그 점에 바구니 가운데(피벗)가 오게
+                var anchor = Vector2.Scale((bagRt.anchorMin + bagRt.anchorMax) * 0.5f - parent.pivot, parent.rect.size);
+                bagRt.anchoredPosition = local - anchor;
+            }
+        }
+
         void Render()
         {
             if (G == null) return;
@@ -184,21 +213,24 @@ namespace MoreMush
         {
             if (G?.farm == null) return;
             var b = G.farm.bag;
-            UIUtil.SetText(storeText, Loc.F("보관 {0} / {1}", Mmss((long)b.sec), Mmss((long)BagCapSec())) + (BagFull() ? " " + Loc.T("가득!") : ""));
-            if (bag != null) bag.interactable = BagReady();
-            UIUtil.SetText(bagText, Loc.F("수확 보따리 받기  <size=80%>{0}{1}</size>", UIUtil.Ic("gold"), U.Fmt(System.Math.Floor(b.gold))));
+            UIUtil.SetText(storeText, Mmss((long)b.sec) + " / " + Mmss((long)BagCapSec()));
+            double gem = System.Math.Floor(b.gem);
+            UIUtil.SetText(amountText, UIUtil.Ic("gold") + U.Fmt(System.Math.Floor(b.gold)) + (gem >= 1 ? " " + UIUtil.Ic("gem") + gem : ""));
+            int k = b.sec >= FULL_SEC ? 2 : b.sec >= HALF_SEC ? 1 : 0;
+            if (bagImg != null && k != basketShown && baskets[k] != null) { basketShown = k; bagImg.sprite = baskets[k]; }
         }
 
-        // 정령 칸: CRITTER_JOIN 순서로 칸 하나에 정령 하나. 있는 정령 = 그림 · 열린 정령 = 실루엣 · 안 열린 정령 = 빈칸 그림
+        // 정령 칸: CRITTER_JOIN 순서로 칸 하나에 정령 하나. 데려온 정령 = 수채화 그림 · 아직 아닌 정령 = 같은 그림의 진한 회색 실루엣
+        // 정령이 없는 칸(목록보다 칸이 많을 때) = 꼬마버섯 그림 실루엣
         void RenderKids()
         {
             for (int i = 0; i < kidSlots.Count; i++)
             {
                 string id = i < CRITTER_JOIN.Length ? CRITTER_JOIN[i] : null;
-                bool shown = id != null && (HasSpecial(id) || KidOpen(id));
-                var s = shown ? UIUtil.KidPortrait(id) : null;
+                var s = id != null ? UIUtil.KidPortrait(id) : noKid;
                 kidSlots[i].sprite = s != null ? s : kidBlank[i];
-                kidSlots[i].color = s != null && !HasSpecial(id) ? SILHOUETTE : Color.white;
+                kidSlots[i].color = Color.white;
+                kidSlots[i].material = id != null && HasSpecial(id) ? null : UIUtil.Fx(1);   // 도감 잠긴 칸과 같은 진한 회색 실루엣 (UIFx_Locked)
             }
         }
 
@@ -212,7 +244,7 @@ namespace MoreMush
             {
                 Snd.Ui();
                 if (HasSpecial(id)) { if (kidInfo.Kid == id) kidInfo.Close(); else { CloseWindows(); RenderTabs(); kidInfo.Show(id); } }
-                else { kidInfo.Close(); CloseWindows(); tab = 1; kidWin.Open(); kidWin.OpenJoin(id); RenderTabs(); }
+                else { kidInfo.Close(); CloseWindows(); RenderTabs(); kidWin.OpenGrade(id); }   // 꼬마 탭 창은 열지 않고 등급(합류) 팝업만
                 return;
             }
             bool confirm = armed == i && Time.unscaledTime - armedT < ARM_SEC;
@@ -347,6 +379,14 @@ namespace MoreMush
             var pa = ((RectTransform)a).anchoredPosition; var pb = ((RectTransform)b).anchoredPosition;
             float d = horizontal ? pa.x - pb.x : pb.y - pa.y;
             return Mathf.Abs(d) > 1 ? (d > 0 ? 1 : -1) : a.GetSiblingIndex().CompareTo(b.GetSiblingIndex());
+        }
+
+        // 격자 순서: 위 줄 → 아래 줄, 같은 줄이면 왼쪽 → 오른쪽
+        static int Grid(Image a, Image b)
+        {
+            var pa = ((RectTransform)a.transform).anchoredPosition; var pb = ((RectTransform)b.transform).anchoredPosition;
+            if (Mathf.Abs(pa.y - pb.y) > 1) return pb.y.CompareTo(pa.y);
+            return pa.x.CompareTo(pb.x);
         }
 
         // 배치한 패널은 버튼이 아니라서 누름만 받게 버튼 컴포넌트를 붙인다 (모양은 그대로)

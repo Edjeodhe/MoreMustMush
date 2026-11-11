@@ -12,7 +12,7 @@ namespace MoreMush
     //   Box / Title · Exit · Card_Aff (Pic · Info · Hearts/Heart0~4 · Button) · Card_Grade (Pic · Info · Stars · Button)
     //   Box / ReqBox (Title · Pic · Bubble/Text · Button) · EvoBox (Title · Icon · Text · Button)
     // 카드 두 장은 시안 그림 그대로(새싹·이슬, 2026-10-20 사용자): 새싹 = 꼬마들 호감도 요약 [호감도] → 호감도 팝업,
-    // 이슬 = 꼬마들 별 등급 요약 [등급] → 등급 팝업. 합류(꼬마 종류) 팝업은 아래 꼬마 칸에서 아직 없는 꼬마를 누르면 연다.
+    // 이슬 = 꼬마들 별 등급 요약 [등급] → 등급 팝업. 아직 없는 꼬마의 합류도 등급 팝업에서 한다 (꼬마 칸에서 아직 없는 꼬마를 누르면 등급 팝업만 연다).
     // 꼬마의 부탁 → 일일·주간 부탁 팝업, 꼬마 진화 → 진화 팝업 (Lv업·진화 조건·균사석). 팝업은 FarmListPopup 하나를 돌려 쓴다.
     public class KidWindow
     {
@@ -87,17 +87,26 @@ namespace MoreMush
             UIUtil.SetText(evoText, can > 0 ? Loc.F("지금 진화할 수 있는 꼬마 {0}", can) : Loc.T("한 단계 더 자라요!"));
         }
 
-        // ===== 등급: 꼬마마다 별(진화 단계)·Lv·지금 등급 효과. 진화할 수 있으면 [진화 >] → 진화 팝업 =====
-        public void OpenGrade()
+        // ===== 등급 (+ 합류): 꼬마마다 별(진화 단계)·Lv·지금 등급 효과. 진화할 수 있으면 [진화 >] → 진화 팝업 =====
+        // 아직 없는 꼬마는 얻는 조건(데려오기 균사석 · 만나는 세계수 단계)과 [합류] 버튼 (2026-11-11 합류 팝업을 여기로 합침).
+        // 꼬마 칸에서 아직 없는 꼬마를 누르면 이 팝업만 연다 (focus = 그 꼬마를 맨 위로)
+        public void OpenGrade(string focus = null)
         {
             popup?.Open(Loc.T("꼬마 등급"), "ic_evolve", p =>
             {
-                foreach (var k in Ordered())
+                foreach (var k in Ordered().OrderBy(k => k.id == focus ? 0 : 1))
                 {
-                    string id = k.id; bool own = HasSpecial(id); int aw = Awaken(id);
+                    string id = k.id; bool own = HasSpecial(id), open = KidOpen(id); int aw = Awaken(id);
                     string stars = new string('★', own ? aw : 0) + FarmWin.Col(new string('★', KLV.awakenMax - (own ? aw : 0)), "#d9c9b0");
                     var row = p.Row().Pic(UIUtil.KidPortrait(id), !own);
-                    if (!own) { row.Text((KidOpen(id) ? SPC[id].n : "???") + "  " + stars, FarmWin.Col(Loc.T("아직 합류 전"), FarmWin.GRAY)); continue; }
+                    if (!own && open)
+                    {
+                        var f = CanUnlockKid(id);
+                        row.Text(SPC[id].n + "  " + stars, Loc.F("데려오기 {0}", FarmWin.Gem(UnlockGem(id))), FarmWin.Col(k.traitText, FarmWin.GRAY))
+                           .A(f == KidFail.Gem ? Loc.T("균사석 부족") : Loc.T("합류"), f == KidFail.None, () => Unlock(id));
+                        continue;
+                    }
+                    if (!own) { row.Text("???  " + stars, FarmWin.Col(Loc.F("세계수 {0}단계 {1}가 되면 만나요", JoinLv(id), WT.StageName(JoinLv(id))), FarmWin.GRAY)); continue; }
                     row.Text(SPC[id].n + "  " + FarmWin.Col(stars, "#e8a900"),
                              Loc.F("등급 ★{0}/{1} · Lv.{2}/{3}", aw, KLV.awakenMax, KLv(id), KLV.Cap(aw)),
                              FarmWin.Col(KidStep(id) > 0 ? KidBonusText(k, KidStep(id)) : k.traitText, FarmWin.GRAY));
@@ -142,27 +151,6 @@ namespace MoreMush
             farm?.Cheer(id, IsFav(id, sp) ? Loc.T("이거 제일 좋아해! 고마워!") : U.Pick(FARM_LINES["thanks"]), up > 0 ? Loc.F("호감도 Lv.{0}!", AffLv(id)) : null);
             App.Notify(Loc.F("{0}에게 {1} ×{2}", SPC[id].n, SP[sp].n, n) + (up > 0 ? " · " + Loc.F("호감도 Lv.{0}!", AffLv(id)) : ""));
             After();
-        }
-
-        // ===== 합류: 꼬마 종류 (함께하는 꼬마 · 데려올 수 있는 꼬마 · 아직 못 만난 꼬마) =====
-        public void OpenJoin(string focus = null)
-        {
-            popup?.Open(Loc.T("꼬마 친구들"), "ic_join", p =>
-            {
-                foreach (var k in Ordered().OrderBy(k => k.id == focus ? 0 : 1))
-                {
-                    string id = k.id; bool own = HasSpecial(id), open = KidOpen(id);
-                    var row = p.Row().Pic(UIUtil.KidPortrait(id), !own && !open);
-                    if (own) row.Text(SPC[id].n, FarmWin.Col(Loc.T("함께하는 중"), FarmWin.GREEN), FarmWin.Col(k.traitText, FarmWin.GRAY));
-                    else if (open)
-                    {
-                        var f = CanUnlockKid(id);
-                        row.Text(SPC[id].n, Loc.F("데려오기 {0}", FarmWin.Gem(UnlockGem(id))), FarmWin.Col(k.traitText, FarmWin.GRAY))
-                           .A(f == KidFail.Gem ? Loc.T("균사석 부족") : Loc.T("합류"), f == KidFail.None, () => Unlock(id));
-                    }
-                    else row.Text("???", FarmWin.Col(Loc.F("세계수 {0}단계 {1}가 되면 만나요", JoinLv(id), WT.StageName(JoinLv(id))), FarmWin.GRAY));
-                }
-            }, Render);
         }
 
         void Unlock(string id)
