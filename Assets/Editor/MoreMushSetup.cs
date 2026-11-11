@@ -279,24 +279,6 @@ namespace MoreMush.EditorTools
             Debug.Log($"[MoreMush] {name} sprite asset: {names.Count} glyphs ({string.Join(" ", names)})");
         }
 
-        // the painted fill can come out peach; tint=1 multiplies it, so blue/violet tiers turned muddy. Light pixels go to
-        // a barely warm paper grey of the same lightness (grain kept, matches the field), the brown rim stays as painted.
-        static Texture2D Bleach(Texture2D t)
-        {
-            var px = t.GetPixels32();
-            for (int i = 0; i < px.Length; i++)
-            {
-                var c = px[i];
-                if (c.a < 16) { px[i] = default; continue; }   // near-invisible coloured speckle the generator leaves in the background
-                float l = (0.299f * c.r + 0.587f * c.g + 0.114f * c.b) / 255f;
-                float k = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0.35f, 0.6f, l));
-                byte g = (byte)Mathf.Clamp(Mathf.RoundToInt(Mathf.Min(1, l * 1.12f) * 255), 0, 255);
-                px[i] = new Color32((byte)Mathf.Lerp(c.r, g, k), (byte)Mathf.Lerp(c.g, g * 0.985f, k), (byte)Mathf.Lerp(c.b, g * 0.95f, k), c.a);
-            }
-            t.SetPixels32(px); t.Apply();
-            return t;
-        }
-
         static Texture2D LoadReadable(string path)
         {
             var t = new Texture2D(2, 2, TextureFormat.RGBA32, false);

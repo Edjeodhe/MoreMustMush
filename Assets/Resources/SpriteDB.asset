@@ -3729,6 +3729,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: c1d4225258b519b438cdd2a66bfcd390, type: 3}
   - key: FX/sprout
     sprite: {fileID: 21300000, guid: 50557b60d918f30479e0936bb830636f, type: 3}
+  - key: FX/square
+    sprite: {fileID: 21300000, guid: 1a04737655ccbdd49bcbb95786643a9f, type: 3}
   - key: FX/streak
     sprite: {fileID: 21300000, guid: 09dea24b4919dbf4288d33547ecc72c9, type: 3}
   - key: FX/tree_soil
@@ -4637,6 +4639,8 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7bc26bcb0a392174fa7b1bc279722f40, type: 3}
   - key: UI/hp_fill
     sprite: {fileID: 21300000, guid: 27864a0d1b9287741b63730b4954d20f, type: 3}
+  - key: UI/kid_unknown
+    sprite: {fileID: 21300000, guid: c543878811c4e8649bed2cfc79aa37b1, type: 3}
   - key: UI/logo
     sprite: {fileID: 21300000, guid: ba82d180eaa43e946b01d34c8f25028a, type: 3}
   - key: UI/panel_accent
