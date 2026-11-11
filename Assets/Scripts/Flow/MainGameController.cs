@@ -11,7 +11,7 @@ namespace MoreMush
 {
     // MainGame 씬 (업그레이드). 사람이 배치한 캔버스에 기능만 잇는다 — UI를 코드로 만들지 않는다.
     // 이름으로 찾는 것:
-    //   Gold_UI_BG/Gold_Img·Ston_Img 안의 글자 = 골드·균사석
+    //   Gold_UI_BG/Gold_Img · Ston_UI_BG/Ston_Img 안의 글자 = 골드·균사석
     //   Button_Option · Button_StageStart · Stage_Text
     //   Button_MushTree(세계수 씬) · Button_MushDex(도감 팝업) · Button_Harvesters(공방 팝업)
     //   Button_Quest(의뢰 창, 지금 배치된 이름은 Quset — 둘 다 찾는다, 글자 = "의뢰" + 받을 수 있는 수)

@@ -39,7 +39,8 @@ namespace MoreMush.EditorTools
             {
                 R("Canvas/MainBG/Gold_UI_BG", "UI/bar_top"),
                 R("Canvas/MainBG/Gold_UI_BG/Gold_Img", "Icons/gold", INK, aspect: true),
-                R("Canvas/MainBG/Gold_UI_BG/Ston_Img", "Icons/gem", INK, aspect: true),
+                R("Canvas/MainBG/Ston_UI_BG", "UI/bar_top"),   // 골드·균사석 칸을 따로 (2026-11-11)
+                R("Canvas/MainBG/Ston_UI_BG/Ston_Img", "Icons/gem", INK, aspect: true),
                 R("Canvas/MainBG/Button_Option", "UI/btn_round"),
                 R("Canvas/MainBG/Button_Option/Img", "Icons/option", aspect: true),
                 R("Canvas/MainBG/Stage_Image", "UI/panel_wood", INK),
