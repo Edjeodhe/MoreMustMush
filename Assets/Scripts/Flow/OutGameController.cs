@@ -12,7 +12,7 @@ namespace MoreMush
     // 이름으로 찾는 것:
     //   UP_Panel/Gold·수확석 안의 글자 = 골드·균사석 · UP_Panel/Text (TMP) (1) = 보따리 보관 시간
     //   Button_Bag = 수확 보따리 받기 (쌓인 게 있을 때만 눌린다)
-    //   Down_Panel(접힘) ↔ Down_hidden_Panel(펼침) = 누르면 서로 바뀐다. 펼침 안의 칸 = 정령 (CRITTER_JOIN 순서, 칸 하나 = 정령 하나)
+    //   Down_Panel(늘 보임)을 누르면 Down_hidden_Panel(펼침)이 켜지고, 다시 누르면 꺼진다. 펼침 안의 칸 = 정령 (CRITTER_JOIN 순서, 칸 하나 = 정령 하나)
     //     있는 정령 = 그림 · 열렸지만 아직 안 데려온 정령 = 검은 실루엣 · 안 열린 정령 = 배치한 빈칸 그림.
     //     누르면 (정령 창이 배치되기 전 임시): 안 데려온 정령 = 균사석으로 데려오기, 있는 정령 = 골드로 Lv 업, Lv 상한이면 균사석으로 진화(각성).
     //     균사석을 쓰는 일은 한 번 눌러 값을 보여 주고, 3초 안에 다시 누르면 한다
@@ -64,7 +64,7 @@ namespace MoreMush
 
             fold = SceneUI.Need(scene, "Down_Panel");
             unfold = SceneUI.Need(scene, "Down_hidden_Panel");
-            Clickable(fold, () => SetFolded(false));
+            Clickable(fold, () => SetFolded(!Folded));   // 누를 때마다 펼침 ↔ 접힘 (Down_Panel은 그대로 보인다)
             Clickable(unfold, () => SetFolded(true));
             if (unfold != null)
             {
@@ -320,12 +320,15 @@ namespace MoreMush
             btn.onClick.AddListener(() => SetFolded(true));
         }
 
+        // Down_Panel은 늘 보이고, Down_hidden_Panel만 펼치고 접는다
         void SetFolded(bool folded, bool sound = true)
         {
             if (sound) Snd.Ui();
-            UIUtil.Show(fold, folded);
+            UIUtil.Show(fold, true);
             UIUtil.Show(unfold, !folded);
         }
+
+        bool Folded => unfold == null || !unfold.activeSelf;
 
         void ClaimBag()
         {
