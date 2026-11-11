@@ -7,7 +7,8 @@ using static MoreMush.Game;
 namespace MoreMush
 {
     // 수확기 상점(공방) 팝업. 배치한 카드 Harvesters (1)~(8)이 HARVESTERS 순서대로 수확기 하나씩을 맡는다.
-    // 카드 구성 (이름으로 찾음): Image(아이콘) · Panel(이름) · Panel (1)(설명) · Button_Buy · Button_Upg
+    // 카드 구성 (이름으로 찾음): Image(아이콘) · Stars(Star1~5, 그림과 설명 사이) · Panel(이름) · Panel (1)(설명) · Button_Buy · Button_Upg
+    //   Stars: 강화 단계(★)만큼 별 그림을 앞에서부터 켠다 (가운데 정렬). 없는 카드는 설명 첫 줄에 ★☆ 글자로
     //   Button_Buy: 미보유면 구매, 보유하면 장착 켜기/끄기
     //   Button_Upg: 다음 ★ 강화
     // 다시 그리기는 팝업을 열 때 · 버튼을 누른 뒤 · 언어를 바꿀 때 · 열려 있는 동안 재화가 바뀔 때만 (MainGameController가 부른다).
@@ -81,6 +82,7 @@ namespace MoreMush
             readonly Image icon;
             readonly TMP_Text title, desc, buyText, upgText;
             readonly Button buy, upg;
+            readonly GameObject[] stars;   // Stars/Star1~5 (배치 전이면 빈 배열)
 
             public Card(HarvesterShop shop, Transform t, string id)
             {
@@ -96,6 +98,10 @@ namespace MoreMush
                 upg = SceneUI.Bind(u, () => shop.Upgrade(id));
                 buyText = SceneUI.TextIn(b);
                 upgText = SceneUI.TextIn(u);
+                var st = t.Find("Stars");
+                var list = new System.Collections.Generic.List<GameObject>();
+                if (st != null) foreach (Transform s in st) list.Add(s.gameObject);
+                stars = list.ToArray();
             }
 
             // 씬의 카드는 가로 배율(0.34)로 줄여 배치돼 있어 글자가 납작하고, 이름 나무바(Panel)는 배율 2.37로 옆 카드까지 넘친다.
@@ -184,8 +190,12 @@ namespace MoreMush
                 // 이름 칸은 짧아서 이름만. 별·미보유는 설명 첫 줄에
                 UIUtil.SetText(title, h.n);
 
-                // 설명만 (능력 이름 "황금 손길: " 같은 앞머리는 뺀다)
-                string trait = (S > 0 ? $"<color=#e8a900>{U.Stars(S)}</color>" : Loc.T("<color=#8a6a4a>미보유</color>")) + "\n" + DescOnly(h.text(System.Math.Max(1, S)));
+                // 별 그림: 강화 단계만큼 켠다
+                for (int i = 0; i < stars.Length; i++) stars[i].SetActive(i < S);
+
+                // 설명만 (능력 이름 "황금 손길: " 같은 앞머리는 뺀다). 별 그림이 있으면 별 글자 줄은 뺀다
+                string head = S == 0 ? Loc.T("<color=#8a6a4a>미보유</color>") : stars.Length == 0 ? $"<color=#e8a900>{U.Stars(S)}</color>" : null;
+                string trait = (head != null ? head + "\n" : "") + DescOnly(h.text(System.Math.Max(1, S)));
                 if (S > 0 && S < 5) trait += "\n" + Loc.F("다음 ★{0}: {1}", S + 1, DescOnly(h.text(S + 1)));
                 UIUtil.SetText(desc, trait);
 
